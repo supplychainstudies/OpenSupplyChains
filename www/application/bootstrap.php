@@ -94,15 +94,18 @@ Kohana::modules(array(
 
 Kohana::add_include_path(SITESPATH.SITESHORTNM.'/');
 
+
+    
 if(is_file(SITESPATH.SITESHORTNM.'/bootstrap'.EXT)) {
     require SITESPATH.SITESHORTNM.'/bootstrap'.EXT;
-} else {
+}
 
-    /**
-     * Set the routes. Each route must have a minimum of a name, a URI and a set of
-     * defaults for the URI.
-     */
+/**
+ * Set the default (all sites) routes. Each route must have a minimum of a name, a URI and a set of
+ * defaults for the URI. May be overridden in sites/<site>/bootstrap.php.
+ */
 
+if(!defined('SUPPRESS_DEFAULT_ROUTES')) {
     Route::set('services', 'services(/<controller>(/<id>))')
         ->defaults(array(
             'directory' => 'services', 'controller' => 'services', 'action' => 'index'
@@ -113,16 +116,15 @@ if(is_file(SITESPATH.SITESHORTNM.'/bootstrap'.EXT)) {
             'controller' => 'welcome',
             'action'     => 'index',
         ));
+}
 
-    if ( ! defined('SUPPRESS_REQUEST'))
-    {
-        /**
-         * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
-         * If no source is specified, the URI will be automatically detected.
-         */
-        echo Request::instance()
-            ->execute()
-            ->send_headers()
-            ->response;
-    }
+if (!defined('SUPPRESS_REQUEST')) {
+    /**
+     * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
+     * If no source is specified, the URI will be automatically detected.
+     */
+    echo Request::instance()
+        ->execute()
+        ->send_headers()
+        ->response;
 }

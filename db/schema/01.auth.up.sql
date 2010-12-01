@@ -48,6 +48,3 @@ CREATE INDEX role_id_idx ON user_role (role_id);
 
 ALTER TABLE user_token
   ADD CONSTRAINT user_id_fkey FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE;
-
-INSERT INTO role (name, description) VALUES ('login', 'Login privileges, granted after account confirmation');
-INSERT INTO role (name, description) VALUES ('admin', 'Administrative user, has access to everything.');

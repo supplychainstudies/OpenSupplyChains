@@ -44,4 +44,15 @@ create table "hop" (
     foreign key (from_stop_id) references stop (id) on delete cascade,
     foreign key (to_stop_id) references stop (id) on delete cascade
 );
+
 select AddGeometryColumn('', 'hop', 'geometry', 3785, 'MULTILINESTRING', 2);
+
+create table "hop_attribute" (
+    id serial,
+    hop_id integer not null,
+    "key" varchar(32) not null,
+    "value" text,
+    constraint hop_attribute_id_pkey primary key (id),
+    constraint hop_attribute_key_key unique (hop_id, "key"),
+    foreign key (hop_id) references stop (id) on delete cascade
+);

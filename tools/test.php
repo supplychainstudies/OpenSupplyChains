@@ -22,11 +22,13 @@ function sm_test() { // ($label, $expected, $got) {
 }
 
 if(php_sapi_name() === 'cli') {
+    define('SMAPDIR', getenv('SMAPDIR') ? 
+        rtrim(getenv('SMAPDIR'), '/').'/' : dirname(__FILE__).'/');
     $args = $argv;
     array_shift($args);
     foreach($args as $i => $arg) {
         print "$arg\n";
-        include('t/'.basename($arg));
+        include(SMAPDIR.'t/'.basename($arg));
     }
     list($total, $good, $bad) = sm_test();
     print "\n>>>\n";

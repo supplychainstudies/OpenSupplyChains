@@ -38,7 +38,7 @@ else
     sortcmd="sort"
 fi
 
-SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" | "${sortcmd}") #todo: fix sorting
+SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" | $sortcmd) 
 
 for sfile in ${SCHEMAFILES[@]}
 do

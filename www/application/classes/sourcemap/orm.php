@@ -1,0 +1,136 @@
+<?php
+class Sourcemap_ORM extends Kohana_ORM {
+
+    public $_table_names_plural = false;
+
+    protected $_select_columns = array();
+
+	/**
+	 * Tests if this object has a relationship to a different model.
+	 *
+	 * @param   string   alias of the has_many "through" relationship
+	 * @param   ORM      related ORM model
+	 * @return  boolean
+	 */
+	public function has($alias, $model)
+	{
+		// Return count of matches as boolean
+		return (bool) DB::select(array(DB::expr('COUNT(*)'), 'records_found'))
+			->from($this->_has_many[$alias]['through'])
+			->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
+			->where($this->_has_many[$alias]['far_key'], '=', $model->pk())
+			->execute($this->_db)
+			->get('records_found');
+	}
+    
+    /**
+	 * Loads a database result, either as a new object for this model, or as
+	 * an iterator for multiple rows.
+	 *
+	 * @chainable
+	 * @param   boolean       return an iterator or load a single row
+	 * @return  ORM           for single rows
+	 * @return  ORM_Iterator  for multiple rows
+	 */
+	protected function _load_result($multiple = FALSE) {
+		$this->_db_builder->from($this->_table_name);
+
+		if ($multiple === FALSE)
+		{
+			// Only fetch 1 record
+			$this->_db_builder->limit(1);
+		}
+
+        
+		// Select all columns by default
+        $cols = in_array('_select_columns', get_class_methods($this)) && is_array($this->_select_columns()) ? 
+            array_values($this->_select_columns()) : $this->_table_name.'.*';
+        if(is_array($cols)) {
+            $this->_db_builder->select_array($cols);
+        } else {
+            $this->_db_builder->select($cols);
+        }
+
+		if ( ! isset($this->_db_applied['order_by']) AND ! empty($this->_sorting))
+		{
+			foreach ($this->_sorting as $column => $direction)
+			{
+				if (strpos($column, '.') === FALSE)
+				{
+					// Sorting column for use in JOINs
+					$column = $this->_table_name.'.'.$column;
+				}
+
+				$this->_db_builder->order_by($column, $direction);
+			}
+		}
+
+		if ($multiple === TRUE)
+		{
+			// Return database iterator casting to this object type
+			$result = $this->_db_builder->as_object(get_class($this))->execute($this->_db);
+
+			$this->reset();
+
+			return $result;
+		}
+		else
+		{
+			// Load the result as an associative array
+			$result = $this->_db_builder->as_assoc()->execute($this->_db);
+
+			$this->reset();
+
+			if ($result->count() === 1)
+			{
+				// Load object values
+				$this->_load_values($result->current());
+			}
+			else
+			{
+				// Clear the object, nothing was found
+				$this->clear();
+			}
+
+			return $this;
+		}
+	}
+
+    /**
+	 * Count the number of records in the table. Fixes 
+     * problem with Kohana_ORM count_all method using
+     * DB::expr around count(*) sql.
+	 *
+	 * @return  integer
+	 */
+	public function count_all()
+	{
+		$selects = array();
+
+		foreach ($this->_db_pending as $key => $method)
+		{
+			if ($method['name'] == 'select')
+			{
+				// Ignore any selected columns for now
+				$selects[] = $method;
+				unset($this->_db_pending[$key]);
+			}
+		}
+
+		$this->_build(Database::SELECT);
+
+		$records = (int) $this->_db_builder->from($this->_table_name)
+			->select(array(DB::expr('COUNT(*)'), 'records_found'))
+			->execute($this->_db)
+			->get('records_found');
+
+		// Add back in selected columns
+		$this->_db_pending += $selects;
+
+		$this->reset();
+
+		// Return the total number of records in a table
+		return $records;
+	}
+}
+

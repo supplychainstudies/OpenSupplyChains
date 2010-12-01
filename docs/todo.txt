@@ -1,0 +1,7 @@
+- tools
+    - deployment
+        - create cache and log directories
+            - /var/cache/tknm/appnm
+            - /var/log/tknm/appnm
+        - set perms on cache and log directories
+            - chown www-data:www-data

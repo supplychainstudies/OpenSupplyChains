@@ -49,6 +49,7 @@
                     $new_sc_attr->supplychain_id = $new_sc->id;
                     $new_sc_attr->save();
                 }
+                # todo: stops and hops, yo.
                 /*foreach($supplychain->stops as $i => $raw_stop) {
                     $new_stop = ORM::factory('stop');
                     $new_stop->

@@ -26,6 +26,10 @@ class Model_Supplychain extends ORM {
         'stops' => array(
             'model' => 'stop',
             'foreign_key' => 'supplychain_id'
+        ),
+        'attributes' => array(
+            'model' => 'supplychain_attribute',
+            'foreign_key' => 'supplychain_id'
         )
     );
 
@@ -58,9 +62,12 @@ class Model_Supplychain extends ORM {
                     $hops[] = (object)$hop;
                 }
             }
+            $attributes = $this->attributes
+                ->find_all()->as_array('key', 'value');
             $supplychain = (object)$this->as_array();
             $supplychain->stops = $stops;
             $supplychain->hops = $hops;
+            $supplychain->attributes = $attributes;
         }
         return $supplychain;
     }

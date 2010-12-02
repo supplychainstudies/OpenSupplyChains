@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SMAP_DB="smap"
+SMAP_DBUSER="smap"
+SMAP_DBPASS="smap"
+SMAP_DBHOST="localhost"

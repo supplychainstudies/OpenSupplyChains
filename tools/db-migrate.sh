@@ -38,12 +38,25 @@ else
     sortcmd="sort"
 fi
 
+# set postgresql creds (from env/<env>)
+PGUSER="${SMAP_DBUSER}"
+PGPASSWORD="${SMAP_DBPASS}"
+PGHOST="${SMAP_DBHOST}"
+PGDATABASE="${SMAP_DB}"
+
+export PGUSER PGPASSWORD PGHOST PGDATABASE
+
 SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" | $sortcmd) 
 
 for sfile in ${SCHEMAFILES[@]}
 do
     sfilebase=`basename ${sfile}`
     echo -e "\t- Executing sql: ${sfilebase}" #todo: actually execute sql
+    psql < "${sfile}"
+    echo -e "\n\t- ...${sfilebase} done."
 done
 
+PGUSER=""
+PGPASSWORD=""
+export PGUSER PGPASSWORD
 echo

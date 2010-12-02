@@ -24,6 +24,9 @@ alter table supplychain add column usergroup_id integer null;
 alter table supplychain add column usergroup_perms integer not null default 0;
 alter table supplychain add column other_perms integer not null default 0;
 
+-- user flag column
+alter table "user" add column flags integer not null default 0;
+
 --supplychain revision tracking
 create table supplychain_rev (
     id serial,

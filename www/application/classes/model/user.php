@@ -19,4 +19,26 @@ class Model_User extends Model_Auth_User {
             'model' => 'usergroup', 'through' => 'user_usergroup'
         )
 	);
+
+    const FACTIVE = 1;
+    #const FSUSPENDED = 64;
+    #const FDELETED = 128;
+    #const FVIP = 256;
+
+    public function has_flag($flag) {
+        $current_flags = (integer)$this->flags;
+        $flag = (integer)$flag;
+        return $current_flags & $flag;
+    }
+
+    public function has_flags() {
+        $flags = 0;
+        $args = func_get_args();
+        foreach($args as $i => $arg) $flags |= (integer)$arg;
+        return $this->has_flag($flags);
+    }
+
+    public function is_active() {
+        return (bool)$this->has_flag(self::FACTIVE);
+    }
 }

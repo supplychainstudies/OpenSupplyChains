@@ -102,6 +102,7 @@ do
         echo -e "\t\t- Executing data sql: ${sfilebase}"
         psql --echo-all < "${SMAP_DATADIR}${sfilebase}" &>> "${DBOUTPUT}"
     fi
+    # todo: FIXTURES
     echo -e "\t\t- ...${sfilebase} done."
 done
 

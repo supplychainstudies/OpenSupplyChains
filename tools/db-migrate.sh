@@ -29,6 +29,28 @@ case "${2}" in
     ;;
 esac
 
+if [ "${mdir}" == "up" ]; then
+    STARTIDX="00"
+    STOPIDX="ZZ"
+elif [ "${mdir}" == "dn" ]; then
+    STARTIDX="ZZ"
+    STOPIDX="00"
+fi
+
+if [ -n "${3}" ]; then
+    case "${mdir}" in
+        "up")
+            STARTIDX="${3}"
+            STOPIDX="ZZZ"
+            ;;
+        "dn")
+            STOPIDX="${3}"
+            STARTIDX="ZZZ"
+            ;;
+    esac
+    echo -e "\t- Set start idx = \"${STARTIDX}\", stop idx = \"${STOPIDX}\"."
+fi
+
 SMAP_ROOTDIR=$(dirname $(dirname $(readlink -f "${0}")))
 SMAP_DATADIR="${SMAP_ROOTDIR}/db/data/"
 SMAP_SCHEMADIR="${SMAP_ROOTDIR}/db/schema/"
@@ -49,16 +71,36 @@ export PGUSER PGPASSWORD PGHOST PGDATABASE
 
 SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" | $sortcmd) 
 
-DBOUTPUT="db-migrate.`date \"+%Y%m%d.%H%M%S\"`.${mdir}.out"
+DATESTR=`date "+%Y%m%d.%H%M%S"`
+DBOUTPUT="db-migrate.${DATESTR}.${mdir}.out"
+DUMPOUTPUT="${DATESTR}.${mdir}.dump"
+
+echo -e "\t- Backing up current schema and data..."
+pg_dump > "${DUMPOUTPUT}"
+echo -e "\t\t- done."
 
 for sfile in ${SCHEMAFILES[@]}
 do
     sfilebase=`basename ${sfile}`
+    if [ "${mdir}" == "up" ]; then
+        if [ "${sfilebase}" \< "${STARTIDX}" ]; then
+            echo -e "\t- Skipping ${sfilebase}."
+            continue
+        fi
+    elif [ "${mdir}" == "dn" ]; then
+        if [ "${sfilebase}" \< "${STOPIDX}" ]; then
+            echo -e "\t- Skipping ${sfilebase}."
+            continue
+        fi
+    else
+        echo -e "\t- FATAL: Migration direction is borked."
+        exit 1
+    fi
     echo -e "\t- Executing schema sql: ${sfilebase}"
-    psql --echo-all < "${sfile}" &> "${DBOUTPUT}"
+    psql --echo-all < "${sfile}" &>> "${DBOUTPUT}"
     if [ -f "${SMAP_DATADIR}${sfilebase}" ]; then
         echo -e "\t\t- Executing data sql: ${sfilebase}"
-        psql --echo-all < "${SMAP_DATADIR}${sfilebase}" &> "${DBOUTPUT}"
+        psql --echo-all < "${SMAP_DATADIR}${sfilebase}" &>> "${DBOUTPUT}"
     fi
     echo -e "\t\t- ...${sfilebase} done."
 done

@@ -139,7 +139,7 @@ class Sourcemap_ORM extends Kohana_ORM {
 	}
 
     public function save() {
-        if(($this->empty_pk() || $this->_changed[$this->_primary_key]) && $this->_get_currval) {
+        if(($this->empty_pk() || isset($this->_changed[$this->_primary_key])) && $this->_get_currval) {
             $connection = $this->_db->get_connection();
             $connection->beginTransaction('save');
             try {

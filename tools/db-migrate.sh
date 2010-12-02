@@ -42,7 +42,8 @@ SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" | $sortcmd)
 
 for sfile in ${SCHEMAFILES[@]}
 do
-    echo "${sfile}"
+    sfilebase=`basename ${sfile}`
+    echo -e "\t- Executing sql: ${sfilebase}" #todo: actually execute sql
 done
 
 echo

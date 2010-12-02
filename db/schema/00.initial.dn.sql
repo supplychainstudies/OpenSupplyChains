@@ -8,7 +8,6 @@ drop table hop;
 select DropGeometryColumn('', 'stop', 'geometry');
 
 drop table stop;
-drop table hop;
 
 drop table supplychain_attribute;
 

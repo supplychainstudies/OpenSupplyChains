@@ -30,6 +30,7 @@ case "${2}" in
 esac
 
 SMAP_ROOTDIR=$(dirname $(dirname $(readlink -f "${0}")))
+SMAP_DATADIR="${SMAP_ROOTDIR}/db/data/"
 SMAP_SCHEMADIR="${SMAP_ROOTDIR}/db/schema/"
 
 if [ "${mdir}" = "dn" ]; then
@@ -48,12 +49,18 @@ export PGUSER PGPASSWORD PGHOST PGDATABASE
 
 SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" | $sortcmd) 
 
+DBOUTPUT="db-migrate.`date \"+%Y%m%d.%H%M%S\"`.${mdir}.out"
+
 for sfile in ${SCHEMAFILES[@]}
 do
     sfilebase=`basename ${sfile}`
-    echo -e "\t- Executing sql: ${sfilebase}" #todo: actually execute sql
-    psql < "${sfile}"
-    echo -e "\n\t- ...${sfilebase} done."
+    echo -e "\t- Executing schema sql: ${sfilebase}"
+    psql --echo-all < "${sfile}" &> "${DBOUTPUT}"
+    if [ -f "${SMAP_DATADIR}${sfilebase}" ]; then
+        echo -e "\t\t- Executing data sql: ${sfilebase}"
+        psql --echo-all < "${SMAP_DATADIR}${sfilebase}" &> "${DBOUTPUT}"
+    fi
+    echo -e "\t\t- ...${sfilebase} done."
 done
 
 PGUSER=""

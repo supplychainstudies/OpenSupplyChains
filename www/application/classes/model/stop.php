@@ -48,4 +48,26 @@ class Model_Stop extends ORM {
         $this->reload();
         return $this;
 	}
+
+    /**
+     * Determines whether a raw data structure is stop-like.
+     *
+     * @param object $stop
+     * @param array|boolean $stop_ids Stop identifiers to check against, false to skip checks.
+     * @return boolean
+     */
+    public function validate_raw_stop($stop, $stop_ids=array()) {
+        if(!isset($stop->geometry)) {
+            throw new Exception('Bad stop: missing geometry.');
+        }
+        if(!isset($stop->attributes) || !is_object($stop->attributes)) {
+            throw new Exception('Bad stop: missing attributes.');
+        }
+        if($stop_ids !== false) {
+            if(!isset($stop->id) || empty($stop->id) || in_array($stop->id, $stop_ids)) {
+                throw new Exception('Bad stop: missing or duplicate id.');
+            }
+        }
+        return true;
+    }
 }

@@ -27,4 +27,8 @@ class Database_PDOPGSQL extends Kohana_Database_PDOPGSQL {
         } 
         return $value;
     }
+
+    public function get_connection() {
+        return $this->_connection;
+    }
 }

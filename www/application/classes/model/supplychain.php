@@ -3,12 +3,12 @@ class Model_Supplychain extends ORM {
     
     public $_table_names_plural = false;
 
-    public $_updated_column = array(
+    protected $_updated_column = array(
         'column' => 'modified',
         'format' => true
     );
 
-    public $_created_column = array(
+    protected $_created_column = array(
         'column' => 'created',
         'format' => true
     );
@@ -30,7 +30,8 @@ class Model_Supplychain extends ORM {
     );
 
     public function save() {
-        if(parent::save()) {
+        $this->modified = time();
+        if(parent::save() && $this->pk()) {
             $rev = ORM::factory('supplychain_rev');
             $rev->supplychain_id = $this->pk();
             $rev->user_id = Auth::instance()->get_user() ? 
@@ -62,5 +63,36 @@ class Model_Supplychain extends ORM {
             $supplychain->hops = $hops;
         }
         return $supplychain;
+    }
+
+    public function validate_raw_supplychain($data) {
+        $valid = true;
+        if(!isset($data->attributes)) {
+            throw new Exception('Bad supplychain: attributes must be array.');
+        }
+        if(!isset($data->stops, $data->hops)) {
+            die(print_r($data, true));
+            throw new Exception('Bad supplychain: missing stops or hops.');
+        }
+        if(!is_array($data->stops) || !is_array($data->hops)) {
+            throw new Exception('Bad supplychain: stops/hops must be arrays.');
+        }
+        $stop_ids = array();
+        if($data->stops) {
+            $stopmodel = ORM::factory('stop');
+            foreach($data->stops as $stop) {
+                $valid = $valid && $stopmodel->validate_raw_stop($stop, $stop_ids);
+                $stop_ids[] = $stop->id;
+            }
+            if($data->hops) {
+                $hopmodel = ORM::factory('hop');
+                foreach($data->hops as $hop) {
+                    $valid = $valid && $hopmodel->validate_raw_hop($hop, $stop_ids); 
+                }
+            }
+        } elseif($data->hops) {
+            throw new Exception('Bad supplychain: hops to nonexistent stops.');
+        }
+        return $valid;
     }
 }

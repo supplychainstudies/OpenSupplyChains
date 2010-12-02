@@ -45,4 +45,32 @@ class Model_Hop extends ORM {
         $this->reload();
         return $this;
 	}
+
+    /**
+     * Determines whether a raw data structure is hop-like.
+     *
+     * @param object $hop
+     * @param array|boolean $stop_ids Stop identifiers to check against, false to skip checks.
+     * @return boolean
+     */
+    public function validate_raw_hop($hop, $stop_ids=array()) {
+        if(!$hop || empty($hop) || !is_object($hop)) {
+            throw new Exception('Bad hop: empty or flat.');
+        }
+        if(!isset($hop->geometry)) {
+            throw new Exception('Bad hop: missing geometry.');
+        }
+        if(!isset($hop->attributes) || !is_array($attributes)) {
+            throw new Exception('Bad hop: missing attributes.');
+        }
+        if($stop_ids !== false) {
+            if(!isset($hop->from_stop) || !in_array($hop->from_stop, $stop_ids)) {
+                throw new Exception('Bad hop: missing or invalid from stop.');
+            }
+            if(!isset($hop->to_stop) || !in_array($hop->to_stop, $stop_ids)) {
+                throw new Exception('Bad hop: missing or invalid to stop.');
+            }
+        }
+        return true;
+    }
 }

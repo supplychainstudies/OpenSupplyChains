@@ -5,6 +5,12 @@ class Sourcemap_ORM extends Kohana_ORM {
 
     protected $_select_columns = array();
 
+    protected $_get_currval = true;
+
+    public function sequence_name() {
+        return $this->_table_name.'_'.$this->_primary_key.'_seq';
+    }
+
 	/**
 	 * Tests if this object has a relationship to a different model.
 	 *
@@ -103,8 +109,7 @@ class Sourcemap_ORM extends Kohana_ORM {
 	 *
 	 * @return  integer
 	 */
-	public function count_all()
-	{
+	public function count_all() {
 		$selects = array();
 
 		foreach ($this->_db_pending as $key => $method)
@@ -132,5 +137,30 @@ class Sourcemap_ORM extends Kohana_ORM {
 		// Return the total number of records in a table
 		return $records;
 	}
+
+    public function save() {
+        if(($this->empty_pk() || $this->_changed[$this->_primary_key]) && $this->_get_currval) {
+            $connection = $this->_db->get_connection();
+            $connection->beginTransaction('save');
+            try {
+                parent::save();
+                $result = $this->_db->query(Database::SELECT, 
+                    'select currval(\''.$this->sequence_name().'\') '.
+                    'as last_insert_id', 
+                    false
+                );
+                $result = $result->as_array();
+                $last_insert_id = $result[0]['last_insert_id'];
+                $this->_object[$this->_primary_key] = $last_insert_id;
+            } catch(Exception $e) {
+                die($e);
+                $connection->rollBack();
+            }
+            $connection->commit('save');
+        } else {
+            return parent::save();
+        }
+    }
+
 }
 

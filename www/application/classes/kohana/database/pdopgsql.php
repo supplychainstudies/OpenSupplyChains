@@ -9,7 +9,7 @@
  */
 class Kohana_Database_PDOPGSQL extends Kohana_Database_PDO {
 
-    public function set_charset($charset) {} // TODO: this
+    #public function set_charset($charset) {} // TODO: this
 
     public function list_tables($like = NULL) {
         if (is_string($like)) {

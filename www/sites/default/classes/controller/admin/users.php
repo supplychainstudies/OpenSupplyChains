@@ -8,7 +8,6 @@
  */
 
 
-
  class Controller_Admin_Users extends Sourcemap_Controller_Layout {
 
     public $layout = 'admin';
@@ -29,14 +28,12 @@
 						  'items_per_page' => $items,
 						  ));
 	
+
 	   
 	  $this->template->users = $user->order_by('username', 'ASC')->limit($pagination->items_per_page)->offset($pagination->offset)->find_all()->as_array('id', array('email', 'username'));
-
-	  $this->template->page_links = $pagination->render();
-	   
 	  
-
-
+	  $this->template->page_links = $pagination->render();
+	  $this->template->offset = $pagination->offset;
             
         }
       

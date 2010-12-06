@@ -7,6 +7,7 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 
+
  class Controller_Admin_Users extends Sourcemap_Controller_Layout {
 
   public $layout = 'admin';
@@ -40,7 +41,7 @@
 	foreach($user->roles->find_all()->as_array() as $i => $role) {
 	  $roles[] = $role->as_array();
 	}
-	$query = "SELECT  * FROM role ";
+	$query = "SELECT * FROM role ";
 
 	$all_roles = Db::query(Database::SELECT, $query)
           ->execute()
@@ -49,6 +50,35 @@
 	$this->template->main_content->user = $user;
 	$this->template->main_content->roles = $roles;
 	$this->template->main_content->all_roles = $all_roles;
+
+	$post = Validate::factory($_POST);
+	$post->rule('email', 'not_empty')
+	  ->rule('password', 'not_empty')
+	  ->rule('password', 'max_length', array(16))
+	  ->rule('confirmpassword', 'not_empty')
+	  ->rule('confirmpassword', 'max_length', array(16))
+	  ->filter(true, 'trim');
+
+	
+	
+	if($post->check()) {
+
+	  $post = (object)$post->as_array();
+	  
+	  if($post->password == $post->confirmpassword) {
+	    $user_row = ORM::factory('user')
+	      ->where('email', '=', $post->email)
+	      ->find();
+	    
+	    $user_row->password = $post->password;
+	    $user_row->save();
+	    $this->template->main_content->reset = true;
+	    
+	  } else {
+
+	    Message::instance()->set('Please enter again.', Message::ERROR);
+	  }
+	}
 	
 	
       }

@@ -24,7 +24,7 @@ create table "stop" (
     constraint stop_id_pkey primary key (id),
     foreign key (supplychain_id) references supplychain (id) on delete cascade
 );
-select AddGeometryColumn('', 'stop', 'geometry', 3785, 'POINT', 2);
+select AddGeometryColumn('', 'stop', 'geometry', 3857, 'POINT', 2);
 
 create table "stop_attribute" (
     id serial,
@@ -45,7 +45,7 @@ create table "hop" (
     foreign key (to_stop_id) references stop (id) on delete cascade
 );
 
-select AddGeometryColumn('', 'hop', 'geometry', 3785, 'MULTILINESTRING', 2);
+select AddGeometryColumn('', 'hop', 'geometry', 3857, 'MULTILINESTRING', 2);
 
 create table "hop_attribute" (
     id serial,

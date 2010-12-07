@@ -7,6 +7,14 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 
+function dbg_var($var) {
+    ob_start();
+    print_r($var);
+    $output = ob_get_clean();
+   
+    file_put_contents('/tmp/log5.txt', file_get_contents('/tmp/log5.txt') . $output); 
+}
+
 
  class Controller_Admin_Users extends Sourcemap_Controller_Layout {
 
@@ -41,6 +49,7 @@
 	foreach($user->roles->find_all()->as_array() as $i => $role) {
 	  $roles[] = $role->as_array();
 	}
+
 	$query = "SELECT * FROM role ";
 
 	$all_roles = Db::query(Database::SELECT, $query)
@@ -50,7 +59,9 @@
 	$this->template->main_content->user = $user;
 	$this->template->main_content->roles = $roles;
 	$this->template->main_content->all_roles = $all_roles;
+	
 
+	// this is to reset the password
 	$post = Validate::factory($_POST);
 	$post->rule('email', 'not_empty')
 	  ->rule('password', 'not_empty')
@@ -75,13 +86,30 @@
 	    $this->template->main_content->reset = true;
 	    
 	  } else {
-
 	    Message::instance()->set('Please enter again.', Message::ERROR);
 	  }
 	}
-	
-	
+
       }
-      
+
+      public function action_delete($id) {
+	$post = Validate::factory($_POST);
+	$post->rule('role', 'not_empty')
+	  ->filter(true, 'trim');
+	if($post->check()) {
+	  $post = (object)$post->as_array();
+	  $role = $post->role;  
+
+	  $query = "DELETE FROM user_role WHERE role_id = $role AND user_id = $id";
+	  $delete_role= Db::query(Database::SELECT, $query)
+          ->execute()
+          ->as_array();
+
+	}
+
+      }
+	
+
+	      
 
 }

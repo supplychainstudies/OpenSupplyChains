@@ -9,7 +9,7 @@
         'directory' => 'admin', 'controller' => 'admin', 'action' => 'index'
 	));*/
 
-Route::set('admin/users', 'admin/users(/<action>(/<id>))(/page/<page>)', array('id' => '\d+', 'action' => 'index|single', 'page' => '\d+'))
+Route::set('admin/users', 'admin/users(/<action>(/<id>))(/page/<page>)', array('id' => '\d+', 'action' => 'index|single|delete', 'page' => '\d+'))
 ->defaults(array(
 'directory' => 'admin',
 'controller' => 'users',

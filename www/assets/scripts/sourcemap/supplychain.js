@@ -3,6 +3,12 @@ Sourcemap.Supplychain = function(remote_id) {
     this.local_id = Sourcemap.local_id("supplychain");
     this.stops = [];
     this.hops = [];
+    this.broadcast('supplychainInstantiated', this);
+}
+
+Sourcemap.Supplychain.prototype.broadcast = function() {
+    Sourcemap.broadcast.apply(Sourcemap, arguments);
+    return this;
 }
 
 Sourcemap.Supplychain.prototype.stopIds = function() {
@@ -28,6 +34,7 @@ Sourcemap.Supplychain.prototype.addStop = function(stop) {
             throw new Error("Stop already exists in this supplychain.");
         }
         this.stops.push(stop);
+        this.broadcast('supplychainStopAdded', this, stop);
     } else throw new Error("Sourcemap.Stop expected.");
     return this;
 }
@@ -41,6 +48,7 @@ Sourcemap.Supplychain.prototype.removeStop = function(target_id) {
             break;
         }
     }
+    this.broadcast('supplychainStopRemoved', this, removed);
     return removed;
 }
 
@@ -124,6 +132,7 @@ Sourcemap.Supplychain.prototype.addHop = function(hop) {
             throw new Error("Hop exists.");
         }
         this.hops.push(hop);
+        this.broadcast('supplychainHopAdded', this, hop);
     } else throw new Error("Sourcemap.Hop expected.");
     return this;
 }
@@ -136,6 +145,7 @@ Sourcemap.Supplychain.prototype.removeHop = function(hop_id) {
             delete this.hops[i];
         }
     }
+    this.broadcast('supplychainHopRemoved', this, removed);
     return removed;
 }
 

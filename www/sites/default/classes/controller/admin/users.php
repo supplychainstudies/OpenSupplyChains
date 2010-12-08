@@ -7,14 +7,6 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 
-function dbg_var($var) {
-    ob_start();
-    print_r($var);
-    $output = ob_get_clean();
-   
-    file_put_contents('/tmp/log5.txt', file_get_contents('/tmp/log5.txt') . $output); 
-}
-
 
  class Controller_Admin_Users extends Sourcemap_Controller_Layout {
 
@@ -51,10 +43,11 @@ function dbg_var($var) {
 	}
 
 	$query = "SELECT * FROM role ";
-
+	$user_roles = array();
 	$all_roles = Db::query(Database::SELECT, $query)
           ->execute()
           ->as_array();
+
 	
 	$this->template->main_content->user = $user;
 	$this->template->main_content->roles = $roles;
@@ -101,15 +94,45 @@ function dbg_var($var) {
 	  $role = $post->role;  
 
 	  $query = "DELETE FROM user_role WHERE role_id = $role AND user_id = $id";
-	  $delete_role= Db::query(Database::SELECT, $query)
-          ->execute()
-          ->as_array();
-
+	  $delete_role= Db::query(Database::DELETE, $query)
+	    ->execute();
 	}
-
-      }
 	
+	$this->request->redirect("admin/users/single/".$id);
+      }
 
-	      
+      public function action_add($id) {
+	$check =  false;
+	$post = Validate::factory($_POST);
+	$post->rule('addrole', 'not_empty')->filter(true, 'trim');
+	if($post->check()) {
+	  $post = (object)$post->as_array();
+	  $user = ORM::factory('user', $id);
+	  $roles = array();
+	  foreach($user->roles->find_all()->as_array() as $i => $role) {
+	    $roles[] = $role->as_array();
+	  }
+	  $role_added = $post->addrole;
+	  $query = "SELECT id FROM role WHERE name = '$role_added'";
+	  $role_id = Db::query(Database::SELECT, $query)
+	    ->execute()->as_array();
+	  $role_id = $role_id[0]['id'];
+
+	  //check if the role already exists, if not add the new role
+	  foreach($roles as $i => $k) {
+	    if($roles[$i]['name'] == $post->addrole){
+	      $check = true;
+	      break;
+	    }
+	  }
+	    if ($check == false || (count($roles)<0)) {
+	      $query = "INSERT into user_role (id, user_id, role_id) VALUES ((SELECT MAX(id) FROM user_role)+1, $id, $role_id)";
+	      $role_id = Db::query(Database::INSERT, $query)
+		->execute();
+	    }  
+	}
+	$this->request->redirect("admin/users/single/".$id);
+      }
+	  
 
 }

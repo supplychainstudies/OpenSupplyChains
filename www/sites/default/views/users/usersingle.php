@@ -15,15 +15,34 @@
 <input type="submit" value="reset" />
 </form><br />
 
-    <?if(isset($roles) && count($roles)>0) {?>
-<strong>User Role</strong><br />
+ <?if(isset($roles) && count($roles)>0) {?>
+  <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k) { ?>
-    <?php echo $roles[$i]['name'];?><form name="user-roles" method="post" action="admin/users/delete/<?= $user->id?>"><input type="hidden" name="role" value="<?=$roles[$i]['id']?>"><input type="submit" value="delete"/></form> <? }?><br /><br />
-			
+    <form name="user-roles" method="post" action="admin/users/delete/<?= $user->id?>"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['id']?>"><input type="submit" value="delete"/></form> 
+<? }?><br />
+ <? }?>
+
+
    Change the user role:
-<select>
-<? foreach ($all_roles as $role) { ?>
-<option value="<?php echo $role['name']; ?>"  <?if($roles[0]['name'] == $role['name']) { echo "selected"; } ?>><?php echo $role['name']; ?></option>
-<? } ?>
-</select>
-    <? }?>
+<form name="change-role" method="post" action="admin/users/add/<?= $user->id?>">
+<select name="addrole">
+<? foreach ($all_roles as $role) { ?>			
+    <? $skip = false; 
+       foreach($roles as $roler) {
+         if($roler['name'] == $role['name']) {
+	   $skip = true; 
+	   break; 
+	 }
+      } 
+      if($skip) {
+	continue;
+      }
+?>
+					    
+   <option value="<?php echo $role['name']; ?>"><?php echo $role['name']; ?></option>
+
+  <? }?>
+   </select><input type="submit" value="add role"/></form>
+
+
+    

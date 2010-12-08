@@ -40,3 +40,7 @@ create table supplychain_rev (
     foreign key (supplychain_id) references supplychain (id) on delete cascade--,
     --foreign key (user_id) references "user" (id) on delete cascade
 );
+
+insert into sourcemap_schema_version ("key", extra) values (
+    '02.user_group', 'User group tables.'
+);

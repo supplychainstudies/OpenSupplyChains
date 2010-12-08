@@ -37,8 +37,8 @@ class Model_Hop extends ORM {
 		if (array_key_exists('geometry', $this->_changed))
 		{
 			$this->_object['geometry'] = 
-                DB::expr(sprintf('ST_SetSRID(ST_GeometryFromText(%s), 3785)',
-                    $this->_db->quote($this->_object['geometry'])));
+                DB::expr(sprintf('ST_SetSRID(ST_GeometryFromText(%s), %d)',
+                    $this->_db->quote($this->_object['geometry']), Sourcemap::PROJ));
 		}
 
 		parent::save();
@@ -60,14 +60,17 @@ class Model_Hop extends ORM {
         if(!isset($hop->geometry)) {
             throw new Exception('Bad hop: missing geometry.');
         }
-        if(!isset($hop->attributes) || !is_array($attributes)) {
+        if(!Sourcemap_Wkt::validate_geometry(Sourcemap_Wkt::MULTILINESTRING, $hop->geometry)) {
+            throw new Exception('Bad stop: invalid WKT MULTILINESTRING geometry.');
+        }
+        if(!isset($hop->attributes) || !is_object($hop->attributes)) {
             throw new Exception('Bad hop: missing attributes.');
         }
         if($stop_ids !== false) {
-            if(!isset($hop->from_stop) || !in_array($hop->from_stop, $stop_ids)) {
+            if(!isset($hop->from_stop_id) || !in_array($hop->from_stop_id, $stop_ids)) {
                 throw new Exception('Bad hop: missing or invalid from stop.');
             }
-            if(!isset($hop->to_stop) || !in_array($hop->to_stop, $stop_ids)) {
+            if(!isset($hop->to_stop_id) || !in_array($hop->to_stop_id, $stop_ids)) {
                 throw new Exception('Bad hop: missing or invalid to stop.');
             }
         }

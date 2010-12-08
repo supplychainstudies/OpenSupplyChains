@@ -1,6 +1,13 @@
 -- createdb -T postgistemplate -O smap smap "Sourcemap Redux"
 -- \i /usr/share/postgres/<v.m>/contrib/{postgis.sql,postgis_comments.sql,spatial_ref_...sql
 
+create table sourcemap_schema_version (
+    "when" timestamp not null default now(),
+    "key" varchar(256) not null,
+    extra varchar(256),
+    constraint sourcemap_schema_version_key_pkey primary key ("key")
+);
+
 create table "supplychain" (
     id serial,
     created integer not null,
@@ -55,4 +62,8 @@ create table "hop_attribute" (
     constraint hop_attribute_id_pkey primary key (id),
     constraint hop_attribute_key_key unique (hop_id, "key"),
     foreign key (hop_id) references stop (id) on delete cascade
+);
+
+insert into sourcemap_schema_version ("key", extra) values (
+    '00.initial', 'Initial schema.'
 );

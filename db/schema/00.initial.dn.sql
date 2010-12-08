@@ -12,3 +12,5 @@ drop table stop;
 drop table supplychain_attribute;
 
 drop table supplychain;
+
+drop table sourcemap_schema_version;

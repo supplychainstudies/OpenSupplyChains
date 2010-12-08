@@ -153,8 +153,10 @@ class Sourcemap_ORM extends Kohana_ORM {
                 $last_insert_id = $result[0]['last_insert_id'];
                 $this->_object[$this->_primary_key] = $last_insert_id;
             } catch(Exception $e) {
-                die($e);
-                $connection->rollBack();
+                try {
+                    $connection->rollBack('save');
+                } catch(Exception $ee) {}
+                throw $e;
             }
             $connection->commit('save');
         } else {

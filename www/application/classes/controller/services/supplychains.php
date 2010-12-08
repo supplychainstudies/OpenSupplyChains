@@ -49,11 +49,37 @@
                     $new_sc_attr->supplychain_id = $new_sc->id;
                     $new_sc_attr->save();
                 }
-                # todo: stops and hops, yo.
-                /*foreach($supplychain->stops as $i => $raw_stop) {
+                $local_stop_ids = array();
+                foreach($raw_sc->stops as $i => $raw_stop) {
                     $new_stop = ORM::factory('stop');
-                    $new_stop->
-                }*/
+                    $new_stop->geometry = $raw_stop->geometry;
+                    $new_stop->supplychain_id = $new_sc->id;
+                    $new_stop->save();
+                    $local_stop_ids[(int)$raw_stop->id] = (int)$new_stop->id;
+                    foreach($raw_stop->attributes as $k => $v) {
+                        $new_stop_attr = ORM::factory('stop_attribute');
+                        $new_stop_attr->stop_id = $new_stop->id;
+                        $new_stop_attr->{'key'} = $k;
+                        $new_stop_attr->value = $v;
+                        $new_stop_attr->save();
+                    }
+                }
+                foreach($raw_sc->hops as $i => $raw_hop) {
+                    $new_hop = ORM::factory('hop');
+                    $new_hop->geometry = $raw_hop->geometry;
+                    $new_hop->from_stop_id = $local_stop_ids[(int)$raw_hop->from_stop_id];
+                    $new_hop->to_stop_id = $local_stop_ids[(int)$raw_hop->to_stop_id];
+                    $new_hop->save();
+                    foreach($raw_hop->attributes as $k => $v) {
+                        $new_hop_attr = ORM::factory('hop_attribute');
+                        $new_hop_attr->hop_id = $new_hop->id;
+                        $new_hop_attr->{'key'} = $k;
+                        $new_hop_attr->value = $v;
+                        $new_hop_attr->save();
+                    }
+                    
+                }
+
                 $this->request->status = 201;
                 $this->request->headers['Location'] = 'services/supplychains/'.$new_sc->id;
                 $this->response = (object)array(
@@ -61,8 +87,12 @@
                 );
             }
         } catch(Exception $e) {
-            return $this->_bad_request('Unusable supplychain: '.$e->getMessage()); 
+            return $this->_bad_request('Could not save supplychain: '.$e->getMessage()); 
         }
+    }
+
+    public function action_put() {
+        //TODO: update
     }
 
     protected function _validate_raw_supplychain($data) {

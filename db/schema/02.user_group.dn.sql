@@ -9,3 +9,5 @@ alter table "user" drop column flags;
 
 drop table user_usergroup;
 drop table usergroup;
+
+delete from sourcemap_schema_version where "key" = '02.user_group';

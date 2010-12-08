@@ -48,3 +48,7 @@ CREATE INDEX role_id_idx ON user_role (role_id);
 
 ALTER TABLE user_token
   ADD CONSTRAINT user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE;
+
+insert into sourcemap_schema_version ("key", extra) values (
+    '01.auth', 'Auth module schema.'
+);

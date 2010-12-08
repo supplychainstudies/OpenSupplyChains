@@ -40,8 +40,8 @@ class Model_Stop extends ORM {
 		if (array_key_exists('geometry', $this->_changed))
 		{
 			$this->_object['geometry'] = 
-                DB::expr(sprintf('ST_SetSRID(ST_GeometryFromText(%s), 3785)',
-                    $this->_db->quote($this->_object['geometry'])));
+                DB::expr(sprintf('ST_SetSRID(ST_GeometryFromText(%s), %d)',
+                    $this->_db->quote($this->_object['geometry']), Sourcemap::PROJ));
 		}
 
 		parent::save();
@@ -59,6 +59,9 @@ class Model_Stop extends ORM {
     public function validate_raw_stop($stop, $stop_ids=array()) {
         if(!isset($stop->geometry)) {
             throw new Exception('Bad stop: missing geometry.');
+        }
+        if(!Sourcemap_Wkt::validate_geometry(Sourcemap_Wkt::POINT, $stop->geometry)) {
+            throw new Exception('Bad stop: invalid WKT POINT geometry.');
         }
         if(!isset($stop->attributes) || !is_object($stop->attributes)) {
             throw new Exception('Bad stop: missing attributes.');

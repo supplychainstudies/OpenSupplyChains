@@ -193,4 +193,17 @@ class Sourcemap_Controller_Service extends Controller_REST {
     protected function _forbidden($msg='Forbidden.') {
         return $this->_rest_error(403, $msg);
     }
+
+    protected function cache_set($id, $data) {
+        //pass
+        // TODO: set cached data.
+        return $this;
+    }
+
+    protected function cache_get($id, $default=null) {
+        // TODO: get cached data if available.
+        // $id = "sourcemap-services-".$id
+        return false;
+    }
+
 }

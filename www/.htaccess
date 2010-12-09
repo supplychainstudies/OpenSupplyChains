@@ -7,6 +7,9 @@ RewriteEngine On
 	Deny From All
 </Files>
 
+# Ignore assets dir
+RewriteRule ^assets - [L,NC]
+
 # Protect application and system files from being viewed
 RewriteRule ^(?:application|modules|system)\b.* index.php/$0 [L]
 

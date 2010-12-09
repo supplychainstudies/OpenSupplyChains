@@ -89,3 +89,94 @@ Sourcemap.broadcast = function(evt) {
     //jQuery.trigger.apply($(document), args);
     Sourcemap.log('Broadcast: '+evt);
 }
+
+Sourcemap.factory = function(type, data) {
+    var instance;
+    switch(type) {
+        case 'supplychain':
+            try {
+                Sourcemap.validate(type, data);
+            } catch(e) {
+                throw new Error('Could not validate Supplychain: '+e.message);
+            }
+            instance = new Sourcemap.Supplychain();
+            var sc = data;
+            var stop_ids = {};
+            for(var i=0; i<sc.stops.length; i++) {
+                var new_stop = new Sourcemap.Stop(
+                    sc.stops[i].geometry, sc.stops[i].attributes
+                );
+                stop_ids[sc.stops[i].id] = new_stop.local_id;
+                instance.addStop(new_stop);
+            }
+            for(var i=0; i<sc.hops.length; i++) {
+                var local_from = stop_ids[sc.hops[i].from_stop_id];
+                var local_to = stop_ids[sc.hops[i].to_stop_id];
+                var new_hop = new Sourcemap.Hop(
+                    sc.hops[i].geometry, local_from, local_to,
+                    sc.hops[i].attributes
+                );
+                instance.addHop(new_hop);
+            }
+            break;
+        default:
+            instance = false;
+            break;
+    }
+    return instance;
+}
+
+Sourcemap.validate = function(type, data) {
+    switch(type) {
+        case 'supplychain':
+            var sc = data;
+            if(!(sc.stops instanceof Array))
+                throw new Error('Stops array missing or invalid.');
+            if(!(sc.hops instanceof Array))
+                throw new Error('Hops array missing or invalid.');
+            var stop_ids = [];
+            for(var i=0; i<sc.stops.length; i++) {
+                Sourcemap.validate('stop', sc.stops[i]);
+                stop_ids.push(sc.stops[i].id);
+            }
+            for(var i=0; i<sc.hops.length; i++) {
+                Sourcemap.validate('hop', sc.hops[i]);
+                if(stop_ids.indexOf(sc.hops[i].from_stop_id) < 0)
+                    throw new Error('From stop in hop is invalid.');
+                if(stop_ids.indexOf(sc.hops[i].to_stop_id) < 0)
+                    throw new Error('To stop in hop is invalid.');
+            }
+            if(!(sc.attributes instanceof Object)) {
+                throw new Error('Missing or invalid attributes property.');
+            }
+            break;
+        case 'stop':
+            var stop = data;
+            if(!(stop.attributes instanceof Object))
+                throw new Error('Stop missing attributes object.');
+            if(!stop.geometry)
+                throw new Error('Stop missing geometry.');
+            var parser = new OpenLayers.Format.WKT();
+            var parsed = parser.read(stop.geometry)
+            if(!parsed || !(parsed instanceof OpenLayers.Feature.Vector)) {
+                throw new Error('Invalid geometry.');
+            }
+            break;
+        case 'hop':
+            var hop = data;
+            if(!(hop.attributes instanceof Object))
+                throw new Error('Hop missing attributes object.');
+            if(!hop.geometry)
+                throw new Error('Hop missing geometry.');
+            var parser = new OpenLayers.Format.WKT();
+            var parsed = parser.read(hop.geometry)
+            if(!parsed || !(parsed instanceof OpenLayers.Feature.Vector)) {
+                throw new Error('Invalid geometry.');
+            }
+            break;
+        default:
+            throw new Error('validation not implemented: '+type);
+            break;
+    }
+    return false;
+}

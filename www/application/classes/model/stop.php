@@ -60,9 +60,9 @@ class Model_Stop extends ORM {
         if(!isset($stop->geometry)) {
             throw new Exception('Bad stop: missing geometry.');
         }
-        if(!Sourcemap_Wkt::validate_geometry(Sourcemap_Wkt::POINT, $stop->geometry)) {
+        /*if(!Sourcemap_Wkt::validate_geometry(Sourcemap_Wkt::POINT, $stop->geometry)) {
             throw new Exception('Bad stop: invalid WKT POINT geometry.');
-        }
+        }*/
         if(!isset($stop->attributes) || !is_object($stop->attributes)) {
             throw new Exception('Bad stop: missing attributes.');
         }

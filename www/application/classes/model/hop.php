@@ -5,17 +5,26 @@
  */
 class Model_Hop extends ORM {
     public $_table_names_plural = false;
+
     public $_belongs_to = array(
         'supplychain' => array(
             'foreign_key' => 'supplychain_id'
         )
     );
+
     public $_has_one = array(
         'from_stop' => array(
             'model' => 'stop', 'foreign_key' => 'from_stop_id'
         ),
         'to_stop' => array(
             'model' => 'stop', 'foreign_key' => 'to_stop_id'
+        )
+    );
+
+    public $_has_many = array(
+        'attributes' => array(
+            'model' => 'hop_attribute',
+            'foreign_key' => 'hop_id'
         )
     );
 
@@ -60,9 +69,9 @@ class Model_Hop extends ORM {
         if(!isset($hop->geometry)) {
             throw new Exception('Bad hop: missing geometry.');
         }
-        if(!Sourcemap_Wkt::validate_geometry(Sourcemap_Wkt::MULTILINESTRING, $hop->geometry)) {
+        /*if(!Sourcemap_Wkt::validate_geometry(Sourcemap_Wkt::MULTILINESTRING, $hop->geometry)) {
             throw new Exception('Bad stop: invalid WKT MULTILINESTRING geometry.');
-        }
+        }*/
         if(!isset($hop->attributes) || !is_object($hop->attributes)) {
             throw new Exception('Bad hop: missing attributes.');
         }

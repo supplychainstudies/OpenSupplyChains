@@ -58,8 +58,12 @@ class Model_Supplychain extends ORM {
                 $stop_arr = $stop->as_array();
                 $stop_arr['attributes'] = (object)$attrs->as_array("key", "value");
                 $stops[] = (object)$stop_arr;
-                foreach($stop->hops->find_all()->as_array("id", true) as $j => $hop) {
-                    $hops[] = (object)$hop;
+                foreach($stop->hops->find_all() as $j => $hop) {
+                    $hattrs = $hop->attributes->find_all();
+                    $hop_arr = $hop->as_array();
+                    $hop_arr['attributes'] = (object)$hattrs
+                        ->as_array("key", "value");
+                    $hops[] = (object)$hop_arr;
                 }
             }
             $attributes = $this->attributes

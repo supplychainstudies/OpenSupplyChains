@@ -34,6 +34,7 @@ Sourcemap.Supplychain.prototype.addStop = function(stop) {
             throw new Error("Stop already exists in this supplychain.");
         }
         this.stops.push(stop);
+        stop.supplychain_id = this.local_id;
         this.broadcast('supplychainStopAdded', this, stop);
     } else throw new Error("Sourcemap.Stop expected.");
     return this;
@@ -44,6 +45,7 @@ Sourcemap.Supplychain.prototype.removeStop = function(target_id) {
     for(var i=0; i<this.stops.length; i++) {
         if(this.stops[i].local_id === target_id) {
             removed = this.stops[i];
+            removed.supplychain_id = null;
             delete this.stops[i];
             break;
         }
@@ -132,6 +134,7 @@ Sourcemap.Supplychain.prototype.addHop = function(hop) {
             throw new Error("Hop exists.");
         }
         this.hops.push(hop);
+        hop.supplychain_id = this.local_id;
         this.broadcast('supplychainHopAdded', this, hop);
     } else throw new Error("Sourcemap.Hop expected.");
     return this;
@@ -142,6 +145,7 @@ Sourcemap.Supplychain.prototype.removeHop = function(hop_id) {
     for(var i=0; i<this.hops.length; i++) {
         if(hop_id === this.hops[i].local_id) {
             removed = this.hops[i];
+            removed.supplychain_id = null;
             delete this.hops[i];
         }
     }
@@ -151,12 +155,14 @@ Sourcemap.Supplychain.prototype.removeHop = function(hop_id) {
 
 Sourcemap.Stop = function(geometry, attributes) {
     this.local_id = Sourcemap.local_id("stop");
+    this.supplychain_id = null;
     this.geometry = geometry;
     this.attributes = attributes ? Sourcemap.deep_clone(attributes) : {};
 }
 
 Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {
     this.local_id = Sourcemap.local_id("hop");
+    this.supplychain_id = null;
     this.from_stop_id = from_stop_id;
     this.to_stop_id = to_stop_id;
     this.geometry = geometry;

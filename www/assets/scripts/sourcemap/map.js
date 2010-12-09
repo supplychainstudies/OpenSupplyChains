@@ -1,6 +1,6 @@
 Sourcemap.Map = function(element_id, o) {
     this.broadcast('mapInstantiated', this);
-    this.supplychains = [];
+    this.supplychain = null;
     this.layers = {};
     this.controls = {};
     var o = o || {};
@@ -146,6 +146,7 @@ Sourcemap.Map.prototype.loadSupplychain = function(remote_id, callback) {
     var _remote_id = remote_id;
     $.get('services/supplychains/'+remote_id, {},  function(data) {
             callback.apply(this, arguments);
+            // notice this event fires _after_ the callback runs.
             _that.broadcast('mapSupplychainLoaded', this, data);
         }
     );
@@ -155,4 +156,45 @@ Sourcemap.Map.prototype.saveSupplychain = function(supplychain_id) {
     // this.findSupplychain(supplychain_id);
     // save supplychain
     // this.broadcast('mapSupplychainSaved', this, supplychain); asynch!
+}
+
+Sourcemap.Map.prototype.mapSupplychain = function(supplychain) {
+    if(!(supplychain instanceof Sourcemap.Supplychain))
+        throw new Error('Sourcemap.Supplychain required.');
+    this.supplychain = supplychain;
+    for(var i=0; i<supplychain.stops.length; i++) {
+        this.mapStop(supplychain.stops[i]);
+    }
+    for(var i=0; i<supplychain.hops.length; i++) {
+        this.mapHop(supplychain.hops[i]);
+    }
+    this.broadcast('mapSupplychainMapped', this);
+}
+
+Sourcemap.Map.prototype.mapStop = function(stop) {
+    if(!(stop instanceof Sourcemap.Stop))
+        throw new Error('Sourcemap.Stop required.');
+    var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
+    new_feature.attributes.supplychain_id = stop.supplychain_id;
+    new_feature.attributes.stop_id = stop.local_id;
+    new_feature.attributes.size = 8;
+    this.broadcast('mapStopMapped', this, stop, new_feature);
+    this.layers.stops.addFeatures([new_feature]);
+}
+
+Sourcemap.Map.prototype.mapHop = function(hop) {
+    if(!(hop instanceof Sourcemap.Hop))
+        throw new Error('Sourcemap.Hop required.');
+    var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
+    new_feature.attributes.supplychain_id = hop.supplychain_id;
+    new_feature.attributes.hop_id = hop.local_id;
+    new_feature.attributes.from_stop_id = hop.from_stop_id;
+    new_feature.attributes.to_stop_id = hop.to_stop_id;
+    new_feature.attributes.size = 8;
+    this.broadcast('mapHopMapped', this, hop, new_feature);
+    this.layers.hops.addFeatures([new_feature]);
+}
+
+Sourcemap.Map.prototype.clearMap = function() {
+    // clear map.
 }

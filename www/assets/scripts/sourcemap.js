@@ -11,7 +11,7 @@ Sourcemap.options = {
 Sourcemap.log = function(message, level) {
     var level = typeof level === "undefined" ? Sourcemap.INFO : level;
     if(level & Sourcemap.options.log_level) {
-        if(console && console.log) console.log(message);
+        if(typeof console !== 'undefined' && console && console.log) console.log(message);
     }
     return true;
 }
@@ -29,11 +29,13 @@ Sourcemap.deep_clone = function(o) {
             var r = new o.constructor(o.toString());
         } else if(o instanceof HTMLElement) {
             var r = o.cloneNode();
-        } else {
+        } else if(o) {
             var r = o.constructor ? new o.constructor() : {};
             for(var k in o) {
                 r[k] = Sourcemap.deep_clone(o[k]);
             }
+        } else {
+            r = o;
         }
     } else {
         var r = o;
@@ -102,6 +104,7 @@ Sourcemap.factory = function(type, data) {
             instance = new Sourcemap.Supplychain();
             var sc = data;
             var stop_ids = {};
+            sc.attributes = Sourcemap.deep_clone(sc.attributes);
             for(var i=0; i<sc.stops.length; i++) {
                 var new_stop = new Sourcemap.Stop(
                     sc.stops[i].geometry, sc.stops[i].attributes

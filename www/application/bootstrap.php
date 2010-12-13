@@ -75,13 +75,16 @@ Kohana::$config->attach(new Kohana_Config_File);
 if(isset(Kohana::config('sourcemap')->base_url)) {
     Kohana::$base_url = Kohana::config('sourcemap')->base_url;
 }
+if(isset(Kohana::config('sourcemap')->cache_dir)) {
+    Kohana::$cache_dir = Kohana::config('sourcemap')->cache_dir;
+}
 
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
 	'auth'       => MODPATH.'auth',       // Basic authentication
-	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
+	'cache'      => MODPATH.'cache',      // Caching with multiple backends
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
 	'database'   => MODPATH.'database',   // Database access
 	// 'image'      => MODPATH.'image',      // Image manipulation

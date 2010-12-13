@@ -54,7 +54,10 @@ Sourcemap.Map.prototype.initMap = function() {
 Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.Google(
         "Google Streets",
-        {'sphericalMercator': true, "wrapeDateLine": true}
+        {
+            'sphericalMercator': true, "wrapeDateLine": true,
+            "type": google.maps.MapTypeId.TERRAIN
+        }
     ));
     this.broadcast('mapBaseLayerInitialized', this);
     return this;
@@ -64,7 +67,21 @@ Sourcemap.Map.prototype.initLayers = function() {
     var stylemap = new OpenLayers.StyleMap({
         "default": {
             "pointRadius": "${size}",
-            "fillColor": "red"
+            "fillColor": "${color}",
+            "strokeWidth": 1,
+            "strokeColor": "#eee",
+            "fontColor": "#eee",
+            "fontSize": "${size}"//,
+            /*"label": "${label}",
+            "fontSize": "16px",
+            "fontFamily": "Arial, sans-serif",
+            "fontWeight": "bold",
+            "fontStyle": "italic",
+            "labelAlign": "tm",
+            "fontOpacity": .9,
+            "labelXOffset": "${size}",
+            "labelYOffset": "${size}"*/
+
         },
         "select": {
             "fillColor": "yellow"
@@ -106,6 +123,10 @@ Sourcemap.Map.prototype.initControls = function() {
     );
     this.addControl('drag',
         new OpenLayers.Control.DragFeature(this.getLayer('stops'))
+    );
+    this.controls.drag.activate();
+    this.addControl('mouse',
+        new OpenLayers.Control.MousePosition()
     );
     this.broadcast('mapControlsInitialized', this);
     return this;
@@ -162,8 +183,19 @@ Sourcemap.Map.prototype.mapSupplychain = function(supplychain) {
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Sourcemap.Supplychain required.');
     this.supplychain = supplychain;
+    var vols = [];
     for(var i=0; i<supplychain.stops.length; i++) {
-        this.mapStop(supplychain.stops[i]);
+        var stop = supplychain.stops[i];
+        var volp = stop.getAttr('org.mysourcemap.stonyfield.volp', 0);
+        if(typeof volp == 'string') volp = parseFloat(volp.replace(/%/, ''));
+        if(!volp) volp = 0;
+        stop.attributes['org.mysourcemap.stonyfield.volp'] = volp;
+        vols.push(volp);
+    }
+    supplychain.attributes['org.mysourcemap.stonyfield.vmax'] = Math.max.apply(Math, vols);
+    supplychain.attributes['org.mysourcemap.stonyfield.vmin'] = Math.min.apply(Math, vols);
+    for(var i=0; i<supplychain.stops.length; i++) {
+        this.mapStop(supplychain.stops[i], supplychain);
     }
     for(var i=0; i<supplychain.hops.length; i++) {
         this.mapHop(supplychain.hops[i]);
@@ -171,13 +203,16 @@ Sourcemap.Map.prototype.mapSupplychain = function(supplychain) {
     this.broadcast('mapSupplychainMapped', this);
 }
 
-Sourcemap.Map.prototype.mapStop = function(stop) {
+Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {
     if(!(stop instanceof Sourcemap.Stop))
         throw new Error('Sourcemap.Stop required.');
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
     new_feature.attributes.supplychain_id = stop.supplychain_id;
     new_feature.attributes.stop_id = stop.local_id;
-    new_feature.attributes.size = 8;
+    new_feature.attributes.size = 6;
+    if(this.prepareStopFeature instanceof Function) {
+        this.prepareStopFeature(stop, new_feature);
+    }
     this.broadcast('mapStopMapped', this, stop, new_feature);
     this.layers.stops.addFeatures([new_feature]);
 }

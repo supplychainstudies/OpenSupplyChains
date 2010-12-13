@@ -10,18 +10,34 @@
     public function action_get() {
         $id = $this->request->param('id', false);
         if($id) {
-            $supplychain = ORM::factory('supplychain', $id);
-            if(!$supplychain->loaded()) {
-                return $this->_not_found('Supplychain not found.');
+            if($cached = Cache::instance()->get('supplychain-'.$id)) {
+                $this->response = array(
+                    'supplychain' => unserialize($cached)
+                );
+            } else {
+                $supplychain = ORM::factory('supplychain', $id);
+                if(!$supplychain->loaded()) {
+                    return $this->_not_found('Supplychain not found.');
+                }
+                $fetched = $supplychain->kitchen_sink();
+                Cache::instance()->set('supplychain-'.$id, serialize($fetched));
+                $this->response = array(
+                    'supplychain' => $fetched
+                );
             }
-            $this->response = array(
-                'supplychain' => $supplychain->kitchen_sink()
-            );
         } else {
             $params = $this->_list_parameters();
-            $supplychains = ORM::factory('supplychain')
-                ->offset($params->offset)->limit($params->limit)
-                ->find_all()->as_array('id', array('id', 'created'));
+            $cache_key = sprintf("supplychains-%d-%d", 
+                $params->offset, $params->limit
+            );
+            if($supplychains = Cache::instance()->get($cache_key)) {
+                $supplychains = unserialize($supplychains);    
+            } else {
+                $supplychains = ORM::factory('supplychain')
+                    ->offset($params->offset)->limit($params->limit)
+                    ->find_all()->as_array('id', array('id', 'created'));
+                Cache::instance()->set($cache_key, serialize($supplychains));
+            }
             $this->response = array(
                 'supplychains' => $supplychains,
                 'parameters' => $params, 
@@ -92,12 +108,36 @@
     }
 
     public function action_put() {
-        //TODO: update
+        $id = $this->request->param('id', false);
+        if(!$id) {
+            return $this->_bad_request('No id.');
+        }
+        if(!($supplychain = ORM::factory('supplychain', $id))) {
+            return $this->_not_found('That supplychain does not exist.');
+        }
+        $current_user = Auth::instance()->get_user();
+        if(!$current_user) {
+            return $this->_forbidden('You must be logged in to create supplychains.');
+        }
+        if((int)$current_user->id !== (int)$supplychain->user_id) {
+            $user_groups = ORM::factory('user', $current_user)
+                ->groups->find_all()->as_array('id', true);
+            return $this->_forbidden(
+                'You do not have permission to edit this supplychain.'
+            );
+        }
+        $put = $this->request->put_data;
+        try {
+            if($this->_validate_raw_supplychain($put));
+        } catch(Exception $e) {
+            return $this->_bad_request('Could not save supplychain: '.$e->getMessage());
+        }
     }
 
     protected function _validate_raw_supplychain($data) {
-        if(!isset($data->supplychain) || !is_object($data->supplychain))
+        if(!isset($data->supplychain) || !is_object($data->supplychain)) {
             throw new Exception('Bad data: no supplychain.');
+        }
         return ORM::factory('supplychain')
             ->validate_raw_supplychain($data->supplychain);
     }

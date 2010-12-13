@@ -3,6 +3,7 @@ Sourcemap.Supplychain = function(remote_id) {
     this.local_id = Sourcemap.local_id("supplychain");
     this.stops = [];
     this.hops = [];
+    this.attributes = {};
     this.broadcast('supplychainInstantiated', this);
 }
 
@@ -158,6 +159,11 @@ Sourcemap.Stop = function(geometry, attributes) {
     this.supplychain_id = null;
     this.geometry = geometry;
     this.attributes = attributes ? Sourcemap.deep_clone(attributes) : {};
+}
+
+Sourcemap.Stop.prototype.getAttr = function(k, d) {
+    if(this.attributes[k] !== undefined) return this.attributes[k];
+    else return d;
 }
 
 Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {

@@ -16,7 +16,8 @@ class Model_User extends Model_Auth_User {
             'model' => 'role', 'through' => 'user_role', 
         ),
         'groups' => array(
-            'model' => 'usergroup', 'through' => 'user_usergroup'
+            'model' => 'usergroup', 'through' => 'user_usergroup',
+            'far_key' => 'usergroup_id'
         )
 	);
 

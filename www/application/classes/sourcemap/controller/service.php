@@ -41,9 +41,14 @@ class Sourcemap_Controller_Service extends Controller_REST {
             $this->request->posted_content_type = $this->_req_content_type();
             $this->request->posted_raw = file_get_contents('php://input');
             $this->request->posted_data = $this->_unserialize($this->request->posted_raw);
+        } elseif(Request::$method === 'PUT') {
+            $this->request->put_content_type = $this->_req_content_type();
+            $this->request->put_raw = file_get_contents('php://input');
+            $this->request->put_data = $this->_unserialize($this->request->put_raw);
         } else {
             $this->_format = isset($_GET['f']) ? $_GET['f'] : $this->_default_format;
         }
+        return $pbefore;
     }
 
     public function after() {

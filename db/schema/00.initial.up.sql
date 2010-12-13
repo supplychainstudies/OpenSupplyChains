@@ -18,7 +18,7 @@ create table "supplychain" (
 create table "supplychain_attribute" (
     id serial,
     supplychain_id integer not null,
-    "key" varchar(32) not null,
+    "key" varchar(128) not null,
     "value" text,
     constraint supplychain_attribute_id_pkey primary key (id),
     constraint supplychain_attribute_key_key unique (supplychain_id, "key"),
@@ -36,7 +36,7 @@ select AddGeometryColumn('', 'stop', 'geometry', 3857, 'POINT', 2);
 create table "stop_attribute" (
     id serial,
     stop_id integer not null,
-    "key" varchar(32) not null,
+    "key" varchar(128) not null,
     "value" text,
     constraint stop_attribute_id_pkey primary key (id),
     constraint stop_attribute_key_key unique (stop_id, "key"),
@@ -57,11 +57,11 @@ select AddGeometryColumn('', 'hop', 'geometry', 3857, 'MULTILINESTRING', 2);
 create table "hop_attribute" (
     id serial,
     hop_id integer not null,
-    "key" varchar(32) not null,
+    "key" varchar(128) not null,
     "value" text,
     constraint hop_attribute_id_pkey primary key (id),
     constraint hop_attribute_key_key unique (hop_id, "key"),
-    foreign key (hop_id) references stop (id) on delete cascade
+    foreign key (hop_id) references hop (id) on delete cascade
 );
 
 insert into sourcemap_schema_version ("key", extra) values (

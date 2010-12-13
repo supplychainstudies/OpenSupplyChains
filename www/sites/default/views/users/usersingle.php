@@ -18,7 +18,7 @@
  <?if(isset($roles) && count($roles)>0) {?>
   <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k) { ?>
-    <form name="user-roles" method="post" action="admin/users/delete/<?= $user->id?>"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['id']?>"><input type="submit" value="delete"/></form> 
+    <form name="user-roles" method="post" action="admin/users/delete/<?= $user->id?>"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
 <? }?><br />
  <? }?>
 
@@ -29,7 +29,7 @@
 <? foreach ($all_roles as $role) { ?>			
     <? $skip = false; 
        foreach($roles as $roler) {
-         if($roler['name'] == $role['name']) {
+         if($roler['name'] == $role->name) {
 	   $skip = true; 
 	   break; 
 	 }
@@ -39,7 +39,7 @@
       }
 ?>
 					    
-   <option value="<?php echo $role['name']; ?>"><?php echo $role['name']; ?></option>
+   <option value="<?php echo $role->name; ?>"><?php echo $role->name; ?></option>
 
   <? }?>
    </select><input type="submit" value="add role"/></form>

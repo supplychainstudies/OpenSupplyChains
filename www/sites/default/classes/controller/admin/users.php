@@ -42,12 +42,7 @@
 	  $roles[] = $role->as_array();
 	}
 
-	$query = "SELECT * FROM role ";
-	$user_roles = array();
-	$all_roles = Db::query(Database::SELECT, $query)
-          ->execute()
-          ->as_array();
-
+	$all_roles = ORM::factory('role')->find_all()->as_array('id', array('id', 'name'));
 	
 	$this->template->main_content->user = $user;
 	$this->template->main_content->roles = $roles;
@@ -61,9 +56,7 @@
 	  ->rule('password', 'max_length', array(16))
 	  ->rule('confirmpassword', 'not_empty')
 	  ->rule('confirmpassword', 'max_length', array(16))
-	  ->filter(true, 'trim');
-
-	
+	  ->filter(true, 'trim');	
 	
 	if($post->check()) {
 
@@ -92,10 +85,10 @@
 	if($post->check()) {
 	  $post = (object)$post->as_array();
 	  $role = $post->role;  
+	  $role_id = ORM::factory('role', array('name' => $role));
 
-	  $query = "DELETE FROM user_role WHERE role_id = $role AND user_id = $id";
-	  $delete_role= Db::query(Database::DELETE, $query)
-	    ->execute();
+	  $user = ORM::factory('user', $id)->remove('roles', $role_id)->save();
+	  
 	}
 	
 	$this->request->redirect("admin/users/single/".$id);
@@ -113,26 +106,24 @@
 	    $roles[] = $role->as_array();
 	  }
 	  $role_added = $post->addrole;
-	  $query = "SELECT id FROM role WHERE name = '$role_added'";
-	  $role_id = Db::query(Database::SELECT, $query)
-	    ->execute()->as_array();
-	  $role_id = $role_id[0]['id'];
+	  
+	  $roleid = ORM::factory('role', array('name' => $role_added));
 
+	 
 	  //check if the role already exists, if not add the new role
 	  foreach($roles as $i => $k) {
-	    if($roles[$i]['name'] == $post->addrole){
+	    if($roles[$i]['name'] == $role_added){
 	      $check = true;
 	      break;
 	    }
 	  }
 	    if ($check == false || (count($roles)<0)) {
-	      $query = "INSERT into user_role (id, user_id, role_id) VALUES ((SELECT MAX(id) FROM user_role)+1, $id, $role_id)";
-	      $role_id = Db::query(Database::INSERT, $query)
-		->execute();
+	      $user = ORM::factory('user', $id)->add('roles', $roleid)->save();
+
 	    }  
 	}
 	$this->request->redirect("admin/users/single/".$id);
       }
-	  
+
 
 }

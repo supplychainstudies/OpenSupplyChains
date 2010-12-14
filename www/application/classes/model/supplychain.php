@@ -47,33 +47,65 @@ class Model_Supplychain extends ORM {
         return $this;
     }
     
-    public function kitchen_sink() {
-        // get everything you'd need for a supplychain.
-        $supplychain = false;
-        if($this->loaded() && $this->pk()) {
+    public function kitchen_sink($scid) {
+        $scid = (int)$scid;
+        if(($sc = ORM::factory('supplychain', $scid)) && $sc->loaded()) {
+            $rows = $this->_db->query(Database::SELECT,
+                sprintf("select s.id as stop_id, ST_AsText(s.geometry) as geometry, 
+                        sa.key as attr_k, sa.value as attr_v
+                    from stop as s left outer join stop_attribute as sa on
+                        (s.id=sa.stop_id)
+                    where s.supplychain_id = %d
+                    order by sa.id desc",
+                    $scid
+                ), true
+            )->as_array();
             $stops = array();
-            $hops = array();
-            foreach($this->stops->find_all()->as_array() as $i => $stop) {
-                $attrs = $stop->attributes->find_all();
-                $stop_arr = $stop->as_array();
-                $stop_arr['attributes'] = (object)$attrs->as_array("key", "value");
-                $stops[] = (object)$stop_arr;
-                foreach($stop->hops->find_all() as $j => $hop) {
-                    $hattrs = $hop->attributes->find_all();
-                    $hop_arr = $hop->as_array();
-                    $hop_arr['attributes'] = (object)$hattrs
-                        ->as_array("key", "value");
-                    $hops[] = (object)$hop_arr;
+            foreach($rows as $i => $row) {
+                if(!isset($stops[$row->stop_id])) {
+                    $stops[$row->stop_id] = (object)array(
+                        'id' => $row->stop_id,
+                        'geometry' => $row->geometry,
+                        'attributes' => (object)array()
+                    );
                 }
+                if($row->attr_k) 
+                    $stops[$row->stop_id]->attributes->{$row->attr_k} = $row->attr_v;
             }
-            $attributes = $this->attributes
-                ->find_all()->as_array('key', 'value');
-            $supplychain = (object)$this->as_array();
-            $supplychain->stops = $stops;
-            $supplychain->hops = $hops;
-            $supplychain->attributes = $attributes;
-        }
-        return $supplychain;
+            $hops = array();
+            $sql = sprintf("select s.id as stop_id, h.id as hop_id, h.geometry as geometry,
+                    ha.key as attr_k, ha.value as attr_v
+                from stop as s 
+                    left outer join hop as h on (s.id=h.from_stop_id)
+                    left outer join hop_attribute as ha on (h.id=ha.hop_id)
+                where s.supplychain_id=%d and h.id is not null", $scid
+            );
+            $rows = $this->_db->query(Database::SELECT, $sql, true);
+            foreach($rows as $i => $row) {
+                if(!isset($hops[$row->hop_id])) {
+                    $hops[$row->hop_id] = (object)array(
+                        'id' => $row->stop_id,
+                        'geometry' => $row->geometry,
+                        'attributes' => (object)array()
+                    );
+                }
+                if($row->attr_k)
+                    $hops[$row->stop_id]->attributes->{$row->attr_k} = $row->attr_v;
+            }
+            $sql = sprintf("select sca.key as attr_k, sca.value as attr_v
+                from supplychain_attribute as sca
+                where sca.supplychain_id=%d", $scid
+            );
+            $sc = (object)$sc->as_array();
+            $sc->attributes = new stdClass();
+            $rows = $this->_db->query(Database::SELECT, $sql, true);
+            foreach($rows as $i => $row) {
+                $sc->attributes->{$row->attr_k} = $row->attr_v;
+            }
+            $sc->stops = $stops;
+            $sc->hops = $hops;
+        } else throw new Exception('Supplychain not found.');
+        return $sc;
     }
 
     public function validate_raw_supplychain($data) {
@@ -105,5 +137,69 @@ class Model_Supplychain extends ORM {
             throw new Exception('Bad supplychain: hops to nonexistent stops.');
         }
         return $valid;
+    }
+
+    public function save_raw_supplychain($sc, $scid=null) {
+        if(!$scid) {
+            # todo: create here.
+            $new_sc = ORM::factory('supplychain')->save();
+            $scid = $new_sc->id;
+        } else {
+            $sql = sprintf('delete from supplychain_attribute where supplychain_id = %d', $scid);
+            $this->_db->query(Database::DELETE, $sql, true);
+            $sql = sprintf('delete from stop where supplychain_id = %d', $scid);
+            $this->_db->query(Database::DELETE, $sql, true);
+        }
+        # todo: concurrency? check last rev?
+        $this->_db->query(null, 'BEGIN', true);
+        try {
+            $sql = sprintf('insert into stop (supplychain_id, geometry) values '.
+                '(:supplychain_id, ST_SetSRID(ST_GeometryFromText(:geometry), %d))',
+                Sourcemap::PROJ
+            );
+            $query = DB::query(Database::INSERT, $sql, true)->param(':supplychain_id', $scid);
+            $last_insert_query = DB::query(Database::SELECT, 'select currval(\'stop_id_seq\') as stop_seq');
+            $stattr_sql = 'insert into stop_attribute (stop_id, "key", "value") values (:stop_id, :key, :value)';
+            $stattr_insert_query = DB::query(Database::INSERT, $stattr_sql);
+            $stop_map = array();
+            foreach($sc->stops as $sti => $raw_stop) {
+                list($nothing, $affected) = $query->param(':geometry', $raw_stop->geometry)->execute();
+                if($affected && $last_insert = $last_insert_query->execute()) {
+                    $stop_map[$raw_stop->id] = $last_insert[0]['stop_seq'];
+                } else throw new Exception('Could not insert stop.');
+                foreach($raw_stop->attributes as $k => $v) {
+                    list($nothing, $affected) = $stattr_insert_query->param(':stop_id', $stop_map[$raw_stop->id])
+                        ->param(':key', $k)->param(':value', $v)->execute();
+                    if(!$affected) throw new Exception('Could not insert stop attribute: "'.$k.'".');
+                }
+            }
+            $hop_insert_query = DB::query(Database::INSERT, 
+                'insert into hop (to_stop_id,from_stop_id,geometry) values '.
+                '(:to_stop_id, :from_stop_id, :geometry)'
+            );
+            $last_insert_query = DB::query(Database::SELECT, 'select currval(\'hop_id_seq\') as stop_seq');
+            $hattr_sql = 'insert into stop_attribute (hop_id, "key", "value") values (:hop_id, :key, :value)';
+            $hattr_insert_query = DB::query(Database::INSERT, $hattr_sql);
+            foreach($sc->hops as $hi => $raw_hop) {
+                list($nothing, $affected) = $hop_insert_query
+                    ->param(':to_stop_id', $stop_map[$raw_hop->to_stop_id])
+                    ->param(':from_stop_id', $stop_map[$raw_hop->from_stop_id])
+                    ->param(':geometry', $raw_hop->geometry)
+                    ->execute();
+                if($affected && $last_insert = $last_insert_query->execute()) {
+                    $new_hop_id = (int)$last_insert[0]['stop_seq'];
+                } else throw new Exception('Could not insert hop.');
+                foreach($raw_hop->attributes as $k => $v) {
+                    list($nothing, $affected) = $hattr_insert_query->param(':hop_id', $new_hop_id)
+                        ->param(':key', $k)->param(':value', $v)->execute();
+                    if(!$affected) throw new Exception('Could not insert hop attribute: "'.$k.'".');
+                }
+            }
+        } catch(Exception $e) {
+            $this->_db->query(null, 'ROLLBACK', true);
+            throw new Exception('Could not save raw suppychain with id "'.$scid.'"('.$e->getMessage().')');
+        }
+        $this->_db->query(null, 'COMMIT', true);
+        return $scid;
     }
 }

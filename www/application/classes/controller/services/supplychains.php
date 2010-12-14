@@ -15,11 +15,16 @@
                     'supplychain' => unserialize($cached)
                 );
             } else {
-                $supplychain = ORM::factory('supplychain', $id);
-                if(!$supplychain->loaded()) {
+                $fetched = false;
+                try {
+                    $fetched = ORM::factory('supplychain')->kitchen_sink($id);
+                } catch(Exception $e) {
+                    // pass
+                    $fetched = false;
+                }
+                if(!$fetched) {
                     return $this->_not_found('Supplychain not found.');
                 }
-                $fetched = $supplychain->kitchen_sink();
                 Cache::instance()->set('supplychain-'.$id, serialize($fetched));
                 $this->response = array(
                     'supplychain' => $fetched
@@ -55,51 +60,11 @@
         try {
             if($this->_validate_raw_supplychain($posted)) {
                 $raw_sc = $posted->supplychain;
-                $new_sc = ORM::factory('supplychain');
-                $new_sc->user_id = $current_user;
-                $new_sc->save();
-                foreach($raw_sc->attributes as $k => $v) {
-                    $new_sc_attr = ORM::factory('supplychain_attribute');
-                    $new_sc_attr->key = $k;
-                    $new_sc_attr->value = (string)$v;
-                    $new_sc_attr->supplychain_id = $new_sc->id;
-                    $new_sc_attr->save();
-                }
-                $local_stop_ids = array();
-                foreach($raw_sc->stops as $i => $raw_stop) {
-                    $new_stop = ORM::factory('stop');
-                    $new_stop->geometry = $raw_stop->geometry;
-                    $new_stop->supplychain_id = $new_sc->id;
-                    $new_stop->save();
-                    $local_stop_ids[(int)$raw_stop->id] = (int)$new_stop->id;
-                    foreach($raw_stop->attributes as $k => $v) {
-                        $new_stop_attr = ORM::factory('stop_attribute');
-                        $new_stop_attr->stop_id = $new_stop->id;
-                        $new_stop_attr->{'key'} = $k;
-                        $new_stop_attr->value = $v;
-                        $new_stop_attr->save();
-                    }
-                }
-                foreach($raw_sc->hops as $i => $raw_hop) {
-                    $new_hop = ORM::factory('hop');
-                    $new_hop->geometry = $raw_hop->geometry;
-                    $new_hop->from_stop_id = $local_stop_ids[(int)$raw_hop->from_stop_id];
-                    $new_hop->to_stop_id = $local_stop_ids[(int)$raw_hop->to_stop_id];
-                    $new_hop->save();
-                    foreach($raw_hop->attributes as $k => $v) {
-                        $new_hop_attr = ORM::factory('hop_attribute');
-                        $new_hop_attr->hop_id = $new_hop->id;
-                        $new_hop_attr->{'key'} = $k;
-                        $new_hop_attr->value = $v;
-                        $new_hop_attr->save();
-                    }
-                    
-                }
-
+                $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
                 $this->request->status = 201;
-                $this->request->headers['Location'] = 'services/supplychains/'.$new_sc->id;
+                $this->request->headers['Location'] = 'services/supplychains/'.$new_scid;
                 $this->response = (object)array(
-                    'created' => 'services/supplychains/'.$new_sc->id
+                    'created' => 'services/supplychains/'.$new_scid
                 );
             }
         } catch(Exception $e) {
@@ -108,6 +73,7 @@
     }
 
     public function action_put() {
+        error_log(__METHOD__);
         $id = $this->request->param('id', false);
         if(!$id) {
             return $this->_bad_request('No id.');
@@ -115,7 +81,7 @@
         if(!($supplychain = ORM::factory('supplychain', $id))) {
             return $this->_not_found('That supplychain does not exist.');
         }
-        $current_user = Auth::instance()->get_user();
+        $current_user = Auth::instance()->logged_in() ? Auth::instance()->get_user() : false;
         if(!$current_user) {
             return $this->_forbidden('You must be logged in to create supplychains.');
         }
@@ -128,10 +94,18 @@
         }
         $put = $this->request->put_data;
         try {
-            if($this->_validate_raw_supplychain($put));
+            if($this->_validate_raw_supplychain($put)) {
+                $raw_sc = $put->supplychain;
+                $supplychain->save_raw_supplychain($raw_sc, $id);
+            }
         } catch(Exception $e) {
+            die($e);
             return $this->_bad_request('Could not save supplychain: '.$e->getMessage());
         }
+        $this->request->status = 202;
+        $this->response = (object)array(
+            'success' => 'Supplychain updated.'
+        );
     }
 
     protected function _validate_raw_supplychain($data) {

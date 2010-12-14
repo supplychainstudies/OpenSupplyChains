@@ -36,6 +36,8 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 
 //-- Configuration and initialization -----------------------------------------
 
+Sourcemap::init();
+
 /**
  * Set Kohana::$environment if $_ENV['KOHANA_ENV'] has been supplied.
  * 

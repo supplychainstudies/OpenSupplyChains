@@ -40,10 +40,10 @@ Sourcemap.Map.prototype.initMap = function() {
             -20037508.43, -20037508.43,
             20037508.43, 20037508.43
         ),
-        "restrictedExtent": new OpenLayers.Bounds(
+        /*"restrictedExtent": new OpenLayers.Bounds(
             -20037508.43, -20037508.43,
             20037508.43, 20037508.43
-        ),
+        ),*/
         "minZoomLevel": 2
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);

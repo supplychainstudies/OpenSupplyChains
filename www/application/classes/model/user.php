@@ -13,7 +13,8 @@ class Model_User extends Model_Auth_User {
 	protected $_has_many = array(
 		'user_tokens' => array('model' => 'user_token'),
 		'roles' => array(
-            'model' => 'role', 'through' => 'user_role', 
+            'model' => 'role', 'through' => 'user_role',
+            'foreign_key' => 'user_id', 'far_key' => 'role_id'
         ),
         'groups' => array(
             'model' => 'usergroup', 'through' => 'user_usergroup',

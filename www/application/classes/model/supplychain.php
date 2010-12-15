@@ -102,8 +102,12 @@ class Model_Supplychain extends ORM {
             foreach($rows as $i => $row) {
                 $sc->attributes->{$row->attr_k} = $row->attr_v;
             }
-            $sc->stops = $stops;
-            $sc->hops = $hops;
+            $stops_arr = array();
+            foreach($stops as $stop) $stops_arr[] = $stop;
+            $hops_arr = array();
+            foreach($hops as $hop) $hops_arr[] = $hop;
+            $sc->stops = $stops_arr;
+            $sc->hops = $hops_arr;
         } else throw new Exception('Supplychain not found.');
         return $sc;
     }
@@ -201,5 +205,40 @@ class Model_Supplychain extends ORM {
         }
         $this->_db->query(null, 'COMMIT', true);
         return $scid;
+    }
+
+    public function user_can( $user_id, $mode) {
+        $can = false;
+        if($this->loaded()) {
+            $owner_id = (int)$this->user_id;
+            $user_id = (int)$user_id;
+            // owner?
+            if($owner_id === $user_id) {
+                $can = true;
+            }
+            // group?
+            $user = ORM::factory('user', $user_id);
+            if(!$can && $this->usergroup_id) {
+                $owner_group_id = (int)$this->usergroup_id;
+                if($owner_group_id && $this->usergroup_perms & $mode) {
+                    if($user->has('groups', ORM::factory('usergroup', $this->group_id))) {
+                        $can = true;
+                    }
+                }
+            }
+            // other?
+            if(!$can && $this->other_perms & $mode) {
+                $can = true;
+            }
+            // admin?
+            if(!$can && $user) {
+                $admin = ORM::factory('role')
+                    ->where('name', '=', 'adminstrator')->find();
+                if($user->has('roles', $admin)) {
+                    $can = true;
+                } else die("$user_id: \n".print_r($user->roles->find_all()->as_array(), true));
+            }
+        }
+        return $can;
     }
 }

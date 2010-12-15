@@ -4,12 +4,12 @@ class Controller_Map extends Sourcemap_Controller_Layout {
     public $layout = 'map';
     public $template = 'map/view';
     
-    public function action_index() {}
-
     public function action_view($supplychain_id) {
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
-            if($supplychain->other_perms & Sourcemap::READ) {
+            $current_user_id = (int)Auth::instance()->logged_in();
+            $owner_id = (int)$supplychain->user_id;
+            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->template->supplychain_id = $supplychain->id;
             } else {
                 $this->request->status = 403;

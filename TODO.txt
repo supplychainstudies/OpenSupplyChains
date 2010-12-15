@@ -11,3 +11,7 @@
 - Security
     - failed login tracking/throttling
     - custom salt/hash pattern
+- Build/Deploy (ant/phing?)
+    - dirs/perms
+    - schema update (db-migrate.sh)
+    - clear cache

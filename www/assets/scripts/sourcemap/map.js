@@ -72,16 +72,6 @@ Sourcemap.Map.prototype.initLayers = function() {
             "strokeColor": "#eee",
             "fontColor": "#eee",
             "fontSize": "${size}"//,
-            /*"label": "${label}",
-            "fontSize": "16px",
-            "fontFamily": "Arial, sans-serif",
-            "fontWeight": "bold",
-            "fontStyle": "italic",
-            "labelAlign": "tm",
-            "fontOpacity": .9,
-            "labelXOffset": "${size}",
-            "labelYOffset": "${size}"*/
-
         },
         "select": {
             "fillColor": "yellow"
@@ -116,19 +106,14 @@ Sourcemap.Map.prototype.initLayers = function() {
 }
 
 Sourcemap.Map.prototype.initControls = function() {
+    this.broadcast('mapControlsInitialize', this);
     this.addControl('select', 
         new OpenLayers.Control.SelectFeature([this.getLayer('stops'), this.getLayer('hops')], {
             "onSelect": OpenLayers.Function.bind(function(feature) { this.broadcast('featureSelected', {'map': this, 'feature': feature}); }, this)
         })
     );
-    this.addControl('drag',
-        new OpenLayers.Control.DragFeature(this.getLayer('stops'))
-    );
-    this.controls.drag.activate();
-    this.addControl('mouse',
-        new OpenLayers.Control.MousePosition()
-    );
-    this.broadcast('mapControlsInitialized', this);
+    this.controls.select.activate();
+    this.broadcast('mapControlsInitialized', this, ['select']);
     return this;
 }
 
@@ -161,39 +146,9 @@ Sourcemap.Map.prototype.getControl = function(label) {
     return this.controls[label];
 }
 
-Sourcemap.Map.prototype.loadSupplychain = function(remote_id, callback) {
-    // fetch and initialize supplychain
-    var _that = this;
-    var _remote_id = remote_id;
-    $.get('services/supplychains/'+remote_id, {},  function(data) {
-            callback.apply(this, arguments);
-            // notice this event fires _after_ the callback runs.
-            _that.broadcast('mapSupplychainLoaded', this, data);
-        }
-    );
-}
-
-Sourcemap.Map.prototype.saveSupplychain = function(supplychain_id) {
-    // this.findSupplychain(supplychain_id);
-    // save supplychain
-    // this.broadcast('mapSupplychainSaved', this, supplychain); asynch!
-}
-
 Sourcemap.Map.prototype.mapSupplychain = function(supplychain) {
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Sourcemap.Supplychain required.');
-    this.supplychain = supplychain;
-    var vols = [];
-    for(var i=0; i<supplychain.stops.length; i++) {
-        var stop = supplychain.stops[i];
-        var volp = stop.getAttr('org.mysourcemap.stonyfield.volp', 0);
-        if(typeof volp == 'string') volp = parseFloat(volp.replace(/%/, ''));
-        if(!volp) volp = 0;
-        stop.attributes['org.mysourcemap.stonyfield.volp'] = volp;
-        vols.push(volp);
-    }
-    supplychain.attributes['org.mysourcemap.stonyfield.vmax'] = Math.max.apply(Math, vols);
-    supplychain.attributes['org.mysourcemap.stonyfield.vmin'] = Math.min.apply(Math, vols);
     for(var i=0; i<supplychain.stops.length; i++) {
         this.mapStop(supplychain.stops[i], supplychain);
     }
@@ -225,7 +180,7 @@ Sourcemap.Map.prototype.mapHop = function(hop) {
     new_feature.attributes.hop_id = hop.local_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
-    new_feature.attributes.size = 8;
+    new_feature.attributes.size = 4;
     this.broadcast('mapHopMapped', this, hop, new_feature);
     this.layers.hops.addFeatures([new_feature]);
 }

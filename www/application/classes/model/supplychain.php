@@ -199,6 +199,22 @@ class Model_Supplychain extends ORM {
                     if(!$affected) throw new Exception('Could not insert hop attribute: "'.$k.'".');
                 }
             }
+            if(isset($sc->usergroup_perms)) {
+                $sc->usergroup_perms = (int)$sc->usergroup_perms;
+                $sql = sprintf(
+                    'update supplychain set usergroup_perms = %d where id = %d', 
+                    $sc->usergroup_perms, $scid
+                );
+                $this->_db->query(Database::UPDATE, $sql);
+            }
+            if(isset($sc->other_perms)) {
+                $sc->other_perms = (int)$sc->other_perms;
+                $sql = sprintf(
+                    'update supplychain set other_perms = %d where id = %d', 
+                    $sc->other_perms, $scid
+                );
+                $this->_db->query(Database::UPDATE, $sql);
+            }
         } catch(Exception $e) {
             $this->_db->query(null, 'ROLLBACK', true);
             throw new Exception('Could not save raw suppychain with id "'.$scid.'"('.$e->getMessage().')');

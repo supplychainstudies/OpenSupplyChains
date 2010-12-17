@@ -258,4 +258,111 @@ class Sourcemap_Proj {
         return $a / sqrt(1.0 - $temp * $temp);
     }
 
+    public static function transform($src, $dest, $pt) {
+        if(!($src instanceof Sourcemap_Proj_Projection))
+            $src = new Sourcemap_Proj_Projection($src);
+        if(!($dest instanceof Sourcemap_Proj_Projection))
+            $dest = new Sourcemap_Proj_Projection($dest);
+        // Workaround for Spherical Mercator
+        if(($src->srs_projnum =="900913" && $dest->datum_code != "WGS84") ||
+            ($dest->srs_projnum == "900913" && $src->datum_code != "WGS84")) {
+            $wgs84 = new Sourcemap_Proj_Projection('WGS84');
+            self::transform($src, $wgs84, $pt);
+            $src = wgs84;
+        }
+
+        // Transform source points to long/lat, if they aren't already.
+        if($source->proj_name == "longlat") {
+            $point->x *= self::D2R;  // convert degrees to radians
+            $point->y *= self::D2R;
+        } else {
+            if($src->to_meter) {
+                $pt->x *= $src->to_meter;
+                $pt->y *= $src->to_meter;
+            }
+            $source->inverse($pt); // Convert Cartesian to longlat
+        }
+
+        // Adjust for the prime meridian if necessary
+        if ($src->from_greenwich) { 
+            $pt->x += $src->from_greenwich; 
+        }
+
+        // Convert datums if needed, and if possible.
+        $pt = self::datum_transform($source->datum, $dest->datum, $pt );
+
+        // Adjust for the prime meridian if necessary
+        if($dest->from_greenwich) {
+            $pt->x -= $dest->from_greenwich;
+        }
+
+        if($dest->proj_name == "longlat") {
+            // convert radians to decimal degrees
+            $pt->x *= self::R2D;
+            $pt->y *= self::R2D;
+        } else  { // else project
+            $dest->forward($pt);
+            if ($dest->to_meter) {
+                $pt->x /= $dest->to_meter;
+                $pt->y /= $dest->to_meter;
+            }
+        }
+        return $pt;
+    }
+
+    public static function datum_transform(Sourcemap_Proj_Datum $src, Sourcemap_Proj_Datum $dest, $pt) {
+        // Short cut if the datums are identical.
+        if(Sourcemap_Proj_Datum::cmp($src, $dest)) {
+            return $pt;
+        }
+
+        // Explicitly skip datum transform by setting 'datum=none' as parameter for either source or dest
+        if($src->datum_type == self::PJD_NODATUM
+            || $dest->datum_type == self::PJD_NODATUM) {
+            return $pt;
+        }
+
+        // If this datum requires grid shifts, then apply it to geodetic coordinates.
+        if($src->datum_type == self::PJD_GRIDSHIFT ) {
+            throw new Exception('Gridshift not implemented.');
+        }
+
+        if($dest->datum_type == self::PJD_GRIDSHIFT ) {
+            throw new Exception('Gridshift not implemented.');
+        }
+
+        // Do we need to go through geocentric coordinates?
+        if($src->es != $dest->es || $src->a != $dest->a
+          || $src->datum_type == self::PJD_3PARAM
+          || $src->datum_type == self::PJD_7PARAM
+          || $dest->datum_type == self::PJD_3PARAM
+          || $dest->datum_type == self::PJD_7PARAM){
+
+        // Convert to geocentric coordinates.
+        $src->geodetic_to_geocentric($pt);
+        // CHECK_RETURN;
+
+        // Convert between datums
+        if($src->datum_type == self::PJD_3PARAM || $src->datum_type == self::PJD_7PARAM) {
+          $src->geocentric_to_wgs84($pt);
+          // CHECK_RETURN;
+        }
+
+        if( $dest->datum_type == self::PJD_3PARAM || $dest->datum_type == self::PJD_7PARAM) {
+          $dest->geocentric_from_wgs84($pt);
+          // CHECK_RETURN;
+        }
+
+        // Convert back to geodetic coordinates
+        $dest->geocentric_to_geodetic($pt);
+          // CHECK_RETURN;
+        }
+
+        // Apply grid shift to destination if required
+        if( $dest->datum_type == self::PJD_GRIDSHIFT) {
+            throw new Exception('Grid shift not implemented.');
+        }
+        return $pt;
+
+    }
 }

@@ -23,11 +23,11 @@ class Sourcemap_Proj_Projection {
     public function init($params) {
         foreach($params as $k => $v) $this->{$k} = $v;
         // derive constants.
-        if(isset($this->nagrids) & $this->nagrids == '@null') $this->datum_code = 'none';
+        if(isset($this->nagrids) && $this->nagrids == '@null') $this->datum_code = 'none';
         if(isset($this->datum_code) && $this->datum_code && $this->datum_code != 'none') {
             $datum_def = Sourcemap_Proj::$datum[$this->datum_code];
             if($datum_def) {
-                $this->datum_params = $datum_def['towgs84'] ? split(',', $datumDef['towgs84']) : null;
+                $this->datum_params = $datum_def['towgs84'] ? split(',', $datum_def['towgs84']) : null;
                 $this->ellps = $datum_def['ellipse'];
                 $this->datum_name = $datum_def['datumName'] ? $datum_def['datumName'] : $this->datum_code;
             }
@@ -37,7 +37,7 @@ class Sourcemap_Proj_Projection {
             foreach($ellipse as $k => $v)
             $this->{$k} = $v;
         }
-        if((isset($this->rf && $this->rf) && (!isset($this->b) || !$this->b)) 
+        if((isset($this->rf) && $this->rf) && (!isset($this->b) || !$this->b)) 
             $this->b = (1.0 - 1.0/$this->rf) * $this->a;
         if(abs($this->a - $this->b) < Sourcemap_Proj::EPSLN) {
             $this->sphere = true;
@@ -47,7 +47,7 @@ class Sourcemap_Proj_Projection {
         $this->b2 = $this->b * $this->b;          // used in geocentric
         $this->es = ($this->a2 - $this->b2) / $this->a2;  // e ^ 2
         $this->e = sqrt($this->es);        // eccentricity
-        if(isset($this->R_A && $this->R_A) {
+        if(isset($this->R_A) && $this->R_A) {
             $this->a *= 1.0 - $this->es * (Sourcemap_Proj::SIXTH + $this->es * (Sourcemap_Proj::RA4 + $this->es * Sourcemap_Proj::RA6));
             $this->a2 = $this->a * $this->a;
             $this->b2 = $this->b * $this->b;
@@ -156,6 +156,10 @@ class Sourcemap_Proj_Projection {
             }
         }
         return $parsed;
+    }
+
+    public function inverse($pt) {
+        return $pt;
     }
 
 }

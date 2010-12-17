@@ -23,7 +23,7 @@ class Sourcemap_Proj {
     const PJD_NODATUM = 5;
     const SRS_WGS84_SEMIMAJOR = 6378137.0;
 
-    // ellipoid pj_set_ell.c
+    // ellipsoid pj_set_ell.c
     const SIXTH = .1666666666666666667;
     const RA4 = .04722222222222222222;
     const RA6 = .02215608465608465608;
@@ -272,27 +272,27 @@ class Sourcemap_Proj {
         }
 
         // Transform source points to long/lat, if they aren't already.
-        if($source->proj_name == "longlat") {
+        if($src->proj_name == "longlat") {
             $point->x *= self::D2R;  // convert degrees to radians
             $point->y *= self::D2R;
         } else {
-            if($src->to_meter) {
+            if(isset($src->to_meter) && $src->to_meter) {
                 $pt->x *= $src->to_meter;
                 $pt->y *= $src->to_meter;
             }
-            $source->inverse($pt); // Convert Cartesian to longlat
+            $src->inverse($pt); // Convert Cartesian to longlat
         }
 
         // Adjust for the prime meridian if necessary
-        if ($src->from_greenwich) { 
+        if(isset($src->from_greenwich) && $src->from_greenwich) { 
             $pt->x += $src->from_greenwich; 
         }
 
         // Convert datums if needed, and if possible.
-        $pt = self::datum_transform($source->datum, $dest->datum, $pt );
+        $pt = self::datum_transform($src->datum, $dest->datum, $pt );
 
         // Adjust for the prime meridian if necessary
-        if($dest->from_greenwich) {
+        if(isset($dest->from_greenwich) && $dest->from_greenwich) {
             $pt->x -= $dest->from_greenwich;
         }
 

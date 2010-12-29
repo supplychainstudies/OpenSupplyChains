@@ -16,11 +16,11 @@
   public function action_index() {
     $user = ORM::factory('user');
     $page = max($this->request->param('page'), 1);
-    $items = 3;
+    $items = 5;
     $offset = ($items * ($page - 1));
     $count = $user->count_all();
     $pagination = Pagination::factory(
-				      array('current_page' => array('source' => 'route', 'key' => 'page'),
+				      array('current_page' => array('source' => 'query_string', 'key' => 'page'),
 					    'total_items' => $user->count_all(),
 					    'items_per_page' => $items,
 					    ));
@@ -31,8 +31,10 @@
       ->find_all()->as_array('id', array('id', 'email', 'username'));
     $this->template->main_content->page_links = $pagination->render();
     $this->template->main_content->offset = $pagination->offset;
-    
+
+
   }
+  
       public function action_single($id) {
 	
 	$this->template->main_content = new View('users/usersingle');
@@ -41,6 +43,7 @@
 	foreach($user->roles->find_all()->as_array() as $i => $role) {
 	  $roles[] = $role->as_array();
 	}
+
 
 	$all_roles = ORM::factory('role')->find_all()->as_array('id', array('id', 'name'));
 	
@@ -72,8 +75,10 @@
 	    $this->template->main_content->reset = true;
 	    
 	  } else {
-	    Message::instance()->set('Please enter again.', Message::ERROR);
+	    Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
 	  }
+	} else {
+	  Message::instance()->set('Invalid Password Reset.', Message::ERROR);
 	}
 
       }
@@ -89,6 +94,8 @@
 
 	  $user = ORM::factory('user', $id)->remove('roles', $role_id)->save();
 	  
+	} else {
+	  Message::instance()->set('Could not delete role.', Message::ERROR);
 	}
 	
 	$this->request->redirect("admin/users/single/".$id);
@@ -121,6 +128,8 @@
 	      $user = ORM::factory('user', $id)->add('roles', $roleid)->save();
 
 	    }  
+	} else {
+	  Message::instance()->set('Please try again.', Message::ERROR);
 	}
 	$this->request->redirect("admin/users/single/".$id);
       }

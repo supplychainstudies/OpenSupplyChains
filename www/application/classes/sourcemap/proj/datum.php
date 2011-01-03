@@ -37,9 +37,6 @@ class Sourcemap_Proj_Datum {
     }
 
     public static function cmp(Sourcemap_Proj_Datum $a, Sourcemap_Proj_Datum $b) {
-        print __METHOD__."\n";
-        print_r($a);
-        print_r($b);
         if($a->datum_type != $b->datum_type) {
             return false; // false, datums are not equal
         } elseif($a->a != $b->a || abs($a->es - $b->es) > 0.000000000050) {
@@ -97,9 +94,9 @@ class Sourcemap_Proj_Datum {
         $Y = ($Rn + $height) * $cos_lat * sin($longitude);
         $Z = (($Rn * (1 - $this->es)) + $height) * $sin_lat;
 
-        $pt->x = X;
-        $pt->y = Y;
-        $pt->z = Z;
+        $pt->x = $X;
+        $pt->y = $Y;
+        $pt->z = $Z;
         return $this;
     } // cs_geodetic_to_geocentric()
 

@@ -270,8 +270,6 @@ class Sourcemap_Proj {
             self::transform($src, $wgs84, $pt);
             $src = wgs84;
         }
-        print_r($src);
-        print_r($dest);
 
         // Transform source points to long/lat, if they aren't already.
         if($src->proj_name == "longlat") {
@@ -341,8 +339,6 @@ class Sourcemap_Proj {
           || $dest->datum_type == self::PJD_7PARAM){
 
             // Convert to geocentric coordinates.
-            print_r($src);
-            print_r($dest);
             $src->geodetic_to_geocentric($pt);
             // CHECK_RETURN;
 

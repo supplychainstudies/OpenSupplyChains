@@ -15,9 +15,21 @@ class Sourcemap_Proj_Projection {
         // todo: support urn/url/config file
         $this->setSrsCode($srs_code);
         // todo: url loading?
-        $def = isset(Sourcemap_Proj::$defs[$srs_code]) ? Sourcemap_Proj::$defs[$srs_code] : false;
+        $def = self::load_proj_def($srs_code);
         if(!$def) throw new Exception('Def not found for proj "'.$srs_code.'".');
         $this->init(self::parse_def($def));
+        $this->transformer = self::load_proj_transform($this->proj_name);
+    }
+
+    public function load_proj_def($srs_code) {
+        $rc = new ReflectionClass('Sourcemap_Proj_Def_'.$srs_code);
+        return $rc->getStaticPropertyValue('def_data');
+    }
+
+    public function load_proj_transform($proj_name) {
+        $rc = new ReflectionClass('Sourcemap_Proj_Projection_Transform_'.ucfirst($proj_name));
+        $transform = $rc->newInstance();
+        return $transform;
     }
 
     public function init($params) {
@@ -158,8 +170,11 @@ class Sourcemap_Proj_Projection {
         return $parsed;
     }
 
-    public function inverse($pt) {
-        return $pt;
+    public function forward($pt) {
+
     }
 
+    public function inverse($pt) {
+
+    }
 }

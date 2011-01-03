@@ -11,11 +11,13 @@ class Sourcemap_Proj_Datum {
             for($i=0; $i<count($proj->datum_params); $i++) {
                 $proj->datum_params[$i] = (float)$proj->datum_params[$i];
             }
-            if ($proj->datum_params[0] != 0 || $proj->datum_params[1] != 0 || $proj->datum_params[2] != 0 ) {
+            if(count($proj->datum_params) <= 3 && (
+                $proj->datum_params[0] != 0 || $proj->datum_params[1] != 0 ||
+                $proj->datum_params[2] != 0)) {
                 $this->datum_type = Sourcemap_Proj::PJD_3PARAM;
             }
-            if (count($proj->datum_params)> 3) {
-                if ($proj->datum_params[3] != 0 || $proj->datum_params[4] != 0 ||
+            if(count($proj->datum_params) > 3) {
+                if($proj->datum_params[3] != 0 || $proj->datum_params[4] != 0 ||
                     $proj->datum_params[5] != 0 || $proj->datum_params[6] != 0) {
                     $this->datum_type = Sourcemap_Proj::PJD_7PARAM;
                     $proj->datum_params[3] *= Sourcemap_Proj::SEC_TO_RAD;
@@ -35,13 +37,16 @@ class Sourcemap_Proj_Datum {
     }
 
     public static function cmp(Sourcemap_Proj_Datum $a, Sourcemap_Proj_Datum $b) {
+        print __METHOD__."\n";
+        print_r($a);
+        print_r($b);
         if($a->datum_type != $b->datum_type) {
             return false; // false, datums are not equal
-        } else if($a->a != $b->a || abs($a->es - $b->es) > 0.000000000050) {
+        } elseif($a->a != $b->a || abs($a->es - $b->es) > 0.000000000050) {
             // the tolerence for es is to ensure that GRS80 and WGS84
             // are considered identical
             return false;
-        } else if($a->datum_type == Sourcemap_Proj::PJD_3PARAM) {
+        } elseif($a->datum_type == Sourcemap_Proj::PJD_3PARAM) {
             $eq = true;
             for($i=0; $i<3; $i++) {
                 if($a->datum_params[$i] != $b->datum_params[$i]) {
@@ -49,7 +54,7 @@ class Sourcemap_Proj_Datum {
                 }
             }
             return $eq;
-        } else if($this->datum_type == Sourcemap_Proj::PJD_7PARAM) {
+        } elseif($a->datum_type == Sourcemap_Proj::PJD_7PARAM) {
             $eq = true;
             for($i=0; $i<7; $i++) {
                 if($a->datum_params[$i] != $b->datum_params[$i]) {
@@ -58,7 +63,7 @@ class Sourcemap_Proj_Datum {
                 }
             }
             return $eq;
-        } else if($a->datum_type == Sourcemap_Proj::PJD_GRIDSHIFT) {
+        } elseif($a->datum_type == Sourcemap_Proj::PJD_GRIDSHIFT) {
             throw new Exception('Gridshift not implemented.');
         } else {
             return true; // datums are equal
@@ -66,9 +71,9 @@ class Sourcemap_Proj_Datum {
     }
 
     public function geodetic_to_geocentric($pt) {
-        $longitude = $p->x;
-        $latitude = $p->y;
-        $height = $p->z ? $p->z : 0;   //Z value not always supplied
+        $longitude = (float)$pt->x;
+        $latitude = (float)$pt->y;
+        $height = $pt->z ? (float)$pt->z : 0;   //Z value not always supplied
         /*
          ** Don't blow up if Latitude is just a little out of the value
          ** range as it may just be a rounding issue.  Also removed longitude
@@ -76,11 +81,11 @@ class Sourcemap_Proj_Datum {
          */
         if($latitude < -Sourcemap_Proj::HALF_PI && $latitude > -1.001 * Sourcemap_Proj::HALF_PI ) {
             $latitude = -Sourcemap_Proj::HALF_PI;
-        } else if( $latitude > Sourcemap_Proj::HALF_PI && $latitude < 1.001 * Sourcemap_Proj::HALF_PI ) {
+        } elseif( $latitude > Sourcemap_Proj::HALF_PI && $latitude < 1.001 * Sourcemap_Proj::HALF_PI ) {
             $latitude = Sourcemap_Proj::HALF_PI;
-        } else if (($latitude < -Sourcemap_Proj::HALF_PI) || ($latitude > Sourcemap_Proj::HALF_PI)) {
+        } elseif(($latitude < -Sourcemap_Proj::HALF_PI) || ($latitude > Sourcemap_Proj::HALF_PI)) {
             /* $latitude out of range */
-            throw new Exception('Latitude out of range.');
+            throw new Exception('Latitude out of range: '.$latitude);
         }
 
         if ($longitude > Sourcemap_Proj::PI) $longitude -= (2*Sourcemap_Proj::PI);
@@ -92,9 +97,9 @@ class Sourcemap_Proj_Datum {
         $Y = ($Rn + $height) * $cos_lat * sin($longitude);
         $Z = (($Rn * (1 - $this->es)) + $height) * $sin_lat;
 
-        $p->x = X;
-        $p->y = Y;
-        $p->z = Z;
+        $pt->x = X;
+        $pt->y = Y;
+        $pt->z = Z;
         return $this;
     } // cs_geodetic_to_geocentric()
 
@@ -102,54 +107,51 @@ class Sourcemap_Proj_Datum {
     public function geocentric_to_geodetic($pt) {
         /* local defintions and variables */
         /* end-criterium of loop, accuracy of sin(Latitude) */
-        var genau = 1.E-12;
-        var genau2 = (genau*genau);
-        var maxiter = 30;
+        $genau = 1.E-12;
+        $genau2 = ($genau*$genau);
+        $maxiter = 30;
 
-        var P;        /* distance between semi-minor axis and location */
-        var RR;       /* distance between center and location */
-        var CT;       /* sin of geocentric latitude */
-        var ST;       /* cos of geocentric latitude */
-        var RX;
-        var RK;
-        var RN;       /* Earth radius at location */
-        var CPHI0;    /* cos of start or old geodetic latitude in iterations */
-        var SPHI0;    /* sin of start or old geodetic latitude in iterations */
-        var CPHI;     /* cos of searched geodetic latitude */
-        var SPHI;     /* sin of searched geodetic latitude */
-        var SDPHI;    /* end-criterium: addition-theorem of sin(Latitude(iter)-Latitude(iter-1)) */
-        var At_Pole;     /* indicates location is in polar region */
-        var iter;        /* # of continous iteration, max. 30 is always enough (s.a.) */
+#        $P;        /* distance between semi-minor axis and location */
+#        $RR;       /* distance between center and location */
+#        $CT;       /* sin of geocentric latitude */
+#        $ST;       /* cos of geocentric latitude */
+#        $RX;
+#        $RK;
+#        $RN;       /* Earth radius at location */
+#        $CPHI0;    /* cos of start or old geodetic latitude in iterations */
+#        $SPHI0;    /* sin of start or old geodetic latitude in iterations */
+#        $CPHI;     /* cos of searched geodetic latitude */
+#        $SPHI;     /* sin of searched geodetic latitude */
+#        $SDPHI;    /* end-criterium: addition-theorem of sin(Latitude(iter)-Latitude(iter-1)) */
+#        $At_Pole;     /* indicates location is in polar region */
+#        $iter;        /* # of continous iteration, max. 30 is always enough (s.a.) */
 
-        var X = p.x;
-        var Y = p.y;
-        var Z = p.z ? p.z : 0.0;   //Z value not always supplied
-        var Longitude;
-        var Latitude;
-        var Height;
+        $x = $pt->x;
+        $y = $pt->y;
+        $z = $pt->z ? $pt->z : 0.0;   //Z value not always supplied
 
-        At_Pole = false;
-        P = Math.sqrt(X*X+Y*Y);
-        RR = Math.sqrt(X*X+Y*Y+Z*Z);
+        $at_pole = false;
+        $p = sqrt($x*$x+$y*$y);
+        $rr = sqrt($x*$x+$y*$y+$z*$z);
 
         /*      special cases for latitude and longitude */
-        if (P/this.a < genau) {
+        if ($p/$this->a < $genau) {
 
             /*  special case, if P=0. (X=0., Y=0.) */
-            At_Pole = true;
-            Longitude = 0.0;
+            $at_pole = true;
+            $longitude = 0.0;
 
             /*  if (X,Y,Z)=(0.,0.,0.) then Height becomes semi-minor axis
              *  of ellipsoid (=center of mass), Latitude becomes PI/2 */
-            if (RR/this.a < genau) {
-                Latitude = Proj4js.common.HALF_PI;
-                Height   = -this.b;
+            if ($rr/$this->a < $genau) {
+                $latitude = Sourcemap_Proj::HALF_PI;
+                $height = -$this->b;
                 return;
             }
         } else {
             /*  ellipsoidal (geodetic) longitude
              *  interval: -PI < Longitude <= +PI */
-            Longitude=Math.atan2(Y,X);
+            $longitude = atan2($y, $x);
         }
 
         /* --------------------------------------------------------------
@@ -161,40 +163,40 @@ class Sourcemap_Proj_Datum {
          * 2*10**-7 arcsec.
          * --------------------------------------------------------------
          */
-        CT = Z/RR;
-        ST = P/RR;
-        RX = 1.0/Math.sqrt(1.0-this.es*(2.0-this.es)*ST*ST);
-        CPHI0 = ST*(1.0-this.es)*RX;
-        SPHI0 = CT*RX;
-        iter = 0;
+        $ct = $z/$rr;
+        $st = $p/$rr;
+        $rx = 1.0/sqrt(1.0-$this->es*(2.0-$this->es)*$st*$st);
+        $cphi0 = $st*(1.0-$this->es)*$rx;
+        $sphi0 = $ct*$rx;
+        $iter = 0;
 
         /* loop to find sin(Latitude) resp. Latitude
          * until |sin(Latitude(iter)-Latitude(iter-1))| < genau */
         do
         {
-            iter++;
-            RN = this.a/Math.sqrt(1.0-this.es*SPHI0*SPHI0);
+            $iter++;
+            $rn = $this->a/sqrt(1.0-$this->es*$sphi0*$sphi0);
 
             /*  ellipsoidal (geodetic) height */
-            Height = P*CPHI0+Z*SPHI0-RN*(1.0-this.es*SPHI0*SPHI0);
+            $height = $p*$cphi0+$z*$sphi0-$rn*(1.0-$this->es*$sphi0*$sphi0);
 
-            RK = this.es*RN/(RN+Height);
-            RX = 1.0/Math.sqrt(1.0-RK*(2.0-RK)*ST*ST);
-            CPHI = ST*(1.0-RK)*RX;
-            SPHI = CT*RX;
-            SDPHI = SPHI*CPHI0-CPHI*SPHI0;
-            CPHI0 = CPHI;
-            SPHI0 = SPHI;
+            $rk = $this->es*$rn/($rn+$height);
+            $rx = 1.0/sqrt(1.0-$rk*(2.0-$rk)*$st*$st);
+            $cphi = $st*(1.0-$rk)*$rx;
+            $sphi = $ct*$rx;
+            $sdphi = $sphi*$cphi0-$cphi*$sphi0;
+            $cphi0 = $cphi;
+            $sphi0 = $sphi;
         }
-        while (SDPHI*SDPHI > genau2 && iter < maxiter);
+        while ($sdphi*$sdphi > $genau2 && $iter < $maxiter);
 
         /*      ellipsoidal (geodetic) latitude */
-        Latitude=Math.atan(SPHI/Math.abs(CPHI));
+        $latitude = atan($sphi/abs($cphi));
 
-        p.x = Longitude;
-        p.y = Latitude;
-        p.z = Height;
-        return p;
+        $pt->x = $longitude;
+        $pt->y = $latitude;
+        $pt->z = $height;
+        return $p;
   } // cs_geocentric_to_geodetic()
 
   /** Convert_Geocentric_To_Geodetic
@@ -202,101 +204,78 @@ class Sourcemap_Proj_Datum {
    * Geocentric to Geodetic Coordinate Conversion', by Ralph Toms, Feb 1996
    */
     public static function geocentric_to_geodetic_noniter($pt) {
-        var X = p.x;
-        var Y = p.y;
-        var Z = p.z ? p.z : 0;   //Z value not always supplied
-        var Longitude;
-        var Latitude;
-        var Height;
+        $x = $pt->x;
+        $y = $pt->y;
+        $z = $pt->z ? $pt->z : 0;   //Z value not always supplied
+        
+#        var W;        /* distance from Z axis */
+#        var W2;       /* square of distance from Z axis */
+#        var T0;       /* initial estimate of vertical component */
+#        var T1;       /* corrected estimate of vertical component */
+#        var S0;       /* initial estimate of horizontal component */
+#        var S1;       /* corrected estimate of horizontal component */
+#        var Sin_B0;   /* Math.sin(B0), B0 is estimate of Bowring aux variable */
+#        var Sin3_B0;  /* cube of Math.sin(B0) */
+#        var Cos_B0;   /* Math.cos(B0) */
+#        var Sin_p1;   /* Math.sin(phi1), phi1 is estimated latitude */
+#        var Cos_p1;   /* Math.cos(phi1) */
+#        var Rn;       /* Earth radius at location */
+#        var Sum;      /* numerator of Math.cos(phi1) */
+#        var At_Pole;  /* indicates location is in polar region */
 
-        var W;        /* distance from Z axis */
-        var W2;       /* square of distance from Z axis */
-        var T0;       /* initial estimate of vertical component */
-        var T1;       /* corrected estimate of vertical component */
-        var S0;       /* initial estimate of horizontal component */
-        var S1;       /* corrected estimate of horizontal component */
-        var Sin_B0;   /* Math.sin(B0), B0 is estimate of Bowring aux variable */
-        var Sin3_B0;  /* cube of Math.sin(B0) */
-        var Cos_B0;   /* Math.cos(B0) */
-        var Sin_p1;   /* Math.sin(phi1), phi1 is estimated latitude */
-        var Cos_p1;   /* Math.cos(phi1) */
-        var Rn;       /* Earth radius at location */
-        var Sum;      /* numerator of Math.cos(phi1) */
-        var At_Pole;  /* indicates location is in polar region */
+        $x = (float)$x;
+        $y = (float)$y;
+        $z = (float)$z;
 
-        X = parseFloat(X);  // cast from string to float
-        Y = parseFloat(Y);
-        Z = parseFloat(Z);
-
-        At_Pole = false;
-        if (X != 0.0)
-        {
-            Longitude = Math.atan2(Y,X);
-        }
-        else
-        {
-            if (Y > 0)
-            {
-                Longitude = Proj4js.common.HALF_PI;
-            }
-            else if (Y < 0)
-            {
-                Longitude = -Proj4js.common.HALF_PI;
-            }
-            else
-            {
-                At_Pole = true;
-                Longitude = 0.0;
-                if (Z > 0.0)
-                {  /* north pole */
-                    Latitude = Proj4js.common.HALF_PI;
-                }
-                else if (Z < 0.0)
-                {  /* south pole */
-                    Latitude = -Proj4js.common.HALF_PI;
-                }
-                else
-                {  /* center of earth */
-                    Latitude = Proj4js.common.HALF_PI;
-                    Height = -this.b;
+        $at_pole = false;
+        if($x != 0.0) {
+            $longitude = atan2($y, $x);
+        } else {
+            if($y > 0) {
+                $longitude = Sourcemap_Proj::HALF_PI;
+            } else if ($y < 0) {
+                $longitude = -Sourcemap_Proj::HALF_PI;
+            } else {
+                $at_pole = true;
+                $longitude = 0.0;
+                if($z > 0.0) {  /* north pole */
+                    $latitude = Sourcemap_Proj::HALF_PI;
+                } elseif($z < 0.0) {  /* south pole */
+                    $latitude = -Sourcemap_Proj::HALF_PI;
+                } else {  /* center of earth */
+                    $latitude = Sourcemap_Proj::HALF_PI;
+                    $height = -$this->b;
                     return;
                 }
             }
         }
-        W2 = X*X + Y*Y;
-        W = Math.sqrt(W2);
-        T0 = Z * Proj4js.common.AD_C;
-        S0 = Math.sqrt(T0 * T0 + W2);
-        Sin_B0 = T0 / S0;
-        Cos_B0 = W / S0;
-        Sin3_B0 = Sin_B0 * Sin_B0 * Sin_B0;
-        T1 = Z + this.b * this.ep2 * Sin3_B0;
-        Sum = W - this.a * this.es * Cos_B0 * Cos_B0 * Cos_B0;
-        S1 = Math.sqrt(T1*T1 + Sum * Sum);
-        Sin_p1 = T1 / S1;
-        Cos_p1 = Sum / S1;
-        Rn = this.a / Math.sqrt(1.0 - this.es * Sin_p1 * Sin_p1);
-        if (Cos_p1 >= Proj4js.common.COS_67P5)
-        {
-            Height = W / Cos_p1 - Rn;
-        }
-        else if (Cos_p1 <= -Proj4js.common.COS_67P5)
-        {
-            Height = W / -Cos_p1 - Rn;
-        }
-        else
-        {
-            Height = Z / Sin_p1 + Rn * (this.es - 1.0);
-        }
-        if (At_Pole == false)
-        {
-            Latitude = Math.atan(Sin_p1 / Cos_p1);
+        $w2 = $x*$x + $y*$y;
+        $w = sqrt($w2);
+        $t0 = $z * Sourcemap_Proj::AD_C;
+        $s0 = sqrt($t0 * $t0 + $w2);
+        $sin_b0 = $t0 / $s0;
+        $cos_b0 = $w / $s0;
+        $sin3_b0 = $sin_b0 * $sin_b0 * $sin_b0;
+        $t1 = $z + $this->b * $this->ep2 * $sin3_b0;
+        $sum = $w - $this->a * $this->es * $cos_b0 * $cos_b0 * $cos_b0;
+        $s1 = sqrt($t1*$t1 + $sum * $sum);
+        $sin_p1 = $t1 / $s1;
+        $cos_p1 = $sum / $s1;
+        $rn = $this->a / sqrt(1.0 - $this->es * $sin_p1 * $sin_p1);
+        if ($cos_p1 >= Sourcemap_Proj::COS_67P5) {
+            $height = $w / $cos_p1 - $rn;
+        } elseif($cos_p1 <= -Sourcemap_Proj::COS_67P5) {
+            $height = $w / -$cos_p1 - $rn;
+        } else {
+            $height = $z / $sin_p1 + $rn * ($this->es - 1.0);
+        } if ($at_pole == false) {
+            $latitude = atan($sin_p1 / $cos_p1);
         }
 
-        p.x = Longitude;
-        p.y = Latitude;
-        p.z = Height;
-        return p;
+        $pt->x = $longitude;
+        $pt->y = $latitude;
+        $pt->z = $height;
+        return $p;
   } // geocentric_to_geodetic_noniter()
 
   /****************************************************************/
@@ -304,32 +283,25 @@ class Sourcemap_Proj_Datum {
   //  p = point to transform in geocentric coordinates (x,y,z)
     public static function geocentric_to_wgs84($pt) {
 
-        if( this.datum_type == Proj4js.common.PJD_3PARAM )
-        {
-            // if( x[io] == HUGE_VAL )
-            //    continue;
-            p.x += this.datum_params[0];
-            p.y += this.datum_params[1];
-            p.z += this.datum_params[2];
+        if(this.datum_type == Sourcemap_Proj::PJD_3PARAM) {
+            $pt->x += $this->datum_params[0];
+            $pt->y += $this->datum_params[1];
+            $pt->z += $this->datum_params[2];
 
-        }
-        else if (this.datum_type == Proj4js.common.PJD_7PARAM)
-        {
-            var Dx_BF =this.datum_params[0];
-            var Dy_BF =this.datum_params[1];
-            var Dz_BF =this.datum_params[2];
-            var Rx_BF =this.datum_params[3];
-            var Ry_BF =this.datum_params[4];
-            var Rz_BF =this.datum_params[5];
-            var M_BF  =this.datum_params[6];
-            // if( x[io] == HUGE_VAL )
-            //    continue;
-            var x_out = M_BF*(       p.x - Rz_BF*p.y + Ry_BF*p.z) + Dx_BF;
-            var y_out = M_BF*( Rz_BF*p.x +       p.y - Rx_BF*p.z) + Dy_BF;
-            var z_out = M_BF*(-Ry_BF*p.x + Rx_BF*p.y +       p.z) + Dz_BF;
-            p.x = x_out;
-            p.y = y_out;
-            p.z = z_out;
+        } elseif(this.datum_type == Sourcemap_Proj::PJD_7PARAM) {
+            $dx_bf = $this->datum_params[0];
+            $dy_bf = $this->datum_params[1];
+            $dz_bf = $this->datum_params[2];
+            $rx_bf = $this->datum_params[3];
+            $ry_bf = $this->datum_params[4];
+            $rz_bf = $this->datum_params[5];
+            $m_bf  = $this->datum_params[6];
+            $x_out = $m_bf*($pt->x - $rz_bf*$pt->y + $ry_bf*$pt->z) + $dx_bf;
+            $y_out = $m_bf*( $rz_bf*$pt->x + $pt->y - $rx_bf*$pt->z) + $dy_bf;
+            $z_out = $m_bf*(-$ry_bf*$pt->x + $rx_bf*$pt->y + $pt->z) + $dz_bf;
+            $pt->x = $x_out;
+            $pt->y = $y_out;
+            $pt->z = $z_out;
         }
   } // cs_geocentric_to_wgs84
 
@@ -339,31 +311,26 @@ class Sourcemap_Proj_Datum {
   //  point to transform in geocentric coordinates (x,y,z)
     public static function geocentric_from_wgs84($pt) {
 
-        if( this.datum_type == Proj4js.common.PJD_3PARAM ) {
-            //if( x[io] == HUGE_VAL )
-            //    continue;
-            p.x -= this.datum_params[0];
-            p.y -= this.datum_params[1];
-            p.z -= this.datum_params[2];
+        if(this.datum_type == Sourcemap_Proj::PJD_3PARAM) {
+            $pt->x -= $this->datum_params[0];
+            $pt->y -= $this->datum_params[1];
+            $pt->z -= $this->datum_params[2];
 
-        }
-        else if (this.datum_type == Proj4js.common.PJD_7PARAM) {
-            var Dx_BF =this.datum_params[0];
-            var Dy_BF =this.datum_params[1];
-            var Dz_BF =this.datum_params[2];
-            var Rx_BF =this.datum_params[3];
-            var Ry_BF =this.datum_params[4];
-            var Rz_BF =this.datum_params[5];
-            var M_BF  =this.datum_params[6];
-            var x_tmp = (p.x - Dx_BF) / M_BF;
-            var y_tmp = (p.y - Dy_BF) / M_BF;
-            var z_tmp = (p.z - Dz_BF) / M_BF;
-            //if( x[io] == HUGE_VAL )
-            //    continue;
+        } elseif($this->datum_type == Sourcemap_Proj::PJD_7PARAM) {
+            $Dx_bf =$this->datum_params[0];
+            $Dy_bf =$this->datum_params[1];
+            $Dz_bf =$this->datum_params[2];
+            $Rx_bf =$this->datum_params[3];
+            $Ry_bf =$this->datum_params[4];
+            $Rz_bf =$this->datum_params[5];
+            $m_bf  =$this->datum_params[6];
+            $x_tmp = ($pt->x - $Dx_bf) / $m_bf;
+            $y_tmp = ($pt->y - $Dy_bf) / $m_bf;
+            $z_tmp = ($pt->z - $Dz_bf) / $m_bf;
 
-            p.x =        x_tmp + Rz_BF*y_tmp - Ry_BF*z_tmp;
-            p.y = -Rz_BF*x_tmp +       y_tmp + Rx_BF*z_tmp;
-            p.z =  Ry_BF*x_tmp - Rx_BF*y_tmp +       z_tmp;
+            $pt->x = $x_tmp + $Rz_bf*$y_tmp - $Ry_bf*$z_tmp;
+            $pt->y = -$Rz_bf*$x_tmp + $y_tmp + $Rx_bf*$z_tmp;
+            $pt->z =  $Ry_bf*$x_tmp - $Rx_bf*$y_tmp + $z_tmp;
     } //cs_geocentric_from_wgs84()
   }
 

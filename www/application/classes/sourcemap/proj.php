@@ -264,12 +264,14 @@ class Sourcemap_Proj {
         if(!($dest instanceof Sourcemap_Proj_Projection))
             $dest = new Sourcemap_Proj_Projection($dest);
         // Workaround for Spherical Mercator
-        if(($src->srs_projnum =="900913" && $dest->datum_code != "WGS84") ||
+        if(($src->srs_projnum == "900913" && $dest->datum_code != "WGS84") ||
             ($dest->srs_projnum == "900913" && $src->datum_code != "WGS84")) {
             $wgs84 = new Sourcemap_Proj_Projection('WGS84');
             self::transform($src, $wgs84, $pt);
             $src = wgs84;
         }
+        print_r($src);
+        print_r($dest);
 
         // Transform source points to long/lat, if they aren't already.
         if($src->proj_name == "longlat") {
@@ -338,24 +340,26 @@ class Sourcemap_Proj {
           || $dest->datum_type == self::PJD_3PARAM
           || $dest->datum_type == self::PJD_7PARAM){
 
-        // Convert to geocentric coordinates.
-        $src->geodetic_to_geocentric($pt);
-        // CHECK_RETURN;
+            // Convert to geocentric coordinates.
+            print_r($src);
+            print_r($dest);
+            $src->geodetic_to_geocentric($pt);
+            // CHECK_RETURN;
 
-        // Convert between datums
-        if($src->datum_type == self::PJD_3PARAM || $src->datum_type == self::PJD_7PARAM) {
-          $src->geocentric_to_wgs84($pt);
-          // CHECK_RETURN;
-        }
+            // Convert between datums
+            if($src->datum_type == self::PJD_3PARAM || $src->datum_type == self::PJD_7PARAM) {
+              $src->geocentric_to_wgs84($pt);
+              // CHECK_RETURN;
+            }
 
-        if( $dest->datum_type == self::PJD_3PARAM || $dest->datum_type == self::PJD_7PARAM) {
-          $dest->geocentric_from_wgs84($pt);
-          // CHECK_RETURN;
-        }
+            if( $dest->datum_type == self::PJD_3PARAM || $dest->datum_type == self::PJD_7PARAM) {
+              $dest->geocentric_from_wgs84($pt);
+              // CHECK_RETURN;
+            }
 
-        // Convert back to geodetic coordinates
-        $dest->geocentric_to_geodetic($pt);
-          // CHECK_RETURN;
+            // Convert back to geodetic coordinates
+            $dest->geocentric_to_geodetic($pt);
+              // CHECK_RETURN;
         }
 
         // Apply grid shift to destination if required

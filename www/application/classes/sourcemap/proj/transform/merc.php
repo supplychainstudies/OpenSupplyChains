@@ -35,7 +35,8 @@
 //static double false_easting = x0;	   /* x offset in meters			*/
 //scale_fact = k0 
 class Sourcemap_Proj_Transform_Merc extends Sourcemap_Proj_Transform {
-    public function init($proj) {
+    public function init() {
+        $proj = $this->_proj;
         if($proj->lat_ts) {
             if($proj->sphere) {
                 $proj->k0 = cos($proj->lat_ts);

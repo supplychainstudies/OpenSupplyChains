@@ -22,12 +22,15 @@ class Sourcemap_Proj_Projection {
     }
 
     public function load_proj_def($srs_code) {
-        $rc = new ReflectionClass('Sourcemap_Proj_Def_'.$srs_code);
+        $c = 'Sourcemap_Proj_Def_'.$srs_code;
+        $rc = new ReflectionClass($c);
         return $rc->getStaticPropertyValue('def_data');
     }
 
     public function load_proj_transform($proj_name) {
-        $rc = new ReflectionClass('Sourcemap_Proj_Projection_Transform_'.ucfirst($proj_name));
+        if($proj_name == 'longlat') $c = 'Sourcemap_Proj_Projection_Transform';
+        else $c = 'Sourcemap_Proj_Projection_Transform_'.ucfirst($proj_name);
+        $rc = new ReflectionClass($c);
         $transform = $rc->newInstance();
         return $transform;
     }
@@ -147,7 +150,7 @@ class Sourcemap_Proj_Projection {
                     $parsed[$pkey] = (float)$pval * Sourcemap_Proj::D2R;
                     break;
                 case 'proj':
-                    $pkey['proj_name'] = $pval;
+                    $parsed['proj_name'] = $pval;
                     break;
                 case 'datum':
                     $parsed['datum_code'] = $pval;

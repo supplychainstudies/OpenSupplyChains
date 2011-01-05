@@ -11,6 +11,10 @@ class Sourcemap_Proj_Projection {
     public $srs_auth = null;
     public $srs_projnum = null;
 
+    public $lat_ts = null;
+    public $to_meter = null;
+    public $sphere = null;
+
     public function __construct($srs_code) {
         // todo: support urn/url/config file
         $this->setSrsCode($srs_code);
@@ -22,16 +26,16 @@ class Sourcemap_Proj_Projection {
     }
 
     public function load_proj_def($srs_code) {
-        $c = 'Sourcemap_Proj_Def_'.$srs_code;
+        $c = 'Sourcemap_Proj_Def_'.ucfirst(preg_replace('/\W+/', '', $srs_code));
         $rc = new ReflectionClass($c);
         return $rc->getStaticPropertyValue('def_data');
     }
 
     public function load_proj_transform($proj_name) {
-        if($proj_name == 'longlat') $c = 'Sourcemap_Proj_Projection_Transform';
-        else $c = 'Sourcemap_Proj_Projection_Transform_'.ucfirst($proj_name);
+        if($proj_name == 'longlat') $c = 'Sourcemap_Proj_Transform';
+        else $c = 'Sourcemap_Proj_Transform_'.ucfirst($proj_name);
         $rc = new ReflectionClass($c);
-        $transform = $rc->newInstance();
+        $transform = $rc->newInstance($this);
         return $transform;
     }
 
@@ -174,10 +178,10 @@ class Sourcemap_Proj_Projection {
     }
 
     public function forward($pt) {
-
+        return $this->transformer->forward($pt);
     }
 
     public function inverse($pt) {
-
+        return $this->transformer->inverse($pt);
     }
 }

@@ -273,8 +273,8 @@ class Sourcemap_Proj {
 
         // Transform source points to long/lat, if they aren't already.
         if($src->proj_name == "longlat") {
-            $point->x *= self::D2R;  // convert degrees to radians
-            $point->y *= self::D2R;
+            $pt->x *= self::D2R;  // convert degrees to radians
+            $pt->y *= self::D2R;
         } else {
             if(isset($src->to_meter) && $src->to_meter) {
                 $pt->x *= $src->to_meter;
@@ -302,7 +302,7 @@ class Sourcemap_Proj {
             $pt->y *= self::R2D;
         } else  { // else project
             $dest->forward($pt);
-            if ($dest->to_meter) {
+            if($dest->to_meter) {
                 $pt->x /= $dest->to_meter;
                 $pt->y /= $dest->to_meter;
             }
@@ -340,22 +340,18 @@ class Sourcemap_Proj {
 
             // Convert to geocentric coordinates.
             $src->geodetic_to_geocentric($pt);
-            // CHECK_RETURN;
 
             // Convert between datums
             if($src->datum_type == self::PJD_3PARAM || $src->datum_type == self::PJD_7PARAM) {
               $src->geocentric_to_wgs84($pt);
-              // CHECK_RETURN;
             }
 
             if( $dest->datum_type == self::PJD_3PARAM || $dest->datum_type == self::PJD_7PARAM) {
               $dest->geocentric_from_wgs84($pt);
-              // CHECK_RETURN;
             }
 
             // Convert back to geodetic coordinates
             $dest->geocentric_to_geodetic($pt);
-              // CHECK_RETURN;
         }
 
         // Apply grid shift to destination if required

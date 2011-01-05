@@ -4,7 +4,7 @@ class Sourcemap_Proj_Datum {
 
     public function __construct(Sourcemap_Proj_Projection $proj) {
         $this->datum_type = Sourcemap_Proj::PJD_WGS84;   //default setting
-        if(isset($proj->datum_code) && $proj->datum_code == 'none') {
+        if((isset($proj->datum_code) && $proj->datum_code === null) || !isset($proj->datum_code)) {
             $this->datum_type = Sourcemap_Proj::PJD_NODATUM;
         }
         if(isset($proj->datum_params) && $proj->datum_params) {
@@ -280,12 +280,12 @@ class Sourcemap_Proj_Datum {
   //  p = point to transform in geocentric coordinates (x,y,z)
     public static function geocentric_to_wgs84($pt) {
 
-        if(this.datum_type == Sourcemap_Proj::PJD_3PARAM) {
+        if($this->datum_type == Sourcemap_Proj::PJD_3PARAM) {
             $pt->x += $this->datum_params[0];
             $pt->y += $this->datum_params[1];
             $pt->z += $this->datum_params[2];
 
-        } elseif(this.datum_type == Sourcemap_Proj::PJD_7PARAM) {
+        } elseif($this->datum_type == Sourcemap_Proj::PJD_7PARAM) {
             $dx_bf = $this->datum_params[0];
             $dy_bf = $this->datum_params[1];
             $dz_bf = $this->datum_params[2];

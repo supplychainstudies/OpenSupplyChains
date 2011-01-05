@@ -53,7 +53,7 @@ class Sourcemap_Proj_Transform_Merc extends Sourcemap_Proj_Transform {
 /* Mercator forward equations--mapping lat,long to x,y
   --------------------------------------------------*/
 
-    public function ($pt) {	
+    public function forward($pt) {	
         $lon = $pt->x;
         $lat = $pt->y;
         // convert to radians
@@ -61,54 +61,50 @@ class Sourcemap_Proj_Transform_Merc extends Sourcemap_Proj_Transform {
             $lat * Sourcemap_Proj::R2D < -90.0 && 
             $lon * Sourcemap_Proj::R2D > 180.0 && 
             $lon * Sourcemap_Proj::R2D < -180.0) {
-            throw new Error('Lat/Lon input out of range.');
+            throw new Exception('Lat/Lon input out of range.');
         }
 
-        var x,y;
-        if(Math.abs( Math.abs(lat) - Proj4js.common.HALF_PI)  <= Proj4js.common.EPSLN) {
-            Proj4js.reportError("merc:forward: ll2mAtPoles");
-            return null;
+        if(abs(abs($lat) - Sourcemap_Proj::HALF_PI)  <= Sourcemap_Proj::EPSLN) {
+            throw new Exception('Lat/Long at poles.');
         } else {
-            if (this.sphere) {
-                x = this.x0 + this.a * this.k0 * Proj4js.common.adjust_lon(lon - this.long0);
-                y = this.y0 + this.a * this.k0 * Math.log(Math.tan(Proj4js.common.FORTPI + 0.5*lat));
+            if($this->_proj->sphere) {
+                $x = $this->_proj->x0 + $this->_proj->a * $this->_proj->k0 * Sourcemap_Proj::adjust_lon($lon - $this->_proj->long0);
+                $y = $this->_proj->y0 + $this->_proj->a * $this->_proj->k0 * log(tan(Sourcemap_Proj::FORTPI + 0.5*$lat));
             } else {
-                var sinphi = Math.sin(lat);
-                var ts = Proj4js.common.tsfnz(this.e,lat,sinphi);
-                x = this.x0 + this.a * this.k0 * Proj4js.common.adjust_lon(lon - this.long0);
-                y = this.y0 - this.a * this.k0 * Math.log(ts);
+                $sinphi = sin($lat);
+                $ts = Sourcemap_Proj::tsfnz($this->_proj->e, $lat, $sinphi);
+                $x = $this->_proj->x0 + $this->_proj->a * $this->_proj->k0 * Sourcemap_Proj::adjust_lon($lon - $this->_proj->long0);
+                $y = $this->_proj->y0 - $this->_proj->a * $this->_proj->k0 * log($ts);
             }
-            p.x = x; 
-            p.y = y;
-            return p;
+            $pt->x = $x; 
+            $pt->y = $y;
+            return $pt;
         }
-    },
+    }
 
 
   /* Mercator inverse equations--mapping x,y to lat/long
   --------------------------------------------------*/
-  inverse : function(p) {	
+    public function inverse($pt) {	
 
-    var x = p.x - this.x0;
-    var y = p.y - this.y0;
-    var lon,lat;
+        $x = $pt->x - $this->_proj->x0;
+        $y = $pt->y - $this->_proj->y0;
 
-    if (this.sphere) {
-      lat = Proj4js.common.HALF_PI - 2.0 * Math.atan(Math.exp(-y / this.a * this.k0));
-    } else {
-      var ts = Math.exp(-y / (this.a * this.k0));
-      lat = Proj4js.common.phi2z(this.e,ts);
-      if(lat == -9999) {
-        Proj4js.reportError("merc:inverse: lat = -9999");
-        return null;
-      }
+        if($this->_proj->sphere) {
+            $lat = Sourcemap_Proj::HALF_PI - 2.0 * atan(exp(-$y / $this->_proj->a * $this->_proj->k0));
+        } else {
+            $ts = exp(-$y / ($this->_proj->a * $this->_proj->k0));
+            $lat = Sourcemap_Proj::phi2z($this->_proj->e, $ts);
+            if($lat == -9999) {
+                throw new Exception("Lat = -9999");
+            }
+        }
+        $lon = Sourcemap_Proj::adjust_lon($this->_proj->long0 + $x / ($this->_proj->a * $this->_proj->k0));
+
+        $pt->x = $lon;
+        $pt->y = $lat;
+        return $pt;
     }
-    lon = Proj4js.common.adjust_lon(this.long0+ x / (this.a * this.k0));
-
-    p.x = lon;
-    p.y = lat;
-    return p;
-  }
-};
+}
 
 

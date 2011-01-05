@@ -8,7 +8,7 @@ class Sourcemap_Proj_Transform {
         $this->init();
     }
 
-    public function init() {};
+    public function init() {}
     public function forward($pt) { return $pt; }
     public function inverse($pt) { return $pt; }
 }

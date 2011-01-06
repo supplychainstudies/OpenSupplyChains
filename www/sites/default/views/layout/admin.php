@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<base href="<?= URL::base() ?>" />
+<base href="<?= URL::base(true, true) ?>" />
 <title>Administration - <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 </head>
 <body>

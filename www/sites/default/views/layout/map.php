@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html style="height: 100%">
 <head>
-<base href="<?= URL::base() ?>" />
+<base href="<?= URL::base(true, true) ?>"></base>
 <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 <!-- Google Maps API -->
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 <!-- OpenLayers -->
 <script type="text/javascript" language="javascript" src="assets/scripts/openlayers/OpenLayers.js"></script>
 <!-- jQuery -->

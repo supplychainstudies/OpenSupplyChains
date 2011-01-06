@@ -12,13 +12,15 @@ class Sourcemap_Proj_Projection {
     public $srs_projnum = null;
 
     public $lat_ts = null;
+    public $lat2 = null;
+    public $lat1 = null;
+    public $lat0 = null;
+    public $k0 = null;
     public $to_meter = null;
     public $sphere = null;
 
     public function __construct($srs_code) {
-        // todo: support urn/url/config file
         $this->setSrsCode($srs_code);
-        // todo: url loading?
         $def = self::load_proj_def($srs_code);
         if(!$def) throw new Exception('Def not found for proj "'.$srs_code.'".');
         $this->init(self::parse_def($def));

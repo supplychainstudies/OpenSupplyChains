@@ -26,7 +26,12 @@ class Sourcemap_Controller_Service extends Controller_REST {
     public $_content_types = array(
         'json' => 'application/json',
         'jsonp' => 'text/javascript',
-        'php' => 'application/vnd.php.serialized'
+        'php' => 'application/vnd.php.serialized',
+        'form' => array(
+            'application/x-www-form-urlencoded',
+            'multipart/form-data'
+        ),
+        'csv' => 'text/csv'
     );
 
     // Collection options
@@ -71,6 +76,8 @@ class Sourcemap_Controller_Service extends Controller_REST {
         $ct = '';
         if(in_array(strtolower(Request::$method), array('post', 'put'))) {
             $ct = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+            // ignore add'l params, charset, etc. for now.
+            // todo: stop ignoring.
             $ct = preg_replace('/;.+$/', '', $ct);
         }
         return $ct;
@@ -111,7 +118,14 @@ class Sourcemap_Controller_Service extends Controller_REST {
 
     protected function _content_type_format($content_type=null) {
         $ct = $content_type === null ? $this->_default_content_type : $content_type;
-        $types = array_flip($this->_content_types);
+        static $types;
+        if(!$types) {
+            $types = array();
+            foreach($this->_content_types as $f => $t) {
+                if(!is_array($t)) $t = array($t);
+                foreach($t as $ti => $tv) $types[$tv] = $f;
+            }
+        }
         return isset($types[$ct]) ? $types[$ct] : $this->_default_format;
     }
 
@@ -172,6 +186,33 @@ class Sourcemap_Controller_Service extends Controller_REST {
 
     protected function  _unserialize_json($str) {
         return json_decode($str);
+    }
+
+    protected function _serialize_form($data) {
+        return http_build_query($data);
+    }
+
+    protected function _unserialize_form($str) {
+        $data = null;
+        parse_str($str, $data);
+        return array_merge($data, Sourcemap_Upload::get_uploads());
+    }
+
+    protected function _serialize_csv($data) {
+        $csv = null;
+        if(is_array($data)) {
+            $csv = array();
+            foreach($data as $dk => $dv) {
+                if(!is_array($dv)) $dv = array($dv);
+                $csv[] = Sourcemap_Csv::make_csv_row($dv);
+            }
+            $csv = implode("\n", $csv);
+        } else throw new Exception('CSV serialization requires array.');
+        return $csv;
+    }
+
+    protected function _unserialize_csv($csv) {
+        return Sourcemap_Csv::parse($csv);
     }
 
     protected function  _serialize_jsonp($data, $callback=null) {

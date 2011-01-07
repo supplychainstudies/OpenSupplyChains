@@ -7,6 +7,15 @@ class Sourcemap_Csv {
     const FESC = 'FESC';
     const FQUO = 'FQUO';
 
+    public static function parse($csv) {
+        $lines = explode("\n", $csv);
+        $data = array();
+        foreach($lines as $i => $line) {
+            $data[] = self::parse_csv_row($line);
+        }
+        return $data;
+    }
+
     public static function parse_csv_row($row) {
         $row = trim($row);
         $vs = array();
@@ -70,7 +79,7 @@ class Sourcemap_Csv {
                         case ',':
                             $vs[] = $b;
                             $b = '';
-                            $st = FSTA;
+                            $st = self::FSTA;
                             break;
                         default:
                             break;

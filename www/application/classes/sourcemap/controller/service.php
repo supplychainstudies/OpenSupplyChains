@@ -195,7 +195,8 @@ class Sourcemap_Controller_Service extends Controller_REST {
     protected function _unserialize_form($str) {
         $data = null;
         parse_str($str, $data);
-        return array_merge($data, Sourcemap_Upload::get_uploads());
+        if(!$data) $data = array();
+        return (object)array_merge($data, Sourcemap_Upload::get_uploads());
     }
 
     protected function _serialize_csv($data) {

@@ -23,6 +23,10 @@ class Sourcemap_Proj_Point {
         return sprintf("x=%f,y=%f,z=%f", $this->x, $this->y);
     }
 
+    public function toGeometry() {
+        return sprintf("POINT(%f %f)", $this->x, $this->y);
+    }
+
     public static function parse_coords($str) {
         $coords = split(',', $str);
         $ks = array('x', 'y', 'z');

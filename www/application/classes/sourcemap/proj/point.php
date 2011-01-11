@@ -9,14 +9,10 @@ class Sourcemap_Proj_Point {
             }
         } elseif($y === null && $z === null && is_string($x)) {
             list($x, $y, $z) = self::parse_coords($coords);
-        } else {
-            $x = (float)$x;
-            $y = (float)$y;
-            $z = (float)$z;
-        }
-        $this->x = $x;
-        $this->y = $y;
-        $this->z = $z;
+        } 
+        $this->x = self::parse_coord_val($x);
+        $this->y = self::parse_coord_val($y);
+        $this->z = self::parse_coord_val($z);
     }
 
     public function __toString() {
@@ -35,5 +31,12 @@ class Sourcemap_Proj_Point {
                 $coords[$ci] = preg_replace('/^\s*'.$ks[$ci].'\s*=/', '', $coords[$ci]);
             $coords[$ci] = isset($coords[$ci]) ? (float)trim($coords[$ci]) : 0.0;
         return $coords;
+    }
+
+    public static function parse_coord_val($cv) {
+        if(!is_numeric($cv))
+            $cv = preg_replace('/^\+/', '', $cv);
+        $val = (float)$cv;
+        return $val;
     }
 }

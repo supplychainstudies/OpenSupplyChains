@@ -146,7 +146,9 @@ class Model_Supplychain extends ORM {
     public function save_raw_supplychain($sc, $scid=null) {
         if(!$scid) {
             # todo: create here.
-            $new_sc = ORM::factory('supplychain')->save();
+            $new_sc = ORM::factory('supplychain');
+            $new_sc->user_id = isset($sc->user_id) ? $sc->user_id : null;
+            $new_sc->save();
             $scid = $new_sc->id;
         } else {
             $sql = sprintf('delete from supplychain_attribute where supplychain_id = %d', $scid);
@@ -223,7 +225,7 @@ class Model_Supplychain extends ORM {
         return $scid;
     }
 
-    public function user_can( $user_id, $mode) {
+    public function user_can($user_id, $mode) {
         $can = false;
         if($this->loaded()) {
             $owner_id = (int)$this->user_id;

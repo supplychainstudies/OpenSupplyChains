@@ -48,7 +48,16 @@ Sourcemap Database Installation from Scratch        #database
 
         \i /home/me/path/to/my/repository/db/schema/00_initial.sql
 
+    *OR*
+
+    Use the db-migrate.sh tool in the tools directory.  This script will
+    build the latest schema with fixtures and required data.
+
 8.  Load additional files, all numbered sequentially.
+
+    *OR*
+
+    See #7 above.  If you used the db-migrate.sh tool, this is already done.
 
 9.  Be sure you run the commands as the user you hope to use.  If
     you need to change  ownership of a table, you can do this with

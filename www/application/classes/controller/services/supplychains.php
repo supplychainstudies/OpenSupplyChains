@@ -60,6 +60,7 @@
         try {
             if($this->_validate_raw_supplychain($posted)) {
                 $raw_sc = $posted->supplychain;
+                $raw_sc->user_id = $current_user;
                 $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
                 $this->request->status = 201;
                 $this->request->headers['Location'] = 'services/supplychains/'.$new_scid;

@@ -165,6 +165,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {
     new_feature.attributes.supplychain_id = stop.supplychain_id;
     new_feature.attributes.stop_id = stop.local_id;
     new_feature.attributes.size = 6;
+    new_feature.attributes.color = '#000';
     if(this.prepareStopFeature instanceof Function) {
         this.prepareStopFeature(stop, new_feature);
     }

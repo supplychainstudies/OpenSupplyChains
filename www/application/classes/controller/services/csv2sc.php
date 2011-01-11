@@ -22,6 +22,29 @@ class Controller_Services_Csv2Sc extends Sourcemap_Controller_Service {
                         $data[] = $record;
                 }
             }
+            $headers = isset($posted->headers) ? (boolean)$posted->headers : $defaults['headers'];
+            $latcol = isset($posted->latcol) ? $posted->latcol : $defaults['latcol'];
+            $loncol = isset($posted->loncol) ? $posted->loncol : $defaults['loncol'];
+            if($headers) {
+                if(is_null($latcol) || is_null($loncol)) {
+                    foreach($headers as $i => $h) {
+                        if(is_null($latcol) && preg_match('/^lat(itude)?$/i', $h)) {
+                            $latcol = $i;
+                        } elseif(is_null($loncol) && preg_match('/^(lng)|(lon(g(itude)?)?)$/i', $h)) {
+                            $loncol = $i;
+                        }
+                    }
+                    if(is_null($latcol) || is_null($loncol)) {
+                        return $this->_bad_request('Missing lat/lon column index.');
+                    }
+                }
+            } else {
+                if(is_null($latcol) || is_null($latcol)) {
+                    return $this->_bad_request(
+                        'Headers or lat/lon column indices required.'
+                    );    
+                }
+            }
             $this->response = $data;
         } elseif(($posted = (object)$_POST) && isset($posted->csv)) {
             foreach($defaults as $k => $v) $$k = isset($posted->{$k}) ? $posted->{$k} : $v;

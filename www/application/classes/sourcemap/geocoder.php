@@ -26,7 +26,9 @@ class Sourcemap_Geocoder {
         $ret = array();
         if($result && isset($result->results)) {
             foreach($result->results as $i => $r) {
+                die(print_r($r, true));
                 $loc = $r->geometry->location;
+                $loc->placename = $r->formatted_address;
                 $ret[] = $loc;
             }
         }

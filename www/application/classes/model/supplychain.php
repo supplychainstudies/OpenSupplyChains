@@ -254,7 +254,7 @@ class Model_Supplychain extends ORM {
                     ->where('name', '=', 'adminstrator')->find();
                 if($user->has('roles', $admin)) {
                     $can = true;
-                } else die("$user_id: \n".print_r($user->roles->find_all()->as_array(), true));
+                }
             }
         }
         return $can;

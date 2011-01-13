@@ -23,6 +23,15 @@ class Sourcemap_Proj_Point {
         return sprintf("POINT(%f %f)", $this->x, $this->y);
     }
 
+    public static function fromGeometry($geometry) {
+        $matches = null;
+        $pt = false;
+        if(preg_match('/^POINT\(((-|\+)?\d+(\.\d+)?) ((-|\+)?\d+(\.\d+)?)\)$/', $geometry, $matches)) {
+            $pt = new Sourcemap_Proj_Point($matches[1], $matches[4]);
+        }
+        return $pt;
+    }
+
     public static function parse_coords($str) {
         $coords = split(',', $str);
         $ks = array('x', 'y', 'z');

@@ -24,10 +24,11 @@ function sm_test() { // ($label, $expected, $got) {
 if(php_sapi_name() === 'cli') {
     define('SMAPDIR', getenv('SMAPDIR') ? 
         rtrim(getenv('SMAPDIR'), '/').'/' : dirname(__FILE__).'/');
+    define('SUPPRESS_REQUEST', true);
+    require_once(SMAPDIR.'/www/index.php');
     $args = $argv;
     array_shift($args);
     foreach($args as $i => $arg) {
-        print "$arg\n";
         include(SMAPDIR.'t/'.basename($arg));
     }
     list($total, $good, $bad) = sm_test();

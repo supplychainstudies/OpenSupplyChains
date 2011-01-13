@@ -29,13 +29,18 @@ class CloudMade_StaticMap {
         foreach($raw_sc->stops as $i => $stop) {
             if($pt = Sourcemap_Proj_Point::fromGeometry($stop->geometry)) {
                 $pt = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $pt);
-                $markers[] = $pt->y.','.$pt->x;
+                $markers[] = 'label:'.$i.'|'.$pt->y.','.$pt->x;
             }
         }
-        $params['marker'] = join($markers, '|');
+        foreach($raw_sc->hops as $i => $hop) {
+            
+        }
         $ps = array();
         foreach($params as $k => $v) {
             $ps[] = "$k=$v";
+        }
+        foreach($markers as $i => $m) {
+            $ps[] = 'marker='.$m;
         }
         $ps = join($ps, '&');
         $ch = curl_init();

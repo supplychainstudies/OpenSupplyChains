@@ -1,3 +1,4 @@
+<?php
 /*******************************************************************************
 NAME                             EQUIRECTANGULAR 
 
@@ -20,53 +21,50 @@ ALGORITHM REFERENCES
     U.S. Geological Survey Professional Paper 1453 , United State Government
     Printing Office, Washington D.C., 1989.
 *******************************************************************************/
-Proj4js.Proj.equi = {
+class Sourcemap_Proj_Transform_Equi extends Sourcemap_Proj_Transform {
 
-  init: function() {
-    if(!this.x0) this.x0=0;
-    if(!this.y0) this.y0=0;
-    if(!this.lat0) this.lat0=0;
-    if(!this.long0) this.long0=0;
-    ///this.t2;
-  },
-
-
-
-/* Equirectangular forward equations--mapping lat,long to x,y
-  ---------------------------------------------------------*/
-  forward: function(p) {
-
-    var lon=p.x;				
-    var lat=p.y;			
-
-    var dlon = Proj4js.common.adjust_lon(lon - this.long0);
-    var x = this.x0 +this. a * dlon *Math.cos(this.lat0);
-    var y = this.y0 + this.a * lat;
-
-    this.t1=x;
-    this.t2=Math.cos(this.lat0);
-    p.x=x;
-    p.y=y;
-    return p;
-  },  //equiFwd()
-
-
-
-/* Equirectangular inverse equations--mapping x,y to lat/long
-  ---------------------------------------------------------*/
-  inverse: function(p) {
-
-    p.x -= this.x0;
-    p.y -= this.y0;
-    var lat = p.y /this. a;
-
-    if ( Math.abs(lat) > Proj4js.common.HALF_PI) {
-        Proj4js.reportError("equi:Inv:DataError");
+    public function init() {
+        if(!$this->x0) $this->x0 = 0;
+        if(!$this->y0) $this->y0 = 0;
+        if(!$this->lat0) $this->lat0 = 0;
+        if(!$this->long0) $this->long0 = 0;
     }
-    var lon = Proj4js.common.adjust_lon(this.long0 + p.x / (this.a * Math.cos(this.lat0)));
-    p.x=lon;
-    p.y=lat;
-  }//equiInv()
+
+
+
+    # Equirectangular forward equations--mapping lat,long to x,y
+    public function forward($p) {
+
+        $lon=$p->x;				
+        $lat=$p->y;			
+
+        $dlon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
+        $x = $this->x0 +$this->a * $dlon * cos($this->lat0);
+        $y = $this->y0 + $this->a * $lat;
+
+        $this->t1 = $x;
+        $this->t2 = cos($this->lat0);
+        $p->x = $x;
+        $p->y = $y;
+        return $p;
+    }
+
+
+
+    # Equirectangular inverse equations--mapping x,y to lat/long
+    public function inverse($p) {
+        $p->x -= $this->x0;
+        $p->y -= $this->y0;
+        $lat = $p->y /$this-> a;
+
+        if(abs($lat) > Sourcemap_Proj::HALF_PI) {
+            throw new Exception("Data error: lat out of range.");
+        }
+        $lon = Sourcemap_Proj::adjust_lon($this->long0 + $p->x / ($this->a * cos($this->lat0)));
+        $p->x = $lon;
+        $p->y = $lat;
+        return $p;
+    }
 };
 
 

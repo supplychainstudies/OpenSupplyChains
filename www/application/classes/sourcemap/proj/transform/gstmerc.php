@@ -1,52 +1,50 @@
-Proj4js.Proj.gstmerc = {
-  init : function() {
+<?php
+class Sourcemap_Proj_Transform_Gstmerc extends Sourcemap_Proj_Transform {
+    public function init() {
+        // array of:  a, b, lon0, lat0, k0, x0, y0
+        $temp = $this->b / $this->a;
+        $this->e = sqrt(1.0 - $temp * $temp);
+        $this->lc = $this->long0;
+        $this->rs = sqrt(1.0 + $this->e * $this->e * pow(cos($this->lat0), 4.0) / (1.0 - $this->e * $this->e));
+        $sinz = sin($this->lat0);
+        $pc = asin($sinz / $this->rs);
+        $sinzpc = sin($pc);
+        $this->cp = Sourcemap_Proj::latiso(0.0, $pc, $sinzpc) - $this->rs * Sourcemap_Proj::latiso($this->e, $this->lat0, $sinz);
+        $this->n2 = $this->k0 * $this->a * sqrt(1.0 - $this->e * $this->e) / (1.0 - $this->e * $this->e * $sinz * $sinz);
+        $this->xs = $this->x0;
+        $this->ys = $this->y0-$this->n2 * $pc;
 
-    // array of:  a, b, lon0, lat0, k0, x0, y0
-      var temp= this.b / this.a;
-      this.e= Math.sqrt(1.0 - temp*temp);
-      this.lc= this.long0;
-      this.rs= Math.sqrt(1.0+this.e*this.e*Math.pow(Math.cos(this.lat0),4.0)/(1.0-this.e*this.e));
-      var sinz= Math.sin(this.lat0);
-      var pc= Math.asin(sinz/this.rs);
-      var sinzpc= Math.sin(pc);
-      this.cp= Proj4js.common.latiso(0.0,pc,sinzpc)-this.rs*Proj4js.common.latiso(this.e,this.lat0,sinz);
-      this.n2= this.k0*this.a*Math.sqrt(1.0-this.e*this.e)/(1.0-this.e*this.e*sinz*sinz);
-      this.xs= this.x0;
-      this.ys= this.y0-this.n2*pc;
-
-      if (!this.title) this.title = "Gauss Schreiber transverse mercator";
-    },
+        if(!$this->title) $this->title = "Gauss Schreiber transverse mercator";
+    }
 
 
-    // forward equations--mapping lat,long to x,y
-    // -----------------------------------------------------------------
-    forward : function(p) {
+    # forward equations--mapping lat,long to x,y
+    public function forward($p) {
 
-      var lon= p.x;
-      var lat= p.y;
+        $lon = $p->x;
+        $lat = $p->y;
 
-      var L= this.rs*(lon-this.lc);
-      var Ls= this.cp+(this.rs*Proj4js.common.latiso(this.e,lat,Math.sin(lat)));
-      var lat1= Math.asin(Math.sin(L)/Proj4js.common.cosh(Ls));
-      var Ls1= Proj4js.common.latiso(0.0,lat1,Math.sin(lat1));
-      p.x= this.xs+(this.n2*Ls1);
-      p.y= this.ys+(this.n2*Math.atan(Proj4js.common.sinh(Ls)/Math.cos(L)));
-      return p;
-    },
+        $L = $this->rs*($lon-$this->lc);
+        $Ls = $this->cp + ($this->rs * Sourcemap_Proj::latiso($this->e, $lat, sin($lat)));
+        $lat1 = asin(sin($L)/Sourcemap_Proj::cosh($Ls));
+        $Ls1 = Sourcemap_Proj::latiso(0.0, $lat1, sin($lat1));
+        $p->x = $this->xs + ($this->n2 * $Ls1);
+        $p->y = $this->ys + ($this->n2 * atan(Sourcemap_Proj::sinh($Ls)/cos($L)));
+        return $p;
+    }
 
-  // inverse equations--mapping x,y to lat/long
-  // -----------------------------------------------------------------
-  inverse : function(p) {
+    # inverse equations--mapping x,y to lat/long
+    public function inverse($p) {
 
-    var x= p.x;
-    var y= p.y;
+        $x = $p->x;
+        $y = $p->y;
 
-    var L= Math.atan(Proj4js.common.sinh((x-this.xs)/this.n2)/Math.cos((y-this.ys)/this.n2));
-    var lat1= Math.asin(Math.sin((y-this.ys)/this.n2)/Proj4js.common.cosh((x-this.xs)/this.n2));
-    var LC= Proj4js.common.latiso(0.0,lat1,Math.sin(lat1));
-    p.x= this.lc+L/this.rs;
-    p.y= Proj4js.common.invlatiso(this.e,(LC-this.cp)/this.rs);
-    return p;
-  }
+        $L = atan(Sourcemap_Proj::sinh(($x-$this->xs) / $this->n2) / cos(($y - $this->ys) / $this->n2));
+        $lat1 = asin(sin(($y - $this->ys) / $this->n2) / Sourcemap_Proj::cosh(($x - $this->xs) / $this->n2));
+        $LC = Sourcemap_Proj::latiso(0.0, $lat1, sin($lat1));
+        $p->x = $this->lc + $L / $this->rs;
+        $p->y = Sourcemap_Proj::invlatiso($this->e, ($LC - $this->cp) / $this->rs);
+        return $p;
+    }
 
-};
+}

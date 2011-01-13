@@ -1,3 +1,5 @@
+<?php
+class Sourcemap_Proj_Transform_Moll extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                            MOLLWEIDE
 
@@ -23,78 +25,68 @@ ALGORITHM REFERENCES
     State Government Printing Office, Washington D.C., 1987.
 *******************************************************************************/
 
-Proj4js.Proj.moll = {
-
-  /* Initialize the Mollweide projection
-    ------------------------------------*/
-  init: function(){
-    //no-op
-  },
-
-  /* Mollweide forward equations--mapping lat,long to x,y
-    ----------------------------------------------------*/
-  forward: function(p) {
-
-    /* Forward equations
-      -----------------*/
-    var lon=p.x;
-    var lat=p.y;
-
-    var delta_lon = Proj4js.common.adjust_lon(lon - this.long0);
-    var theta = lat;
-    var con = Proj4js.common.PI * Math.sin(lat);
-
-    /* Iterate using the Newton-Raphson method to find theta
-      -----------------------------------------------------*/
-    for (var i=0;true;i++) {
-       var delta_theta = -(theta + Math.sin(theta) - con)/ (1.0 + Math.cos(theta));
-       theta += delta_theta;
-       if (Math.abs(delta_theta) < Proj4js.common.EPSLN) break;
-       if (i >= 50) {
-          Proj4js.reportError("moll:Fwd:IterationError");
-         //return(241);
-       }
+    # Initialize the Mollweide projection
+    public function init() {
+        //no-op
     }
-    theta /= 2.0;
 
-    /* If the latitude is 90 deg, force the x coordinate to be "0 + false easting"
-       this is done here because of precision problems with "cos(theta)"
-       --------------------------------------------------------------------------*/
-    if (Proj4js.common.PI/2 - Math.abs(lat) < Proj4js.common.EPSLN) delta_lon =0;
-    var x = 0.900316316158 * this.a * delta_lon * Math.cos(theta) + this.x0;
-    var y = 1.4142135623731 * this.a * Math.sin(theta) + this.y0;
+    # Mollweide forward equations--mapping lat,long to x,y
+    public function forward($p) {
 
-    p.x=x;
-    p.y=y;
-    return p;
-  },
+        /* Forward equations
+           -----------------*/
+        $lon = $p->x;
+        $lat = $p->y;
 
-  inverse: function(p){
-    var theta;
-    var arg;
+        $delta_lon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
+        $theta = $lat;
+        $con = Sourcemap_Proj::PI * sin($lat);
 
-    /* Inverse equations
-      -----------------*/
-    p.x-= this.x0;
-    //~ p.y -= this.y0;
-    var arg = p.y /  (1.4142135623731 * this.a);
+        /* Iterate using the Newton-Raphson method to find theta
+           -----------------------------------------------------*/
+        for($i = 0; true; $i++) {
+            $delta_theta = -($theta + sin($theta) - $con)/ (1.0 + cos($theta));
+            $theta += $delta_theta;
+            if(abs($delta_theta) < Sourcemap_Proj::EPSLN) break;
+            if($i >= 50) {
+                throw new Exception("Iteration error.");
+            }
+        }
+        $theta /= 2.0;
 
-    /* Because of division by zero problems, 'arg' can not be 1.0.  Therefore
-       a number very close to one is used instead.
-       -------------------------------------------------------------------*/
-    if(Math.abs(arg) > 0.999999999999) arg=0.999999999999;
-    var theta =Math.asin(arg);
-    var lon = Proj4js.common.adjust_lon(this.long0 + (p.x / (0.900316316158 * this.a * Math.cos(theta))));
-    if(lon < (-Proj4js.common.PI)) lon= -Proj4js.common.PI;
-    if(lon > Proj4js.common.PI) lon= Proj4js.common.PI;
-    arg = (2.0 * theta + Math.sin(2.0 * theta)) / Proj4js.common.PI;
-    if(Math.abs(arg) > 1.0)arg=1.0;
-    var lat = Math.asin(arg);
-    //return(OK);
+        /* If the latitude is 90 deg, force the x coordinate to be "0 + false easting"
+           this is done here because of precision problems with "cos(theta)"
+           --------------------------------------------------------------------------*/
+        if(Sourcemap_Proj::PI / 2 - abs($lat) < Sourcemap_Proj::EPSLN) $delta_lon = 0;
+        $x = 0.900316316158 * $this->a * $delta_lon * cos($theta) + $this->x0;
+        $y = 1.4142135623731 * $this->a * sin($theta) + $this->y0;
 
-    p.x=lon;
-    p.y=lat;
-    return p;
-  }
-};
+        $p->x = $x;
+        $p->y = $y;
+        return $p;
+    }
 
+    public function inverse($p) {
+        /* Inverse equations
+           -----------------*/
+        $p->x-= $this->x0;
+        //~ $p->y -= $this->y0;
+        $arg = $p->y /  (1.4142135623731 * $this->a);
+
+        /* Because of division by zero problems, 'arg' can not be 1.0.  Therefore
+           a number very close to one is used instead.
+           -------------------------------------------------------------------*/
+        if(abs($arg) > 0.999999999999) $arg = 0.999999999999;
+        $theta = asin($arg);
+        $lon = Sourcemap_Proj::adjust_lon($this->long0 + ($p->x / (0.900316316158 * $this->a * cos($theta))));
+        if($lon < (-Sourcemap_Proj::PI)) $lon = -Sourcemap_Proj::PI;
+        if($lon > Sourcemap_Proj::PI) $lon = Sourcemap_Proj::PI;
+        $arg = (2.0 * $theta + sin(2.0 * $theta)) / Sourcemap_Proj::PI;
+        if(abs($arg) > 1.0) $arg = 1.0;
+        $lat = asin($arg);
+
+        $p->x = $lon;
+        $p->y = $lat;
+        return $p;
+    }
+}

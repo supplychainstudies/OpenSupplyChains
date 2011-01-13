@@ -1,3 +1,4 @@
+<?php
 /*******************************************************************************
 NAME                    LAMBERT CYLINDRICAL EQUAL AREA
 
@@ -32,54 +33,48 @@ ALGORITHM REFERENCES
 2.  Snyder, John P., "Flattening the Earth - Two Thousand Years of Map 
     Projections", Univ. Chicago Press, 1993
 *******************************************************************************/
-
-Proj4js.Proj.cea = {
-
-/* Initialize the Cylindrical Equal Area projection
-  -------------------------------------------*/
-  init: function() {
-    //no-op
-  },
-
-
-  /* Cylindrical Equal Area forward equations--mapping lat,long to x,y
-    ------------------------------------------------------------*/
-  forward: function(p) {
-    var lon=p.x;
-    var lat=p.y;
-    /* Forward equations
-      -----------------*/
-    dlon = Proj4js.common.adjust_lon(lon -this.long0);
-    var x = this.x0 + this.a * dlon * Math.cos(this.lat_ts);
-    var y = this.y0 + this.a * Math.sin(lat) / Math.cos(this.lat_ts);
-   /* Elliptical Forward Transform
-      Not implemented due to a lack of a matchign inverse function
-    {
-      var Sin_Lat = Math.sin(lat);
-      var Rn = this.a * (Math.sqrt(1.0e0 - this.es * Sin_Lat * Sin_Lat ));
-      x = this.x0 + this.a * dlon * Math.cos(this.lat_ts);
-      y = this.y0 + Rn * Math.sin(lat) / Math.cos(this.lat_ts);
+class Sourcemap_Proj_Transform_Cea {
+    # Initialize the Cylindrical Equal Area projection
+    public function init() {
+        //no-op
     }
-   */
 
 
-    p.x=x;
-    p.y=y;
-    return p;
-  },//ceaFwd()
+    # Cylindrical Equal Area forward equations--mapping lat,long to x,y
+    public function forward($p) {
+        $lon = $p->x;
+        $lat = $p->y;
+        /* Forward equations
+           -----------------*/
+        $dlon = Sourcemap_Proj::adjust_lon($lon -$this->long0);
+        $x = $this->x0 + $this->a * $dlon * cos($this->lat_ts);
+        $y = $this->y0 + $this->a * sin($lat) / cos($this->lat_ts);
+        /* Elliptical Forward Transform
+           Not implemented due to a lack of a matching inverse function
+           {
+           $Sin_Lat = sin(lat);
+           $Rn = $this->a * (sqrt(1.0e0 - $this->es * Sin_Lat * Sin_Lat ));
+           x = $this->x0 + $this->a * dlon * cos($this->lat_ts);
+           y = $this->y0 + Rn * sin(lat) / cos($this->lat_ts);
+           }
+         */
+        $p->x = $x;
+        $p->y = $y;
+        return $p;
+    }
 
-  /* Cylindrical Equal Area inverse equations--mapping x,y to lat/long
-    ------------------------------------------------------------*/
-  inverse: function(p) {
-    p.x -= this.x0;
-    p.y -= this.y0;
+    # Cylindrical Equal Area inverse equations--mapping x,y to lat/long
+    public function inverse($p) {
 
-    var lon = Proj4js.common.adjust_lon( this.long0 + (p.x / this.a) / Math.cos(this.lat_ts) );
+        $p->x -= $this->x0;
+        $p->y -= $this->y0;
 
-    var lat = Math.asin( (p.y/this.a) * Math.cos(this.lat_ts) );
+        $lon = Sourcemap_Proj::adjust_lon($this->long0 + ($p->x / $this->a) / cos($this->lat_ts) );
 
-    p.x=lon;
-    p.y=lat;
-    return p;
-  }//ceaInv()
-};
+        $lat = asin(($p->y/$this->a) * cos($this->lat_ts) );
+
+        $p->x = $lon;
+        $p->y= $lat;
+        return $p;
+    }
+}

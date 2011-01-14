@@ -10,6 +10,8 @@ class Controller_Services_Geocode extends Controller_Services {
                 return $this->_bad_request('Invalid lat/lng.');
             list($lat, $lng) = explode(',', $_GET['ll']);
             $q = new Sourcemap_Proj_Point($lng, $lat);
+        } else {
+            return $this->_bad_request('Placename or ll required.');
         }
         $this->response = (object)array(
             'results' => Sourcemap_Geocoder::geocode($q)

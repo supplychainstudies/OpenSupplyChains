@@ -1,3 +1,5 @@
+<?php
+class Sourcemap_Proj_Transform_Utm extends Sourcemap_Proj_Transform_Tmerc {
 /*******************************************************************************
 NAME                            TRANSVERSE MERCATOR
 
@@ -18,26 +20,17 @@ ALGORITHM REFERENCES
 *******************************************************************************/
 
 
-/**
-  Initialize Transverse Mercator projection
-*/
+    #Initialize Transverse Mercator projection
+    public function init() {
+        if(!$this->zone) {
+            throw new Exception("Zone must be specified for UTM");
+        }
+        $this->lat0 = 0.0;
+        $this->long0 = ((6 * abs($this->zone)) - 183) * Sourcemap_Proj::D2R;
+        $this->x0 = 500000.0;
+        $this->y0 = $this->utmSouth ? 10000000.0 : 0.0;
+        $this->k0 = 0.9996;
 
-Proj4js.Proj.utm = {
-  dependsOn : 'tmerc',
-
-  init : function() {
-    if (!this.zone) {
-      Proj4js.reportError("utm:init: zone must be specified for UTM");
-      return;
+        parent::init();
     }
-    this.lat0 = 0.0;
-    this.long0 = ((6 * Math.abs(this.zone)) - 183) * Proj4js.common.D2R;
-    this.x0 = 500000.0;
-    this.y0 = this.utmSouth ? 10000000.0 : 0.0;
-    this.k0 = 0.9996;
-
-    Proj4js.Proj['tmerc'].init.apply(this);
-    this.forward = Proj4js.Proj['tmerc'].forward;
-    this.inverse = Proj4js.Proj['tmerc'].inverse;
-  }
-};
+}

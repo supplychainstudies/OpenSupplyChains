@@ -1,3 +1,5 @@
+<?php
+class Sourcemap_Proj_Transform_Somerc extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                       SWISS OBLIQUE MERCATOR
 
@@ -13,98 +15,86 @@ ALGORITHM REFERENCES
 
 *******************************************************************************/
 
-Proj4js.Proj.somerc = {
-
-  init: function() {
-    var phy0 = this.lat0;
-    this.lambda0 = this.long0;
-    var sinPhy0 = Math.sin(phy0);
-    var semiMajorAxis = this.a;
-    var invF = this.rf;
-    var flattening = 1 / invF;
-    var e2 = 2 * flattening - Math.pow(flattening, 2);
-    var e = this.e = Math.sqrt(e2);
-    this.R = semiMajorAxis * Math.sqrt(1 - e2) / (1 - e2 * Math.pow(sinPhy0, 2.0));
-    this.alpha = Math.sqrt(1 + e2 / (1 - e2) * Math.pow(Math.cos(phy0), 4.0));
-    this.b0 = Math.asin(sinPhy0 / this.alpha);
-    this.K = Math.log(Math.tan(Math.PI / 4.0 + this.b0 / 2.0))
-            - this.alpha
-            * Math.log(Math.tan(Math.PI / 4.0 + phy0 / 2.0))
-            + this.alpha
-            * e / 2
-            * Math.log((1 + e * sinPhy0)
-            / (1 - e * sinPhy0));
-  },
-
-
-  forward: function(p) {
-    var Sa1 = Math.log(Math.tan(Math.PI / 4.0 - p.y / 2.0));
-    var Sa2 = this.e / 2.0
-            * Math.log((1 + this.e * Math.sin(p.y))
-            / (1 - this.e * Math.sin(p.y)));
-    var S = -this.alpha * (Sa1 + Sa2) + this.K;
-
-        // spheric latitude
-    var b = 2.0 * (Math.atan(Math.exp(S)) - Math.PI / 4.0);
-
-        // spheric longitude
-    var I = this.alpha * (p.x - this.lambda0);
-
-        // psoeudo equatorial rotation
-    var rotI = Math.atan(Math.sin(I)
-            / (Math.sin(this.b0) * Math.tan(b) +
-               Math.cos(this.b0) * Math.cos(I)));
-
-    var rotB = Math.asin(Math.cos(this.b0) * Math.sin(b) -
-                         Math.sin(this.b0) * Math.cos(b) * Math.cos(I));
-
-    p.y = this.R / 2.0
-            * Math.log((1 + Math.sin(rotB)) / (1 - Math.sin(rotB)))
-            + this.y0;
-    p.x = this.R * rotI + this.x0;
-    return p;
-  },
-
-  inverse: function(p) {
-    var Y = p.x - this.x0;
-    var X = p.y - this.y0;
-
-    var rotI = Y / this.R;
-    var rotB = 2 * (Math.atan(Math.exp(X / this.R)) - Math.PI / 4.0);
-
-    var b = Math.asin(Math.cos(this.b0) * Math.sin(rotB)
-            + Math.sin(this.b0) * Math.cos(rotB) * Math.cos(rotI));
-    var I = Math.atan(Math.sin(rotI)
-            / (Math.cos(this.b0) * Math.cos(rotI) - Math.sin(this.b0)
-            * Math.tan(rotB)));
-
-    var lambda = this.lambda0 + I / this.alpha;
-
-    var S = 0.0;
-    var phy = b;
-    var prevPhy = -1000.0;
-    var iteration = 0;
-    while (Math.abs(phy - prevPhy) > 0.0000001)
-    {
-      if (++iteration > 20)
-      {
-        Proj4js.reportError("omercFwdInfinity");
-        return;
-      }
-      //S = Math.log(Math.tan(Math.PI / 4.0 + phy / 2.0));
-      S = 1.0
-              / this.alpha
-              * (Math.log(Math.tan(Math.PI / 4.0 + b / 2.0)) - this.K)
-              + this.e
-              * Math.log(Math.tan(Math.PI / 4.0
-              + Math.asin(this.e * Math.sin(phy))
-              / 2.0));
-      prevPhy = phy;
-      phy = 2.0 * Math.atan(Math.exp(S)) - Math.PI / 2.0;
+    public function init() {
+        $phy0 = $this->lat0;
+        $this->lambda0 = $this->long0;
+        $sinPhy0 = sin($phy0);
+        $semiMajorAxis = $this->a;
+        $invF = $this->rf;
+        $flattening = 1 / $invF;
+        $e2 = 2 * $flattening - pow($flattening, 2);
+        $e = $this->e = sqrt($e2);
+        $this->R = $semiMajorAxis * sqrt(1 - $e2) / (1 - $e2 * pow($sinPhy0, 2.0));
+        $this->alpha = sqrt(1 + $e2 / (1 - $e2) * pow(cos($phy0), 4.0));
+        $this->b0 = asin($sinPhy0 / $this->alpha);
+        $this->K = log(tan(pi() / 4.0 + $this->b0 / 2.0))
+            - $this->alpha
+            * log(tan(pi() / 4.0 + $phy0 / 2.0))
+            + $this->alpha
+            * $e / 2
+            * log((1 + $e * $sinPhy0)
+                    / (1 - $e * $sinPhy0));
     }
 
-    p.x = lambda;
-    p.y = phy;
-    return p;
-  }
-};
+    public function forward($p) {
+        $Sa1 = log(tan(pi() / 4.0 - $p->y / 2.0));
+        $Sa2 = $this->e / 2.0
+            * log((1 + $this->e * sin($p->y))
+                    / (1 - $this->e * sin($p->y)));
+        $S = -$this->alpha * ($Sa1 + $Sa2) + $this->K;
+
+        // spheric latitude
+        $b = 2.0 * (atan(exp($S)) - pi() / 4.0);
+
+        // spheric longitude
+        $I = $this->alpha * ($p->x - $this->lambda0);
+
+        // psoeudo equatorial rotation
+        $rotI = atan(sin($I)
+                / (sin($this->b0) * tan($b) +
+                    cos($this->b0) * cos($I)));
+
+        $rotB = asin(cos($this->b0) * sin($b) -
+                sin($this->b0) * cos($b) * cos($I));
+
+        $p->y = $this->R / 2.0
+            * log((1 + sin($rotB)) / (1 - sin($rotB)))
+            + $this->y0;
+        $p->x = $this->R * $rotI + $this->x0;
+        return $p;
+    }
+
+    public function inverse($p) {
+        $Y = $p->x - $this->x0;
+        $X = $p->y - $this->y0;
+
+        $rotI = $Y / $this->R;
+        $rotB = 2 * (atan(exp(X / $this->R)) - PI / 4.0);
+
+        $b = asin(cos($this->b0) * sin($rotB)
+                + sin($this->b0) * cos($rotB) * cos($rotI));
+        $I = atan(sin($rotI)
+                / (cos($this->b0) * cos($rotI) - sin($this->b0)
+                    * tan($rotB)));
+
+        $lambda = $this->lambda0 + $I / $this->alpha;
+
+        $S = 0.0;
+        $phy = $b;
+        $prevPhy = -1000.0;
+        $iteration = 0;
+        while (abs($phy - $prevPhy) > 0.0000001) {
+            if (++$iteration > 20) {
+                throw new Exception("Infinity...");
+            }
+            //S = log(tan(pi() / 4.0 + $phy / 2.0));
+            $S = 1.0 / $this->alpha * (log(tan(pi() / 4.0 + $b / 2.0)) - $this->K) + $this->e * log(tan(pi() / 4.0 + asin($this->e * sin($phy)) / 2.0));
+            $prevPhy = $phy;
+            $phy = 2.0 * atan(exp($S)) - PI / 2.0;
+        }
+
+        $p->x = $lambda;
+        $p->y = $phy;
+        return $p;
+    }
+}

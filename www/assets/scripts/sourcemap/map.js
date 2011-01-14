@@ -26,7 +26,7 @@ Sourcemap.Map.prototype.init = function() {
     var p = new OpenLayers.LonLat(-122.8764, 42.3263);
     p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.getProjectionObject());
     this.map.setCenter(p);
-    this.map.zoomTo(0);
+    this.map.zoomTo(2);
     this.broadcast('mapInitialized', this);
     return this;
 }
@@ -52,13 +52,20 @@ Sourcemap.Map.prototype.initMap = function() {
 }
 
 Sourcemap.Map.prototype.initBaseLayer = function() {
-    this.map.addLayer(new OpenLayers.Layer.Google(
+    /*this.map.addLayer(new OpenLayers.Layer.Google(
         "Google Streets",
         {
             'sphericalMercator': true, "wrapeDateLine": true,
             "type": google.maps.MapTypeId.TERRAIN
         }
-    ));
+    ));*/
+    // todo: make this togglable
+    this.map.addLayer(new OpenLayers.Layer.CloudMade(
+        "Cloudmade", {
+        "key": "BC9A493B41014CAABB98F0471D759707",
+        "styleId": 1,
+        "wrapDateLine": true
+    }));
     this.broadcast('mapBaseLayerInitialized', this);
     return this;
 }

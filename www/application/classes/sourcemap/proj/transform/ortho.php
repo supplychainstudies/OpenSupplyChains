@@ -1,3 +1,5 @@
+<?php
+class Sourcemap_Proj_Transform_Ortho extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                             ORTHOGRAPHIC 
 
@@ -21,93 +23,87 @@ ALGORITHM REFERENCES
     Printing Office, Washington D.C., 1989.
 *******************************************************************************/
 
-Proj4js.Proj.ortho = {
-
   /* Initialize the Orthographic projection
     -------------------------------------*/
-  init: function(def) {
-    //double temp;			/* temporary variable		*/
+    public function init() {
+        //double temp;			/* temporary variable		*/
 
-    /* Place parameters in static storage for common use
-      -------------------------------------------------*/;
-    this.sin_p14=Math.sin(this.lat0);
-    this.cos_p14=Math.cos(this.lat0);	
-  },
-
-
-  /* Orthographic forward equations--mapping lat,long to x,y
-    ---------------------------------------------------*/
-  forward: function(p) {
-    var sinphi, cosphi;	/* sin and cos value				*/
-    var dlon;		/* delta longitude value			*/
-    var coslon;		/* cos of longitude				*/
-    var ksp;		/* scale factor					*/
-    var g;		
-    var lon=p.x;
-    var lat=p.y;	
-    /* Forward equations
-      -----------------*/
-    dlon = Proj4js.common.adjust_lon(lon - this.long0);
-
-    sinphi=Math.sin(lat);
-    cosphi=Math.cos(lat);	
-
-    coslon = Math.cos(dlon);
-    g = this.sin_p14 * sinphi + this.cos_p14 * cosphi * coslon;
-    ksp = 1.0;
-    if ((g > 0) || (Math.abs(g) <= Proj4js.common.EPSLN)) {
-      var x = this.a * ksp * cosphi * Math.sin(dlon);
-      var y = this.y0 + this.a * ksp * (this.cos_p14 * sinphi - this.sin_p14 * cosphi * coslon);
-    } else {
-      Proj4js.reportError("orthoFwdPointError");
+        /* Place parameters in static storage for common use
+           -------------------------------------------------*/;
+        $this->sin_p14 = sin($this->lat0);
+        $this->cos_p14 = cos($this->lat0);	
     }
-    p.x=x;
-    p.y=y;
-    return p;
-  },
 
 
-  inverse: function(p) {
-    var rh;		/* height above ellipsoid			*/
-    var z;		/* angle					*/
-    var sinz,cosz;	/* sin of z and cos of z			*/
-    var temp;
-    var con;
-    var lon , lat;
-    /* Inverse equations
-      -----------------*/
-    p.x -= this.x0;
-    p.y -= this.y0;
-    rh = Math.sqrt(p.x * p.x + p.y * p.y);
-    if (rh > this.a + .0000001) {
-      Proj4js.reportError("orthoInvDataError");
+    # Orthographic forward equations--mapping lat,long to x,y
+    public function forward($p) {
+#        $sinphi, $cosphi;	/* sin and cos value				*/
+#        $dlon;		/* delta longitude value			*/
+#        $coslon;		/* cos of longitude				*/
+#        $ksp;		/* scale factor					*/
+#        $g;		
+        $lon = $p->x;
+        $lat = $p->y;	
+        /* Forward equations
+           -----------------*/
+        $dlon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
+
+        $sinphi = sin($lat);
+        $cosphi = cos($lat);	
+
+        $coslon = cos($dlon);
+        $g = $this->sin_p14 * $sinphi + $this->cos_p14 * $cosphi * $coslon;
+        $ksp = 1.0;
+        if(($g > 0) || (abs($g) <= Sourcemap_Proj::EPSLN)) {
+            $x = $this->a * $ksp * $cosphi * sin($dlon);
+            $y = $this->y0 + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
+        } else {
+            throw new Exception("Point error.");
+        }
+        $p->x = $x;
+        $p->y = $y;
+        return $p;
     }
-    z = Proj4js.common.asinz(rh / this.a);
 
-    sinz=Math.sin(z);
-    cosz=Math.cos(z);
+    public function inverse($p) {
+#        $rh;		/* height above ellipsoid			*/
+#        $z;		/* angle					*/
+#        $sinz, $cosz;	/* sin of z and cos of z			*/
+#        $temp;
+#        $con;
+#        $lon, $lat;
+        /* Inverse equations
+           -----------------*/
+        $p->x -= $this->x0;
+        $p->y -= $this->y0;
+        $rh = sqrt($p->x * $p->x + $p->y * $p->y);
+        if ($rh > $this->a + .0000001) {
+            throw new Exception("orthoInvDataError");
+        }
+        $z = Sourcemap_Proj::asinz($rh / $this->a);
 
-    lon = this.long0;
-    if (Math.abs(rh) <= Proj4js.common.EPSLN) {
-      lat = this.lat0; 
+        $sinz = sin($z);
+        $cosz = cos($z);
+
+        $lon = $this->long0;
+        if(abs($rh) <= Sourcemap_Proj::EPSLN) {
+            $lat = $this->lat0; 
+        }
+        $lat = Sourcemap_Proj::asinz($cosz * $this->sin_p14 + ($p->y * $sinz * $this->cos_p14) / $rh);
+        $con = abs($lat0) - Sourcemap_Proj::HALF_PI;
+        if(abs($con) <= Sourcemap_Proj::EPSLN) {
+            if($this->lat0 >= 0) {
+                $lon = Sourcemap_Proj::adjust_lon($this->long0 + atan2($p->x, -$p->y));
+            } else {
+                $lon = Sourcemap_Proj::adjust_lon($this->long0 - atan2(-$p->x, $p->y));
+            }
+        }
+        $con = $cosz - $this->sin_p14 * sin($lat);
+        if((abs($con) >= Sourcemap_Proj::EPSLN) || (abs($x) >= Sourcemap_Proj::EPSLN)) {
+            $lon = Sourcemap_Proj::adjust_lon($this->long0 + atan2(($p->x * $sinz * $this->cos_p14), ($con * $rh)));
+        }
+        $p->x = $lon;
+        $p->y = $lat;
+        return $p;
     }
-    lat = Proj4js.common.asinz(cosz * this.sin_p14 + (p.y * sinz * this.cos_p14)/rh);
-    con = Math.abs(lat0) - Proj4js.common.HALF_PI;
-    if (Math.abs(con) <= Proj4js.common.EPSLN) {
-       if (this.lat0 >= 0) {
-          lon = Proj4js.common.adjust_lon(this.long0 + Math.atan2(p.x, -p.y));
-       } else {
-          lon = Proj4js.common.adjust_lon(this.long0 -Math.atan2(-p.x, p.y));
-       }
-    }
-    con = cosz - this.sin_p14 * Math.sin(lat);
-    if ((Math.abs(con) >= Proj4js.common.EPSLN) || (Math.abs(x) >= Proj4js.common.EPSLN)) {
-       lon = Proj4js.common.adjust_lon(this.long0 + Math.atan2((p.x * sinz * this.cos_p14), (con * rh)));
-    }
-    p.x=lon;
-    p.y=lat;
-    return p;
-  }
-};
-
-
+}

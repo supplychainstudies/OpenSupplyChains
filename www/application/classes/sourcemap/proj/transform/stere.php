@@ -1,72 +1,73 @@
+<?php
+class Sourcemap_Proj_Transform_Stere extends Sourcemap_Proj_Transform {
+    
+    public $TOL = 1.e-8;
+    public $NITER = 8;
+    public $CONV = 1.e-10;
+    public $S_POLE = 0;
+    public $N_POLE = 1;
+    public $OBLIQ = 2;
+    public $EQUIT = 3;
 
-// Initialize the Stereographic projection
-
-Proj4js.Proj.stere = {
-  ssfn_: function(phit, sinphi, eccen) {
-  	sinphi *= eccen;
-  	return (Math.tan (.5 * (Proj4js.common.HALF_PI + phit)) * Math.pow((1. - sinphi) / (1. + sinphi), .5 * eccen));
-  },
-  TOL:	1.e-8,
-  NITER:	8,
-  CONV:	1.e-10,
-  S_POLE:	0,
-  N_POLE:	1,
-  OBLIQ:	2,
-  EQUIT:	3,
-
-  init : function() {
-  	this.phits = this.lat_ts ? this.lat_ts : Proj4js.common.HALF_PI;
-    var t = Math.abs(this.lat0);
-  	if ((Math.abs(t) - Proj4js.common.HALF_PI) < Proj4js.common.EPSLN) {
-  		this.mode = this.lat0 < 0. ? this.S_POLE : this.N_POLE;
-  	} else {
-  		this.mode = t > Proj4js.common.EPSLN ? this.OBLIQ : this.EQUIT;
+    public function ssfn_($phit, $sinphi, $eccen) {
+        sinphi *= eccen;
+        return (Math.tan (.5 * (Proj4js.common.HALF_PI + phit)) * Math.pow((1. - sinphi) / (1. + sinphi), .5 * eccen));
     }
-  	this.phits = Math.abs(this.phits);
-  	if (this.es) {
-  		var X;
+  
+    // Initialize the Stereographic projection
+    public function init() {
+        this.phits = this.lat_ts ? this.lat_ts : Proj4js.common.HALF_PI;
+        var t = Math.abs(this.lat0);
+        if ((Math.abs(t) - Proj4js.common.HALF_PI) < Proj4js.common.EPSLN) {
+            this.mode = this.lat0 < 0. ? this.S_POLE : this.N_POLE;
+        } else {
+            this.mode = t > Proj4js.common.EPSLN ? this.OBLIQ : this.EQUIT;
+        }
+        this.phits = Math.abs(this.phits);
+        if (this.es) {
+            var X;
 
-  		switch (this.mode) {
-  		case this.N_POLE:
-  		case this.S_POLE:
-  			if (Math.abs(this.phits - Proj4js.common.HALF_PI) < Proj4js.common.EPSLN) {
-  				this.akm1 = 2. * this.k0 / Math.sqrt(Math.pow(1+this.e,1+this.e)*Math.pow(1-this.e,1-this.e));
-  			} else {
-          t = Math.sin(this.phits);
-  				this.akm1 = Math.cos(this.phits) / Proj4js.common.tsfnz(this.e, this.phits, t);
-  				t *= this.e;
-  				this.akm1 /= Math.sqrt(1. - t * t);
-  			}
-  			break;
-  		case this.EQUIT:
-  			this.akm1 = 2. * this.k0;
-  			break;
-  		case this.OBLIQ:
-  			t = Math.sin(this.lat0);
-  			X = 2. * Math.atan(this.ssfn_(this.lat0, t, this.e)) - Proj4js.common.HALF_PI;
-  			t *= this.e;
-  			this.akm1 = 2. * this.k0 * Math.cos(this.lat0) / Math.sqrt(1. - t * t);
-  			this.sinX1 = Math.sin(X);
-  			this.cosX1 = Math.cos(X);
-  			break;
-  		}
-  	} else {
-  		switch (this.mode) {
-  		case this.OBLIQ:
-  			this.sinph0 = Math.sin(this.lat0);
-  			this.cosph0 = Math.cos(this.lat0);
-  		case this.EQUIT:
-  			this.akm1 = 2. * this.k0;
-  			break;
-  		case this.S_POLE:
-  		case this.N_POLE:
-  			this.akm1 = Math.abs(this.phits - Proj4js.common.HALF_PI) >= Proj4js.common.EPSLN ?
-  			   Math.cos(this.phits) / Math.tan(Proj4js.common.FORTPI - .5 * this.phits) :
-  			   2. * this.k0 ;
-  			break;
-  		}
-  	}
-  }, 
+            switch (this.mode) {
+                case this.N_POLE:
+                case this.S_POLE:
+                    if (Math.abs(this.phits - Proj4js.common.HALF_PI) < Proj4js.common.EPSLN) {
+                        this.akm1 = 2. * this.k0 / Math.sqrt(Math.pow(1+this.e,1+this.e)*Math.pow(1-this.e,1-this.e));
+                    } else {
+                        t = Math.sin(this.phits);
+                        this.akm1 = Math.cos(this.phits) / Proj4js.common.tsfnz(this.e, this.phits, t);
+                        t *= this.e;
+                        this.akm1 /= Math.sqrt(1. - t * t);
+                    }
+                    break;
+                case this.EQUIT:
+                    this.akm1 = 2. * this.k0;
+                    break;
+                case this.OBLIQ:
+                    t = Math.sin(this.lat0);
+                    X = 2. * Math.atan(this.ssfn_(this.lat0, t, this.e)) - Proj4js.common.HALF_PI;
+                    t *= this.e;
+                    this.akm1 = 2. * this.k0 * Math.cos(this.lat0) / Math.sqrt(1. - t * t);
+                    this.sinX1 = Math.sin(X);
+                    this.cosX1 = Math.cos(X);
+                    break;
+            }
+        } else {
+            switch (this.mode) {
+                case this.OBLIQ:
+                    this.sinph0 = Math.sin(this.lat0);
+                    this.cosph0 = Math.cos(this.lat0);
+                case this.EQUIT:
+                    this.akm1 = 2. * this.k0;
+                    break;
+                case this.S_POLE:
+                case this.N_POLE:
+                    this.akm1 = Math.abs(this.phits - Proj4js.common.HALF_PI) >= Proj4js.common.EPSLN ?
+                        Math.cos(this.phits) / Math.tan(Proj4js.common.FORTPI - .5 * this.phits) :
+                        2. * this.k0 ;
+                    break;
+            }
+        }
+    }
 
 // Stereographic forward equations--mapping lat,long to x,y
   forward: function(p) {

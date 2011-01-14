@@ -28,6 +28,7 @@ class CloudMade_StaticMap {
         $markers = array();
         $paths = array();
         foreach($raw_sc->stops as $i => $stop) {
+            # todo: address hard limit of 100 stops.
             if($pt = Sourcemap_Proj_Point::fromGeometry($stop->geometry)) {
                 $pt = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $pt);
                 $markers[] = 'size:small|opacity:0.9|label:'.($i+1).'|'.$pt->y.','.$pt->x;
@@ -52,7 +53,7 @@ class CloudMade_StaticMap {
             $ps[] = 'marker='.$m;
         }
         foreach($paths as $i => $p) {
-            $ps[] = 'path='.$p;
+            #$ps[] = 'path='.$p;
         }
         $ps = join($ps, '&');
         $ch = curl_init();

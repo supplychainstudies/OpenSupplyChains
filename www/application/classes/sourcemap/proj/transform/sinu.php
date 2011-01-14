@@ -1,3 +1,5 @@
+<?php
+class Sourcemap_Proj_Transform_Sinu extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                  		SINUSOIDAL
 
@@ -24,56 +26,48 @@ ALGORITHM REFERENCES
     Package", U.S. Geological Survey National Mapping Division, May 1982.
 *******************************************************************************/
 
-Proj4js.Proj.sinu = {
-
-	/* Initialize the Sinusoidal projection
-	  ------------------------------------*/
-	init: function() {
-		/* Place parameters in static storage for common use
-		  -------------------------------------------------*/
-		this.R = 6370997.0; //Radius of earth
-	},
+    # Initialize the Sinusoidal projection
+    public function init() {
+        /* Place parameters in static storage for common use
+           -------------------------------------------------*/
+        $this->R = 6370997.0; //Radius of earth
+    }
 
 	/* Sinusoidal forward equations--mapping lat,long to x,y
 	-----------------------------------------------------*/
-	forward: function(p) {
-		var x,y,delta_lon;	
-		var lon=p.x;
-		var lat=p.y;	
-		/* Forward equations
-		-----------------*/
-		delta_lon = Proj4js.common.adjust_lon(lon - this.long0);
-		x = this.R * delta_lon * Math.cos(lat) + this.x0;
-		y = this.R * lat + this.y0;
+    public function forward($p) {
+        $lon = $p->x;
+        $lat = $p->y;	
+        /* Forward equations
+           -----------------*/
+        $delta_lon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
+        $x = $this->R * $delta_lon * cos($lat) + $this->x0;
+        $y = $this->R * $lat + $this->y0;
 
-		p.x=x;
-		p.y=y;	
-		return p;
-	},
+        $p->x = $x;
+        $p->y = $y;	
+        return $p;
+    }
 
-	inverse: function(p) {
-		var lat,temp,lon;	
+    public function inverse($p) {
+        /* Inverse equations
+           -----------------*/
+        $p->x -= $this->x0;
+        $p->y -= $this->y0;
+        $lat = $p->y / $this->R;
+        if(abs($lat) > Sourcemap_Proj::HALF_PI) {
+            throw new Exception("Data error.");
+        }
+        $temp = abs($lat) - Sourcemap_Proj::HALF_PI;
+        if(abs($temp) > Sourcemap_Proj::EPSLN) {
+            $temp = $this->long0 + $p->x / ($this->R *cos($lat));
+            $lon = Sourcemap_Proj::adjust_lon($temp);
+        } else {
+            $lon = $this->long0;
+        }
 
-		/* Inverse equations
-		  -----------------*/
-		p.x -= this.x0;
-		p.y -= this.y0;
-		lat = p.y / this.R;
-		if (Math.abs(lat) > Proj4js.common.HALF_PI) {
-		    Proj4js.reportError("sinu:Inv:DataError");
-		}
-		temp = Math.abs(lat) - Proj4js.common.HALF_PI;
-		if (Math.abs(temp) > Proj4js.common.EPSLN) {
-			temp = this.long0+ p.x / (this.R *Math.cos(lat));
-			lon = Proj4js.common.adjust_lon(temp);
-		} else {
-			lon = this.long0;
-		}
-		  
-		p.x=lon;
-		p.y=lat;
-		return p;
-	}
-};
-
-
+        $p->x = $lon;
+        $p->y = $lat;
+        return $p;
+    }
+}

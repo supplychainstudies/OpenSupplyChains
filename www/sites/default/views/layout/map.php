@@ -7,6 +7,7 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 <!-- OpenLayers -->
 <script type="text/javascript" language="javascript" src="assets/scripts/openlayers/OpenLayers.js"></script>
+<script type="text/javascript" language="javascript" src="assets/scripts/openlayers/cloudmade.js"></script>
 <!-- jQuery -->
 <script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <!-- Sourcemap -->

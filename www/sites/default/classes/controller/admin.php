@@ -23,7 +23,7 @@
             Message::instance()->set(
                 'You\'re not allowed to access the management dashboard.', Message::ERROR
             );
-            $this->request->redirect('error');
+            $this->request->redirect('auth/');
         }
     }
 

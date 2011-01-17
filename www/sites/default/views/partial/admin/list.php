@@ -1,10 +1,10 @@
-<?php if(isset($list)): ?>
+<?php if(isset($list, $list_type)): ?>
     <?php if($list): ?>
         <table class="admin-list">
-        <?php $items = array_values($list) ?>
-        <?php $headings = array_keys((array)$items[0]) ?>
+        <?php $items = array_values(is_array($list) ? $list : $list->as_array()) ?>
+        <?php $headings = array_keys(is_array($items[0]) ? $items[0] : is_callable(array($items[0], 'as_array')) ? $items[0]->as_array() : (array)$items[0]) ?>
         <?php try {
-                $partial = View::factory('partial/admin/list/head/supplychains', array('headings' => $headings));
+                $partial = View::factory('partial/admin/list/head/'.$list_type, array('headings' => $headings));
             } catch(Exception $e) {
                 $partial = false;
             }
@@ -22,7 +22,7 @@
         <?php endif; ?>
         <tbody>
         <?php try {
-                $partial = View::factory('partial/admin/list/item/supplychains');
+                $partial = View::factory('partial/admin/list/item/'.$list_type);
             } catch(Exception $e) {
                 $partial = false;
             }

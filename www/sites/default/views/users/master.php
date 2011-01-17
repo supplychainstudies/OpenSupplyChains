@@ -1,1 +1,0 @@
-<? echo $main_content; ?>

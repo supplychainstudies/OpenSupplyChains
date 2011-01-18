@@ -15,17 +15,31 @@ class Sourcemap_Database_Result_Cached extends Kohana_Database_Result_Cached {
      */
     public function as_array($key=null, $values=null) {
         $results = array();
-        if($key !== null && is_array($values)) {
-            foreach($this as $i => $row) {
-                $results[$row->$key] = array();
-                foreach($values as $j => $value) {
-                    $results[$row->$key][$value] = $row->$value;
+        if(is_array($values)) {
+            if($key !== null) {
+                foreach($this as $i => $row) {
+                    $results[$row->$key] = array();
+                    foreach($values as $j => $value) {
+                        $results[$row->$key][$value] = $row->$value;
+                    }
+                    $results[$row->$key] = (object)$results[$row->$key];
                 }
-                $results[$row->$key] = (object)$results[$row->$key];
+            } else {
+                foreach($this as $i => $row) {
+                    $result = array();
+                    foreach($values as $j => $value) {
+                        $result[$value] = $row->$value;
+                    }
+                    $results[] = $result;
+                }
             }
-        } elseif($key !== null && $values === true) {
+        } elseif($values === true) {
             foreach($this as $i => $row) {
-                $results[$row->$key] = (object)$row->as_array();
+                if($key !== null) {
+                    $results[$row->$key] = (object)$row->as_array();
+                } else {
+                    $results[] = (object)$row->as_array();
+                }
             }
         } else {
             $results = parent::as_array($key, $values);

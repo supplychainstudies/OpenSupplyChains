@@ -15,11 +15,11 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="<?= URL::base() ?>assets/styles/style.css?v=2">
-    <link rel="stylesheet/less" href="<?= URL::base() ?>assets/styles/sourcemap.less?v=2" type="text/css">
+    <link rel="stylesheet" href="assets/styles/style.css?v=2">
+    <link rel="stylesheet/less" href="assets/styles/sourcemap.less?v=2" type="text/css">
 
-    <script src="<?= URL::base() ?>assets/scripts/libs/modernizr-1.6.min.js"></script>
-    <script src="<?= URL::base() ?>assets/scripts/libs/less-1.0.40.min.js"></script>
+    <script src="assets/scripts/libs/modernizr-1.6.min.js"></script>
+    <script src="assets/scripts/libs/less-1.0.40.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
@@ -78,7 +78,7 @@
    
     <div id="bar">
         <nav id="page-navigation">
-            <h2>Generic Page Title</h2>
+            <h2><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h2>
             <div class="clear"></div>
         </nav>
     </div> <!-- bar -->
@@ -127,7 +127,7 @@
 </body>
 
   
-  <script src="js/script.js"></script>
+  <script src="assets/scripts/script.js"></script>
   
   
   <!--[if lt IE 7 ]>

@@ -288,12 +288,14 @@ ul.nav {
 }
 
 #map {
-    .box_shadow_inset(5px, 5px, 5px);    background:url("http://staticmaps.cloudmade.com/8ee2a50541944fb9bcedded5165f09d9/staticmap?bbox=51.35,-0.05,51.45,30&size=1000x600");
+    .box_shadow_inset(5px, 5px, 5px);    
     height:600px;    
     margin:0 0 0 221px;
     border:1px solid #ccc;
     border-top:none;
-
+}
+#map > div > div {
+    z-index:0 !important;
 }
 #map-actions {
     position:absolute;

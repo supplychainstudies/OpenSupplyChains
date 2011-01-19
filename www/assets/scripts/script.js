@@ -16,7 +16,7 @@ jQuery(document).ready(function(){
 
     $( "#view-pane" ).accordion();
     $(".place-details, #detail-pane .close").click(function() {toggleDetailPane();});
-    $("#map").click(function() {
+    $("#fullscreen-button").click(function() {
         if($("#map").css("position") == "fixed") {
             $("#map").css("z-index", "").css("position","static").css("height","600px")
                      .css("left","").css("top","").css("width","100%").css("margin-left","221px")

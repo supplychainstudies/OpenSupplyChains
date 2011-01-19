@@ -17,7 +17,7 @@ Sourcemap.Map.prototype.broadcast = function() {
 }
 
 Sourcemap.Map.prototype.defaults = {
-    "auto_init": true, "element_id": "sourcemap",
+    "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/"
 }
 
@@ -63,7 +63,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "Cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
-        "styleId": 1,
+        "styleId": 4993,
         "wrapDateLine": true
     }));
     this.broadcast('mapBaseLayerInitialized', this);

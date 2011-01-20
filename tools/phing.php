@@ -56,7 +56,6 @@ try {
     
     // Assume the message was already printed as part of the build and
     // exit with non-0 error code.
-    print $x;
     
     exit(1);
     

@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Sourcemap2" default="dist">
+<project name="Sourcemap2" default="build">
+
+<target name="clean">
+<echo msg="Clean..." />
+<if>
+    <isset property="builddir" />
+    <then>
+        <mkdir dir="${builddir}" />
+    </then>
+    <else>
+        <fail message="Build directory (builddir) property required." />
+    </else>
+</if>
+<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="true" />
+</target>
 
 <!-- ============================================  -->
 <!-- Target: prepare                               -->
 <!-- ============================================  -->
 <target name="prepare">
 <echo msg="Prepare..." />
-<!--mkdir dir="./build" /-->
+<if>
+    <isset property="builddir" />
+    <then>
+        <mkdir dir="${builddir}" />
+    </then>
+    <else>
+        <fail message="Build directory (builddir) property required." />
+    </else>
+</if>
 </target>
 
 <!-- ============================================  -->
@@ -15,17 +37,40 @@
 <!-- ============================================  -->
 <target name="build" depends="prepare">
 
+<if>
+    <not><isset property="srcdir" /></not>
+    <then>
+        <fail message="Src directory (srcdir) property required." />
+    </then>
+</if>
+
 <echo msg="Build..." />
-<!--echo msg="Copying files to build directory..." />
+<echo msg="Copying files to build directory..." />
+<copy todir="${builddir}">
+<fileset dir="${srcdir}">
+</fileset>
+</copy>
+<phingcall target="build-css" />
+</target>
 
-<echo msg="Copying ./about.php to ./build directory..." />
-<copy file="./about.php" tofile="./build/about.php" />
+<target name="build-css" depends="prepare">
+    <foreach param="cssfile" absparam="cssfile_abs" target="less-compile">
+        <fileset dir="${builddir}assets/styles/">
+            <include name="*.less" />
+            <include name="**/*.less" />
+        </fileset>
+    </foreach>
+</target>
 
-<echo msg="Copying ./browsers.php to ./build directory..." />
-<copy file="./browsers.php" tofile="./build/browsers.php" />
-
-<echo msg="Copying ./contact.php to ./build directory..." />
-<copy file="./contact.php" tofile="./build/contact.php" /-->
+<target name="less-compile">
+    <php function="basename" returnProperty="basename">
+        <param value="${cssfile_abs}" />
+        <param value=".less" />
+    </php>
+    <php function="dirname" returnProperty="dirname">
+        <param value="${cssfile_abs}" />
+    </php>
+    <exec command="${phing.home}plessc ${cssfile_abs} ${dirname}/${basename}.css" />
 </target>
 
 <!-- ============================================  -->

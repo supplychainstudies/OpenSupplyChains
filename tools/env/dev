@@ -11,3 +11,4 @@ export SMAPDIR="/home/reed/devel/mit/sourcemap/smap/trunk/"
 # for phing
 export PHP_CLASSPATH="${SMAPDIR}www/application/classes/"
 export PHING_HOME="${SMAPDIR}tools/"
+export SMAP_BUILDDIR="${SMAPDIR}build/"

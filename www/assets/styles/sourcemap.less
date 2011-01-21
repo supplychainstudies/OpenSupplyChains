@@ -1,5 +1,11 @@
 @brand-color: #009027;
 @highlight-color: #C9FF23;
+.brand_gradient {
+    background:@brand-color;
+    background:-webkit-gradient(radial, center center, 0, center center, 400, from(#22b249), to(@brand-color));
+    background:-moz-radial-gradient(center 45deg, circle closest-side, #22b249 0%, @brand-color 100%);
+    
+}
 .rounded(@radius: 4px) {
     -webkit-border-radius: @radius;
     -moz-border-radius: @radius;
@@ -28,7 +34,7 @@ body {
     background: #fff;
 }
 body.fixed {
-    #branding, #content, #footer-content, #page-navigation {
+    #branding, #content, #footer-content, #page-navigation, .splash-text {
         width:1020px;
         padding-left:0;
         padding-right:0;
@@ -122,11 +128,11 @@ ul.nav {
     .rounded(4px);
     margin:0 auto;
     min-height:40px;
-    background:@brand-color;
+    .brand_gradient();
 }
 #splash {
     margin:0 auto 10px auto;
-    background:-webkit-gradient(radial, center center, 0, center center, 400, from(#22b249), to(#009027));
+    .brand_gradient();
     .rounded(4px);
     height:400px;
     #cartoons {
@@ -148,6 +154,13 @@ ul.nav {
         width:275px;
         padding:20px;
         float:left;
+        font-size:2.4em;
+        color:#fff;
+        text-shadow: rgba(0,0,0,0.2) 2px 2px 4px;
+    }
+    .splash-text {
+        margin:0 auto;
+        padding:20px;
         font-size:2.4em;
         color:#fff;
         text-shadow: rgba(0,0,0,0.2) 2px 2px 4px;
@@ -199,7 +212,7 @@ ul.nav {
         width:28% !important;
         margin-top:46px;
         #news-callout {
-            background:-webkit-gradient(radial, center center, 0, center center, 400, from(#22b249), to(#009027));
+            .brand_gradient();
             border:5px solid @brand-color;
             padding:20px 10px;
             margin-bottom:20px;

@@ -49,13 +49,16 @@
 <echo msg="Copying files to build directory..." />
 <copy todir="${builddir}">
 <fileset dir="${srcdir}">
+    <exclude name="**/.*.swp" />
 </fileset>
 </copy>
 <phingcall target="build-css" />
+<phingcall target="build-js" />
 </target>
 
 <target name="build-jsmin">
 <echo msg="Build jsmin.c here..." />
+<exec command="gcc -o jsmin jsmin.c" dir="${srcdir}/../tools/jsmin/" />
 </target>
 
 <target name="build-css" depends="prepare">
@@ -63,6 +66,15 @@
         <fileset dir="${builddir}assets/styles/">
             <include name="*.less" />
             <include name="**/*.less" />
+        </fileset>
+    </foreach>
+</target>
+
+<target name="build-js" depends="prepare">
+    <foreach param="jssfile" absparam="jsfile_abs" target="minify-js">
+        <fileset dir="${builddir}assets/scripts/">
+            <include name="*.js" />
+            <include name="**/*.js" />
         </fileset>
     </foreach>
 </target>
@@ -76,6 +88,18 @@
         <param value="${cssfile_abs}" />
     </php>
     <exec command="${phing.home}plessc ${cssfile_abs} ${dirname}/${basename}.css" />
+</target>
+
+<target name="minify-js">
+    <php function="basename" returnProperty="basename">
+        <param value="${jsfile_abs}" />
+        <param value=".js" />
+    </php>
+    <php function="dirname" returnProperty="dirname">
+        <param value="${jsfile_abs}" />
+    </php>
+    <exec command="cat ${jsfile_abs} | ${phing.home}jsmin/jsmin > ${dirname}/${basename}.min.js" />
+    <copy file="${dirname}/${basename}.min.js" tofile="${dirname}/${basename}.js" />
 </target>
 
 <!-- ============================================  -->

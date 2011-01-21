@@ -45,6 +45,7 @@ Sourcemap::init();
 if (isset($_ENV['KOHANA_ENV']))
 {
 	Kohana::$environment = $_ENV['KOHANA_ENV'];
+    Sourcemap::$env = Kohana::$environment;
 }
 
 /**

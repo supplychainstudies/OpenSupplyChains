@@ -3,5 +3,5 @@
 return array(
     'base_url' => '/mit/smap/',
     'cache_dir' => CACHEPATH,
-    'upload_dir' => '/tmp/'
+    'upload_dir' => '/tmp/',
 );

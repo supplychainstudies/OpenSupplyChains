@@ -192,7 +192,7 @@ Sourcemap.loadSupplychain = function(remote_id, callback) {
     $.get('services/supplychains/'+remote_id, {},  function(data) {
             callback.apply(this, arguments);
             // notice this event fires _after_ the callback runs.
-            _that.broadcast('supplychainLoaded', this, data);
+            _that.broadcast('supplychain:loaded', this, data);
         }
     );
 }
@@ -201,5 +201,3 @@ Sourcemap.saveSupplychain = function(supplychain_id) {
     // save supplychain
     // this.broadcast('supplychainSaved', this, supplychain); asynch!
 }
-
-

@@ -8,6 +8,5 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         $this->template->supplychains = ORM::factory('supplychain')
             ->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)
             ->find_all();
-        $this->template->message = 'Hi.';
     }
 }

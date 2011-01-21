@@ -1,5 +1,5 @@
 Sourcemap.Map = function(element_id, o) {
-    this.broadcast('mapInstantiated', this);
+    this.broadcast('map:instantiated', this);
     this.supplychain = null;
     this.layers = {};
     this.controls = {};
@@ -27,7 +27,7 @@ Sourcemap.Map.prototype.init = function() {
     p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.getProjectionObject());
     this.map.setCenter(p);
     this.map.zoomTo(2);
-    this.broadcast('mapInitialized', this);
+    this.broadcast('map:initialized', this);
     return this;
 }
 
@@ -53,7 +53,7 @@ Sourcemap.Map.prototype.initMap = function() {
         ]
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
-    this.broadcast('mapOpenLayersMapInitialized', this);
+    this.broadcast('map:openlayers_map_initialized', this);
     return this;
 }
 
@@ -72,7 +72,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "styleId": 4993,
         "wrapDateLine": true
     }));
-    this.broadcast('mapBaseLayerInitialized', this);
+    this.broadcast('map:base_layer_initialized', this);
     return this;
 }
 
@@ -114,19 +114,18 @@ Sourcemap.Map.prototype.initLayers = function() {
         }
     ));
     this.map.raiseLayer(this.getLayer('stops'),1);
-    this.broadcast('mapLayersInitialized', this);
+    this.broadcast('map:layers_initialized', this);
     return this;
 }
 
 Sourcemap.Map.prototype.initControls = function() {
-    this.broadcast('mapControlsInitialize', this);
     this.addControl('select', 
         new OpenLayers.Control.SelectFeature([this.getLayer('stops'), this.getLayer('hops')], {
             "onSelect": OpenLayers.Function.bind(function(feature) { this.broadcast('featureSelected', {'map': this, 'feature': feature}); }, this)
         })
     );
     this.controls.select.activate();
-    this.broadcast('mapControlsInitialized', this, ['select']);
+    this.broadcast('map:controls_initialized', this, ['select']);
     return this;
 }
 
@@ -168,7 +167,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(supplychain) {
     for(var i=0; i<supplychain.hops.length; i++) {
         this.mapHop(supplychain.hops[i]);
     }
-    this.broadcast('mapSupplychainMapped', this);
+    this.broadcast('map:supplychain_mapped', this);
 }
 
 Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {
@@ -182,7 +181,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {
     if(this.prepareStopFeature instanceof Function) {
         this.prepareStopFeature(stop, new_feature);
     }
-    this.broadcast('mapStopMapped', this, stop, new_feature);
+    this.broadcast('map:stop_mapped', this, stop, new_feature);
     this.layers.stops.addFeatures([new_feature]);
 }
 
@@ -195,7 +194,7 @@ Sourcemap.Map.prototype.mapHop = function(hop) {
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     new_feature.attributes.size = 4;
-    this.broadcast('mapHopMapped', this, hop, new_feature);
+    this.broadcast('map:hop_mapped', this, hop, new_feature);
     this.layers.hops.addFeatures([new_feature]);
 }
 

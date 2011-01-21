@@ -6,11 +6,20 @@ class Sourcemap {
     const WRITE = 2;
     const DELETE = 8;
 
+    // env constants
+    const DEV = 'development';
+    const STAGING = 'staging';
+    const PRODUCTION = 'production';
+
     public static $session_dir = '/tmp';
 
     public static $_sess_save_path;
 
+    public static $env = self::PRODUCTION;
+
     public static function init() {
+        if(isset(Kohana::$environment))
+            self::$env = Kohana::$environment;
         session_set_save_handler(
             array('Sourcemap', "_sess_open"), array('Sourcemap', "_sess_close"), 
             array('Sourcemap', "_sess_read"), array('Sourcemap', "_sess_write"), 

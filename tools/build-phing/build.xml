@@ -30,6 +30,7 @@
         <fail message="Build directory (builddir) property required." />
     </else>
 </if>
+<phingcall target="build-jsmin" />
 </target>
 
 <!-- ============================================  -->
@@ -51,6 +52,10 @@
 </fileset>
 </copy>
 <phingcall target="build-css" />
+</target>
+
+<target name="build-jsmin">
+<echo msg="Build jsmin.c here..." />
 </target>
 
 <target name="build-css" depends="prepare">

@@ -30,12 +30,28 @@ return array(
                 'jqote', 'jquery-ui', 'openlayers'
             )
         ),
+        'sourcemap-template' => array(
+            'scripts' => array(
+                'assets/scripts/sourcemap/template.js'
+            ),
+            'requires' => array(
+                'sourcemap-core'
+            )
+        ),
         'sourcemap-map' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/map.js'
             ),
             'requires' => array(
                 'sourcemap-core'
+            )
+        ),
+        'sourcemap-working' => array(
+            'scripts' => array(
+                'assets/scripts/script.js'
+            ),
+            'requires' => array(
+                'sourcemap-core', 'sourcemap-template'
             )
         ),
         'openlayers' => array(

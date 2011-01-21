@@ -18,8 +18,6 @@
     <link rel="stylesheet" href="assets/styles/style.css?v=2">
     <link rel="stylesheet/less" href="assets/styles/sourcemap.less?v=2" type="text/css">
     
-    <?= Sourcemap_JS::script_tags('modernizr', 'less', 'sourcemap-map') ?>
-
     <!--script src="assets/scripts/libs/modernizr-1.6.min.js"></script>
     <script src="assets/scripts/libs/less-1.0.40.min.js"></script>
 
@@ -130,14 +128,12 @@
     </footer>
 </body>
 
-  
-  <script src="assets/scripts/script.js"></script>
-  
+    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
+
   
   <!--[if lt IE 7 ]>
     <script src="js/libs/dd_belatedpng.js"></script>
     <script> DD_belatedPNG.fix('img, .png_bg'); 
   <![endif]-->
   
-</body>
 </html>

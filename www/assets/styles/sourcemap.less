@@ -27,6 +27,13 @@ body {
     margin:0 auto;
     background: #fff;
 }
+body.fixed {
+    #branding, #content, #footer-content, #page-navigation {
+        width:1020px;
+        padding-left:0;
+        padding-right:0;
+    }
+}
 a:hover, a:active, a:visited, a, a:link {
     color:@brand-color;
 }
@@ -293,10 +300,14 @@ ul.nav {
     margin:0 0 0 221px;
     border:1px solid #ccc;
     border-top:none;
+    > div > div {
+        z-index:0 !important;
+    }
+    .olControlAttribution {
+        bottom:5px !important;
+    }
 }
-#map > div > div {
-    z-index:0 !important;
-}
+
 #map-actions {
     position:absolute;
     top:10px;
@@ -653,6 +664,9 @@ ul.nav {
     padding:10px 1.5% 0 1.5%;
     color:#777;
     border-top:1px solid #999;
+    #footer-content {
+        margin:0 auto;
+    }
     .footer-box {
         float:left;
         padding:0 2% 10px 0;

@@ -1,5 +1,5 @@
-Sourcemap.TPL_PATH = "/assets/scripts/sourcemap/tpl/";
-Sourcemap.TPL_EXT = ".js.tpl";
+Sourcemap.TPL_PATH = "assets/scripts/sourcemap/tpl/";
+Sourcemap.TPL_EXT = ".jstpl";
 
 
 Sourcemap.TemplateLoader = function(tpls, o) {
@@ -21,20 +21,21 @@ Sourcemap.TemplateLoader.prototype.init = function() {
 Sourcemap.TemplateLoader.prototype.fetch = function(tpl) {
     if(this.queue.indexOf(tpl) >= 0) return;
     this.queue.push(tpl);
-    $.get(Sourcemap.TPL_PATH+tpl+Sourcemap.TPL_EXT, {
-        "success": function() {
-            Sourcemap.broadcast('template_loader:template_loaded');
-        }
-    });
+    console.log(this.get_id(tpl));
+    console.log($('<script></script>')
+        .attr('id', this.get_id(tpl))
+        .attr('src', Sourcemap.TPL_PATH+tpl+Sourcemap.TPL_EXT)
+        .attr('type', 'text/html')
+        .appendTo($('body')));
 }
 
 Sourcemap.TemplateLoader.prototype.get_id = function(tpl) {
-    return tpl.replace(/\w+/, '-').toLowerCase();
+    return "sourcemap-jstpl-"+tpl.replace(/\W+/, '-').toLowerCase();
 }
 
 Sourcemap.TemplateLoader.prototype.load = function() {
     for(var t=0; t<this.templates.length; t++) {
-        if(!$('#'+this.get_id(this.templates[t]))) {
+        if(!$('#'+this.get_id(this.templates[t])).length) {
             this.fetch(this.templates[t]);
         } else {
             this.loaded.push(this.templates[t]);

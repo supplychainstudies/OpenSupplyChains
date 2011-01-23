@@ -10,7 +10,15 @@
     public function action_get() {
         $id = $this->request->param('id', false);
         if($id) {
-            if($cached = Cache::instance()->get('supplychain-'.$id)) {
+            try {
+                $cached = Cache::instance()->get('supplychain-'.$id);
+            } catch(Exception $e) {
+                print_r(Cache::instance());
+                die($e);
+                $cached = false;
+            }
+            if($cached) {
+                $this->_cache_hit = true;
                 $this->response = array(
                     'supplychain' => unserialize($cached)
                 );
@@ -25,7 +33,12 @@
                 if(!$fetched) {
                     return $this->_not_found('Supplychain not found.');
                 }
-                Cache::instance()->set('supplychain-'.$id, serialize($fetched));
+                try {
+                    Cache::instance()->set('supplychain-'.$id, serialize($fetched));
+                } catch(Exception $e) {
+                    //pass
+                    die($e);
+                }
                 $this->response = array(
                     'supplychain' => $fetched
                 );

@@ -30,12 +30,12 @@ Route::set('admin', 'admin/<controller>/<action>')
 
 Sourcemap_JS::init();
 Sourcemap_JS::add_packages(array(
-    'default-view' => array(
+    'map-view' => array(
         'scripts' => array(
-            'site/default/assets/view.js'
+            'sites/default/assets/scripts/map/view.js'
         ),
         'requires' => array(
-            'sourcemap-map', 'sourcemap-template'
+            'modernizr', 'less', 'sourcemap-map', 'sourcemap-template'
         )
     )
 ));

@@ -11,6 +11,10 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->template->supplychain_id = $supplychain->id;
+                $this->layout->scripts = array(
+                    'modernizr', 'less', 'map-view', 'sourcemap-core', 
+                    'sourcemap-template', 'sourcemap-working'
+                );
             } else {
                 $this->request->status = 403;
                 $this->layout = View::factory('layout/error');

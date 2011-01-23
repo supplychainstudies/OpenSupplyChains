@@ -18,22 +18,6 @@
     <link rel="stylesheet" href="assets/styles/style.css?v=2">
     <link rel="stylesheet/less" href="assets/styles/sourcemap.less?v=2" type="text/css">
 
-    <script src="assets/scripts/libs/modernizr-1.6.min.js"></script>
-    <script src="assets/scripts/libs/less-1.0.40.min.js"></script>
-
-    <!-- Google Maps API -->
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
-    <!-- OpenLayers -->
-    <script type="text/javascript" language="javascript" src="assets/scripts/openlayers/OpenLayers.js"></script>
-    <script type="text/javascript" language="javascript" src="assets/scripts/openlayers/cloudmade.js"></script>
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
-
-    <!-- Sourcemap -->
-    <script type="text/javascript" language="javascript" src="assets/scripts/sourcemap.js"></script>
-    <script type="text/javascript" language="javascript" src="assets/scripts/sourcemap/map.js"></script>
-    <script type="text/javascript" language="javascript" src="assets/scripts/sourcemap/supplychain.js"></script>
     </head>
     
 
@@ -420,8 +404,7 @@
 </body>
 
   
-  <script src="assets/scripts/script.js"></script>
-  
+    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
   
   <!--[if lt IE 7 ]>
     <script src="js/libs/dd_belatedpng.js"></script>

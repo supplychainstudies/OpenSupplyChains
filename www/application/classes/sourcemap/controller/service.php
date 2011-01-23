@@ -7,6 +7,8 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 class Sourcemap_Controller_Service extends Controller_REST {
+
+    const HDR_CACHE_HIT = 'X-Sourcemap-Cache-Hit';
     
     public $_action_map = array(
         'GET' => 'get',
@@ -34,6 +36,8 @@ class Sourcemap_Controller_Service extends Controller_REST {
         'csv' => 'text/csv'
     );
 
+    public $_cache_hit = false;
+
     // Collection options
     public $_max_page_sz = 25;
     public $_default_page_sz = 25;
@@ -60,6 +64,8 @@ class Sourcemap_Controller_Service extends Controller_REST {
         $this->request->response = $this->_serialize($this->response);
         $this->request->headers['Content-Type'] = 
             $this->_format_content_type($this->_format);
+        if($this->_cache_hit)
+            $this->request->headers[self::HDR_CACHE_HIT] = 'true';
         return parent::after();
     }
 

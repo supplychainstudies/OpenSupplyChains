@@ -24,7 +24,7 @@ return array(
         ),
         'sourcemap-core' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap.js'
+                'assets/scripts/sourcemap.js', 'assets/scripts/sourcemap/supplychain.js'
             ),
             'requires' => array(
                 'jqote', 'jquery-ui', 'openlayers'
@@ -43,7 +43,7 @@ return array(
                 'assets/scripts/sourcemap/map.js'
             ),
             'requires' => array(
-                'sourcemap-core'
+                'sourcemap-core', 'openlayers-cloudmade'
             )
         ),
         'sourcemap-working' => array(
@@ -57,6 +57,14 @@ return array(
         'openlayers' => array(
             'scripts' => array(
                 'assets/scripts/openlayers/OpenLayers.js'
+            )
+        ),
+        'openlayers-cloudmade' => array(
+            'scripts' => array(
+                'assets/scripts/openlayers/cloudmade.js'
+            ),
+            'requires' => array(
+                'openlayers'
             )
         ),
         'less' => array(

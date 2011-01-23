@@ -7,7 +7,8 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
     public function action_index() {
         $this->template->supplychains = ORM::factory('supplychain')
             ->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)
+            ->limit(10)
             ->find_all();
-        $this->layout->scripts = array('modernizr', 'less', 'sourcemap-core', 'sourcemap-template', 'sourcemap-working');
+        $this->layout->scripts = array('modernizr', 'less', 'default-view', 'sourcemap-core', 'sourcemap-template', 'sourcemap-working');
     }
 }

@@ -61,8 +61,7 @@ class CloudMade_StaticMap {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $ps);
-        header('Content-Type: image/png');
-        die(curl_exec($ch));
+        return curl_exec($ch);
     }
 
     public static function make_bent_line($from, $to) {

@@ -86,7 +86,14 @@
     <div id="content">          
          <article>
              <header>
-                 <p><?php if(Breadcrumbs::instance()->get()): ?><?= Breadcrumbs::instance()->render() ?><?php endif; ?></p><?php if(Message::instance()->get()): ?><?= Message::instance()->render() ?><?php endif; ?>
+                <p><?php 
+                    if(Breadcrumbs::instance()->get()): ?>
+                        <?= Breadcrumbs::instance()->render() ?>
+                    <?php endif; ?>
+                </p>
+                <?php if(Message::instance()->get()): ?>
+                    <?= Message::instance()->render() ?>
+                <?php endif; ?>
                  
              </header>
              <p><?= $content ?></p>

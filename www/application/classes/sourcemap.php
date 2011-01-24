@@ -25,6 +25,12 @@ class Sourcemap {
             array('Sourcemap', "_sess_read"), array('Sourcemap', "_sess_write"), 
             array('Sourcemap', "_sess_destroy"), array('Sourcemap', "_sess_gc")
         );
+        Sourcemap_JS::add_packages(
+            isset(Kohana::config('js')->packages) ? 
+                Kohana::config('js')->packages : array()
+        );
+        Sourcemap_JS::$bundle = self::$env == self::DEV ? false : true;
+        Sourcemap_CSS::$convert_less = self::$env == self::DEV ? false : true;
     }
 
     public static function _sess_open($save_path, $session_name) {

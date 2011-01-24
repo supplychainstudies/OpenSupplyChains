@@ -22,13 +22,20 @@ return array(
                 'jquery'
             )
         ),
+        'sourcemap-jquery' => array(
+            'scripts' => array(
+                'assets/scripts/jquery/jquery.js',
+                'assets/scripts/jquery/jquery-ui.js',
+                'assets/scripts/jquery/jquery.jqote.js'
+            )
+        ),
         'sourcemap-core' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap.js', 
                 'assets/scripts/sourcemap/supplychain.js'
             ),
             'requires' => array(
-                'jqote', 'jquery-ui', 'openlayers'
+                'modernizr', 'less', 'sourcemap-jquery', 'openlayers'
             )
         ),
         'sourcemap-template' => array(

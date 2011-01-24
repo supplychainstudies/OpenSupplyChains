@@ -3,65 +3,64 @@
 <project name="Sourcemap2" default="build">
 
 <target name="clean">
-<echo msg="Clean..." />
-<if>
-    <isset property="builddir" />
-    <then>
-        <mkdir dir="${builddir}" />
-    </then>
-    <else>
-        <fail message="Build directory (builddir) property required." />
-    </else>
-</if>
-<delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="true" />
+    <echo msg="Clean..." />
+    <if>
+        <isset property="builddir" />
+        <then>
+            <mkdir dir="${builddir}" />
+        </then>
+        <else>
+            <fail message="Build directory (builddir) property required." />
+        </else>
+    </if>
+    <delete dir="${builddir}" includeemptydirs="true" verbose="true" failonerror="true" />
 </target>
 
 <!-- ============================================  -->
 <!-- Target: prepare                               -->
 <!-- ============================================  -->
 <target name="prepare">
-<echo msg="Prepare..." />
-<if>
-    <isset property="builddir" />
-    <then>
-        <mkdir dir="${builddir}" />
-    </then>
-    <else>
-        <fail message="Build directory (builddir) property required." />
-    </else>
-</if>
-<phingcall target="build-jsmin" />
+    <echo msg="Prepare..." />
+    <if>
+        <isset property="builddir" />
+        <then>
+            <mkdir dir="${builddir}" />
+        </then>
+        <else>
+            <fail message="Build directory (builddir) property required." />
+        </else>
+    </if>
+    <phingcall target="build-jsmin" />
 </target>
 
 <!-- ============================================  -->
-<!-- Target: build                                 -->
+<!-- *** Target: build                                 -->
 <!-- ============================================  -->
 <target name="build" depends="prepare">
+    <if>
+        <not><isset property="srcdir" /></not>
+        <then>
+            <fail message="Src directory (srcdir) property required." />
+        </then>
+    </if>
 
-<if>
-    <not><isset property="srcdir" /></not>
-    <then>
-        <fail message="Src directory (srcdir) property required." />
-    </then>
-</if>
-
-<echo msg="Build..." />
-<echo msg="Copying files to build directory..." />
-<copy todir="${builddir}">
-<fileset dir="${srcdir}">
-    <exclude name="**/.*.swp" />
-</fileset>
-</copy>
-<phingcall target="build-css" />
-<phingcall target="build-js" />
+    <echo msg="Build..." />
+    <echo msg="Copying files to build directory..." />
+    <copy todir="${builddir}">
+    <fileset dir="${srcdir}">
+        <exclude name="**/.*.swp" />
+    </fileset>
+    </copy>
+    <phingcall target="build-css" />
+    <phingcall target="build-js" />
 </target>
 
 <target name="build-jsmin">
-<echo msg="Build jsmin.c here..." />
-<exec command="gcc -o jsmin jsmin.c" dir="${srcdir}/../tools/jsmin/" />
+    <echo msg="Build jsmin.c here..." />
+    <exec command="gcc -o jsmin jsmin.c" dir="${srcdir}/../tools/jsmin/" />
 </target>
 
-<target name="build-css" depends="prepare">
+<target name="build-css">
     <foreach param="cssfile" absparam="cssfile_abs" target="less-compile">
         <fileset dir="${builddir}assets/styles/">
             <include name="*.less" />
@@ -70,13 +69,19 @@
     </foreach>
 </target>
 
-<target name="build-js" depends="prepare">
+<target name="build-js">
+    <phingcall target="build-js-bundles" />
     <foreach param="jssfile" absparam="jsfile_abs" target="minify-js">
         <fileset dir="${builddir}assets/scripts/">
             <include name="*.js" />
             <include name="**/*.js" />
         </fileset>
     </foreach>
+</target>
+
+<target name="build-js-bundles">
+    <mkdir dir="${builddir}assets/scripts/bundles" />
+    <exec command="${phing.home}js-bundle ${builddir}assets/scripts/bundles/" />
 </target>
 
 <target name="less-compile">
@@ -103,10 +108,10 @@
 </target>
 
 <!-- ============================================  -->
-<!-- (DEFAULT)  Target: dist                       --> 
+<!--   Target: dist                       --> 
 <!-- ============================================  -->
 <target name="dist" depends="build">
-<echo msg="Dist..." />
+    <echo msg="Dist..." />
 <!--echo msg="Creating archive..." />
 
 <tar destfile="./build/build.tar.gz" compression="gzip">

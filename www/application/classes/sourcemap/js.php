@@ -1,15 +1,13 @@
 <?php
+// todo: make configurable at init(), rather than loading config files...?
 class Sourcemap_JS {
+
+    const BUNDLE_EXT = '.bundle.js';
 
     public static $pkgs = null;
 
-    public static function init() {
-        if(self::$pkgs) return;
-        self::add_packages(
-            isset(Kohana::config('js')->packages) ? 
-                Kohana::config('js')->packages : array()
-        );
-    }
+    public static $bundle = false;
+    public static $bundle_path = 'assets/scripts/bundles/';
 
     public static function add_packages($pkgs) {
         foreach($pkgs as $pkg_tag => $pkg_data) {
@@ -19,7 +17,6 @@ class Sourcemap_JS {
     }
 
     public static function get_package($pkg_tag) {
-        if(!self::$pkgs) self::init();
         $package = array();
         $q = array($pkg_tag);
         while($pkg = array_pop($q)) {
@@ -45,6 +42,19 @@ class Sourcemap_JS {
         return $package;
     }
 
+    public static function packages() {
+        $args = func_get_args();
+        $pkgs = array();
+        foreach($args as $i => $arg) {
+            if(is_array($arg)) {
+                foreach($arg as $j => $a)
+                    $pkgs[] = self::get_package($a);
+            } else $pkgs[] = self::get_package($arg);
+        }
+        $pkgs = array_values(array_unique(call_user_func_array('array_merge', $pkgs)));
+        return $pkgs;
+    }
+
     public static function get_package_scripts($pkg_tag) {
         $package = self::get_package($pkg_tag);
         $scripts = array();
@@ -60,18 +70,25 @@ class Sourcemap_JS {
 
     public static function scripts() {
         $args = func_get_args();
-        $pkgs = array();
-        foreach($args as $i => $arg) {
-            if(is_array($arg)) {
-                foreach($arg as $j => $a)
-                    $pkgs[] = $a;
-            } else $pkgs[] = $arg;
+        if(self::$bundle) {
+            $scripts = call_user_func_array(array('self', 'packages'), $args);
+            foreach($scripts as $si => $script)
+                $scripts[$si] = self::$bundle_path.$script.self::BUNDLE_EXT;
+        } else {
+            $pkgs = array();
+            foreach($args as $i => $arg) {
+                if(is_array($arg)) {
+                    foreach($arg as $j => $a)
+                        $pkgs[] = $a;
+                } else $pkgs[] = $arg;
+            }
+            $scripts = array();
+            foreach($pkgs as $pi => $pkg) {
+                $scripts[] = self::get_package_scripts($pkg);
+            }
+            if(!$scripts) $scripts[] = array();
+            $scripts = array_values(array_unique(call_user_func_array('array_merge', $scripts)));
         }
-        $scripts = array();
-        foreach($pkgs as $pi => $pkg) {
-            $scripts[] = self::get_package_scripts($pkg);
-        }
-        $scripts = array_unique(call_user_func_array('array_merge', $scripts));
         return $scripts;
     }
 

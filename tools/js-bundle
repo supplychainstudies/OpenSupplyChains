@@ -1,0 +1,34 @@
+#!/usr/local/bin/php
+<?php
+
+if(php_sapi_name() !== 'cli') die('cli only');
+
+if($argc == 2 && is_dir($argv[1]))
+    define('BUNDLEDIR', rtrim($argv[1], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
+elseif($argc == 2)
+    die('Bundle directory does not exist.');
+else
+    die('Bundle directory required as first parameter.');
+
+// sourcemap-specific bootstrap
+define('SMAPDIR', getenv('SMAPDIR') ? 
+    rtrim(getenv('SMAPDIR'), '/').'/' : dirname(__FILE__).'/');
+define('SUPPRESS_REQUEST', true);
+
+require_once(SMAPDIR.'/www/index.php');
+
+$packages = Kohana::config('js')->packages;
+
+Sourcemap_JS::$bundle = false;
+
+foreach($packages as $pkg_tag => $pconf) {
+    $scripts = Sourcemap_JS::$pkgs[$pkg_tag]['scripts'];
+    $script_content = array();
+    foreach($scripts as $si => $script) {
+        if(!preg_match('/^http/', $script))
+            $script = SMAPDIR.'/www/'.$script;
+        $script_content[] = file_get_contents($script);
+    }
+    $outfile = BUNDLEDIR.$pkg_tag.Sourcemap_JS::BUNDLE_EXT;
+    print file_put_contents($outfile, join("\n", $script_content))." bytes written to $outfile.\n";
+}

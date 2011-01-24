@@ -36,16 +36,13 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 
 //-- Configuration and initialization -----------------------------------------
 
-Sourcemap::init();
 
 /**
  * Set Kohana::$environment if $_ENV['KOHANA_ENV'] has been supplied.
  * 
  */
-if (isset($_ENV['KOHANA_ENV']))
-{
-	Kohana::$environment = $_ENV['KOHANA_ENV'];
-    Sourcemap::$env = Kohana::$environment;
+if(getenv('SOURCEMAP_ENV')) {
+	Kohana::$environment = getenv('SOURCEMAP_ENV');
 }
 
 /**
@@ -101,6 +98,7 @@ Kohana::modules(array(
 Kohana::add_include_path(SITESPATH.SITESHORTNM.'/');
 
 
+Sourcemap::init();
     
 if(is_file(SITESPATH.SITESHORTNM.'/bootstrap'.EXT)) {
     require SITESPATH.SITESHORTNM.'/bootstrap'.EXT;

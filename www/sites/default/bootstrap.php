@@ -28,7 +28,6 @@ Route::set('admin', 'admin/<controller>/<action>')
         'directory' => 'admin', 'controller' => 'admin', 'action' => 'index'
     ));
 
-Sourcemap_JS::init();
 Sourcemap_JS::add_packages(array(
     'map-view' => array(
         'scripts' => array(

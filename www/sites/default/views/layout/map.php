@@ -266,7 +266,7 @@
               
                 <p>Time to throw away that wrapping paper and put your new toys on the shelf, the holidays are over and its time for another look into the greatness that is the Vimeo Community.</p>
                 
-                <iframe src="http://player.vimeo.com/video/17679597" width="400" height="225" frameborder="0"></iframe><p><a href="http://vimeo.com/17679597">"Sky High"</a> from <a href="http://vimeo.com/birg">Birg</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+                <!--iframe src="http://player.vimeo.com/video/17679597" width="400" height="225" frameborder="0"></iframe--><p><a href="http://vimeo.com/17679597">"Sky High"</a> from <a href="http://vimeo.com/birg">Birg</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
             </div>
             <h3 class="place-receipt-title">Receipt</h3>
            <ul class="place-metrics">

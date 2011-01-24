@@ -24,7 +24,8 @@ return array(
         ),
         'sourcemap-core' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap.js', 'assets/scripts/sourcemap/supplychain.js'
+                'assets/scripts/sourcemap.js', 
+                'assets/scripts/sourcemap/supplychain.js'
             ),
             'requires' => array(
                 'jqote', 'jquery-ui', 'openlayers'

@@ -21,3 +21,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule .* index.php/$0 [PT]
 
 SetEnv KOHANA_ENV dev
+
+AddType text/html .jstpl

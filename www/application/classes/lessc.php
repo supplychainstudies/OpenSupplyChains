@@ -637,14 +637,15 @@ class lessc {
 
 	// consume an argument definition list surrounded by ()
 	// each argument is a variable name with optional value
-	function argumentDef(&$args, $delim = ';') {
+	function argumentDef(&$args, $delim = ',') {
 		$s = $this->seek();
 		if (!$this->literal('(')) return false;
 
 		$values = array();
 		while ($this->variable($vname)) {
 			$arg = array($vname);
-			if ($this->assign() && $this->propertyValue($value)) {
+            $value = null;
+			if ($this->assign() && $this->value($value)) {
 				$arg[] = $value;
 				// let the : slide if there is no value
 			}

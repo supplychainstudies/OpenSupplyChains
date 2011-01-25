@@ -15,6 +15,10 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'modernizr', 'less', 'map-view', 'sourcemap-core', 
                     'sourcemap-template', 'sourcemap-working'
                 );
+                $this->layout->styles = array(
+                    'assets/styles/style.css', 
+                    'assets/styles/sourcemap.less?v=2'
+                );
             } else {
                 $this->request->status = 403;
                 $this->layout = View::factory('layout/error');

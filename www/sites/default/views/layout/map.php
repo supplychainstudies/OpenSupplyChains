@@ -15,8 +15,7 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="assets/styles/style.css?v=2">
-    <link rel="stylesheet/less" href="assets/styles/sourcemap.less?v=2" type="text/css">
+    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 
     </head>
     

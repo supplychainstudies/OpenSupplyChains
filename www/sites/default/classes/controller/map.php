@@ -63,4 +63,30 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $this->template->error_message = 'That map could not be found.';
         }
     }
+
+    public function action_embed($supplychain_id) {
+        $supplychain = ORM::factory('supplychain', $supplychain_id);
+        if($supplychain->loaded()) {
+            $current_user_id = (int)Auth::instance()->logged_in();
+            $owner_id = (int)$supplychain->user_id;
+            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
+                $this->layout = View::factory('layout/embed');
+                $this->template = View::factory('map/embed');
+                $this->layout->scripts = array(
+                    'sourcemap-embed'
+                );
+            } else {
+                $this->request->status = 403;
+                $this->layout = View::factory('layout/error');
+                $this->template = View::factory('error');
+                $this->template->error_message = 'This map is private.';
+            }
+
+        } else {
+            $this->request->status = 404;
+            $this->layout = View::factory('layout/error');
+            $this->template = View::factory('error');
+            $this->template->error_message = 'That map could not be found.';
+        }
+    }
 }

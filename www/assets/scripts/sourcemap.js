@@ -88,7 +88,7 @@ Sourcemap.Configurable.prototype.defaults = {"auto_init": false};
 Sourcemap.broadcast = function(evt) {
     var a = []; for(var i=0; i<arguments.length; i++) a.push(arguments[i]);
     var args = a.slice(1);
-    //jQuery.trigger.apply($(document), args);
+    $(document).trigger(evt, args);
     Sourcemap.log('Broadcast: '+evt);
 }
 

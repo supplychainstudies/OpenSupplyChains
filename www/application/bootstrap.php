@@ -104,6 +104,11 @@ if(is_file(SITESPATH.SITESHORTNM.'/bootstrap'.EXT)) {
     require SITESPATH.SITESHORTNM.'/bootstrap'.EXT;
 }
 
+if(is_dir(SITESPATH.SITESHORTNM.'/config/')) {
+    $site_config_dir = SITESPATH.SITESHORTNM.'/config/';
+    Kohana::$config->attach(new Kohana_Config_File($site_config_dir));
+}
+
 /**
  * Set the default (all sites) routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI. May be overridden in sites/<site>/bootstrap.php.

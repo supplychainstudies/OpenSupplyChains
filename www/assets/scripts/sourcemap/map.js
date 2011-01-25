@@ -1,6 +1,5 @@
 Sourcemap.Map = function(element_id, o) {
     this.broadcast('map:instantiated', this);
-    this.supplychain = null;
     this.layers = {};
     this.controls = {};
     var o = o || {};
@@ -167,7 +166,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(supplychain) {
     for(var i=0; i<supplychain.hops.length; i++) {
         this.mapHop(supplychain.hops[i]);
     }
-    this.broadcast('map:supplychain_mapped', this);
+    this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 
 Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {

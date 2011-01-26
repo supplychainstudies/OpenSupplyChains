@@ -52,9 +52,9 @@ class Model_Supplychain extends ORM {
         if(($sc = ORM::factory('supplychain', $scid)) && $sc->loaded()) {
             $rows = $this->_db->query(Database::SELECT,
                 sprintf("select s.id as stop_id, ST_AsText(s.geometry) as geometry, 
-                        sa.key as attr_k, sa.value as attr_v
+                        sa.key as attr_k, sa.value as attr_v, s.local_stop_id as local_stop_id
                     from stop as s left outer join stop_attribute as sa on
-                        (s.id=sa.stop_id)
+                        (s.supplychain_id=sa.supplychain_id and s.id=sa.local_stop_id)
                     where s.supplychain_id = %d
                     order by sa.id desc",
                     $scid
@@ -62,35 +62,40 @@ class Model_Supplychain extends ORM {
             )->as_array();
             $stops = array();
             foreach($rows as $i => $row) {
-                if(!isset($stops[$row->stop_id])) {
-                    $stops[$row->stop_id] = (object)array(
-                        'id' => $row->stop_id,
+                if(!isset($stops[$row->local_stop_id])) {
+                    $stops[$row->local_stop_id] = (object)array(
+                        'local_stop_id' => $row->local_stop_id,
+                        'id' => $row->local_stop_id,
                         'geometry' => $row->geometry,
                         'attributes' => (object)array()
                     );
                 }
                 if($row->attr_k) 
-                    $stops[$row->stop_id]->attributes->{$row->attr_k} = $row->attr_v;
+                    $stops[$row->local_stop_id]->attributes->{$row->attr_k} = $row->attr_v;
             }
             $hops = array();
-            $sql = sprintf("select s.id as stop_id, h.id as hop_id, h.geometry as geometry,
-                    ha.key as attr_k, ha.value as attr_v
-                from stop as s 
-                    left outer join hop as h on (s.id=h.from_stop_id)
-                    left outer join hop_attribute as ha on (h.id=ha.hop_id)
-                where s.supplychain_id=%d and h.id is not null", $scid
-            );
+            $sql = sprintf("select h.id as hop_id, h.from_stop_id, h.to_stop_id,
+                ST_AsText(h.geometry) as geometry, ha.key as attr_k, ha.value as attr_v
+                from hop as h 
+                    left outer join hop_attribute as ha on (
+                        h.supplychain_id=ha.supplychain_id and
+                        h.from_stop_id=ha.from_stop_id and
+                        h.to_stop_id=ha.to_stop_id
+                    )
+                where h.supplychain_id = %d", $scid);
             $rows = $this->_db->query(Database::SELECT, $sql, true);
             foreach($rows as $i => $row) {
-                if(!isset($hops[$row->hop_id])) {
-                    $hops[$row->hop_id] = (object)array(
-                        'id' => $row->stop_id,
+                $hkey = sprintf("%d-%d", $row->from_stop_id, $row->to_stop_id);
+                if(!isset($hops[$hkey])) {
+                    $hops[$hkey] = (object)array(
+                        'from_stop_id' => $row->from_stop_id,
+                        'to_stop_id' => $row->to_stop_id,
                         'geometry' => $row->geometry,
                         'attributes' => (object)array()
                     );
                 }
                 if($row->attr_k)
-                    $hops[$row->stop_id]->attributes->{$row->attr_k} = $row->attr_v;
+                    $hops[$hkey]->attributes->{$row->attr_k} = $row->attr_v;
             }
             $sql = sprintf("select sca.key as attr_k, sca.value as attr_v
                 from supplychain_attribute as sca
@@ -102,12 +107,8 @@ class Model_Supplychain extends ORM {
             foreach($rows as $i => $row) {
                 $sc->attributes->{$row->attr_k} = $row->attr_v;
             }
-            $stops_arr = array();
-            foreach($stops as $stop) $stops_arr[] = $stop;
-            $hops_arr = array();
-            foreach($hops as $hop) $hops_arr[] = $hop;
-            $sc->stops = $stops_arr;
-            $sc->hops = $hops_arr;
+            $sc->stops = array_values($stops);
+            $sc->hops = array_values($hops);
         } else throw new Exception('Supplychain not found.');
         return $sc;
     }
@@ -159,28 +160,27 @@ class Model_Supplychain extends ORM {
         # todo: concurrency? check last rev?
         $this->_db->query(null, 'BEGIN', true);
         try {
-            $sql = sprintf('insert into stop (supplychain_id, geometry) values '.
-                '(:supplychain_id, ST_SetSRID(ST_GeometryFromText(:geometry), %d))',
+            $sql = sprintf('insert into stop (supplychain_id, local_stop_id, geometry) values '.
+                '(:supplychain_id, :local_stop_id, ST_SetSRID(ST_GeometryFromText(:geometry), %d))',
                 Sourcemap::PROJ
             );
             $query = DB::query(Database::INSERT, $sql, true)->param(':supplychain_id', $scid);
             $last_insert_query = DB::query(Database::SELECT, 'select currval(\'stop_id_seq\') as stop_seq');
-            $stattr_sql = 'insert into stop_attribute (stop_id, "key", "value") values (:stop_id, :key, :value)';
+            $stattr_sql = 'insert into stop_attribute (supplychain_id, local_stop_id, "key", "value") '.
+                'values (:supplychain_id, :local_stop_id, :key, :value)';
             $stattr_insert_query = DB::query(Database::INSERT, $stattr_sql);
-            $stop_map = array();
             foreach($sc->stops as $sti => $raw_stop) {
                 list($nothing, $affected) = $query->param(':geometry', $raw_stop->geometry)->execute();
-                if($affected && $last_insert = $last_insert_query->execute()) {
-                    $stop_map[$raw_stop->id] = $last_insert[0]['stop_seq'];
-                } else throw new Exception('Could not insert stop.');
+                if(!$affected)
+                    throw new Exception('Could not insert stop.');
                 foreach($raw_stop->attributes as $k => $v) {
-                    list($nothing, $affected) = $stattr_insert_query->param(':stop_id', $stop_map[$raw_stop->id])
+                    list($nothing, $affected) = $stattr_insert_query->param(':local_stop_id', $stop_map[$raw_stop->local_stop_id])
                         ->param(':key', $k)->param(':value', $v)->execute();
                     if(!$affected) throw new Exception('Could not insert stop attribute: "'.$k.'".');
                 }
             }
             $hop_insert_query = DB::query(Database::INSERT, 
-                'insert into hop (to_stop_id,from_stop_id,geometry) values '.
+                'insert into hop (to_stop_id, from_stop_id,geometry) values '.
                 '(:to_stop_id, :from_stop_id, :geometry)'
             );
             $last_insert_query = DB::query(Database::SELECT, 'select currval(\'hop_id_seq\') as stop_seq');
@@ -192,9 +192,8 @@ class Model_Supplychain extends ORM {
                     ->param(':from_stop_id', $stop_map[$raw_hop->from_stop_id])
                     ->param(':geometry', $raw_hop->geometry)
                     ->execute();
-                if($affected && $last_insert = $last_insert_query->execute()) {
-                    $new_hop_id = (int)$last_insert[0]['stop_seq'];
-                } else throw new Exception('Could not insert hop.');
+                if(!$affected) 
+                    throw new Exception('Could not insert hop.');
                 foreach($raw_hop->attributes as $k => $v) {
                     list($nothing, $affected) = $hattr_insert_query->param(':hop_id', $new_hop_id)
                         ->param(':key', $k)->param(':value', $v)->execute();

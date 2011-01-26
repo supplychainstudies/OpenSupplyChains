@@ -13,8 +13,6 @@
             try {
                 $cached = Cache::instance()->get('supplychain-'.$id);
             } catch(Exception $e) {
-                print_r(Cache::instance());
-                die($e);
                 $cached = false;
             }
             if($cached) {
@@ -28,6 +26,7 @@
                     $fetched = ORM::factory('supplychain')->kitchen_sink($id);
                 } catch(Exception $e) {
                     // pass
+                    die($e);
                     $fetched = false;
                 }
                 if(!$fetched) {

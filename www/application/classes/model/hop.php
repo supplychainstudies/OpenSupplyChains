@@ -12,22 +12,6 @@ class Model_Hop extends ORM {
         )
     );
 
-    public $_has_one = array(
-        'from_stop' => array(
-            'model' => 'stop', 'foreign_key' => 'from_stop_id'
-        ),
-        'to_stop' => array(
-            'model' => 'stop', 'foreign_key' => 'to_stop_id'
-        )
-    );
-
-    public $_has_many = array(
-        'attributes' => array(
-            'model' => 'hop_attribute',
-            'foreign_key' => 'hop_id'
-        )
-    );
-
     protected function _select_columns() {
         return array(
             'id' => 'id',
@@ -37,7 +21,7 @@ class Model_Hop extends ORM {
     }
 
     /**
-	 * Saves the current object. Will hash password if it was changed.
+	 * Get saved.
 	 *
 	 * @return  ORM
 	 */

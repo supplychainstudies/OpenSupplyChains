@@ -53,6 +53,7 @@ fi
 
 SMAP_ROOTDIR=$(dirname $(dirname $(readlink -f "${0}")))
 SMAP_DATADIR="${SMAP_ROOTDIR}/db/data/"
+SMAP_FIXTUREDIR="${SMAP_ROOTDIR}/db/fixtures/"
 SMAP_SCHEMADIR="${SMAP_ROOTDIR}/db/schema/"
 
 if [ "${mdir}" = "dn" ]; then
@@ -82,6 +83,7 @@ echo -e "\t\t- done."
 for sfile in ${SCHEMAFILES[@]}
 do
     sfilebase=`basename ${sfile}`
+    sfilenum=`echo -n "${sfilebase}" | cut -d "." -f 1`
     if [ "${mdir}" == "up" ]; then
         if [ "${sfilebase}" \< "${STARTIDX}" ]; then
             echo -e "\t- Skipping ${sfilebase}."
@@ -98,11 +100,23 @@ do
     fi
     echo -e "\t- Executing schema sql: ${sfilebase}"
     psql --echo-all < "${sfile}" &>> "${DBOUTPUT}"
-    if [ -f "${SMAP_DATADIR}${sfilebase}" ]; then
-        echo -e "\t\t- Executing data sql: ${sfilebase}"
-        psql --echo-all < "${SMAP_DATADIR}${sfilebase}" &>> "${DBOUTPUT}"
-    fi
-    # todo: FIXTURES
+
+    DATAFILES=$(find "${SMAP_DATADIR}" -name "${sfilenum}.*.${mdir}.sql" | $sortcmd)
+    for dfile in ${DATAFILES[@]}
+    do
+        dfilebase=`basename "${dfile}"`
+        echo -e "\t\t- Executing data sql: ${dfilebase}"
+        psql --echo-all < "${SMAP_DATADIR}${dfilebase}" &>> "${DBOUTPUT}"
+    done
+
+    FIXTUREFILES=$(find "${SMAP_FIXTUREDIR}" -name "${sfilenum}.*.${mdir}.sql" | $sortcmd)
+    for ffile in ${FIXTUREFILES[@]}
+    do
+        ffilebase=`basename "${ffile}"`
+        echo -e "\t\t- Executing fixture sql: ${ffilebase}"
+        psql --echo-all < "${SMAP_FIXTUREDIR}${ffilebase}" &>> "${DBOUTPUT}"
+    done
+
     echo -e "\t\t- ...${sfilebase} done."
 done
 

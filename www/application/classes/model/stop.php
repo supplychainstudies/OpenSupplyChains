@@ -6,17 +6,6 @@
 class Model_Stop extends ORM {
     public $_table_names_plural = false;
     
-    public $_has_many = array(
-        'hops' => array(
-            'model' => 'hop',
-            'foreign_key' => 'from_stop_id'
-        ),
-        'attributes' => array(
-            'model' => 'stop_attribute',
-            'foreign_key' => 'stop_id'
-        )
-    );
-
     public $_belongs_to = array(
         'supplychain' => array(
             'foreign_key' => 'supplychain_id'
@@ -25,7 +14,8 @@ class Model_Stop extends ORM {
 
     protected function _select_columns() {
         return array(
-            'id' => 'id', 'supplychain_id' => 'supplychain_id',
+            'id' => 'id', 'supplychain_id' => 'supplychain_id', 
+            'local_stop_id' => 'local_stop_id',
             'geometry' => array(DB::expr('ST_AsText(geometry)'), 'geometry')
         );
     }

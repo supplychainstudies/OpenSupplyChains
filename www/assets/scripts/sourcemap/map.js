@@ -17,7 +17,21 @@ Sourcemap.Map.prototype.broadcast = function() {
 
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
-    "supplychains_uri": "services/supplychains/"
+    "supplychains_uri": "services/supplychains/",
+    "stylemap": {
+        "default": {
+            "pointRadius": "${size}",
+            "fillColor": "${color}",
+            "strokeWidth": 1,
+            "strokeColor": "#072",
+            "fontColor": "#eee",
+            "fontSize": "${size}",
+            "opacity": 0.8
+        },
+        "select": {
+            "fillColor": "yellow"
+        }
+    }
 }
 
 Sourcemap.Map.prototype.init = function() {
@@ -76,7 +90,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
 }
 
 Sourcemap.Map.prototype.initLayers = function() {
-    var stylemap = new OpenLayers.StyleMap({
+    var stop_style = this.options.stop_style ? this.options.stop_style : {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
@@ -88,28 +102,29 @@ Sourcemap.Map.prototype.initLayers = function() {
         "select": {
             "fillColor": "yellow"
         }
-    });
+    };
     this.addLayer('stops', new OpenLayers.Layer.Vector(
         "Stop Layer",
         {
             "sphericalMercator": true,
-            "styleMap": stylemap
+            "styleMap": new OpenLayers.StyleMap(stop_style)
         }
     ));
+    var hop_style = this.options.hop_style ? this.option.hop_style : {
+        "default": {
+            "strokeWidth": 4,
+                "strokeColor": "red"
+        },
+        "select": {
+            "strokeColor": "yellow",
+            "strokeWidth": 8
+        }
+    }
     this.addLayer('hops', new OpenLayers.Layer.Vector(
         "Hop Layer",
         {
             'sphericalMercator': true,
-            "styleMap": new OpenLayers.StyleMap({
-                "default": {
-                    "strokeWidth": 4,
-                    "strokeColor": "red"
-                },
-                "select": {
-                    "strokeColor": "yellow",
-                    "strokeWidth": 8
-                }
-            })
+            "styleMap": new OpenLayers.StyleMap(hop_style)
         }
     ));
     this.map.raiseLayer(this.getLayer('stops'),1);

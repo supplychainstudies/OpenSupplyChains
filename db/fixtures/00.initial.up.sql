@@ -1,5 +1,5 @@
 BEGIN;
-insert into supplychain (created, modified) values (extract(epoch from now()), extract(epoch from now()));
+insert into supplychain (user_id, created, modified) values (1, extract(epoch from now()), extract(epoch from now()));
 --select currval('supplychain_id_seq') into new_supplychain_id;
 \set new_supplychain_id currval('supplychain_id_seq')
 insert into stop (supplychain_id, local_stop_id, geometry) values 

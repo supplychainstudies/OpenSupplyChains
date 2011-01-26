@@ -25,9 +25,11 @@ class Controller_Admin_Supplychains extends Sourcemap_Controller_Layout {
         } else {
             $supplychains = ORM::factory('supplychain')
                 ->offset($offset)->limit($limit)
-                ->find_all()->as_array('id', array('id', 'created'));
+                ->find_all()->as_array('id', array('id', 'created', 'user_id'));
             Cache::instance()->set($cache_key, serialize($supplychains));
         }
+        Breadcrumbs::instance()->add('Management', 'admin/')
+            ->add('Supply Chains', 'admin/supplychains');
         $this->template->list = $supplychains;
         $this->template->offset = $offset;
         $this->template->limit = $limit;

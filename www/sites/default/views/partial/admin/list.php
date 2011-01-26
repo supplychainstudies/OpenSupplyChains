@@ -2,7 +2,7 @@
     <?php if($list): ?>
         <table class="admin-list">
         <?php $items = array_values(is_array($list) ? $list : $list->as_array()) ?>
-        <?php $headings = array_keys(is_array($items[0]) ? $items[0] : is_callable(array($items[0], 'as_array')) ? $items[0]->as_array() : (array)$items[0]) ?>
+        <?php $headings = array_keys(is_array($items[0]) ? $items[0] : (is_callable(array($items[0], 'as_array')) ? $items[0]->as_array() : (array)$items[0])) ?>
         <?php try {
                 $partial = View::factory('partial/admin/list/head/'.$list_type, array('headings' => $headings));
             } catch(Exception $e) {
@@ -30,7 +30,7 @@
         <?php foreach($list as $lk => $item): ?>
             <tr>
                 <?php if($partial): ?>
-                    <?php $partial->item = $item; ?>
+                    <?php $partial->item = is_object($item) ? $item : (object)$item; ?>
                     <?= $partial ?>
                 <?php else: ?>
                     <?php foreach($item as $ik => $iv): ?>

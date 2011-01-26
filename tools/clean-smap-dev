@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source dev/env
+source env/dev
 
 ./phing -buildfile build-phing/build.xml -Dbuilddir=${SMAPDIR}/build/ clean

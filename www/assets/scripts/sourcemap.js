@@ -5,7 +5,7 @@ Sourcemap.WARNING = 2;
 Sourcemap.INFO = 4;
 
 Sourcemap.options = {
-    "log_level": Sourcemap.ERROR | Sourcemap.WARNING | Sourcemap.INFO
+    "log_level": Sourcemap.ERROR | Sourcemap.WARNING //| Sourcemap.INFO
 };
 
 Sourcemap.log = function(message, level) {
@@ -142,7 +142,6 @@ Sourcemap.validate = function(type, data) {
                 Sourcemap.validate('stop', sc.stops[i]);
                 stop_ids.push(sc.stops[i].id);
             }
-            console.log(stop_ids);
             for(var i=0; i<sc.hops.length; i++) {
                 Sourcemap.validate('hop', sc.hops[i]);
                 if(stop_ids.indexOf(sc.hops[i].from_stop_id) < 0)

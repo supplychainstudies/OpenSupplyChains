@@ -5,18 +5,12 @@ if(!class_exists('Kohana')) die('stop. drop. shut \'em down. whoa. that\'s how r
  * defaults for the URI.
  */
 
-Route::set('admin/users/id', 'admin/users/<id>', array('id' => '\d+'))
+Route::set('admin/users/id', 'admin/users(/<id>(/<action>))', array('id' => '\d+', 'action' => 'delete|add'))
     ->defaults(array(
         'directory' => 'admin', 'controller' => 'users', 'action' => 'single'
     ));
 
-/*Route::set('admin/users', 'admin/users(/<action>(/<id>))(/page/<page>)', 
-    array('id' => '\d+', 'action' => 'index|single|delete', 'page' => '\d+'))
-    ->defaults(array(
-        'directory' => 'admin',
-        'controller' => 'users',
-    ));
-*/
+
 
 Route::set('admin/id', 'admin/<controller>(/<id>)', array(
         'id' => '\d+'

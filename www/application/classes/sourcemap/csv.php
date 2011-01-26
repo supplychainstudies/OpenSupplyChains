@@ -28,9 +28,12 @@ class Sourcemap_Csv {
                     switch($c) {
                         case '"':
                             $st = self::FQUO;
+                            $b = '';
                             break;
                         case ',':
                             $vs[] = '';
+                            break;
+                        case ' ':
                             break;
                         default:
                             $b .= $c;

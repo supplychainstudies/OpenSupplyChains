@@ -247,6 +247,10 @@ class Sourcemap_Controller_Service extends Controller_REST {
         return $this->_rest_error(403, $msg);
     }
 
+    protected function _internal_server_error($msg='Internal server error.') {
+        return $this->_rest_error(500, $msg);
+    }
+
     protected function cache_set($id, $data) {
         //pass
         // TODO: set cached data.

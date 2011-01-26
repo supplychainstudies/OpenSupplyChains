@@ -251,7 +251,7 @@ class Model_Supplychain extends ORM {
             // admin?
             if(!$can && $user) {
                 $admin = ORM::factory('role')
-                    ->where('name', '=', 'adminstrator')->find();
+                    ->where('name', '=', 'administrator')->find();
                 if($user->has('roles', $admin)) {
                     $can = true;
                 }

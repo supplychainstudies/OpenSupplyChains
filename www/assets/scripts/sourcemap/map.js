@@ -18,18 +18,28 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
-    "stylemap": {
+    "stop_style": {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
-            "strokeWidth": 1,
+            "strokeWidth": 0,
             "strokeColor": "#072",
             "fontColor": "#eee",
             "fontSize": "${size}",
             "opacity": 0.8
         },
         "select": {
-            "fillColor": "yellow"
+            "fillColor": "#050"
+        }
+    }, "draw_hops": true,
+    "hop_style": {
+        "default": {
+            "strokeWidth": 3,
+            "strokeColor": "#072"
+        },
+        "select": {
+            "strokeColor": "#050",
+            "strokeWidth": 4
         }
     }
 }
@@ -94,13 +104,13 @@ Sourcemap.Map.prototype.initLayers = function() {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
-            "strokeWidth": 1,
+            "strokeWidth": 0,
             "strokeColor": "#eee",
             "fontColor": "#eee",
             "fontSize": "${size}"//,
         },
         "select": {
-            "fillColor": "yellow"
+            "fillColor": "#eee"
         }
     };
     this.addLayer('stops', new OpenLayers.Layer.Vector(
@@ -110,14 +120,14 @@ Sourcemap.Map.prototype.initLayers = function() {
             "styleMap": new OpenLayers.StyleMap(stop_style)
         }
     ));
-    var hop_style = this.options.hop_style ? this.option.hop_style : {
+    var hop_style = this.options.hop_style ? this.options.hop_style : {
         "default": {
-            "strokeWidth": 4,
-                "strokeColor": "red"
+            "strokeWidth": 3,
+                "strokeColor": "#072"
         },
         "select": {
-            "strokeColor": "yellow",
-            "strokeWidth": 8
+            "strokeColor": "#eee",
+            "strokeWidth": 4
         }
     }
     this.addLayer('hops', new OpenLayers.Layer.Vector(
@@ -191,7 +201,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {
     new_feature.attributes.supplychain_id = stop.supplychain_id;
     new_feature.attributes.stop_id = stop.local_id;
     new_feature.attributes.size = 6;
-    new_feature.attributes.color = '#000';
+    new_feature.attributes.color = '#072';
     if(this.prepareStopFeature instanceof Function) {
         this.prepareStopFeature(stop, new_feature);
     }

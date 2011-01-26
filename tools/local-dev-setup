@@ -24,16 +24,19 @@ fi
 # make cache and log directories
 for app in ${LOCAL_DEV_APPS[@]}
 do
-echo -e "\n\tMaking cache directory for app \"$app\" @ /var/cache/$app."
-mkdir -p "/var/cache/$app"
+echo -e "\n\tMaking cache directory for app \"$app\" @ /var/cache/$LOCAL_DEV_TKNM/$app."
+mkdir -p "/var/cache/$LOCAL_DEV_TKNM/$app"
 
-echo -e "\tMaking log directory for app \"$app\" @ /var/log/$app."
-mkdir -p "/var/log/$app"
+echo -e "\tMaking log directory for app \"$app\" @ /var/log/$LOCAL_DEV_TKNM/$app."
+mkdir -p "/var/log/$LOCAL_DEV_TKNM/$app"
 
 # change owner to www-data (apache)
 echo -e "\tSetting permissions on cache and log directories..."
-chown -R www-data:www-data "/var/cache/$app"
-chown -R www-data:www-data "/var/log/$app"
+chown -R www-data:`whoami`  "/var/cache/$LOCAL_DEV_TKNM/$app"
+chown -R www-data:`whoami` "/var/log/$LOCAL_DEV_TKNM/$app"
+
+chmod -R g+w "/var/cache/$LOCAL_DEV_TKNM/$app"
+chmod -R g+w "/var/log/$LOCAL_DEV_TKNM/$app"
 
 done
 

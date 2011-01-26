@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ -n "${1}" ]; then
+    if [ -f "env/${1}" ]; then
+        SMAPENV="${1}"
+        echo "activated ${SMAPENV}"
+        source "env/${SMAPENV}"
+    else
+        echo "invalid env"
+    fi
+else
+    echo "no env specified"
+fi

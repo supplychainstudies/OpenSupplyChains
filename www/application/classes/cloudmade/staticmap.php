@@ -53,7 +53,7 @@ class CloudMade_StaticMap {
             $ps[] = 'marker='.$m;
         }
         foreach($paths as $i => $p) {
-            #$ps[] = 'path='.$p;
+            $ps[] = 'path='.$p;
         }
         $ps = join($ps, '&');
         $ch = curl_init();

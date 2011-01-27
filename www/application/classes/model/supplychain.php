@@ -170,11 +170,11 @@ class Model_Supplychain extends ORM {
                 'values (:supplychain_id, :local_stop_id, :key, :value)';
             $stattr_insert_query = DB::query(Database::INSERT, $stattr_sql);
             foreach($sc->stops as $sti => $raw_stop) {
-                list($nothing, $affected) = $query->param(':geometry', $raw_stop->geometry)->execute();
+                list($nothing, $affected) = $query->param(':local_stop_id', $raw_stop->local_stop_id)->param(':geometry', $raw_stop->geometry)->execute();
                 if(!$affected)
                     throw new Exception('Could not insert stop.');
                 foreach($raw_stop->attributes as $k => $v) {
-                    list($nothing, $affected) = $stattr_insert_query->param(':local_stop_id', $stop_map[$raw_stop->local_stop_id])
+                    list($nothing, $affected) = $stattr_insert_query->param(':supplychain_id', $scid)->param(':local_stop_id', $raw_stop->local_stop_id)
                         ->param(':key', $k)->param(':value', $v)->execute();
                     if(!$affected) throw new Exception('Could not insert stop attribute: "'.$k.'".');
                 }
@@ -218,6 +218,8 @@ class Model_Supplychain extends ORM {
             }
         } catch(Exception $e) {
             $this->_db->query(null, 'ROLLBACK', true);
+            if(isset($new_sc))
+                $new_sc->delete();
             throw new Exception('Could not save raw suppychain with id "'.$scid.'"('.$e->getMessage().')');
         }
         $this->_db->query(null, 'COMMIT', true);

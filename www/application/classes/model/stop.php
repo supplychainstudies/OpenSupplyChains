@@ -53,11 +53,13 @@ class Model_Stop extends ORM {
         /*if(!Sourcemap_Wkt::validate_geometry(Sourcemap_Wkt::POINT, $stop->geometry)) {
             throw new Exception('Bad stop: invalid WKT POINT geometry.');
         }*/
+        if(!isset($stop->local_stop_id))
+            throw new Exception('Bad stop: missing local id.');
         if(!isset($stop->attributes) || !is_object($stop->attributes)) {
             throw new Exception('Bad stop: missing attributes.');
         }
         if($stop_ids !== false) {
-            if(!isset($stop->id) || empty($stop->id) || in_array($stop->id, $stop_ids)) {
+            if(!isset($stop->local_stop_id) || empty($stop->local_stop_id) || in_array($stop->local_stop_id, $stop_ids)) {
                 throw new Exception('Bad stop: missing or duplicate id.');
             }
         }

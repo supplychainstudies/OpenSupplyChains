@@ -7,10 +7,12 @@ class Sourcemap_Import_Csv {
 
     public static function csv2sc($stop_csv, $hop_csv=null, $o=array()) {
         $options = array();
+        if(!is_array($o)) $o = (array)$o;
         foreach(self::$default_options as $k => $v)
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;
         extract($options);
         $sc = new stdClass();
+        // todo: look for id column!
         $sc->stops = self::csv2stops($stop_csv, $options);
         $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $options) : array();
         $sc->attributes = array();
@@ -69,7 +71,7 @@ class Sourcemap_Import_Csv {
                     throw new Exception('Missing address field (record #'.($i+1).').');
             }
             $new_stop = array(
-                'id' => "stop-".($i+1),
+                'local_stop_id' => $i+1,
                 'attributes' => array()
             );
             $lat = null;

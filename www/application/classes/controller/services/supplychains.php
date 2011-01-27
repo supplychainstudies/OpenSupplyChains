@@ -48,12 +48,12 @@
                 $params->offset, $params->limit
             );
             if($supplychains = Cache::instance()->get($cache_key)) {
-                $supplychains = unserialize($supplychains);    
+                // pass
             } else {
                 $supplychains = ORM::factory('supplychain')
                     ->offset($params->offset)->limit($params->limit)
                     ->find_all()->as_array('id', array('id', 'created'));
-                Cache::instance()->set($cache_key, serialize($supplychains));
+                Cache::instance()->set($cache_key, $supplychains);
             }
             $this->response = array(
                 'supplychains' => $supplychains,

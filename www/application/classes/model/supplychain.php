@@ -180,22 +180,27 @@ class Model_Supplychain extends ORM {
                 }
             }
             $hop_insert_query = DB::query(Database::INSERT, 
-                'insert into hop (to_stop_id, from_stop_id,geometry) values '.
-                '(:to_stop_id, :from_stop_id, :geometry)'
+                'insert into hop (supplychain_id, to_stop_id, from_stop_id,geometry) values '.
+                '(:supplychain_id, :to_stop_id, :from_stop_id, ST_SetSRID(ST_GeometryFromText(:geometry), '.Sourcemap::PROJ.'))'
             );
             $last_insert_query = DB::query(Database::SELECT, 'select currval(\'hop_id_seq\') as stop_seq');
-            $hattr_sql = 'insert into stop_attribute (hop_id, "key", "value") values (:hop_id, :key, :value)';
+            $hattr_sql = 'insert into hop_attribute (supplychain_id, from_stop_id, to_stop_id, "key", "value")'.
+                ' values (:supplychain_id, :from_stop_id, :to_stop_id, :key, :value)';
             $hattr_insert_query = DB::query(Database::INSERT, $hattr_sql);
             foreach($sc->hops as $hi => $raw_hop) {
                 list($nothing, $affected) = $hop_insert_query
-                    ->param(':to_stop_id', $stop_map[$raw_hop->to_stop_id])
-                    ->param(':from_stop_id', $stop_map[$raw_hop->from_stop_id])
+                    ->param(':supplychain_id', $scid)
+                    ->param(':to_stop_id', $raw_hop->to_stop_id)
+                    ->param(':from_stop_id', $raw_hop->from_stop_id)
                     ->param(':geometry', $raw_hop->geometry)
                     ->execute();
                 if(!$affected) 
                     throw new Exception('Could not insert hop.');
                 foreach($raw_hop->attributes as $k => $v) {
-                    list($nothing, $affected) = $hattr_insert_query->param(':hop_id', $new_hop_id)
+                    list($nothing, $affected) = $hattr_insert_query
+                        ->param(':supplychain_id', $scid)
+                        ->param(':from_stop_id', $raw_hop->from_stop_id)
+                        ->param(':to_stop_id', $raw_hop->to_stop_id)
                         ->param(':key', $k)->param(':value', $v)->execute();
                     if(!$affected) throw new Exception('Could not insert hop attribute: "'.$k.'".');
                 }
@@ -220,7 +225,7 @@ class Model_Supplychain extends ORM {
             $this->_db->query(null, 'ROLLBACK', true);
             if(isset($new_sc))
                 $new_sc->delete();
-            throw new Exception('Could not save raw suppychain with id "'.$scid.'"('.$e->getMessage().')');
+            throw new Exception('Could not save raw supplychain with id "'.$scid.'"('.$e->getMessage().')');
         }
         $this->_db->query(null, 'COMMIT', true);
         return $scid;

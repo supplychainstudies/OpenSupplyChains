@@ -4,8 +4,11 @@ class Sourcemap_Proj_Point {
         if(is_array($x)) {
             if(isset($x[0], $x[1], $x[2])) {
                 list($x, $y, $z) = $x;
+            } elseif(isset($x[0], $x[1])) {
+                list($x, $y) = $x;
+                $z = null;
             } else {
-                throw new Error('Invalid coords.');
+                throw new Exception('Invalid coords.');
             }
         } elseif($y === null && $z === null && is_string($x)) {
             list($x, $y, $z) = self::parse_coords($coords);

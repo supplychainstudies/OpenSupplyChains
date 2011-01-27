@@ -26,6 +26,72 @@ class Sourcemap_Wkt {
         return $geom;
     }
 
+    public static function raw_write($type) {
+        $args = func_get_args();
+        array_shift($args);
+        $wkt = false;
+        switch($type) {
+            case self::POINT:
+                if(count($args) !== 1)
+                    throw new Exception('Exactly one argument allowed for type POINT.');
+                elseif(!($args[0] instanceof Sourcemap_Proj_Point))
+                    throw new Exception('Sourcemap_Proj_Point expected.');
+                $pt = $args[0];
+                $wkt = sprintf("%f %f", $pt->x, $pt->y);
+                break;
+            case self::LINESTRING:
+                if(count($args) < 2)
+                    throw new Exception('At least two points required for LINESTRING.');
+                $pts = array();
+                foreach($args as $i => $a) {
+                    $pts[] = self::raw_write(self::POINT, $a);
+                }
+                $wkt = join(', ', $pts);
+                break;
+            case self::MULTILINESTRING:
+                if(count($args) < 1)
+                    throw new Exception('At least one linestring expected.');
+                $linestrings = array();
+                foreach($args as $i => $a) {
+                    if(!is_array($a))
+                        throw new Exception('Array of points expected.');
+                    $aargs = $a;
+                    array_unshift($aargs, self::LINESTRING);
+                    $linestring = call_user_func_array(array('self', 'raw_write'), $aargs);
+                    $linestrings[] = sprintf('(%s)', $linestring);
+                }
+                $wkt = join(', ', $linestrings);
+                break;
+            default:
+                throw new Exception('Wkt type "'.$type.'" not implemented.');
+                break;
+        }
+        return $wkt;
+    }
+
+    public static function write($type) {
+        $args = func_get_args();
+        $wkt = false;
+        switch($type) {
+            case self::POINT:
+                $raw = call_user_func_array(array('self', 'raw_write'), $args);
+                $wkt = sprintf("POINT(%s)", $raw);
+                break;
+            case self::LINESTRING:
+                $raw = call_user_func_array(array('self', 'raw_write'), $args);
+                $wkt = sprintf("LINESTRING(%s)", $raw);
+                break;
+            case self::MULTILINESTRING:
+                $raw = call_user_func_array(array('self', 'raw_write'), $args);
+                $wkt = sprintf("MULTILINESTRING(%s)", $raw);
+                break;
+            default:
+                $wkt = call_user_func_array(array('self', 'raw_write'), $args);
+                break;
+        }
+        return $wkt;
+    }
+
     public static function parse($type, $gstr) {
         $geom = null;
         switch($type) {

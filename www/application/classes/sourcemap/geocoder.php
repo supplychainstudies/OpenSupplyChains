@@ -5,7 +5,14 @@ class Sourcemap_Geocoder {
     const GOOGLE_GEOCODE_FMT = 'json';
 
     public static function geocode($placename) {
-        return self::get_google_results($placename);
+        $ckey = sprintf("geocode-%s", md5($placename));
+        if($cached = Cache::instance()->get($ckey)) {
+            $results = $cached;
+        } else {
+            $results = self::get_google_results($placename);
+            Cache::instance()->set($ckey, $results, 60 * 60 * 24 * 30);
+        }
+        return $results;
     }
 
     public static function get_google_results($q) {

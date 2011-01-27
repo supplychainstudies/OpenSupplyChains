@@ -5,7 +5,7 @@ Sourcemap.WARNING = 2;
 Sourcemap.INFO = 4;
 
 Sourcemap.options = {
-    "log_level": Sourcemap.ERROR | Sourcemap.WARNING //| Sourcemap.INFO
+    "log_level": Sourcemap.ERROR | Sourcemap.WARNING | Sourcemap.INFO
 };
 
 Sourcemap.log = function(message, level) {

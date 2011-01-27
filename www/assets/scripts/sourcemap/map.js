@@ -50,6 +50,7 @@ Sourcemap.Map.prototype.init = function() {
     p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.getProjectionObject());
     this.map.setCenter(p);
     this.map.zoomTo(2);
+    this.supplychains = {};
     this.broadcast('map:initialized', this);
     return this;
 }
@@ -100,44 +101,6 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
 }
 
 Sourcemap.Map.prototype.initLayers = function() {
-    var stop_style = this.options.stop_style ? this.options.stop_style : {
-        "default": {
-            "pointRadius": "${size}",
-            "fillColor": "${color}",
-            "strokeWidth": 0,
-            "strokeColor": "#eee",
-            "fontColor": "#eee",
-            "fontSize": "${size}"//,
-        },
-        "select": {
-            "fillColor": "#eee"
-        }
-    };
-    this.addLayer('stops', new OpenLayers.Layer.Vector(
-        "Stop Layer",
-        {
-            "sphericalMercator": true,
-            "styleMap": new OpenLayers.StyleMap(stop_style)
-        }
-    ));
-    var hop_style = this.options.hop_style ? this.options.hop_style : {
-        "default": {
-            "strokeWidth": 3,
-                "strokeColor": "#072"
-        },
-        "select": {
-            "strokeColor": "#eee",
-            "strokeWidth": 4
-        }
-    }
-    this.addLayer('hops', new OpenLayers.Layer.Vector(
-        "Hop Layer",
-        {
-            'sphericalMercator': true,
-            "styleMap": new OpenLayers.StyleMap(hop_style)
-        }
-    ));
-    this.map.raiseLayer(this.getLayer('stops'),1);
     this.broadcast('map:layers_initialized', this);
     return this;
 }
@@ -159,6 +122,28 @@ Sourcemap.Map.prototype.addLayer = function(label, layer) {
     return this;
 }
 
+Sourcemap.Map.prototype.addStopLayer = function(scid) {
+    var slayer = new OpenLayers.Layer.Vector(
+        "Stop Layer - Supplychain #"+scid, {
+            "sphericalMercator": true,
+            "styleMap": new OpenLayers.StyleMap(this.options.stop_style)
+        }
+    );
+    this.addLayer(([scid, 'stops']).join('-'), slayer);
+    return this;
+}
+
+Sourcemap.Map.prototype.addHopLayer = function(scid) {
+    var hlayer = new OpenLayers.Layer.Vector(
+        "Hop Layer - Supplychain #"+scid, {
+            "sphericalMercator": true,
+            "styleMap": new OpenLayers.StyleMap(this.options.hop_style)
+        }
+    );
+    this.addLayer(([scid, 'hops']).join('-'), hlayer);
+    return this;
+}
+
 Sourcemap.Map.prototype.removeLayer = function(label) {
     if(this.layers[label]) {
         var layer = this.layers[label];
@@ -168,8 +153,26 @@ Sourcemap.Map.prototype.removeLayer = function(label) {
     return this;
 }
 
+Sourcemap.Map.prototype.removeStopLayer = function(scid) {
+    return this.removeLayer(([scid, 'stops']).join('-'));
+}
+
+Sourcemap.Map.prototype.removeHopLayer = function(scid) {
+    return this.removeLayer(([scid, 'hops']).join('-'));
+}
+
 Sourcemap.Map.prototype.getLayer = function(label) {
     return this.layers[label];
+}
+
+Sourcemap.Map.prototype.getStopLayer = function(scid) {
+    var llabel = ([scid, 'stops']).join('-');
+    return this.layers[llabel];
+}
+
+Sourcemap.Map.prototype.getHopLayer = function(scid) {
+    var llabel = ([scid, 'hops']).join('-');
+    return this.layers[llabel];
 }
 
 Sourcemap.Map.prototype.addControl = function(label, control) {
@@ -182,19 +185,20 @@ Sourcemap.Map.prototype.getControl = function(label) {
     return this.controls[label];
 }
 
-Sourcemap.Map.prototype.mapSupplychain = function(supplychain) {
+Sourcemap.Map.prototype.mapSupplychain = function(scid) {
+    var supplychain = this.findSupplychain(scid);
     if(!(supplychain instanceof Sourcemap.Supplychain))
-        throw new Error('Sourcemap.Supplychain required.');
+        throw new Error('Supplychain not found/Sourcemap.Supplychain required.');
     for(var i=0; i<supplychain.stops.length; i++) {
-        this.mapStop(supplychain.stops[i], supplychain);
+        this.mapStop(supplychain.stops[i], scid);
     }
     for(var i=0; i<supplychain.hops.length; i++) {
-        this.mapHop(supplychain.hops[i]);
+        this.mapHop(supplychain.hops[i], scid);
     }
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 
-Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {
+Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     if(!(stop instanceof Sourcemap.Stop))
         throw new Error('Sourcemap.Stop required.');
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
@@ -205,11 +209,11 @@ Sourcemap.Map.prototype.mapStop = function(stop, supplychain) {
     if(this.prepareStopFeature instanceof Function) {
         this.prepareStopFeature(stop, new_feature);
     }
-    this.broadcast('map:stop_mapped', this, stop, new_feature);
-    this.layers.stops.addFeatures([new_feature]);
+    this.broadcast('map:stop_mapped', this, this.findSupplychain(scid), stop, new_feature);
+    this.getStopLayer(scid).addFeatures([new_feature]);
 }
 
-Sourcemap.Map.prototype.mapHop = function(hop) {
+Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(!(hop instanceof Sourcemap.Hop))
         throw new Error('Sourcemap.Hop required.');
     var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
@@ -218,10 +222,38 @@ Sourcemap.Map.prototype.mapHop = function(hop) {
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     new_feature.attributes.size = 4;
-    this.broadcast('map:hop_mapped', this, hop, new_feature);
-    this.layers.hops.addFeatures([new_feature]);
+    this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
+    this.getHopLayer(scid).addFeatures([new_feature]);
 }
 
 Sourcemap.Map.prototype.clearMap = function() {
     // clear map.
+}
+
+Sourcemap.Map.prototype.findSupplychain = function(scid) {
+    if(scid instanceof Sourcemap.Supplychain)
+        scid = scid.local_id;
+    return this.supplychains[scid];
+}
+
+Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
+    var scid = supplychain.local_id;
+    this.supplychains[scid] = supplychain;
+    this.removeStopLayer(scid);
+    this.addStopLayer(scid).addHopLayer(scid);
+    this.mapSupplychain(scid);
+    this.broadcast('map:supplychain_added', this, supplychain);
+    return this;
+}
+
+Sourcemap.Map.prototype.removeSupplychain = function(scid) {
+    var sc = this.findSupplychain(scid);
+    var removed = false;
+    if(sc && sc.local_id) {
+        var scid = sc.local_id;
+        removed = this.supplychains[scid];
+        delete this.supplychains[scid];
+        this.broadcast('map:supplychain_removed', this, removed, scid);
+    }
+    return removed;
 }

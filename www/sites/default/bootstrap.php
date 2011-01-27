@@ -5,22 +5,35 @@ if(!class_exists('Kohana')) die('stop. drop. shut \'em down. whoa. that\'s how r
  * defaults for the URI.
  */
 
-Route::set('admin/users/id', 'admin/users(/<id>(/<action>))', array('id' => '\d+', 'action' => 'delete|add'))
+Route::set('tools/tool/action', 'tools/<controller>/<action>')
     ->defaults(array(
-        'directory' => 'admin', 'controller' => 'users', 'action' => 'single'
+        'directory' => 'tools',
+        'controller' => 'tools',
+        'action' => 'index'
     ));
 
+Route::set('admin/collection/id/action', 'admin/<controller>(/<id>(/<action>))', array(
+        'id' => '\d+', 
+        'action' => 'delete|add'))
+    ->defaults(array(
+        'directory' => 'admin', 
+        'controller' => 'admin', 
+        'action' => 'single'
+    ));
 
-
-Route::set('admin/id', 'admin/<controller>(/<id>)', array(
+Route::set('admin/collection/id', 'admin/<controller>/<id>', array(
         'id' => '\d+'
     ))->defaults(array(
-        'directory' => 'admin', 'controller' => 'admin', 'action' => 'index'
+        'directory' => 'admin', 
+        'controller' => 'admin', 
+        'action' => 'index'
     ));
 
-Route::set('admin', 'admin/<controller>/<action>')
+Route::set('admin/collection', 'admin/<controller>')
     ->defaults(array(
-        'directory' => 'admin', 'controller' => 'admin', 'action' => 'index'
+        'directory' => 'admin', 
+        'controller' => 'admin', 
+        'action' => 'index'
     ));
 
 Sourcemap_JS::add_packages(array(

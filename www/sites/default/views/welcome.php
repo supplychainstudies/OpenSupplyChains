@@ -1,4 +1,3 @@
-<h1>Welcome!</h1>
 <?php foreach($supplychains->as_array('id', array('created', 'modified')) as $id => $details): ?>
 <div class="map-thumb" style="width: 20%; float: left;">
 <a href="map/view/<?= $id ?>">This is a map</a><br />

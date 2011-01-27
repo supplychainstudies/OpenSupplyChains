@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <base href="<?= URL::base() ?>" />
+    <base href="<?= URL::base(true, true) ?>"></base>
     <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
     <meta name="description" content="">
@@ -17,8 +17,7 @@
 
     <!-- link rel="stylesheet" href="assets/styles/style.css?v=2">
     <link rel="stylesheet/less" href="assets/styles/sourcemap.less?v=2" type="text/css"-->
-    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
-
+    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags('assets/styles/style.css', 'assets/styles/sourcemap.less?v=2') ?>
 </head>
 
 <body id="supplychain" class="fixed">
@@ -130,7 +129,7 @@
     </footer>
 </body>
 
-    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
+    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
 
   
   <!--[if lt IE 7 ]>

@@ -12,8 +12,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public $template = 'auth';
 
     public function action_index() {
-        //Message::instance()->set(time());
-        //Breadcrumbs::instance()->add('Hello', 'world/yeah')->add('bye');
+        //Breadcrumbs::instance()->add('Login');
+        $this->layout->page_title = Auth::instance()->get_user() ? 'Logged in.' : 'Log in';
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
             $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());

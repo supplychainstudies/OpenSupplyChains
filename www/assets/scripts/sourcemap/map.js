@@ -106,19 +106,21 @@ Sourcemap.Map.prototype.initLayers = function() {
 }
 
 Sourcemap.Map.prototype.initControls = function() {
-    this.addControl('select', 
+    // todo: select feature controls for vector layers
+    /*this.addControl('select', 
         new OpenLayers.Control.SelectFeature([this.getLayer('stops'), this.getLayer('hops')], {
             "onSelect": OpenLayers.Function.bind(function(feature) { this.broadcast('featureSelected', {'map': this, 'feature': feature}); }, this)
         })
     );
     this.controls.select.activate();
-    this.broadcast('map:controls_initialized', this, ['select']);
+    this.broadcast('map:controls_initialized', this, ['select']);*/
     return this;
 }
 
 Sourcemap.Map.prototype.addLayer = function(label, layer) {
     this.map.addLayer(layer);
     this.layers[label] = layer;
+    this.broadcast('map:layer_added', this, label, layer);
     return this;
 }
 
@@ -149,6 +151,7 @@ Sourcemap.Map.prototype.removeLayer = function(label) {
         var layer = this.layers[label];
         this.map.removeLayer(layer.id);
         delete this.layers[label];
+        this.broadcast('map:layer_removed', this, layer);
     }
     return this;
 }
@@ -239,7 +242,7 @@ Sourcemap.Map.prototype.findSupplychain = function(scid) {
 Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     var scid = supplychain.local_id;
     this.supplychains[scid] = supplychain;
-    this.removeStopLayer(scid);
+    //this.removeStopLayer(scid);
     this.addStopLayer(scid).addHopLayer(scid);
     this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);

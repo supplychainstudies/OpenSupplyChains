@@ -3,14 +3,16 @@ Sourcemap.MapTour = function(map, o) {
         throw new Error('MapTour requires a map instance.');
     }
     this.map = map;
+    this.features = o.features || [];
+    this.ftr_index = -1;
     this.timeout = null;
-    this.stop_index = 0;
     Sourcemap.Configurable.call(this, o);
 }
 
 Sourcemap.MapTour.prototype.defaults = {
     "auto_init": true, "interval": 2500,
-    "start_inactive": 5 // seconds
+    "start_inactive": 5, // seconds
+    "tour_hops": false, "tour_stops": true
 };
 
 Sourcemap.MapTour.prototype.init = function() {
@@ -33,16 +35,31 @@ Sourcemap.MapTour.prototype.stop = function() {
 }
 
 Sourcemap.MapTour.prototype.next = function() {
-    var next_index = this.stop_index >= this.map.layers.stops.features.length ?
-        0 : this.stop_index+1;
-    var current_stop = this.map.layers.stops.features[this.stop_index] || null;
-    var next_stop = this.map.layers.stops.features[next_index] || null;
-    if(current_stop) this.map.controls.select.unselect(current_stop);
-    if(next_stop) {
-        this.map.map.panTo((new OpenLayers.LonLat(next_stop.geometry.x, next_stop.geometry.y)));
-        this.map.controls.select.select(next_stop);
+    var next_index = this.ftr_index >= this.features.length ?
+        0 : this.ftr_index+1;
+    var current_ftr = this.features[this.ftr_index] || null;
+    var next_ftr = this.features[next_index] || null;
+    if(current_ftr && this.map.controls && this.map.controls.select) 
+        this.map.controls.select.unselect(current_ftr);
+    if(next_ftr) {
+        this.map.map.panTo(this.getFeatureLonLat(next_ftr));
+        if(this.map.controls && this.map.controls.select)
+            this.map.controls.select.select(next_ftr);
     }
-    this.stop_index = next_index;
+    this.ftr_index = next_index;
     if(this.timeout) clearTimeout(this.timeout);
     this.timeout = setTimeout($.proxy(this.next, this), this.interval);
+}
+
+Sourcemap.MapTour.prototype.getNextFeature = function() {}
+
+Sourcemap.MapTour.prototype.getFeatureLonLat = function(ftr) {
+    var ll = null;
+    if(ftr.geometry && ftr.geometry instanceof OpenLayers.Geometry.Point) {
+        ll = new OpenLayers.LonLat(ftr.geometry.x, ftr.geometry.y);
+    } else if(ftr.geometry && ftr.geometry instanceof OpenLayers.Geometry.MultiLineString) {
+        var ctr = ftr.geometry.getBounds().getCenterLonLat();
+        ll = ctr;
+    }
+    return ll;
 }

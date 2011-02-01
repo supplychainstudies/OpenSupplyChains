@@ -19,7 +19,7 @@ Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
     "draw_hops": true, "hops_as_arcs": false,
-    "hops_as_bezier": true,
+    "hops_as_bezier": true, "arrows_on_hops": true,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -37,8 +37,14 @@ Sourcemap.Map.prototype.defaults = {
     }, 
     "hop_style": {
         "default": {
-            "strokeWidth": 3,
-            "strokeColor": "#072"
+            "graphicName": "${type}",
+            "pointRadius": "${size}",
+            "fillColor": "${color}",
+            "strokeWidth": "${width}",
+            "strokeColor": "${color}",
+            "fillOpacity": 0.8,
+            "strokeOpacity": 0.8,
+            "rotation": "${angle}"
         },
         "select": {
             "strokeColor": "#050",
@@ -256,14 +262,34 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     } else {
         var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
     }
+    if(this.options.arrows_on_hops) {
+        var new_arrow = this.makeArrow(new_feature.geometry, {"color": "#072", "size": 11});
+        this.getHopLayer(scid).addFeatures([new_arrow]);
+    }
     new_feature.attributes.supplychain_id = hop.supplychain_id;
     new_feature.attributes.hop_id = hop.local_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
-    new_feature.attributes.size = 4;
+    new_feature.attributes.width = 4;
+    new_feature.attributes.color = '#072';
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     this.mapped_features[hop.local_id] = new_feature;
     this.getHopLayer(scid).addFeatures([new_feature]);
+}
+
+Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
+    if(!OpenLayers.Renderer.symbol.arrow)
+        OpenLayers.Renderer.symbol.arrow = [-5, 5,  0,3,  5, 5,  0, -5,  -5, 5];
+    var verts = hop_geom.getVertices();
+    var from_pt = verts[0];
+    var to_pt = verts[verts.length-1];
+    var mid_pt = verts[Math.ceil(verts.length/2)]
+    var angle = (Math.atan2(to_pt.x-from_pt.x, to_pt.y-from_pt.y)/Math.PI)*180;
+    var attrs = {"type": "arrow", "width": 0, "angle": angle};
+    var o = o || {};
+    for(var k in o) attrs[k] = o[k];
+    var a = new OpenLayers.Feature.Vector(mid_pt, attrs);
+    return a;
 }
 
 Sourcemap.Map.prototype.makeBezierCurve = function(from, to) {
@@ -275,8 +301,8 @@ Sourcemap.Map.prototype.makeBezierCurve = function(from, to) {
     var dx = x1 - x0;
     var dy = y1 - y0;
 
-    var bzx = x0 + dx/4;//dx > 0 ? x0 + (dx/2) : x0 - (dx/2);
-    var bzy = y0 + dy;//dy > 0 ? y0 + (dy/2) : y0 - (dy/2);//Math.abs(y1-y0)/2;
+    var bzx = x0 + dx/4;
+    var bzy = y1;
 
     var res = 100;
 

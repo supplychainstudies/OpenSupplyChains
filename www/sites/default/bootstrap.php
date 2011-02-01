@@ -12,14 +12,32 @@ Route::set('tools/tool/action', 'tools/<controller>/<action>')
         'action' => 'index'
     ));
 
+Route::set('admin/collection', 'admin/<controller>')
+    ->defaults(array(
+        'directory' => 'admin', 
+        'controller' => 'admin', 
+        'action' => 'index'
+    ));
+
+Route::set('admin/collection/action', 'admin/<controller>/<action>', array(
+	'action' => '(?!\d+)',
+    ))
+    ->defaults(array(
+        'directory' => 'admin', 
+        'controller' => 'users', 
+        'action' => 'create'
+    ));
+
+
+
 Route::set('admin/collection/id/action', 'admin/<controller>(/<id>(/<action>))', array(
         'id' => '\d+', 
         'action' => 'delete|add'))
     ->defaults(array(
         'directory' => 'admin', 
-        'controller' => 'admin', 
-        'action' => 'single'
-    ));
+        'controller' => 'users', 
+        'action' => 'details'
+	));
 
 Route::set('admin/collection/id', 'admin/<controller>/<id>', array(
         'id' => '\d+'
@@ -29,12 +47,6 @@ Route::set('admin/collection/id', 'admin/<controller>/<id>', array(
         'action' => 'index'
     ));
 
-Route::set('admin/collection', 'admin/<controller>')
-    ->defaults(array(
-        'directory' => 'admin', 
-        'controller' => 'admin', 
-        'action' => 'index'
-    ));
 
 Sourcemap_JS::add_packages(array(
     'map-view' => array(

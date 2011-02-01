@@ -1,7 +1,6 @@
 <?php if (isset($reset) && ($reset == true)) { ?>
     Password is reset successfully!<br />
     <?}?>
-<strong>Hello <? echo $user->username;?>!</strong> 
 
 <form name="user-info" method="post" action="">
 <label for="username">username:</label><br />
@@ -18,13 +17,13 @@
  <?if(isset($roles) && count($roles)>0) {?>
   <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k) { ?>
-    <form name="user-roles" method="post" action="admin/users/delete/<?= $user->id?>"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
+    <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
 <? }?><br />
  <? }?>
 
 
    Change the user role:
-<form name="change-role" method="post" action="admin/users/add/<?= $user->id?>">
+<form name="change-role" method="post" action="admin/users/<?= $user->id?>/add">
 <select name="addrole">
 <? foreach ($all_roles as $role) { ?>			
     <? $skip = false; 

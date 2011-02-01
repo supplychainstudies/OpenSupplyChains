@@ -8,6 +8,14 @@
  */
 
 
+function dbg_var($var) {
+    ob_start();
+    print_r($var);
+    $output = ob_get_clean();
+   
+    file_put_contents('/tmp/log5.txt', file_get_contents('/tmp/log5.txt') . $output); 
+}
+
  class Controller_Admin_Users extends Sourcemap_Controller_Layout {
 
   public $layout = 'admin';
@@ -34,7 +42,9 @@
             ->add('Users', 'admin/users');
     }
   
-    public function action_single($id) {
+
+    
+    public function action_details($id) {
 
         $this->template = View::factory('admin/users/details');
         $user = ORM::factory('user', $id);
@@ -72,7 +82,7 @@
 
                 $user_row->password = $post->password;
                 $user_row->save();
-                $this->template->main_content->reset = true;
+		Message::instance()->set('Password changed successfully!');
 
             } else {
                 Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
@@ -86,7 +96,39 @@
             ->add(ucwords($user->username), 'admin/users/'.$user->id);
     }
 
-    public function action_delete_role($id) {
+
+    function _genpassword($len = 6) {	
+      $password = '';
+      for($i=0; $i<$len; $i++)
+	$password .= chr(rand(0, 25) + ord('a'));
+      return $password;
+    }
+
+
+    public function action_create() {
+      $post = Validate::factory($_POST);
+      $post->rule('email', 'not_empty')
+	->rule('username', 'not_empty')
+	->filter(true, 'trim');
+      if(strtolower(Request::$method) === 'post' && $post->check()) {
+	$post = (object)$post->as_array();
+	$password = $this->_genpassword();
+	$create = ORM::factory('user');
+	$create->email = $post->email;
+	$create->username = $post->username;
+	$create->password = $password;
+	$create->save();
+      } elseif (strtolower(Request::$method === 'post')) {
+	Message::instance()->set('Could not delete role.', Message::ERROR);
+      } else {
+	Message::instance()->set('Bad request.');
+      }
+
+      $this->request->redirect("admin/users/");
+    }
+
+
+    public function action_delete($id) {
         $post = Validate::factory($_POST);
         $post->rule('role', 'not_empty')
             ->filter(true, 'trim');
@@ -106,7 +148,7 @@
         $this->request->redirect("admin/users/".$id);
     }
 
-    public function action_add_role($id) {
+    public function action_add($id) {
         $check =  false;
         $post = Validate::factory($_POST);
         $post->rule('addrole', 'not_empty')->filter(true, 'trim');

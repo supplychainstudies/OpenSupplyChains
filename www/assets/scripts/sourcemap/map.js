@@ -18,7 +18,8 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
-    "draw_hops": true, "hops_as_arcs": true,
+    "draw_hops": true, "hops_as_arcs": false,
+    "hops_as_bezier": true,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -242,12 +243,16 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
 Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(!(hop instanceof Sourcemap.Hop))
         throw new Error('Sourcemap.Hop required.');
-    if(this.options.hops_as_arcs) {
+    if(this.options.hops_as_arcs || this.options.hops_as_bezier) {
         var sc = this.supplychains[scid];
         var wkt = new OpenLayers.Format.WKT();
         var from_pt = wkt.read(sc.findStop(hop.from_stop_id).geometry).geometry;
         var to_pt = wkt.read(sc.findStop(hop.to_stop_id).geometry).geometry;
+    }
+    if(this.options.hops_as_arcs) {
         var new_feature = new OpenLayers.Feature.Vector(this.makeBentLine(from_pt, to_pt));
+    } else if(this.options.hops_as_bezier) {
+        var new_feature = new OpenLayers.Feature.Vector(this.makeBezierCurve(from_pt, to_pt));
     } else {
         var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
     }
@@ -259,6 +264,29 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     this.mapped_features[hop.local_id] = new_feature;
     this.getHopLayer(scid).addFeatures([new_feature]);
+}
+
+Sourcemap.Map.prototype.makeBezierCurve = function(from, to) {
+    var x0 = from.x;
+    var y0 = from.y;
+    var x1 = to.x;
+    var y1 = to.y;
+
+    var dx = x1 - x0;
+    var dy = y1 - y0;
+
+    var bzx = x0 + dx/4;//dx > 0 ? x0 + (dx/2) : x0 - (dx/2);
+    var bzy = y0 + dy;//dy > 0 ? y0 + (dy/2) : y0 - (dy/2);//Math.abs(y1-y0)/2;
+
+    var res = 100;
+
+    var pts = [];
+    for(var t=0.0; t<1.0; t += 1.0/res) {
+        var x = (1-t) * (1-t) * x0 + 2 * (1-t) * t * bzx + t * t * x1;
+        var y = (1-t) * (1-t) * y0 + 2 * (1-t) * t * bzy + t * t * y1;
+        pts.push(new OpenLayers.Geometry.Point(x, y));
+    }
+    return new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(pts)]);
 }
 
 Sourcemap.Map.prototype.makeBentLine = function(from, to) {

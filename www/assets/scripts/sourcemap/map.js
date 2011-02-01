@@ -312,6 +312,8 @@ Sourcemap.Map.prototype.makeBezierCurve = function(from, to) {
         var y = (1-t) * (1-t) * y0 + 2 * (1-t) * t * bzy + t * t * y1;
         pts.push(new OpenLayers.Geometry.Point(x, y));
     }
+    if(!to.equals(pts[pts.length-1]))
+        pts.push(to.clone());
     return new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(pts)]);
 }
 

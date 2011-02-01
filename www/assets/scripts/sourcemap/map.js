@@ -18,6 +18,7 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
+    "draw_hops": true, "hops_as_arcs": true,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -32,7 +33,7 @@ Sourcemap.Map.prototype.defaults = {
             "fillColor": "#050",
             "fillOpacity": 1.0
         }
-    }, "draw_hops": true,
+    }, 
     "hop_style": {
         "default": {
             "strokeWidth": 3,
@@ -213,8 +214,10 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     for(var i=0; i<supplychain.stops.length; i++) {
         this.mapStop(supplychain.stops[i], scid);
     }
-    for(var i=0; i<supplychain.hops.length; i++) {
-        this.mapHop(supplychain.hops[i], scid);
+    if(this.options.draw_hops) {
+        for(var i=0; i<supplychain.hops.length; i++) {
+            this.mapHop(supplychain.hops[i], scid);
+        }
     }
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
@@ -239,13 +242,15 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
 Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(!(hop instanceof Sourcemap.Hop))
         throw new Error('Sourcemap.Hop required.');
-    var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
-    /*var sc = this.supplychains[scid];
-    var wkt = new OpenLayers.Format.WKT();
-    var from_stopf = wkt.read(sc.findStop(hop.from_stop_id).geometry).geometry;
-    var to_stopf = wkt.read(sc.findStop(hop.to_stop_id).geometry).geometry;
-    console.log(from_stopf);
-    console.log(to_stopf);*/
+    if(this.options.hops_as_arcs) {
+        var sc = this.supplychains[scid];
+        var wkt = new OpenLayers.Format.WKT();
+        var from_pt = wkt.read(sc.findStop(hop.from_stop_id).geometry).geometry;
+        var to_pt = wkt.read(sc.findStop(hop.to_stop_id).geometry).geometry;
+        var new_feature = new OpenLayers.Feature.Vector(this.makeBentLine(from_pt, to_pt));
+    } else {
+        var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
+    }
     new_feature.attributes.supplychain_id = hop.supplychain_id;
     new_feature.attributes.hop_id = hop.local_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
@@ -254,6 +259,41 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     this.mapped_features[hop.local_id] = new_feature;
     this.getHopLayer(scid).addFeatures([new_feature]);
+}
+
+Sourcemap.Map.prototype.makeBentLine = function(from, to) {
+    // dzwarg's "polyline" bent line routine,
+    // minus the many-globes business
+    var resolution = 8.0;
+    var points = [];
+    var dx = to.x - from.x;
+    var dy = to.y - from.y;
+    var theta = (Math.PI/2) - Math.atan(dy/dx);
+    var maxdisp = Math.sqrt(dx*dx+dy*dy) * 0.05;
+
+    if(dx == 0 && dy == 0) {
+        points.push(new OpenLayers.Geometry.Point(from.x, from.y));
+    } else {
+        var absintheta = Math.abs(Math.sin(theta));
+        var abcostheta = Math.abs(Math.cos(theta));
+        for(var p=0; p<resolution; p++) {
+            var relamt = Math.sin(p/resolution*Math.PI) * maxdisp;
+            if(absintheta < abcostheta) {
+                relamt *= Math.abs(Math.sin(Math.PI*dx/dy));
+            }
+            var ddx = Math.cos(theta+Math.PI) * relamt;
+            var ddy = Math.sin(theta) * relamt;
+
+            points.push(
+                new OpenLayers.Geometry.Point(
+                    from.x + (dx*p/resolution) + ddx,
+                    from.y + (dy*p/resolution) + ddy
+                )
+            );
+        }
+    }
+    points.push(new OpenLayers.Geometry.Point(to.x, to.y));
+    return new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(points)]);
 }
 
 Sourcemap.Map.prototype.clearMap = function() {

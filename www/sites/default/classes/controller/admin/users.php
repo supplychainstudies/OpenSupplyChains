@@ -50,9 +50,16 @@
             array('id', 'name')
         );
 
-        $this->template->user = $user;
+	$groups = array();
+	foreach($user->groups->find_all()->as_array() as $i => $usergroup) {
+	  $groups[] = $usergroup->as_array();
+        }
+	
+	$this->template->user = $user;
         $this->template->roles = $roles;
         $this->template->all_roles = $all_roles;
+	$this->template->groups = $groups;
+
 
 
         // this is to reset the password

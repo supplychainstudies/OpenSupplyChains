@@ -8,14 +8,6 @@
  */
 
 
-function dbg_var($var) {
-    ob_start();
-    print_r($var);
-    $output = ob_get_clean();
-   
-    file_put_contents('/tmp/log5.txt', file_get_contents('/tmp/log5.txt') . $output); 
-}
-
  class Controller_Admin_Users extends Sourcemap_Controller_Layout {
 
   public $layout = 'admin';

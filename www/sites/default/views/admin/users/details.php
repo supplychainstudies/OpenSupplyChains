@@ -14,7 +14,7 @@
 <input type="submit" value="reset" />
 </form><br />
 
-      <?php if(isset($roles) && count($roles)>0 && !empty($all_roles)):?>
+      <?php if(isset($roles) && count($roles)>0):?>
   <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k) { ?>
     <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
@@ -23,8 +23,8 @@
 
 
        
- <?php if (!empty($all_roles) && !empty($roles)): ?>
-   Change the user role:
+
+   Change or add the user role:
 <form name="change-role" method="post" action="admin/users/<?= $user->id?>/add">
 <select name="addrole">
 <?php foreach ($all_roles as $role) { ?>			
@@ -44,7 +44,7 @@
 
    <?php }?>
    </select><input type="submit" value="add role"/></form>
-    <?php endif; ?>
+
 
 <?php if(!empty($groups)): ?>
    Group Information: 

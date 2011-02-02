@@ -17,6 +17,5 @@ $(document).ready(function() {
                 features.push(map.mapped_features[order[i]]);
         }
         var tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
-        
     });
 });

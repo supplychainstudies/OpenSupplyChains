@@ -15,7 +15,7 @@ class Sourcemap_Geocoder {
         return $results;
     }
 
-    public static function get_google_results($q) {
+    public static function get_google_results($q, $ttl=5) {
         $params = array('sensor' => 'false');
         if($q instanceof Sourcemap_Proj_Point) {
             $params['latlng'] = sprintf('%f,%f', $q->y, $q->x);
@@ -31,12 +31,16 @@ class Sourcemap_Geocoder {
         $result = curl_exec($ch);
         $result = json_decode($result);
         $ret = array();
-        if($result && isset($result->results)) {
+        if($result && isset($result->results) && !empty($result->results)) {
             foreach($result->results as $i => $r) {
                 $loc = $r->geometry->location;
                 $loc->placename = $r->formatted_address;
                 $ret[] = $loc;
             }
+        } else {
+            error_log('sleeping and retrying: "'.$q.'" (ttl = '.$ttl.').');
+            usleep((6 - $ttl) * 100000);
+            return self::get_google_results($q, $ttl-1);
         }
         return $ret;
     }

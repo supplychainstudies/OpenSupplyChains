@@ -11,27 +11,46 @@ Sourcemap.MapTour = function(map, o) {
 
 Sourcemap.MapTour.prototype.defaults = {
     "auto_init": true, "interval": 2500,
-    "start_inactive": 5, // seconds
+    "wait_interval": 5, // seconds
     "tour_hops": false, "tour_stops": true
 };
 
 Sourcemap.MapTour.prototype.init = function() {
     this.interval = this.options.interval > 0 ? this.options.interval : 1000;
-    this.start_inactive = this.options.start_inactive > 0 ? this.options.start_inactive : 0;
-    if(this.start_inactive) {
-        this.stop();
-        this.timeout = setTimeout($.proxy(this.start, this), this.start_inactive*1000);
-    }
+    this.wait_interval = this.options.wait_interval > 0 ? this.options.wait_interval : 0;
+    this.initEvents();
+    this.wait();
     Sourcemap.broadcast('map_tour:init', this);
+    return this;
+}
+
+Sourcemap.MapTour.prototype.initEvents = function() {
+    this.map.map.events.on({
+        "click": function(e) {
+            this.wait();
+        },
+        "scope": this 
+    });
+    return this;
+}
+
+Sourcemap.MapTour.prototype.wait = function() {
+    if(this.wait_interval) {
+        this.stop();
+        this.timeout = setTimeout($.proxy(this.start, this), this.wait_interval*1000);
+    }
+    return this;
 }
 
 Sourcemap.MapTour.prototype.start = function() {
     Sourcemap.broadcast('map_tour:start', this);
     this.next();
+    return this;
 }
 
 Sourcemap.MapTour.prototype.stop = function() {
     if(this.timeout) clearTimeout(this.timeout);
+    return this;
 }
 
 Sourcemap.MapTour.prototype.next = function() {

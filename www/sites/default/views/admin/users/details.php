@@ -1,6 +1,6 @@
-<?php if (isset($reset) && ($reset == true)) { ?>
-    Password is reset successfully!<br />
-    <?}?>
+<?php if (isset($reset) && ($reset == true)): ?>
+      Password is reset successfully!<br />
+	  <?php endif;?>
 
 <form name="user-info" method="post" action="">
 <label for="username">username:</label><br />
@@ -14,20 +14,21 @@
 <input type="submit" value="reset" />
 </form><br />
 
-    <?if(isset($roles) && count($roles)>0 && !empty($all_roles)) {?>
+      <?php if(isset($roles) && count($roles)>0 && !empty($all_roles)):?>
   <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k) { ?>
     <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
-<? }?><br />
- <? }?>
+       <? }?><br />
+      <?php endif;?>
 
-<?php if (isset($all_roles) && count($all_roles)>0): ?>
 
+       
+ <?php if (!empty($all_roles) && !empty($roles)): ?>
    Change the user role:
 <form name="change-role" method="post" action="admin/users/<?= $user->id?>/add">
 <select name="addrole">
-<? foreach ($all_roles as $role) { ?>			
-    <? $skip = false; 
+<?php foreach ($all_roles as $role) { ?>			
+    <?php $skip = false; 
        foreach($roles as $roler) {
          if($roler['name'] == $role->name) {
 	   $skip = true; 
@@ -45,8 +46,9 @@
    </select><input type="submit" value="add role"/></form>
     <?php endif; ?>
 
+<?php if(!empty($groups)): ?>
    Group Information: 
-<? foreach ($groups as $group) { ?>
+<?php foreach ($groups as $group) { ?>
      <?= $group['name']; 
      }?>
-    
+     <?php endif; ?>

@@ -5,6 +5,8 @@ if(!class_exists('Kohana')) die('stop. drop. shut \'em down. whoa. that\'s how r
  * defaults for the URI.
  */
 
+
+
 Route::set('tools/tool/action', 'tools/<controller>/<action>')
     ->defaults(array(
         'directory' => 'tools',
@@ -20,15 +22,13 @@ Route::set('admin/collection', 'admin/<controller>')
     ));
 
 Route::set('admin/collection/action', 'admin/<controller>/<action>', array(
-	'action' => '(?!\d+)',
+	  'action' => 'create'
     ))
     ->defaults(array(
         'directory' => 'admin', 
         'controller' => 'users', 
         'action' => 'create'
     ));
-
-
 
 Route::set('admin/collection/id/action', 'admin/<controller>(/<id>(/<action>))', array(
         'id' => '\d+', 

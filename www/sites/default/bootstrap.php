@@ -32,7 +32,7 @@ Route::set('admin/collection/action', 'admin/<controller>/<action>', array(
 
 Route::set('admin/collection/id/action', 'admin/<controller>(/<id>(/<action>))', array(
         'id' => '\d+', 
-        'action' => 'delete|add'))
+        'action' => 'delete_role|add_role'))
     ->defaults(array(
         'directory' => 'admin', 
         'controller' => 'users', 

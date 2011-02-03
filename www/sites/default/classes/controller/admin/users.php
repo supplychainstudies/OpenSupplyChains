@@ -125,7 +125,7 @@ class Controller_Admin_Users extends Controller_Admin {
         $this->request->redirect("admin/users/");
     }
     
-    public function action_delete($id) {
+    public function action_delete_role($id) {
         $post = Validate::factory($_POST);
         $post->rule('role', 'not_empty')
             ->filter(true, 'trim');
@@ -145,7 +145,7 @@ class Controller_Admin_Users extends Controller_Admin {
         $this->request->redirect("admin/users/".$id);
     }
     
-    public function action_add($id) {
+    public function action_add_role($id) {
         $check =  false;
         $post = Validate::factory($_POST);
         $post->rule('addrole', 'not_empty')->filter(true, 'trim');

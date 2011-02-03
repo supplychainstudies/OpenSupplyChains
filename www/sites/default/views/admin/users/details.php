@@ -17,7 +17,7 @@
       <?php if(isset($roles) && count($roles)>0):?>
   <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k) { ?>
-    <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
+    <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete_role"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
        <? }?><br />
       <?php endif;?>
 
@@ -25,7 +25,7 @@
        
 <?php if(count($roles) != count($all_roles)) { ?>
    Change or add the user role:
-<form name="change-role" method="post" action="admin/users/<?= $user->id?>/add">
+<form name="change-role" method="post" action="admin/users/<?= $user->id?>/add_role">
 <select name="addrole">
 <?php foreach ($all_roles as $role) { ?>			
     <?php $skip = false; 

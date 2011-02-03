@@ -50,15 +50,21 @@ class Controller_Admin_Users extends Controller_Admin {
                                 array('id', 'name')
         );
     
-        $groups = array();
+        $members = array();
         foreach($user->groups->find_all()->as_array() as $i => $usergroup) {
-            $groups[] = $usergroup->as_array();
+            $members[] = $usergroup->as_array();
         }
-        
+
+	$owners = array();
+        foreach($user->owned_groups->find_all()->as_array() as $i => $usergroup) {
+            $owners[] = $usergroup->as_array();
+        }
+
         $this->template->user = $user;
         $this->template->roles = $roles;
         $this->template->all_roles = $all_roles;
-        $this->template->groups = $groups;
+        $this->template->members = $members;
+	$this->template->owners = $owners;
         
         
         // this is to reset the password

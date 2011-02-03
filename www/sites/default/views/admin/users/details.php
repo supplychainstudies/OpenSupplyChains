@@ -45,11 +45,22 @@
    <?php }?>
    </select><input type="submit" value="add role"/></form>
 
-<? } ?>
+<? } ?><br />
 
-<?php if(!empty($groups)): ?>
-   Group Information: 
-<?php foreach ($groups as $group) { ?>
-     <?= $group['name']; 
-     }?>
+<?php if(!empty($members)): ?>
+   Group Membership: 
+       <?php $last_member = end($members);?>
+<?php foreach ($members as $member) { ?>
+     <?= $member['name']; ?> 
+   <?php if ($member != $last_member) {?>, <?}?>
+ <?php     }?><br />
+ <?php endif; ?><br />
+
+<?php if(!empty($owners)): ?>
+   Group Ownership: 
+<?php $last_owner = end($owners);?>
+<?php foreach ($owners as $owner) { ?>
+     <?= $owner['name'];  ?>
+ <?php if($owner != $last_owner) {?>, <?}?>
+ <?php    }?>
      <?php endif; ?>

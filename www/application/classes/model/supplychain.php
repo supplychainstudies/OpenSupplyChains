@@ -54,7 +54,7 @@ class Model_Supplychain extends ORM {
                 sprintf("select s.id as stop_id, ST_AsText(s.geometry) as geometry, 
                         sa.key as attr_k, sa.value as attr_v, s.local_stop_id as local_stop_id
                     from stop as s left outer join stop_attribute as sa on
-                        (s.supplychain_id=sa.supplychain_id and s.id=sa.local_stop_id)
+                        (s.supplychain_id=sa.supplychain_id and s.local_stop_id=sa.local_stop_id)
                     where s.supplychain_id = %d
                     order by sa.id desc",
                     $scid

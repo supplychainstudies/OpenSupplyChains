@@ -4,4 +4,6 @@
 <dd>Browse and manage supplychains.</dd>
 <dt><a href="admin/users">Users</a></dt>
 <dd>Manage users.</dd>
+<dt><a href="admin/groups">Groups</a></dt>
+<dd>Manage groups.</dd>
 </dl>

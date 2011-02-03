@@ -5,7 +5,7 @@ Sourcemap.Map = function(element_id, o) {
     var o = o || {};
     o.element_id = element_id;
     Sourcemap.Configurable.call(this, o);
-    this.local_id = Sourcemap.local_id("sourcemap");
+    this.instance_id = Sourcemap.instance_id("sourcemap");
 }
 
 Sourcemap.Map.prototype = new Sourcemap.Configurable();
@@ -19,7 +19,10 @@ Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
     "layer_switcher": true, "google_tiles": true,
-    "cloudmade_tiles": true,
+    "cloudmade_tiles": true, "popups": true,
+    "stop_popups": true, "hop_popups": true,
+    "arrow_popups": true, "popup_width": 200,
+    "popup_height": 200,
     "draw_hops": true, "hops_as_arcs": false,
     "hops_as_bezier": true, "arrows_on_hops": true,
     "stop_style": {
@@ -50,7 +53,7 @@ Sourcemap.Map.prototype.defaults = {
         },
         "select": {
             "strokeColor": "#050",
-            "strokeWidth": 4
+            "fillColor": "#050"
         }
     }
 }
@@ -123,15 +126,32 @@ Sourcemap.Map.prototype.initControls = function() {
     var layers = [];
     for(var k in this.layers) layers.push(this.layers[k]);
     if(layers.length) {
-        this.addControl('layer_switcher',
-            new OpenLayers.Control.LayerSwitcher()
-        );
+        if(this.options.layer_switcher) {
+            this.addControl('layer_switcher',
+                new OpenLayers.Control.LayerSwitcher()
+            );
+        }
         this.addControl('select', 
             new OpenLayers.Control.SelectFeature(layers, {
+                "geometryTypes": ["OpenLayers.Geometry.Point", "OpenLayers.Geometry.MultiLineString"],
                 "onSelect": OpenLayers.Function.bind(
-                    function(feature) { 
-                        this.broadcast('featureSelected', {'map': this, 'feature': feature}); 
-                    }, this)
+                    function(feature) {
+                        if(this.options.popups) {
+                            this.showPopup(feature);
+                        }
+                        this.broadcast('map:feature_selected', this, feature); 
+                    }, 
+                    this
+                ),
+                "onUnselect": OpenLayers.Function.bind(
+                    function(feature) {
+                        if(this.options.popups) {
+                            this.hidePopup(feature);
+                        }
+                        this.broadcast('map:feature_unselected', this, feature); 
+                    },
+                    this
+                )
             })
         );
         $(document).bind(['map:layer_added', 'map:layer_removed'], function(e, map, label, layer) {
@@ -149,9 +169,18 @@ Sourcemap.Map.prototype.initControls = function() {
     return this;
 }
 
+Sourcemap.Map.prototype.updateControls = function() {
+    var layers = [];
+    for(var k in this.layers) layers.push(this.layers[k]);
+    if(this.controls.select)
+        this.controls.select.setLayer(layers);
+    return this;
+}
+
 Sourcemap.Map.prototype.addLayer = function(label, layer) {
     this.map.addLayer(layer);
     this.layers[label] = layer;
+    this.updateControls();
     this.broadcast('map:layer_added', this, label, layer);
     return this;
 }
@@ -169,8 +198,9 @@ Sourcemap.Map.prototype.addStopLayer = function(scid) {
 }
 
 Sourcemap.Map.prototype.addHopLayer = function(scid) {
+    var sc = this.findSupplychain(scid);
     var hlayer = new OpenLayers.Layer.Vector(
-        "Hop Layer - Supplychain #"+scid, {
+        "Hop Layer - Supplychain #"+sc.getLabel(), {
             "sphericalMercator": true,
             "styleMap": new OpenLayers.StyleMap(this.options.hop_style)
         }
@@ -185,6 +215,7 @@ Sourcemap.Map.prototype.removeLayer = function(label) {
         this.map.removeLayer(layer);
         this.layers[label].destroy();
         delete this.layers[label];
+        this.updateControls();
         this.broadcast('map:layer_removed', this, layer);
     }
     return this;
@@ -241,20 +272,35 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     if(!(stop instanceof Sourcemap.Stop))
         throw new Error('Sourcemap.Stop required.');
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
-    new_feature.attributes.supplychain_id = stop.supplychain_id;
+    new_feature.attributes.supplychain_instance_id = stop.supplychain_id;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
-    new_feature.attributes.stop_id = stop.local_id;
+    new_feature.attributes.stop_instance_id = stop.instance_id;
     new_feature.attributes.size = 6;
     new_feature.attributes.color = '#072';
+    var new_popup = false;
+    if(this.options.popups && this.options.stop_popups) {
+        var puid = stop.instance_id+'-popup';
+        var ll = new OpenLayers.LonLat(new_feature.geometry.x, new_feature.geometry.y);
+        var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
+        var sc = this.findSupplychain(scid);
+        var new_popup = new OpenLayers.Popup(puid, ll, sz, stop.getLabel(), true);
+        new_popup.hide();
+    }
     if(this.prepareStopFeature instanceof Function) {
         this.prepareStopFeature(stop, new_feature);
     }
-    this.broadcast('map:stop_mapped', this, this.findSupplychain(scid), stop, new_feature);
     // save references to features
-    this.mapped_features[stop.local_id] = new_feature;
-    this.stop_features[scid][stop.local_stop_id] = {"stop": new_feature};
+    this.mapped_features[stop.instance_id] = new_feature;
+    this.stop_features[scid][stop.instance_id] = {"stop": new_feature};
+    if(new_popup) {
+        this.map.addPopup(new_popup);
+        this.stop_features[scid][stop.instance_id].popup = new_popup;
+    }
     this.getStopLayer(scid).addFeatures([new_feature]);
+    this.broadcast('map:stop_mapped', this, this.findSupplychain(scid), stop, new_feature);
 }
+
+// todo: removeStop
 
 Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(!(hop instanceof Sourcemap.Hop))
@@ -274,11 +320,26 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     }
     var new_arrow = false;
     if(this.options.arrows_on_hops) {
-        new_arrow = this.makeArrow(new_feature.geometry, {"color": "#072", "size": 11});
-        this.getHopLayer(scid).addFeatures([new_arrow]);
+        new_arrow = this.makeArrow(new_feature.geometry, {
+            "color": "#072", "size": 11, "supplychain_instance_id": scid,
+            "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
+            "to_stop_id": hop.to_stop_id
+            
+        });
     }
-    new_feature.attributes.supplychain_id = hop.supplychain_id;
-    new_feature.attributes.hop_id = hop.local_id;
+    var new_popup = false;
+    if(this.options.popups && this.options.hop_popups && new_arrow) {
+        var puid = hop.instance_id+'-popup';
+        var ll = new OpenLayers.LonLat(new_arrow.geometry.x, new_arrow.geometry.y);
+        var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
+        var sc = this.findSupplychain(scid);
+        var fromst = sc.findStop(hop.from_stop_id);
+        var tost = sc.findStop(hop.to_stop_id);
+        var new_popup = new OpenLayers.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), true);
+        new_popup.hide();
+    }
+    new_feature.attributes.supplychain_instance_id = scid;
+    new_feature.attributes.hop_instance_id = hop.instance_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     new_feature.attributes.width = 4;
@@ -288,8 +349,16 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     this.mapped_features[hop.local_id] = new_feature;
     if(!this.hop_features[scid][hop.from_stop_id]) this.hop_features[scid][hop.from_stop_id] = {};
     this.hop_features[scid][hop.from_stop_id][hop.to_stop_id] = {"hop": new_feature};
-    if(new_arrow) this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].arrow = new_arrow;
+    if(new_arrow) {
+        this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].arrow = new_arrow;
+        if(new_popup) {
+            this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].popup = new_popup;
+            this.map.addPopup(new_popup);
+        }
+    }
     this.getHopLayer(scid).addFeatures([new_feature]);
+    if(new_arrow)
+        this.getHopLayer(scid).addFeatures([new_arrow]);
 }
 
 Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
@@ -386,11 +455,11 @@ Sourcemap.Map.prototype.getSupplychains = function() {
 }
 
 Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
-    var scid = supplychain.local_id;
+    var scid = supplychain.instance_id;
     if(this.findSupplychain(scid))
         throw new Error("Supplychain already attached to this map.");
     this.supplychains[scid] = supplychain;
-    this.addStopLayer(scid).addHopLayer(scid);
+    this.addHopLayer(scid).addStopLayer(scid);
     this.stop_features[scid] = {};
     this.hop_features[scid] = {};
     this.mapSupplychain(scid);
@@ -412,7 +481,7 @@ Sourcemap.Map.prototype.removeSupplychain = function(scid) {
     return removed;
 }
 
-Sourcemap.Map.prototype.findStopFeatures = function(scid, stid) {
+Sourcemap.Map.prototype.findFeaturesForStop = function(scid, stid) {
     var ftrs = false;
     if(this.stop_features[scid]) {
         var sc_st_ftrs = this.stop_features[scid];
@@ -423,7 +492,7 @@ Sourcemap.Map.prototype.findStopFeatures = function(scid, stid) {
     return ftrs;
 }
 
-Sourcemap.Map.prototype.findHopFeatures = function(scid, from_stid, to_stid) {
+Sourcemap.Map.prototype.findFeaturesForHop = function(scid, from_stid, to_stid) {
     var ftrs = false;
     if(this.hop_features[scid]) {
         var sc_hop_ftrs = this.hop_features[scid];
@@ -435,4 +504,27 @@ Sourcemap.Map.prototype.findHopFeatures = function(scid, from_stid, to_stid) {
         }
     }
     return ftrs;
+}
+
+Sourcemap.Map.prototype.showPopup = function(feature) {
+    var attrs = feature.attributes;
+    if(attrs.supplychain_instance_id && attrs.stop_instance_id) {
+        ftrs = this.findFeaturesForStop(attrs.supplychain_instance_id, attrs.stop_instance_id);
+    } else if(attrs.supplychain_instance_id && attrs.hop_instance_id) {
+        ftrs = this.findFeaturesForHop(attrs.supplychain_instance_id, attrs.from_stop_id, attrs.to_stop_id);
+    }
+    if(ftrs && ftrs.popup)
+        ftrs.popup.show();
+}
+
+Sourcemap.Map.prototype.hidePopup = function(feature) {
+    var attrs = feature.attributes;
+    if(attrs.supplychain_instance_id && attrs.stop_instance_id) {
+        ftrs = this.findFeaturesForStop(attrs.supplychain_instance_id, attrs.stop_instance_id);
+    } else if(attrs.supplychain_instance_id && attrs.hop_instance_id) {
+        ftrs = this.findFeaturesForHop(attrs.supplychain_instance_id, attrs.from_stop_id, attrs.to_stop_id);
+    }
+    if(ftrs && ftrs.popup)
+        ftrs.popup.hide();
+
 }

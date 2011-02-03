@@ -52,7 +52,7 @@ Sourcemap.hash = function(str) {
 }
 
 Sourcemap._local_seq = {};
-Sourcemap.local_id = function(seq) {
+Sourcemap.instance_id = function(seq) {
     var seq = typeof seq === "string" ? seq : new String(seq);
     if(typeof Sourcemap._local_seq[seq] === "undefined") {
         Sourcemap._local_seq[seq] = 0;
@@ -119,14 +119,15 @@ Sourcemap.factory = function(type, data) {
                 var new_stop = new Sourcemap.Stop(
                     sc.stops[i].geometry, sc.stops[i].attributes
                 );
-                stop_ids[sc.stops[i].id] = new_stop.local_id;
+                stop_ids[sc.stops[i].local_stop_id] = new_stop.instance_id;
+                new_stop.local_stop_id = sc.stops[i].local_stop_id;
                 instance.addStop(new_stop);
             }
             for(var i=0; i<sc.hops.length; i++) {
-                var local_from = stop_ids[sc.hops[i].from_stop_id];
-                var local_to = stop_ids[sc.hops[i].to_stop_id];
+                var from_instance = stop_ids[sc.hops[i].from_stop_id];
+                var to_instance = stop_ids[sc.hops[i].to_stop_id];
                 var new_hop = new Sourcemap.Hop(
-                    sc.hops[i].geometry, local_from, local_to,
+                    sc.hops[i].geometry, from_instance, to_instance,
                     sc.hops[i].attributes
                 );
                 instance.addHop(new_hop);

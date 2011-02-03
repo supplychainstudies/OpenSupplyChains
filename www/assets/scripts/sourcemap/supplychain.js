@@ -1,6 +1,6 @@
 Sourcemap.Supplychain = function() {
     this.remote_id = null;
-    this.local_id = Sourcemap.local_id("supplychain");
+    this.instance_id = Sourcemap.instance_id("supplychain");
     this.stops = [];
     this.hops = [];
     this.attributes = {};
@@ -18,7 +18,7 @@ Sourcemap.Supplychain.prototype.getLabel = function() {
     if(!label && this.remote_id)
         label = this.remote_id;
     else if(!label)
-        label = this.local_id;
+        label = this.instance_id;
     return label;
 }
 
@@ -29,14 +29,14 @@ Sourcemap.Supplychain.prototype.broadcast = function() {
 
 Sourcemap.Supplychain.prototype.stopIds = function() {
     var ids = [];
-    for(var i=0; i<this.stops.length; i++) ids.push(this.stops[i].local_id);
+    for(var i=0; i<this.stops.length; i++) ids.push(this.stops[i].instance_id);
     return ids;
 }
 
 Sourcemap.Supplychain.prototype.findStop = function(target_id) {
     var found = false;
     for(var i=0; i<this.stops.length; i++) {
-        if(this.stops[i].local_id === target_id) {
+        if(this.stops[i].instance_id === target_id) {
             found = this.stops[i];
             break;
         }
@@ -46,11 +46,11 @@ Sourcemap.Supplychain.prototype.findStop = function(target_id) {
 
 Sourcemap.Supplychain.prototype.addStop = function(stop) {
     if(stop instanceof Sourcemap.Stop) {
-        if(this.stopIds().indexOf(stop.local_id) >= 0) {
+        if(this.stopIds().indexOf(stop.instance_id) >= 0) {
             throw new Error("Stop already exists in this supplychain.");
         }
         this.stops.push(stop);
-        stop.supplychain_id = this.local_id;
+        stop.supplychain_id = this.instance_id;
         this.broadcast('supplychain:stop_added', this, stop);
     } else throw new Error("Sourcemap.Stop expected.");
     return this;
@@ -59,7 +59,7 @@ Sourcemap.Supplychain.prototype.addStop = function(stop) {
 Sourcemap.Supplychain.prototype.removeStop = function(target_id) {
     var removed = false;
     for(var i=0; i<this.stops.length; i++) {
-        if(this.stops[i].local_id === target_id) {
+        if(this.stops[i].instance_id === target_id) {
             removed = this.stops[i];
             removed.supplychain_id = null;
             delete this.stops[i];
@@ -77,9 +77,9 @@ Sourcemap.Supplychain.prototype.stopHops = function(stop_id) {
     for(var i=0; i<this.hops.length; i++) {
         var hop = this.hops[i];
         if(hop.from_stop_id === stop_id) {
-            stop_hops.out.push(hop.local_id);
+            stop_hops.out.push(hop.instance_id);
         } else if(hop.to_stop_id === stop_id) {
-            stop_hops["in"].push(hop.local_id);
+            stop_hops["in"].push(hop.instance_id);
         }
     }
     return stop_hops;
@@ -90,7 +90,7 @@ Sourcemap.Supplychain.prototype.cycleCheck = function() {
     var stack = [];
     for(var i=0; i<this.hops.length; i++) {
         if(this.hops[i].from_stop_id === this.hops[i].to_stop_id) {
-            throw new Error("Hop '"+this.hops[i].local_id+"' is circular.");
+            throw new Error("Hop '"+this.hops[i].instance_id+"' is circular.");
         }
         var n = this.hops[i].from_stop_id;
         var v = [];
@@ -106,7 +106,7 @@ Sourcemap.Supplychain.prototype.cycleCheck = function() {
                 var out_hop = this.findHop(outgoing[oi]);
                 if(new_v.indexOf(out_hop.to_stop_id) >= 0) {
                     throw new Error("Found cycle at hop from '"+n+"' to '"+
-                        out_hop.to_stop_id+"' in '"+this.local_id+"'.");
+                        out_hop.to_stop_id+"' in '"+this.instance_id+"'.");
                 }
                 st.push({"n": out_hop.to_stop_id, "v": new_v});
             }
@@ -117,13 +117,13 @@ Sourcemap.Supplychain.prototype.cycleCheck = function() {
 
 Sourcemap.Supplychain.prototype.hopIds = function() {
     var ids = [];
-    for(var i=0; i<this.hops.length; i++) ids.push(this.hops[i].local_id);
+    for(var i=0; i<this.hops.length; i++) ids.push(this.hops[i].instance_id);
 }
 
 Sourcemap.Supplychain.prototype.findHop = function(target_id) {
     var found = false;
     for(var i=0; i<this.hops.length; i++) {
-        if(this.hops[i].local_id === target_id) {
+        if(this.hops[i].instance_id === target_id) {
             found = this.hops[i];
             break;
         }
@@ -137,7 +137,7 @@ Sourcemap.Supplychain.prototype.hopExists = function(from_stop_id, to_stop_id) {
         var hop = this.hops[i];
         if(hop.from_stop_id === from_stop_id &&
             hop.to_stop_id === to_stop_id) {
-            exists = hop.local_id;
+            exists = hop.instance_id;
             break;
         }
     }
@@ -150,7 +150,7 @@ Sourcemap.Supplychain.prototype.addHop = function(hop) {
             throw new Error("Hop exists.");
         }
         this.hops.push(hop);
-        hop.supplychain_id = this.local_id;
+        hop.supplychain_id = this.instance_id;
         this.broadcast('supplychain:hop_added', this, hop);
     } else throw new Error("Sourcemap.Hop expected.");
     return this;
@@ -159,7 +159,7 @@ Sourcemap.Supplychain.prototype.addHop = function(hop) {
 Sourcemap.Supplychain.prototype.removeHop = function(hop_id) {
     var removed = false;
     for(var i=0; i<this.hops.length; i++) {
-        if(hop_id === this.hops[i].local_id) {
+        if(hop_id === this.hops[i].instance_id) {
             removed = this.hops[i];
             removed.supplychain_id = null;
             delete this.hops[i];
@@ -170,8 +170,9 @@ Sourcemap.Supplychain.prototype.removeHop = function(hop_id) {
 }
 
 Sourcemap.Stop = function(geometry, attributes) {
-    this.local_id = Sourcemap.local_id("stop");
+    this.instance_id = Sourcemap.instance_id("stop");
     this.supplychain_id = null;
+    this.local_id = null; // local id unique to supplychain
     this.geometry = geometry;
     this.attributes = attributes ? Sourcemap.deep_clone(attributes) : {};
 }
@@ -181,8 +182,23 @@ Sourcemap.Stop.prototype.getAttr = function(k, d) {
     else return d;
 }
 
+Sourcemap.Stop.prototype.getLabel = function() {
+    var label = this.instance_id;
+    var search_keys = ["name", "label", "org.sourcemap.name", 
+        "org.sourcemap.name.place"
+    ];
+    for(var ki=0; ki<search_keys.length; ki++) {
+        var k = search_keys[ki];
+        if(this.getAttr(k, false)) {
+            label = this.getAttr(k, false);
+            break;
+        }   
+    }
+    return label;
+}
+
 Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {
-    this.local_id = Sourcemap.local_id("hop");
+    this.instance_id = Sourcemap.instance_id("hop");
     this.supplychain_id = null;
     this.from_stop_id = from_stop_id;
     this.to_stop_id = to_stop_id;

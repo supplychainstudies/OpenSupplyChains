@@ -99,6 +99,7 @@ class Sourcemap_Import_Csv {
                         $result = $results[0];
                         $lat = $result->lat;
                         $lon = $result->lng;
+                        $new_stop['attributes']['org.sourcemap.placename'] = $result->placename;
                     } else {
                         throw new Exception('Could not geocode: "'.$v.'".');
                     }

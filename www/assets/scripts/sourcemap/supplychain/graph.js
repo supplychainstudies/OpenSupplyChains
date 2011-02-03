@@ -17,7 +17,7 @@ Sourcemap.Supplychain.Graph.prototype.init = function() {
 Sourcemap.Supplychain.Graph.prototype.getNodes = function() {
     var stops = this.supplychain.stops;
     var nodes = [];
-    for(var i=0; i<stops.length; i++) nodes.push(stops[i].local_id);
+    for(var i=0; i<stops.length; i++) nodes.push(stops[i].instance_id);
     return nodes;
 }
 
@@ -28,7 +28,7 @@ Sourcemap.Supplychain.Graph.prototype.getEdges = function() {
         var hop = hops[i];
         var edge = {
             "to": hop.to_stop_id, "from": hop.from_stop_id, 
-            "id": hop.local_id
+            "id": hop.instance_id
         }
         edges.push(edge);
     }

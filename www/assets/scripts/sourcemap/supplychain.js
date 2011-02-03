@@ -183,15 +183,15 @@ Sourcemap.Stop.prototype.getAttr = function(k, d) {
 }
 
 Sourcemap.Stop.prototype.getLabel = function() {
-    var label = this.instance_id;
+    var label = false;
     var search_keys = ["name", "label", "org.sourcemap.name", 
-        "org.sourcemap.name.place"
+        "org.sourcemap.placename", "org.sourcemap.name.place",
+        "address"
     ];
     for(var ki=0; ki<search_keys.length; ki++) {
         var k = search_keys[ki];
         if(this.getAttr(k, false)) {
             label = this.getAttr(k, false);
-            break;
         }   
     }
     return label;

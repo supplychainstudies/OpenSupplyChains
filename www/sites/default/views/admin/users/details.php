@@ -23,7 +23,7 @@
 
 
        
-
+<?php if(count($roles) != count($all_roles)) { ?>
    Change or add the user role:
 <form name="change-role" method="post" action="admin/users/<?= $user->id?>/add">
 <select name="addrole">
@@ -45,6 +45,7 @@
    <?php }?>
    </select><input type="submit" value="add role"/></form>
 
+<? } ?>
 
 <?php if(!empty($groups)): ?>
    Group Information: 

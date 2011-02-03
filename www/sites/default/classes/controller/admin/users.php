@@ -8,7 +8,7 @@
  */
 
 
-class Controller_Admin_Users extends Sourcemap_Controller_Layout {
+class Controller_Admin_Users extends Controller_Admin {
     
     public $layout = 'admin';
     public $template = 'admin/users/list';

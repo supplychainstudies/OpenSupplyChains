@@ -21,7 +21,7 @@ class Model_User extends Model_Auth_User {
             'far_key' => 'usergroup_id'
         ),
         'owned_groups' => array(
-            'mode' => 'usergroup', 'foreign_key' => 'owner_id'
+            'model' => 'usergroup', 'foreign_key' => 'owner_id'
         )
 	);
 

@@ -10,6 +10,6 @@ class Model_Usergroup extends ORM {
         'owner' => array(
             'model' => 'user',
             'foreign_key' => 'owner_id'
-        )
-    )
+	    )
+	);
 }

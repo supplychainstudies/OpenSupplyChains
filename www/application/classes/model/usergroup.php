@@ -6,4 +6,10 @@ class Model_Usergroup extends ORM {
             'through' => 'user_usergroup'
         )
     );
+    protected $_belongs_to = array(
+        'owner' => array(
+            'model' => 'user',
+            'foreign_key' => 'owner_id'
+        )
+    )
 }

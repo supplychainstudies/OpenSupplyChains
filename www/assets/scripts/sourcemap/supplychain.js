@@ -1,10 +1,25 @@
-Sourcemap.Supplychain = function(remote_id) {
-    this.remote_id = remote_id;
+Sourcemap.Supplychain = function() {
+    this.remote_id = null;
     this.local_id = Sourcemap.local_id("supplychain");
     this.stops = [];
     this.hops = [];
     this.attributes = {};
     this.broadcast('supplychain:instantiated', this);
+}
+
+Sourcemap.Supplychain.prototype.getLabel = function() {
+    var label = false;
+    var search_keys = ["org.sourcemap.name", "name", "label"];
+    for(var ki=0; ki<search_keys.length; ki++) {
+        var k = search_keys[ki];
+        if(this.attributes[k])
+            label = this.attributes[k];
+    }
+    if(!label && this.remote_id)
+        label = this.remote_id;
+    else if(!label)
+        label = this.local_id;
+    return label;
 }
 
 Sourcemap.Supplychain.prototype.broadcast = function() {

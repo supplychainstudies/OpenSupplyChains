@@ -18,6 +18,8 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
+    "layer_switcher": true, "google_tiles": true,
+    "cloudmade_tiles": true,
     "draw_hops": true, "hops_as_arcs": false,
     "hops_as_bezier": true, "arrows_on_hops": true,
     "stop_style": {
@@ -61,6 +63,8 @@ Sourcemap.Map.prototype.init = function() {
     this.map.zoomTo(2);
     this.supplychains = {};
     this.mapped_features = {};
+    this.stop_features = {}; // dicts of stop ftrs keyed by parent supplychain
+    this.hop_features = {}; // dicts of hop ftrs keyed by parent supplychain
     this.broadcast('map:initialized', this);
     return this;
 }
@@ -92,14 +96,13 @@ Sourcemap.Map.prototype.initMap = function() {
 }
 
 Sourcemap.Map.prototype.initBaseLayer = function() {
-    /*this.map.addLayer(new OpenLayers.Layer.Google(
+    this.map.addLayer(new OpenLayers.Layer.Google(
         "Google Streets",
         {
             'sphericalMercator': true, "wrapeDateLine": true,
             "type": google.maps.MapTypeId.TERRAIN
         }
-    ));*/
-    // todo: make this togglable
+    ));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "Cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
@@ -120,6 +123,9 @@ Sourcemap.Map.prototype.initControls = function() {
     var layers = [];
     for(var k in this.layers) layers.push(this.layers[k]);
     if(layers.length) {
+        this.addControl('layer_switcher',
+            new OpenLayers.Control.LayerSwitcher()
+        );
         this.addControl('select', 
             new OpenLayers.Control.SelectFeature(layers, {
                 "onSelect": OpenLayers.Function.bind(
@@ -151,8 +157,9 @@ Sourcemap.Map.prototype.addLayer = function(label, layer) {
 }
 
 Sourcemap.Map.prototype.addStopLayer = function(scid) {
+    var sc = this.findSupplychain(scid);
     var slayer = new OpenLayers.Layer.Vector(
-        "Stop Layer - Supplychain #"+scid, {
+        "Stops - "+sc.getLabel(), {
             "sphericalMercator": true,
             "styleMap": new OpenLayers.StyleMap(this.options.stop_style)
         }
@@ -175,7 +182,8 @@ Sourcemap.Map.prototype.addHopLayer = function(scid) {
 Sourcemap.Map.prototype.removeLayer = function(label) {
     if(this.layers[label]) {
         var layer = this.layers[label];
-        this.map.removeLayer(layer.id);
+        this.map.removeLayer(layer);
+        this.layers[label].destroy();
         delete this.layers[label];
         this.broadcast('map:layer_removed', this, layer);
     }
@@ -242,7 +250,9 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         this.prepareStopFeature(stop, new_feature);
     }
     this.broadcast('map:stop_mapped', this, this.findSupplychain(scid), stop, new_feature);
+    // save references to features
     this.mapped_features[stop.local_id] = new_feature;
+    this.stop_features[scid][stop.local_stop_id] = {"stop": new_feature};
     this.getStopLayer(scid).addFeatures([new_feature]);
 }
 
@@ -262,8 +272,9 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     } else {
         var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
     }
+    var new_arrow = false;
     if(this.options.arrows_on_hops) {
-        var new_arrow = this.makeArrow(new_feature.geometry, {"color": "#072", "size": 11});
+        new_arrow = this.makeArrow(new_feature.geometry, {"color": "#072", "size": 11});
         this.getHopLayer(scid).addFeatures([new_arrow]);
     }
     new_feature.attributes.supplychain_id = hop.supplychain_id;
@@ -273,7 +284,11 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.width = 4;
     new_feature.attributes.color = '#072';
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
+    // save references to features
     this.mapped_features[hop.local_id] = new_feature;
+    if(!this.hop_features[scid][hop.from_stop_id]) this.hop_features[scid][hop.from_stop_id] = {};
+    this.hop_features[scid][hop.from_stop_id][hop.to_stop_id] = {"hop": new_feature};
+    if(new_arrow) this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].arrow = new_arrow;
     this.getHopLayer(scid).addFeatures([new_feature]);
 }
 
@@ -372,9 +387,12 @@ Sourcemap.Map.prototype.getSupplychains = function() {
 
 Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     var scid = supplychain.local_id;
+    if(this.findSupplychain(scid))
+        throw new Error("Supplychain already attached to this map.");
     this.supplychains[scid] = supplychain;
-    //this.removeStopLayer(scid);
     this.addStopLayer(scid).addHopLayer(scid);
+    this.stop_features[scid] = {};
+    this.hop_features[scid] = {};
     this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);
     return this;
@@ -385,9 +403,36 @@ Sourcemap.Map.prototype.removeSupplychain = function(scid) {
     var removed = false;
     if(sc && sc.local_id) {
         var scid = sc.local_id;
+        this.removeStopLayer(scid);
+        this.removeHopLayer(scid);
         removed = this.supplychains[scid];
         delete this.supplychains[scid];
         this.broadcast('map:supplychain_removed', this, removed, scid);
     }
     return removed;
+}
+
+Sourcemap.Map.prototype.findStopFeatures = function(scid, stid) {
+    var ftrs = false;
+    if(this.stop_features[scid]) {
+        var sc_st_ftrs = this.stop_features[scid];
+        if(sc_st_ftrs[stid]) {
+            ftrs = sc_st_ftrs[stid];
+        }
+    }
+    return ftrs;
+}
+
+Sourcemap.Map.prototype.findHopFeatures = function(scid, from_stid, to_stid) {
+    var ftrs = false;
+    if(this.hop_features[scid]) {
+        var sc_hop_ftrs = this.hop_features[scid];
+        if(sc_hop_ftrs[from_stid]) {
+            var from_st_ftrs = sc_hop_ftrs[from_stid];
+            if(from_st_ftrs[to_stid]) {
+                ftrs = from_st_ftrs[to_stid];
+            }
+        }
+    }
+    return ftrs;
 }

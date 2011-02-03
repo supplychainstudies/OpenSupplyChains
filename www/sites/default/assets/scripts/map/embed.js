@@ -1,7 +1,7 @@
 $(document).ready(function() {
     Sourcemap.map_instance = new Sourcemap.Map('sourcemap-map-embed');
-    Sourcemap.loadSupplychain(window.location.href.split('/').pop(), function(data) {
-        var sc = Sourcemap.factory('supplychain', data.supplychain);
+    var scid = new Number(window.location.href.split('/').pop());
+    Sourcemap.loadSupplychain(scid, function(sc) {
         Sourcemap.map_instance.addSupplychain(sc);
     });
     $(document).bind('map:supplychain_mapped', function(evt, map) {
@@ -16,6 +16,6 @@ $(document).ready(function() {
             for(var i=0; i<order.length; i++)
                 features.push(map.mapped_features[order[i]]);
         }
-        var tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
+        //var tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
     });
 });

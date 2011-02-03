@@ -51,7 +51,7 @@ return array(
                 'assets/scripts/sourcemap/map.js'
             ),
             'requires' => array(
-                'sourcemap-core', 'openlayers-cloudmade'
+                'sourcemap-core', 'google-maps', 'openlayers-cloudmade'
             )
         ),
         'sourcemap-working' => array(
@@ -73,6 +73,11 @@ return array(
             ),
             'requires' => array(
                 'openlayers'
+            )
+        ),
+        'google-maps' => array(
+            'scripts' => array(
+                'http://maps.google.com/maps/api/js?sensor=false&v=3.2'
             )
         ),
         'less' => array(

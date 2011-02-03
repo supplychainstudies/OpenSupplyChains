@@ -92,6 +92,16 @@ Sourcemap.broadcast = function(evt) {
     Sourcemap.log('Broadcast: '+evt);
 }
 
+Sourcemap.listen = function(evts, callback, scope) {
+    var scope = scope || window;
+    if(evts instanceof Array)
+        evts = evts.join(" ");
+    if(callback instanceof Function) {
+        $.bind(evts, $.proxy(callback, scope));
+    }
+    return true;
+}
+
 Sourcemap.factory = function(type, data) {
     var instance;
     switch(type) {
@@ -121,6 +131,7 @@ Sourcemap.factory = function(type, data) {
                 );
                 instance.addHop(new_hop);
             }
+            instance.remote_id = sc.id;
             break;
         default:
             instance = false;
@@ -190,9 +201,10 @@ Sourcemap.loadSupplychain = function(remote_id, callback) {
     var _that = this;
     var _remote_id = remote_id;
     $.get('services/supplychains/'+remote_id, {},  function(data) {
-            callback.apply(this, arguments);
+            var sc = Sourcemap.factory('supplychain', data.supplychain);
+            callback.apply(this, [sc]);
             // notice this event fires _after_ the callback runs.
-            _that.broadcast('supplychain:loaded', this, data);
+            _that.broadcast('supplychain:loaded', this, sc);
         }
     );
 }

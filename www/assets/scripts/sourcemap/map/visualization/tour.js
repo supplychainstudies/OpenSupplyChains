@@ -19,6 +19,7 @@ Sourcemap.MapTour.prototype.init = function() {
     this.interval = this.options.interval > 0 ? this.options.interval : 1000;
     this.wait_interval = this.options.wait_interval > 0 ? this.options.wait_interval : 0;
     this.initEvents();
+    this.features = this.getFeatures();
     this.wait();
     Sourcemap.broadcast('map_tour:init', this);
     return this;
@@ -31,13 +32,38 @@ Sourcemap.MapTour.prototype.initEvents = function() {
         },
         "scope": this 
     });
+    var map_changes = [
+        'map:supplychain_added', 'map:supplychain_removed', 
+        'map:supplychain_updated'
+    ];
+    Sourcemap.listen(map_changes, function(evt, map) {
+        if(map === this.map) {
+            this.stop().wait();
+        }
+    }, this);
     return this;
 }
 
+Sourcemap.MapTour.prototype.getFeatures = function() {
+    var map = this.map;
+    var features = [];
+    for(var k in map.supplychains) {
+        var sc = map.supplychains[k];
+        var g = new Sourcemap.Supplychain.Graph(map.supplychains[k]);
+        var order = g.depthFirstOrder();
+        order = order.concat(g.islands());
+        for(var i=0; i<order.length; i++)
+            features.push(map.mapped_features[order[i]]);
+    }
+    return features;
+}
+
 Sourcemap.MapTour.prototype.wait = function() {
+    this.stop();
     if(this.wait_interval) {
-        this.stop();
         this.timeout = setTimeout($.proxy(this.start, this), this.wait_interval*1000);
+    } else {
+        this.start();
     }
     return this;
 }

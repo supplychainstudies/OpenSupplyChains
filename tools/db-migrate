@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. activate.sh "${1}"
+source "env/${1}"
 
 echo
 

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# env
+export SMAPENV="dev"
+
 # db
 export SMAP_DB="smap"
 export SMAP_DBUSER="smap"

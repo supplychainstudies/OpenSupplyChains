@@ -1,3 +1,5 @@
+/* General Stylesheet   ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> */
+
 html,body,div,span,object,iframe,
 h1,h2,h3,h4,h5,h6,p,blockquote,pre,
 abbr,address,cite,code,
@@ -31,8 +33,9 @@ body,select,input,textarea{color:#444;font-family:Helvetica,Arial,sans-serif;*/}
 h1,h2,h3,h4,h5,h6{font-weight:bold;}
 html{overflow-y:scroll;}
 a:hover,a:active{outline:none;}
-a,a:active,a:visited{color:#607890;}
-a:hover{color:#036;}
+a,a:active{color:blue;}
+a:visited {color:darkblue;}
+a:hover{color:purple;}
 ul,ol{margin-left:1.8em;}
 ol{list-style-type:decimal;}
 nav ul,nav li{margin:0;}
@@ -67,9 +70,9 @@ button{width:auto;overflow:visible;}
 .visuallyhidden{position:absolute !important;clip:rect(1px 1px 1px 1px);/* IE6,IE7 */
 clip:rect(1px,1px,1px,1px);}
 .invisible{visibility:hidden;}
-.clearfix:before,.clearfix:after{content:"\0020";display:block;height:0;visibility:hidden;}
-.clearfix:after{clear:both;}
-.clearfix{zoom:1;}
+.clear:before,.clear:after{content:"\0020";display:block;height:0;visibility:hidden;}
+.clear:after{clear:both;}
+.clear{zoom:1;}
 @media all and (orientation:portrait){}
 @media all and (orientation:landscape){}
 @media screen and (max-device-width:480px){}
@@ -85,3 +88,4 @@ tr,img{page-break-inside:avoid;}
 p,h2,h3{orphans:3;widows:3;}
 h2,h3{page-break-after:avoid;}
 }
+/* General Stylesheet   ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> */

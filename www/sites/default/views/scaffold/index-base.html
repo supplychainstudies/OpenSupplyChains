@@ -19,15 +19,18 @@
 
 
 
-    <script src="js/libs/modernizr-1.6.min.js"></script>
-    <script src="js/libs/less-1.0.40.min.js"></script>
+    <script type="text/javascript" src="js/libs/modernizr-1.6.min.js"></script>
+    <script type="text/javascript" src="js/libs/less-1.0.40.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
 
 </head>
 
-<body id="supplychain">
+<body id="supplychain" class="fixed">
+    <div id="top-notice">
+        Cool!
+    </div>
     <div id="branding">
         <header id="masthead">
             <h1>Sourcemap</h1>
@@ -74,8 +77,9 @@
             </ul>
             <div id="search"><input id="search-field" type="search" results="0" placeholder="Search" /></div>
         </nav>
+        <div class="clear"></div>
+        
     </div> <!-- branding -->
-    <div class="clear"></div>
    
     <div id="bar">
         <nav id="page-navigation">
@@ -86,49 +90,92 @@
     <div id="content">          
          <article>
              <header>
-                 <h2>Article title</h2>
+                 <h1>Article title</h1>
                  <p>Article metadata</p>
              </header>
-             <p>content...</p>
-             
+             <div class="article-content">
+                 <h1>HTML Ipsum Presents</h1>
+
+                 <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+
+                 <h2>Header Level 2</h2>
+
+                 <ol>
+                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                    <li>Aliquam tincidunt mauris eu risus.</li>
+                 </ol>
+
+                 <blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></blockquote>
+
+                 <h3>Header Level 3</h3>
+
+                 <ul>
+                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                    <li>Aliquam tincidunt mauris eu risus.</li>
+                 </ul>
+
+                 <pre><code>
+                 #header h1 a { 
+                 	display: block; 
+                 	width: 300px; 
+                 	height: 80px; 
+                 }
+                 </code></pre>
+             </div>
              <footer>Article footer</footer>
          </article>
          <aside id="sidebar">
              <h3>Sidebar title</h3>
-             <p>Sidebar content</p>
+             <p>
+                 Sidebar content...
+                 <h3>Header Level 3</h3>
+                 <ul>
+                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                    <li>Aliquam tincidunt mauris eu risus.</li>
+                 </ul>
+                 <ul>
+                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                    <li>Aliquam tincidunt mauris eu risus.</li>
+                 </ul>
+                 <ul>
+                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                    <li>Aliquam tincidunt mauris eu risus.</li>
+                 </ul>
+            </p>
          </aside>
          <nav id="secondary-navigation">
              Secondary nav
          </nav>
     </div>
     <footer id="footer">
-        <div id="footer-callouts">
-            <div class="footer-box">
-                <h3>Contact us</h3>
-                <p>Interested in helping? Partnering? Just have some questions? Contact us at <a>info[at]sourcemap[dot]org</a>.</p> 
-            </div>
-            <div class="footer-box">               
-                <h3>Creative Commons</h3>
-                <p>All of our user generated content (maps, comments, etc.) is licensed <a href="">BY-SA Creative commons 3.0</a>.</p> 
-            </div>
-            <div class="footer-box">               
-                <h3>Open Data</h3>
-                <p>Sourcemap is committed to open data. All of our data is <a href="">PDDL (1.0)</a> and available at <a href="">data.sourcemap.org</a>.</p> 
-            </div>
-            <div class="clear"></div>
-            <p>Sourcemap (TM). For more information on how we use your data, read our <a href="">privacy policy</a>. For more information on how you can use the site, read our <a href="">terms of service</a>.</p>
-        </div>
-        <div id="footer-about">
-            <h3>About Sourcemap</h3>
-            <p>We built Sourcemap so that everyone can access the information needed to make sustainable choices and share them with the world. The project is free, opensource, and volunteer driven. For more news, check the <a href="">Sourcemap Blog</a>.</p>
-        </div>    
-        <div class="clear"></div>
-    </footer>
-</body>
+         <div id="footer-content">
+         <div id="footer-callouts">
+             <div class="footer-box">
+                 <h3>Contact us</h3>
+                 <p>Interested in helping? Partnering? Just have some questions? Contact us at <a>info[at]sourcemap[dot]org</a>.</p> 
+             </div>
+             <div class="footer-box">               
+                 <h3>Creative Commons</h3>
+                 <p>All of our user generated content (maps, comments, etc.) is licensed <a href="">BY-SA Creative commons 3.0</a>.</p> 
+             </div>
+             <div class="footer-box">               
+                 <h3>Open Data</h3>
+                 <p>Sourcemap is committed to open data. All of our data is <a href="">PDDL (1.0)</a> and available at <a href="">data.sourcemap.org</a>.</p> 
+             </div>
+             <div class="clear"></div>
+             <p>Sourcemap (TM). For more information on how we use your data, read our <a href="">privacy policy</a>. For more information on how you can use the site, read our <a href="">terms of service</a>.</p>
+         </div>
+         <div id="footer-about">
+             <h3>About Sourcemap</h3>
+             <p>We built Sourcemap so that everyone can access the information needed to make sustainable choices and share them with the world. The project is free, opensource, and volunteer driven. For more news, check the <a href="">Sourcemap Blog</a>.</p>
+         </div>    
+         <div class="clear"></div>
+         </div>
+     </footer>
 
   
-  <script src="js/plugins.js"></script>
-  <script src="js/script.js"></script>
+  <script type="text/javascript" src="js/plugins.js"></script>
+  <script type="text/javascript" src="js/script.js"></script>
   
   
   <!--[if lt IE 7 ]>

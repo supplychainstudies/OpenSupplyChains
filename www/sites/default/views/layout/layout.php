@@ -21,10 +21,13 @@
 </head>
 
 <body id="supplychain" class="fixed">
+    <div id="top-notice"></div>
     <div id="branding">
+        <a href="">        
         <header id="masthead">
             <h1>Sourcemap</h1>
         </header>
+        </a>
         <nav id="main-navigation">
             <ul class="nav">
                 <li class="register-link"><a href="">Join us</a> or <a href="">Log in</a></li>          
@@ -80,27 +83,20 @@
     <div id="content">          
          <article>
              <header>
-                <p><?php 
-                    if(Breadcrumbs::instance()->get()): ?>
-                        <?= Breadcrumbs::instance()->render() ?>
-                    <?php endif; ?>
-                </p>
-                <?php if(Message::instance()->get()): ?>
-                    <?= Message::instance()->render() ?>
-                <?php endif; ?>
-                 
+                <h1><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h1>                 
+                <p><? Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+                <p><? Message::instance()->get() ? Message::instance()->render() : false ?></p>
              </header>
-             <p><?= $content ?></p>
-             
+             <div class="article-content">             
+                 <p><?= $content ?></p>
+             </div>
              <footer></footer>
          </article>
          <aside id="sidebar">
-             <h3></h3>
-             <p></p>
+             <h3>Sidebar</h3>
+             <p>...</p>
          </aside>
-         <nav id="secondary-navigation">
-        
-         </nav>
+         <nav id="secondary-navigation"></nav>
     </div>
     <footer id="footer">
         <div id="footer-content">
@@ -127,14 +123,26 @@
         <div class="clear"></div>
         </div>
     </footer>
-</body>
-
+    <div class="overlay">
+        <div class="dialog">
+            <header class="dialog-header error">
+            <h3>This is a dialog title</h3>
+            <div class="close">X</div>
+            </header>
+            <div class="dialog-content">
+                This is some dialog content
+            </div>
+            <footer>
+                <button class="button">Done</button> 
+            </footer>
+        </div>                
+    </div>
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
-
   
   <!--[if lt IE 7 ]>
     <script src="js/libs/dd_belatedpng.js"></script>
     <script> DD_belatedPNG.fix('img, .png_bg'); 
   <![endif]-->
   
+</body>
 </html>

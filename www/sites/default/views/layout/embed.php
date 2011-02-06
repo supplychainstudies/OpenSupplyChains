@@ -22,7 +22,7 @@
 
 </head>
 
-<body id="supplychain" style="height: 100%; width: 100%;">
+<body id="supplychain">
 <?= $content ?>
 </body>
 

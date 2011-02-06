@@ -24,9 +24,11 @@
 
 <body id="supplychain">
     <div id="branding">
+        <a href="">        
         <header id="masthead">
             <h1>Sourcemap</h1>
         </header>
+        </a>
         <nav id="main-navigation">
             <ul class="nav">
                 <li class="register-link"><a href="">Join us</a> or <a href="">Log in</a></li>          
@@ -111,12 +113,6 @@
                     Added by <a class="user-link" href="">hock</a> and modified ten months ago.
                 </div>
                 <div class="clear"></div>
-                
-                <div id="qrcode-badge">
-                    <img class="qrcode" src="http://chart.apis.google.com/chart?chs=70x70&chf=bg,s,ffffffff&cht=qr&chl=http://www.sourcemap.org&choe=UTF-8&chld=L|0" />
-                    <div class="clear"></div>
-                </div>
-                <h4 class="clear subtitle">Description</h4>
                 <p id="supplychain-description">
                     Whats the carbon footprint of your IKEA bed? www.sourcemap.org knows: <a href="http://bit.ly/96m9uy">http://bit.ly/96m9uy</a>
                 </p>
@@ -355,6 +351,11 @@
             </div>
         
             <div id="linking-section">
+                <div id="qrcode-badge">
+                    <img class="qrcode" src="http://chart.apis.google.com/chart?chs=70x70&chf=bg,s,ffffffff&cht=qr&chl=http://www.sourcemap.org&choe=UTF-8&chld=L|0" />
+                    <div class="qrcode-about">You can share this physically with a qrcode.</div>
+                    <div class="clear"></div>
+                </div>
                 <h3>Similar Supplychains</h3>
                 <ul id="similar-supplychains">
                     <li><a href="">Ikea Product Map</a></li>
@@ -400,8 +401,20 @@
         <div class="clear"></div>
         </div>
     </footer>
-</body>
-
+    <div class="overlay">
+        <div class="dialog">
+            <header class="dialog-header error">
+            <h3>This is a dialog title</h3>
+            <div class="close">X</div>
+            </header>
+            <div class="dialog-content">
+                This is some dialog content
+            </div>
+            <footer>
+                <button class="button">Done</button> 
+            </footer>
+        </div>                
+    </div>
   
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
   

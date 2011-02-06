@@ -93,6 +93,7 @@ a:hover, a:active, a:visited, a, a:link {
     top:7px;
     right:5px;
     display:block;
+    display:none;
     width:113px;
     height:30px;
     background:url("../images/logo-green-small.png") top left no-repeat;        

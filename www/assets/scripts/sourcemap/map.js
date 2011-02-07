@@ -109,7 +109,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "Cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
-        "styleId": 1,
+        "styleId": 999,
         "wrapDateLine": true
     }));
     this.broadcast('map:base_layer_initialized', this);

@@ -74,6 +74,7 @@ Sourcemap.Map.prototype.init = function() {
 
 Sourcemap.Map.prototype.initMap = function() {
     var options = {
+        "theme": "assets/scripts/openlayers/theme/sourcemap/style.css",
         "projection": new OpenLayers.Projection("EPSG:3857"),
         "displayProjection": new OpenLayers.Projection("EPSG:4326"),
         "units": "m",

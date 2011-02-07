@@ -1,3 +1,4 @@
+// todo: finish this?
 if(window.jQuery) {
     // :match selector for jquery
     (function($){
@@ -10,15 +11,12 @@ if(window.jQuery) {
 Sourcemap = Sourcemap || {};
 // todo: make this extensible, templates, etc.
 Sourcemap.FormEditor = function(container, supplychain) {
-    this.id = Sourcemap.local_id('supplychaineditor-form');
+    this.id = Sourcemap.instance_id('supplychaineditor-form');
     if(!(container instanceof HTMLElement)) 
         throw new Error('Form-based supplychain editor requires a container.');
     this.container = container;
-    try{
-        Sourcemap.validate('supplychain', supplychain);
-    } catch(e) {
+    if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Invalid supplychain passed to form-based editor.');
-    }
     this.dialog = $('<div id="'+this.id+'-dialog"></div>').dialog({
         "modal": true, "autoOpen": false, "title": "Information"
     });
@@ -174,7 +172,7 @@ Sourcemap.FormEditor.prototype.setSupplychainAttribute = function(k, v) {
     } else {
         set = this.addSupplychainAttribute(k, v);
     }
-    if(!set) throw new Error('Could not set "'+k+'" for "'+this.supplychain.local_id+'".');
+    if(!set) throw new Error('Could not set "'+k+'" for "'+this.supplychain.instance_id+'".');
     return this;
 }
 
@@ -207,8 +205,8 @@ Sourcemap.FormEditor.prototype.addStop = function(stop) {
     var pt = new OpenLayers.Projection('EPSG:4326');
     var p = f.geometry.transform(pf, pt);
     var ll = new OpenLayers.LonLat(p.x, p.y);
-    $(this.stops_container).append('<div class="formeditor-stop" id="'+this.id+'-'+stop.local_id+'">'+
-        '<h3 class="formedit-stop-id">'+stop.local_id+'</h3>'+
+    $(this.stops_container).append('<div class="formeditor-stop" id="'+this.id+'-'+stop.instance_id+'">'+
+        '<h3 class="formedit-stop-id">'+stop.instance_id+'</h3>'+
         '<button class="rmstop">remove this stop</button>'+
         '<div class="lonlat"><span class="lat">'+ll.lat+'</span>, <span class="lon">'+ll.lon+'</span></div>'+
         '<br /><label>Move to address:</label><input type="text" class="input-text stop-moveto-v" />&nbsp;'+
@@ -220,8 +218,8 @@ Sourcemap.FormEditor.prototype.addStop = function(stop) {
         '<dl class="attributes"></dl><button class="stop-geocode">geocode</button>'+
         '<!--button class="stop-edit">edit</button--></div>'
     );
-    $('#'+this.id+'-'+stop.local_id+' > .addstopattr-form > button.addstopattr').click(
-        {'editor': this, 'stop_id': stop.local_id}, 
+    $('#'+this.id+'-'+stop.instance_id+' > .addstopattr-form > button.addstopattr').click(
+        {'editor': this, 'stop_id': stop.instance_id}, 
         function(evt) {
             var editor = evt.data.editor;
             var stop_id = evt.data.stop_id;
@@ -232,7 +230,7 @@ Sourcemap.FormEditor.prototype.addStop = function(stop) {
             $(this).parent().find('.addstopattr-v').val('');
         }
     );
-    $('#'+this.id+'-'+stop.local_id+' > .rmstop').click({'editor': this, 'stop_id': stop.local_id},
+    $('#'+this.id+'-'+stop.instance_id+' > .rmstop').click({'editor': this, 'stop_id': stop.instance_id},
         function(evt) {
             var _editor = evt.data.editor;
             var _stop_id = evt.data.stop_id;
@@ -249,7 +247,7 @@ Sourcemap.FormEditor.prototype.addStop = function(stop) {
             _editor.dialog.dialog("open");
         }
     );
-    $('#'+this.id+'-'+stop.local_id+' > .stop-moveto').click({'editor': this, 'stop_id': stop.local_id},
+    $('#'+this.id+'-'+stop.instance_id+' > .stop-moveto').click({'editor': this, 'stop_id': stop.instance_id},
         function(evt) {
             var editor = evt.data.editor;
             var _editor = editor;
@@ -290,14 +288,14 @@ Sourcemap.FormEditor.prototype.addStop = function(stop) {
     for(var k in stop.attributes) {
         this.setStopAttribute(stop.id, k, stop.attributes[k]);
     }
-    var data = {"stop_id": stop.local_id, "editor_id": this.id, "editor": this};
-    $('#'+this.id+'-'+stop.local_id+' button.stop-geocode').click(data, function(evt) {
+    var data = {"stop_id": stop.instance_id, "editor_id": this.id, "editor": this};
+    $('#'+this.id+'-'+stop.instance_id+' button.stop-geocode').click(data, function(evt) {
         var editor = evt.data.editor;
         var stop_id = evt.data.stop_id;
         var lat = parseFloat($('#'+editor.id+'-'+stop_id+' > .lonlat > .lat').text());
         var lon = parseFloat($('#'+editor.id+'-'+stop_id+' > .lonlat > .lon').text());
         var ll = new OpenLayers.LonLat(lon, lat);
-        var _stelid = evt.data.editor_id+'-'+stop.local_id;
+        var _stelid = evt.data.editor_id+'-'+stop.instance_id;
         $(this).val('working...').attr("disabled", true);
         var _editor = evt.data.editor;
         var _stop_id = evt.data.stop_id;

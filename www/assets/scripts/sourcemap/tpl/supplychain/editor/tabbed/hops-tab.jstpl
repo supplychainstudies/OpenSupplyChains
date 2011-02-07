@@ -1,0 +1,12 @@
+<h4>Stops</h4>
+<table class="sourcemap-tabbed-editor hops">
+<thead>
+<tr><th>From</th><th>To</th><th>Name</th></tr>
+</thead>
+<tbody>
+<% for(var i=0; i<this.hops.length; i++) { %>
+<%     var h = this.hops[i]; %>
+<tr><td><%= h.from_stop_id %></td><td><%= h.to_stop_id %></td><td>XXX</td></tr>
+<% } %>
+</tbody>
+</table>

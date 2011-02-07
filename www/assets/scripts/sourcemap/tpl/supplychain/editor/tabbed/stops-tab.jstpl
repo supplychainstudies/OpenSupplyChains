@@ -1,0 +1,12 @@
+<h4>Stops</h4>
+<table class="sourcemap-tabbed-editor stops">
+<thead>
+<tr><th>Latitude</th><th>Longitude</th><th>Name</th></tr>
+</thead>
+<tbody>
+<% for(var i=0; i<this.stops.length; i++) { %>
+<%     var st = this.stops[i]; %>
+<tr><td><%= st.geometry %></td><td>0.0</td><td><%= st.getLabel() %></td></tr>
+<% } %>
+</tbody>
+</table>

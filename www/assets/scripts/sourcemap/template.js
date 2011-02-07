@@ -14,7 +14,7 @@ Sourcemap.TemplateLoader.prototype.defaults = {
 }
 
 Sourcemap.TemplateLoader.prototype.init = function() {
-    this.id = Sourcemap.local_id("template_loader");
+    this.id = Sourcemap.instance_id("template_loader");
     this.defer_interval = this.options.defer_interval;
     Sourcemap.broadcast('template_loader:init', this.id);
 }
@@ -64,11 +64,27 @@ Sourcemap.load_templates = function(tpls, callback) {
     loader.load(tpls, callback);
 }
 
-Sourcemap.template = function(tpath, ucallback) {
+Sourcemap.template = function(tpath, ucallback, context, scope) {
+    // this function takes a path, callback, context and scope OR
+    // a path, target element(s) and context
+    // tpath is required
+    // ucallback is a function or a target element(s)
+    // context is the data used to evaluate the template
+    // the callback is bound to scope, if provided
     var context = context || {};
-    var ucallback = ucallback || function(str) {};
+    if(!(ucallback instanceof Function)) {
+        var __el = ucallback;
+        var __ctxt = context || window;
+        var ucallback = function(tpl, txt, thtml) {
+            $(__el).html(thtml);
+        }
+    }
+    if(scope) {
+        ucallback = $.proxy(ucallback, scope);
+    }
     Sourcemap.load_templates([tpath], function(tpl, txt, loader) {
         Sourcemap.broadcast("template:loaded", tpath, txt);
-        ucallback(tpl, txt);
+        var thtml = $('<script type="text/html">'+txt+'</script>').jqote(context);
+        ucallback(tpl, txt, thtml);
     });
 }

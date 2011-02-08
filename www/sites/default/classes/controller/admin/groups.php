@@ -102,6 +102,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	$this->request->redirect("admin/groups/");
     }
 
+
     public function action_add_member($id) {
 	
 	$post = Validate::factory($_POST);
@@ -147,5 +148,27 @@ class Controller_Admin_Groups extends Controller_Admin {
 	
 	$this->request->redirect("admin/groups/".$id);
     }
+
+
+
+        public function action_delete_member($id) {
+	
+	$post = Validate::factory($_POST);
+	$post->rule('username', 'not_empty')->filter(true, 'trim');
+	
+	if($post->check()) {
+	    $post = (object)$post->as_array();
+	 		
+	    $user = ORM::factory('user')->where('username', '=', $post->username)->find();
+	    $usergroup = ORM::factory('usergroup', $id);
+	    $user->remove('groups', $usergroup);
+		
+	} else {
+	    Message::instance()->set('Bad request.');
+	}
+	
+	$this->request->redirect("admin/groups/".$id);
+    }
+
    
 }

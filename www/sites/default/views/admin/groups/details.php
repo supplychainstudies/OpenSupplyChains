@@ -4,13 +4,13 @@
 <input type="submit" value="Add" />
 </form><br />
 
-Groupname: <?=$group_name;?><br />
-Owner: <?=$owner; ?><br />
+<strong>Groupname:</strong> <?=$group_name;?><br />
+<strong>Owner:</strong> <?=$owner; ?><br />
 <?php if(!empty($members)): ?>
-Group Members: 
-       <?php $last_member = end($members);?>
+<strong>Group Members:</strong> 
 <?php foreach ($members as $member) { ?>
-     <?= $member['username']; ?> 
-   <?php if ($member != $last_member) {?>, <?}?>
+     <form name="delete-member" method="post" action="admin/groups/<?= $group_id?>/delete_member">
+	 <?=$member['username'];?>
+     <input type="hidden" name="username" value="<?= $member['username'];?>"><input type="submit" value="delete"/></form> 
  <?php     }?><br />
  <?php endif; ?><br />

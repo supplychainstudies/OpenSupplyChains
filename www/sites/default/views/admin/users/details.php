@@ -24,7 +24,7 @@
 
        
 <?php if(count($roles) != count($all_roles)) { ?>
-   Change or add the user role:
+  <strong>Change or add the user role:</strong>
 <form name="change-role" method="post" action="admin/users/<?= $user->id?>/add_role">
 <select name="addrole">
 <?php foreach ($all_roles as $role) { ?>			
@@ -48,7 +48,7 @@
 <? } ?><br />
 
 <?php if(!empty($members)): ?>
-   Group Membership: 
+<strong>Group Membership:</strong>
        <?php $last_member = end($members);?>
 <?php foreach ($members as $member) { ?>
      <?= $member['name']; ?> 
@@ -56,8 +56,9 @@
  <?php     }?><br />
  <?php endif; ?><br />
 
+
 <?php if(!empty($owners)): ?>
-   Group Ownership: 
+  <strong>Group Ownership:</strong>
 <?php $last_owner = end($owners);?>
 <?php foreach ($owners as $owner) { ?>
      <?= $owner['name'];  ?>

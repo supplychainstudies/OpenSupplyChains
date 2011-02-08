@@ -37,8 +37,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	foreach($groups as $group) {
 	    $groups_array[$iterator]['owner'] = $group->owner->username;
 	    $iterator++;
-	}
-	
+	}	
 
         $this->template->page_links = $pagination->render();
         $this->template->offset = $pagination->offset;
@@ -49,8 +48,7 @@ class Controller_Admin_Groups extends Controller_Admin {
  
     public function action_details($id) {
 
-	$this->template = View::factory('admin/groups/details');
-	
+	$this->template = View::factory('admin/groups/details');	
 	$group = ORM::factory('usergroup', $id);
 	
 	$group_members = array();
@@ -67,6 +65,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	$this->template->owner = $owner_name;
 	$this->template->group_name = $group_name;
 	$this->template->members = $group_members;
+	$this->template->group_id = $id;
 	
 	Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Groups', 'admin/groups')
@@ -86,9 +85,14 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    $create = ORM::factory('usergroup');
 	    $name = $post->username;
 	    $userid = ORM::factory('user')->where('username', '=', $name)->find_all()->as_array(null, 'id');
-	    $create->owner_id = $userid[0];
-            $create->name= $post->groupname;
-            $create->save();
+	    if(!empty($userid)) {
+		$create->owner_id = $userid[0];
+		$create->name= $post->groupname;
+		$create->save();
+	    } else {
+		Message::instance()->set('Please enter a valid user name.');
+	    }
+            
         } elseif (strtolower(Request::$method === 'post')) {
             Message::instance()->set('Could not delete role.', Message::ERROR);
         } else {
@@ -96,6 +100,52 @@ class Controller_Admin_Groups extends Controller_Admin {
         }
         
 	$this->request->redirect("admin/groups/");
+    }
+
+    public function action_add_member($id) {
+	
+	$post = Validate::factory($_POST);
+	$post->rule('username', 'not_empty')->filter(true, 'trim');
+	$group = ORM::factory('usergroup', $id);
+	
+	$group_members = array();
+	foreach($group->members->find_all()->as_array() as $i => $user) {
+	    $group_members[] = $user->as_array();
+	}
+
+
+	// get the member names
+	$members = array();
+	foreach($group_members as $member) {
+	    $members[] = $member['username'];
+	}
+
+	// get all the user names
+	$usernames = ORM::factory('user')->find_all()->as_array(null, 'username');
+
+	if($post->check()) {
+	    $post = (object)$post->as_array();
+	    $membernames = explode(",", $post->username);
+
+	    foreach ($membernames as $name) {
+		if(in_array($name, $usernames)) {
+
+		    //check the user is already a member
+		    $name = trim($name);
+		    if(!in_array($name, $members)) {
+			$user = ORM::factory('user')->where('username', '=', $name)->find();
+			$usergroup = ORM::factory('usergroup', $id);
+			//add the object to the alias
+			$user->add('groups', $usergroup);
+		    }
+		} else {
+		    Message::instance()->set('Please enter a valid user name.');
+		}
+	    }
+
+	}
+	
+	$this->request->redirect("admin/groups/".$id);
     }
    
 }

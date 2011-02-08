@@ -22,7 +22,7 @@ Route::set('admin/collection', 'admin/<controller>')
     ));
 
 Route::set('admin/collection/action', 'admin/<controller>/<action>', array(
-	  'action' => 'create'
+	  'action' => 'create|create_group'
     ))
     ->defaults(array(
         'directory' => 'admin', 
@@ -32,7 +32,7 @@ Route::set('admin/collection/action', 'admin/<controller>/<action>', array(
 
 Route::set('admin/collection/id/action', 'admin/<controller>(/<id>(/<action>))', array(
         'id' => '\d+', 
-        'action' => 'delete_role|add_role'))
+        'action' => 'delete_role|add_role|add_member'))
     ->defaults(array(
         'directory' => 'admin', 
         'controller' => 'users', 

@@ -54,6 +54,14 @@ return array(
                 'sourcemap-core', 'google-maps', 'openlayers-cloudmade'
             )
         ),
+        'sourcemap-tabbed-edit' => array(
+            'scripts' => array(
+                'assets/scripts/sourcemap/geocode.js'
+            ),
+            'requires' => array(
+                'sourcemap-template', 'sourcemap-map'
+            )
+        ),
         'sourcemap-working' => array(
             'scripts' => array(
                 'assets/scripts/script.js'

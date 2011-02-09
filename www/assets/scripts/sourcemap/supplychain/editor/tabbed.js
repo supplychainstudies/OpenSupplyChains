@@ -10,6 +10,7 @@ Sourcemap.TabbedEditor.prototype.defaults = {
 };
 
 Sourcemap.TabbedEditor.prototype.init = function() {
+    //todo: preview link/button
     var tabsul = $(
         '<ul><li><a href="#'+this.id+'-sc">Supplychain</a></li>'+
         '<li><a href="#'+this.id+'-stops">Stops</a></li>'+
@@ -26,9 +27,14 @@ Sourcemap.TabbedEditor.prototype.init = function() {
     $(this.container).append(tabsul);
     $(this.container).append(tabels);
     $(this.container).after(dialogel);
-    $(dialogel).dialog({"modal": true});
+    $(dialogel).dialog({"modal": true, "buttons": {
+        "Save": function() {
+            $(this).dialog("close");
+        }
+    }});
     $(this.container).tabs();
     this.update();
+    this.editStop();
 }
 
 Sourcemap.TabbedEditor.prototype.update = function() {
@@ -67,4 +73,20 @@ Sourcemap.TabbedEditor.prototype.stopsTab = function() {
 
 Sourcemap.TabbedEditor.prototype.hopsTab = function() {
     return $('#'+this.id+'-hops').get(0);
+}
+
+Sourcemap.TabbedEditor.prototype.dialogEl = function() {
+    return $('#'+this.id+'-dialog').get(0);
+}
+
+Sourcemap.TabbedEditor.prototype.editStop = function(stop_id) {
+    var stop = stop_id ? this.supplychain.findStop(stop_id) : new Sourcemap.Stop()
+    Sourcemap.template('supplychain/editor/tabbed/edit-stop',
+        $.proxy(function(tpath, txt, thtml) {
+            $(this.dialogEl()).html(thtml);
+            $(this.dialogEl()).find("input.placename").geocomplete();
+            $(this.dialogEl()).dialog("open");
+        }, this),
+        stop
+    );
 }

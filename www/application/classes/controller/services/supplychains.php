@@ -18,7 +18,7 @@
             if($cached) {
                 $this->_cache_hit = true;
                 $this->response = array(
-                    'supplychain' => unserialize($cached)
+                    'supplychain' => $cached
                 );
             } else {
                 $fetched = false;
@@ -33,7 +33,7 @@
                     return $this->_not_found('Supplychain not found.');
                 }
                 try {
-                    Cache::instance()->set('supplychain-'.$id, serialize($fetched));
+                    Cache::instance()->set('supplychain-'.$id, $fetched);
                 } catch(Exception $e) {
                     //pass
                     die($e);

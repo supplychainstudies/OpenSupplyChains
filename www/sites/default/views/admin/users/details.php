@@ -37,8 +37,8 @@
       } 
       if($skip) {
 	continue;
-      }
-?><br />
+      }?>
+<br />
 					    
    <option value="<?php echo $role->name; ?>"><?php echo $role->name; ?></option>
 
@@ -51,17 +51,17 @@
 <strong>Group Membership:</strong>
        <?php $last_member = end($members);?>
 <?php foreach ($members as $member) { ?>
-     <?= $member['name']; ?> 
+     <a href="admin/groups/<?=$member['id'];?>"><?= $member['name']; ?></a>
    <?php if ($member != $last_member) {?>, <?}?>
  <?php     }?><br />
- <?php endif; ?><br />
+ <?php endif; ?>
 
 
 <?php if(!empty($owners)): ?>
   <strong>Group Ownership:</strong>
 <?php $last_owner = end($owners);?>
 <?php foreach ($owners as $owner) { ?>
-     <?= $owner['name'];  ?>
+     <a href="admin/groups/<?=$owner['id'];?>"><?= $owner['name']; ?></a>
  <?php if($owner != $last_owner) {?>, <?}?>
  <?php    }?>
      <?php endif; ?>

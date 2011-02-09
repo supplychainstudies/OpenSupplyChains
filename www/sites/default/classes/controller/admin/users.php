@@ -95,7 +95,7 @@ class Controller_Admin_Users extends Controller_Admin {
         } elseif(strtolower(Request::$method) === 'post') {
             Message::instance()->set('Invalid Password Reset.', Message::ERROR);
         }
-
+	
         Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Users', 'admin/users')
             ->add(ucwords($user->username), 'admin/users/'.$user->id);

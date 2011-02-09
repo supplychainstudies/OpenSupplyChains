@@ -19,11 +19,14 @@ class Controller_Admin_Users extends Controller_Admin {
         $items = 5;
         $offset = ($items * ($page - 1));
         $count = $user->count_all();
-        $pagination = Pagination::factory(
-            array('current_page' => array('source' => 'query_string', 'key' => 'page'),
-          'total_items' => $user->count_all(),
-          'items_per_page' => $items,
-                ));
+        $pagination = Pagination::factory(array(
+            'current_page' => array(
+                'source' => 'query_string', 
+                'key' => 'page'
+            ),
+            'total_items' => $user->count_all(),
+            'items_per_page' => $items,
+        ));
         $this->template->users = $user->order_by('username', 'ASC')
             ->limit($pagination->items_per_page)
             ->offset($pagination->offset)
@@ -74,7 +77,7 @@ class Controller_Admin_Users extends Controller_Admin {
             ->rule('password', 'max_length', array(16))
             ->rule('confirmpassword', 'not_empty')
             ->rule('confirmpassword', 'max_length', array(16))
-	    ->rule('email', 'validate::email')
+            ->rule('email', 'validate::email')
             ->filter(true, 'trim');
 
         if(strtolower(Request::$method) === 'post' && $post->check()) {
@@ -95,7 +98,7 @@ class Controller_Admin_Users extends Controller_Admin {
         } elseif(strtolower(Request::$method) === 'post') {
             Message::instance()->set('Invalid Password Reset.', Message::ERROR);
         }
-	
+        
         Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Users', 'admin/users')
             ->add(ucwords($user->username), 'admin/users/'.$user->id);
@@ -114,24 +117,24 @@ class Controller_Admin_Users extends Controller_Admin {
         $post = Validate::factory($_POST);
         $post->rule('email', 'not_empty')
             ->rule('username', 'not_empty')
-	    ->rule('email', 'validate::email')
+            ->rule('email', 'validate::email')
             ->filter(true, 'trim');
-	    
+            
         if(strtolower(Request::$method) === 'post' && $post->check()) {
             $post = (object)$post->as_array();
 
             $password = $this->_genpassword();
             $create = ORM::factory('user');
-	    $all_users = $create->find_all()->as_array(null, 'username');
-	    $all_emails = $create->find_all()->as_array(null, 'email');
-	    if(!in_array($post->username, $all_users) && !in_array($post->email, $all_emails)) {
-		$create->username = $post->username;		
-		$create->email = $post->email;
-		$create->password = $password;
-		$create->save();
-	    } else {
-		Message::instance()->set('User already exists.');
-	    }
+            $all_users = $create->find_all()->as_array(null, 'username');
+            $all_emails = $create->find_all()->as_array(null, 'email');
+            if(!in_array($post->username, $all_users) && !in_array($post->email, $all_emails)) {
+                $create->username = $post->username;                
+                $create->email = $post->email;
+                $create->password = $password;
+                $create->save();
+            } else {
+                Message::instance()->set('User already exists.');
+            }
         } elseif (strtolower(Request::$method === 'post')) {
             Message::instance()->set('Could not delete role.', Message::ERROR);
         } else {

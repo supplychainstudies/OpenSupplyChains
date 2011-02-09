@@ -178,6 +178,18 @@ Sourcemap.Stop = function(geometry, attributes) {
 }
 
 Sourcemap.Stop.prototype.getAttr = function(k, d) {
+    if(arguments.length == 1) {
+        if(this.attributes[k] !== undefined) return this.attributes[k];
+        else return undefined;
+    } else if(arguments.length > 2) {
+        for(var i=0, args=[]; i<arguments.length; args.push(arguments[i++]));
+        var d = args.pop();
+        for(var i=0; i<args.length; i++) {
+            var k = args[i];
+            if(this.attributes[k] !== undefined) return this.attributes[k];
+        }
+        return d;
+    }
     if(this.attributes[k] !== undefined) return this.attributes[k];
     else return d;
 }
@@ -204,4 +216,9 @@ Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {
     this.to_stop_id = to_stop_id;
     this.geometry = geometry;
     this.attributes = attributes ? Sourcemap.deep_clone(attributes) : {};
+}
+
+Sourcemap.Hop.prototype.getAttr = function(k, d) {
+    if(this.attributes[k] !== undefined) return this.attributes[k];
+    else return d;
 }

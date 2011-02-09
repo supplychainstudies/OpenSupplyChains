@@ -6,7 +6,7 @@
 <tbody>
 <% for(var i=0; i<this.hops.length; i++) { %>
 <%     var h = this.hops[i]; %>
-<tr><td><%= h.from_stop_id %></td><td><%= h.to_stop_id %></td><td>XXX</td></tr>
+<tr><td><%= this.findStop(h.from_stop_id).getLabel() %></td><td><%= this.findStop(h.to_stop_id).getLabel() %></td><td><%= h.getAttr("name", "unnamed") %></td></tr>
 <% } %>
 </tbody>
 </table>

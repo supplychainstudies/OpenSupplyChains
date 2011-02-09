@@ -1,12 +1,23 @@
+<![CDATA[
 <h4>Stops</h4>
 <table class="sourcemap-tabbed-editor stops">
 <thead>
-<tr><th>Latitude</th><th>Longitude</th><th>Name</th></tr>
+<tr><th></th><th>Latitude</th><th>Longitude</th><th>Location</th><th>Name</th></tr>
 </thead>
 <tbody>
 <% for(var i=0; i<this.stops.length; i++) { %>
 <%     var st = this.stops[i]; %>
-<tr><td><%= st.geometry %></td><td>0.0</td><td><%= st.getLabel() %></td></tr>
+<%     var pt = (new OpenLayers.Format.WKT()).read(st.geometry).geometry.transform(
+            new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326")
+        ); %> 
+    <tr>
+        <td class="buttons"><button class="edit">edit</button></td>
+        <td class="lat"><%= pt.y.toFixed(2) %></td>
+        <td class="lon"><%= pt.x.toFixed(2) %></td>
+        <td class="placename"><%= st.getAttr("org.sourcemap.placename", "placename", "") %></td>
+        <td classe="name"><%= st.getAttr("org.sourcemap.name", "name", "unnamed") %></td>
+    </tr>
 <% } %>
 </tbody>
 </table>
+]]>

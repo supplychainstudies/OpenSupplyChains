@@ -132,6 +132,7 @@ Sourcemap.factory = function(type, data) {
                 );
                 instance.addHop(new_hop);
             }
+            instance.owner = data.owner;
             instance.remote_id = sc.id;
             break;
         default:

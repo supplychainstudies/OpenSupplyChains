@@ -1,5 +1,6 @@
 <![CDATA[
 <h4>Supplychain - <%= this.getLabel() %></h4>
+<h5>owned by <%= this.owner.name %></h5>
 <dl>
     <dt>Stops:</dt><dd><%= this.stops.length %></dd>
     <dt>Hops:</dt><dd><%= this.hops.length %></dd>

@@ -13,12 +13,12 @@ class Model_Supplychain extends ORM {
         'format' => true
     );
 
-    public $_has_one = array(
+    public $_belongs_to = array(
         'owner' => array(
-            'model' => 'supplychain_user'
+            'model' => 'user', 'foreign_key' => 'user_id' 
         ),
         'owner_group' => array(
-            'model' => 'supplychain_usergroup'
+            'model' => 'usergroup', 'foreign_key' => 'usergroup_id'
         )
     );
 
@@ -101,6 +101,7 @@ class Model_Supplychain extends ORM {
                 from supplychain_attribute as sca
                 where sca.supplychain_id=%d", $scid
             );
+            $owner = $sc->owner;
             $sc = (object)$sc->as_array();
             $sc->attributes = new stdClass();
             $rows = $this->_db->query(Database::SELECT, $sql, true);
@@ -109,6 +110,9 @@ class Model_Supplychain extends ORM {
             }
             $sc->stops = array_values($stops);
             $sc->hops = array_values($hops);
+            $sc->owner = (object)array(
+                'id' => $owner->id, 'name' => $owner->username
+            );
         } else throw new Exception('Supplychain not found.');
         return $sc;
     }

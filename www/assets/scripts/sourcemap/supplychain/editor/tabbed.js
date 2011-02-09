@@ -20,8 +20,13 @@ Sourcemap.TabbedEditor.prototype.init = function() {
         '<div id="'+this.id+'-stops"><h3>Stops</h3></div>'+
         '<div id="'+this.id+'-hops"><h3>Hops</h3></div>'
     );
+    var dialogel = $(
+        '<div id="'+this.id+'-dialog"></div>'
+    );
     $(this.container).append(tabsul);
     $(this.container).append(tabels);
+    $(this.container).after(dialogel);
+    $(dialogel).dialog({"modal": true});
     $(this.container).tabs();
     this.update();
 }

@@ -74,6 +74,7 @@ class Controller_Admin_Users extends Controller_Admin {
             ->rule('password', 'max_length', array(16))
             ->rule('confirmpassword', 'not_empty')
             ->rule('confirmpassword', 'max_length', array(16))
+	    ->rule('email', 'validate::email')
             ->filter(true, 'trim');
 
         if(strtolower(Request::$method) === 'post' && $post->check()) {
@@ -113,15 +114,24 @@ class Controller_Admin_Users extends Controller_Admin {
         $post = Validate::factory($_POST);
         $post->rule('email', 'not_empty')
             ->rule('username', 'not_empty')
+	    ->rule('email', 'validate::email')
             ->filter(true, 'trim');
+	    
         if(strtolower(Request::$method) === 'post' && $post->check()) {
             $post = (object)$post->as_array();
+
             $password = $this->_genpassword();
             $create = ORM::factory('user');
-            $create->email = $post->email;
-            $create->username = $post->username;
-            $create->password = $password;
-            $create->save();
+	    $all_users = $create->find_all()->as_array(null, 'username');
+	    $all_emails = $create->find_all()->as_array(null, 'email');
+	    if(!in_array($post->username, $all_users) && !in_array($post->email, $all_emails)) {
+		$create->username = $post->username;		
+		$create->email = $post->email;
+		$create->password = $password;
+		$create->save();
+	    } else {
+		Message::instance()->set('User already exists.');
+	    }
         } elseif (strtolower(Request::$method === 'post')) {
             Message::instance()->set('Could not delete role.', Message::ERROR);
         } else {

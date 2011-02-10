@@ -6,6 +6,7 @@
  * @copyright  (c) Sourcemap
  * @license    http://blog.sourcemap.org/terms-of-service
  */
+
 class Controller_Admin_Supplychains extends Controller_Admin { 
  
 
@@ -32,8 +33,18 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	$supplychains_array = $supplychains->as_array(null, array('id', 'created'));
 	
 	$iterator = 0;
+	$attributes = array();
 	foreach($supplychains as $supplychain) {
 	    $supplychains_array[$iterator]['owner'] = $supplychain->owner->username;
+	    $attributes[] = $supplychain->attributes->find_all()->as_array(null, array('id', 'supplychain_id', 'key', 'value'));	
+	    $iterator++;
+	}
+	
+	$iterator = 0;
+	foreach($attributes as $attribute) {
+	    if($attribute[0]['supplychain_id'] == $supplychains_array[$iterator]['id']){
+		$supplychains_array[$iterator]['key'] = $attribute[0]['key'];
+	    }
 	    $iterator++;
 	}
 

@@ -55,4 +55,25 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             ->add('Supply Chains', 'admin/supplychains');
 
     }
+
+
+    public function action_details($id) {
+	$this->template = View::factory('admin/supplychains/details');
+	
+	$supplychain = ORM::factory('supplychain', $id);	
+
+	$stop_count = $supplychain->stops->count_all();
+	$hop_count = $supplychain->hops->count_all();
+
+	$attribute= $supplychain->attributes->find_all()->as_array(null, 'key');
+
+	$this->template->stop_count = $stop_count;
+	$this->template->hop_count = $hop_count;
+	$this->template->attribute_key = $attribute[0];
+	
+	Breadcrumbs::instance()->add('Management', 'admin/')
+            ->add('Supply Chains', 'admin/supplychains')
+            ->add(ucwords($attribute[0]), 'admin/supplychains/'.$id);
+	
+    }
 }

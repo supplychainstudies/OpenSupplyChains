@@ -33,6 +33,10 @@ class Controller_Admin_Users extends Controller_Admin {
             ->find_all()->as_array(null, array('id', 'username', 'email'));
         $this->template->page_links = $pagination->render();
         $this->template->offset = $pagination->offset;
+
+	$user_count = $user->count_all();
+
+	Message::instance()->set('Total users '.$user_count);
         Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Users', 'admin/users');
     }

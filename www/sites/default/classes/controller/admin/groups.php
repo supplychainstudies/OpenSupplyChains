@@ -42,6 +42,11 @@ class Controller_Admin_Groups extends Controller_Admin {
         $this->template->page_links = $pagination->render();
         $this->template->offset = $pagination->offset;
 	$this->template->groups = $groups_array;
+
+	$group_count = $usergroup->count_all();
+	
+	Message::instance()->set('Total groups '.$group_count);
+
         Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Groups', 'admin/groups');
     }

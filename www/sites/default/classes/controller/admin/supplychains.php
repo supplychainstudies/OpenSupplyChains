@@ -48,9 +48,14 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    $iterator++;
 	}
 
+
+	$supplychain_count = $supplychain->count_all();
+
 	$this->template->page_links = $pagination->render();
 	$this->template->supplychains = $supplychains_array;
         $this->template->offset = $pagination->offset;
+
+	Message::instance()->set('Total users '.$supplychain_count);
         Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Supply Chains', 'admin/supplychains');
 

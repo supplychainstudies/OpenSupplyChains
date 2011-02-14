@@ -79,7 +79,7 @@ define('APPPATH', realpath($application).DIRECTORY_SEPARATOR);
 define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
 define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
 // Log path
-define('LOGPATH', '/var/log/'.TKSHORTNM.'/'.APPSHORTNM.'/');
+define('LOGPATH', getenv('LOGPATH') ? getenv('LOGPATH') : '/var/log/'.TKSHORTNM.'/'.APPSHORTNM.'/');
 // Cache path
 define('CACHEPATH', getenv('CACHEPATH') ? getenv('CACHEPATH') : '/var/cache/'.TKSHORTNM.'/'.APPSHORTNM.'/');
 // Sites directory

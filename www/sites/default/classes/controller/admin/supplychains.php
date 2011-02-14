@@ -12,25 +12,24 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 
     public $layout = 'admin';
     public $template = 'admin/supplychains/list';
+    	const PAGESZ_MIN = 1;
+	const PAGESZ_MAX = 25;
+
 
     public function action_index() {
 
 	$supplychain = ORM::factory('supplychain');
-	$page = max($this->request->param('page'), 1);
-	$items = 5;
-        $offset = ($items * ($page - 1));
-        $count = $supplychain->count_all();
-        $pagination = Pagination::factory(
-            array('current_page' => array('source' => 'query_string', 'key' => 'page'),
-          'total_items' => $supplychain->count_all(),
-          'items_per_page' => $items,
-                ));
-        $supplychains = $supplychain->order_by('id', 'ASC')
-            ->limit($pagination->items_per_page)
-            ->offset($pagination->offset)
-            ->find_all();
+	
+	$limit = isset($_GET['l']) ?
+            max(self::PAGESZ_MIN, min(self::PAGESZ_MAX, (int)$_GET['l'])) :
+            self::PAGESZ_MAX;
+        $offset = isset($_GET['o']) ? (int)$_GET['o'] : 0;
 
-	$supplychains_array = $supplychains->as_array(null, array('id', 'created'));
+	$supplychains = $supplychain->order_by('id', 'ASC')
+		->offset($offset)->limit($limit)
+                ->find_all();        
+	$supplychains_array = $supplychains->as_array(null, array('id', 'created')); 
+
 	
 	$iterator = 0;
 	$attributes = array();
@@ -40,20 +39,20 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    $iterator++;
 	}
 	
+
 	$iterator = 0;
 	foreach($attributes as $attribute) {
 	    if($attribute[0]['supplychain_id'] == $supplychains_array[$iterator]['id']){
 		$supplychains_array[$iterator]['key'] = $attribute[0]['key'];
 	    }
 	    $iterator++;
-	}
-
+	} 
 
 	$supplychain_count = $supplychain->count_all();
 
-	$this->template->page_links = $pagination->render();
-	$this->template->supplychains = $supplychains_array;
-        $this->template->offset = $pagination->offset;
+	$this->template->limit = $limit;
+	$this->template->total = $supplychain_count;
+	$this->template->list = $supplychains_array;
 
 	Message::instance()->set('Total users '.$supplychain_count);
         Breadcrumbs::instance()->add('Management', 'admin/')

@@ -2,7 +2,7 @@
 <form name="edit-stop">
 <input type="hidden" name="instance" value="<%= this.instance_id %>" />
 <label for="name">Name:</label><br />
-<input class="name" type="text" name="name" value="<%= this.getAttr("org.sourcemap.name", "") %>" /><br />
+<input class="name" type="text" name="name" value="<%= this.getAttr("org.sourcemap.name", "name", "") %>" /><br />
 <label for="placename">Location:</label><br />
-<input class="placename" type="text" name="placename" value="<%= this.getAttr("org.sourcemap.placename", "") %>" />
+<input class="placename" type="text" name="placename" value="<%= this.getAttr("org.sourcemap.placename", "placename", "") %>" />
 </form>

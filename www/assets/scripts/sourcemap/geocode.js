@@ -11,6 +11,7 @@ Sourcemap.geocode = function(placename, cb) {
         $.get(url, {"placename": placename}, function(data) {
             Sourcemap.geocode_cache[placename] = data.results[0];
             for(var i=0; i<data.results.length; i++) {
+                data.results[i].lon = data.results[i].lng;
                 Sourcemap.geocode_cache[data.results[i].placename] = data.results[i];
             }
             __cb(data);

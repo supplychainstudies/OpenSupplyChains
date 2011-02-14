@@ -209,6 +209,18 @@ Sourcemap.Stop.prototype.getLabel = function() {
     return label;
 }
 
+Sourcemap.Stop.fromLonLat = function(ll, proj) {
+    var proj = proj || 'EPSG:4326';
+    var geom = new OpenLayers.Geometry.Point(ll.lon, ll.lat);
+    geom = geom.transform(
+        new OpenLayers.Projection(proj),
+        new OpenLayers.Projection('EPSG:900913')
+    );
+    var wkt = new OpenLayers.Format.WKT();
+    var stop = new Sourcemap.Stop(wkt.write(new OpenLayers.Feature.Vector(geom)));
+    return stop;
+}
+
 Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {
     this.instance_id = Sourcemap.instance_id("hop");
     this.supplychain_id = null;

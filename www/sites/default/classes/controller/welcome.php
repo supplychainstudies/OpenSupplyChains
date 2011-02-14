@@ -14,8 +14,8 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             'sourcemap-core', 'sourcemap-template', 'sourcemap-working'
         );
         $this->layout->styles = array(
-            'assets/styles/style.css', 
-            'assets/styles/sourcemap.less?v=2'
+            'sites/default/assets/styles/style.css', 
+            'sites/default/assets/styles/sourcemap.less?v=2'
         );
     }
 }

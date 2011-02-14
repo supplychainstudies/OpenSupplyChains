@@ -23,7 +23,7 @@ Sourcemap Database Installation from Scratch        #database
        make install
 
 3.  Create a database user.  You'll need to be logged in as a root database
-    user or as postgresql in order to have sufficient priveleges to complete
+    user or as postgresql in order to have sufficient privileges to complete
     this step.
 
 4.  Create a new database.  On Linux, you can do this as follows:

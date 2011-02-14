@@ -10,7 +10,7 @@
 <%     var pt = (new OpenLayers.Format.WKT()).read(st.geometry).geometry.transform(
             new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326")
         ); %> 
-    <tr>
+    <tr id="<%= st.instance_id %>">
         <td class="buttons"><button class="edit">edit</button></td>
         <td class="lat"><%= pt.y.toFixed(2) %></td>
         <td class="lon"><%= pt.x.toFixed(2) %></td>

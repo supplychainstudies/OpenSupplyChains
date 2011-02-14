@@ -62,7 +62,7 @@
 
 <target name="build-css">
     <foreach param="cssfile" absparam="cssfile_abs" target="less-compile">
-        <fileset dir="${builddir}assets/styles/">
+        <fileset dir="${builddir}">
             <include name="*.less" />
             <include name="**/*.less" />
         </fileset>

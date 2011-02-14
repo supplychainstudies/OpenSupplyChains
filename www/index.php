@@ -81,7 +81,7 @@ define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
 // Log path
 define('LOGPATH', '/var/log/'.TKSHORTNM.'/'.APPSHORTNM.'/');
 // Cache path
-define('CACHEPATH', '/var/cache/'.TKSHORTNM.'/'.APPSHORTNM.'/');
+define('CACHEPATH', getenv('CACHEPATH') ? getenv('CACHEPATH') : '/var/cache/'.TKSHORTNM.'/'.APPSHORTNM.'/');
 // Sites directory
 define('SITESPATH', realpath(dirname(APPPATH)).'/sites/');
 

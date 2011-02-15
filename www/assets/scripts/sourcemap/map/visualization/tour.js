@@ -10,13 +10,13 @@ Sourcemap.MapTour = function(map, o) {
 }
 
 Sourcemap.MapTour.prototype.defaults = {
-    "auto_init": true, "interval": 2500,
+    "auto_init": true, "interval": 2.5, // seconds
     "wait_interval": 5, // seconds
     "tour_hops": false, "tour_stops": true
 };
 
 Sourcemap.MapTour.prototype.init = function() {
-    this.interval = this.options.interval > 0 ? this.options.interval : 1000;
+    this.interval = this.options.interval > 0 ? this.options.interval * 1000 : 1000;
     this.wait_interval = this.options.wait_interval > 0 ? this.options.wait_interval : 0;
     this.initEvents();
     this.features = this.getFeatures();

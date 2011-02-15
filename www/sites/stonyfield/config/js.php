@@ -7,7 +7,7 @@ return array(
                 'assets/scripts/sourcemap/map/visualization/tour.js',
             ),
             'requires' => array(
-                'sourcemap-map'
+                'sourcemap-template', 'sourcemap-map'
             )
         )
     )

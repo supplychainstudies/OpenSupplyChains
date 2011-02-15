@@ -72,6 +72,7 @@ define('TKSHORTNM', 'sm-ivory'); // Toolkit short name, e.g. 'sm-ivory'
 define('TKLONGNM', 'Sourcemap Ivory'); // Toolkit long name, e.g. 'Sourcemap Ivory'
 define('APPSHORTNM', getenv('APPSHORTNM') === false ? 'sm-base' : getenv('APPSHORTNM')); // Application short name, e.g. 'sm-base'
 define('APPLONGNM', 'Sourcemap Base'); // Application long name, e.g. 'Sourcemap Base'
+define('SMAPSITE', getenv('SMAPSITE') ? getenv('SMAPSITE') : 'default');
 define('SITESHORTNM', getenv('SMAPSITE') ? getenv('SMAPSITE') : 'default');
 
 // Define the absolute paths for configured directories

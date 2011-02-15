@@ -3,8 +3,20 @@ class Controller_Map extends Sourcemap_Controller_Layout {
     
     public $layout = 'map';
     public $template = 'map/view';
+
+    protected function _match_alias($alias) {
+        $found = ORM::factory('supplychain_alias')
+            ->where('site', '=', SMAPSITE)
+            ->where('alias', '=', $alias)
+            ->find_all()->as_array('alias', 'supplychain_id');
+        $supplychain_id = $found ? $found[$alias] : -1;
+        return $supplychain_id;
+    }
     
     public function action_view($supplychain_id) {
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
             $current_user_id = (int)Auth::instance()->logged_in();

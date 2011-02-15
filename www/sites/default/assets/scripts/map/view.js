@@ -1,6 +1,6 @@
 $(document).ready(function() {
     Sourcemap.map_instance = new Sourcemap.Map('sourcemap-map-view');
-    var scid = new Number(window.location.href.split('/').pop());
+    var scid = supplychain_id;
     Sourcemap.loadSupplychain(scid, function(sc) {
         Sourcemap.map_instance.addSupplychain(sc);
     });

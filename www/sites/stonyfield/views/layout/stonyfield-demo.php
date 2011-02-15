@@ -63,12 +63,31 @@
 <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
 <script>
 $(document).ready(function() {
-    Sourcemap.map_instance = new Sourcemap.Map('map');
-    var scids = [34,35,37,38];
+    Sourcemap.map_instance = new Sourcemap.Map('map', {
+        "prep_stop": function(stop, ftr) {
+            ftr.attributes.size = Math.floor(Math.random()*20);
+        }
+    });
+    // todo: color sets.
+    var scids = [<?= join(',', $supplychain_ids) ?>];
+    Sourcemap.map_sc_count = scids.length;
     for(var i=0; i<scids.length; i++) { 
         var scid = scids[i];
         Sourcemap.loadSupplychain(scid, function(sc) {
             Sourcemap.map_instance.addSupplychain(sc);
+            if(!(--Sourcemap.map_sc_count)) {
+                var map = Sourcemap.map_instance;
+                var features = [];
+                for(var k in map.supplychains) {
+                    var sc = map.supplychains[k];
+                    var g = new Sourcemap.Supplychain.Graph(map.supplychains[k]);
+                    var order = g.depthFirstOrder();
+                    order = order.concat(g.islands());
+                    for(var i=0; i<order.length; i++)
+                        features.push(map.mapped_features[order[i]]);
+                }
+                var tour = new Sourcemap.MapTour(map, {"features": features});
+            }
         });
     }
 });

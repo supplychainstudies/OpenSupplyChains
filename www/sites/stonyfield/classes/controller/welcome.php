@@ -12,6 +12,6 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             'stonyfield-embed', 
             'sourcemap-map'
         );
-        $this->layout->supplychain_ids = array(44);
+        $this->layout->supplychain_ids = array(50);
     }
 }

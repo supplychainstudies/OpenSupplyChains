@@ -52,6 +52,7 @@
         border: 1px solid #333 !important;
         color: #333;
         font-family: "Palatino", "Georgia", serif;
+        padding: 1em;
     }
     .olPopup h4, h5, a {
         margin: 0;
@@ -59,9 +60,11 @@
     }
     .olPopup h5 {
         font-weight: normal;
+        margin-bottom: .25em;
     }
     .olPopup a {
         color: #525b0c;
+        color: #362a76;
         font-family: "Helvetica", "Arial", sans-serif;
         font-size: .8em;
     }
@@ -69,7 +72,7 @@
         color: #333;
         font-family: "Palatino", "Georgia", serif;
     }
-    #dialog h2, #dialog h3 {
+    #dialog h2, #dialog h3, #dialog h4 {
         margin: 0;
         padding: 0;
     }
@@ -83,6 +86,25 @@
     }
     #dialog h3 .placename {
         font-weight: bold;
+        padding-top: 0;
+    }
+    #dialog a {
+        border: none;
+        outline: none;
+    }
+    #dialog p {
+        padding: 0;
+        margin: 1em 0 1em 0;
+        font-family: "Helvetica", "Arial", sans-serif;
+        font-size: .9em;
+    }
+    #dialog .fun-fact {
+        padding: 0;
+        padding-top: 1em;
+        font-style: italic;
+    }
+    #dialog .fun-fact h4 {
+        border-bottom: 1px solid #ccc;
     }
 </style>
 </head>
@@ -95,7 +117,6 @@
     </div>
     <div class="clear">&nbsp;</div>
     <div id="foot">
-        <a href="http://sourcemap.org"><img src="assets/images/logo-green.png" /></a>
         <div class="clear">&nbsp;</div>
     </div>
 </div>

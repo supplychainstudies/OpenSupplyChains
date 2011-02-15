@@ -1,6 +1,11 @@
 <h2><%= this.attributes.name %></h2>
 
 <h3>from <span class="placename"><%= this.attributes["org.sourcemap.placename"] %></span></h3>
+
+<% if(this.getAttr("justification", false)) { %>
+<p><%= this.getAttr("justification") %></p>
+<% } %>
+
 <% if(this.getAttr("vimeo_link", false)) { %>
 <p>&raquo;<a class="video vimeo" target="_blank" href="<%= this.getAttr("vimeo_link") %>"><%= this.getAttr("vimeo_title", "Vimeo Video") %></a></p>
 <iframe src="http://player.vimeo.com/video/<%= (this.getAttr("vimeo_link").match(/\/(\d+)$/))[1] %>?title=0&amp;byline=0&amp;portrait=0" width="400" height="230" frameborder="0"></iframe>
@@ -12,11 +17,9 @@
 <iframe title="YouTube video player" width="480" height="390" src="http://www.youtube.com/embed/<%= (this.getAttr("youtube_link").match(/v=(.+)$/))[1] %>" frameborder="0" allowfullscreen></iframe>
 <% } %>
 
-<% if(this.getAttr("justification", false)) { %>
-<p><%= this.getAttr("justification") %></p>
-<% } %>
-
 <% if(this.getAttr("fun_fact", false)) { %>
-<h4>Fun Fact</h4>
-<%= this.getAttr("fun_fact") %>
+<div class="fun-fact">
+<h4>Fun Fact:</h4>
+<p><%= this.getAttr("fun_fact") %></p>
+</div>
 <% } %>

@@ -22,7 +22,7 @@ Sourcemap.Map.prototype.defaults = {
     "cloudmade_tiles": true, "popups": true,
     "stop_popups": true, "hop_popups": true,
     "arrow_popups": true, "popup_width": 200,
-    "popup_height": 60,
+    "popup_height": 90,
     "draw_hops": true, "hops_as_arcs": false,
     "hops_as_bezier": true, "arrows_on_hops": true,
     "stop_style": {

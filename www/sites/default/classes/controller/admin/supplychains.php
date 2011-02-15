@@ -7,6 +7,7 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 
+
 class Controller_Admin_Supplychains extends Controller_Admin { 
  
 
@@ -71,10 +72,56 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 
 	$attribute= $supplychain->attributes->find_all()->as_array(null, 'key');
 
+	$alias = $supplychain->alias->find_all()->as_array(null, array('site', 'alias'));
+
 	$this->template->stop_count = $stop_count;
 	$this->template->hop_count = $hop_count;
 	$this->template->attribute_key = $attribute[0];
+	$this->template->alias = $alias;
+
+
+	//create an alias
+	$post = Validate::factory($_POST);
+	$post->rule('site', 'not_empty')
+	    ->rule('alias', 'not_empty')
+	    ->filter(true, 'trim');
 	
+	if(strtolower(Request::$method) === 'post' && $post->check()) {
+	    $check = false;
+	    $post = (object)$post->as_array();
+
+	    $site_added = $post->site;
+	    $alias_added = $post->alias;
+	    
+	    $supplychain = ORM::factory('supplychain')
+		->where('id', '=', $id)
+		->find();
+	
+	    $alias = $supplychain->alias->find_all()->as_array(null, array('site', 'alias'));
+
+	    $alias_names = array();
+	    $site_names = array();
+	    
+	    // check if the alias already exists, if not add new alias
+	    foreach($alias as $alias_array) {	
+		$alias_names[] = $alias_array['alias']; 
+		$site_names[] = $alias_array['site']; 
+
+	    }
+	    if((!in_array($alias_added, $alias_names) && (!in_array($site_added, $site_names)))) {
+		$supplychain_alias = ORM::factory('supplychain_alias');
+		$supplychain_alias->supplychain_id = $id;
+		$supplychain_alias->site = $site_added;
+		$supplychain_alias->alias = $alias_added;
+		$supplychain_alias->save();
+		
+	    } else {
+		Message::instance()->set('Alias and site already exist.');
+	    }
+	    
+	    $this->request->redirect("admin/supplychains/".$id);
+		
+	}
 	Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Supply Chains', 'admin/supplychains')
             ->add(ucwords($attribute[0]), 'admin/supplychains/'.$id);

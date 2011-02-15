@@ -46,6 +46,9 @@ class Controller_Map extends Sourcemap_Controller_Layout {
     }
 
     public function action_static($supplychain_id) {
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
             $current_user_id = (int)Auth::instance()->logged_in();
@@ -77,6 +80,9 @@ class Controller_Map extends Sourcemap_Controller_Layout {
     }
 
     public function action_embed($supplychain_id) {
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
             $current_user_id = (int)Auth::instance()->logged_in();

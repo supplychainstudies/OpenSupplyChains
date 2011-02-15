@@ -68,6 +68,8 @@ Sourcemap.Map.prototype.init = function() {
     this.mapped_features = {};
     this.stop_features = {}; // dicts of stop ftrs keyed by parent supplychain
     this.hop_features = {}; // dicts of hop ftrs keyed by parent supplychain
+    this.prepareStopFeature = this.options.prep_stop ? this.options.prep_stop : false;
+    this.prepareHopFeature = this.options.prep_hop ? this.options.prep_stop : false;
     this.broadcast('map:initialized', this);
     return this;
 }

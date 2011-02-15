@@ -29,14 +29,14 @@ Sourcemap.Map.prototype.defaults = {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
-            "strokeWidth": 2,
+            "strokeWidth": 1,
             "strokeColor": "#fff",
             "fontColor": "#eee",
             "fontSize": "${size}",
             "fillOpacity": 0.8
         },
         "select": {
-            "fillColor": "#fff",
+            "fillColor": "#362a76",
             "fillOpacity": 1.0,
             "strokeColor": "${color}"
         }
@@ -70,7 +70,8 @@ Sourcemap.Map.prototype.init = function() {
     this.stop_features = {}; // dicts of stop ftrs keyed by parent supplychain
     this.hop_features = {}; // dicts of hop ftrs keyed by parent supplychain
     this.prepareStopFeature = this.options.prep_stop ? this.options.prep_stop : false;
-    this.prepareHopFeature = this.options.prep_hop ? this.options.prep_stop : false;
+    this.prepareHopFeature = this.options.prep_hop ? this.options.prep_hop : false;
+    this.preparePopup = this.options.prep_popup ? this.options.prep_popup : false;
     this.broadcast('map:initialized', this);
     return this;
 }
@@ -291,12 +292,13 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         new_popup.hide();
     }
     if(this.prepareStopFeature instanceof Function) {
-        this.prepareStopFeature(stop, new_feature);
+        this.prepareStopFeature.call(this, stop, new_feature);
     }
     // save references to features
     this.mapped_features[stop.instance_id] = new_feature;
     this.stop_features[scid][stop.instance_id] = {"stop": new_feature};
     if(new_popup) {
+        if(this.preparePopup instanceof Function) this.preparePopup.call(this, stop, new_feature, new_popup);
         this.map.addPopup(new_popup);
         this.stop_features[scid][stop.instance_id].popup = new_popup;
     }
@@ -356,9 +358,13 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(new_arrow) {
         this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].arrow = new_arrow;
         if(new_popup) {
+            if(this.preparePopup instanceof Function) this.preparePopup.call(this, hop, new_feature, new_popup);
             this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].popup = new_popup;
             this.map.addPopup(new_popup);
         }
+    }
+    if(this.prepareHopFeature instanceof Function) {
+        this.prepareHopFeature.call(this, hop, new_feature);
     }
     this.getHopLayer(scid).addFeatures([new_feature]);
     if(new_arrow)

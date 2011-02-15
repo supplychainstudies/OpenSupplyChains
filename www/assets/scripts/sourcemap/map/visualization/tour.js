@@ -70,6 +70,8 @@ Sourcemap.MapTour.prototype.wait = function() {
 
 Sourcemap.MapTour.prototype.start = function() {
     Sourcemap.broadcast('map_tour:start', this);
+    for(var i=0; i<this.features.length; i++)
+        this.map.controls.select.unselect(this.features[i]);
     this.next();
     return this;
 }

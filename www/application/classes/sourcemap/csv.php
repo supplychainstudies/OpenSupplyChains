@@ -70,10 +70,12 @@ class Sourcemap_Csv {
                     switch($c) {
                         case '"':
                             $b .= $c;
+                            $st = self::FQUO;
                             break;
                         default:
                             $b .= '\\';
                             $b .= $c;
+                            $st = self::FQUO;
                             break;
                     }
                     break;

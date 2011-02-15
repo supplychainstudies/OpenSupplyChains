@@ -63,6 +63,7 @@
 <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
 <script>
 $(document).ready(function() {
+    OpenLayers.Popup.OPACITY = 0.7;
     Sourcemap.map_instance = new Sourcemap.Map('map', {
         "prep_stop": function(stop, ftr) {
             ftr.attributes.size = Math.floor(Math.random()*20);
@@ -86,7 +87,12 @@ $(document).ready(function() {
                     for(var i=0; i<order.length; i++)
                         features.push(map.mapped_features[order[i]]);
                 }
-                var tour = new Sourcemap.MapTour(map, {"features": features});
+                Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features});
+                $(Sourcemap.map_instance.map.div).mouseup(function() {
+                    for(var i=0; i<Sourcemap.map_tour.features; i++)
+                        Sourcemap.map_instance.controls.select.unselect(Sourcemap.map_tour.features[i]);
+                    Sourcemap.map_tour.wait();
+                });
             }
         });
     }

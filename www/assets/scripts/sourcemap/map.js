@@ -29,15 +29,16 @@ Sourcemap.Map.prototype.defaults = {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
-            "strokeWidth": 0,
-            "strokeColor": "#072",
+            "strokeWidth": 2,
+            "strokeColor": "#fff",
             "fontColor": "#eee",
             "fontSize": "${size}",
             "fillOpacity": 0.8
         },
         "select": {
-            "fillColor": "#050",
-            "fillOpacity": 1.0
+            "fillColor": "#fff",
+            "fillOpacity": 1.0,
+            "strokeColor": "${color}"
         }
     }, 
     "hop_style": {

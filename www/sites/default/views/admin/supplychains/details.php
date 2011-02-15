@@ -13,7 +13,7 @@
 <?php if(!empty($attribute_key)): ?>
 <strong>Attribute:</strong> <?=$attribute_key;?> 
  <?php endif;?><br />
-
+ <?php if(!empty($alias)): ?>
 <table>
 <tr>
 <th>Site</th>
@@ -21,11 +21,14 @@
 </tr>
 <?php foreach($alias as $alias_name): ?>
 <tr>
-<td><?=$alias_name['site'];?></td>
-<td><?=$alias_name['alias'];?></td>
+<form name="delete-alias" method="post" action="admin/supplychains/<?= $alias_name['supplychain_id']?>/delete_alias">
+<td><?=$alias_name['site'];?><input type="hidden" name="site" value="<?=$alias_name['site'];?>"></td>
+<td><?=$alias_name['alias'];?><input type="hidden" name="alias" value="<?=$alias_name['alias'];?>"></td>
+<td><input type ="submit" value="delete" /></form></td>
 </tr>
 <?php endforeach;?>
 </table> 
+<?php endif;?>
 
 
 

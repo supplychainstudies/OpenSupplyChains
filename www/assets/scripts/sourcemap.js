@@ -29,9 +29,9 @@ Sourcemap.deep_clone = function(o) {
             var r = new o.constructor(o.getTime());
         } else if(o instanceof RegExp) {
             var r = new o.constructor(o.toString());
-        } else if(o instanceof HTMLElement) {
+        } /*else if(o instanceof HTMLElement) {
             var r = o.cloneNode();
-        } else if(o) {
+        }*/ else if(o) {
             var r = o.constructor ? new o.constructor() : {};
             for(var k in o) {
                 r[k] = Sourcemap.deep_clone(o[k]);

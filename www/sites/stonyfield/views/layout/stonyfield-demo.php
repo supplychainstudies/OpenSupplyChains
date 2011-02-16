@@ -160,14 +160,6 @@ $(document).ready(function() {
         "prep_popup": function(st, ftr, pop) {
             var html = '<h4>'+st.getAttr("name", st.getLabel())+'</h4>';
             html += '<h5>from <span class="placename">'+st.getAttr("org.sourcemap.placename")+'</span></h5>';
-            /*if(st.getAttr("vimeo_link", false)) html += '<p><a href="'+st.getAttr("vimeo_link")+'">'+st.getAttr("vimeo_title", "Vimeo Video")+"</a>";
-            if(st.getAttr("youtube_link", false)) {
-                var ytlnk = st.getAttr("youtube_link");
-                var vid = ytlnk.match(/v=(.+)$/);
-                if(vid) vid = vid[1];
-                html += '<p><a href="'+st.getAttr("youtube_link")+'">'+st.getAttr("youtube_title", "Youtube Video")+"</a><br />";
-                html += '<img src="http://img.youtube.com/vi/'+vid+'/2.jpg" /><br />';
-            }*/
             html += '&raquo;<a href="javascript: Sourcemap._showDialog(\''+ftr.attributes.supplychain_instance_id+'\',\''+st.instance_id+'\');">View details</a>';
             pop.setContentHTML(html);
         }

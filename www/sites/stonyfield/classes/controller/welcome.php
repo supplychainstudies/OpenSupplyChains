@@ -12,6 +12,13 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             'stonyfield-embed', 
             'sourcemap-map'
         );
-        $this->layout->supplychain_ids = array(50);
+        $alias = ORM::factory('supplychain_alias')
+            ->where('site', '=', 'stonyfield')
+            ->where('alias', '=', 'yogurt')
+            ->find_all()
+            ->as_array('alias', 'supplychain_id');
+        $scids = array();
+        if($alias) $scids[] = $alias['yogurt'];
+        $this->layout->supplychain_ids = $scids;
     }
 }

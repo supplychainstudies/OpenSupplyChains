@@ -1,0 +1,104 @@
+html {
+    overflow:hidden;
+    width:100%;
+    height:100%;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body {
+    /*width:560px;height:312px;*/
+    position:relative;
+    width:100%;
+    height:100%;
+}
+#map {
+    width:100%;
+    height:100%;    background:url("http://staticmaps.cloudmade.com/8ee2a50541944fb9bcedded5165f09d9/staticmap?bbox=51.35,-0.05,51.45,0.05&size=700x600");
+    
+}
+a:hover, a:active, a:visited, a, a:link {
+    color:#009027;
+    text-decoration:none;
+}
+#info-pane {
+    display:none;
+    position:absolute;
+    top:0; left:0;
+    background:#fff;
+    font-size:1.4em;
+    color:eee;
+    z-index:10;
+    width:96%;
+    height:96%;
+    margin:2%;
+    border-right:1px solid #ccc;  
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+}
+#info {
+    padding:20px;
+    position:relative;
+}
+#info-close {
+    font-weight:bold;
+    position:absolute;
+    top:5px;
+    right:5px;
+    cursor:pointer;
+}
+#embed-overview {
+    border-bottom:5px solid #009027;
+    font-size:1.4em;
+    position:absolute;
+    top:0;
+    left:0;
+    display:block;
+    color:#aaa;
+    padding:5px 0;
+    width:100%;
+    background:#fff;
+}
+.user-avatar {
+    margin: 0 10px 0 0;
+    float:left;
+    border:2px solid #009027;
+    border-left:0;
+}
+#embed-meta {
+    font-size:0.6em;
+}
+#embed-actions {
+    position:absolute;
+    top:100px;
+    right:5px;
+}
+#embed-actions li {
+    font-size:0;
+    cursor:pointer;
+    display:block;
+    -webkit-border-radius:8px;
+    margin:5px 0;
+    padding:5px;
+    border:2px solid #fff;
+    background:rgba(255,255,255,0.6);
+}
+#embed-actions li:hover {
+    background-color:#C9FF23;
+    color:#333;
+}
+#embed-actions li .icon {
+    background:url("../images/favorite-button-green.png");
+    background-position: 0 0; width: 32px; height: 31px;
+    margin: 0 auto;
+}
+#embed-actions li:hover .icon {
+    background-position: 0 -81px; width: 32px; height: 31px;   
+}
+#branding-link {
+    position:absolute;
+    top:7px;
+    right:5px;
+    display:block;
+    width:113px;
+    height:30px;
+    background:url("../images/logo-green-small.png") top left no-repeat;        
+}

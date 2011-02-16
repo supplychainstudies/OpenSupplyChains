@@ -3,7 +3,8 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
     public $layout = 'stonyfield-demo';
     public $template = 'welcome';
 
-    public function action_index($scalias) {
+    public function action_index($scalias=null) {
+        if(is_null($scalias) || is_empty($scalias)) $scalias = 'yogurt';
         $this->layout->styles = array(
             'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery-ui.css'
         );

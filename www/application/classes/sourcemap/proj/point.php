@@ -19,7 +19,7 @@ class Sourcemap_Proj_Point {
     }
 
     public function __toString() {
-        return sprintf("x=%f,y=%f,z=%f", $this->x, $this->y);
+        return sprintf("x=%f,y=%f,z=%f", $this->x, $this->y, $this->z);
     }
 
     public function toGeometry() {

@@ -27,7 +27,7 @@
         height: 88px;
         background-image: url("sites/stonyfield/assets/images/stonyfield-demo-banner.png");
     }
-    #content, #map {
+    #map, .tabs-map {
         min-height: 400px;
         height: 600px;
         width: 100%;
@@ -71,6 +71,7 @@
     #dialog {
         color: #333;
         font-family: "Palatino", "Georgia", serif;
+        font-family: "Helvetica", "Arial", sans-serif;
     }
     #dialog h2, #dialog h3, #dialog h4 {
         margin: 0;
@@ -79,6 +80,7 @@
     #dialog h2 {
         font-size: 1.8em;
         border-bottom: 1px solid #bbb;
+        color: darkgreen;
     }
     #dialog h3 {
         font-size: 1.2em;
@@ -106,6 +108,44 @@
     #dialog .fun-fact h4 {
         border-bottom: 1px solid #ccc;
     }
+
+    .ui-dialog-titlebar {
+        background: none;
+        border: none;
+    }
+
+    .ui-resizable-handle, .ui-resizable-handle * {
+        background: none;
+    }
+
+    /* hock */
+    .olPopup {
+        border:1px solid #fff !important;
+        height:90px !important; 
+        background:#fff !important; 
+        padding:5px 0 5px 5px !important; 
+        border:none !important; 
+        font-family:Helvetica, Arial, sans-serif !important;
+        position:relative;
+    } 
+    .olPopupContent {
+        width:215px !important;
+        background:#fff; 
+        margin-right:5px;
+    } 
+    .olPopupContent a { 
+        display:block;
+        text-align:center; -moz-border-radius:4px; -webkit-border-radius:4px;
+        padding:5px; background:#eee;
+    } 
+    .olPopupCloseBox {display:none;} 
+    .olPopup h4 {color:darkgreen;}
+    ul.map-nav { width: 100%; background-color: white; margin: 0; padding: 0;}
+    ul.map-nav li { display: inline; padding: .25em;}
+    ul.map-nav li a { color: black; }
+    ul.map-nav li.dairy { background-color: #60cb59; }
+    ul.map-nav li.sweeteners { background-color: #f7c370; }
+    ul.map-nav li.other { background-color: #70d0f8; }
 </style>
 </head>
 <body>
@@ -124,22 +164,28 @@
 <script>
 $(document).ready(function() {
 
+
     // change default template path
     Sourcemap.TPL_PATH = "sites/stonyfield/assets/scripts/tpl/";
 
-    // new map instance with custom stop and popup decorators
+    // supplychains to map
+    var scid = <?= $supplychain_id ?>;
+    
+    // new map instance with custom stop and popup decoratorsa
     Sourcemap.map_instance = new Sourcemap.Map('map', {
         "prep_stop": function(stop, ftr) {
-            var sz = 8;
+            var sz = 5;
             var vol = parseFloat(stop.getAttr("vol_pct"));
-            if(vol < 1) {
-                sz = 5;
-            } else if(vol < 20) {
-                sz = 10;
-            } else if(vol < 70) {
-                sz = 14;
-            } else {
-                sz = 48;
+            if(vol instanceof Number) {
+                if(vol < 1) {
+                    sz = 5;
+                } else if(vol < 20) {
+                    sz = 10;
+                } else if(vol < 70) {
+                    sz = 14;
+                } else {
+                    sz = 48;
+                }
             }
             ftr.attributes.size = sz;
             var color = 'green';
@@ -160,69 +206,65 @@ $(document).ready(function() {
         "prep_popup": function(st, ftr, pop) {
             var html = '<h4>'+st.getAttr("name", st.getLabel())+'</h4>';
             html += '<h5>from <span class="placename">'+st.getAttr("org.sourcemap.placename")+'</span></h5>';
-            html += '&raquo;<a href="javascript: Sourcemap._showDialog(\''+ftr.attributes.supplychain_instance_id+'\',\''+st.instance_id+'\');">View details</a>';
+            html += '<a href="javascript: Sourcemap._showDialog(\''+st.instance_id+'\');">View details</a>';
             pop.setContentHTML(html);
         }
     });
 
     // function for opening stop detail dialog
-    Sourcemap._showDialog = function(sc, st) {
-        Sourcemap.template('stop_details', function(p, txt, thtml) {
-            Sourcemap.map_tour.stop();
-            $(Sourcemap.map_dialog).html(thtml).dialog("open");
-        }, Sourcemap.map_instance.findSupplychain(sc).findStop(st));
-    }
-    
-    // supplychains to map
-    var scids = [<?= join(',', $supplychain_ids) ?>];
-    
-    // counter
-    Sourcemap.map_sc_count = scids.length;
-
-    // load all supplychains
-    for(var i=0; i<scids.length; i++) { 
-        var scid = scids[i];
-        Sourcemap.loadSupplychain(scid, function(sc) {
-            Sourcemap.map_instance.addSupplychain(sc);
-            if(!(--Sourcemap.map_sc_count)) {
-                var map = Sourcemap.map_instance;
-                // get features in a natural order:
-                //      from upstream to downstream
-                var features = [];
-                for(var k in map.supplychains) {
-                    var sc = map.supplychains[k];
-                    var g = new Sourcemap.Supplychain.Graph(map.supplychains[k]);
-                    var order = g.depthFirstOrder();
-                    order = order.concat(g.islands());
-                    for(var i=0; i<order.length; i++)
-                        features.push(map.mapped_features[order[i]]);
-                }
-
-                // back off a little
-                Sourcemap.map_instance.map.zoomOut();
-                Sourcemap.map_instance.map.zoomOut();
-
-                // set up tour
-                Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features, "interval": 5});
-
-                // set up details dialog
-                var d_el = $('<div id="dialog"></div>');
-                $(document.body).append(d_el);
-                $(d_el).dialog({"width": 600, "height": 600, "zIndex": 3000, "close": function(evt, ui) {
-                    $(Sourcemap.map_dialog).html('');
-                    Sourcemap.map_tour.wait();
-                }}).dialog("close");
-                Sourcemap.map_dialog = d_el;
-
-                // pause tour on click anywhere on map
-                $(Sourcemap.map_instance.map.div).mouseup(function() {
-                    for(var i=0; i<Sourcemap.map_tour.features; i++)
-                        Sourcemap.map_instance.controls.select.unselect(Sourcemap.map_tour.features[i]);
-                    Sourcemap.map_tour.wait();
-                });
+    Sourcemap._showDialog = function(st) {
+        for(var scid in Sourcemap.map_instance.supplychains) {
+            if(Sourcemap.map_instance.supplychains[scid].findStop(st)) {
+                break;
             }
-        });
+        }
+        console.log(map); console.log(scid); console.log(st);
+        Sourcemap.template('stop_details', function(p, txt, thtml) {
+            //Sourcemap.map_tour.stop();
+            $(Sourcemap.map_dialog).html(thtml).dialog("open");
+        }, Sourcemap.map_instance.supplychains[scid].findStop(st));
     }
+    
+    // load all supplychains
+    Sourcemap.loadSupplychain(scid, function(sc) {
+        console.log('load: '+scid);
+        var map = Sourcemap.map_instance;
+        map.addSupplychain(sc);
+        // get features in a natural order:
+        //      from upstream to downstream
+        var features = [];
+        for(var k in map.supplychains) {
+            var sc = map.supplychains[k];
+            var g = new Sourcemap.Supplychain.Graph(map.supplychains[k]);
+            var order = g.depthFirstOrder();
+            order = order.concat(g.islands());
+            for(var i=0; i<order.length; i++)
+                features.push(map.mapped_features[order[i]]);
+        }
+
+        // back off a little
+        map.map.zoomOut();
+        map.map.zoomOut();
+
+        // set up tour
+        Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features, "interval": 5});
+
+        // set up details dialog
+        var d_el = $('<div id="dialog"></div>');
+        $(document.body).append(d_el);
+        $(d_el).dialog({"width": 600, "height": 600, "zIndex": 3000, "close": function(evt, ui) {
+                $(Sourcemap.map_dialog).html('');
+                //Sourcemap.map_tour.wait();
+                }}).dialog("close");
+        Sourcemap.map_dialog = d_el;
+
+        // pause tour on click anywhere on map
+        $(Sourcemap.map_instance.map.div).mouseup(function() {
+            for(var i=0; i<Sourcemap.map_tour.features; i++)
+                Sourcemap.map_instance.controls.select.unselect(Sourcemap.map_tour.features[i]);
+            Sourcemap.map_tour.wait();
+        });
+    });
 });
 </script>
 </body>

@@ -3,7 +3,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
     public $layout = 'stonyfield-demo';
     public $template = 'welcome';
 
-    public function action_index() {
+    public function action_index($scalias) {
         $this->layout->styles = array(
             'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery-ui.css'
         );
@@ -14,11 +14,17 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         );
         $alias = ORM::factory('supplychain_alias')
             ->where('site', '=', 'stonyfield')
-            ->where('alias', '=', 'yogurt')
+            ->where('alias', '=', $scalias)
             ->find_all()
             ->as_array('alias', 'supplychain_id');
-        $scids = array();
-        if($alias) $scids[] = $alias['yogurt'];
-        $this->layout->supplychain_ids = $scids;
+        $alias_mapping = array(
+            'yogurt' => 'sf-yogurt-all',
+            'dairy' => 'sf-yogurt-d',
+            'sweeteners' => 'sf-yogurt-fs',
+            'other' => 'sf-yogurt-o'
+        );
+        if(!isset($alias[$scalias])) die('That map does not exist.');
+        $scid = $alias[$scalias];
+        $this->layout->supplychain_id = $scid;
     }
 }

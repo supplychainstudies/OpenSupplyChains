@@ -46,7 +46,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             $scid = $supplychain->id;
             $supplychains_array[$scid] = (array)$supplychains_array[$scid];
             $supplychains_array[$scid]['owner'] = $supplychain->owner->username;
-            $supplychains_array[$scid]['attributes'] = $supplychain->attributes->find_all()->as_array(null, 'key');	
         }
 
         
@@ -68,13 +67,13 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $stop_count = $supplychain->stops->count_all();
         $hop_count = $supplychain->hops->count_all();
 
-        $attribute= $supplychain->attributes->find_all()->as_array(null, 'key');
-
+        $attributes= $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
+	
         $alias = $supplychain->alias->find_all()->as_array(null, array('supplychain_id', 'site', 'alias'));
 
         $this->template->stop_count = $stop_count;
         $this->template->hop_count = $hop_count;
-        $this->template->attribute_key = $attribute[0];
+        $this->template->attributes = $attributes;
         $this->template->alias = $alias;
 
 
@@ -104,7 +103,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             foreach($alias as $alias_array) {	
             $alias_names[] = $alias_array['alias']; 
             $site_names[] = $alias_array['site']; 
-
             }
             if((!in_array($alias_added, $alias_names) && (!in_array($site_added, $site_names)))) {
             $supplychain_alias = ORM::factory('supplychain_alias');
@@ -122,7 +120,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         }
         Breadcrumbs::instance()->add('Management', 'admin/')
                 ->add('Supply Chains', 'admin/supplychains')
-                ->add(ucwords($attribute[0]), 'admin/supplychains/'.$id);
+                ->add(ucwords($id), 'admin/supplychains/'.$id);
         
     }
 

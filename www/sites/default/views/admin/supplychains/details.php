@@ -8,15 +8,23 @@
 </form><br />
 
 <?php if(!empty($stop_count)): ?>
-<strong>Number of stops:</strong> <?=$stop_count;?><br />
+ <strong>Number of stops:</strong> <?=$stop_count;?><br />
 <?php endif;?>
+
 <?php if(!empty($hop_count)): ?>
-<strong>Number of hops:</strong> <?=$hop_count;?><br />
+ <strong>Number of hops:</strong> <?=$hop_count;?><br />
 <?php endif;?>
-<?php if(!empty($attribute_key)): ?>
-<strong>Attribute:</strong> <?=$attribute_key;?> 
- <?php endif;?><br />
- <?php if(!empty($alias)): ?>
+
+<?php if(!empty($attributes)): ?>
+ <?php $last_attribute = end($attributes);?>
+ <strong>Attribute(s):</strong>  
+ <?php foreach($attributes as $attribute): ?>
+   <?=$attribute['key'];?>
+ <?php if($attribute != $last_attribute) {?>, <?}?>
+ <?php endforeach;?>
+<?php endif;?>
+
+<?php if(!empty($alias)): ?>
 <table>
 <tr>
 <th>Site</th>

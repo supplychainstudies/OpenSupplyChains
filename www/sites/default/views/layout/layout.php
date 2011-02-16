@@ -35,6 +35,11 @@
                     <h3>Browse</h3>            
                     <ul>
                         <li><a href="">Sourcemaps</a></li>
+                        <li><a href="">Tools</a>
+                            <ul>
+                                <li><a href="tools/import/csv">Importer</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="">Carbon Catalogue</a>
                             <ul>

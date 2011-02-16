@@ -141,9 +141,14 @@
     .olPopupCloseBox {display:none;} 
     .olPopup h4 {color:darkgreen;}
     ul.map-nav { width: 100%; background-color: white; margin: 0; padding: 0;}
-    ul.map-nav li { display: inline; padding: .25em;}
+    ul.map-nav li { margin-top: 0; display: inline; padding: .25em; background-color: #ccc; }
     ul.map-nav li a { color: black; }
     ul.map-nav li.dairy { background-color: #60cb59; }
+    ul.map-nav.dairy li.dairy,
+    ul.map-nav.sweeteners li.sweeteners,
+    ul.map-nav.yogurt li.yogurt,
+    ul.map-nav.other li.other
+    { font-weight: bold; }
     ul.map-nav li.sweeteners { background-color: #f7c370; }
     ul.map-nav li.other { background-color: #70d0f8; }
 </style>
@@ -176,7 +181,7 @@ $(document).ready(function() {
         "prep_stop": function(stop, ftr) {
             var sz = 5;
             var vol = parseFloat(stop.getAttr("vol_pct"));
-            if(vol instanceof Number) {
+            if(!isNaN(vol)) {
                 if(vol < 1) {
                     sz = 5;
                 } else if(vol < 20) {
@@ -218,7 +223,6 @@ $(document).ready(function() {
                 break;
             }
         }
-        console.log(map); console.log(scid); console.log(st);
         Sourcemap.template('stop_details', function(p, txt, thtml) {
             //Sourcemap.map_tour.stop();
             $(Sourcemap.map_dialog).html(thtml).dialog("open");
@@ -227,7 +231,6 @@ $(document).ready(function() {
     
     // load all supplychains
     Sourcemap.loadSupplychain(scid, function(sc) {
-        console.log('load: '+scid);
         var map = Sourcemap.map_instance;
         map.addSupplychain(sc);
         // get features in a natural order:
@@ -247,7 +250,7 @@ $(document).ready(function() {
         map.map.zoomOut();
 
         // set up tour
-        Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features, "interval": 5});
+        Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features, "interval": 4});
 
         // set up details dialog
         var d_el = $('<div id="dialog"></div>');

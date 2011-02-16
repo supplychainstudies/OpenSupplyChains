@@ -27,5 +27,6 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         if(!isset($alias[$scalias])) die('That map does not exist.');
         $scid = $alias[$scalias];
         $this->layout->supplychain_id = $scid;
+        $this->template->scalias = $scalias;
     }
 }

@@ -9,7 +9,7 @@ class Controller_Tools_Import extends Sourcemap_Controller_Layout {
     }
 
     public function action_csv() {
-        if(!Auth::instance()->get_user())
+        if(!Auth::instance()->get_user()) // todo: write method below.
             return $this->_forbidden('You must be logged in to use the import tool.');
         $this->layout->scripts = array(
             'sourcemap-core'

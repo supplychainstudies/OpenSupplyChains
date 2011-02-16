@@ -3,7 +3,7 @@
 <head>
     <base href="<?= URL::base(true, true) ?>"></base>
 <title>
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||stonyfield demo
+Stonyfield Yogurt - Sourcemap
 </title>
 <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 <style>
@@ -178,6 +178,7 @@ $(document).ready(function() {
     
     // new map instance with custom stop and popup decoratorsa
     Sourcemap.map_instance = new Sourcemap.Map('map', {
+        "layer_switcher": false,
         "prep_stop": function(stop, ftr) {
             var sz = 5;
             var vol = parseFloat(stop.getAttr("vol_pct"));
@@ -247,17 +248,16 @@ $(document).ready(function() {
 
         // back off a little
         map.map.zoomOut();
-        map.map.zoomOut();
 
         // set up tour
-        Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features, "interval": 4});
+        Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features, "interval": 4, "wait_interval": 0});
 
         // set up details dialog
         var d_el = $('<div id="dialog"></div>');
         $(document.body).append(d_el);
         $(d_el).dialog({"width": 600, "height": 600, "zIndex": 3000, "close": function(evt, ui) {
                 $(Sourcemap.map_dialog).html('');
-                //Sourcemap.map_tour.wait();
+                Sourcemap.map_tour.wait();
                 }}).dialog("close");
         Sourcemap.map_dialog = d_el;
 
@@ -265,7 +265,7 @@ $(document).ready(function() {
         $(Sourcemap.map_instance.map.div).mouseup(function() {
             for(var i=0; i<Sourcemap.map_tour.features; i++)
                 Sourcemap.map_instance.controls.select.unselect(Sourcemap.map_tour.features[i]);
-            Sourcemap.map_tour.wait();
+            Sourcemap.map_tour.stop();
         });
     });
 });

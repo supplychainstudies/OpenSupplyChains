@@ -7,9 +7,12 @@
 <input type="submit" value="Create Alias" />
 </form><br />
 
-
+<?php if(!empty($stop_count)): ?>
 <strong>Number of stops:</strong> <?=$stop_count;?><br />
+<?php endif;?>
+<?php if(!empty($hop_count)): ?>
 <strong>Number of hops:</strong> <?=$hop_count;?><br />
+<?php endif;?>
 <?php if(!empty($attribute_key)): ?>
 <strong>Attribute:</strong> <?=$attribute_key;?> 
  <?php endif;?><br />

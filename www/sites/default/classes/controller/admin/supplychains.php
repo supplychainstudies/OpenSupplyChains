@@ -13,22 +13,32 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 
     public $layout = 'admin';
     public $template = 'admin/supplychains/list';
-    	const PAGESZ_MIN = 1;
-	const PAGESZ_MAX = 25;
-
+  
 
     public function action_index() {
-
-        $supplychain = ORM::factory('supplychain');
-        
-        $limit = isset($_GET['l']) ?
-                max(self::PAGESZ_MIN, min(self::PAGESZ_MAX, (int)$_GET['l'])) :
-                self::PAGESZ_MAX;
-            $offset = isset($_GET['o']) ? (int)$_GET['o'] : 0;
-
+	
+	  
+	$supplychain = ORM::factory('supplychain');
+	$page = max($this->request->param('page'), 1);
+        $items = 20;
+        $offset = ($items * ($page - 1));
+        $count = $supplychain->count_all();
+        $pagination = Pagination::factory(
+            array('current_page' => array('source' => 'query_string', 'key' => 'page'),
+          'total_items' => $supplychain->count_all(),
+          'items_per_page' => $items,
+                ));
+	
+	
+	$supplychains = $supplychain->order_by('id', 'ASC')
+	    ->limit($pagination->items_per_page)
+	    ->offset($pagination->offset)
+	    ->find_all();        
+	$supplychains_array = $supplychains->as_array(null, array('id', 'created')); 
         $supplychains = $supplychain->order_by('id', 'ASC')
-            ->offset($offset)->limit($limit)
-                    ->find_all();        
+	    ->limit($pagination->items_per_page)
+            ->offset($pagination->offset)
+	    ->find_all();        
         $supplychains_array = $supplychains->as_array('id', array('id', 'created')); 
         
         $attributes = array();
@@ -36,27 +46,16 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             $scid = $supplychain->id;
             $supplychains_array[$scid] = (array)$supplychains_array[$scid];
             $supplychains_array[$scid]['owner'] = $supplychain->owner->username;
-            $supplychains_array[$scid]['attributes'] = $supplychain->attributes->find_all()->as_array('key', array('id', 'value'));	
+            $supplychains_array[$scid]['attributes'] = $supplychain->attributes->find_all()->as_array(null, 'key');	
         }
+
         
-
-        /*$iterator = 0;
-        foreach($attributes as $attribute) {
-            if($attribute[0]['supplychain_id'] == $supplychains_array[$iterator]['id']){
-            $supplychains_array[$iterator]['key'] = $attribute[0]['key'];
-            }
-            $iterator++;
-        } */
-
-        $supplychain_count = $supplychain->count_all();
-
-        $this->template->limit = $limit;
-        $this->template->total = $supplychain_count;
-        $this->template->list = $supplychains_array;
-
-        Message::instance()->set('Total users '.$supplychain_count);
-            Breadcrumbs::instance()->add('Management', 'admin/')
-                ->add('Supply Chains', 'admin/supplychains');
+	$this->template->page_links = $pagination->render();
+	$this->template->offset = $pagination->offset;
+	$this->template->list = $supplychains_array;
+	Message::instance()->set('Total supplychains '.$count);
+	Breadcrumbs::instance()->add('Management', 'admin/')
+	    ->add('Supply Chains', 'admin/supplychains');
 
     }
 

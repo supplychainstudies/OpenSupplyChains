@@ -52,9 +52,11 @@ class Controller_Admin_Groups extends Controller_Admin {
     }
  
     public function action_details($id) {
-
+	
 	$this->template = View::factory('admin/groups/details');	
-	$group = ORM::factory('usergroup', $id);
+	$group = ORM::factory('usergroup')
+	    ->where('id', '=', $id)
+	    ->find();
 	
 	$group_members = array();
 	foreach($group->members->find_all()->as_array() as $i => $user) {
@@ -63,7 +65,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	
 	$owner = $group->owner->find()->as_array(null, array('id', 'username'));
 
-	$group_name = $group->find()->as_array(null, 'name');
+	$group_name = $group->as_array(null, 'name');
 	$group_name = $group_name['name'];
 
 	$this->template->owner = $owner;

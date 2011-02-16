@@ -36,7 +36,7 @@ Sourcemap.Map.prototype.defaults = {
             "fillOpacity": 0.8
         },
         "select": {
-            "fillColor": "#362a76",
+            "fillColor": "#ffd800",
             "fillOpacity": 1.0,
             "strokeColor": "${color}"
         }

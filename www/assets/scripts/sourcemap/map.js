@@ -56,7 +56,8 @@ Sourcemap.Map.prototype.defaults = {
             "strokeColor": "#050",
             "fillColor": "#050"
         }
-    }
+    }, "prep_stop": null, "prep_hop": null,
+    "prep_popup": null
 }
 
 Sourcemap.Map.prototype.init = function() {
@@ -277,7 +278,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     if(!(stop instanceof Sourcemap.Stop))
         throw new Error('Sourcemap.Stop required.');
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
-    new_feature.attributes.supplychain_instance_id = stop.supplychain_id;
+    new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
     new_feature.attributes.size = 6;
@@ -298,7 +299,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     this.mapped_features[stop.instance_id] = new_feature;
     this.stop_features[scid][stop.instance_id] = {"stop": new_feature};
     if(new_popup) {
-        if(this.preparePopup instanceof Function) this.preparePopup.call(this, stop, new_feature, new_popup);
+        if(this.preparePopup instanceof Function) this.preparePopup.apply(this, [stop, new_feature, new_popup]);
         this.map.addPopup(new_popup);
         this.stop_features[scid][stop.instance_id].popup = new_popup;
     }

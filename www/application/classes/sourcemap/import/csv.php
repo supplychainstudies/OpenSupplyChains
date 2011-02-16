@@ -106,6 +106,15 @@ class Sourcemap_Import_Csv {
                 }
                 $new_stop['attributes'][$k] = $v;
             }
+            if(is_null($addresscol) && $lat && $lon) {
+                $results = Sourcemap_Geocoder::geocode((new Sourcemap_Proj_Point($lon, $lat)));
+                if($results) {
+                    $result = $results[0];
+                    $lat = $result->lat;
+                    $lon = $result->lng;
+                    $new_stop['attributes']['org.sourcemap.placename'] = $result->placename;
+                }
+            }
             if(is_null($lon) || is_null($lat)) throw new Exception('No lat/lon.');
             $from_pt = new Sourcemap_Proj_Point($lon, $lat);
             $new_stop['geometry'] = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $from_pt)->toGeometry();

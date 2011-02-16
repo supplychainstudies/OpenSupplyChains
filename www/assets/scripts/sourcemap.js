@@ -20,7 +20,9 @@ Sourcemap.log('Welcome to Sourcemap.', Sourcemap.INFO);
 
 Sourcemap.deep_clone = function(o) {
     if(typeof o === "object") {
-        if(o instanceof Array) {
+        if(o instanceof Function) {
+            var r = function() { return o.apply(this, arguments); };
+        } else if(o instanceof Array) {
             var r = [];
             for(var i=0; i<o.length; i++) r[i] = Sourcemap.deep_clone(o[i]);
         } else if(o instanceof Date) {

@@ -19,7 +19,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
         }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
-            $current_user_id = (int)Auth::instance()->logged_in();
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->template->supplychain_id = $supplychain->id;
@@ -51,7 +51,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
         }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
-            $current_user_id = (int)Auth::instance()->logged_in();
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 header('Content-Type: image/png');
@@ -85,7 +85,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
         }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
-            $current_user_id = (int)Auth::instance()->logged_in();
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout = View::factory('layout/embed');

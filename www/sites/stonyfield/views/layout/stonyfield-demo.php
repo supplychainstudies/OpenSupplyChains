@@ -225,7 +225,7 @@ $(document).ready(function() {
             }
         }
         Sourcemap.template('stop_details', function(p, txt, thtml) {
-            //Sourcemap.map_tour.stop();
+            Sourcemap.map_tour.stop();
             $(Sourcemap.map_dialog).html(thtml).dialog("open");
         }, Sourcemap.map_instance.supplychains[scid].findStop(st));
     }

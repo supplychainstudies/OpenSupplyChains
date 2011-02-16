@@ -26,12 +26,20 @@ class Model_Supplychain extends ORM {
         'stops' => array(
             'model' => 'stop',
             'foreign_key' => 'supplychain_id'
-        ),
+	    ),
         'attributes' => array(
             'model' => 'supplychain_attribute',
             'foreign_key' => 'supplychain_id'
-        )
-    );
+	    ),
+	'hops' => array(
+	    'model' => 'hop',
+	    'foreign_key' => 'supplychain_id'
+	    ),
+	'alias' => array(
+	    'model' => 'supplychain_alias',
+	    'foreign_key' => 'supplychain_id'
+	    )
+	);
 
     public function save() {
         $this->modified = time();

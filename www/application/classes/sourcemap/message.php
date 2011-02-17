@@ -3,7 +3,7 @@ class Sourcemap_Message {
 
     public $session_key = 'sourcemap_messages';
     public $_default_level = self::ERROR;
-    public $_default_view = 'messages';
+    public $_default_view = 'partial/messages';
 
     const SUCCESS = 'success';
     const INFO = 'info';
@@ -11,7 +11,7 @@ class Sourcemap_Message {
     const ERROR = 'error';
 
     public function set($message, $level=null) {
-        $level = $level ? $this->_default_level : (string)$level;
+        $level = $level ? (string)$level : $this->_default_level;
         $messages = (array)$this->get();
         $messages[] = (object)array('message' => $message, 'level' => $level);
         Session::instance()->set($this->session_key, $messages);

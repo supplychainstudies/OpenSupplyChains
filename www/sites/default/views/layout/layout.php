@@ -17,7 +17,7 @@
 
     <!-- link rel="stylesheet" href="assets/styles/style.css?v=2">
     <link rel="stylesheet/less" href="assets/styles/sourcemap.less?v=2" type="text/css"-->
-    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags('assets/styles/style.css', 'assets/styles/sourcemap.less?v=2') ?>
+    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags('sites/default/assets/styles/style.css', 'sites/default/assets/styles/sourcemap.less?v=2') ?>
 </head>
 
 <body id="supplychain" class="fixed">
@@ -30,7 +30,11 @@
         </a>
         <nav id="main-navigation">
             <ul class="nav">
-                <li class="register-link"><a href="">Join us</a> or <a href="">Log in</a></li>          
+                <?php if($current_user = Auth::instance()->get_user()): ?>
+                <li class="register-link"><span class="username"><?= HTML::chars($current_user->username) ?>&nbsp;|&nbsp;<a href="auth/logout">Log out</a></li>
+                <?php else: ?>
+                <li class="register-link"><a href="">Join us</a> or <a href="auth">Log in</a></li>
+                <?php endif; ?>
                 <li id="browse-navigation">
                     <h3>Browse</h3>            
                     <ul>
@@ -89,8 +93,8 @@
          <article>
              <header>
                 <h1><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h1>                 
-                <p><? Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
-                <p><? Message::instance()->get() ? Message::instance()->render() : false ?></p>
+                <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+                <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
              </header>
              <div class="article-content">             
                  <p><?= $content ?></p>

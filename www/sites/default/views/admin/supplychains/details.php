@@ -7,6 +7,12 @@
 <input type="submit" value="Create Alias" />
 </form><br />
 
+
+<form name="permissions" method="post" action="admin/supplychains/<?=$id?>/change_perms">
+<label for="perms"><strong>Reset Permissions:</strong></label>
+<input type="text" name="perms" class="input text"size="10" maxlength="20" value="<?=$permissions?>"/>
+<input type="submit" value="Save" /><br />
+
 <?php if(!empty($stop_count)): ?>
  <strong>Number of stops:</strong> <?=$stop_count;?><br />
 <?php endif;?>
@@ -19,7 +25,7 @@
  <?php $last_attribute = end($attributes);?>
  <strong>Attribute(s):</strong>  
  <?php foreach($attributes as $attribute): ?>
-   <?=$attribute['key'];?>
+ <?= Html::chars($attribute['key']) ?>
  <?php if($attribute != $last_attribute) {?>, <?}?>
  <?php endforeach;?>
 <?php endif;?>
@@ -33,8 +39,8 @@
 <?php foreach($alias as $alias_name): ?>
 <tr>
 <form name="delete-alias" method="post" action="admin/supplychains/<?= $alias_name['supplychain_id']?>/delete_alias">
-<td><?=$alias_name['site'];?><input type="hidden" name="site" value="<?=$alias_name['site'];?>"></td>
-<td><?=$alias_name['alias'];?><input type="hidden" name="alias" value="<?=$alias_name['alias'];?>"></td>
+<td><?= Html::chars($alias_name['site'])?><input type="hidden" name="site" value="<?=$alias_name['site'];?>"></td>
+<td><?= Html::chars($alias_name['alias'])?><input type="hidden" name="alias" value="<?=$alias_name['alias'];?>"></td>
 <td><input type ="submit" value="delete" /></form></td>
 </tr>
 <?php endforeach;?>

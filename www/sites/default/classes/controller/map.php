@@ -95,7 +95,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 );
             } else {
                 $this->request->status = 403;
-                $this->layout = View::factory('layout/layout');
+                $this->layout = View::factory('layout/embed');
                 $this->template = View::factory('error');
                 $this->template->error_message = 'This map is private.';
             }

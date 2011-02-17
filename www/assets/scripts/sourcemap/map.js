@@ -18,6 +18,7 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
+    "zoom_control": false,
     "layer_switcher": false, "google_tiles": true,
     "cloudmade_tiles": true, "popups": true,
     "stop_popups": true, "hop_popups": true,
@@ -78,6 +79,13 @@ Sourcemap.Map.prototype.init = function() {
 }
 
 Sourcemap.Map.prototype.initMap = function() {
+    var controls = [
+            new OpenLayers.Control.Navigation(),
+            new OpenLayers.Control.ArgParser(),
+            new OpenLayers.Control.Attribution()
+    ];
+    if(this.options.zoom_control) 
+        controls.push(new OpenLayers.Control.ZoomPanel());
     var options = {
         "theme": "assets/scripts/openlayers/theme/sourcemap/style.css",
         "projection": new OpenLayers.Projection("EPSG:3857"),
@@ -92,12 +100,7 @@ Sourcemap.Map.prototype.initMap = function() {
             20037508.43, 20037508.43
         ),*/
         //"minZoomLevel": 2,
-        "controls": [
-            new OpenLayers.Control.Navigation(),
-            new OpenLayers.Control.ArgParser(),
-            new OpenLayers.Control.Attribution(),
-            new OpenLayers.Control.ZoomPanel()
-        ]
+        "controls": controls
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
     this.broadcast('map:openlayers_map_initialized', this);

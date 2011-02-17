@@ -4,5 +4,5 @@ return array(
     'base_url' => '/',
     'cache_dir' => CACHEPATH,
     'upload_dir' => '/tmp/',
-    'debug' => false
+    'debug' => true
 );

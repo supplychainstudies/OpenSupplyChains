@@ -91,7 +91,7 @@ Sourcemap.Map.prototype.initMap = function() {
             -20037508.43, -20037508.43,
             20037508.43, 20037508.43
         ),*/
-        "minZoomLevel": 2,
+        //"minZoomLevel": 2,
         "controls": [
             new OpenLayers.Control.Navigation(),
             new OpenLayers.Control.ArgParser(),

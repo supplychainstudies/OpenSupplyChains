@@ -14,10 +14,6 @@ class Controller_Tools_Import extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-core'
         );
-        $this->layout->styles = array(
-            'assets/styles/style.css',
-            'assets/styles/sourcemap.less?v=2'
-        );
         if(strtolower(Request::$method) === 'post') {
             $posted = (object)array_merge($_POST, Sourcemap_Upload::get_uploads());
             if(isset($posted->stop_file) && $posted->stop_file instanceof Sourcemap_Upload && $posted->stop_file->ok()) {
@@ -26,7 +22,12 @@ class Controller_Tools_Import extends Sourcemap_Controller_Layout {
                     $hop_csv = $posted->hop_file->get_contents();
                 else
                     $hop_csv = null;
-                $sc = Sourcemap_Import_Csv::csv2sc($stop_csv, $hop_csv, $posted);
+                try {
+                    $sc = Sourcemap_Import_Csv::csv2sc($stop_csv, $hop_csv, $posted);
+                } catch(Exception $e) {
+                    Message::instance()->set('Problem with import: '.$e->getMessage());
+                    $this->request->redirect('tools/import/csv');
+                }
                 $sc->user_id = Auth::instance()->get_user();
                 $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc);
                 if($new_sc_id)

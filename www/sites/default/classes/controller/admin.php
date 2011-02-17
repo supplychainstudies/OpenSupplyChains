@@ -15,23 +15,12 @@
 
     public function __construct($request) {
         parent::__construct($request);
-        $current_user_id = Auth::instance()->get_user();
-        if($current_user_id) {
-            $current_user = ORM::factory('user', $current_user_id);
+        $current_user = Auth::instance()->get_user();
 	    $admin = ORM::factory('role')
-		->where('name', '=', 'administrator')->find();
-	    if($current_user->has('roles', $admin)) {
-		$is_admin = true;
-	    } else {
-		$is_admin = false;
-	    }
-       
-
+            ->where('name', '=', 'admin')->find();
+	    if($current_user && $current_user->has('roles', $admin)) {
+            // pass
         } else {
-            $current_user =  false;
-        }
-
-        if((!$current_user) && (!$is_admin)){
             Message::instance()->set(
                 'You\'re not allowed to access the management dashboard.', Message::ERROR
             );

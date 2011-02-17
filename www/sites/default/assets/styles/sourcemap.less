@@ -91,6 +91,7 @@ body.fixed {
     
     li.register-link {
         border:none;
+        width: 150px;
     }
 }
 
@@ -945,10 +946,37 @@ ul.nav {
     }
 .button:hover { background-color: #ccc; color: #333; }
 
-.error {
+/*.error {
     background:red !important;
     color:white !important;
+}*/
+
+.status-messages {
+    font-size: 1.4em;
+    list-style-type: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
+.status-messages .status-message {
+    background-color: #ccc;
+    color: #333;
+    padding: .25em;
+    border-left: .25em solid #999;
+}
+.status-messages .status-message.error {
+    background-color: #ffc0c0;
+    border-color: #ff8080;
+}
+.status-messages .status-message.warning {
+    background-color: #ffff66;
+    border-color: #ff9900;
+}
+.status-messages .status-message.success {
+    background-color: #99ff99;
+    border-color: #55ff55;
+}
+
 .boxed {
     padding:5px;
     .rounded(4px);

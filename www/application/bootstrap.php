@@ -132,8 +132,57 @@ if (!defined('SUPPRESS_REQUEST')) {
      * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
      * If no source is specified, the URI will be automatically detected.
      */
-    echo Request::instance()
+    try {
+        $response = Request::instance()
+            ->execute()
+            ->send_headers()
+            ->response;
+
+    } catch(Exception $e) {
+        if(Kohana::config('sourcemap.debug')) {
+            header('HTTP/1.1 500 Internal Server Error');
+            header('Content-Type: text/plain');
+            die($e);
+        }
+        $response = <<<HTML
+            <!DOCTYPE html>
+            <html>
+                <head>
+                    <title>Page not found.</title>
+                    <link href="assets/styles/style.css" rel="stylesheet" type="text/css" />
+                    <style>
+                        body > * {
+                            padding: .5em;
+                        }
+                        header {
+                            font-size: 3em;
+                            color: #006600;
+                            background-color: #eee;
+                            border-bottom: 1px solid #ccc;
+                        }
+                        .article-content p {
+                            font-size: 2em;
+                            margin: .25em;
+                            margin-bottom: .5em;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <header id="masthead">
+                        <h1>Sourcemap couldn't fulfill your request</h1>
+                    </header>
+                    <div class="article-content">
+                        <p>This is the part of the map where it says, "Here be monsters."</p><p>Please, <a href="/">go back</a>.</p>
+                    </div>
+                </body>
+            </html>
+HTML;
+    }
+    echo $response;
+    exit;
+    /*echo Request::instance()
         ->execute()
         ->send_headers()
         ->response;
+    */
 }

@@ -20,6 +20,10 @@ body {
     padding: .25em .5em .25em .5em;
     margin: 0;
 }
+.nav {
+    text-align: right;
+    padding-right: 1em;
+}
 .breadcrumbs {
     background-color: #eee;
     padding: .25em;
@@ -44,6 +48,7 @@ fieldset {
 <body>
 <div id="masthead">
 <h1><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h1>
+<div class="nav"><a href="auth/logout">log out</a>&nbsp;|&nbsp;<a href="">view site</a></div>
 <?php if(Breadcrumbs::instance()->get()): ?><?= Breadcrumbs::instance()->render() ?><?php endif; ?>
 <?php if(Message::instance()->get()): ?><?= Message::instance()->render() ?><?php endif; ?>
 </div>

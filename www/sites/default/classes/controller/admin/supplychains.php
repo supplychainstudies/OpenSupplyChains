@@ -60,14 +60,17 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 
 
     public function action_details($id) {
+
         $this->template = View::factory('admin/supplychains/details');
         
-        $supplychain = ORM::factory('supplychain', $id);	
+        $supplychain = ORM::factory('supplychain')->where('id', '=', $id);
 
-        $stop_count = $supplychain->stops->count_all();
-        $hop_count = $supplychain->hops->count_all();
+        $stop_count = $supplychain->stops->find()->count_all();
+        $hop_count = $supplychain->hops->find()->count_all();
+	$supplychain_permissions = $supplychain->find()->as_array();
+	$supplychain_permissions['other_perms'] == 1 ? $permissions = "public" : $permissions = "private";
 
-        $attributes= $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
+       $attributes= $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
 	
         $alias = $supplychain->alias->find_all()->as_array(null, array('supplychain_id', 'site', 'alias'));
 
@@ -75,6 +78,8 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $this->template->hop_count = $hop_count;
         $this->template->attributes = $attributes;
         $this->template->alias = $alias;
+	$this->template->permissions = $permissions;
+	$this->template->id = $id;
 
 
         //create an alias
@@ -144,6 +149,28 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         }
 
         $this->request->redirect("admin/supplychains/".$id);
+    }
+
+    public function action_change_perms($id) {
+
+	$post = Validate::factory($_POST);
+        $post->rule('perms', 'not_empty')
+            ->filter(true, 'trim');
+	if(strtolower(Request::$method) === 'post' && $post->check()) {
+	    $post = (object)$post->as_array();
+	    if($post->perms == "private" || "public") {
+		$supplychain = ORM::factory('supplychain', $id);
+		$post->perms == "public" ? $perms=1 : $perms=0;
+		$supplychain->other_perms = $perms;
+		$supplychain->save();
+	    } else {
+		Message::instance()->set('Please enter valid permissions.');
+	    }
+		    
+	} else {
+	    Message::instance()->set('Bad request.');
+	    }
+	$this->request->redirect("admin/supplychains/".$id);
     }
 }
 

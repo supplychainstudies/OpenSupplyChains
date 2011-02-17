@@ -48,7 +48,7 @@ class Model_Supplychain extends ORM {
             $rev->supplychain_id = $this->pk();
             $rev->user_id = Auth::instance()->get_user() ? 
                 Auth::instance()->get_user() : 0;
-            $rev->data = json_encode($this->kitchen_sink());
+            $rev->data = json_encode($this->kitchen_sink($this->pk()));
             $rev->rev_hash = md5($rev->data.microtime());
             $rev->save();
         }

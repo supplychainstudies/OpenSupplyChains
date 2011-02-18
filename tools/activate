@@ -2,9 +2,9 @@
 
 if [ -n "${1}" ]; then
     if [ -f "env/${1}" ]; then
-        SMAPENV="${1}"
-        echo "activated ${SMAPENV}"
-        source "env/${SMAPENV}"
+        SOURCEMAP_ENV="${1}"
+        echo "activated ${SOURCEMAP_ENV}"
+        source "env/${SOURCEMAP_ENV}"
     else
         echo "invalid env"
     fi

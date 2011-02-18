@@ -4,13 +4,13 @@ source "env/${1}"
 
 echo
 
-if [ ! -n "${SMAPENV}" ]; then
+if [ ! -n "${SOURCEMAP_ENV}" ]; then
     echo -e "\t- ** FATAL: You must provide a valid env name ('dev', 'stage', etc.).\n"
     exit 1
 fi
 
 echo ""
-echo -e "\t- Set env to \"${SMAPENV}\"."
+echo -e "\t- Set env to \"${SOURCEMAP_ENV}\"."
 
 if [ ! -n "${2}" ]; then
     echo -e "\t- ** FATAL: No up/dn parameter given.\n"

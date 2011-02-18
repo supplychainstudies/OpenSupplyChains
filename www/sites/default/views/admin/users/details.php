@@ -17,7 +17,7 @@
       <?php if(isset($roles) && count($roles)>0):?>
   <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k) { ?>
-    <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete_role"><?php echo $roles[$i]['name'];?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
+	 <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete_role"><?= HTML::chars($roles[$i]['name'])?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
        <? }?><br />
       <?php endif;?>
 
@@ -40,7 +40,7 @@
       }?>
 <br />
 					    
-   <option value="<?php echo $role->name; ?>"><?php echo $role->name; ?></option>
+ <option value="<?php echo $role->name; ?>"><?= Html::chars($role->name) ?></option>
 
    <?php }?>
    </select><input type="submit" value="add role"/></form>
@@ -51,7 +51,7 @@
 <strong>Group Membership:</strong>
        <?php $last_member = end($members);?>
 <?php foreach ($members as $member) { ?>
-     <a href="admin/groups/<?=$member['id'];?>"><?= $member['name']; ?></a>
+    <a href="admin/groups/<?=$member['id'];?>"><?=HTML::chars($member['name']) ?></a>
    <?php if ($member != $last_member) {?>, <?}?>
  <?php     }?><br />
  <?php endif; ?>
@@ -61,7 +61,7 @@
   <strong>Group Ownership:</strong>
 <?php $last_owner = end($owners);?>
 <?php foreach ($owners as $owner) { ?>
-     <a href="admin/groups/<?=$owner['id'];?>"><?= $owner['name']; ?></a>
+    <a href="admin/groups/<?=$owner['id'];?>"><?=HTML::chars($owner['name']) ?></a>
  <?php if($owner != $last_owner) {?>, <?}?>
  <?php    }?>
      <?php endif; ?>

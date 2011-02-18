@@ -30,6 +30,8 @@ class Sourcemap {
                 Kohana::config('js')->packages : array()
         );
         Sourcemap_JS::$bundle = self::$env == self::DEV ? false : true;
+        Sourcemap_JS::$minified = self::$env == self::DEV ? false : true;
+        Sourcemap_JS::$bundle_path = 'assets/scripts/bundles/'.self::site().'/';
         Sourcemap_CSS::$convert_less = self::$env == self::DEV ? false : true;
     }
 
@@ -79,5 +81,42 @@ class Sourcemap {
         return true;
     }
 
+    public static function environment() {
+        return self::$env;
+    }
 
+    public static function sites_path() {
+        static $path;
+        if(!$path) {
+            $path = rtrim(
+                SOURCEMAP_SITES_PATH, 
+                DIRECTORY_SEPARATOR
+            ).DIRECTORY_SEPARATOR;
+        }
+        return $path;
+    }
+
+    public static function sites_avail() {
+        static $sites;
+        if(!$sites) {
+            if($sites = Kohana::config('sourcemap.sites')) {
+                // pass
+            } else {
+                $sites = array();
+                $sdir = dir(self::sites_path());
+                while(false !== ($f = $sdir->read())) {
+                    if(substr($f, 0, 1) != '.' && is_dir(self::sites_path().$f))
+                        $sites[] = $f;
+                }
+            }
+        }
+        return $sites;
+    }
+
+    public static function site($new_site=null) {
+        static $site;
+        if(!$site) $site = SOURCEMAP_SITE;
+        if($new_site) $site = $new_site;
+        return $site;
+    }
 }

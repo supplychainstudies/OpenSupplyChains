@@ -3,13 +3,20 @@
 class Sourcemap_JS {
 
     const BUNDLE_EXT = '.bundle.js';
+    const BUNDLE_MIN_EXT = '.bundle.min.js';
 
     public static $pkgs = null;
 
     public static $bundle = false;
     public static $bundle_path = 'assets/scripts/bundles/';
+    public static $minified = false;
+
+    public static function reset_packages() {
+        self::$pkgs = array();
+    }
 
     public static function add_packages($pkgs) {
+        if(self::$pkgs === null) self::$pkgs = array();
         foreach($pkgs as $pkg_tag => $pkg_data) {
             if(!isset($pkg_data['scripts'])) continue;
             self::$pkgs[$pkg_tag] = $pkg_data;
@@ -25,7 +32,7 @@ class Sourcemap_JS {
             if(isset(self::$pkgs[$pkg]['env'])) {
                 $envs = is_array(self::$pkgs[$pkg]['env']) ? 
                     self::$pkgs[$pkg]['env'] : array(self::$pkgs[$pkg]['env']);
-                if(!in_array(Sourcemap::$env, $envs)) {
+                if(!in_array(Sourcemap::environment(), $envs)) {
                     continue;
                 }
             }
@@ -71,9 +78,16 @@ class Sourcemap_JS {
     public static function scripts() {
         $args = func_get_args();
         if(self::$bundle) {
-            $scripts = call_user_func_array(array('self', 'packages'), $args);
-            foreach($scripts as $si => $script)
-                $scripts[$si] = self::$bundle_path.$script.self::BUNDLE_EXT;
+            $pkgs = call_user_func_array(array('self', 'packages'), $args);
+            foreach($pkgs as $si => $pkg) {
+                $pscripts = self::get_package_scripts($pkg);
+                foreach($pscripts as $pi => $ps) {
+                    if(preg_match('/^http/', $ps)) {
+                        if(!in_array($ps, $scripts)) $scripts[] = $ps;
+                    }
+                }
+                $scripts[] = self::$bundle_path.$pkg.(self::$minified ? self::BUNDLE_MIN_EXT : self::BUNDLE_EXT);
+            }
         } else {
             $pkgs = array();
             foreach($args as $i => $arg) {

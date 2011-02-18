@@ -4,31 +4,54 @@
 if(php_sapi_name() !== 'cli') die('cli only');
 
 if($argc == 2 && is_dir($argv[1]))
-    define('BUNDLEDIR', rtrim($argv[1], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
+    define('BUILD_DIR', rtrim($argv[1], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
 elseif($argc == 2)
-    die('Bundle directory does not exist.');
+    die("Bundle directory does not exist.\n");
 else
-    die('Bundle directory required as first parameter.');
+    die("Bundle directory required as first parameter.\n");
 
 // sourcemap-specific bootstrap
-define('SMAPDIR', getenv('SMAPDIR') ? 
-    rtrim(getenv('SMAPDIR'), '/').'/' : dirname(__FILE__).'/');
+define('SOURCEMAP_DIR', getenv('SOURCEMAP_DIR') ? 
+    rtrim(getenv('SOURCEMAP_DIR'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR : 
+    realpath(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR
+);
 define('SUPPRESS_REQUEST', true);
 
-require_once(SMAPDIR.'/www/index.php');
+require_once(SOURCEMAP_DIR.'/www/index.php');
 
-$packages = Kohana::config('js')->packages;
+$sites = Sourcemap::sites_avail();
 
-Sourcemap_JS::$bundle = false;
+foreach($sites as $i => $site) {
+    print "Building bundles for site: '$site'.\n";
+    
+    Sourcemap::site($site);
 
-foreach($packages as $pkg_tag => $pconf) {
-    $scripts = Sourcemap_JS::$pkgs[$pkg_tag]['scripts'];
-    $script_content = array();
-    foreach($scripts as $si => $script) {
-        if(!preg_match('/^http/', $script))
-            $script = SMAPDIR.'/www/'.$script;
-        $script_content[] = file_get_contents($script);
+    if($i) {
+        Kohana::remove_include_path(SOURCEMAP_DIR.'www/sites/'.$sites[$i-1]);
     }
-    $outfile = BUNDLEDIR.$pkg_tag.Sourcemap_JS::BUNDLE_EXT;
-    print file_put_contents($outfile, join("\n", $script_content))." bytes written to $outfile.\n";
+
+    Kohana::add_include_path(SOURCEMAP_DIR.'www/sites/'.Sourcemap::site().'/');
+
+    Sourcemap_JS::reset_packages();
+
+    $packages = Kohana::$config->load('js')->packages;
+    Sourcemap_JS::add_packages($packages);
+
+    Sourcemap_JS::$bundle = false;
+
+    $bundle_dir = BUILD_DIR.Sourcemap::site().'/';
+    if(!is_dir($bundle_dir)) mkdir($bundle_dir);
+
+    foreach(Sourcemap_JS::$pkgs as $pkg_tag => $pconf) {
+        $scripts = Sourcemap_JS::$pkgs[$pkg_tag]['scripts'];
+        $script_content = array();
+        foreach($scripts as $si => $script) {
+            if(preg_match('/^http/', $script))
+                continue;
+            $script = SOURCEMAP_DIR.'/www/'.$script;
+            $script_content[] = file_get_contents($script);
+        }
+        $outfile = $bundle_dir.$pkg_tag.Sourcemap_JS::BUNDLE_EXT;
+        print file_put_contents($outfile, join("\n", $script_content))." bytes written to $outfile.\n";
+    }
 }

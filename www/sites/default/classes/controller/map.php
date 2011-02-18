@@ -6,7 +6,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
 
     protected function _match_alias($alias) {
         $found = ORM::factory('supplychain_alias')
-            ->where('site', '=', SMAPSITE)
+            ->where('site', '=', Kohana::config('sourcemap.site'))
             ->where('alias', '=', $alias)
             ->find_all()->as_array('alias', 'supplychain_id');
         $supplychain_id = $found ? $found[$alias] : -1;

@@ -72,19 +72,20 @@ define('TKSHORTNM', 'sm-ivory'); // Toolkit short name, e.g. 'sm-ivory'
 define('TKLONGNM', 'Sourcemap Ivory'); // Toolkit long name, e.g. 'Sourcemap Ivory'
 define('APPSHORTNM', getenv('APPSHORTNM') === false ? 'sm-base' : getenv('APPSHORTNM')); // Application short name, e.g. 'sm-base'
 define('APPLONGNM', 'Sourcemap Base'); // Application long name, e.g. 'Sourcemap Base'
-define('SMAPSITE', getenv('SMAPSITE') ? getenv('SMAPSITE') : 'default');
-define('SITESHORTNM', getenv('SMAPSITE') ? getenv('SMAPSITE') : 'default');
+define('SOURCEMAP_SITE', getenv('SOURCEMAP_SITE') ? getenv('SOURCEMAP_SITE') : 'default');
 
 // Define the absolute paths for configured directories
 define('APPPATH', realpath($application).DIRECTORY_SEPARATOR);
 define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
 define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
 // Log path
-define('LOGPATH', getenv('LOGPATH') ? getenv('LOGPATH') : '/var/log/'.TKSHORTNM.'/'.APPSHORTNM.'/');
+define('LOGPATH', getenv('SOURCEMAP_LOG_PATH') ? getenv('SOURCEMAP_LOG_PATH') : '/var/log/'.TKSHORTNM.'/'.APPSHORTNM.'/');
+define('SOURCEMAP_LOG_PATH', LOGPATH);
 // Cache path
-define('CACHEPATH', getenv('CACHEPATH') ? getenv('CACHEPATH') : '/var/cache/'.TKSHORTNM.'/'.APPSHORTNM.'/');
+define('CACHEPATH', getenv('SOURCEMAP_CACHE_PATH') ? getenv('SOURCEMAP_CACHE_PATH') : '/var/cache/'.TKSHORTNM.'/'.APPSHORTNM.'/');
+define('SOURCEMAP_CACHE_PATH', CACHEPATH);
 // Sites directory
-define('SITESPATH', realpath(dirname(APPPATH)).'/sites/');
+define('SOURCEMAP_SITES_PATH', realpath(dirname(APPPATH)).'/sites/');
 
 // Clean up the configuration vars
 unset($application, $modules, $system);

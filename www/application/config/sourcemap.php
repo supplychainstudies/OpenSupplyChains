@@ -2,7 +2,8 @@
 
 return array(
     'base_url' => '/',
-    'cache_dir' => CACHEPATH,
+    'cache_dir' => SOURCEMAP_CACHE_PATH,
     'upload_dir' => '/tmp/',
-    'debug' => true
+    'debug' => true,
+    'site' => SOURCEMAP_SITE
 );

@@ -22,14 +22,14 @@ function sm_test() { // ($label, $expected, $got) {
 }
 
 if(php_sapi_name() === 'cli') {
-    define('SMAPDIR', getenv('SMAPDIR') ? 
-        rtrim(getenv('SMAPDIR'), '/').'/' : dirname(__FILE__).'/');
+    define('SOURCEMAP_DIR', getenv('SOURCEMAP_DIR') ? 
+        rtrim(getenv('SOURCEMAP_DIR'), '/').'/' : dirname(__FILE__).'/');
     define('SUPPRESS_REQUEST', true);
-    require_once(SMAPDIR.'/www/index.php');
+    require_once(SOURCEMAP_DIR.'/www/index.php');
     $args = $argv;
     array_shift($args);
     foreach($args as $i => $arg) {
-        include(SMAPDIR.'t/'.basename($arg));
+        include(SOURCEMAP_DIR.'t/'.basename($arg));
     }
     list($total, $good, $bad) = sm_test();
     print "\n>>>\n";

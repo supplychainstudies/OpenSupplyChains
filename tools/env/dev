@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # env
-export SMAPENV="dev"
+export SOURCEMAP_ENV="dev"
 
 # db
 export SMAP_DB="smap"
@@ -9,8 +9,8 @@ export SMAP_DBUSER="smap"
 export SMAP_DBPASS="smap"
 export SMAP_DBHOST="localhost"
 
-export SMAPDIR="/home/reed/devel/mit/sourcemap/smap/trunk/"
+export SOURCEMAP_DIR="/home/reed/devel/mit/sourcemap/smap/trunk/"
 
 # for phing
-export PHP_CLASSPATH="${SMAPDIR}www/application/classes/"
-export PHING_HOME="${SMAPDIR}tools/"
+export PHP_CLASSPATH="${SOURCEMAP_DIR}www/application/classes/"
+export PHING_HOME="${SOURCEMAP_DIR}tools/"

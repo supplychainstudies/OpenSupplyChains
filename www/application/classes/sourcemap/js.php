@@ -79,6 +79,7 @@ class Sourcemap_JS {
         $args = func_get_args();
         if(self::$bundle) {
             $pkgs = call_user_func_array(array('self', 'packages'), $args);
+            $scripts = array();
             foreach($pkgs as $si => $pkg) {
                 $pscripts = self::get_package_scripts($pkg);
                 foreach($pscripts as $pi => $ps) {

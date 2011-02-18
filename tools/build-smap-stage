@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source env/stage
+
+./phing -buildfile build-phing/build.xml -Dbuilddir="${SOURCEMAP_DIR}build/" -Dsrcdir="${SOURCEMAP_DIR}www/"

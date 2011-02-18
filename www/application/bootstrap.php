@@ -43,6 +43,8 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  */
 if(getenv('SOURCEMAP_ENV')) {
 	Kohana::$environment = getenv('SOURCEMAP_ENV');
+} else {
+    Kohana::$environment = Sourcemap::PRODUCTION;
 }
 
 /**

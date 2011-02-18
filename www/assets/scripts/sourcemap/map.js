@@ -80,7 +80,7 @@ Sourcemap.Map.prototype.init = function() {
 
 Sourcemap.Map.prototype.initMap = function() {
     var controls = [
-            new OpenLayers.Control.Navigation(),
+            new OpenLayers.Control.Navigation({"handleRightClicks": true}),
             new OpenLayers.Control.ArgParser(),
             new OpenLayers.Control.Attribution()
     ];

@@ -1,1 +1,7 @@
-<h1>This is an embedded map with an overlay.</h1>
+<div class="embed-summary">
+<h1><%= "A Sourcemap" %></h1>
+<div>
+<img class="user-avatar" src="<%= this.owner.avatar %>" />
+created by <%= this.owner.name %> <%= (new Date(this.created*1000)).toLocaleString() %>
+</div>
+</div>

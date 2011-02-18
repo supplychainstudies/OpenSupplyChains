@@ -46,15 +46,3 @@ Route::set('admin/collection/id', 'admin/<controller>/<id>', array(
         'controller' => 'admin', 
         'action' => 'index'
     ));
-
-
-Sourcemap_JS::add_packages(array(
-    'map-view' => array(
-        'scripts' => array(
-            'sites/default/assets/scripts/map/view.js'
-        ),
-        'requires' => array(
-            'modernizr', 'less', 'sourcemap-map', 'sourcemap-template'
-        )
-    )
-));

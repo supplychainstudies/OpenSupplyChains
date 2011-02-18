@@ -21,6 +21,14 @@ return array(
             'requires' => array(
                 'sourcemap-template', 'sourcemap-map'
             )
+        ),
+        'map-view' => array(
+            'scripts' => array(
+                'sites/default/assets/scripts/map/view.js'
+            ),
+            'requires' => array(
+                'modernizr', 'less', 'sourcemap-map', 'sourcemap-template'
+            )
         )
     )
 );

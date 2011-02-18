@@ -97,19 +97,20 @@ Kohana::modules(array(
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
 
-Kohana::add_include_path(SITESPATH.SITESHORTNM.'/');
+Kohana::add_include_path(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/');
 
 
-Sourcemap::init();
     
-if(is_file(SITESPATH.SITESHORTNM.'/bootstrap'.EXT)) {
-    require SITESPATH.SITESHORTNM.'/bootstrap'.EXT;
+if(is_file(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/bootstrap'.EXT)) {
+    require SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/bootstrap'.EXT;
 }
 
-if(is_dir(SITESPATH.SITESHORTNM.'/config/')) {
-    $site_config_dir = SITESPATH.SITESHORTNM.'/config/';
+if(is_dir(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/config/')) {
+    $site_config_dir = SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/config/';
     Kohana::$config->attach(new Kohana_Config_File($site_config_dir));
 }
+
+Sourcemap::init();
 
 /**
  * Set the default (all sites) routes. Each route must have a minimum of a name, a URI and a set of

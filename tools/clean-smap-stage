@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source env/dev
+
+./phing -buildfile build-phing/build.xml -Dbuilddir=${SOURCEMAP_DIR}/build/ clean

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # env
-export SOURCEMAP_ENV="development"
+export SOURCEMAP_ENV="staging"
 
 # db
 export SMAP_DB="smap"

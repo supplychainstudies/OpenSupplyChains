@@ -136,6 +136,7 @@ Sourcemap.factory = function(type, data) {
             }
             instance.owner = data.owner;
             instance.remote_id = sc.id;
+            instance.created = sc.created;
             break;
         default:
             instance = false;

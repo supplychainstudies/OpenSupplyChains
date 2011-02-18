@@ -93,6 +93,10 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 $this->layout->scripts = array(
                     'sourcemap-embed'
                 );
+                $this->layout->styles = array(
+                    'sites/default/assets/styles/style.css',
+                    'sites/default/assets/styles/sourcemap.less?v=2'
+                );
             } else {
                 $this->request->status = 403;
                 $this->layout = View::factory('layout/embed');

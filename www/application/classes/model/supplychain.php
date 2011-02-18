@@ -119,7 +119,8 @@ class Model_Supplychain extends ORM {
             $sc->stops = array_values($stops);
             $sc->hops = array_values($hops);
             $sc->owner = (object)array(
-                'id' => $owner->id, 'name' => $owner->username
+                'id' => $owner->id, 'name' => $owner->username,
+                'avatar' => Gravatar::avatar($owner->email)
             );
         } else throw new Exception('Supplychain not found.');
         return $sc;

@@ -20,19 +20,27 @@ $(document).ready(function() {
         Sourcemap.map_instance.map.zoomToExtent(
             Sourcemap.map_instance.getStopLayer(sc.instance_id).getDataExtent()
         );
-        var overlay = $('<div class="map-overlay" id="map-overlay"></div>');
-        overlay.css("width", "100%").css("height", "100%").css("background-color", "red")
+        var overlay = $('<div class="sourcemap-embed-overlay" id="map-overlay"></div>');
+        overlay.css("width", "40%").css("height", "100%").css("background-color", "white")
             .css("position", "absolute").css("top", 0).css("left", 0).css("z-index", 5000)
-            .css("overflow", "hidden").hide();
+            .css("overflow", "hidden");
         Sourcemap.map_overlay = overlay;
         $(Sourcemap.map_instance.map.div).css("position", "relative");
         $(Sourcemap.map_instance.map.div).append(overlay);
         Sourcemap.TPL_PATH = "sites/default/assets/scripts/tpl/";
         Sourcemap.template('embed/overlay/supplychain', function(p, tx, th) {
-            $(Sourcemap.map_overlay).html(th).show('slide');
-        }, {});
+            $(Sourcemap.map_overlay).html(th).trigger('click');
+        }, sc);
+        $(Sourcemap.map_overlay).data("state", 1);
         $(Sourcemap.map_overlay).click(function() {
-            $(this).hide('slide');
+            var st = $(this).data("state");
+            if(st == 0) {
+                st = -1;
+                $(this).animate({"width": "40%", "height": "100%"}, 750, function() { $(Sourcemap.map_overlay).data("state", 1); });
+            } else if(st == 1) {
+                st = -1;
+                $(this).animate({"width": "20%", "height": "20%"}, 750, function() { $(Sourcemap.map_overlay).data("state", 0); });
+            }
         });
     });
 });

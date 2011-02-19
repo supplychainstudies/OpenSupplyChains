@@ -1,6 +1,6 @@
 <!doctype html>  
 
-<html lang="en" class="no-js" style="height: 100%; width: 100%">
+<html lang="en" class="no-js" style="height: 100%; width: 100%; overflow: hidden;">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

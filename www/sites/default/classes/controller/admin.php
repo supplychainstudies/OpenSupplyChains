@@ -12,13 +12,15 @@
 
     public $layout = 'admin';
     public $template = 'admin/dashboard';
+    public $current_user = null;
+    public $admin = null;
 
     public function __construct($request) {
         parent::__construct($request);
-        $current_user = Auth::instance()->get_user();
-	    $admin = ORM::factory('role')
+        $this->current_user = Auth::instance()->get_user();
+	    $this->admin = ORM::factory('role')
             ->where('name', '=', 'admin')->find();
-	    if($current_user && $current_user->has('roles', $admin)) {
+	    if($this->current_user && $this->current_user->has('roles', $this->admin)) {
             // pass
         } else {
             Message::instance()->set(
@@ -32,4 +34,5 @@
         $this->layout->page_title = 'Management Dashboard';
         Breadcrumbs::instance()->add('Management', 'admin/');
     }
+    
 }

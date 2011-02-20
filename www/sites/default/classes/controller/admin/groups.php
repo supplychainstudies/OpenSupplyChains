@@ -14,41 +14,44 @@ class Controller_Admin_Groups extends Controller_Admin {
     public $template = 'admin/groups/list';
     
     public function action_index() {
-	
-        $usergroup = ORM::factory('usergroup');
-        $page = max($this->request->param('page'), 1);
-        $items = 5;
-        $offset = ($items * ($page - 1));
-        $count = $usergroup->count_all();
-        $pagination = Pagination::factory(
-            array('current_page' => array('source' => 'query_string', 'key' => 'page'),
-          'total_items' => $usergroup->count_all(),
-          'items_per_page' => $items,
-                ));
-        $groups = $usergroup->order_by('name', 'ASC')
-            ->limit($pagination->items_per_page)
-            ->offset($pagination->offset)
-            ->find_all();
-	
-	$groups_array = $groups->as_array(null, array('id', 'name'));
+	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
+	    $usergroup = ORM::factory('usergroup');
+	    $page = max($this->request->param('page'), 1);
+	    $items = 20;
+	    $offset = ($items * ($page - 1));
+	    $count = $usergroup->count_all();
+	    $pagination = Pagination::factory(
+		array('current_page' => array('source' => 'query_string', 'key' => 'page'),
+		      'total_items' => $usergroup->count_all(),
+		      'items_per_page' => $items,
+		    ));
+	    $groups = $usergroup->order_by('name', 'ASC')
+		->limit($pagination->items_per_page)
+		->offset($pagination->offset)
+		->find_all();
+	    
+	    $groups_array = $groups->as_array(null, array('id', 'name'));
+	    
+	    
+	    $iterator = 0;
+	    foreach($groups as $group) {
+		$groups_array[$iterator]['owner'] = $group->owner->username;
+		$iterator++;
+	    }	
 
-	
-	$iterator = 0;
-	foreach($groups as $group) {
-	    $groups_array[$iterator]['owner'] = $group->owner->username;
-	    $iterator++;
-	}	
-
-        $this->template->page_links = $pagination->render();
-        $this->template->offset = $pagination->offset;
-	$this->template->groups = $groups_array;
-
-	$group_count = $usergroup->count_all();
-	
-	Message::instance()->set('Total groups '.$group_count);
-
-        Breadcrumbs::instance()->add('Management', 'admin/')
-            ->add('Groups', 'admin/groups');
+	    $this->template->page_links = $pagination->render();
+	    $this->template->offset = $pagination->offset;
+	    $this->template->groups = $groups_array;
+	    
+	    $group_count = $usergroup->count_all();
+	    
+	    Message::instance()->set('Total groups '.$group_count);
+	    
+	    Breadcrumbs::instance()->add('Management', 'admin/')
+		->add('Groups', 'admin/groups');
+	} else {
+	    $this->request->redirect('auth/');
+	}
     }
  
     public function action_details($id) {
@@ -176,5 +179,5 @@ class Controller_Admin_Groups extends Controller_Admin {
 	$this->request->redirect("admin/groups/".$id);
     }
 
-   
+	   
 }

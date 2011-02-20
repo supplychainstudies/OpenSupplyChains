@@ -9,8 +9,13 @@
 
 
 <form name="permissions" method="post" action="admin/supplychains/<?=$id?>/change_perms">
-<label for="perms"><strong>Reset Permissions:</strong></label>
-<input type="text" name="perms" class="input text"size="10" maxlength="20" value="<?=$permissions?>"/>
+ <strong>Reset Permissions:</strong> 
+<select name="perms">
+     <? foreach($permissions_array as $i => $perm):?>
+     <option value="<?=$perm ?>" <?php if($perm == $permissions):?>selected<?php endif; ?>><?= HTML::chars($perm); ?>
+     </option>
+     <?php endforeach;?>
+</select>
 <input type="submit" value="Save" /><br />
 
 <?php if(!empty($stop_count)): ?>

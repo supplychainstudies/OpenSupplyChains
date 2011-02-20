@@ -13,99 +13,99 @@ class Controller_Admin_Users extends Controller_Admin {
     public $layout = 'admin';
     public $template = 'admin/users/list';
 
+
     public function action_index() {
-        $user = ORM::factory('user');
-        $page = max($this->request->param('page'), 1);
-        $items = 5;
-        $offset = ($items * ($page - 1));
-        $count = $user->count_all();
-        $pagination = Pagination::factory(array(
-            'current_page' => array(
-                'source' => 'query_string', 
-                'key' => 'page'
-            ),
-            'total_items' => $user->count_all(),
-            'items_per_page' => $items,
-        ));
-        $this->template->users = $user->order_by('username', 'ASC')
-            ->limit($pagination->items_per_page)
-            ->offset($pagination->offset)
-            ->find_all()->as_array(null, array('id', 'username', 'email'));
-        $this->template->page_links = $pagination->render();
-        $this->template->offset = $pagination->offset;
 
+	$user = ORM::factory('user');
+	$page = max($this->request->param('page'), 1);
+	$items = 20;
+	$offset = ($items * ($page - 1));
+	$count = $user->count_all();
+	$pagination = Pagination::factory(array(
+					      'current_page' => array(
+						  'source' => 'query_string', 
+						  'key' => 'page'
+						      ),
+					      'total_items' => $user->count_all(),
+					      'items_per_page' => $items,
+					      ));
+	$this->template->users = $user->order_by('username', 'ASC')
+	    ->limit($pagination->items_per_page)
+	    ->offset($pagination->offset)
+	    ->find_all()->as_array(null, array('id', 'username', 'email'));
+	$this->template->page_links = $pagination->render();
+	$this->template->offset = $pagination->offset;
+	    
 	$user_count = $user->count_all();
-
+	
 	Message::instance()->set('Total users '.$user_count);
-        Breadcrumbs::instance()->add('Management', 'admin/')
-            ->add('Users', 'admin/users');
+	Breadcrumbs::instance()->add('Management', 'admin/')
+	    ->add('Users', 'admin/users');
+	
     }
+    
+    
+    public function action_details($id) {	
+	
+	$this->template = View::factory('admin/users/details');
+	$user = ORM::factory('user', $id);
+	$roles = array();
+	foreach($user->roles->find_all()->as_array() as $i => $role) {
+	    $roles[] = $role->as_array();
+	}	    
+	
+	$all_roles = ORM::factory('role')->find_all()->as_array('id', array('id', 'name'));
+	    
+	    $members = array();
+	    foreach($user->groups->find_all()->as_array() as $i => $usergroup) {
+		$members[] = $usergroup->as_array();
+	    }
+	    
+	    $owners = array();
+	    foreach($user->owned_groups->find_all()->as_array() as $i => $usergroup) {
+		$owners[] = $usergroup->as_array();
+	    }
+	    
+	    $this->template->user = $user;
+	    $this->template->roles = $roles;
+	    $this->template->all_roles = $all_roles;
+	    $this->template->members = $members;
+	    $this->template->owners = $owners;
 
 
+	    // this is to reset the password
+	    $post = Validate::factory($_POST);
+	    $post->rule('email', 'not_empty')
+		->rule('password', 'not_empty')
+		->rule('password', 'max_length', array(16))
+		->rule('confirmpassword', 'not_empty')
+		->rule('confirmpassword', 'max_length', array(16))
+		->rule('email', 'validate::email')
+		->filter(true, 'trim');
+	    
+	    if(strtolower(Request::$method) === 'post' && $post->check()) {
+		$post = (object)$post->as_array();
+		
+		if($post->password == $post->confirmpassword) {
+		    $user_row = ORM::factory('user')
+			->where('email', '=', $post->email)
+			->find();
+		    
+		    $user_row->password = $post->password;
+		    $user_row->save();
+		    Message::instance()->set('Password changed successfully!');
+		    $this->request->redirect("admin/users/".$id);
+		} else {
+		    Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
+		}
+	    } elseif(strtolower(Request::$method) === 'post') {
+		Message::instance()->set('Invalid Password Reset.', Message::ERROR);
+	    }
+	    
+	    Breadcrumbs::instance()->add('Management', 'admin/')
+		->add('Users', 'admin/users')
+		->add(ucwords($user->username), 'admin/users/'.$user->id);
 
-    public function action_details($id) {
-
-        $this->template = View::factory('admin/users/details');
-        $user = ORM::factory('user', $id);
-        $roles = array();
-        foreach($user->roles->find_all()->as_array() as $i => $role) {
-            $roles[] = $role->as_array();
-        }
-
-
-        $all_roles = ORM::factory('role')->find_all()->as_array('id', 
-                                array('id', 'name')
-        );
-
-        $members = array();
-        foreach($user->groups->find_all()->as_array() as $i => $usergroup) {
-            $members[] = $usergroup->as_array();
-        }
-
-        $owners = array();
-        foreach($user->owned_groups->find_all()->as_array() as $i => $usergroup) {
-            $owners[] = $usergroup->as_array();
-        }
-
-        $this->template->user = $user;
-        $this->template->roles = $roles;
-        $this->template->all_roles = $all_roles;
-        $this->template->members = $members;
-        $this->template->owners = $owners;
-
-
-        // this is to reset the password
-        $post = Validate::factory($_POST);
-        $post->rule('email', 'not_empty')
-            ->rule('password', 'not_empty')
-            ->rule('password', 'max_length', array(16))
-            ->rule('confirmpassword', 'not_empty')
-            ->rule('confirmpassword', 'max_length', array(16))
-            ->rule('email', 'validate::email')
-            ->filter(true, 'trim');
-
-        if(strtolower(Request::$method) === 'post' && $post->check()) {
-            $post = (object)$post->as_array();
-
-            if($post->password == $post->confirmpassword) {
-                $user_row = ORM::factory('user')
-                    ->where('email', '=', $post->email)
-                    ->find();
-
-                $user_row->password = $post->password;
-                $user_row->save();
-                Message::instance()->set('Password changed successfully!');
-                $this->request->redirect("admin/users/".$id);
-            } else {
-                Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
-            }
-        } elseif(strtolower(Request::$method) === 'post') {
-            Message::instance()->set('Invalid Password Reset.', Message::ERROR);
-        }
-        
-        Breadcrumbs::instance()->add('Management', 'admin/')
-            ->add('Users', 'admin/users')
-            ->add(ucwords($user->username), 'admin/users/'.$user->id);
     }
 
 
@@ -136,17 +136,26 @@ class Controller_Admin_Users extends Controller_Admin {
                 $create->email = $post->email;
                 $create->password = $password;
                 $create->save();
-            } else {
-                Message::instance()->set('User already exists.');
+		
+
+		//add a default login role when a new user is created
+		$role = ORM::factory('role', array('name' => 'login'));
+		$create->add('roles', $role)->save();
+
+		
+		// assign the user role as login 
+	    } else {
+		Message::instance()->set('User already exists.');
             }
         } elseif (strtolower(Request::$method === 'post')) {
             Message::instance()->set('Could not delete role.', Message::ERROR);
         } else {
-            Message::instance()->set('Bad request.');
+	    Message::instance()->set('Bad request.');
         }
 
-        $this->request->redirect("admin/users/");
+	//$this->request->redirect("admin/users/");
     }
+
 
     public function action_delete_role($id) {
         $post = Validate::factory($_POST);

@@ -178,6 +178,20 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    }
 	$this->request->redirect("admin/supplychains/".$id);
     }
+
+    
+    public function action_delete_supplychain($id) {
+	
+	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
+	    $supplychain = ORM::factory('supplychain')->where('id', '=', $id)->find();
+	    $supplychain->delete();
+	    
+	    $this->request->redirect("admin/supplychains/");
+	} else {
+	    $this->request->redirect('auth/');
+	}
+    }
+
 }
 
 

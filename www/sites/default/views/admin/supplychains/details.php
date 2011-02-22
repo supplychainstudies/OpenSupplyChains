@@ -7,19 +7,12 @@
 <input type="submit" value="Create Alias" />
 </form><br />
 
-
-<form name="permissions" method="post" action="admin/supplychains/<?=$id?>/change_perms">
- <strong>Reset Permissions:</strong> 
-<select name="perms">
-     <? foreach($permissions_array as $i => $perm):?>
-     <option value="<?=$perm ?>" <?php if($perm == $permissions):?>selected<?php endif; ?>><?= HTML::chars($perm); ?>
-     </option>
-     <?php endforeach;?>
-</select>
-<input type="submit" value="Save" /><br />
+<?php if(!empty($owner)): ?>
+		       <strong>Owner:</strong> <?= HTML::chars($owner)?><br />
+<?php endif;?>
 
 <?php if(!empty($stop_count)): ?>
- <strong>Number of stops:</strong> <?=$stop_count;?><br />
+      <strong>Number of stops:</strong> <?= $stop_count;?><br />
 <?php endif;?>
 
 <?php if(!empty($hop_count)): ?>
@@ -34,6 +27,32 @@
  <?php if($attribute != $last_attribute) {?>, <?}?>
  <?php endforeach;?>
 <?php endif;?>
+
+<form name="permissions" method="post" action="admin/supplychains/<?=$id?>/change_perms">
+ <strong>Reset Permissions:</strong> 
+<select name="perms">
+     <?php foreach($permissions_array as $i => $perm):?>
+     <option value="<?=$perm ?>" <?php if($perm == $permissions):?>selected<?php endif; ?>><?= HTML::chars($perm); ?>
+     </option>
+     <?php endforeach;?>
+</select>
+<input type="submit" value="Save" /></form><br />
+
+<?php if(!empty($owner_group)): ?>
+ <strong>Groupname:</strong> <?=HTML::chars($owner_group)?>
+<?php endif;?>
+
+
+<form name="group-permissions" method="post" action="admin/supplychains/<?=$id?>/change_usergroup_perms">
+ <strong>Reset Group Permissions:</strong> 
+<select name="groupperm">
+      <?php foreach($group_permissions_array as $i => $group_perm): ?>
+      <option value="<?=$group_perm ?>" <?php if($group_perm == $usergroup_perms):?>selected<?php endif; ?>><?= HTML::chars($group_perm); ?>
+      </option>
+     <?php endforeach;?>
+</select>
+<input type="submit" value="Save" /></form><br />
+
 
 <?php if(!empty($alias)): ?>
 <table>

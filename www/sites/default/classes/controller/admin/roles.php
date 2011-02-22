@@ -71,4 +71,15 @@ class Controller_Admin_Roles extends Controller_Admin {
 	$this->request->redirect("admin/roles/");
     }
 
+    public function action_delete_role_entry($id) {
+	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
+	    $role = ORM::factory('role')->where('id', '=', $id)->find();
+	    $role->delete();
+	    
+	    $this->request->redirect("admin/roles/");
+	} else {
+	    $this->request->redirect('auth/');
+	}
+    }
+
   }

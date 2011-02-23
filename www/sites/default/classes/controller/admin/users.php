@@ -53,6 +53,11 @@ class Controller_Admin_Users extends Controller_Admin {
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
 	    $this->template = View::factory('admin/users/details');
 	    $user = ORM::factory('user', $id);
+	    
+	    $get_last_login = $user->last_login;
+	    $last_login =  date("F j, Y, g:i a", $get_last_login);
+
+
 	    $roles = array();
 	    foreach($user->roles->find_all()->as_array() as $i => $role) {
 		$roles[] = $role->as_array();
@@ -70,11 +75,13 @@ class Controller_Admin_Users extends Controller_Admin {
 		$owners[] = $usergroup->as_array();
 	    }
 	    
+	    
 	    $this->template->user = $user;
 	    $this->template->roles = $roles;
 	    $this->template->all_roles = $all_roles;
 	    $this->template->members = $members;
 	    $this->template->owners = $owners;
+	    $this->template->last_login = $last_login;
 	    
 	    
 	    // this is to reset the password

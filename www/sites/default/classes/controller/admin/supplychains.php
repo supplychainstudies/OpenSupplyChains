@@ -68,17 +68,17 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
 	    $this->template = View::factory('admin/supplychains/details');
 	    
-	    $supplychain = ORM::factory('supplychain')->where('id', '=', $id);
+	    $supplychain = ORM::factory('supplychain', $id);
 	    
 	    $stop_count = $supplychain->stops->find()->count_all();
 	    $hop_count = $supplychain->hops->find()->count_all();
 	    
-	    $supplychain_permissions = $supplychain->find()->as_array();
-	    $supplychain_permissions['other_perms'] == 1 ? $permissions = "public" : $permissions = "private";
+	    $supplychain_permissions = $supplychain->other_perms;
+	    $supplychain_permissions == 1 ? $permissions = "public" : $permissions = "private";
 	    $permissions_array = array("public", "private");
 	    $group_permissions_array = array("Nothing", "Read", "Write", "Read and Write");
 	    
-	    switch($supplychain_permissions['usergroup_perms']) {
+	    switch($supplychain->usergroup_perms) {
 	    case 0:
 		$usergroup_perms = "Nothing";
 		break;

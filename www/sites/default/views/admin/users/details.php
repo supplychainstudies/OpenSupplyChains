@@ -2,6 +2,8 @@
       Password is reset successfully!<br />
 	  <?php endif;?>
 
+<?= HTML::chars($user->username)?> last logged in on <?= $last_login?><br />
+
 <form name="user-info" method="post" action="">
 <label for="username">username:</label><br />
 <input type="text" name="username" class="input text" value="<? echo $user->username?>"/><br />

@@ -57,10 +57,8 @@ class Controller_Admin_Groups extends Controller_Admin {
     public function action_details($id) {
 	
 	$this->template = View::factory('admin/groups/details');	
-	$group = ORM::factory('usergroup')
-	    ->where('id', '=', $id)
-	    ->find();
-	
+	$group = ORM::factory('usergroup', $id);
+		
 	$group_members = array();
 	foreach($group->members->find_all()->as_array() as $i => $user) {
 	    $group_members[] = $user->as_array();
@@ -68,17 +66,13 @@ class Controller_Admin_Groups extends Controller_Admin {
 	
 	$owner = $group->owner->find()->as_array(null, array('id', 'username'));
 
-	$group_name = $group->as_array(null, 'name');
-	$group_name = $group_name['name'];
-
+	$this->template->group = $group;
 	$this->template->owner = $owner;
-	$this->template->group_name = $group_name;
 	$this->template->members = $group_members;
-	$this->template->group_id = $id;
-	
+		
 	Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Groups', 'admin/groups')
-            ->add(ucwords($group_name), 'admin/groups/'.$id);
+            ->add(ucwords($group->name), 'admin/groups/'.$id);
 	
     }
 
@@ -144,9 +138,8 @@ class Controller_Admin_Groups extends Controller_Admin {
 		    $name = trim($name);
 		    if(!in_array($name, $members)) {
 			$user = ORM::factory('user')->where('username', '=', $name)->find();
-			$usergroup = ORM::factory('usergroup', $id);
 			//add the object to the alias
-			$user->add('groups', $usergroup);
+			$user->add('groups', $group);
 		    }
 		} else {
 		    Message::instance()->set('Please enter a valid user name.');

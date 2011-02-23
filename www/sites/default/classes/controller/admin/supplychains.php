@@ -28,13 +28,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		      'total_items' => $supplychain->count_all(),
 		      'items_per_page' => $items,
 		    ));
-	    
-	    
-	    $supplychains = $supplychain->order_by('id', 'ASC')
-		->limit($pagination->items_per_page)
-		->offset($pagination->offset)
-		->find_all();        
-	    $supplychains_array = $supplychains->as_array(null, array('id', 'created')); 
+
 	    $supplychains = $supplychain->order_by('id', 'ASC')
 		->limit($pagination->items_per_page)
 		->offset($pagination->offset)

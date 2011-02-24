@@ -13,11 +13,12 @@ class Controller_Services_Qrencode extends Controller_Services {
     }
 
     public function action_get() {
-        if(isset($_GET['s'])) {
-            $this->response = Sourcemap_QRencode::encode($_GET['s']);
+        $sz = isset($_GET['sz']) ? (int)$_GET['sz'] : null;
+        if(isset($_GET['q'])) {
+            $this->response = Sourcemap_QRencode::encode($_GET['q'], $sz);
         } else {
             header('HTTP/1.1 400 Bad Request');
-            die("Parameter 's' required.");
+            die("Parameter 'q' required.");
         }
     }
 }

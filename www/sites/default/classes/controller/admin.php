@@ -61,15 +61,6 @@
 	
 	$start_time = strtotime(strftime('%Y-%m-%d 00:00:00'));
 
-
-	$query = "SELECT id FROM supplychain WHERE created BETWEEN '$today' AND '$start_time'"; 
-	$check = Db::query(Database::SELECT, $query) 
-	    ->execute()->as_array(); 
-	
-	print_r($check);
-
-
-	
 	$get_usercreated_today = $user->where('created', 'BETWEEN', array($start_time, $today))
 	    ->count_all();
 	

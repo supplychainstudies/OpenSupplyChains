@@ -16,6 +16,7 @@ class Sourcemap_Geocoder {
     }
 
     public static function get_google_results($q, $ttl=5) {
+        if($ttl <= 0) return false;
         $params = array('sensor' => 'false');
         if($q instanceof Sourcemap_Proj_Point) {
             $params['latlng'] = sprintf('%f,%f', $q->y, $q->x);

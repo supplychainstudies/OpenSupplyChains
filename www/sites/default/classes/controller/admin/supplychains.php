@@ -64,8 +64,8 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    
 	    $supplychain = ORM::factory('supplychain', $id);
 	    
-	    $stop_count = $supplychain->stops->find()->count_all();
-	    $hop_count = $supplychain->hops->find()->count_all();
+	    $stop_count = $supplychain->stops->count_all();
+	    $hop_count = $supplychain->hops->count_all();
 	    
 	    $supplychain_permissions = $supplychain->other_perms;
 	    $supplychain_permissions == 1 ? $permissions = "public" : $permissions = "private";

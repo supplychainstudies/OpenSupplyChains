@@ -5,13 +5,15 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
     public $template = 'welcome';
 
     public function action_index() {
-        /*header('Content-Type: text/plain');
+        header('Content-Type: text/plain');
+        $ip = '18.85.2.115';
+        print "$ip\n";
         die(
             print_r(
-                Model::factory('iploc')->find('74.125.226.146'),
+                Sourcemap_Ip::find_ip($ip),
                 true
             )
-        );*/
+        );
         $this->layout->page_title = 'Welcome to Sourcemap.';
         $this->template->supplychains = ORM::factory('supplychain')
             ->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)

@@ -41,4 +41,8 @@ class Sourcemap_Ip {
         } while($pl>=0);
         return join('.', $d);
     }
+
+    public static function find_ip($ip) {
+        return Model::factory('iploc')->find($ip);
+    }
 }

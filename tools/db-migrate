@@ -70,7 +70,7 @@ PGDATABASE="${SMAP_DB}"
 
 export PGUSER PGPASSWORD PGHOST PGDATABASE
 
-SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" | $sortcmd) 
+SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" -o -name "*.${mdir}.sql" | $sortcmd) 
 
 DATESTR=`date "+%Y%m%d.%H%M%S"`
 DBOUTPUT="db-migrate.${DATESTR}.${mdir}.out"
@@ -101,12 +101,16 @@ do
     echo -e "\t- Executing schema sql: ${sfilebase}"
     psql --echo-all < "${sfile}" &>> "${DBOUTPUT}"
 
-    DATAFILES=$(find "${SMAP_DATADIR}" -name "${sfilenum}.*.${mdir}.sql" | $sortcmd)
+    DATAFILES=$(find "${SMAP_DATADIR}" -name "${sfilenum}.*.${mdir}.sql" -o -name "${sfilenum}.*.${mdir}.sql.bz2" | $sortcmd)
     for dfile in ${DATAFILES[@]}
     do
         dfilebase=`basename "${dfile}"`
         echo -e "\t\t- Executing data sql: ${dfilebase}"
-        psql --echo-all < "${SMAP_DATADIR}${dfilebase}" &>> "${DBOUTPUT}"
+        if [[ "$dfile" =~ ".bz2" ]]; then
+            bzcat "${SMAP_DATADIR}${dfilebase}" | psql --echo-all &>> "${DBOUTPUT}"
+        else
+            psql --echo-all < "${SMAP_DATADIR}${dfilebase}" &>> "${DBOUTPUT}"
+        fi
     done
 
     FIXTUREFILES=$(find "${SMAP_FIXTUREDIR}" -name "${sfilenum}.*.${mdir}.sql" | $sortcmd)

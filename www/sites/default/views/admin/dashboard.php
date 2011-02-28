@@ -16,4 +16,6 @@ The maximum number of hops entered so far are <strong><?= $hop?></strong> (<a hr
 <dd>Manage groups.</dd>
 <dt><a href="admin/roles">Roles</a></dt>
 <dd>Manage Roles.</dd>
+<dt><a href="admin/alias">Aliases</a></dt>
+<dd>Manage Aliases.</dd>
 </dl>

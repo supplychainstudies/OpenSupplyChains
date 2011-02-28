@@ -242,7 +242,7 @@ class Controller_Admin_Users extends Controller_Admin {
     public function action_delete_user($id) {
 	
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-	    $user = ORM::factory('user')->where('id', '=', $id)->find();
+	    $user = ORM::factory('user', $id);
 	    $user->delete();
 	    
 	    $this->request->redirect("admin/users/");

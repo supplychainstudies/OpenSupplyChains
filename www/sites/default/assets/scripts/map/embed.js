@@ -17,6 +17,9 @@ $(document).ready(function() {
                 features.push(map.mapped_features[order[i]]);
         }
         //var tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
+        // the line below has to be here because, otherwise,
+        // openlayers doesn't properly position the popup in webkit (chrome)
+        Sourcemap.map_instance.map.zoomIn();
         Sourcemap.map_instance.map.zoomToExtent(
             Sourcemap.map_instance.getStopLayer(sc.instance_id).getDataExtent()
         );

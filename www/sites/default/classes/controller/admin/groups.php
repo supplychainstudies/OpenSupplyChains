@@ -175,7 +175,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 
 	public function action_delete_group($id) {
 	    if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-		$group = ORM::factory('usergroup')->where('id', '=', $id)->find();
+		$group = ORM::factory('usergroup', $id);
 		$group->delete();
 		
 		$this->request->redirect("admin/groups/");

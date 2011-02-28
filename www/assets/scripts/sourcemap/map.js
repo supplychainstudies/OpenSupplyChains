@@ -274,6 +274,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
             this.mapHop(supplychain.hops[i], scid);
         }
     }
+    this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 
@@ -292,7 +293,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         var ll = new OpenLayers.LonLat(new_feature.geometry.x, new_feature.geometry.y);
         var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
         var sc = this.findSupplychain(scid);
-        var new_popup = new OpenLayers.Popup(puid, ll, sz, stop.getLabel(), true);
+        var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true);
         new_popup.hide();
     }
     if(this.prepareStopFeature instanceof Function) {
@@ -345,7 +346,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         var sc = this.findSupplychain(scid);
         var fromst = sc.findStop(hop.from_stop_id);
         var tost = sc.findStop(hop.to_stop_id);
-        var new_popup = new OpenLayers.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), true);
+        var new_popup = new Sourcemap.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), true);
         new_popup.hide();
     }
     new_feature.attributes.supplychain_instance_id = scid;
@@ -541,4 +542,68 @@ Sourcemap.Map.prototype.hidePopup = function(feature) {
     if(ftrs && ftrs.popup)
         ftrs.popup.hide();
 
+}
+
+Sourcemap.Popup = function() {
+    this.initialize.apply(this, arguments);
+}
+
+Sourcemap.Popup.prototype = new OpenLayers.Popup();
+Sourcemap.Popup.prototype.ANCHOR_HT = 16;
+
+Sourcemap.Popup.prototype.initialize = function(id, lonlat, contentSize, contentHTML, closeBox) {
+    arguments[4] = false; // disallow closebox
+    OpenLayers.Popup.prototype.initialize.apply(this, arguments);
+    $(this.div).css("background-color", 'none');
+    this.bottom_div = $('<div class="sourcemap-popup-bottom"></div>');
+    $(this.bottom_div).css({
+        "background-image": "url(assets/images/popup-anchor-16x16.png)",
+        "background-position": "center", "background-repeat": "no-repeat",
+        "height": this.ANCHOR_HT+"px", "width": "100%", "background-color": "none"
+    });
+    $(this.div).append(this.bottom_div);
+}
+
+Sourcemap.Popup.prototype.setBackgroundColor = function(color) {
+    $(this.contentDiv).css("background-color", "#ffffff");
+    return this;
+}
+
+Sourcemap.Popup.prototype.setOpacity = function(opacity) {
+    $(this.div).css("opacity", opacity);
+    return this;
+}
+
+Sourcemap.Popup.prototype.setBorder = function(border) {
+    $(this.div).css("border", border);
+    return this;
+}
+
+Sourcemap.Popup.prototype.setSize = function(content_sz) {
+    OpenLayers.Popup.prototype.setSize.apply(this, arguments);
+    $(this.div).css("height", (this.size.h + this.ANCHOR_HT) + "px");
+}
+
+Sourcemap.Popup.prototype.updateSize = function() {
+    OpenLayers.Popup.prototype.updateSize.apply(this, arguments);
+    $(this.div).css("height", (this.size.h + this.ANCHOR_HT) + "px");
+}
+
+Sourcemap.Popup.prototype.moveTo = function(px) {
+    if(px != null && this.div) {
+        $(this.div).css("left", px.x - ($(this.div).width() / 2));
+        $(this.div).css("top", px.y - ($(this.div).height()));
+    }
+}
+
+Sourcemap.Popup.prototype.hide = function() {
+    console.log('>hide');
+    OpenLayers.Popup.prototype.hide.apply(this, arguments);
+    $(this.div).find('*').hide();
+}
+
+Sourcemap.Popup.prototype.show = function() {
+    console.log('>show');
+    OpenLayers.Popup.prototype.show.apply(this, arguments);
+    $(this.div).find('*').show();
 }

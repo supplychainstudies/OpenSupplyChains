@@ -218,3 +218,39 @@ Sourcemap.saveSupplychain = function(supplychain_id) {
     // save supplychain
     // this.broadcast('supplychainSaved', this, supplychain); asynch!
 }
+
+Sourcemap.humanDate = function(then, now) {
+    var now = Math.floor((now ? now.getTime() : (new Date()).getTime())/1000);
+    var then = Math.floor(then.getTime()/1000);
+    var str = '';
+    var dow = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    var moy = [
+        "January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
+    ];
+    if(then > now) str = 'in the future';
+    else if(now - then < 60) {
+        str = 'just now';
+    } else if(now - then < 60 * 60) {
+        str = 'less than an hour ago';
+    } else  if(now - then < 60 * 60 * 3) {
+        str = 'a couple of hours ago';
+    } else if(now - then < 60 * 60 * 6) {
+        str = 'a few hours ago';
+    } else if(now - then < 60 * 60 * 24) {
+        str = 'today';
+    } else if(now - then < 60 * 60 * 24 * 7) {
+        str = 'on '+dow[(new Date(then*1000)).getDay()];
+    } else if(now - then < 60 * 60 * 24 * 14) {
+        str = 'last '+dow[(new Date(then*1000)).getDay()];
+    } else if(now - then < 60 * 60 * 24 * 30) {
+        str = 'in the last few weeks';
+    } else if(now - then < 60 * 60 * 24 * 30 * 12) {
+        str = 'in '+moy[(new Date(then*1000)).getMonth()];
+    } else if(now - then < 60 * 60 * 24 * 30 * 16) {
+        str = 'about a year ago';
+    } else {
+        str = 'a long time ago';
+    }
+    return str;
+}

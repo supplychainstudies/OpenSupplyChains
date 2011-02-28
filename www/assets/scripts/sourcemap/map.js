@@ -77,7 +77,6 @@ Sourcemap.Map.prototype.init = function() {
     this.broadcast('map:initialized', this);
     return this;
 }
-
 Sourcemap.Map.prototype.initMap = function() {
     var controls = [
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),

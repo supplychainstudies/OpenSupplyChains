@@ -1,7 +1,9 @@
 <div class="embed-summary">
 <h1><%= "A Sourcemap" %></h1>
 <div>
+<p>
 <img class="user-avatar" src="<%= this.owner.avatar %>" />
-created by <%= this.owner.name %> <%= (new Date(this.created*1000)).toLocaleString() %>
+Created by <%= this.owner.name %> <%= Sourcemap.humanDate((new Date(this.created*1000))) %>.
+</p>
 </div>
 </div>

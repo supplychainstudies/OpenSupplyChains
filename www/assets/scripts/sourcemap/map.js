@@ -160,7 +160,8 @@ Sourcemap.Map.prototype.initControls = function() {
                         this.broadcast('map:feature_unselected', this, feature); 
                     },
                     this
-                )
+                ),
+                "clickOut": true
             })
         );
         $(document).bind(['map:layer_added', 'map:layer_removed'], function(e, map, label, layer) {
@@ -544,17 +545,20 @@ Sourcemap.Map.prototype.hidePopup = function(feature) {
 
 }
 
-Sourcemap.Popup = function() {
+Sourcemap.Popup = function(id, ll, csz, chtm, clsbx, clscb) {
+    var id = id; var ll = ll; var csz = csz; var clsbx = true;
+    var clscb = null;
+    OpenLayers.Popup.prototype.initialize.apply(this, arguments);
     this.initialize.apply(this, arguments);
 }
 
 Sourcemap.Popup.prototype = new OpenLayers.Popup();
 Sourcemap.Popup.prototype.ANCHOR_HT = 16;
 
-Sourcemap.Popup.prototype.initialize = function(id, lonlat, contentSize, contentHTML, closeBox) {
-    arguments[4] = false; // disallow closebox
-    OpenLayers.Popup.prototype.initialize.apply(this, arguments);
-    $(this.div).css("background-color", 'none');
+Sourcemap.Popup.prototype.initialize = function() {
+    if(this.closeDiv) $(this.closeDiv).remove();
+    this.closeDiv = false;
+    $(this.div).css({"background-color": 'none', "visibility": "none"});
     this.bottom_div = $('<div class="sourcemap-popup-bottom"></div>');
     $(this.bottom_div).css({
         "background-image": "url(assets/images/popup-anchor-16x16.png)",
@@ -586,7 +590,6 @@ Sourcemap.Popup.prototype.setSize = function(content_sz) {
 
 Sourcemap.Popup.prototype.updateSize = function() {
     OpenLayers.Popup.prototype.updateSize.apply(this, arguments);
-    $(this.div).css("height", (this.size.h + this.ANCHOR_HT) + "px");
 }
 
 Sourcemap.Popup.prototype.moveTo = function(px) {
@@ -597,13 +600,14 @@ Sourcemap.Popup.prototype.moveTo = function(px) {
 }
 
 Sourcemap.Popup.prototype.hide = function() {
-    console.log('>hide');
     OpenLayers.Popup.prototype.hide.apply(this, arguments);
+    $(this.div).hide();
     $(this.div).find('*').hide();
 }
 
 Sourcemap.Popup.prototype.show = function() {
-    console.log('>show');
     OpenLayers.Popup.prototype.show.apply(this, arguments);
+    $(this.div).show();
     $(this.div).find('*').show();
 }
+

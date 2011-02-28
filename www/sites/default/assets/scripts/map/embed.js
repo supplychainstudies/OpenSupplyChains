@@ -16,14 +16,15 @@ $(document).ready(function() {
             for(var i=0; i<order.length; i++)
                 features.push(map.mapped_features[order[i]]);
         }
-        var tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
+        //var tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
         Sourcemap.map_instance.map.zoomToExtent(
             Sourcemap.map_instance.getStopLayer(sc.instance_id).getDataExtent()
         );
-        var overlay = $('<div class="sourcemap-embed-overlay" id="map-overlay"></div>');
-        overlay.css("width", "40%").css("height", "100%").css("background-color", "white")
-            .css("position", "absolute").css("top", 0).css("left", 0).css("z-index", 5000)
-            .css("overflow", "hidden");
+        /*var overlay = $('<div class="sourcemap-embed-overlay" id="map-overlay"></div>');
+        overlay.css({"width": "100%", "height": "20%", "background-color": "white",
+            "position": "absolute", "top": 0, "left": 0, "z-index": 100,
+            "overflow": "hidden"
+        });
         Sourcemap.map_overlay = overlay;
         $(Sourcemap.map_instance.map.div).css("position", "relative");
         $(Sourcemap.map_instance.map.div).append(overlay);
@@ -36,11 +37,11 @@ $(document).ready(function() {
             var st = $(this).data("state");
             if(st == 0) {
                 st = -1;
-                $(this).animate({"width": "40%", "height": "100%"}, 750, function() { $(Sourcemap.map_overlay).data("state", 1); });
+                $(this).animate({"width": "100%", "height": "20%"}, 750, function() { $(Sourcemap.map_overlay).data("state", 1); });
             } else if(st == 1) {
                 st = -1;
-                $(this).animate({"width": "20%", "height": "20%"}, 750, function() { $(Sourcemap.map_overlay).data("state", 0); });
+                $(this).animate({"width": "0%", "height": "20%"}, 750, function() { $(Sourcemap.map_overlay).data("state", 0); });
             }
-        });
+        });*/
     });
 });

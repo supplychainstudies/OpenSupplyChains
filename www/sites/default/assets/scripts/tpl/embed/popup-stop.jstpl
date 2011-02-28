@@ -1,0 +1,3 @@
+<h4 class="popup-title"><%= this.stop.getAttr("org.sourcemap.name", "org.sourcemap.label", "name", "Stop") %></h4>
+<h5 class="popup-placename"><%= this.stop.getAttr("org.sourcemap.placename", "n/a") %></h5>
+<p class="popup-description"><%= this.stop.getAttr("org.sourcemap.desc.short", "") %></p>

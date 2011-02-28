@@ -179,8 +179,7 @@ Sourcemap.Stop = function(geometry, attributes) {
 
 Sourcemap.Stop.prototype.getAttr = function(k, d) {
     if(arguments.length == 1) {
-        if(this.attributes[k] !== undefined) return this.attributes[k];
-        else return undefined;
+        return this.attributes[k];
     } else if(arguments.length > 2) {
         for(var i=0, args=[]; i<arguments.length; args.push(arguments[i++]));
         var d = args.pop();

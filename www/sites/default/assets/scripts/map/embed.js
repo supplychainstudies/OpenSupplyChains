@@ -32,7 +32,7 @@ $(document).ready(function() {
             for(var i=0; i<order.length; i++)
                 features.push(map.mapped_features[order[i]]);
         }
-        var tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
+        Sourcemap.map_tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
         // the line below has to be here because, otherwise,
         // openlayers doesn't properly position the popup in webkit (chrome)
         Sourcemap.map_instance.map.zoomIn();
@@ -59,8 +59,8 @@ $(document).ready(function() {
         Sourcemap.map_instance.map.addControl(cpanel);
 
         // pause tour on click
-        $(Sourcemap.map_instance.map.div).mouseup(function() {
-            Sourcemap.map_tour.stop();
+        Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
+            Sourcemap.map_tour.wait();
         });
 
         /*

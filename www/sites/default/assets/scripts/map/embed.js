@@ -40,9 +40,9 @@ $(document).ready(function() {
             Sourcemap.map_instance.getStopLayer(sc.instance_id).getDataExtent()
         );
         var overlay = $('<div class="sourcemap-embed-overlay" id="map-overlay"></div>');
-        overlay.css({"width": "100%", "height": "10%", "background-color": "white",
-            "position": "absolute", "top": 0, "left": 0, "opacity": 0.8, "z-index": 1000,
-            "overflow": "hidden", "padding-bottom": ".5em"
+        overlay.css({"width": "100%", "height": "10%",
+            "position": "absolute", "top": 0, "left": 0, "z-index": 1000,
+            "overflow": "hidden"
         });
         Sourcemap.map_overlay = overlay;
         $(Sourcemap.map_instance.map.div).css("position", "relative");

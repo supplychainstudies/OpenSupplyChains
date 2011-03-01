@@ -40,9 +40,8 @@ $(document).ready(function() {
             Sourcemap.map_instance.getStopLayer(sc.instance_id).getDataExtent()
         );
         var overlay = $('<div class="sourcemap-embed-overlay" id="map-overlay"></div>');
-        overlay.css({"width": "100%", "height": "10%",
-            "position": "absolute", "top": 0, "left": 0, "z-index": 1000,
-            "overflow": "hidden"
+        overlay.css({
+            "position": "absolute", "top": 0, "left": 0, "z-index": 1000
         });
         Sourcemap.map_overlay = overlay;
         $(Sourcemap.map_instance.map.div).css("position", "relative");
@@ -54,6 +53,9 @@ $(document).ready(function() {
         var ze = new OpenLayers.Control.ZoomToMaxExtent({"title": "zoom all the way out"});
         var zi = new OpenLayers.Control.ZoomIn({"title": "zoom in"});
         var zo = new OpenLayers.Control.ZoomOut({"title": "zoom out"});
+        $(zo.panel_div).html("-");
+        $(zi.panel_div).html("+");
+        $(ze.panel_div).html("0");
         var cpanel = new OpenLayers.Control.Panel({"defaultControl": ze});
         cpanel.addControls([zo, ze, zi]);
         Sourcemap.map_instance.map.addControl(cpanel);
@@ -62,7 +64,9 @@ $(document).ready(function() {
         Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
             Sourcemap.map_tour.wait();
         });
-
+        console.log($('#map-overlay').width());
+        console.log(window);
+        //$(document.body).css("font-size", Math.floor(document.body.clientWidth / 80)+"px");
         /*
         $(Sourcemap.map_overlay).data("state", 1);
         $(Sourcemap.map_overlay).click(function() {

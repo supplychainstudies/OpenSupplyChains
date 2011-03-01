@@ -1,6 +1,6 @@
 <!doctype html>  
 
-<html lang="en" class="no-js" style="height: 100%; width: 100%; overflow: hidden;">
+<html lang="en" class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -11,6 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
@@ -21,7 +22,7 @@
 
 </head>
 
-<body id="supplychain" style="height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden;">
+<body id="supplychain" style="height: 100%; width: 100%; margin: 0; padding: 0;">
 <?= $content ?>
 </body>
 

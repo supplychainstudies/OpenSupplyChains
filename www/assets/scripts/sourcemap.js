@@ -1,4 +1,5 @@
 Sourcemap = {};
+_S = Sourcemap;
 
 Sourcemap.ERROR = 1;
 Sourcemap.WARNING = 2;
@@ -256,5 +257,21 @@ Sourcemap.humanDate = function(then, now) {
 }
 
 Sourcemap.htesc = function(str) {
-    return $(str).text();
+    var esc = $(str).text();
+    if(esc.length === 0) esc = str;
+    return esc;
+}
+
+Sourcemap.ttrunc = function(str, lim, dots) {
+    var dots = dots || false;
+    var toks = str.split(/\s+/).reverse();
+    trunc = '';
+    while(toks.length && (trunc.length + toks[toks.length-1].length) < lim) {
+        trunc += toks.pop();
+    }
+    if(!trunc.length) trunc = str.substr(0, lim);
+    if(dots && str.length > trunc.length && trunc.length > 3) {
+        trunc = trunc.substr(0, trunc.length-3) + '...';
+    }
+    return trunc;
 }

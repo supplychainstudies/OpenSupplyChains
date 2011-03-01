@@ -1,4 +1,4 @@
-<h4 class="popup-title"><%= this.stop.getAttr("name", "Stop") %></h4>
-<h5 class="popup-placename"><%= this.stop.getAttr("placename", "n/a") %></h5>
-<p class="popup-description"><%= this.stop.getAttr("description", "") %></p>
+<h4 class="popup-title"><%= _S.ttrunc(this.stop.getAttr("name", "Stop"), 16) %></h4>
+<h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", "n/a")), 24) %></h5>
+<p class="popup-description"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("description", "")), 16) %></p>
 <a href="#">View Details</a>

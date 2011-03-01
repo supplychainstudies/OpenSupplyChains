@@ -19,7 +19,7 @@
         'sites/default/assets/styles/style.css', 'sites/default/assets/styles/sourcemap.less?v=2') ?>
 </head>
 
-<body id="supplychain" class="fixed">
+<body class="fixed">
     <div id="top-notice"></div>
     <div id="branding">
         <a href="">        

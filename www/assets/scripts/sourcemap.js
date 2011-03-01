@@ -254,3 +254,7 @@ Sourcemap.humanDate = function(then, now) {
     }
     return str;
 }
+
+Sourcemap.htesc = function(str) {
+    return $(str).text();
+}

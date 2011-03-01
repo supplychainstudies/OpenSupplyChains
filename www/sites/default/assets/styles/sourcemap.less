@@ -1041,21 +1041,31 @@ body#supplychain {
     }
     .olPopup h4, .olPopup h5 {
         margin: 0;
+        padding: 0;
     }
     .olPopup h4 {
         border-bottom: 1px solid #ccc;
         font-size: 1.5em;
+        line-height: .8em;
     }
     .olPopup h5 {
         font-weight: normal;
         color: #555;
+        line-height: 1em;
+        text-indent: .25em;
     }
     .olPopup .olPopupContent a {
+        &:hover {
+            background-color: #333;
+            color: #eee;
+        }
         display:block;
         text-align:center; 
         .rounded(4px);
         padding: 5px; 
         background: #eee;
+        height: auto;
+        color: #333;
     }
 
 }

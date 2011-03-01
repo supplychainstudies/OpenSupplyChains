@@ -16,7 +16,7 @@ $(document).ready(function() {
             }, tscope), tscope);
         }
     });
-    var scid = new Number(window.location.href.split('/').pop());
+    var scid = Sourcemap.embed_supplychain_id;
     Sourcemap.loadSupplychain(scid, function(sc) {
         Sourcemap.map_instance.addSupplychain(sc);
     });
@@ -32,7 +32,13 @@ $(document).ready(function() {
             for(var i=0; i<order.length; i++)
                 features.push(map.mapped_features[order[i]]);
         }
-        Sourcemap.map_tour = new Sourcemap.MapTour(Sourcemap.map_instance, {"features": features});
+        if(Sourcemap.embed_params && Sourcemap.embed_params.tour) {
+            Sourcemap.map_tour = new Sourcemap.MapTour(Sourcemap.map_instance, {
+                "features": features
+            });
+        } else {
+            Sourcemap.map_tour = false;
+        }
         // the line below has to be here because, otherwise,
         // openlayers doesn't properly position the popup in webkit (chrome)
         Sourcemap.map_instance.map.zoomIn();
@@ -62,10 +68,8 @@ $(document).ready(function() {
 
         // pause tour on click
         Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
-            Sourcemap.map_tour.wait();
+            if(Sourcemap.map_tour) Sourcemap.map_tour.wait();
         });
-        console.log($('#map-overlay').width());
-        console.log(window);
         //$(document.body).css("font-size", Math.floor(document.body.clientWidth / 80)+"px");
         /*
         $(Sourcemap.map_overlay).data("state", 1);

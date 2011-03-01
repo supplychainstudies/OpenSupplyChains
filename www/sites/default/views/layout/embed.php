@@ -34,6 +34,8 @@
   <![endif]-->
   
 </body>
+<script>
+    Sourcemap.embed_supplychain_id = <?= isset($supplychain_id) ? $supplychain_id : '"null"' ?>;
+    Sourcemap.embed_params = <?= isset($embed_params) ? json_encode($embed_params) : '{}' ?>;
+</script>
 </html>
-
-

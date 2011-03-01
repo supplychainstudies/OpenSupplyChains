@@ -90,6 +90,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout = View::factory('layout/embed');
                 $this->template = View::factory('map/embed');
+                $this->layout->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array(
                     'sourcemap-embed'
                 );
@@ -97,6 +98,30 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'sites/default/assets/styles/style.css',
                     'sites/default/assets/styles/sourcemap.less?v=2'
                 );
+                $params = array(
+                    'tour' => 'yes', 'tour_start_delay' => 7,
+                    'tour_interval' => 5
+                );
+                foreach($params as $k => $v) 
+                    if(isset($_GET[$k])) 
+                        $params[$k] = $_GET[$k];
+                $v = Validate::factory($params);
+                $v->rule('tour', 'regex', array('/yes|no/i'))
+                    ->rule('tour_start_delay', 'numeric')
+                    ->rule('tour_start_delay', 'range', array(0, 300))
+                    ->rule('tour_interval', 'numeric')
+                    ->rule('tour_interval', 'range', array(1, 15));
+                if($v->check()) {
+                    $params = $v->as_array();
+                    $params['tour'] = 
+                        strtolower(trim($params['tour'])) === 'yes' ? true : false;
+                    $this->layout->embed_params = $params;
+                } else {
+                    $this->request->status = 400;
+                    $this->layout = View::factory('layout/embed');
+                    $this->template = View::factory('error');
+                    $this->template->error_message = 'Bad params: '.http_build_query($params).'.';
+                }
             } else {
                 $this->request->status = 403;
                 $this->layout = View::factory('layout/embed');

@@ -992,9 +992,9 @@ body#supplychain {
     font-size: 101%;
     .sourcemap-embed-overlay {
         background-color: #eee;
-        height: 3.5em;
         padding: 0;
-        background: none;
+        margin: 0;
+        width: 100%;
         .embed-summary {
             background: none;
             h1 {
@@ -1002,7 +1002,6 @@ body#supplychain {
                 color: @brand-color;
                 text-indent: 1em;
                 font-size: 2.2em;
-                height: 1em;
                 text-transform: uppercase;
                 opacity: 0.8;
             }
@@ -1011,9 +1010,7 @@ body#supplychain {
                 background-color: @brand-color;
                 opacity: 0.8;
                 vertical-align: bottom; 
-                line-height: 1.5em;
                 width: 100%;
-                height: 1.5em;
                 margin: 0;
                 text-indent: 1.8em;
                 color: #eee;
@@ -1066,6 +1063,7 @@ body#supplychain {
     .olPopup h4, .olPopup h5 {
         margin: 0;
         padding: 0;
+        white-space: nowrap;
     }
     .olPopup h4 {
         border-bottom: 1px solid #ccc;
@@ -1077,7 +1075,6 @@ body#supplychain {
         color: #555;
         line-height: 1em;
         text-indent: .25em;
-        white-space: nowrap;
     }
     .olPopup .olPopupContent a {
         &:hover {

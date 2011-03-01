@@ -267,6 +267,7 @@ Sourcemap.ttrunc = function(str, lim, dots) {
     var toks = str.split(/\s+/).reverse();
     trunc = '';
     while(toks.length && (trunc.length + toks[toks.length-1].length) < lim) {
+        if(trunc.length) trunc += ' ';
         trunc += toks.pop();
     }
     if(!trunc.length) trunc = str.substr(0, lim);

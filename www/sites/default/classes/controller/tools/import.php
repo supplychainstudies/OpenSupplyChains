@@ -9,7 +9,7 @@ class Controller_Tools_Import extends Sourcemap_Controller_Layout {
     }
 
     public function action_csv() {
-        if(!Auth::instance()->get_user()) // todo: write method below.
+        if(!Auth::instance()->get_user()) 
             return $this->_forbidden('You must be logged in to use the import tool.');
         $this->layout->scripts = array(
             'sourcemap-core'
@@ -25,11 +25,17 @@ class Controller_Tools_Import extends Sourcemap_Controller_Layout {
                 try {
                     $sc = Sourcemap_Import_Csv::csv2sc($stop_csv, $hop_csv, $posted);
                 } catch(Exception $e) {
+                    die($e);
                     Message::instance()->set('Problem with import: '.$e->getMessage());
                     $this->request->redirect('tools/import/csv');
                 }
                 $sc->user_id = Auth::instance()->get_user();
                 $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc);
+                if(isset($posted->publish) && $posted->publish) {
+                    $new_sc = ORM::factory('supplychain', $new_sc_id);
+                    $new_sc->other_perms |= Sourcemap::READ;
+                    $new_sc->save();
+                }
                 if($new_sc_id)
                     Request::instance()->redirect('map/view/'.$new_sc_id);
                 else

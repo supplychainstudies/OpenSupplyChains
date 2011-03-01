@@ -48,7 +48,7 @@ class Sourcemap_Proj_Projection {
         if(isset($this->datum_code) && $this->datum_code && $this->datum_code != 'none') {
             $datum_def = Sourcemap_Proj::$datum[$this->datum_code];
             if($datum_def) {
-                $this->datum_params = $datum_def['towgs84'] ? split(',', $datum_def['towgs84']) : null;
+                $this->datum_params = $datum_def['towgs84'] ? explode(',', $datum_def['towgs84']) : null;
                 $this->ellps = $datum_def['ellipse'];
                 $this->datum_name = $datum_def['datumName'] ? $datum_def['datumName'] : $this->datum_code;
             }

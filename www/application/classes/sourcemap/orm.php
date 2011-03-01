@@ -141,7 +141,7 @@ class Sourcemap_ORM extends Kohana_ORM {
     public function save() {
         if(($this->empty_pk() || isset($this->_changed[$this->_primary_key])) && $this->_get_currval) {
             $connection = $this->_db->get_connection();
-            $connection->beginTransaction('save');
+            $connection->beginTransaction();
             try {
                 parent::save();
                 $result = $this->_db->query(Database::SELECT, 
@@ -154,11 +154,11 @@ class Sourcemap_ORM extends Kohana_ORM {
                 $this->_object[$this->_primary_key] = $last_insert_id;
             } catch(Exception $e) {
                 try {
-                    $connection->rollBack('save');
+                    $connection->rollBack();
                 } catch(Exception $ee) {}
                 throw $e;
             }
-            $connection->commit('save');
+            $connection->commit();
         } else {
             return parent::save();
         }

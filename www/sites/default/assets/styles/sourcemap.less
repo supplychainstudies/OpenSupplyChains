@@ -37,7 +37,7 @@ html { height:100%;}
 body {
     padding:0 1% 0 1%;
     width:98%;
-    min-width:1020px;
+    /*min-width:1020px;*/
     margin:0 auto;
     background: @background;
     a:hover, a:active, a:visited, a, a:link {
@@ -50,7 +50,7 @@ body {
 }
 body.fixed {
     #branding, #content, #footer-content, #page-navigation, .splash-text {
-        width:1020px;
+        /*width:1020px;*/
         padding-left:0;
         padding-right:0;
     }
@@ -989,6 +989,8 @@ ul.nav {
 }
 
 body#supplychain {
+    width: 100% !important;
+    min-width: 0 !important;
     font-size: 101%;
     .sourcemap-embed-overlay {
         background-color: #eee;

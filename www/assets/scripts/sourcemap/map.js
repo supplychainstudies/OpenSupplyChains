@@ -87,7 +87,7 @@ Sourcemap.Map.prototype.initMap = function() {
         controls.push(new OpenLayers.Control.ZoomPanel());
     var options = {
         "theme": "assets/scripts/openlayers/theme/sourcemap/style.css",
-        "projection": new OpenLayers.Projection("EPSG:3857"),
+        "projection": new OpenLayers.Projection("EPSG:900913"),
         "displayProjection": new OpenLayers.Projection("EPSG:4326"),
         "units": "m",
         "maxExtent": new OpenLayers.Bounds(

@@ -22,9 +22,8 @@
 
 </head>
 
-<body id="supplychain" style="height: 100%; width: 100%; margin: 0; padding: 0;">
+<body id="supplychain" style="height: 100%;margin: 0; padding: 0;">
 <?= $content ?>
-</body>
 
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
   
@@ -33,9 +32,9 @@
     <script> DD_belatedPNG.fix('img, .png_bg'); 
   <![endif]-->
   
-</body>
 <script>
     Sourcemap.embed_supplychain_id = <?= isset($supplychain_id) ? $supplychain_id : '"null"' ?>;
     Sourcemap.embed_params = <?= isset($embed_params) ? json_encode($embed_params) : '{}' ?>;
 </script>
+</body>
 </html>

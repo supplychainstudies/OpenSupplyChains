@@ -1,5 +1,5 @@
 <h1><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h1>
 <% if(this.stop.getAttr("description", false)) { %><div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div><% } %>
-<% if(this.stop.getAttr("funfact", false)) { %><div class="funfact"><h3>Fun Fact</h3><%= _S.htesc(this.stop.getAttr("funfact")) %></div><% } %>
+<% if(this.stop.getAttr("greenfact", false)) { %><div class="funfact"><h3>Fun Fact</h3><%= _S.htesc(this.stop.getAttr("funfact")) %></div><% } %>
 <% if(this.stop.getAttr("youtube:link", false)) { %><%= _S.magic.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
 <% if(this.stop.getAttr("vimeo:link", false)) { %><%= _S.magic.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>

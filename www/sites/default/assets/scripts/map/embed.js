@@ -13,6 +13,8 @@ $(document).ready(function() {
             }
             Sourcemap.template('embed/'+t.join('-'), $.proxy(function(p, tx, th) {
                 $(this.popup.contentDiv).html(th);
+                this.popup.updateSize();
+                this.popup.updatePosition();
             }, tscope), tscope);
         }
     });
@@ -71,9 +73,7 @@ $(document).ready(function() {
         Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
             if(Sourcemap.map_tour) Sourcemap.map_tour.wait();
         });
-        console.log($(document.body).height());
-        console.log($(document.body).width());
-        //$(document.body).css("font-size", Math.floor(document.body.clientWidth / 80)+"px");
+        $(document.body).css("font-size", Math.floor(document.body.clientWidth / 60)+"px");
         /*
         $(Sourcemap.map_overlay).data("state", 1);
         $(Sourcemap.map_overlay).click(function() {

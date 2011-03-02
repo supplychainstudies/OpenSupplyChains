@@ -7,19 +7,24 @@ Sourcemap.Supplychain = function() {
     this.broadcast('supplychain:instantiated', this);
 }
 
-Sourcemap.Supplychain.prototype.getLabel = function() {
-    var label = false;
-    var search_keys = ["org.sourcemap.name", "name", "label"];
-    for(var ki=0; ki<search_keys.length; ki++) {
-        var k = search_keys[ki];
-        if(this.attributes[k])
-            label = this.attributes[k];
+Sourcemap.Supplychain.prototype.getAttr = function(k, d) {
+    if(arguments.length == 1) {
+        return this.attributes[k];
+    } else if(arguments.length > 2) {
+        for(var i=0, args=[]; i<arguments.length; args.push(arguments[i++]));
+        var d = args.pop();
+        for(var i=0; i<args.length; i++) {
+            var k = args[i];
+            if(this.attributes[k] !== undefined) return this.attributes[k];
+        }
+        return d;
     }
-    if(!label && this.remote_id)
-        label = this.remote_id;
-    else if(!label)
-        label = this.instance_id;
-    return label;
+    if(this.attributes[k] !== undefined) return this.attributes[k];
+    else return d;
+}
+
+Sourcemap.Supplychain.prototype.getLabel = function() {
+    return this.getAttr("name", "label", "title", "A Sourcemap");
 }
 
 Sourcemap.Supplychain.prototype.broadcast = function() {

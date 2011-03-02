@@ -583,6 +583,7 @@ Sourcemap.Popup.prototype.setBorder = function(border) {
 }
 
 Sourcemap.Popup.prototype.setSize = function(content_sz) {
+    content_sz.h += this.ANCHOR_HT;
     OpenLayers.Popup.prototype.setSize.apply(this, arguments);
     $(this.div).css("height", (this.size.h + this.ANCHOR_HT) + "px");
 }

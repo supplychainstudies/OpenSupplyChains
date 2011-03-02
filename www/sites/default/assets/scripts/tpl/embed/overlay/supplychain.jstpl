@@ -1,5 +1,5 @@
 <div class="embed-summary">
-<h1><%= "A Sourcemap" %></h1>
+<h1><%= this.getAttr("name", "A Sourcemap") %></h1>
 <div>
 <p>
 <img class="user-avatar" src="<%= this.owner.avatar %>" />

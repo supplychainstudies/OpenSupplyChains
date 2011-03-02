@@ -31,10 +31,17 @@ class Controller_Tools_Import extends Sourcemap_Controller_Layout {
                 }
                 $sc->user_id = Auth::instance()->get_user();
                 $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc);
+                $new_sc = ORM::factory('supplychain', $new_sc_id);
                 if(isset($posted->publish) && $posted->publish) {
-                    $new_sc = ORM::factory('supplychain', $new_sc_id);
                     $new_sc->other_perms |= Sourcemap::READ;
                     $new_sc->save();
+                }
+                if(isset($posted->supplychain_name) && is_string($posted->supplychain_name)) {
+                    $attr = ORM::factory('supplychain_attribute');
+                    $attr->supplychain_id = $new_sc_id;
+                    $attr->key = 'name';
+                    $attr->value = substr($posted->supplychain_name, 0, 64);
+                    $attr->save();
                 }
                 if($new_sc_id)
                     Request::instance()->redirect('map/view/'.$new_sc_id);

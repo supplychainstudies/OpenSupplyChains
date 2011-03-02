@@ -169,6 +169,7 @@ $(document).ready(function() {
         Sourcemap.embed_dialog_show = function(mkup) {
             if(mkup) $(Sourcemap.map_dialog).html(mkup);
             $(Sourcemap.map_dialog).show().data("state", 1);
+            Sourcemap.map_tour.stop();
         }
         Sourcemap.embed_dialog_hide = function() {
             $(Sourcemap.map_dialog).empty();

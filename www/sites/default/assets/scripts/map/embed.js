@@ -1,9 +1,33 @@
+Sourcemap.magic = {
+    "youtube": {
+        "link": function(lnk) {
+            var mkup = '<iframe title="YouTube video player" width="400" height="300" '+
+                'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'" frameborder="0" '+
+                'allowfullscreen></iframe>';
+            return mkup;
+        }
+    },
+    "vimeo": {
+        "link": function(lnk) {
+            var mkup = '<iframe src="http://player.vimeo.com/video/'+
+                (lnk.match(/\/(\d+)$/))[1]+'?title=0&amp;byline=0&amp;portrait=0" '+
+                'width="400" height="300" frameborder="0"></iframe>';
+            return mkup;
+        }
+    }
+};
+
 $(document).ready(function() {
     // reset template path to site-specific location
     Sourcemap.TPL_PATH = "sites/default/assets/scripts/tpl/";
 
-    Sourcemap.embed_stop_details = function(stop, sc) {
+    Sourcemap.embed_stop_details = function(stid, scid) {
         // load stop details template and show in embed dialog
+        var sc = Sourcemap.map_instance.supplychains[scid];
+        var stop = sc.findStop(stid);
+        Sourcemap.template('embed/details/stop', function(p, tx, th) {
+            Sourcemap.embed_dialog_show(th);
+        }, {"stop": stop, "supplychain": sc});
     }
 
     Sourcemap.embed_hop_details = function(hop, sc) {
@@ -27,6 +51,37 @@ $(document).ready(function() {
                 this.popup.updateSize();
                 this.popup.updatePosition();
             }, tscope), tscope);
+        },
+        "prep_stop": function(stop, ftr) {
+            var sz = 5;
+            var vol = parseFloat(stop.getAttr("percentage"));
+            if(!isNaN(vol)) {
+                if(vol < 1) {
+                    sz = 5;
+                } else if(vol < 20) {
+                    sz = 10;
+                } else if(vol < 70) {
+                    sz = 14;
+                } else {
+                    sz = 48;
+                }
+            }
+            ftr.attributes.size = sz;
+            var color = stop.getAttr("color", null);
+            var cat = stop.getAttr('category');
+            switch(cat) {
+                case "FS":
+                    color = "#66cc33";
+                    break;
+                case "D":
+                    color = "#339933";
+                    break;
+                default:
+                    color = "#006633";
+                    break;
+            }
+            if(color)
+                ftr.attributes.color = color;
         }
     });
 
@@ -101,6 +156,7 @@ $(document).ready(function() {
         // pause tour on click
         Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
             if(Sourcemap.map_tour) Sourcemap.map_tour.wait();
+            Sourcemap.embed_dialog_hide();
         });
 
         // set body font-size to a constant(ish) factor based on doc width
@@ -115,6 +171,7 @@ $(document).ready(function() {
             $(Sourcemap.map_dialog).show().data("state", 1);
         }
         Sourcemap.embed_dialog_hide = function() {
+            $(Sourcemap.map_dialog).empty();
             $(Sourcemap.map_dialog).hide().data("state", 0);
         }
         Sourcemap.embed_dialog_show();

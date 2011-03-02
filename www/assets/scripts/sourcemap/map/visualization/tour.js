@@ -6,6 +6,8 @@ Sourcemap.MapTour = function(map, o) {
     this.features = o.features || [];
     this.ftr_index = -1;
     this.timeout = null;
+    this.instance_id = Sourcemap.instance_id('sourcemap-tour');
+    this.stopped = false;
     Sourcemap.Configurable.call(this, o);
 }
 
@@ -19,10 +21,35 @@ Sourcemap.MapTour.prototype.init = function() {
     this.interval = this.options.interval > 0 ? this.options.interval * 1000 : 1000;
     this.wait_interval = this.options.wait_interval > 0 ? this.options.wait_interval : 0;
     this.initEvents();
+    this.initControls();
     this.features = this.getFeatures();
     this.wait();
     Sourcemap.broadcast('map_tour:init', this);
     return this;
+}
+
+Sourcemap.MapTour.prototype.initControls = function() {
+    this.controls_div_id = this.instance_id+'-controls';
+    this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel"></div>');
+    this.control_prev = $('<div class="sourcemap-tour-prev"></div>');
+    this.control_next = $('<div class="sourcemap-tour-next"></div>');
+    this.control_play = $('<div class="sourcemap-tour-play stopped"></div>');
+    $(this.map.map.div).append(this.controls);
+    $(this.controls).append(this.control_prev).append(this.control_play)
+        .append(this.control_next);
+    this.control_prev.click($.proxy(function() {
+        this.prev();
+    }, this));
+    this.control_next.click($.proxy(function() {
+        this.next();
+    }, this));
+    this.control_play.click($.proxy(function() {
+        if(this.timeout) {
+            this.stop();
+        } else {
+            this.start();
+        }
+    }, this));
 }
 
 Sourcemap.MapTour.prototype.initEvents = function() {
@@ -69,7 +96,10 @@ Sourcemap.MapTour.prototype.wait = function() {
 }
 
 Sourcemap.MapTour.prototype.start = function() {
+    if(this.timeout) this.clearTimeout(this.timeout);
+    this.stopped = false;
     Sourcemap.broadcast('map_tour:start', this);
+    this.control_play.removeClass("stopped");
     for(var i=0; i<this.features.length; i++)
         this.map.controls.select.unselect(this.features[i]);
     this.next();
@@ -77,11 +107,14 @@ Sourcemap.MapTour.prototype.start = function() {
 }
 
 Sourcemap.MapTour.prototype.stop = function() {
-    if(this.timeout) clearTimeout(this.timeout);
+    if(this.timeout) this.clearTimeout(this.timeout);
+    this.stopped = true;
+    this.control_play.addClass("stopped");
     return this;
 }
 
 Sourcemap.MapTour.prototype.next = function() {
+    this.clearTimeout();
     var next_index = this.ftr_index >= this.features.length ?
         0 : this.ftr_index+1;
     var current_ftr = this.features[this.ftr_index] || null;
@@ -94,8 +127,31 @@ Sourcemap.MapTour.prototype.next = function() {
             this.map.controls.select.select(next_ftr);
     }
     this.ftr_index = next_index;
+    if(!this.stopped)
+        this.timeout = setTimeout($.proxy(this.next, this), this.interval);
+}
+
+Sourcemap.MapTour.prototype.prev = function() {
+    this.clearTimeout();
+    var prev_index = this.ftr_index <= 0 ?
+        this.features.length-1 : this.ftr_index-1;
+    var current_ftr = this.features[this.ftr_index] || null;
+    var prev_ftr = this.features[prev_index] || null;
+    if(current_ftr && this.map.controls && this.map.controls.select) 
+        this.map.controls.select.unselect(current_ftr);
+    if(prev_ftr) {
+        this.map.map.panTo(this.getFeatureLonLat(prev_ftr));
+        if(this.map.controls && this.map.controls.select)
+            this.map.controls.select.select(prev_ftr);
+    }
+    this.ftr_index = prev_index;
+    if(!this.stopped)
+        this.timeout = setTimeout($.proxy(this.next, this), this.interval);
+}
+
+Sourcemap.MapTour.prototype.clearTimeout = function() {
     if(this.timeout) clearTimeout(this.timeout);
-    this.timeout = setTimeout($.proxy(this.next, this), this.interval);
+    this.timeout = null;
 }
 
 Sourcemap.MapTour.prototype.getNextFeature = function() {}

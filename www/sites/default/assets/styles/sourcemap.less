@@ -1001,8 +1001,14 @@ body#supplychain {
         top: 15%;
         left: 10%;
         padding: 1em;
-        .rounded(1em);
+        .rounded(.5em);
         border: .3em solid #666;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        iframe {
+            margin: 1em;
+            border: .5em solid #ccc;
+        }
     }
     .sourcemap-embed-overlay {
         background-color: #eee;
@@ -1038,14 +1044,15 @@ body#supplychain {
         }
     }
     .olControlPanel {
-        height: 6em;
+        height: 2em;
         background-color: none;
         left: 1em;
-        bottom: .25em;
+        bottom: 1.5em;
     }
     .olControlPanel div {
         float: left;
         opacity: 0.8;
+        clear: none;
     }
     .olControlPanel div:hover {
         opacity: 1.0;
@@ -1053,20 +1060,60 @@ body#supplychain {
     .olControlPanel .olControlZoomToMaxExtentItemActive {
         width: 2em;
         height: 2em;
-        background-color: yellow;
+        /*background-color: yellow;*/
+        background-image: url("/sites/default/assets/images/embed-zoom-zoommax.png");
+        background-size: 100%;
         background-repeat: no-repeat;
     }    
     .olControlPanel .olControlZoomInItemInactive {
         width: 2em;
         height: 2em;
-        background-color: green;
+        /*background-color: green;*/
+        background-image: url("/sites/default/assets/images/embed-zoom-zoomin.png");
+        background-size: 100%;
         background-repeat: no-repeat;
     }
     .olControlPanel .olControlZoomOutItemInactive {
         width: 2em;
         height: 2em;
-        background-color: red;
+        /*background-color: red;*/
+        background-image: url("/sites/default/assets/images/embed-zoom-zoomout.png");
+        background-size: 100%;
         background-repeat: no-repeat;
+    }
+    .sourcemap-tour-control-panel {
+        z-index: 1008;
+        width: 6em;
+        height: 2em;
+        background-color: none;
+        left: 10em;
+        bottom: 1.5em;
+        background: none;
+        position: absolute;
+        div {
+            width: 2em;
+            height: 2em;
+            float: left;
+            clear: none;
+            background-size: 100%;
+            background-repeat: no-repeat;
+            opacity: 0.8;
+            &:hover {
+                opacity: 1.0;
+            }
+        }
+        .sourcemap-tour-prev {
+            background-image: url("/sites/default/assets/images/embed-tour-prev.png");
+        }
+        .sourcemap-tour-play {
+            background-image: url("/sites/default/assets/images/embed-tour-stop.png");
+            &.stopped {
+                background-image: url("/sites/default/assets/images/embed-tour-play.png");
+            }
+        }
+        .sourcemap-tour-next {
+            background-image: url("/sites/default/assets/images/embed-tour-next.png");
+        }
     }
     .olPopup .olPopupContent > * {
         padding: .25em;
@@ -1103,7 +1150,9 @@ body#supplychain {
         height: auto;
         color: #333;
     }
-
+    .olPopup .popup-description {
+        font-size: .7em;
+    }
 }
 
 /* Sourcemap Stylesheet ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> */

@@ -31,6 +31,8 @@ class Sourcemap_Import_Csv {
         $data = array();
 
         if($headers) $headers = array_shift($csv);
+        for($i=0; $i<count($headers); $i++) 
+            $headers[$i] = strtolower($headers[$i]);
         foreach($csv as $ri => $row) {
             if($headers && is_array($headers)) {
                 $record = array();
@@ -134,6 +136,8 @@ class Sourcemap_Import_Csv {
         $csv = Sourcemap_Csv::parse($csv);
 
         if($headers) $headers = array_shift($csv);
+        for($i=0; $i<count($headers); $i++) 
+            $headers[$i] = strtolower($headers[$i]);
         foreach($headers as $i => $h) {
             if(is_null($fromcol) && preg_match('/^from(_?stop)?$/i', $h)) {
                 $fromcol = $h;

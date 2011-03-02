@@ -1,6 +1,6 @@
 <!doctype html>  
 
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" style="height: 100%; height: 100%;">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -22,7 +22,7 @@
 
 </head>
 
-<body id="supplychain" style="height: 100%;margin: 0; padding: 0;">
+<body id="supplychain" style="width: 100%;height: 100%;margin: 0; padding: 0;">
 <?= $content ?>
 
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>

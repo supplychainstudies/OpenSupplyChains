@@ -34,7 +34,8 @@ $(document).ready(function() {
         }
         if(Sourcemap.embed_params && Sourcemap.embed_params.tour) {
             Sourcemap.map_tour = new Sourcemap.MapTour(Sourcemap.map_instance, {
-                "features": features
+                "features": features, "wait_interval": Sourcemap.embed_params.tour_start_delay,
+                "interval": Sourcemap.embed_params.tour_interval
             });
         } else {
             Sourcemap.map_tour = false;
@@ -59,9 +60,9 @@ $(document).ready(function() {
         var ze = new OpenLayers.Control.ZoomToMaxExtent({"title": "zoom all the way out"});
         var zi = new OpenLayers.Control.ZoomIn({"title": "zoom in"});
         var zo = new OpenLayers.Control.ZoomOut({"title": "zoom out"});
-        $(zo.panel_div).html("-");
+        /*$(zo.panel_div).html("-");
         $(zi.panel_div).html("+");
-        $(ze.panel_div).html("0");
+        $(ze.panel_div).html("0");*/
         var cpanel = new OpenLayers.Control.Panel({"defaultControl": ze});
         cpanel.addControls([zo, ze, zi]);
         Sourcemap.map_instance.map.addControl(cpanel);
@@ -70,6 +71,8 @@ $(document).ready(function() {
         Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
             if(Sourcemap.map_tour) Sourcemap.map_tour.wait();
         });
+        console.log($(document.body).height());
+        console.log($(document.body).width());
         //$(document.body).css("font-size", Math.floor(document.body.clientWidth / 80)+"px");
         /*
         $(Sourcemap.map_overlay).data("state", 1);

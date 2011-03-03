@@ -42,7 +42,7 @@ Sourcemap.magic = {
                 */
                 if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
                     var mkup = '<div class="flickr-photoset"><h3>Slideshow</h3><object type="text/html" '+
-                        'data="http://www.flickr.com/slideShow/index.gne?set_id='+setid+'" width="500" height="500"></object></div>';
+                        'data="http://www.flickr.com/slideShow/index.gne?set_id='+setid+'" width="400" height="300"></object></div>';
                 } else {
                     var mkup = '';
                 }

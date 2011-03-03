@@ -26,20 +26,21 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 	$post = Validate::factory($_POST);
 	$post->rule('username', 'not_empty')
 	    ->rule('username', 'max_length', array(318))
-            ->rule('username', 'min_length', array(4))
+        ->rule('username', 'min_length', array(4))
 	    ->rule('email', 'not_empty')
 	    ->rule('email', 'max_length', array(318))
-            ->rule('email', 'min_length', array(4))
+        ->rule('email', 'min_length', array(4))
 	    ->rule('password', 'not_empty')
 	    ->rule('password', 'max_length', array(16))
-            ->rule('password', 'min_length', array(6))
-	    ->rule('confirmpassword', 'not_empty')
-	    ->rule('confirmpassword', 'max_length', array(16))
-            ->rule('confirmpassword', 'min_length', array(6))
+        ->rule('password', 'min_length', array(6))
+	    ->rule('confirm_password', 'not_empty')
+	    ->rule('confirm_password', 'max_length', array(16))
+        ->rule('confirm_password', 'min_length', array(6))
 	    ->filter(true, 'trim');
 
 	
-	if(strtolower(Request::$method) === 'post'){
+	if(strtolower(Request::$method) === 'post' && $post->check()){
+
 	    $post = (object)$post->as_array();
 	    
 	    if($post->password == $post->confirm_password) {

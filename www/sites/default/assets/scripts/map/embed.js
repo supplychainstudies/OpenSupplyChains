@@ -14,6 +14,34 @@ Sourcemap.magic = {
                 'width="400" height="300" frameborder="0"></iframe>';
             return mkup;
         }
+    },
+    "flickr": {
+        "api_key": "06ea60fff75fc5721cfd11d823634ab8",
+        "setid": function(setid, elid) {
+            var url = "http://www.flickr.com/services/rest/?jsoncallback=?";
+            $.getJSON(url, {
+                "method": "flickr.photosets.getPhotos", "format": "json",
+                "api_key": Sourcemap.magic.flickr.api_key, "photoset_id": setid
+            }, function(data) {
+                var mkup = $('<div class="flickr-photoset not-found"></div>');
+                if(data.photoset && data.photoset.photo && data.photoset.photo.length) {
+                    mkup = $('<div class="flickr-photoset"></div>');
+                    var ownerid = data.photoset.owner;
+                    var ownername = data.photoset.ownername;
+                    for(var i=0; i<data.photoset.photo.length; i++) {
+                        var photo = data.photoset.photo[i];
+                        var farm = photo.farm;
+                        var server = photo.server;
+                        var imgurl = 'http://farm'+farm+'.static.flickr.com/'+server+'/'+photo.id+'_'+photo.secret+'.jpg'
+                        var seturl = 'http://www.flickr.com/photos/'+ownername+'/sets/'+setid;
+                        mkup.append('<a href="'+seturl+'"><img src="'+imgurl+'" /></a>');
+                    }
+                    mkup.append('<div class="clear">&nbsp;</div>');
+                }
+                return $('#flickr-photoset-'+setid).html(mkup);
+            });
+            return '';
+        }
     }
 };
 

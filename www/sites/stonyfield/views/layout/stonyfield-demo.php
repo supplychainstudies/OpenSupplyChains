@@ -33,9 +33,6 @@ Stonyfield Yogurt - Sourcemap
         width: 100%;
         background-color: #fff;
     }
-    #content > * {
-        padding: 1em;
-    }
     #foot {}
     #foot img {
         float: right;
@@ -46,79 +43,7 @@ Stonyfield Yogurt - Sourcemap
         width: 100%;
         clear: both;
     }
-    .olPopup {
-        -moz-border-radius: 0 10px 10px 10px;
-        -webkit-border-radius: 0 10px 10px 10px;
-        border: 1px solid #333 !important;
-        color: #333;
-        font-family: "Palatino", "Georgia", serif;
-        padding: 1em;
-    }
-    .olPopup h4, h5, a {
-        margin: 0;
-        padding: 0;
-    }
-    .olPopup h5 {
-        font-weight: normal;
-        margin-bottom: .25em;
-    }
-    .olPopup a {
-        color: #525b0c;
-        color: #362a76;
-        font-family: "Helvetica", "Arial", sans-serif;
-        font-size: .8em;
-    }
-    #dialog {
-        color: #333;
-        font-family: "Palatino", "Georgia", serif;
-        font-family: "Helvetica", "Arial", sans-serif;
-    }
-    #dialog h2, #dialog h3, #dialog h4 {
-        margin: 0;
-        padding: 0;
-    }
-    #dialog h2 {
-        font-size: 1.8em;
-        border-bottom: 1px solid #bbb;
-        color: darkgreen;
-    }
-    #dialog h3 {
-        font-size: 1.2em;
-        font-weight: normal;
-    }
-    #dialog h3 .placename {
-        font-weight: bold;
-        padding-top: 0;
-    }
-    #dialog a {
-        border: none;
-        outline: none;
-    }
-    #dialog p {
-        padding: 0;
-        margin: 1em 0 1em 0;
-        font-family: "Helvetica", "Arial", sans-serif;
-        font-size: .9em;
-    }
-    #dialog .fun-fact {
-        padding: 0;
-        padding-top: 1em;
-        font-style: italic;
-    }
-    #dialog .fun-fact h4 {
-        border-bottom: 1px solid #ccc;
-    }
-
-    .ui-dialog-titlebar {
-        background: none;
-        border: none;
-    }
-
-    .ui-resizable-handle, .ui-resizable-handle * {
-        background: none;
-    }
-
-        ul.map-nav { width: 100%; background-color: white; margin: 0; padding: 0;}
+    ul.map-nav { width: 100%; background-color: white; margin: 0; padding: 0;}
     ul.map-nav li { margin-top: 0; display: inline; padding: .25em; background-color: #ccc; }
     ul.map-nav li a { color: black; }
     ul.map-nav li.dairy { background-color: #60cb59; }

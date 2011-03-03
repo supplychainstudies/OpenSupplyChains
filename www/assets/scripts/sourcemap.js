@@ -286,7 +286,7 @@ Sourcemap.ttrunc = function(str, lim, dots) {
 
 Sourcemap.tlinkify = function(str) {
     var txt = _S.htesc(str);
-    var regex = /((https?:\/\/)?([\w\d]+\.){1,2}([\w\d]{3})((\/[\d\w%\.]+)+)?(\?([\d\w%]+=[\d\w%]+&?)+)?)/g;
+    var regex = /((((http|https):\/\/([\w\d]+\.){1,2})|www\.[\w\d-]+\.)([\w\d]{2,3})((\/[\d\w%\.]+)+)?(\?([\d\w%]+=[\d\w%]+&?)+)?)/g;
     regex = new RegExp(regex);
-    return txt.replace(regex, '<a href="http://$1">$1</a>');
+    return txt.replace(regex, '<a href="$1">$1</a>');
 }

@@ -992,22 +992,31 @@ body#supplychain {
     width: 100% !important;
     min-width: 0 !important;
     font-size: 101%;
+    h1,h2,h3,h4,h5,h6 { 
+        color: @brand-color;
+    }
     .map-dialog {
         margin: auto;
-        width: 80%;
+        width: auto;
+        max-width: 70%;
         height: 70%;
         background-color: #eee;
         position: absolute;
         top: 15%;
         left: 10%;
         padding: 1em;
-        .rounded(.5em);
-        border: .3em solid #666;
+        .rounded(.25em);
+        /*border: .3em solid #666;*/
         overflow-y: scroll;
         overflow-x: hidden;
+        font-size: .8em;
         iframe {
             margin: 1em;
             border: .5em solid #ccc;
+        }
+        h1 {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: .5em;
         }
         h3 {
             margin-top: 1em;
@@ -1020,11 +1029,12 @@ body#supplychain {
         width: 100%;
         .embed-summary {
             background: none;
+            font-size: 110%;
             h1 {
                 color: #5585f5;
                 color: @brand-color;
                 text-indent: 1em;
-                font-size: 2.2em;
+                font-size: 2em;
                 text-transform: uppercase;
                 opacity: 0.8;
             }
@@ -1037,6 +1047,7 @@ body#supplychain {
                 margin: 0;
                 text-indent: 1.8em;
                 color: #eee;
+                font-size: 1.2em;
                 .user-avatar {
                     height: 1.5em;
                     width: 1.5em;
@@ -1049,7 +1060,7 @@ body#supplychain {
     .olControlPanel {
         height: 2em;
         background-color: none;
-        left: 1em;
+        left: 12em;
         bottom: 1.5em;
     }
     .olControlPanel div {
@@ -1066,7 +1077,9 @@ body#supplychain {
         /*background-color: yellow;*/
         background-image: url("/sites/default/assets/images/embed-zoom-zoommax.png");
         background-size: 100%;
+        -moz-background-size: 100%;
         background-repeat: no-repeat;
+        display: none;
     }    
     .olControlPanel .olControlZoomInItemInactive {
         width: 2em;
@@ -1074,6 +1087,7 @@ body#supplychain {
         /*background-color: green;*/
         background-image: url("/sites/default/assets/images/embed-zoom-zoomin.png");
         background-size: 100%;
+        -moz-background-size: 100%;
         background-repeat: no-repeat;
     }
     .olControlPanel .olControlZoomOutItemInactive {
@@ -1082,23 +1096,25 @@ body#supplychain {
         /*background-color: red;*/
         background-image: url("/sites/default/assets/images/embed-zoom-zoomout.png");
         background-size: 100%;
+        -moz-background-size: 100%;
         background-repeat: no-repeat;
     }
     .sourcemap-tour-control-panel {
         z-index: 1008;
-        width: 6em;
-        height: 2em;
+        width: 9em;
+        height: 3em;
         background-color: none;
-        left: 10em;
+        left: 30em;
         bottom: 1.5em;
         background: none;
         position: absolute;
         div {
-            width: 2em;
-            height: 2em;
+            width: 3em;
+            height: 3em;
             float: left;
             clear: none;
             background-size: 100%;
+            -moz-background-size: 100%;
             background-repeat: no-repeat;
             opacity: 0.8;
             &:hover {
@@ -1145,11 +1161,11 @@ body#supplychain {
             background-color: #333;
             color: #eee;
         }
-        display:block;
+        display: block;
         text-align:center; 
         .rounded(.25em);
         padding: .1em; 
-        background: #eee;
+        /*background: #eee;*/
         height: auto;
         color: #333;
     }

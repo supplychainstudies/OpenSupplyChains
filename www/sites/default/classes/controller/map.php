@@ -113,6 +113,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('tour_interval', 'range', array(1, 15));
                 if($v->check()) {
                     $params = $v->as_array();
+                    $params['tour_start_delay'] = (int)$params['tour_start_delay'];
+                    $params['tour_interval'] = (int)$params['tour_interval'];
                     $params['tour'] = 
                         strtolower(trim($params['tour'])) === 'yes' ? true : false;
                     $this->layout->embed_params = $params;

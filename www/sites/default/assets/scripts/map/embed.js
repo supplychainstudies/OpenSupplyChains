@@ -23,6 +23,9 @@ Sourcemap.magic = {
                 "method": "flickr.photosets.getPhotos", "format": "json",
                 "api_key": Sourcemap.magic.flickr.api_key, "photoset_id": setid
             }, function(data) {
+                // let's not use this, which is nice and manageable, and instead
+                // use the following shitty slideshow embed.
+                /*
                 var mkup = $('<div class="flickr-photoset not-found"></div>');
                 if(data.photoset && data.photoset.photo && data.photoset.photo.length) {
                     mkup = $('<div class="flickr-photoset"></div>');
@@ -38,6 +41,9 @@ Sourcemap.magic = {
                     }
                     mkup.append('<div class="clear">&nbsp;</div>');
                 }
+                */
+                var mkup = '<div class="flickr-photoset"><h3>Slideshow</h3><object type="text/html" '+
+                    'data="http://www.flickr.com/slideShow/index.gne?set_id='+setid+'" width="500" height="500"></object></div>';
                 return $('#flickr-photoset-'+setid).html(mkup);
             });
             return '';

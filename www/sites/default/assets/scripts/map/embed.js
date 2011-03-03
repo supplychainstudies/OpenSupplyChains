@@ -160,7 +160,7 @@ $(document).ready(function() {
         });
 
         // set body font-size to a constant(ish) factor based on doc width
-        $(document.body).css("font-size", Math.floor(document.body.clientWidth / 60)+"px");
+        $(document.body).css("font-size", Math.floor(document.body.clientWidth / 65)+"px");
 
         // set up dialog
         Sourcemap.map_dialog = $('<div id="embed-dialog" class="map-dialog"><H2>HELLO</H2></div>');
@@ -168,6 +168,9 @@ $(document).ready(function() {
         $(Sourcemap.map_dialog).data("state", 1);
         Sourcemap.embed_dialog_show = function(mkup) {
             if(mkup) $(Sourcemap.map_dialog).html(mkup);
+            var m = Math.floor(document.body.clientWidth - $(Sourcemap.map_dialog).width()) / 2;
+            Sourcemap.map_instance.controls.select.unselectAll();
+            $(Sourcemap.map_dialog).css({"left": m+"px"});
             $(Sourcemap.map_dialog).show().data("state", 1);
             Sourcemap.map_tour.stop();
         }
@@ -175,7 +178,6 @@ $(document).ready(function() {
             $(Sourcemap.map_dialog).empty();
             $(Sourcemap.map_dialog).hide().data("state", 0);
         }
-        Sourcemap.embed_dialog_show();
         Sourcemap.embed_dialog_hide();
     });
 });

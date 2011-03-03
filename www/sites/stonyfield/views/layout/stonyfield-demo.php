@@ -118,29 +118,7 @@ Stonyfield Yogurt - Sourcemap
         background: none;
     }
 
-    /* hock */
-    .olPopup {
-        border:1px solid #fff !important;
-        height:90px !important; 
-        background:#fff !important; 
-        padding:5px 0 5px 5px !important; 
-        border:none !important; 
-        font-family:Helvetica, Arial, sans-serif !important;
-        position:relative;
-    } 
-    .olPopupContent {
-        width:215px !important;
-        background:#fff; 
-        margin-right:5px;
-    } 
-    .olPopupContent a { 
-        display:block;
-        text-align:center; -moz-border-radius:4px; -webkit-border-radius:4px;
-        padding:5px; background:#eee;
-    } 
-    .olPopupCloseBox {display:none;} 
-    .olPopup h4 {color:darkgreen;}
-    ul.map-nav { width: 100%; background-color: white; margin: 0; padding: 0;}
+        ul.map-nav { width: 100%; background-color: white; margin: 0; padding: 0;}
     ul.map-nav li { margin-top: 0; display: inline; padding: .25em; background-color: #ccc; }
     ul.map-nav li a { color: black; }
     ul.map-nav li.dairy { background-color: #60cb59; }
@@ -167,6 +145,7 @@ Stonyfield Yogurt - Sourcemap
 </div>
 <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
 <script>
+/*
 $(document).ready(function() {
 
 
@@ -269,6 +248,7 @@ $(document).ready(function() {
         });
     });
 });
+*/
 </script>
 </body>
 </html>

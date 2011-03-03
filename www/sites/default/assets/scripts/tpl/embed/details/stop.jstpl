@@ -3,3 +3,8 @@
 <% if(this.stop.getAttr("greenfact", false)) { %><div class="greenfact"><h3>Sustainability Fact</h3><%= _S.htesc(this.stop.getAttr("greenfact")) %></div><% } %>
 <% if(this.stop.getAttr("youtube:link", false)) { %><%= _S.magic.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
 <% if(this.stop.getAttr("vimeo:link", false)) { %><%= _S.magic.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>
+<% if(this.stop.getAttr("flickr:setid", false)) {  %>
+<div id="flickr-photoset-<%= this.stop.getAttr("flickr:setid") %>">
+<%= _S.magic.flickr.setid(this.stop.getAttr("flickr:setid")) %>
+</div>
+<% } %>

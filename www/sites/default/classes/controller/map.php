@@ -100,7 +100,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 );
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
-                    'tour_interval' => 5, 'banner' => false
+                    'tour_interval' => 5, 'banner' => false,
+                    'geoloc' => true
                 );
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 
@@ -110,13 +111,21 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('tour_start_delay', 'numeric')
                     ->rule('tour_start_delay', 'range', array(0, 300))
                     ->rule('tour_interval', 'numeric')
-                    ->rule('tour_interval', 'range', array(1, 15));
+                    ->rule('tour_interval', 'range', array(1, 15))
+                    ->rule('geoloc', 'not_empty');
                 if($v->check()) {
                     $params = $v->as_array();
                     $params['tour_start_delay'] = (int)$params['tour_start_delay'];
                     $params['tour_interval'] = (int)$params['tour_interval'];
                     $params['tour'] = 
                         strtolower(trim($params['tour'])) === 'yes' ? true : false;
+                    if($params['geoloc']) {
+                        $params['iploc'] = false;
+                        if(isset($_SERVER['REMOTE_ADDR'])) {
+                            $_SERVER['REMOTE_ADDR'] = '18.9.22.69';
+                            $params['iploc'] = Sourcemap_Ip::find_ip($_SERVER['REMOTE_ADDR']);
+                        }
+                    }
                     $this->layout->embed_params = $params;
                 } else {
                     $this->request->status = 400;

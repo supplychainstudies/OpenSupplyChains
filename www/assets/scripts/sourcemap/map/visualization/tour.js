@@ -86,7 +86,9 @@ Sourcemap.MapTour.prototype.getFeatures = function() {
 }
 
 Sourcemap.MapTour.prototype.wait = function() {
-    this.stop();
+    this.clearTimeout();
+    $(this.control_play).removeClass("stopped");
+    this.stopped = false;
     if(this.wait_interval) {
         this.timeout = setTimeout($.proxy(this.start, this), this.wait_interval*1000);
     } else {

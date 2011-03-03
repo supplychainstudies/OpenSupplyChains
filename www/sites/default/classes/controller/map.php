@@ -100,7 +100,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 );
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
-                    'tour_interval' => 5
+                    'tour_interval' => 5, 'banner' => false
                 );
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 

@@ -996,9 +996,10 @@ body#supplychain {
         color: @brand-color;
     }
     .map-dialog {
+        z-index: 1010;
         margin: auto;
         width: auto;
-        max-width: 70%;
+        max-width: 50%;
         height: 70%;
         background-color: #eee;
         position: absolute;
@@ -1173,7 +1174,9 @@ body#supplychain {
         display: block;
         text-align:center; 
         .rounded(.25em);
-        padding: .1em; 
+        padding: .1em;
+        padding-bottom: 0;
+        margin-bottom: 0;
         /*background: #eee;*/
         height: auto;
         color: #333;

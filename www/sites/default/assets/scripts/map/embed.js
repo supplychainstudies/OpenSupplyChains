@@ -171,12 +171,15 @@ $(document).ready(function() {
         overlay.css({
             "position": "absolute", "top": 0, "left": 0, "z-index": 1000
         });
-        Sourcemap.map_overlay = overlay;
-        $(Sourcemap.map_instance.map.div).css("position", "relative");
-        $(Sourcemap.map_instance.map.div).append(overlay);
-        Sourcemap.template('embed/overlay/supplychain', function(p, tx, th) {
-            $(Sourcemap.map_overlay).html(th);
-        }, sc);
+        
+        if(Sourcemap.embed_params && Sourcemap.embed_params.banner) {
+            Sourcemap.map_overlay = overlay;
+            $(Sourcemap.map_instance.map.div).css("position", "relative");
+            $(Sourcemap.map_instance.map.div).append(overlay);
+            Sourcemap.template('embed/overlay/supplychain', function(p, tx, th) {
+                $(Sourcemap.map_overlay).html(th);
+            }, sc);
+        }
 
         // make and place custom zoom controls
         var ze = new OpenLayers.Control.ZoomToMaxExtent({"title": "zoom all the way out"});
@@ -191,7 +194,7 @@ $(document).ready(function() {
 
         // pause tour on click
         Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
-            if(Sourcemap.map_tour) Sourcemap.map_tour.wait();
+            if(Sourcemap.map_tour) Sourcemap.map_tour.stop();
             Sourcemap.embed_dialog_hide();
         });
 
@@ -199,7 +202,7 @@ $(document).ready(function() {
         $(document.body).css("font-size", Math.floor(document.body.clientWidth / 65)+"px");
 
         // set up dialog
-        Sourcemap.map_dialog = $('<div id="embed-dialog" class="map-dialog"><H2>HELLO</H2></div>');
+        Sourcemap.map_dialog = $('<div id="embed-dialog" class="map-dialog"></div>');
         $(document.body).append(Sourcemap.map_dialog);
         $(Sourcemap.map_dialog).data("state", 1);
         Sourcemap.embed_dialog_show = function(mkup) {

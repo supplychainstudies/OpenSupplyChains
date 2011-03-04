@@ -51,4 +51,39 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         }
         $this->request->redirect('');
     }
-}
+    
+
+    public function action_reset_password() {
+	$this->template = View::factory('auth/reset_password');
+	$current_user_id = Auth::instance()->get_user();
+	$current_user = ORM::factory('user', Auth::instance()->get_user());
+	$user_name = ORM::factory('user', $current_user_id)->username;
+	$this->template->current_user_id = $current_user_id;
+	$this->template->current_user = $current_user;
+
+	//create a temp password and email that to the user.
+    
+	$post = Validate::factory($_POST);
+	$post->rule('old', 'not_empty')
+	    ->rule('new', 'not_empty')
+	    ->filter(true, 'trim');
+	
+	if(strtolower(Request::$method) === 'post' && $post->check()) {
+	    $post = (object)$post->as_array();
+	    $old_password = $post->old;
+	    $new_password = $post->new;
+
+	    
+	    if(Auth::instance()->check_password($old_password)) {
+		$user = ORM::factory('user', $current_user_id);
+		$user->password = $new_password;
+		$user->save();
+		Message::instance()->set('Password changed successfully!');
+	    } else {
+		Message::instance()->set('Password did not match, try again');
+	    }
+	} 
+    }
+    
+    
+  }

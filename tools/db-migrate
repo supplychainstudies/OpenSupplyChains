@@ -51,7 +51,7 @@ if [ -n "${3}" ]; then
     echo -e "\t- Set start idx = \"${STARTIDX}\", stop idx = \"${STOPIDX}\"."
 fi
 
-SMAP_ROOTDIR="${SMAPDIR}"
+SMAP_ROOTDIR="${SOURCEMAP_DIR}"
 SMAP_DATADIR="${SMAP_ROOTDIR}/db/data/"
 SMAP_FIXTUREDIR="${SMAP_ROOTDIR}/db/fixtures/"
 SMAP_SCHEMADIR="${SMAP_ROOTDIR}/db/schema/"
@@ -77,7 +77,7 @@ DBOUTPUT="db-migrate.${DATESTR}.${mdir}.out"
 DUMPOUTPUT="${DATESTR}.${mdir}.dump"
 
 echo -e "\t- Backing up current schema and data..."
-pg_dump > "${DUMPOUTPUT}"
+pg_dump | bzip2 -cz > "${DUMPOUTPUT}.bz2"
 echo -e "\t\t- done."
 
 for sfile in ${SCHEMAFILES[@]}

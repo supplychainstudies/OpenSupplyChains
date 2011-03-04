@@ -51,7 +51,7 @@ if [ -n "${3}" ]; then
     echo -e "\t- Set start idx = \"${STARTIDX}\", stop idx = \"${STOPIDX}\"."
 fi
 
-SMAP_ROOTDIR=$(dirname $(dirname $(readlink -f "${0}")))
+SMAP_ROOTDIR="${SMAPDIR}"
 SMAP_DATADIR="${SMAP_ROOTDIR}/db/data/"
 SMAP_FIXTUREDIR="${SMAP_ROOTDIR}/db/fixtures/"
 SMAP_SCHEMADIR="${SMAP_ROOTDIR}/db/schema/"
@@ -99,7 +99,7 @@ do
         exit 1
     fi
     echo -e "\t- Executing schema sql: ${sfilebase}"
-    psql --echo-all < "${sfile}" &>> "${DBOUTPUT}"
+    psql --echo-all < "${sfile}" >> "${DBOUTPUT}" 2>> "${DBOUTPUT}"
 
     DATAFILES=$(find "${SMAP_DATADIR}" -name "${sfilenum}.*.${mdir}.sql" -o -name "${sfilenum}.*.${mdir}.sql.bz2" | $sortcmd)
     for dfile in ${DATAFILES[@]}
@@ -107,9 +107,9 @@ do
         dfilebase=`basename "${dfile}"`
         echo -e "\t\t- Executing data sql: ${dfilebase}"
         if [[ "$dfile" =~ ".bz2" ]]; then
-            bzcat "${SMAP_DATADIR}${dfilebase}" | psql --echo-all &>> "${DBOUTPUT}"
+            bzcat "${SMAP_DATADIR}${dfilebase}" | psql --echo-all >> "${DBOUTPUT}" 2>> "${DBOUTPUT}"
         else
-            psql --echo-all < "${SMAP_DATADIR}${dfilebase}" &>> "${DBOUTPUT}"
+            psql --echo-all < "${SMAP_DATADIR}${dfilebase}" >> "${DBOUTPUT}" 2>> "${DBOUTPUT}"
         fi
     done
 
@@ -118,7 +118,7 @@ do
     do
         ffilebase=`basename "${ffile}"`
         echo -e "\t\t- Executing fixture sql: ${ffilebase}"
-        psql --echo-all < "${SMAP_FIXTUREDIR}${ffilebase}" &>> "${DBOUTPUT}"
+        psql --echo-all < "${SMAP_FIXTUREDIR}${ffilebase}" >> "${DBOUTPUT}" 2>> "${DBOUTPUT}"
     done
 
     echo -e "\t\t- ...${sfilebase} done."

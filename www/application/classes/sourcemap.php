@@ -1,6 +1,7 @@
 <?php
 class Sourcemap {
     const PROJ = 3857;
+    const EPSGPROJ = 'WGS84';
 
     const READ = 1;
     const WRITE = 2;

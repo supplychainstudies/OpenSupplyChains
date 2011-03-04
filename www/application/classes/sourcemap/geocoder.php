@@ -36,6 +36,9 @@ class Sourcemap_Geocoder {
             foreach($result->results as $i => $r) {
                 $loc = $r->geometry->location;
                 $loc->placename = $r->formatted_address;
+                $loc->latitude = $loc->lat;
+                $loc->longitude = $loc->lng;
+                $loc->lon = $loc->lng;
                 $ret[] = $loc;
             }
         } else {

@@ -4,7 +4,7 @@
 <input type="password" name="old" class="input text password" /><br />
 <label for="new">New Password:</label><br />
 <input type="password" name="new" class="input text password" /><br />
-<input type="submit" value="Send Password" />
+<input type="submit" value="Reset" />
 </form>
 <?php else: ?>
   <?php $this->request->redirect('auth/login'); ?>

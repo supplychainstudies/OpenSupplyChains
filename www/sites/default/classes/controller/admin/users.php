@@ -86,11 +86,13 @@ class Controller_Admin_Users extends Controller_Admin {
 	    
 	    // this is to reset the password
 	    $post = Validate::factory($_POST);
-	    $post->rule('email', 'not_empty')
+	     $post->rule('email', 'not_empty')
 		->rule('password', 'not_empty')
 		->rule('password', 'max_length', array(16))
+		->rule('password', 'min_length', array(6))
 		->rule('confirmpassword', 'not_empty')
 		->rule('confirmpassword', 'max_length', array(16))
+		->rule('confirmpassword', 'min_length', array(6))
 		->rule('email', 'validate::email')
 		->filter(true, 'trim');
 	    

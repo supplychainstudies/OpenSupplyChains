@@ -125,14 +125,6 @@ class Controller_Admin_Users extends Controller_Admin {
     }
 
 
-    function _genpassword($len = 6) {    
-        $password = '';
-        for($i=0; $i<$len; $i++)
-            $password .= chr(rand(0, 25) + ord('a'));
-        return $password;
-    }
-
-
     public function action_create() {
 
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
@@ -145,7 +137,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    if(strtolower(Request::$method) === 'post' && $post->check()) {
 		$post = (object)$post->as_array();
 		
-		$password = $this->_genpassword();
+		$password = text::random($type = 'alnum', $length = 6);
 		$create = ORM::factory('user');
 		$all_users = $create->find_all()->as_array(null, 'username');
 		$all_emails = $create->find_all()->as_array(null, 'email');

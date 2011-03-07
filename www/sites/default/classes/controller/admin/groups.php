@@ -64,7 +64,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    $group_members[] = $user->as_array();
 	}
 	
-	$owner = $group->owner->find()->as_array(null, array('id', 'username'));
+	$owner = $group->owner->username;
 
 	$this->template->group = $group;
 	$this->template->owner = $owner;

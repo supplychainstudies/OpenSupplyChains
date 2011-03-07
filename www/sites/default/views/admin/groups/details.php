@@ -5,7 +5,7 @@
 </form><br />
 
 <strong>Groupname:</strong> <?=HTML::chars($group->name)?><br />
-<strong>Owner:</strong> <a href="admin/users/<?=$owner['id'];?>"><?=HTML::chars($owner['username']) ?></a><br />
+     <strong>Owner:</strong> <a href="admin/users/<?=$owner['id'];?>"><?=HTML::chars($owner) ?></a><br />
 
 <?php if(!empty($members)): ?>
 <strong>Group Members:</strong> 

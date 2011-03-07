@@ -51,9 +51,49 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         }
         $this->request->redirect('');
     }
+
+
+    public function action_forgot_password() {
+   
+	$this->template = View::factory('auth/forgot_password');
+	
+	$post = Validate::factory($_POST);
+	$post ->rule('email', 'not_empty')
+	    ->rule('email', 'validate::email')
+	    ->filter(true, 'trim');
+   
+	if(strtolower(Request::$method) === 'post' && $post->check()){
+	    $post = (object)$post->as_array();
+	    $email = $post->email;
+	    $user = ORM::factory('user')->where('email', '=', $email)->find();
+	    $temp_password = text::random($type = 'alnum', $length = 6);
+	    $user_temp = ORM::factory('user', $user->id);   
+	    $user_temp->password = $temp_password;
+	    $user_temp->save();
+	    $this->email_password($user->username, $email, $temp_password);
+	}
+    }
+
+    public function email_password($username, $email, $temp_password) {
+
+	$email_vars = array('username' => $username, 'password' => $temp_password);
+	$to = $email;
+	$subject = 'Your Sourcemap account information';
+	$body = View::factory('email/password_template')->bind('email_vars', $email_vars);
+	
+	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	$headers .= 'From: Sourcemap Team <info@sourcemap.org>' . "\r\n";
+	
+	$mail_sent = mail($to, $subject, $body, $headers);
+	
+	echo $mail_sent ? "Mail sent" : "Mail failed";
+       
+    }
     
 
     public function action_reset_password() {
+
 	$this->template = View::factory('auth/reset_password');
 	$current_user_id = Auth::instance()->get_user();
 	$current_user = ORM::factory('user', Auth::instance()->get_user());

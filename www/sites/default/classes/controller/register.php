@@ -95,7 +95,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 	    if (Auth::instance()->hash($user->username.$user->email) == $hash) {
 		$user_confirm = ORM::factory('user', $user->id);
 		$user_confirm->flags =2;
-		$user_confirm->save();		
+		$user_confirm->save();	
+
+		//add a default login role when a new user is created
+		$role = ORM::factory('role', array('name' => 'login'));
+		$user_confirm->add('roles', $role)->save();
 		break;
 	    }
 	}

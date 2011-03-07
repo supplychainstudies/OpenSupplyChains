@@ -988,38 +988,38 @@ ul.nav {
     border:1px solid #eee;
 }
 
+
+html { overflow:hidden;}
+@embed-color: rgba(30,30,30,0.6);
 body#supplychain {
-    width: 100% !important;
-    min-width: 0 !important;
+    width: 100%;
+    min-width: 0;
     font-size: 101%;
-    h1,h2,h3,h4,h5,h6 { 
-        color: @brand-color;
-    }
+
     .map-dialog {
         z-index: 1010;
-        margin: auto;
-        width: auto;
-        max-width: 55%;
-        max-height: 70%;
-        background-color: #fff;
+        margin: 0 auto;
+        display:-moz-inline-stack;
+        display:inline-block;
+        max-height: 90%;
+        background: rgba(0,0,0,0.9);
         position: absolute;
-        top: 15%;
-        left: 10%;
-        padding: 1em;
-        .rounded(.25em);
-        /*border: .3em solid #666;*/
-        overflow-y: scroll;
-        overflow-x: hidden;
-        font-size: .8em;
+        top: 1%; left:50%;
+        padding: 2%;
+        .rounded(0.25em);
+        overflow:hidden;
         iframe, object {
-            margin: 1em;
-            border: .5em solid #ccc;
+            display:block;
+            margin: 1em 0;
         }
-        h1 {
-            border-bottom: 1px solid #ddd;
+        h2 {
+            color:#fff;
+            border-bottom: 1px solid #666;
             margin-bottom: .5em;
+            font-size: 1.2em;          
         }
         h3 {
+            font-size: 1em;            
             margin-top: 1em;
         }
         .flickr-photoset {
@@ -1033,31 +1033,23 @@ body#supplychain {
         }
     }
     .sourcemap-embed-overlay {
-        background-color: #eee;
-        padding: 0;
-        margin: 0;
+        position:absolute;
+        top:0; left:0;
+        z-index:1000;
+        background: @embed-color;
+        .box_shadow(0,0.25em,0.25em);
+        padding: 0; margin: 0;
         width: 100%;
         .embed-summary {
-            background: none;
-            font-size: 110%;
+            font-size:0.6em;
+            padding:1em;
             h1 {
-                color: #5585f5;
-                color: @brand-color;
-                text-indent: 1em;
-                font-size: 2em;
+                color: #fff;
                 text-transform: uppercase;
-                opacity: 0.8;
             }
             p {
-                font-style: italic;
-                background-color: @brand-color;
-                opacity: 0.8;
-                vertical-align: bottom; 
                 width: 100%;
-                margin: 0;
-                text-indent: 1.8em;
-                color: #eee;
-                font-size: 1.2em;
+                color: #ccc;
                 .user-avatar {
                     height: 1.5em;
                     width: 1.5em;
@@ -1067,60 +1059,62 @@ body#supplychain {
 
         }
     }
+    .olLayerGooglePoweredBy, .olLayerGoogleCopyright {
+        z-index:1001 !important;
+    }
     .olControlPanel {
-        height: 2em;
-        background-color: none;
-        left: 12em;
-        bottom: 1.5em;
-    }
-    .olControlPanel div {
-        float: left;
-        opacity: 0.8;
-        clear: none;
-    }
-    .olControlPanel div:hover {
-        opacity: 1.0;
-    }
-    .olControlPanel .olControlZoomToMaxExtentItemActive {
-        width: 2em;
-        height: 2em;
-        /*background-color: yellow;*/
-        background-image: url("../images/embed-zoom-zoommax.png");
-        background-size: 100%;
-        -moz-background-size: 100%;
-        background-repeat: no-repeat;
-        display: none;
-    }    
-    .olControlPanel .olControlZoomInItemInactive {
-        width: 2em;
-        height: 2em;
-        /*background-color: green;*/
-        background-image: url("../images/embed-zoom-zoomin.png");
-        background-size: 100%;
-        -moz-background-size: 100%;
-        background-repeat: no-repeat;
-    }
-    .olControlPanel .olControlZoomOutItemInactive {
-        width: 2em;
-        height: 2em;
-        /*background-color: red;*/
-        background-image: url("../images/embed-zoom-zoomout.png");
-        background-size: 100%;
-        -moz-background-size: 100%;
-        background-repeat: no-repeat;
+        height: 1.5em;
+        left: 1em; bottom: 0.25em;
+        background: @embed-color;
+        .rounded(0.5em);
+        padding:0.5em 0.25em;
+        .box_shadow(0.25em,0.25em,0.25em);
+    
+         div {
+            float: left;
+            opacity: 0.8;
+            clear: none;
+            &:hover {
+                opacity: 1.0;
+            }
+        }
+        .olControlZoomToMaxExtentItemActive {
+            width: 1.5em;
+            height: 1.5em;
+            background: url("../images/embed-zoom-zoommax.png") center center no-repeat;
+            background-size: 100%;
+            -moz-background-size: 100%;
+            display: none;
+        }    
+        .olControlZoomInItemInactive {
+            width: 1.5em;
+            height: 1.5em;
+            background: url("../images/embed-zoom-zoomin.png") center center no-repeat;
+            background-size: 100%;
+            -moz-background-size: 100%;
+        }
+        .olControlZoomOutItemInactive {
+            width: 1.5em;
+            height: 1.5em;
+            background: url("../images/embed-zoom-zoomout.png") center center no-repeat;
+            background-size: 100%;
+            -moz-background-size: 100%;
+        }
     }
     .sourcemap-tour-control-panel {
         z-index: 1008;
-        width: 9em;
-        height: 3em;
-        background-color: none;
-        left: 30em;
-        bottom: 1.5em;
-        background: none;
+        width: 6em; height: 1.5em;
+        background: @embed-color;
+        .rounded(0.5em);
         position: absolute;
+        bottom: 0.25em; left:0; right:0;
+        margin:0 auto;
+        padding:0.5em 0.25em;
+        .box_shadow(0.25em,0.25em,0.25em);
+                
         div {
-            width: 3em;
-            height: 3em;
+            width: 2em;
+            height: 1.5em;
             float: left;
             clear: none;
             background-size: 100%;
@@ -1132,57 +1126,56 @@ body#supplychain {
             }
         }
         .sourcemap-tour-prev {
-            background-image: url("../images/embed-tour-prev.png");
+            background: url("../images/embed-tour-prev.png") center center no-repeat;
+            background-size: 100%;
+            -moz-background-size: 100%;
         }
         .sourcemap-tour-play {
-            background-image: url("../images/embed-tour-stop.png");
+            background: url("../images/embed-tour-stop.png") center center no-repeat;
+            background-size: 100%;
+            -moz-background-size: 100%;
             &.stopped {
                 background-image: url("../images/embed-tour-play.png");
             }
         }
         .sourcemap-tour-next {
-            background-image: url("../images/embed-tour-next.png");
+            background: url("../images/embed-tour-next.png") center center no-repeat;
         }
     }
-    .olPopup .olPopupContent > * {
-        padding: .25em;
-    }
-    .olPopup .olPopupContent {
-        .rounded(.25em);
-    }
-    .olPopup h4, .olPopup h5 {
-        margin: 0;
-        padding: 0;
-        white-space: nowrap;
-    }
-    .olPopup h4 {
-        border-bottom: 1px solid #ccc;
-        font-size: 1.1em;
-        line-height: .8em;
-    }
-    .olPopup h5 {
-        font-weight: normal;
-        color: #555;
-        line-height: 1em;
-        text-indent: .25em;
-    }
-    .olPopup .olPopupContent a {
-        &:hover {
-            background-color: #333;
-            color: #eee;
+    .olPopup {        
+        .olPopupContent {
+            background:rgba(255,255,255,0.9) !important;
+            .rounded(4px);
+            position:relative;
+            .popup-wrapper {                
+                padding:0.5em;
+                h4.popup-title {
+                    border-bottom: 1px solid #ccc;
+                    color:@brand-color;
+                }
+               h5.popup-placename {
+                   font-weight: normal;
+                   font-size:0.7em;
+                   color: #555;
+                   margin-bottom:0.6em;
+               }
+               .popup-more-link {
+                   display:block;
+                   .rounded(4px);
+                   position:absolute;
+                   text-align:center;
+                   color:#eee;
+                   font-size:0.8em;
+                   text-decoration:none;
+                   text-align:center;
+                   bottom:0; left:0; right:0;
+                   margin:0.25em;
+                   padding:0.25em;
+                   background:#999;
+                   
+               }   
+            }
         }
-        display: block;
-        text-align:center; 
-        .rounded(.25em);
-        padding: .1em;
-        padding-bottom: 0;
-        margin-bottom: 0;
-        /*background: #eee;*/
-        height: auto;
-        color: #333;
-    }
-    .olPopup .popup-description {
-        font-size: .7em;
     }
 }
 

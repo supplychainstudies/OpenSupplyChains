@@ -101,7 +101,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
                     'tour_interval' => 5, 'banner' => false,
-                    'geoloc' => true
+                    'geoloc' => true, 'downstream_sc' => null
                 );
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 
@@ -112,7 +112,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('tour_start_delay', 'range', array(0, 300))
                     ->rule('tour_interval', 'numeric')
                     ->rule('tour_interval', 'range', array(1, 15))
-                    ->rule('geoloc', 'not_empty');
+                    ->rule('geoloc', 'not_empty')
+                    ->rule('downstream_sc', 'numeric');
                 if($v->check()) {
                     $params = $v->as_array();
                     $params['tour_start_delay'] = (int)$params['tour_start_delay'];
@@ -122,8 +123,15 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     if($params['geoloc']) {
                         $params['iploc'] = false;
                         if(isset($_SERVER['REMOTE_ADDR'])) {
-                            $_SERVER['REMOTE_ADDR'] = '18.9.22.69';
-                            $params['iploc'] = Sourcemap_Ip::find_ip($_SERVER['REMOTE_ADDR']);
+                            # $_SERVER['REMOTE_ADDR'] = '128.59.48.24'; // ny, ny (columbia.edu)
+                            $params['iploc'] = $iploc = Sourcemap_Ip::find_ip($_SERVER['REMOTE_ADDR']);
+                            $iploc = $iploc ? $iploc[0] : null;
+                            if($params['downstream_sc'] && $iploc) {
+                                $pt = new Sourcemap_Proj_Point($iploc->longitude, $iploc->latitude);
+                                $pt = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $pt);
+                                $nearby = ORM::factory('stop', (int)$params['downstream_sc'])->nearby($pt, 3);
+                                $params['downstream_nearby'] = $nearby;
+                            }
                         }
                     }
                     $this->layout->embed_params = $params;

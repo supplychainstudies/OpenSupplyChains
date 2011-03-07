@@ -32,7 +32,7 @@
                 <?php if($current_user = Auth::instance()->get_user()): ?>
                 <li class="register-link"><span class="username"><?= HTML::chars($current_user->username) ?>&nbsp;|&nbsp;<a href="auth/logout">Log out</a></li>
                 <?php else: ?>
-                <li class="register-link"><a href="">Join us</a> or <a href="auth">Log in</a></li>
+                <li class="register-link"><a href="register">Join us</a> or <a href="auth">Log in</a> or  <a href="auth/forgot_password">forgot password?</a></li>
                 <?php endif; ?>
                 <li id="browse-navigation">
                     <h3>Browse</h3>            

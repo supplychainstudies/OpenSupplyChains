@@ -168,9 +168,6 @@ $(document).ready(function() {
 
         // set up banner overlay. todo: make this optional.
         var overlay = $('<div class="sourcemap-embed-overlay" id="map-overlay"></div>');
-        overlay.css({
-            "position": "absolute", "top": 0, "left": 0, "z-index": 1000
-        });
         
         if(Sourcemap.embed_params && Sourcemap.embed_params.banner) {
             Sourcemap.map_overlay = overlay;
@@ -199,7 +196,8 @@ $(document).ready(function() {
         });
 
         // set body font-size to a constant(ish) factor based on doc width
-        $(document.body).css("font-size", Math.floor(document.body.clientWidth / 65)+"px");
+        // TODO Need to threshold this
+        //$(document.body).css("font-size", Math.floor(document.body.clientWidth / 65)+"px");
 
         // set up dialog
         Sourcemap.map_dialog = $('<div id="embed-dialog" class="map-dialog"></div>');
@@ -207,9 +205,10 @@ $(document).ready(function() {
         $(Sourcemap.map_dialog).data("state", 1);
         Sourcemap.embed_dialog_show = function(mkup) {
             if(mkup) $(Sourcemap.map_dialog).html(mkup);
-            var m = Math.floor(document.body.clientWidth - $(Sourcemap.map_dialog).width()) / 2;
+            var m = -($(Sourcemap.map_dialog).outerWidth() / 2);
             Sourcemap.map_instance.controls.select.unselectAll();
-            $(Sourcemap.map_dialog).css({"left": m+"px"});
+            $(Sourcemap.map_dialog).css({"margin-left": m+"px"});
+            
             $(Sourcemap.map_dialog).show().data("state", 1);
             Sourcemap.map_tour.stop();
         }

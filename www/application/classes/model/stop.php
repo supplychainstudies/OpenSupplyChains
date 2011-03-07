@@ -66,19 +66,32 @@ class Model_Stop extends ORM {
         return true;
     }
 
-    public function nearby(Sourcemap_Proj_Point $pt, $supplychain_id=null, $limit=10) {
+    public function nearby(Sourcemap_Proj_Point $pt, $limit=10, $supplychain_id=null) {
+        if($supplychain_id === null && $this->loaded()) $supplychain_id = $this->id;
         $limit = min(max((int)$limit, 3), 25);
         $wkt = sprintf("POINT(%f %f)", $pt->x, $pt->y);
-        $q = DB::query(Database::SELECT, 
-            "select 
-                supplychain_id, id as stop_id,
-                ST_Distance(ST_SetSRID(ST_GeometryFromText(:wkt), :proj), geometry) as dist
-            from stop order by dist asc limit :lim"
-        );
-        $q->parameters(array(
-            ':wkt' => $wkt, ':proj' => Sourcemap::PROJ,
-            ':lim' => $limit
-        ));
+        if($supplychain_id) {
+            $q = DB::query(Database::SELECT,
+                "select supplychain_id, id as stop_id,
+                    ST_Distance(ST_SETSRID(ST_GeometryFromText(:wkt), :proj), geometry) as dist
+                from stop where supplychain_id = :scid order by dist asc limit :lim"
+            );
+            $q->parameters(array(
+                ':wkt' => $wkt, ':proj' => Sourcemap::PROJ,
+                ':lim' => $limit, ':scid' => $supplychain_id
+            ));
+        } else {
+            $q = DB::query(Database::SELECT, 
+                "select 
+                    supplychain_id, id as stop_id,
+                    ST_Distance(ST_SetSRID(ST_GeometryFromText(:wkt), :proj), geometry) as dist
+                from stop order by dist asc limit :lim"
+            );
+            $q->parameters(array(
+                ':wkt' => $wkt, ':proj' => Sourcemap::PROJ,
+                ':lim' => $limit
+            ));
+        }
         return $q->execute()->as_array();
     }
 }

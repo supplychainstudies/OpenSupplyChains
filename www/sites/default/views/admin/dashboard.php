@@ -18,4 +18,6 @@ The maximum number of hops entered so far are <strong><?= $hop?></strong> (<a hr
 <dd>Manage Roles.</dd>
 <dt><a href="admin/alias">Aliases</a></dt>
 <dd>Manage Aliases.</dd>
+<dt><a href="admin/analytics">Analytics</a></dt>
+<dd>Sourcemap Analytics.</dd>
 </dl>

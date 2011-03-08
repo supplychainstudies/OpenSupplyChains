@@ -89,7 +89,8 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 	
     }    
 
-    public function action_confirm($hash){
+    public function action_confirm(){
+	$hash = $_GET['u'];
 	$users = ORM::factory('user')->find_all()->as_array('id', array('id','username', 'email'));
 	foreach($users as $user) {
 	    if (Auth::instance()->hash($user->username.$user->email) == $hash) {
@@ -100,6 +101,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 		//add a default login role when a new user is created
 		$role = ORM::factory('role', array('name' => 'login'));
 		$user_confirm->add('roles', $role)->save();
+		Message::instance()->set('Thank you, your registration is now complete.');
 		break;
 	    }
 	}

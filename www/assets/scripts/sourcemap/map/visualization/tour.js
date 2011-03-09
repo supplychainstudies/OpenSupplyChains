@@ -168,3 +168,33 @@ Sourcemap.MapTour.prototype.getFeatureLonLat = function(ftr) {
     }
     return ll;
 }
+
+Sourcemap.MapTour.prototype.getCurrentFeature = function() {
+    return this.features[this.ftr_index] || null;
+}
+
+Sourcemap.MapTour.prototype.getCurrentStop = function() {
+    var st = false;
+    var f = this.getCurrentFeature();
+    if(f) {
+        var scid = f.attributes.supplychain_instance_id;
+        if(f.attributes.stop_instance_id) {
+            var stid = f.attributes.stop_instance_id;
+            st = this.map.findSupplychain(scid).findStop(stid);
+        }
+    }
+    return st;
+}
+
+Sourcemap.MapTour.prototype.getCurrentHop = function() {
+    var h = false;
+    var f = this.getCurrentFeature();
+    if(f) {
+        var scid = f.attributes.supplychain_instance_id;
+        if(f.attributes.hop_instance_id) {
+            var hid = f.attributes.hop_instance_id;
+            h = this.map.findSupplychain(scid).findHop(hid);
+        }
+    }
+    return h;
+}

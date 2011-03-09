@@ -28,8 +28,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'sourcemap-template', 'sourcemap-working'
                 );
                 $this->layout->styles = array(
-                    'assets/styles/style.css', 
-                    'assets/styles/sourcemap.less?v=2'
+                    'assets/styles/reset.css', 
+                    'assets/styles/general.less?v=2'
                 );
             } else {
                 $this->request->status = 403;
@@ -95,8 +95,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'sourcemap-embed'
                 );
                 $this->layout->styles = array(
-                    'sites/default/assets/styles/style.css',
-                    'sites/default/assets/styles/sourcemap.less?v=2'
+                    'sites/default/assets/styles/reset.css',
+                    'sites/default/assets/styles/embed.less?v=2'
                 );
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
@@ -139,7 +139,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     $this->request->status = 400;
                     $this->layout = View::factory('layout/embed');
                     $this->template = View::factory('error');
-                    $this->template->error_message = 'Bad params: '.http_build_query($params).'.';
+                    $this->template->error_message = 'Bad parameters.';
                 }
             } else {
                 $this->request->status = 403;

@@ -53,17 +53,26 @@ Sourcemap.magic = {
     }
 };
 
+Sourcemap.magic_seq = ['description', 'youtube:link', 'vimeo:link', 'flickr:setid'];
+Sourcemap.magic_seq_cur = -1; // should be negative to advance to first feature on tour
+
 $(document).ready(function() {
     // reset template path to site-specific location
     Sourcemap.TPL_PATH = "sites/default/assets/scripts/tpl/";
 
-    Sourcemap.embed_stop_details = function(stid, scid) {
+    Sourcemap.embed_stop_details = function(stid, scid, seq_idx) {
+        var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
         // load stop details template and show in embed dialog
         var sc = Sourcemap.map_instance.supplychains[scid];
         var stop = sc.findStop(stid);
+        var magic_word = Sourcemap.magic_seq[seq_idx];
+        while(stop.getAttr(magic_word, false) === false && seq_idx < Sourcemap.magic_seq.length-1) {
+            magic_word = Sourcemap.magic_seq[++seq_idx];
+        }
+        if(stop.getAttr(magic_word, false) === false) magic_word = false;
         Sourcemap.template('embed/details/stop', function(p, tx, th) {
             Sourcemap.embed_dialog_show(th);
-        }, {"stop": stop, "supplychain": sc});
+        }, {"stop": stop, "supplychain": sc, "magic_word": magic_word});
     }
 
     Sourcemap.embed_hop_details = function(hop, sc) {
@@ -201,10 +210,16 @@ $(document).ready(function() {
 
         // set up dialog
         Sourcemap.map_dialog = $('<div id="embed-dialog" class="map-dialog"></div>');
+        Sourcemap.map_dialog_prev = $('<div id="embed-dialog-prev" class="map-dialog-nav prev"><a href="javascript:Sourcemap.embed_dialog_prev();">&laquo;</a></div>');
+        Sourcemap.map_dialog_next = $('<div id="embed-dialog-next" class="map-dialog-nav next"><a href="javascript:Sourcemap.embed_dialog_next();">&raquo;</a></div>');
+        Sourcemap.map_dialog_content = $('<div id="embed-dialog-content" class="content"></div>');
+        Sourcemap.map_dialog.append(Sourcemap.map_dialog_prev)
+            .append(Sourcemap.map_dialog_content).append(Sourcemap.map_dialog_next);
         $(document.body).append(Sourcemap.map_dialog);
         $(Sourcemap.map_dialog).data("state", 1);
         Sourcemap.embed_dialog_show = function(mkup) {
-            if(mkup) $(Sourcemap.map_dialog).html(mkup);
+            // update dialog content and position
+            if(mkup) $(Sourcemap.map_dialog_content).html(mkup);
             var m = -($(Sourcemap.map_dialog).outerWidth() / 2);
             Sourcemap.map_instance.controls.select.unselectAll();
             $(Sourcemap.map_dialog).css({"margin-left": m+"px"});
@@ -213,9 +228,75 @@ $(document).ready(function() {
             Sourcemap.map_tour.stop();
         }
         Sourcemap.embed_dialog_hide = function() {
-            $(Sourcemap.map_dialog).empty();
+            $(Sourcemap.map_dialog_content).empty();
             $(Sourcemap.map_dialog).hide().data("state", 0);
         }
         Sourcemap.embed_dialog_hide();
     });
+
+
+    // side-scrolling next/prev for browsing content
+    Sourcemap.embed_dialog_next = function() {
+        var nxt_seq_idx = Sourcemap.magic_seq_cur >= 0 && Sourcemap.magic_seq_cur < Sourcemap.magic_seq.length - 1 ?
+            Sourcemap.magic_seq_cur + 1 : -1;
+        console.log(nxt_seq_idx);
+        if(nxt_seq_idx < 0) {
+            Sourcemap.map_tour.next();
+            nxt_seq_idx = 0;
+        }
+        Sourcemap.magic_seq_cur = nxt_seq_idx;
+        var scid = Sourcemap.map_tour.getCurrentFeature().attributes.supplychain_instance_id;
+        var stop, hop;
+        if(stop = Sourcemap.map_tour.getCurrentStop()) {
+            var magic_word = false;
+             while(!magic_word && nxt_seq_idx < Sourcemap.magic_seq.length) {
+                magic_word = Sourcemap.magic_seq[nxt_seq_idx];
+                if(magic_word && stop.getAttr(magic_word, false) === false) {
+                    magic_word = false;
+                }
+                if(!magic_word) nxt_seq_idx++;
+            };
+            if(!magic_word) {
+                Sourcemap.magic_seq_cur = -1;
+                return Sourcemap.embed_dialog_next();
+            }
+            Sourcemap.magic_seq_cur = nxt_seq_idx;
+            Sourcemap.embed_stop_details(stop.instance_id, scid, Sourcemap.magic_seq_cur); 
+        } else if(hop = Sourcemap.map_tour.getCurrentHop()) {
+            Sourcemap.embed_hop_details(hop.instance_id, scid, Sourcemap.magic_seq_cur);
+        } else {
+            throw new Exception('Unexpected feature...not a stop or a hop.');
+        }
+    };
+    Sourcemap.embed_dialog_prev = function() {
+        var prv_seq_idx = Sourcemap.magic_seq_cur >= 0 ? Sourcemap.magic_seq_cur - 1 : 0;
+        if(prv_seq_idx < 0) {
+            Sourcemap.map_tour.prev();
+            prv_seq_idx = Sourcemap.magic_seq.length;
+        }
+        Sourcemap.magic_seq_cur = prv_seq_idx;
+        var scid = Sourcemap.map_tour.getCurrentFeature().attributes.supplychain_instance_id;
+        var stop, hop;
+        if(stop = Sourcemap.map_tour.getCurrentStop()) {
+            var magic_word = false;
+             while(!magic_word && prv_seq_idx >= 0) {
+                magic_word = Sourcemap.magic_seq[prv_seq_idx];
+                if(magic_word && stop.getAttr(magic_word, false) === false)
+                    magic_word = false;
+                if(!magic_word) prv_seq_idx--;
+            };
+            if(!magic_word) {
+                Sourcemap.magic_seq_cur = 0;
+                return Sourcemap.embed_dialog_prev();
+            }
+            Sourcemap.magic_seq_cur = prv_seq_idx;
+            Sourcemap.embed_stop_details(stop.instance_id, scid, Sourcemap.magic_seq_cur); 
+        } else if(hop = Sourcemap.map_tour.getCurrentHop()) {
+            Sourcemap.embed_hop_details(hop.instance_id, scid, Sourcemap.magic_seq_cur);
+        } else {
+            throw new Exception('Unexpected feature...not a stop or a hop.');
+        }
+    };
+
+
 });

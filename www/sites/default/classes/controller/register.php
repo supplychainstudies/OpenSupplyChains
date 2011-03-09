@@ -77,7 +77,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 	    'hash_value' => $hash_value);
 	$to = $email;
 	$subject = 'Email confirmation for Sourcemap account';
-	$body = View::factory('email/confirm_template')->bind('email_vars', $email_vars);
+	$body = View::factory('email/confirm')->bind('email_vars', $email_vars);
 	
 	$headers  = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";

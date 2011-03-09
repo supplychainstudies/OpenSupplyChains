@@ -29,7 +29,7 @@
 <p>Users logged in:
 <?php $user_login = end($user_logins);?>
 <?php foreach($user_logins as $login):?>
-<a href="admin/users/<?=$user->id?>"><?=$login->username?></a> at <?=$login->last_login?>
+<a href="admin/users/<?=$login->id?>"><?=$login->username?></a> at <?=$login->last_login?>
 	     <?php if($user_login->username != $login->username){?>, <?}?>
      <?php endforeach;?>
 </p>

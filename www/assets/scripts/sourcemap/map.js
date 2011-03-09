@@ -25,7 +25,7 @@ Sourcemap.Map.prototype.defaults = {
     "arrow_popups": true, "popup_width": 200,
     "popup_height": 90,
     "draw_hops": true, "hops_as_arcs": false,
-    "hops_as_bezier": true, "arrows_on_hops": true,
+    "hops_as_bezier": false, "arrows_on_hops": true,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -457,7 +457,7 @@ Sourcemap.Map.prototype.clearMap = function() {
 
 Sourcemap.Map.prototype.findSupplychain = function(scid) {
     if(scid instanceof Sourcemap.Supplychain)
-        scid = scid.local_id;
+        scid = scid.instance_id;
     return this.supplychains[scid];
 }
 

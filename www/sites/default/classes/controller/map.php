@@ -28,8 +28,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'sourcemap-template', 'sourcemap-working'
                 );
                 $this->layout->styles = array(
-                    'assets/styles/reset.css', 
-                    'assets/styles/general.less?v=2'
+                    'sites/default/assets/styles/reset.css', 
+                    'sites/default/assets/styles/general.less?v=2'
                 );
             } else {
                 $this->request->status = 403;

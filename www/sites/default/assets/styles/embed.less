@@ -11,12 +11,12 @@ body#supplychain {
     .map-dialog {
         z-index: 1010;
         margin: 0 auto;
-        display:-moz-inline-stack;
-        display:inline-block;
+        /*display:-moz-inline-stack;*/
+        /*display:inline-block;*/
         max-height: 90%;
         background: rgba(0,0,0,0.9);
         position: absolute;
-        top: 1%; left:50%;
+        top: 5%; left: 50%;
         padding: 2%;
         .rounded(0.25em);
         overflow:hidden;
@@ -42,6 +42,26 @@ body#supplychain {
                 float: left;
                 margin: .5em;
             }
+        }
+        .map-dialog-nav {
+            height: 100%;
+            width: 1em;
+            float: left;
+            background-color: red;
+            clear: none;
+            &.next {
+                background-color: pink;
+                float: right;
+            }
+            a {
+                display: block;
+                height: 100%;
+                width: 100%;
+            }
+        }
+        .content {
+            float: left;
+            clear: none;
         }
     }
     .sourcemap-embed-overlay {

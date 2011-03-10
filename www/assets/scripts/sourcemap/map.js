@@ -24,7 +24,7 @@ Sourcemap.Map.prototype.defaults = {
     "stop_popups": true, "hop_popups": true,
     "arrow_popups": true, "popup_width": 200,
     "popup_height": 90,
-    "draw_hops": true, "hops_as_arcs": false,
+    "draw_hops": true, "hops_as_arcs": true,
     "hops_as_bezier": false, "arrows_on_hops": true,
     "stop_style": {
         "default": {
@@ -419,7 +419,7 @@ Sourcemap.Map.prototype.makeBezierCurve = function(from, to) {
 Sourcemap.Map.prototype.makeBentLine = function(from, to) {
     // dzwarg's "polyline" bent line routine,
     // minus the many-globes business
-    var resolution = 8.0;
+    var resolution = 20;
     var points = [];
     var dx = to.x - from.x;
     var dy = to.y - from.y;

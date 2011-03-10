@@ -1,4 +1,4 @@
-<h2><%= _S.htesc(this.stop.getAttr("name", "Stop")) %>: (<%= this.magic_word %>)</h2>
+<h2><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
 <div class="content-nav">
 <% for(var i=0; i<Sourcemap.magic_seq.length; i++) { %>
     <% if(this.stop.getAttr(Sourcemap.magic_seq[i], false)) { %>

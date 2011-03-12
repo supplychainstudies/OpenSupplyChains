@@ -1,13 +1,5 @@
 <h2><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
-<div class="content-nav">
-<% for(var i=0; i<Sourcemap.magic_seq.length; i++) { %>
-    <% if(this.stop.getAttr(Sourcemap.magic_seq[i], false)) { %>
-        <div class="content-item <%= _S.htesc(Sourcemap.magic_seq[i].replace(/\W+/, "-")) %>">
-            <a href="javascript: Sourcemap.embed_stop_details('<%= this.stop.instance_id %>', '<%= this.supplychain.instance_id %>', <%= i %>)"><%= Sourcemap.magic_seq[i] %></a>
-        </div>  
-    <% } %>
-<% } %>
-</div>
+
 <% if(this.magic_word === "description" && this.stop.getAttr("description", false)) { %><div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div><% } %>
 <% if(this.magic_word === "greenfact" && this.stop.getAttr("greenfact", false)) { %><div class="greenfact"><h3>Sustainability Fact</h3><%= _S.tlinkify(_S.htesc(this.stop.getAttr("greenfact"))) %></div><% } %>
 <% if(this.magic_word === "youtube:link" && this.stop.getAttr("youtube:link", false)) { %><%= _S.magic.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
@@ -17,3 +9,12 @@
 <%= _S.magic.flickr.setid(this.stop.getAttr("flickr:setid")) %>
 </div>
 <% } %>
+<div class="content-nav">
+<% for(var i=0; i<Sourcemap.magic_seq.length; i++) { %>
+    <% if(this.stop.getAttr(Sourcemap.magic_seq[i], false)) { %>
+        <div class="content-item <%= _S.htesc(Sourcemap.magic_seq[i].replace(/\W+/, "-")) %>">
+            <a href="javascript: Sourcemap.embed_stop_details('<%= this.stop.instance_id %>', '<%= this.supplychain.instance_id %>', <%= i %>)"><%= Sourcemap.magic_seq[i] %></a>
+        </div>  
+    <% } %>
+<% } %>
+</div>

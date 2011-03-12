@@ -228,16 +228,17 @@ $(document).ready(function() {
         Sourcemap.embed_dialog_show = function(mkup) {
             // update dialog content and position
             if(mkup) $(Sourcemap.embed_dialog_content).html(mkup);
-            var m = -($(Sourcemap.embed_dialog).outerWidth() / 2);
-            var v = -($(Sourcemap.embed_dialog).outerHeight() / 2);
-            
+
             Sourcemap.map_instance.controls.select.unselectAll();
-            $(Sourcemap.embed_dialog).css({"margin-left": m+"px"});
-            $(Sourcemap.embed_dialog).css({"margin-top": v+"px"});
             
             var h = $(Sourcemap.embed_dialog).outerHeight();
             $(Sourcemap.embed_dialog).find('.map-dialog-nav')
                 .css({"height": h}).show();
+            
+            var m = -($(Sourcemap.embed_dialog).outerWidth() / 2);
+            var v = -($(Sourcemap.embed_dialog).outerHeight() / 2);
+            $(Sourcemap.embed_dialog).css({"margin-left": m+"px"});
+            $(Sourcemap.embed_dialog).css({"margin-top": v+"px"});
             
             $(Sourcemap.embed_dialog).show().data("state", 1);
             Sourcemap.map_tour.stop();

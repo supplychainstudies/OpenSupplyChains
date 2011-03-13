@@ -9,6 +9,7 @@
 <%= _S.magic.flickr.setid(this.stop.getAttr("flickr:setid")) %>
 </div>
 <% } %>
+<div style="float: left; clear: none">&nbsp;</div>
 <div class="content-nav">
 <% for(var i=0; i<Sourcemap.magic_seq.length; i++) { %>
     <% if(this.stop.getAttr(Sourcemap.magic_seq[i], false)) { %>

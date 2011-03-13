@@ -48,14 +48,21 @@ Sourcemap.magic = {
                 }
                 */
                 if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
-                    var mkup = '<div class="flickr-photoset"><h3>Slideshow</h3><object type="text/html" '+
-                        'data="http://www.flickr.com/slideShow/index.gne?set_id='+setid+'" width="400" height="300"></object></div>';
+                    var mkup = '<object width="400" height="300"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
+                        data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
+                        data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
+                        '<param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=71649"></param> '+
+                        '<param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash" '+
+                        'src="http://www.flickr.com/apps/slideshow/show.swf?v=71649" allowFullScreen="true" '+
+                        'flashvars="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+data.photoset.ownername.toLowerCase()+
+                        '%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+data.photoset.ownername.toLowerCase()+
+                        '%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to=" width="400" height="300"></embed></object>';
                 } else {
                     var mkup = '';
                 }
                 return mkup ? $('#flickr-photoset-'+setid).html(mkup) : false;
             });
-            return '';
+            return '<div style="height: 400px; width: 300px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'">Loading...</div>';
         }
     }
 };
@@ -232,14 +239,16 @@ $(document).ready(function() {
 
             Sourcemap.map_instance.controls.select.unselectAll();
             
-            var h = $(Sourcemap.embed_dialog).outerHeight();
+            var h = $(Sourcemap.embed_dialog).innerHeight();
             $(Sourcemap.embed_dialog).find('.map-dialog-nav')
                 .css({"height": h}).show();
             
-            var m = -($(Sourcemap.embed_dialog).outerWidth() / 2);
-            var v = -($(Sourcemap.embed_dialog).outerHeight() / 2);
-            $(Sourcemap.embed_dialog).css({"margin-left": m+"px"});
-            $(Sourcemap.embed_dialog).css({"margin-top": v+"px"});
+            var h2 = ($(Sourcemap.embed_dialog).outerHeight() / 2);
+            var dt  = Math.floor(($(document.body).innerHeight()-(h2*2)) / 2);
+            var w2 = ($(Sourcemap.embed_dialog).outerWidth() / 2);
+            var dl = Math.floor(($(document.body).innerWidth() - (w2*2)) / 2);
+            $(Sourcemap.embed_dialog).css({"left": dl+"px"});
+            $(Sourcemap.embed_dialog).css({"top": dt+"px"});
             
             $(Sourcemap.embed_dialog).show().data("state", 1);
             Sourcemap.map_tour.stop();

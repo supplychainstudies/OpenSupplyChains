@@ -113,11 +113,25 @@ body#supplychain {
                 background-size: 100%;
                 -moz-background-size: 100%;
             }
+            .description {
+                background: url("../images/embed-text-icon.png") center center no-repeat;
+                background-size: 100%;
+                -moz-background-size: 100%;
+            }
+            .flickr-setid {
+                background: url("../images/embed-image-icon.png") center center no-repeat;
+                background-size: 100%;
+                -moz-background-size: 100%;
+            }
         }
         .content {
             float: left;
             clear: none;
             margin: 0 .5em;
+            > .description {
+                width: 95%;
+                overflow: hidden;
+            }
         }
     }
     .sourcemap-embed-overlay {

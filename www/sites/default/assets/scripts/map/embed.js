@@ -60,7 +60,8 @@ Sourcemap.magic = {
                 } else {
                     var mkup = '';
                 }
-                return mkup ? $('#flickr-photoset-'+setid).html(mkup) : false;
+                $('#flickr-photoset-'+setid).html(mkup)
+                return Sourcemap.embed_dialog_show($(Sourcemap.embed_dialog_content).html());
             });
             return '<div style="height: 400px; width: 300px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'">Loading...</div>';
         }

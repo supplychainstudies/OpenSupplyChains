@@ -78,6 +78,7 @@ $(document).ready(function() {
         }
         if(stop.getAttr(magic_word, false) === false) magic_word = false;
         $(Sourcemap.embed_dialog).data("state", -1); // loading
+        Sourcemap.embed_dialog_hide();
         Sourcemap.template('embed/details/stop', function(p, tx, th) {
             Sourcemap.embed_dialog_show(th);
         }, {"stop": stop, "supplychain": sc, "magic_word": magic_word});

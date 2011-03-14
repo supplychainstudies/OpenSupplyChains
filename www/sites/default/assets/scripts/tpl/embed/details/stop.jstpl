@@ -1,4 +1,5 @@
 <h2><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
+<% if(this.stop.attributes.placename != undefined) { %><h3>from <span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
 
 <% if(this.magic_word === "description" && this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %><div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div><% } %>
 <% if(this.magic_word === "greenfact" && this.stop.getAttr("greenfact", false)) { %><div class="greenfact"><h3>Sustainability Fact</h3><%= _S.tlinkify(_S.htesc(this.stop.getAttr("greenfact"))) %></div><% } %>

@@ -244,9 +244,9 @@ $(document).ready(function() {
             $(Sourcemap.embed_dialog).find('.map-dialog-nav')
                 .css({"height": h}).show();
             
-            var h2 = ($(Sourcemap.embed_dialog).outerHeight() / 2);
+            var h2 = ($(Sourcemap.embed_dialog).innerHeight() / 2);
             var dt  = Math.floor(($(document.body).innerHeight()-(h2*2)) / 2);
-            var w2 = ($(Sourcemap.embed_dialog).outerWidth() / 2);
+            var w2 = ($(Sourcemap.embed_dialog).innerWidth() / 2);
             var dl = Math.floor(($(document.body).innerWidth() - (w2*2)) / 2);
             $(Sourcemap.embed_dialog).css({"left": dl+"px"});
             $(Sourcemap.embed_dialog).css({"top": dt+"px"});

@@ -1,6 +1,6 @@
 <h2><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
 
-<% if(this.magic_word === "description" && this.stop.getAttr("description", false)) { %><div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div><% } %>
+<% if(this.magic_word === "description" && this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %><div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div><% } %>
 <% if(this.magic_word === "greenfact" && this.stop.getAttr("greenfact", false)) { %><div class="greenfact"><h3>Sustainability Fact</h3><%= _S.tlinkify(_S.htesc(this.stop.getAttr("greenfact"))) %></div><% } %>
 <% if(this.magic_word === "youtube:link" && this.stop.getAttr("youtube:link", false)) { %><%= _S.magic.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
 <% if(this.magic_word === "vimeo:link" && this.stop.getAttr("vimeo:link", false)) { %><%= _S.magic.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>

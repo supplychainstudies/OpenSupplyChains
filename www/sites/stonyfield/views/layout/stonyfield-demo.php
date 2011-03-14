@@ -54,6 +54,23 @@ Stonyfield Yogurt - Sourcemap
     { font-weight: bold; }
     ul.map-nav li.sweeteners { background-color: #f7c370; }
     ul.map-nav li.other { background-color: #70d0f8; }
+
+    ul.map-nav li.dairy ul {
+        display: none;
+    }
+
+    ul.map-nav li.dairy:hover ul {
+        display: block;
+        position: absolute;
+    }
+    ul.map-nav li.dairy:hover ul > li {
+        display: block;
+        float: left;
+        width: 100%;
+        position: relative;
+        top: 100%;
+        left: 120%;
+    }
 </style>
 </head>
 <body>

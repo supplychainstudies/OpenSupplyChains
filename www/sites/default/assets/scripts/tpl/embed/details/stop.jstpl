@@ -13,7 +13,7 @@
 <div class="content-nav">
 <% for(var i=0; i<Sourcemap.magic_seq.length; i++) { %>
     <% if(this.stop.getAttr(Sourcemap.magic_seq[i], false)) { %>
-        <div class="content-item <%= _S.htesc(Sourcemap.magic_seq[i].replace(/\W+/, "-")) %>">
+        <div class="content-item <%= _S.htesc(Sourcemap.magic_seq[i].replace(/\W+/, "-")) %><%= (this.magic_word === Sourcemap.magic_seq[i] ? " selected" : "") %>">
             <a href="javascript: Sourcemap.embed_stop_details('<%= this.stop.instance_id %>', '<%= this.supplychain.instance_id %>', <%= i %>)"><%= Sourcemap.magic_seq[i] %></a>
         </div>  
     <% } %>

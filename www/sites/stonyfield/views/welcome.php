@@ -3,8 +3,14 @@
     <li class="sweeteners"><a href="sweeteners">Fruit and Sweeteners</a></li>
     <li class="dairy"><a href="#">Dairy</a>
         <ul>
-            <li><a href="dairy-ne">Northeast</a></li>
-            <li><a href="dairy-ca">California</a></li>
+            <li><a href="northeast">Northeast</a></li>
+            <li><a href="southeast">Southeast</a></li>
+            <li><a href="greatlakes">Great Lakes</a></li>
+            <li><a href="midwest">Midwest</a></li>
+            <li><a href="southcentral">South Central</a></li>
+            <li><a href="mountain">Mountain</a></li>
+            <li><a href="northwest">Northwest</a></li>
+            <li><a href="california">California</a></li>
         </ul>
     </li>
     <li class="other"><a href="other">Other Ingredients</a></li>

@@ -66,10 +66,9 @@ Stonyfield Yogurt - Sourcemap
     ul.map-nav li.dairy:hover ul > li {
         display: block;
         float: left;
-        width: 100%;
         position: relative;
         top: 100%;
-        left: 120%;
+        left: ;
     }
 </style>
 </head>

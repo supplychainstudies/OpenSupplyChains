@@ -67,6 +67,10 @@ body#supplychain {
                 display: block;
                 height: 100%;
                 width: 100%;
+                border:0;
+                &:active {
+                   border:0;
+                }
             }
         }
         .map-dialog-nav#embed-dialog-prev {
@@ -108,7 +112,10 @@ body#supplychain {
                     border:2px solid #fff;
                 }
                 &.selected {
-                    border: 2px solid @brand-color;
+                    border: 2px solid @highlight-color;
+                }
+                &:first-child {
+                   margin-left:0 !important;
                 }
             }
             .youtube-link, .vimeo-link {

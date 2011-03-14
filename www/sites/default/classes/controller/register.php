@@ -51,9 +51,10 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                     $create->username = $post->username;                
                     $create->email = $post->email;
                     $create->password = $post->password;
-                    $create->save();    
-                    $hash_value = Auth::instance()->hash($post->username.$post->email);
-                    $this->email_user($post->username, $post->email, $hash_value);
+                    $create->save();  
+		    $created = ORM::factory('user', $create->id)->created;
+		    $hash_value = Auth::instance()->hash($post->username.$post->email.$created);
+		    $this->email_user($post->username, $post->email, $hash_value);
                     
                     }  else {
                     Message::instance()->set('Email already exists.');
@@ -70,9 +71,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     
     
     public function email_user($username, $email, $hash_value) {
+
         $email_vars = array(
             'username' => $username,
             'hash_value' => $hash_value);
+
         $to = $email;
         $subject = 'Email confirmation for Sourcemap account';
         $body = View::factory('email/confirm')->bind('email_vars', $email_vars);
@@ -88,10 +91,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     }
 
     public function action_confirm(){
-        $hash = $_GET['u'];
-        $users = ORM::factory('user')->find_all()->as_array('id', array('id','username', 'email'));
+    
+	$hash = $_GET['u'];
+        $users = ORM::factory('user')->find_all()->as_array('id', array('id','username', 'email', 'created'));
         foreach($users as $user) {
-            if (Auth::instance()->hash($user->username.$user->email) == $hash) {
+            if (Auth::instance()->hash($user->username.$user->email.$user->created) == $hash) {
             $user_confirm = ORM::factory('user', $user->id);
             $user_confirm->flags =2;
             $user_confirm->save();    

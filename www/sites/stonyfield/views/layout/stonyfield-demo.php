@@ -5,7 +5,6 @@
 <title>
 Stonyfield Yogurt - Sourcemap
 </title>
-<?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 <style>
     body {
         font-family: sans-serif;

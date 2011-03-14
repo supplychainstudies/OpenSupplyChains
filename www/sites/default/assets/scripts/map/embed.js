@@ -289,7 +289,7 @@ $(document).ready(function() {
             var magic_word = false;
              while(!magic_word && nxt_seq_idx < Sourcemap.magic_seq.length) {
                 magic_word = Sourcemap.magic_seq[nxt_seq_idx];
-                if(magic_word && stop.getAttr(magic_word, false) === false) {
+                if(magic_word && stop.getAttr(magic_word, false) == false) {
                     magic_word = false;
                 }
                 if(!magic_word) nxt_seq_idx++;
@@ -330,7 +330,7 @@ $(document).ready(function() {
             var magic_word = false;
              while(!magic_word && prv_seq_idx >= 0) {
                 magic_word = Sourcemap.magic_seq[prv_seq_idx];
-                if(magic_word && stop.getAttr(magic_word, false) === false)
+                if(magic_word && stop.getAttr(magic_word, false) == false)
                     magic_word = false;
                 if(!magic_word) prv_seq_idx--;
             };

@@ -19,7 +19,7 @@ Sourcemap.MapTour.prototype.defaults = {
 
 Sourcemap.MapTour.prototype.init = function() {
     this.interval = this.options.interval > 0 ? this.options.interval * 1000 : 1000;
-    this.wait_interval = this.options.wait_interval > 0 ? this.options.wait_interval : 0;
+    this.wait_interval = this.options.wait_interval > 0 ? this.options.wait_interval : this.defaults.wait_interval;
     this.initEvents();
     this.initControls();
     this.features = this.getFeatures();

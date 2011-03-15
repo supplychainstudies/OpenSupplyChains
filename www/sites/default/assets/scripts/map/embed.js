@@ -200,9 +200,7 @@ $(document).ready(function() {
             });
             
             Sourcemap.listen('map:feature_selected', function(evt, map, ftr) {
-                if(Sourcemap.map_tour)
-                    Sourcemap.map_tour.stop();
-                if(Sourcemap.embed_dialog_hide)
+                if($(Sourcemap.embed_dialog).data("state") == 1)
                     Sourcemap.embed_dialog_hide();
             });
  
@@ -254,8 +252,8 @@ $(document).ready(function() {
 
         // set up dialog
         Sourcemap.embed_dialog = $('<div id="embed-dialog" class="map-dialog"></div>');
-        Sourcemap.embed_dialog_prev_el = $('<div id="embed-dialog-prev" class="map-dialog-nav prev"><a href="javascript:Sourcemap.embed_dialog_prev();">&laquo;</a></div>');
-        Sourcemap.embed_dialog_next_el = $('<div id="embed-dialog-next" class="map-dialog-nav next"><a href="javascript:Sourcemap.embed_dialog_next();">&raquo;</a></div>');
+        Sourcemap.embed_dialog_prev_el = $('<div id="embed-dialog-prev" class="map-dialog-nav prev"><a href="javascript:Sourcemap.embed_dialog_prev();"></a></div>');
+        Sourcemap.embed_dialog_next_el = $('<div id="embed-dialog-next" class="map-dialog-nav next"><a href="javascript:Sourcemap.embed_dialog_next();"></a></div>');
         Sourcemap.embed_dialog_content = $('<div id="embed-dialog-content" class="content"></div>');
         Sourcemap.embed_dialog.append(Sourcemap.embed_dialog_prev_el)
             .append(Sourcemap.embed_dialog_content).append(Sourcemap.embed_dialog_next_el);

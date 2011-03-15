@@ -94,7 +94,8 @@ $(document).ready(function() {
 
         // get magic word...make sure it's valid
         var magic_word = Sourcemap.magic_seq[seq_idx];
-        while(stop.getAttr(magic_word, false) === false && seq_idx < Sourcemap.magic_seq.length-1) {
+        while(((stop.getAttr(magic_word, false) === false) || (!stop.getAttr(magic_word).length || stop.getAttr(magic_word).length == 1)) 
+            && seq_idx < Sourcemap.magic_seq.length-1) {
             magic_word = Sourcemap.magic_seq[++seq_idx];
         }
         

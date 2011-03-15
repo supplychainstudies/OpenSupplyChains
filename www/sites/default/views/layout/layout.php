@@ -16,7 +16,9 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags(
-        'sites/default/assets/styles/style.css', 'sites/default/assets/styles/sourcemap.less?v=2') ?>
+        'sites/default/assets/styles/reset.css', 
+        'sites/default/assets/styles/general.less?v=2'
+    ) ?>
 </head>
 
 <body class="fixed">

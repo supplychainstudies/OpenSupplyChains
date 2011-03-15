@@ -78,9 +78,6 @@ $(document).ready(function() {
     Sourcemap.embed_stop_details = function(stid, scid, seq_idx) {
         var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
         
-        // sync cur seq idx
-        Sourcemap.magic_seq_cur = seq_idx;
-
         // sync tour
         var tftrs = Sourcemap.map_tour.features;
         for(var tfi=0; tfi< tftrs.length; tfi++) {
@@ -100,6 +97,10 @@ $(document).ready(function() {
         while(stop.getAttr(magic_word, false) === false && seq_idx < Sourcemap.magic_seq.length-1) {
             magic_word = Sourcemap.magic_seq[++seq_idx];
         }
+        
+        // sync cur seq idx
+        Sourcemap.magic_seq_cur = seq_idx;
+
         if(stop.getAttr(magic_word, false) === false) magic_word = false;
 
         $(Sourcemap.embed_dialog).data("state", -1); // loading

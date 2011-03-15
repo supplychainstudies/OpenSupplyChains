@@ -6,6 +6,7 @@
  * @copyright  (c) Sourcemap
  * @license    http://blog.sourcemap.org/terms-of-service
  */
+
 class Controller_Auth extends Sourcemap_Controller_Layout {
     
     public $layout = 'layout';
@@ -20,6 +21,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             $this->template->current_user_id = false;
             $this->template->current_user = false;
         }
+	
+
     }
 
     public function action_login() {
@@ -76,6 +79,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
     public function email_password($username, $email, $temp_password) {
 
+
 	$email_vars = array('username' => $username, 'password' => $temp_password);
 	$to = $email;
 	$subject = 'Your Sourcemap account information';
@@ -87,7 +91,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 	
 	$mail_sent = mail($to, $subject, $body, $headers);
 	
-	echo $mail_sent ? "Mail sent" : "Mail failed";
+	echo $mail_sent ? "Mail sent" : "Mail failed"; 
        
     }
     
@@ -124,6 +128,111 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 	    }
 	} 
     }
-    
-    
-  }
+
+
+    public function action_loginopenid() {
+	$errors = $this->register_user($_POST);
+	if(isset($errors)) {
+	    Message::instance()->set($errors);
+	}
+    }
+    public function register_user($_POST) {
+	
+	$errors = "";
+	if(isset($_POST['token'])) {
+	    $token = $_POST['token'];
+	 
+	    $apikey = '0cb119b5123b1731a13c0979937af366504944a4';
+	    $post_data = array('token' => $_POST['token'],
+			       'apiKey'=> $apikey,
+			       'format' => 'json');
+
+	    $curl = curl_init();
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	    curl_setopt($curl, CURLOPT_URL, 'https://rpxnow.com/api/v2/auth_info');
+	    curl_setopt($curl, CURLOPT_POST, true);
+	    curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+	    curl_setopt($curl, CURLOPT_HEADER, false);
+	    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+	    $raw_json = curl_exec($curl);
+	    curl_close($curl); 	    
+	    
+	    $auth_info = json_decode($raw_json, true);	    
+
+	    if ($auth_info['stat'] == 'ok') {
+		$profile = $auth_info['profile'];
+		if (isset($profile['identifier'])) {
+		    $identifier = $profile['identifier'];
+		}
+		if (isset($profile['name'])) {
+		    $name = $profile['name'];
+		    if (isset($name['givenName'])) {
+			$username = $name['givenName'];
+		    } else {
+			$username = $profile['displayName'];
+		    }
+		}	 
+		
+		if (isset($profile['verifiedEmail'])) {
+		    $email = $profile['verifiedEmail'];
+		}
+		
+		$user = ORM::factory('user');
+		$all_users = $user->find_all()->as_array(null, 'username');
+                $all_emails = $user->find_all()->as_array(null, 'email');
+		$auto_password = text::random($type = 'alnum', $length = 6);  
+		
+			
+		if(!in_array($email, $all_emails)){
+		    if(!in_array($username, $all_users)) {
+			$this->create_user($username, $email, $auto_password);
+						
+		    } else {
+			$username = $this->get_username($username);
+			$this->create_user($username, $email, $auto_password);
+		    }
+		    
+		    Auth::instance()->login($username, $auto_password);
+
+		} else {
+		    $get_user = $user->where('email', '=', $email)->find();
+		    $username = $get_user->username;
+		    
+		}
+
+	    } else {
+		$errors .= "No info found";
+	    }
+	}
+	
+	$this->request->redirect('auth/');
+    }
+
+    public function create_user($username, $email, $password){
+
+	$user = ORM::factory('user');
+	$user->username = $username;
+	$user->email = $email;
+	$user->password = $password;
+	$user->save();
+	
+	// add a default role to the user
+	$role = ORM::factory('role', array('name' => 'login'));
+	$user->add('roles', $role)->save();
+    }
+
+    public function get_username($username){
+	$user = ORM::factory('user');
+	$all_users = $user->find_all()->as_array(null, 'username');
+	$count =1;
+	$new_username = $username.$count;
+	if(!in_array($new_username, $all_users)) {
+	    $username = $new_username;
+	} else {
+	    $count++;
+	    $this->get_username($new_username);
+	}
+	return $username;
+    }
+
+}

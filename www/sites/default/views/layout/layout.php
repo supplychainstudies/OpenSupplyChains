@@ -34,7 +34,9 @@
                 <?php if($current_user = Auth::instance()->get_user()): ?>
                 <li class="register-link"><span class="username"><?= HTML::chars($current_user->username) ?>&nbsp;|&nbsp;<a href="auth/logout">Log out</a></li>
                 <?php else: ?>
-                <li class="register-link"><a href="register">Join us</a> or <a href="auth">Log in</a> or  <a href="auth/forgot_password">forgot password?</a></li>
+                <li class="register-link"><a href="register">Join us</a>  |&nbsp;<a class="rpxnow" onclick="return false;"
+		     href="https://sourcemap1.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2F18.85.59.71%2Fsmap%2Ftrunk%2Fwww%2Fauth%2Floginopenid"> Social Sign In </a> 
+		     or <a href="auth">Log in</a> or  <a href="auth/forgot_password">forgot password?</a></li>
                 <?php endif; ?>
                 <li id="browse-navigation">
                     <h3>Browse</h3>            
@@ -153,6 +155,17 @@
     <script src="js/libs/dd_belatedpng.js"></script>
     <script> DD_belatedPNG.fix('img, .png_bg'); 
   <![endif]-->
+
+<script type="text/javascript">
+  var rpxJsHost = (("https:" == document.location.protocol) ? "https://" : "http://static.");
+  document.write(unescape("%3Cscript src='" + rpxJsHost +
+"rpxnow.com/js/lib/rpx.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  RPXNOW.overlay = true;
+  RPXNOW.language_preference = 'en';
+</script>
+
   
 </body>
 </html>

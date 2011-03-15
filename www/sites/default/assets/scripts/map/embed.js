@@ -179,11 +179,7 @@ $(document).ready(function() {
         // die quietly if map fails
         if(map !== Sourcemap.map_instance)
             return;
-        Sourcemap.listen('map:feature_selected', function(evt, map, ftr) {
-            Sourcemap.map_tour.stop();
-            Sourcemap.embed_dialog_hide();
-        });
-        
+       
         // tour?
         if(Sourcemap.embed_params && Sourcemap.embed_params.tour) {
             // build list of features for tour
@@ -202,6 +198,14 @@ $(document).ready(function() {
                 "features": features, "wait_interval": Sourcemap.embed_params.tour_start_delay,
                 "interval": Sourcemap.embed_params.tour_interval
             });
+            
+            Sourcemap.listen('map:feature_selected', function(evt, map, ftr) {
+                if(Sourcemap.map_tour)
+                    Sourcemap.map_tour.stop();
+                if(Sourcemap.embed_dialog_hide)
+                    Sourcemap.embed_dialog_hide();
+            });
+ 
         } else {
             // no tour
             Sourcemap.map_tour = false;

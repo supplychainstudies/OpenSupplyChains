@@ -129,7 +129,7 @@ $(document).ready(function() {
             }
             var hasmagic = false;
             for(var ski=0; ski<Sourcemap.magic_seq.length; ski++) {
-                var sk = Sourcemap.magic_seq[sk];
+                var sk = Sourcemap.magic_seq[ski];
                 if(ref.getAttr(sk, false))
                     hasmagic = true;
             }

@@ -96,11 +96,14 @@ Sourcemap.broadcast = function(evt) {
 }
 
 Sourcemap.listen = function(evts, callback, scope) {
-    var scope = scope || window;
     if(evts instanceof Array)
         evts = evts.join(" ");
     if(callback instanceof Function) {
-        $.bind(evts, $.proxy(callback, scope));
+        if(scope) {
+            $(document).bind(evts, $.proxy(callback, scope));
+        } else {
+            $(document).bind(evts, callback);
+        }
     }
     return true;
 }

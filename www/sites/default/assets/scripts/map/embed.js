@@ -127,11 +127,13 @@ $(document).ready(function() {
                 t.push('hop');
                 tscope.hop = ref;
             }
-            var hasmagic = ref.getAttr.apply(ref, Sourcemap.magic_seq.concat(""))
-            if(hasmagic && hasmagic.length && hasmagic.length > 1)
-                tscope.morelink = true;
-            else
-                tscope.morelink = false;
+            var hasmagic = false;
+            for(var ski=0; ski<Sourcemap.magic_seq.length; ski++) {
+                var sk = Sourcemap.magic_seq[sk];
+                if(Sourcemap.getAttr(sk, false))
+                    hasmagic = true;
+            }
+            tscope.morelink = hasmagic;
             Sourcemap.template('embed/'+t.join('-'), $.proxy(function(p, tx, th) {
                 $(this.popup.contentDiv).html(th);
                 this.popup.updateSize();

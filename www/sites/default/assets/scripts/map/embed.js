@@ -77,14 +77,31 @@ $(document).ready(function() {
 
     Sourcemap.embed_stop_details = function(stid, scid, seq_idx) {
         var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
+        
+        // sync cur seq idx
+        Sourcemap.magic_seq_cur = seq_idx;
+
+        // sync tour
+        var tftrs = Sourcemap.map_tour.features;
+        for(var tfi=0; tfi< tftrs.length; tfi++) {
+            var tfattrs = tftrs[tfi].attributes;
+            if(tfattrs.stop_instance_id && tfattrs.stop_instance_id == stid) {
+                Sourcemap.map_tour.ftr_index = tfi;
+                break;
+            }
+        }
+
         // load stop details template and show in embed dialog
         var sc = Sourcemap.map_instance.supplychains[scid];
         var stop = sc.findStop(stid);
+
+        // get magic word...make sure it's valid
         var magic_word = Sourcemap.magic_seq[seq_idx];
         while(stop.getAttr(magic_word, false) === false && seq_idx < Sourcemap.magic_seq.length-1) {
             magic_word = Sourcemap.magic_seq[++seq_idx];
         }
         if(stop.getAttr(magic_word, false) === false) magic_word = false;
+
         $(Sourcemap.embed_dialog).data("state", -1); // loading
         Sourcemap.embed_dialog_hide();
         Sourcemap.template('embed/details/stop', function(p, tx, th) {
@@ -156,11 +173,15 @@ $(document).ready(function() {
     });
 
     // wait for map to load, then add dressing
-    $(document).bind('map:supplychain_mapped', function(evt, map) {
+    Sourcemap.listen('map:supplychain_mapped', function(evt, map) {
         // die quietly if map fails
         if(map !== Sourcemap.map_instance)
             return;
-
+        Sourcemap.listen('map:feature_selected', function(evt, map, ftr) {
+            Sourcemap.map_tour.stop();
+            Sourcemap.embed_dialog_hide();
+        });
+        
         // tour?
         if(Sourcemap.embed_params && Sourcemap.embed_params.tour) {
             // build list of features for tour
@@ -237,7 +258,7 @@ $(document).ready(function() {
         Sourcemap.embed_dialog_show = function(mkup) {
             // update dialog content and position
             if(mkup) $(Sourcemap.embed_dialog_content).html(mkup);
-
+            
             Sourcemap.map_instance.controls.select.unselectAll();
             
             var h = $(Sourcemap.embed_dialog).innerHeight();
@@ -251,7 +272,10 @@ $(document).ready(function() {
             $(Sourcemap.embed_dialog).css({"left": dl+"px"});
             $(Sourcemap.embed_dialog).css({"top": dt+"px"});
             
-            $(Sourcemap.embed_dialog).show().data("state", 1);
+            Sourcemap.embed_dialog_content.css({"visility": "hidden"});
+            $(Sourcemap.embed_dialog).fadeIn(500, function() {
+                Sourcemap.embed_dialog_content.css({"visility": "visible"});
+            }).data("state", 1);
             Sourcemap.map_tour.stop();
         }
         Sourcemap.embed_dialog_hide = function() {

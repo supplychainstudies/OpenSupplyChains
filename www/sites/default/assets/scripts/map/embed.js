@@ -127,7 +127,7 @@ $(document).ready(function() {
                 t.push('hop');
                 tscope.hop = ref;
             }
-            var hasmagic = ref.getAttr.call(ref, Sourcemap.magic_seq.concat(""))
+            var hasmagic = ref.getAttr.apply(ref, Sourcemap.magic_seq.concat(""))
             if(hasmagic && hasmagic.length && hasmagic.length > 1)
                 tscope.morelink = true;
             else

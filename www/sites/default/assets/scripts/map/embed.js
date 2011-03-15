@@ -127,6 +127,11 @@ $(document).ready(function() {
                 t.push('hop');
                 tscope.hop = ref;
             }
+            var hasmagic = ref.getAttr.call(ref, Sourcemap.magic_seq.concat(""))
+            if(hasmagic && hasmagic.length && hasmagic.length > 1)
+                tscope.morelink = true;
+            else
+                tscope.morelink = false;
             Sourcemap.template('embed/'+t.join('-'), $.proxy(function(p, tx, th) {
                 $(this.popup.contentDiv).html(th);
                 this.popup.updateSize();

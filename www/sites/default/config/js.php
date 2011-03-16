@@ -29,6 +29,15 @@ return array(
             'requires' => array(
                 'modernizr', 'less', 'sourcemap-map', 'sourcemap-template'
             )
-        )
+	 ),
+	
+	'sourcemap-social' => array(
+	    'scripts' => array(
+		'sites/default/assets/scripts/social.js'
+	    ),
+	    'requires' => array(
+		'sourcemap-jquery'
+	    )
+	)
     )
 );

@@ -16,7 +16,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     public function action_index() {
     
         $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template', 'sourcemap-working'
+            'sourcemap-core', 'sourcemap-template', 'sourcemap-working', 'sourcemap-social'
         );
         $this->layout->styles = array(
             'assets/styles/style.css', 

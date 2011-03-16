@@ -28,8 +28,8 @@ class Controller_Dashboard extends Sourcemap_Controller_Layout {
 	    
 	    $supplychains_array = $supplychains->as_array(null, array('id', 'created', 'modified'));	
 	    
-	    $iterator = 0;
 	    $attributes = array();
+	    $iterator= 0;
 	    foreach($supplychains as $supplychain) {
 		$attributes[] = $supplychain->attributes->find_all()->as_array(null, array('id', 'supplychain_id', 'key'));	     
 		$supplychains_array[$iterator]['owner'] = $supplychain->owner->username;
@@ -45,11 +45,11 @@ class Controller_Dashboard extends Sourcemap_Controller_Layout {
 		}
 		$iterator++;
 	    }
-	
+
 	    $this->template->supplychains = $supplychains_array;
 	    
 	    $this->layout->scripts = array(
-		'sourcemap-core', 'sourcemap-template', 'sourcemap-working'
+		'sourcemap-core', 'sourcemap-template', 'sourcemap-working', 'sourcemap-social'
 		);
 	    $this->layout->styles = array(
 		'assets/styles/style.css', 

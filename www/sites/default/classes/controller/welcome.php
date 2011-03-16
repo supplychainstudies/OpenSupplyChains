@@ -20,7 +20,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             ->limit(10)
             ->find_all();
         $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template', 'sourcemap-working'
+            'sourcemap-core', 'sourcemap-template', 'sourcemap-working', 'sourcemap-social'
         );
         $this->layout->styles = array(
             'sites/default/assets/styles/reset.css', 

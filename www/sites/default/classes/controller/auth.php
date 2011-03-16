@@ -22,6 +22,9 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             $this->template->current_user = false;
         }
 	
+	$this->layout->scripts = array(
+	    'sourcemap-social'
+	    );
 
     }
 
@@ -188,7 +191,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 			$this->create_user($username, $email, $auto_password);
 						
 		    } else {
-			$username = $this->get_username($username);
+			$username = $this->get_username($username, $all_users);
 			$this->create_user($username, $email, $auto_password);
 		    }
 		    
@@ -221,9 +224,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 	$user->add('roles', $role)->save();
     }
 
-    public function get_username($username){
-	$user = ORM::factory('user');
-	$all_users = $user->find_all()->as_array(null, 'username');
+    public function get_username($username, $all_users){
 	$count =1;
 	$new_username = $username.$count;
 	if(!in_array($new_username, $all_users)) {

@@ -44,29 +44,22 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             
             if($post->password == $post->confirm_password) {
                 $create = ORM::factory('user');
-                $all_users = $create->find_all()->as_array(null, 'username');
-                $all_emails = $create->find_all()->as_array(null, 'email');
-                if(!in_array($post->username, $all_users)){
-                    if(!in_array($post->email, $all_emails)) {
-                    $create->username = $post->username;                
-                    $create->email = $post->email;
-                    $create->password = $post->password;
-                    $create->save();  
+		$create->username = $post->username;                
+		$create->email = $post->email;
+		$create->password = $post->password;
+		try {
+		    $create->save();  
 		    $created = ORM::factory('user', $create->id)->created;
 		    $hash_value = Auth::instance()->hash($post->username.$post->email.$created);
-		    $this->email_user($post->username, $post->email, $hash_value);
-                    
-                    }  else {
-                    Message::instance()->set('Email already exists.');
-                    }
-                } else {
-                    Message::instance()->set('Username already exists, please try with a different username.');
-                }
-                
-            } else {
-                Message::instance()->set('Passwords did not match.');
-            }
-        }
+		    $this->email_user($post->username, $post->email, $hash_value);	    
+		} catch (Exception $e){
+		    Message::instance()->set('Could not register the user.');
+		}
+		
+	    } else {
+		Message::instance()->set('Passwords did not match.');
+	    }
+	}
     }
     
     
@@ -84,10 +77,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $headers .= 'From: Sourcemap Team <smita@sourcemap.org>' . "\r\n";
         
-        $mail_sent = mail($to, $subject, $body, $headers);
-        
-        echo $mail_sent ? "Mail sent" : "Mail failed"; 
-        
+	try {
+	    mail($to, $subject, $body, $headers);
+	} catch (Exception $e) {
+	    Message::instance()->set('Sorry, could not send an email.');
+	}        
     }
 
     public function action_confirm(){
@@ -96,17 +90,21 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         $users = ORM::factory('user')->find_all()->as_array('id', array('id','username', 'email', 'created'));
         foreach($users as $user) {
             if (Auth::instance()->hash($user->username.$user->email.$user->created) == $hash) {
-            $user_confirm = ORM::factory('user', $user->id);
-            $user_confirm->flags =2;
-            $user_confirm->save();    
+		$user_confirm = ORM::factory('user', $user->id);
+		$user_confirm->flags =2;
 
-            //add a default login role when a new user is created
-            $role = ORM::factory('role', array('name' => 'login'));
-            $user_confirm->add('roles', $role)->save();
-            Message::instance()->set('Thank you, your registration is now complete.');
-            break;
-            }
-        }
+		try {
+		    $user_confirm->save();    
+		    //add a default login role when a new user is created
+		    $role = ORM::factory('role', array('name' => 'login'));
+		    $user_confirm->add('roles', $role)->save();
+		    Message::instance()->set('Thank you, your registration is now complete.');
+		} catch (Exception $e) {
+		    Message::instance()->set('Could not complete the registration.');
+		}
+		
+	    }
+	}
     }
 
     

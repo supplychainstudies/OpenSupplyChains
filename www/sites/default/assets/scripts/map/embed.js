@@ -8,6 +8,8 @@ jQuery.fn.overlay_center = function () {
 Sourcemap.magic = {
     "youtube": {
         "link": function(lnk) {
+            if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
+                return '<p class="error">Invalid YouTube link.</p>';
             var mkup = '<iframe title="YouTube video player" width="400" height="300" '+
                 'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'" frameborder="0" '+
                 'allowfullscreen></iframe>';
@@ -75,8 +77,10 @@ $(document).ready(function() {
     // reset template path to site-specific location
     Sourcemap.TPL_PATH = "sites/default/assets/scripts/tpl/";
 
-    Sourcemap.embed_stop_details = function(stid, scid, seq_idx) {
+    Sourcemap.embed_stop_details = function(stid, scid, seq_idx, fade_in) {
         var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
+
+        var fade_in = fade_in === undefined ? "fast" : fade_in;
         
         // sync tour
         var tftrs = Sourcemap.map_tour.features;
@@ -106,9 +110,10 @@ $(document).ready(function() {
 
         $(Sourcemap.embed_dialog).data("state", -1); // loading
         Sourcemap.embed_dialog_hide();
-        Sourcemap.template('embed/details/stop', function(p, tx, th) {
-            Sourcemap.embed_dialog_show(th);
-        }, {"stop": stop, "supplychain": sc, "magic_word": magic_word});
+        Sourcemap.template('embed/details/stop', $.proxy(function(p, tx, th) {
+            Sourcemap.embed_dialog_show(th, fade_in);
+        }, {"fade_in": fade_in}), 
+        {"stop": stop, "supplychain": sc, "magic_word": magic_word});
     }
 
     Sourcemap.embed_hop_details = function(hop, sc) {
@@ -207,6 +212,8 @@ $(document).ready(function() {
             });
             
             Sourcemap.listen('map:feature_selected', function(evt, map, ftr) {
+                Sourcemap.map_instance.controls.select.unselectAll({"except": ftr});
+                if(Sourcemap.map_tour.timeout) Sourcemap.map_tour.stop();
                 if($(Sourcemap.embed_dialog).data("state") == 1)
                     Sourcemap.embed_dialog_hide();
             });
@@ -263,6 +270,7 @@ $(document).ready(function() {
             Sourcemap.embed_dialog_hide();
         });
 
+
         // set body font-size to a constant(ish) factor based on doc width
         // TODO Need to threshold this
         //$(document.body).css("font-size", Math.floor(document.body.clientWidth / 65)+"px");
@@ -276,9 +284,11 @@ $(document).ready(function() {
             .append(Sourcemap.embed_dialog_content).append(Sourcemap.embed_dialog_next_el);
         $(document.body).append(Sourcemap.embed_dialog);
         $(Sourcemap.embed_dialog).data("state", 1);
-        Sourcemap.embed_dialog_show = function(mkup) {
+        Sourcemap.embed_dialog_show = function(mkup, fade_in) {
             // update dialog content and position
             if(mkup) $(Sourcemap.embed_dialog_content).html(mkup);
+
+            fade_in = fade_in === undefined ? "300" : fade_in;
             
             Sourcemap.map_instance.controls.select.unselectAll();
             
@@ -293,14 +303,14 @@ $(document).ready(function() {
             $(Sourcemap.embed_dialog).css({"left": dl+"px"});
             $(Sourcemap.embed_dialog).css({"top": dt+"px"});
             
-            Sourcemap.embed_dialog_content.css({"visility": "hidden"});
-            $(Sourcemap.embed_dialog).fadeIn(250, function() {
-                Sourcemap.embed_dialog_content.css({"visility": "visible"});
+            Sourcemap.embed_dialog_content.css({"visibility": "hidden"});
+            $(Sourcemap.embed_dialog).fadeIn(300, function() {
+                Sourcemap.embed_dialog_content.css({"visibility": "visible"});
             }).data("state", 1);
             Sourcemap.map_tour.stop();
         }
         Sourcemap.embed_dialog_hide = function() {
-            $(Sourcemap.embed_dialog_content).empty();
+            Sourcemap.embed_dialog_content.empty();
             $(Sourcemap.embed_dialog).find('.map-dialog-nav').css({"height": "auto"}).hide();
             $(Sourcemap.embed_dialog).hide().data("state", 0);
         }

@@ -108,6 +108,87 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             }
         }
     }
+
+    
+    public function action_loginopenid() {
+	
+	$errors = "";
+	if(isset($_POST['token'])) {
+	    $token = $_POST['token'];
+	 
+	    $apikey = '0cb119b5123b1731a13c0979937af366504944a4';
+	    $post_data = array('token' => $_POST['token'],
+			       'apiKey'=> $apikey,
+			       'format' => 'json');
+
+	    $curl = curl_init();
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	    curl_setopt($curl, CURLOPT_URL, 'https://rpxnow.com/api/v2/auth_info');
+	    curl_setopt($curl, CURLOPT_POST, true);
+	    curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+	    curl_setopt($curl, CURLOPT_HEADER, false);
+	    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+	    $raw_json = curl_exec($curl);
+	    curl_close($curl); 	    
+	    
+	    $auth_info = json_decode($raw_json, true);	    
+
+	    if ($auth_info['stat'] == 'ok') {
+		$profile = $auth_info['profile'];
+		if (isset($profile['identifier'])) {
+		    $identifier = $profile['identifier'];
+		}
+		if (isset($profile['name'])) {
+		    $name = $profile['name'];
+		    if (isset($name['givenName'])) {
+			$username = $name['givenName'];
+		    } else {
+			$username = $profile['displayName'];
+		    }
+		}	 
+		
+		if (isset($profile['verifiedEmail'])) {
+		    $email = $profile['verifiedEmail'];
+		}
+		
+		$user = ORM::factory('user');
+		$all_users = $user->find_all()->as_array(null, 'username');
+                $all_emails = $user->find_all()->as_array(null, 'email');
+		$auto_password = text::random($type = 'alnum', $length = 6);  
+		
+			
+		if(!in_array($email, $all_emails)){
+		    $username = $this->get_username($username, $all_users);
+		    
+		} else {
+		    $get_user = $user->where('email', '=', $email)->find();
+		    $username = $get_user->username;
+		    
+		}
+
+	    }
+	}
+	$this->template->email = $email;
+	$this->template->username = $username;
+	$this->template->password = $auto_password;
+	$this->template->identifier = $identifier;
+	
+    }
+
+
+    public function get_username($username, $all_users){
+	$count =0;
+	$test = in_array($username, $all_users);
+	while($test) {
+	    $count++;
+	    $test = in_array($username."-".$count, $all_users);
+	    $username = $username."-".$count;
+	}
+	return $username;
+    }
+
+
+
     
 }
 

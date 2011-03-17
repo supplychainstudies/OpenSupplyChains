@@ -210,6 +210,16 @@ $(document).ready(function() {
                 if($(Sourcemap.embed_dialog).data("state") == 1)
                     Sourcemap.embed_dialog_hide();
             });
+            
+            // Setup embed activity fades 
+            $("html").mouseenter(function() {
+                $(".sourcemap-embed-overlay, .sourcemap-tour-control-panel, .olControlPanel")
+                    .fadeIn("fast");
+            });
+            $("html").mouseleave(function() {
+                $(".sourcemap-embed-overlay, .sourcemap-tour-control-panel, .olControlPanel")
+                    .fadeOut("fast");
+            });
  
         } else {
             // no tour
@@ -284,7 +294,7 @@ $(document).ready(function() {
             $(Sourcemap.embed_dialog).css({"top": dt+"px"});
             
             Sourcemap.embed_dialog_content.css({"visility": "hidden"});
-            $(Sourcemap.embed_dialog).fadeIn(500, function() {
+            $(Sourcemap.embed_dialog).fadeIn(250, function() {
                 Sourcemap.embed_dialog_content.css({"visility": "visible"});
             }).data("state", 1);
             Sourcemap.map_tour.stop();

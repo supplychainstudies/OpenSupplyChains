@@ -22,8 +22,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             $this->template->current_user = false;
         }
 	
-	$this->layout->scripts = array(
-	    'sourcemap-social'
+        $this->layout->scripts = array(
+            'sourcemap-social', 'modernizr', 'less'
 	    );
 
     }

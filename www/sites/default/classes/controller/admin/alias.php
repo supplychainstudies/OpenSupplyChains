@@ -38,15 +38,47 @@ class Controller_Admin_Alias extends Controller_Admin {
 	    
 	    $supplychain_alias_count = $supplychain_alias->count_all();
 	    
-	    Message::instance()->set('Total Aliases '.$supplychain_alias_count);
-	    Breadcrumbs::instance()->add('Management', 'admin/')
-		->add('Aliases', 'admin/alias');
+	   
+	    
+	    $post = Validate::factory($_POST);
+	    $post->rule('site', 'not_empty')
+		->rule('alias', 'not_empty')
+		->rule('supplychain_id', 'not_empty')
+		->filter(true, 'trim');
+	    
+	    if(strtolower(Request::$method) === 'post' && $post->check()) {
+		$check = false;
+		$post = (object)$post->as_array();
+		
+		$site_added = $post->site;
+		$alias_added = $post->alias;
+		$id = $post->supplychain_id;
+				
+		// check if the alias already exists, if not add new alias
+		
+		$supplychain_alias = ORM::factory('supplychain_alias');
+		$supplychain_alias->supplychain_id = $id;
+		$supplychain_alias->site = $site_added;
+		$supplychain_alias->alias = $alias_added;
+		try {
+		    $supplychain_alias->save();
+		} catch(Exception $e) {
+		    Message::instance()->set('Could not create alias. Violates the unique (site, alias)');
+		}
+		$this->request->redirect('admin/alias');
+		
+	    }
+
+	    
 	} else {
 	    $this->request->redirect('auth/');
 	}
-    	
+	
+	Message::instance()->set('Total Aliases '.$supplychain_alias_count);
+	Breadcrumbs::instance()->add('Management', 'admin/')
+	    ->add('Aliases', 'admin/alias');
+	
     }
-
 
 
     public function action_delete_supplychain_alias($id) {

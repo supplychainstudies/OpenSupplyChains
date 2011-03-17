@@ -121,30 +121,17 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		$site_added = $post->site;
 		$alias_added = $post->alias;
 		
-		$supplychain = ORM::factory('supplychain')
-		    ->where('id', '=', $id)
-		    ->find();
+				
+		$supplychain_alias = ORM::factory('supplychain_alias');
+		$supplychain_alias->supplychain_id = $id;
+		$supplychain_alias->site = $site_added;
+		$supplychain_alias->alias = $alias_added;
 		
-		$alias = $supplychain->alias->find_all()->as_array(null, array('site', 'alias'));
-		
-		$alias_names = array();
-		$site_names = array();
-		
-		// check if the alias already exists, if not add new alias
-		foreach($alias as $alias_array) {	
-		    $alias_names[] = $alias_array['alias']; 
-		    $site_names[] = $alias_array['site']; 
-		}
-		if((!in_array($alias_added, $alias_names) && (!in_array($site_added, $site_names)))) {
-		    $supplychain_alias = ORM::factory('supplychain_alias');
-		    $supplychain_alias->supplychain_id = $id;
-		    $supplychain_alias->site = $site_added;
-		    $supplychain_alias->alias = $alias_added;
+		try {
 		    $supplychain_alias->save();
-		    
-		} else {
-		    Message::instance()->set('Alias and site already exist.');
-		}
+		} catch(Exception $e) {
+		    Message::instance()->set('Could not create alias. Violates the unique (site, alias)');
+		}		
 		
 		$this->request->redirect("admin/supplychains/".$id);
 		

@@ -75,7 +75,6 @@ class Controller_Admin_Users extends Controller_Admin {
 		$owners[] = $usergroup->as_array();
 	    }
 	    
-	    
 	    $this->template->user = $user;
 	    $this->template->roles = $roles;
 	    $this->template->all_roles = $all_roles;
@@ -86,7 +85,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    
 	    // this is to reset the password
 	    $post = Validate::factory($_POST);
-	     $post->rule('email', 'not_empty')
+	    $post->rule('email', 'not_empty')
 		->rule('password', 'not_empty')
 		->rule('password', 'max_length', array(16))
 		->rule('password', 'min_length', array(6))
@@ -105,8 +104,14 @@ class Controller_Admin_Users extends Controller_Admin {
 			->find();
 		    
 		    $user_row->password = $post->password;
-		    $user_row->save();
-		    Message::instance()->set('Password changed successfully!');
+
+		    try {
+			$user_row->save();
+			Message::instance()->set('Password changed successfully!');
+		    } catch (Exception $e) {
+			Message::instance()->set('Password reset failed!');
+		    }
+		    
 		    $this->request->redirect("admin/users/".$id);
 		} else {
 		    Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
@@ -139,27 +144,28 @@ class Controller_Admin_Users extends Controller_Admin {
 		
 		$password = text::random($type = 'alnum', $length = 6);
 		$create = ORM::factory('user');
-		$all_users = $create->find_all()->as_array(null, 'username');
-		$all_emails = $create->find_all()->as_array(null, 'email');
-		if(!in_array($post->username, $all_users) && !in_array($post->email, $all_emails)) {
-		    $create->username = $post->username;                
-		    $create->email = $post->email;
-		    $create->password = $password;
+		$create->username = $post->username;                
+		$create->email = $post->email;
+		$create->password = $password;
+		
+		try {
 		    $create->save();
-		    
-		    
-		    //add a default login role when a new user is created
-		    $role = ORM::factory('role', array('name' => 'login'));
-		    $create->add('roles', $role)->save();
-		    
-		    
-		    // assign the user role as login 
-		} else {
-		    Message::instance()->set('User already exists.');
+		} catch (Exception $e) {
+		    Message::instance()->set('Could not create user. User already exists.');
 		}
+		    		    
+		//add a default login role when a new user is created
+		$role = ORM::factory('role', array('name' => 'login'));
+		
+		try {
+		    $create->add('roles', $role)->save();
+		} catch(Exception $e) {
+		    Message::instance()->set('Could not create user login role.');
+		}
+		
 	    } elseif (strtolower(Request::$method === 'post')) {
 		Message::instance()->set('Could not delete role.', Message::ERROR);
-	    } else {
+	    }else {
 		Message::instance()->set('Bad request.');
 	    }
 
@@ -181,10 +187,12 @@ class Controller_Admin_Users extends Controller_Admin {
 		$role = $post->role;  
 		$role_id = ORM::factory('role', array('name' => $role));
 		
-		$user = ORM::factory('user', $id)->remove('roles', $role_id)->save();
+		try {
+		    $user = ORM::factory('user', $id)->remove('roles', $role_id)->save();
+		} catch (Exception $e) {
+		    Message::instance()->set('Could not delete role.', Message::ERROR);
+		}
 		
-	    } elseif(strtolower(Request::$method === 'post')) {
-		Message::instance()->set('Could not delete role.', Message::ERROR);
 	    } else {
 		Message::instance()->set('Bad request.');
 	    }
@@ -194,7 +202,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    $this->request->redirect('auth/');
 	}
     }
-	
+    
     public function action_add_role($id) {
 
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
@@ -204,28 +212,16 @@ class Controller_Admin_Users extends Controller_Admin {
 	    if($post->check()) {
 		$post = (object)$post->as_array();
 		$user = ORM::factory('user', $id);
-		$roles = array();
-		foreach($user->roles->find_all()->as_array() as $i => $role) {
-		    $roles[] = $role->as_array();
+		$role = ORM::factory('role', array('name' => $post->addrole));
+		
+		try {
+		    $user->add('roles', $role)->save();
+		} catch (Exception $e) {
+		    Message::instance()->set('Could not add the role.');
 		}
-		$role_added = $post->addrole;
 		
-		$roleid = ORM::factory('role', array('name' => $role_added));
-		
-		
-		//check if the role already exists, if not add the new role
-		foreach($roles as $i => $k) {
-		    if($roles[$i]['name'] == $role_added){
-			$check = true;
-			break;
-		    }
-		}
-		if ($check == false || (count($roles)<0)) {
-		    $user = ORM::factory('user', $id)->add('roles', $roleid)->save();
-		}  
-	    } else {
-		Message::instance()->set('Please try again.', Message::ERROR);
-	    }
+	    }  
+	    
 	    $this->request->redirect("admin/users/".$id);
 	} else {
 	    $this->request->redirect('auth/');
@@ -237,7 +233,11 @@ class Controller_Admin_Users extends Controller_Admin {
 	
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
 	    $user = ORM::factory('user', $id);
-	    $user->delete();
+	    try {
+		$user->delete();
+	    } catch (Exception $e) {
+		Message::instance()->set('Could not delete the user.');
+	    }
 	    
 	    $this->request->redirect("admin/users/");
 	} else {

@@ -565,6 +565,7 @@ Sourcemap.Popup.prototype.initialize = function() {
         "height": this.ANCHOR_HT+"px", "width": "100%", "background-color": "none"
     });
     $(this.div).append(this.bottom_div);
+    this.fade_in = this.fade_in === undefined ? "fast" : this.fade_in;
 }
 
 Sourcemap.Popup.prototype.setBackgroundColor = function(color) {
@@ -606,8 +607,9 @@ Sourcemap.Popup.prototype.hide = function() {
 }
 
 Sourcemap.Popup.prototype.show = function() {
-    OpenLayers.Popup.prototype.show.apply(this, arguments);
-    $(this.div).show();
-    $(this.div).find('*').show();
+    //OpenLayers.Popup.prototype.show.apply(this, arguments);
+    $(this.div).fadeIn(this.fade_in, $.proxy(function() {
+        $(this.div).find('*').fadeIn(this.fade_in);
+    }, this));
 }
 

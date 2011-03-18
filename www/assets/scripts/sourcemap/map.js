@@ -252,6 +252,14 @@ Sourcemap.Map.prototype.getHopLayer = function(scid) {
     return this.layers[llabel];
 }
 
+Sourcemap.Map.prototype.getDataExtent = function() {
+    var ext = new OpenLayers.Bounds();
+    for(var llabel in this.layers) {
+        ext.extend(this.layers[llabel].getDataExtent());
+    }
+    return ext;
+}
+
 Sourcemap.Map.prototype.addControl = function(label, control) {
     this.map.addControl(control);
     this.controls[label] = control;

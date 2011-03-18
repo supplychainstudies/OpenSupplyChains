@@ -14,7 +14,8 @@ Sourcemap.MapTour = function(map, o) {
 Sourcemap.MapTour.prototype.defaults = {
     "auto_init": true, "interval": 2.5, // seconds
     "wait_interval": 5, // seconds
-    "tour_hops": false, "tour_stops": true
+    "tour_hops": false, "tour_stops": true,
+    "pan_easing": true
 };
 
 Sourcemap.MapTour.prototype.init = function() {
@@ -124,7 +125,16 @@ Sourcemap.MapTour.prototype.next = function() {
     if(current_ftr && this.map.controls && this.map.controls.select) 
         this.map.controls.select.unselect(current_ftr);
     if(next_ftr) {
-        this.map.map.panTo(this.getFeatureLonLat(next_ftr));
+        if(this.options.pan_easing) {
+            this.map.map.zoomToExtent(this.map.getDataExtent());
+            this.map.map.panTo(this.getFeatureLonLat(next_ftr));
+            setTimeout($.proxy(function() { 
+                this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1); 
+            }, this), 1000);
+        } else {
+            this.map.map.moveTo(this.getFeatureLonLat(next_ftr));
+            this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1);
+        }
         if(this.map.controls && this.map.controls.select)
             this.map.controls.select.select(next_ftr);
     }

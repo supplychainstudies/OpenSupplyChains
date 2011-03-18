@@ -56,102 +56,93 @@ class Controller_Admin_Groups extends Controller_Admin {
  
     public function action_details($id) {
 	
-	$this->template = View::factory('admin/groups/details');	
-	$group = ORM::factory('usergroup', $id);
-		
-	$group_members = array();
-	foreach($group->members->find_all()->as_array() as $i => $user) {
-	    $group_members[] = $user->as_array();
+	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
+	    $this->template = View::factory('admin/groups/details');	
+	    $group = ORM::factory('usergroup', $id);
+	    
+	    $group_members = array();
+	    foreach($group->members->find_all()->as_array() as $i => $user) {
+		$group_members[] = $user->as_array();
+	    }
+	    
+	    $owner = $group->owner->username;
+	    
+	    $this->template->group = $group;
+	    $this->template->owner = $owner;
+	    $this->template->members = $group_members;
+	    
+	    Breadcrumbs::instance()->add('Management', 'admin/')
+		->add('Groups', 'admin/groups')
+		->add(ucwords($group->name), 'admin/groups/'.$id);
+	} else {
+	    $this->request->redirect('auth/');
 	}
-	
-	$owner = $group->owner->username;
-
-	$this->template->group = $group;
-	$this->template->owner = $owner;
-	$this->template->members = $group_members;
-		
-	Breadcrumbs::instance()->add('Management', 'admin/')
-            ->add('Groups', 'admin/groups')
-            ->add(ucwords($group->name), 'admin/groups/'.$id);
-	
     }
 
 
     public function action_create_group() {
 
-	$post = Validate::factory($_POST);
-	$post->rule('username', 'not_empty')
-            ->rule('groupname', 'not_empty')
-            ->filter(true, 'trim');
-        if(strtolower(Request::$method) === 'post' && $post->check()) {
-            $post = (object)$post->as_array();
-	    $create = ORM::factory('usergroup');
-	    $name = $post->username;
-	    $userid = ORM::factory('user')->where('username', '=', $name)->find_all()->as_array(null, 'id');
-	    if(!empty($userid)) {
-		$create->owner_id = $userid[0];
+	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
+	    $post = Validate::factory($_POST);
+	    $post->rule('username', 'not_empty')
+		->rule('groupname', 'not_empty')
+		->filter(true, 'trim');
+	    if(strtolower(Request::$method) === 'post' && $post->check()) {
+		$post = (object)$post->as_array();
+		$create = ORM::factory('usergroup');
+		$name = $post->username;
+		$userid = ORM::factory('user')->where('username', '=', $name)->find();
+		$create->owner_id = $userid->id;
 		$create->name= $post->groupname;
-		$create->save();
+		try {
+		    $create->save();
+		} catch(Exception $e) {
+		    Message::instance()->set('Please enter a valid user name.');
+		}
+	        
+	    } elseif (strtolower(Request::$method === 'post')) {
+		Message::instance()->set('Could not delete role.', Message::ERROR);
 	    } else {
-		Message::instance()->set('Please enter a valid user name.');
+		Message::instance()->set('Bad request.');
 	    }
-            
-        } elseif (strtolower(Request::$method === 'post')) {
-            Message::instance()->set('Could not delete role.', Message::ERROR);
-        } else {
-            Message::instance()->set('Bad request.');
-        }
-        
-	$this->request->redirect("admin/groups/");
+	    
+	    $this->request->redirect("admin/groups/");
+	} else {
+	    $this->request->redirect('auth/');
+	}
     }
-
 
     public function action_add_member($id) {
 	
-	$post = Validate::factory($_POST);
-	$post->rule('username', 'not_empty')->filter(true, 'trim');
-	$group = ORM::factory('usergroup', $id);
-	
-	$group_members = array();
-	foreach($group->members->find_all()->as_array() as $i => $user) {
-	    $group_members[] = $user->as_array();
-	}
-
-
-	// get the member names
-	$members = array();
-	foreach($group_members as $member) {
-	    $members[] = $member['username'];
-	}
-
-	// get all the user names
-	$usernames = ORM::factory('user')->find_all()->as_array(null, 'username');
-
-	if($post->check()) {
-	    $post = (object)$post->as_array();
-	    $membernames = explode(",", $post->username);
-
-	    foreach ($membernames as $name) {
-		if(in_array($name, $usernames)) {
-
+	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
+	    $post = Validate::factory($_POST);
+	    $post->rule('username', 'not_empty')->filter(true, 'trim');
+	    $group = ORM::factory('usergroup', $id);
+	 	    
+	    if($post->check()) {
+		$post = (object)$post->as_array();
+		$membernames = explode(",", $post->username);
+		
+		foreach ($membernames as $name) {
 		    //check the user is already a member
-		    $name = trim($name);
-		    if(!in_array($name, $members)) {
+			$name = trim($name);
 			$user = ORM::factory('user')->where('username', '=', $name)->find();
 			//add the object to the alias
-			$user->add('groups', $group);
-		    }
-		} else {
-		    Message::instance()->set('Please enter a valid user name.');
+			try {
+			    $user->add('groups', $group);
+			} catch (Exception $e) {
+			    Message::instance()->set('Could not add the member.');
+			}
+			
 		}
 	    }
+	    $this->request->redirect("admin/groups/".$id);
+	    
+	} else {
+	    $this->request->redirect('auth/');
+	}	
 
-	}
-	
-	$this->request->redirect("admin/groups/".$id);
     }
-
-
 
         public function action_delete_member($id) {
 	
@@ -163,7 +154,12 @@ class Controller_Admin_Groups extends Controller_Admin {
 	 		
 	    $user = ORM::factory('user')->where('username', '=', $post->username)->find();
 	    $usergroup = ORM::factory('usergroup', $id);
-	    $user->remove('groups', $usergroup);
+	 
+	    try {
+		$user->remove('groups', $usergroup);
+	    } catch (Exception $e) {
+		Message::instance()->set('Could not delete member.');
+	    }
 		
 	} else {
 	    Message::instance()->set('Bad request.');
@@ -176,7 +172,11 @@ class Controller_Admin_Groups extends Controller_Admin {
 	public function action_delete_group($id) {
 	    if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
 		$group = ORM::factory('usergroup', $id);
-		$group->delete();
+		try {
+		    $group->delete();
+		} catch (Exception $e) {
+		    Message::instance()->set('Could not delete the group, please try again.');
+		}
 		
 		$this->request->redirect("admin/groups/");
 	    } else {

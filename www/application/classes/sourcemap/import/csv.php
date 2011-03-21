@@ -52,7 +52,7 @@ class Sourcemap_Import_Csv {
                         $latcol = $h;
                     } elseif(is_null($loncol) && preg_match('/^(lng)|(lon(g(itude)?)?)$/i', $h)) {
                         $loncol = $h;
-                    } elseif(is_null($addresscol) && (preg_match('/address/i', $h) || preg_match('/place ?name/i', $h))) {
+                    } elseif(is_null($addresscol) && preg_match('/address/i', $h)) {
                         $addresscol = $h;
                     }
                 }
@@ -101,7 +101,8 @@ class Sourcemap_Import_Csv {
                         $result = $results[0];
                         $lat = $result->lat;
                         $lon = $result->lng;
-                        $new_stop['attributes']['placename'] = $result->placename;
+                        if(!isset($record['placename']))
+                            $new_stop['attributes']['placename'] = $result->placename;
                     } else {
                         throw new Exception('Could not geocode: "'.$v.'".');
                     }
@@ -114,7 +115,8 @@ class Sourcemap_Import_Csv {
                     $result = $results[0];
                     $lat = $result->lat;
                     $lon = $result->lng;
-                    $new_stop['attributes']['placename'] = $result->placename;
+                    if(!isset($record['placename']))
+                        $new_stop['attributes']['placename'] = $result->placename;
                 }
             }
             if(is_null($lon) || is_null($lat)) throw new Exception('No lat/lon.');

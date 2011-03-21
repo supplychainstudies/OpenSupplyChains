@@ -109,19 +109,23 @@ Sourcemap.Supplychain.Graph.prototype.islands = function() {
     return nodes;
 }
 
-Sourcemap.Supplychain.Graph.prototype.depthFirstOrder = function() {
+Sourcemap.Supplychain.Graph.prototype.depthFirstOrder = function(upstream) {
     var order = [];
-    var stack = this.roots();
+    var stack = upstream ? this.leaves() : this.roots();
     var cur = null;
+    var traverse_fn = upstream ? 'inboundEdges' : 'outboundEdges';
+    var traverse_dir = upstream ? 'from' : 'to';
     while(cur = stack.pop()) {
         if(order.indexOf(cur) > 0)
             continue;
         else
             order.push(cur);
-        var out = this.outboundEdges(cur);
-        for(var i=0; i<out.length; i++) 
-            if(stack.indexOf(out[i].to) < 0) 
-                stack.push(out[i].to);
+        var out = this[traverse_fn](cur);
+        for(var i=0; i<out.length; i++) {
+            if(stack.indexOf(out[i][traverse_dir]) < 0) {
+                stack.push(out[i][traverse_dir]);
+            }
+        }
     }
     return order;
 }

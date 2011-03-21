@@ -1,5 +1,5 @@
-<h2><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
-<% if(this.stop.attributes.placename != undefined) { %><h3>from <span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
+<h2 id="overlay-title"><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
+<% if(this.stop.attributes.placename != undefined) { %><h3 id="overlay-placename">from <span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
 
 <% if(this.magic_word === "description") { %>
     <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>

@@ -1,9 +1,16 @@
-<div class="embed-summary">
-<h1><%= this.getAttr("name", "A Sourcemap") %></h1>
-<div>
-<p>
+<div id="embed-summary">
 <img class="user-avatar" src="<%= this.owner.avatar %>" />
+<h1 id="embed-title"><%= this.getAttr("name", "A Sourcemap") %></h1>
+<div id="embed-description">
 Created by <%= this.owner.name %> <%= Sourcemap.humanDate((new Date(this.created*1000))) %>.
-</p>
 </div>
+<div class="clear"></div>
+
+<ul id="share-list">
+    <li id="facebook-share"></li>
+    <a href="javascript: window.location = 'http://twitter.com/?status=Sourcemap';"><li id="twitter-share"></li></a>
+    <li id="vimeo-share"></li>
+    <div class="clear"></div>
+</ul>    
 </div>
+

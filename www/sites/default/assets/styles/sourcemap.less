@@ -5,6 +5,7 @@
 @highlight-color: #C9FF23;
 @background: #f4f4f4;
 @heading-color: #3274d0;
+@embed-color: rgba(30,30,30,0.6);
 
 /* Style Functions */
 .brand_gradient {
@@ -22,7 +23,17 @@
     background:-webkit-gradient(radial, center center, 0, center center, 400, from(#444), to(#000));
     background:-moz-radial-gradient(center 45deg, circle cover, #444 0%, #000 100%);    
 }
-
+.light_gradient {
+    background:#eee;
+    background:-webkit-gradient(radial, center center, 0, center center, 400, from(#eee), to(#ccc));
+    background:-moz-radial-gradient(center 45deg, circle cover, #eee 0%, #ccc 100%);    
+}
+.transparent_gradient {
+    background:#000;
+    background:rgba(30,30,30,0.6);
+    background:-webkit-gradient(radial, center center, 0, center center, 400, from(rgba(30,30,30,0.3)), to(rgba(30,30,30,0.6)));
+    background:-moz-radial-gradient(center 45deg, circle cover, rgba(30,30,30,0.3) 0%, rgba(30,30,30,0.6) 100%);    
+}
 .rounded(@radius: 4px) {
     -webkit-border-radius: @radius;
     -moz-border-radius: @radius;

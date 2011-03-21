@@ -31,7 +31,8 @@ Sourcemap.MapTour.prototype.init = function() {
 
 Sourcemap.MapTour.prototype.initControls = function() {
     this.controls_div_id = this.instance_id+'-controls';
-    this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel"></div>');
+    this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel">'
+                    + '<div class="tour-progress-bar"></div></div>');
     this.control_prev = $('<div class="sourcemap-tour-prev"></div>');
     this.control_next = $('<div class="sourcemap-tour-next"></div>');
     this.control_play = $('<div class="sourcemap-tour-play stopped"></div>');
@@ -141,6 +142,7 @@ Sourcemap.MapTour.prototype.next = function() {
     this.ftr_index = next_index;
     if(!this.stopped)
         this.timeout = setTimeout($.proxy(this.next, this), this.interval);
+    Sourcemap.broadcast('map_tour:positionchange', this);    
 }
 
 Sourcemap.MapTour.prototype.prev = function() {
@@ -159,6 +161,8 @@ Sourcemap.MapTour.prototype.prev = function() {
     this.ftr_index = prev_index;
     if(!this.stopped)
         this.timeout = setTimeout($.proxy(this.next, this), this.interval);
+    Sourcemap.broadcast('map_tour:positionchange', this);    
+    
 }
 
 Sourcemap.MapTour.prototype.clearTimeout = function() {

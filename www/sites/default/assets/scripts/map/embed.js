@@ -10,16 +10,16 @@ Sourcemap.magic = {
         "link": function(lnk) {
             if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
                 return '<p class="error">Invalid YouTube link.</p>';
-            var mkup = '<iframe title="YouTube video player" width="400" height="300" '+
-                'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'" frameborder="0" '+
-                'allowfullscreen></iframe>';
+            var mkup = '<iframe class="youtube-player" type="text/html" width="400" height="300" '+
+                'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'?autoplay=1"'+ 
+                'frameborder="0" allowfullscreen></iframe>';
             return mkup;
         }
     },
     "vimeo": {
         "link": function(lnk) {
-            var mkup = '<iframe src="http://player.vimeo.com/video/'+
-                (lnk.match(/\/(\d+)$/))[1]+'?title=0&amp;byline=0&amp;portrait=0" '+
+            var mkup = '<iframe class="vimeo-player" src="http://player.vimeo.com/video/'+
+                (lnk.match(/\/(\d+)$/))[1]+'?title=0&amp;byline=0&amp;portrait=0&autoplay=1" '+
                 'width="400" height="300" frameborder="0"></iframe>';
             return mkup;
         }
@@ -63,7 +63,7 @@ Sourcemap.magic = {
                     var mkup = '';
                 }
                 $('#flickr-photoset-'+setid).html(mkup)
-                return Sourcemap.embed_dialog_show($(Sourcemap.embed_dialog_content).html());
+                return Sourcemap.embed_overlay_show($(Sourcemap.embed_overlay_content).html());
             });
             return '<div style="height: 400px; width: 300px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'">Loading...</div>';
         }
@@ -77,10 +77,8 @@ $(document).ready(function() {
     // reset template path to site-specific location
     Sourcemap.TPL_PATH = "sites/default/assets/scripts/tpl/";
 
-    Sourcemap.embed_stop_details = function(stid, scid, seq_idx, fade_in) {
+    Sourcemap.embed_stop_details = function(stid, scid, seq_idx) {
         var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-
-        var fade_in = fade_in === undefined ? "fast" : fade_in;
         
         // sync tour
         var tftrs = Sourcemap.map_tour.features;
@@ -92,7 +90,7 @@ $(document).ready(function() {
             }
         }
 
-        // load stop details template and show in embed dialog
+        // load stop details template and show in embed overlay
         var sc = Sourcemap.map_instance.supplychains[scid];
         var stop = sc.findStop(stid);
 
@@ -108,16 +106,16 @@ $(document).ready(function() {
 
         if(stop.getAttr(magic_word, false) === false) magic_word = false;
 
-        $(Sourcemap.embed_dialog).data("state", -1); // loading
-        Sourcemap.embed_dialog_hide();
+        $(Sourcemap.embed_overlay).data("state", -1); // loading
+
         Sourcemap.template('embed/details/stop', $.proxy(function(p, tx, th) {
-            Sourcemap.embed_dialog_show(th, fade_in);
-        }, {"fade_in": fade_in}), 
+            Sourcemap.embed_overlay_show(th);
+        }), 
         {"stop": stop, "supplychain": sc, "magic_word": magic_word});
     }
 
     Sourcemap.embed_hop_details = function(hop, sc) {
-        // load hop details template and show in embed dialog
+        // load hop details template and show in embed overlay
     }
 
     // initialize new map
@@ -214,17 +212,26 @@ $(document).ready(function() {
             Sourcemap.listen('map:feature_selected', function(evt, map, ftr) {
                 Sourcemap.map_instance.controls.select.unselectAll({"except": ftr});
                 if(Sourcemap.map_tour.timeout) Sourcemap.map_tour.stop();
-                if($(Sourcemap.embed_dialog).data("state") == 1)
-                    Sourcemap.embed_dialog_hide();
             });
             
+            Sourcemap.listen('map_tour:positionchange', function(evt, maptour) {
+                var currentindex = maptour.ftr_index+1;
+                var totalcount = maptour.features.length+1;
+                var widthpercent = (currentindex/totalcount*100*.8)+"%";
+                $(".tour-progress-bar").css({"width":widthpercent});
+
+if($(Sourcemap.embed_overlay).data("state") == 1) {
+                    Sourcemap.embed_stop_details(Sourcemap.map_tour.getCurrentStop().instance_id, Sourcemap.map_tour.getCurrentFeature().attributes.supplychain_instance_id, 0);
+                }
+              
+            });
             // Setup embed activity fades 
             $("html").mouseenter(function() {
-                $(".sourcemap-embed-overlay, .sourcemap-tour-control-panel, .olControlPanel")
+                $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
                     .fadeIn("fast");
             });
             $("html").mouseleave(function() {
-                $(".sourcemap-embed-overlay, .sourcemap-tour-control-panel, .olControlPanel")
+                $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
                     .fadeOut("fast");
             });
  
@@ -237,13 +244,15 @@ $(document).ready(function() {
         Sourcemap.map_instance.map.zoomIn();
 
         // zoom to bounds of stops layer
-        Sourcemap.map_instance.map.zoomToExtent(
+        var zoomOffset = 0;
+        var zoom = zoomOffset + Sourcemap.map_instance.map.getZoomForExtent(
             Sourcemap.map_instance.getStopLayer(sc.instance_id).getDataExtent()
         );
+        
+        Sourcemap.map_instance.map.zoomTo(zoom);
 
         // set up banner overlay. todo: make this optional.
-        var overlay = $('<div class="sourcemap-embed-overlay" id="map-overlay"></div>');
-        
+        var overlay = $('<div id="embed-banner"></div>');
         if(Sourcemap.embed_params && Sourcemap.embed_params.banner) {
             Sourcemap.map_overlay = overlay;
             $(Sourcemap.map_instance.map.div).css("position", "relative");
@@ -253,6 +262,63 @@ $(document).ready(function() {
             }, sc);
         }
 
+        // Set up dialog
+        Sourcemap.embed_dialog = $('<div id="embed-dialog"><h1>Message!</h1><p>Some text...</p></div>');       
+        $(document.body).prepend(Sourcemap.embed_dialog);
+        Sourcemap.template('embed/overlay/dialog', function(p, tx, th) {
+        }, sc);
+        Sourcemap.dialog_show = function() {
+            Sourcemap.embed_dialog.slideDown("normal", function() {
+                var shrink = $(Sourcemap.map_instance.map.div).outerHeight() 
+                             - $(Sourcemap.embed_dialog).outerHeight();
+                $(Sourcemap.map_instance.map.div).css({"height":shrink});
+            });            
+        }
+        Sourcemap.dialog_hide = function() {
+            Sourcemap.embed_dialog.slideUp("normal", function() {
+                $(Sourcemap.map_instance.map.div).css({"height":"100%"});
+            });
+        }
+                
+        // Set up tileswithcer 
+        if(Sourcemap.embed_params && Sourcemap.embed_params.tileswitcher) {       
+            var tileswitcher = $('<div id="tileswitcher" class="terrain"><div id="current-tile">Terrain</div><ul id="available-tiles"><li id="styled"></li><li id="terrain"></li><li id="satellite"></li></ul></div>');
+            $(Sourcemap.map_instance.map.div).append(tileswitcher);
+            $("#tileswitcher #available-tiles li").click(function() {
+                var newtile = $(this).attr("id");
+                $("#tileswitcher").attr("class",  newtile);
+                $("#tileswitcher #current-tile").text(newtile);
+
+                // This is a little wonky, sorry
+                if(newtile == "terrain") {
+                   Sourcemap.map_instance.map.setBaseLayer(
+                       Sourcemap.map_instance.map.getLayersByName("Google Streets").pop()
+                   );
+                }       
+                else if(newtile == "styled") {
+                   Sourcemap.map_instance.map.setBaseLayer(
+                       Sourcemap.map_instance.map.getLayersByName("Cloudmade").pop()
+                   );                   
+                }  
+                else if(newtile == "satellite") {
+                   Sourcemap.map_instance.map.setBaseLayer(
+                       Sourcemap.map_instance.map.getLayersByName("Google Satellite").pop()
+                   );   
+                }
+            });
+        }
+        
+        // Setup watermark    
+        var watermark = $('<div id="watermark"></div>');
+        $(Sourcemap.map_instance.map.div).append(watermark);
+        
+        // Setup dimmer    
+        var dimmed = $('<div id="dimmed-overlay"></div>');
+        $(Sourcemap.map_instance.map.div).append(dimmed);
+        dimmed.click(function() {
+            Sourcemap.embed_overlay_hide(); 
+        });
+        
         // make and place custom zoom controls
         var ze = new OpenLayers.Control.ZoomToMaxExtent({"title": "zoom all the way out"});
         var zi = new OpenLayers.Control.ZoomIn({"title": "zoom in"});
@@ -267,61 +333,61 @@ $(document).ready(function() {
         // pause tour on click
         Sourcemap.map_instance.map.events.register('click', Sourcemap.map_instance, function() {
             if(Sourcemap.map_tour) Sourcemap.map_tour.stop();
-            Sourcemap.embed_dialog_hide();
+            Sourcemap.embed_overlay_hide();
         });
 
-
-        // set body font-size to a constant(ish) factor based on doc width
-        // TODO Need to threshold this
-        //$(document.body).css("font-size", Math.floor(document.body.clientWidth / 65)+"px");
-
-        // set up dialog
-        Sourcemap.embed_dialog = $('<div id="embed-dialog" class="map-dialog"></div>');
-        Sourcemap.embed_dialog_prev_el = $('<div id="embed-dialog-prev" class="map-dialog-nav prev"><a href="javascript:Sourcemap.embed_dialog_prev();"></a></div>');
-        Sourcemap.embed_dialog_next_el = $('<div id="embed-dialog-next" class="map-dialog-nav next"><a href="javascript:Sourcemap.embed_dialog_next();"></a></div>');
-        Sourcemap.embed_dialog_content = $('<div id="embed-dialog-content" class="content"></div>');
-        Sourcemap.embed_dialog.append(Sourcemap.embed_dialog_prev_el)
-            .append(Sourcemap.embed_dialog_content).append(Sourcemap.embed_dialog_next_el);
-        $(document.body).append(Sourcemap.embed_dialog);
-        $(Sourcemap.embed_dialog).data("state", 1);
-        Sourcemap.embed_dialog_show = function(mkup, fade_in) {
-            // update dialog content and position
-            if(mkup) $(Sourcemap.embed_dialog_content).html(mkup);
-
-            fade_in = fade_in === undefined ? "300" : fade_in;
+        // set up overlay
+        Sourcemap.embed_overlay = $('<div id="embed-overlay"></div>');
+        Sourcemap.embed_overlay_prev_el = $('<div id="overlay-nav" class="prev"><a href="javascript:Sourcemap.embed_overlay_prev();"></a></div>');
+        Sourcemap.embed_overlay_next_el = $('<div id="overlay-nav" class="next"><a href="javascript:Sourcemap.embed_overlay_next();"></a></div>');
+        Sourcemap.embed_overlay_content = $('<div id="overlay-content" class="content"></div>');
+        Sourcemap.embed_overlay.append(Sourcemap.embed_overlay_prev_el)
+            .append(Sourcemap.embed_overlay_content).append(Sourcemap.embed_overlay_next_el);
+        $(Sourcemap.map_instance.map.div).append(Sourcemap.embed_overlay);
+        $(Sourcemap.embed_overlay).data("state", 1);
+        Sourcemap.embed_overlay_show = function(mkup) {
+            $("#dimmed-overlay").fadeIn();
+            // update overlay content and position
+            if(mkup) $(Sourcemap.embed_overlay_content).html(mkup);
             
             Sourcemap.map_instance.controls.select.unselectAll();
             
-            var h = $(Sourcemap.embed_dialog).innerHeight();
-            $(Sourcemap.embed_dialog).find('.map-dialog-nav')
+            var max_width = 0;
+            $('#overlay-content > *').each(function(){
+             var this_width = $(this).width();
+             if (this_width > max_width) { max_width = this_width;}
+            }); 
+            $(Sourcemap.embed_overlay).width((max_width/.8));
+            var h = $(Sourcemap.embed_overlay).height();
+            $(Sourcemap.embed_overlay).find('#overlay-nav')
                 .css({"height": h}).show();
-            
-            var h2 = ($(Sourcemap.embed_dialog).outerHeight() / 2);
+  
+            var h2 = ($(Sourcemap.embed_overlay).outerHeight() / 2);
             var dt  = Math.floor(($(Sourcemap.map_instance.map.div).innerHeight()-(h2*2)) / 2);
-            var w2 = ($(Sourcemap.embed_dialog).outerWidth() / 2);
+            var w2 = ($(Sourcemap.embed_overlay).outerWidth() / 2);
             var dl = Math.floor(($(Sourcemap.map_instance.map.div).innerWidth() - (w2*2)) / 2);
-            $(Sourcemap.embed_dialog).css({"left": dl+"px"});
-            $(Sourcemap.embed_dialog).css({"top": dt+"px"});
+            $(Sourcemap.embed_overlay).css({"left": dl+"px"});
+            $(Sourcemap.embed_overlay).css({"top": dt+"px"});
             
-            Sourcemap.embed_dialog_content.css({"visibility": "hidden"});
-            $(Sourcemap.embed_dialog).fadeIn(300, function() {
-                Sourcemap.embed_dialog_content.css({"visibility": "visible"});
+            var fade = $(Sourcemap.embed_overlay).css("display") == "block" ? 0 : 100;
+            $(Sourcemap.embed_overlay).fadeIn(fade, function() {
             }).data("state", 1);
+            
             Sourcemap.map_tour.stop();
         }
-        Sourcemap.embed_dialog_hide = function() {
-            Sourcemap.embed_dialog_content.empty();
-            $(Sourcemap.embed_dialog).find('.map-dialog-nav').css({"height": "auto"}).hide();
-            $(Sourcemap.embed_dialog).hide().data("state", 0);
+        Sourcemap.embed_overlay_hide = function() {
+            $("#dimmed-overlay").fadeOut();           
+            Sourcemap.embed_overlay_content.empty();
+            $(Sourcemap.embed_overlay).find('#overlay-nav').css({"height": "auto"}).hide();
+            $(Sourcemap.embed_overlay).hide().data("state", 0);
+            Sourcemap.map_tour.start();           
         }
-        Sourcemap.embed_dialog_hide();
+        Sourcemap.embed_overlay_hide();
     });
-
-
+    
     // side-scrolling next/prev for browsing content
-    Sourcemap.embed_dialog_next = function() {
-        if($(Sourcemap.embed_dialog).data("state") === -1) return;
-        Sourcemap.embed_dialog_hide();
+    Sourcemap.embed_overlay_next = function() {
+        if($(Sourcemap.embed_overlay).data("state") === -1) return;
         var nxt_seq_idx = Sourcemap.magic_seq_cur >= 0 && Sourcemap.magic_seq_cur < Sourcemap.magic_seq.length - 1 ?
             Sourcemap.magic_seq_cur + 1 : -1;
         if(nxt_seq_idx < 0) {
@@ -351,7 +417,7 @@ $(document).ready(function() {
             };
             if(!magic_word) {
                 Sourcemap.magic_seq_cur = -1;
-                return Sourcemap.embed_dialog_next();
+                return Sourcemap.embed_overlay_next();
             }
             Sourcemap.magic_seq_cur = nxt_seq_idx;
             Sourcemap.embed_stop_details(stop.instance_id, scid, Sourcemap.magic_seq_cur); 
@@ -361,9 +427,8 @@ $(document).ready(function() {
             throw new Error('Unexpected feature...not a stop or a hop.');
         }
     };
-    Sourcemap.embed_dialog_prev = function() {
-        if($(Sourcemap.embed_dialog).data("state") === -1) return;
-        Sourcemap.embed_dialog_hide();
+    Sourcemap.embed_overlay_prev = function() {
+        if($(Sourcemap.embed_overlay).data("state") === -1) return;
         var prv_seq_idx = Sourcemap.magic_seq_cur >= 0 ? Sourcemap.magic_seq_cur - 1 : 0;
         if(prv_seq_idx < 0) {
             Sourcemap.map_tour.prev();
@@ -391,7 +456,7 @@ $(document).ready(function() {
             };
             if(!magic_word) {
                 Sourcemap.magic_seq_cur = 0;
-                return Sourcemap.embed_dialog_prev();
+                return Sourcemap.embed_overlay_prev();
             }
             Sourcemap.magic_seq_cur = prv_seq_idx;
             Sourcemap.embed_stop_details(stop.instance_id, scid, Sourcemap.magic_seq_cur); 
@@ -402,5 +467,34 @@ $(document).ready(function() {
         }
     };
 
-
-});
+    // Misc UI things
+    $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 1020 * 100))+"%");
+    
+    $(window).resize(function () { 
+        $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 1020 * 100))+"%");
+        
+        var max_width = 0;
+        $('#overlay-content > *').each(function(){
+         var this_width = $(this).width();
+         if (this_width > max_width) { max_width = this_width;}
+        }); 
+        $(Sourcemap.embed_overlay).width((max_width/.8));
+        
+        var h = $(Sourcemap.embed_overlay).height();
+        $(Sourcemap.embed_overlay).find('#overlay-nav').css({"height": h}).show();
+        var h2 = ($(Sourcemap.embed_overlay).outerHeight() / 2);
+        var dt  = Math.floor(($(Sourcemap.map_instance.map.div).innerHeight()-(h2*2)) / 2);
+        var w2 = ($(Sourcemap.embed_overlay).outerWidth() / 2);
+        var dl = Math.floor(($(Sourcemap.map_instance.map.div).innerWidth() - (w2*2)) / 2);
+        $(Sourcemap.embed_overlay).css({"left": dl+"px"});
+        $(Sourcemap.embed_overlay).css({"top": dt+"px"});    
+        
+        if(Sourcemap.embed_dialog.css("display") == "block") {
+            var shrink = $(window).height() 
+                         - $(Sourcemap.embed_dialog).outerHeight();
+            $(Sourcemap.map_instance.map.div).css({"height":shrink});
+        }   
+        
+    });
+    
+}); 

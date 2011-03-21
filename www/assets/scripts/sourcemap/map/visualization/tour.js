@@ -131,7 +131,7 @@ Sourcemap.MapTour.prototype.next = function() {
             this.map.map.panTo(this.getFeatureLonLat(next_ftr));
             setTimeout($.proxy(function() { 
                 this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1); 
-            }, this), 1000);
+            }, this), 3000);
         } else {
             this.map.map.moveTo(this.getFeatureLonLat(next_ftr));
             this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1);

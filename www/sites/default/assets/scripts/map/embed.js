@@ -176,6 +176,8 @@ $(document).ready(function() {
         }
     });
 
+    // short-circuit panTo method to ease, even if we're at
+    // a high zoom level
     Sourcemap.map_instance.map.panTo = function(lonlat) {
         if(true) {
             if (!this.panTween) {
@@ -244,7 +246,7 @@ $(document).ready(function() {
             for(var k in map.supplychains) {
                 var sc = map.supplychains[k];
                 var g = new Sourcemap.Supplychain.Graph(map.supplychains[k]);
-                var order = g.depthFirstOrder();
+                var order = g.depthFirstOrder(true); // upstream
                 order = order.concat(g.islands());
                 for(var i=0; i<order.length; i++)
                     features.push(map.mapped_features[order[i]]);
@@ -267,8 +269,11 @@ $(document).ready(function() {
                 var widthpercent = (currentindex/totalcount*100*.8)+"%";
                 $(".tour-progress-bar").css({"width":widthpercent});
 
-if($(Sourcemap.embed_overlay).data("state") == 1) {
-                    Sourcemap.embed_stop_details(Sourcemap.map_tour.getCurrentStop().instance_id, Sourcemap.map_tour.getCurrentFeature().attributes.supplychain_instance_id, 0);
+                if($(Sourcemap.embed_overlay).data("state") == 1) {
+                    Sourcemap.embed_stop_details(
+                        Sourcemap.map_tour.getCurrentStop().instance_id, 
+                        Sourcemap.map_tour.getCurrentFeature().attributes.supplychain_instance_id, 0
+                    );
                 }
               
             });

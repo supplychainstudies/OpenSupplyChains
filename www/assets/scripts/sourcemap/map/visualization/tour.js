@@ -23,7 +23,7 @@ Sourcemap.MapTour.prototype.init = function() {
     this.wait_interval = this.options.wait_interval > 0 ? this.options.wait_interval : this.defaults.wait_interval;
     this.initEvents();
     this.initControls();
-    this.features = this.getFeatures();
+    this.features = this.options.features ? this.options.features : this.getFeatures();
     this.wait();
     Sourcemap.broadcast('map_tour:init', this);
     return this;

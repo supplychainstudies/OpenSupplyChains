@@ -176,6 +176,53 @@ $(document).ready(function() {
         }
     });
 
+    Sourcemap.map_instance.map.panTo = function(lonlat) {
+        if(true) {
+            if (!this.panTween) {
+                this.panTween = new OpenLayers.Tween(this.panMethod);
+            }
+            var center = this.getCenter();
+
+            // center will not change, don't do nothing
+            if (lonlat.lon == center.lon &&
+                lonlat.lat == center.lat) {
+                return;
+            }
+
+            var from = {
+                lon: center.lon,
+                lat: center.lat
+            };
+            var to = {
+                lon: lonlat.lon,
+                lat: lonlat.lat
+            };
+            this.panTween.start(from, to, this.panDuration, {
+                callbacks: {
+                    start: OpenLayers.Function.bind(function(lonlat) {
+                        this.events.triggerEvent("movestart");
+                    }, this),
+                    eachStep: OpenLayers.Function.bind(function(lonlat) {
+                        lonlat = new OpenLayers.LonLat(lonlat.lon, lonlat.lat);
+                        this.moveTo(lonlat, this.zoom, {
+                            'dragging': true,
+                            'noEvent': true
+                        });
+                    }, this),
+                    done: OpenLayers.Function.bind(function(lonlat) {
+                        lonlat = new OpenLayers.LonLat(lonlat.lon, lonlat.lat);
+                        this.moveTo(lonlat, this.zoom, {
+                            'noEvent': true
+                        });
+                        this.events.triggerEvent("moveend");
+                    }, this)
+                }
+            });
+        } else {
+            this.setCenter(lonlat);
+        }
+    }
+
     // get scid from inline script
     var scid = Sourcemap.embed_supplychain_id;
 

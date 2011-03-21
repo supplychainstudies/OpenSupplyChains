@@ -127,11 +127,13 @@ Sourcemap.MapTour.prototype.next = function() {
         this.map.controls.select.unselect(current_ftr);
     if(next_ftr) {
         if(this.options.pan_easing) {
-            this.map.map.zoomToExtent(this.map.getDataExtent());
+            //this.map.map.zoomToExtent(this.map.getDataExtent());
+            //this.map.map.panTo(this.getFeatureLonLat(next_ftr));
+            //setTimeout($.proxy(function() { 
+            //    this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1); 
+            //}, this), 3000);
+            Sourcemap.map_instance.map.panTween = new OpenLayers.Tween();
             this.map.map.panTo(this.getFeatureLonLat(next_ftr));
-            setTimeout($.proxy(function() { 
-                this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1); 
-            }, this), 3000);
         } else {
             this.map.map.moveTo(this.getFeatureLonLat(next_ftr));
             this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1);

@@ -100,8 +100,9 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 );
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
-                    'tour_interval' => 5, 'banner' => false,
-                    'geoloc' => true, 'downstream_sc' => null
+                    'tour_interval' => 5, 'banner' => 'yes',
+                    'tileswitcher' => true, 'geoloc' => true, 
+                    'downstream_sc' => null
                 );
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 
@@ -113,6 +114,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('tour_interval', 'numeric')
                     ->rule('tour_interval', 'range', array(1, 15))
                     ->rule('geoloc', 'not_empty')
+                    ->rule('banner', 'regex', array('/yes|no/i'))
+                    ->rule('tileswitcher', 'not_empty')                   
                     ->rule('downstream_sc', 'numeric');
                 if($v->check()) {
                     $params = $v->as_array();
@@ -120,6 +123,10 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     $params['tour_interval'] = (int)$params['tour_interval'];
                     $params['tour'] = 
                         strtolower(trim($params['tour'])) === 'yes' ? true : false;
+                    $params['banner'] = 
+                        strtolower(trim($params['banner'])) === 'yes' ? true : false;
+                    
+                    
                     if($params['geoloc']) {
                         $params['iploc'] = false;
                         if(isset($_SERVER['REMOTE_ADDR'])) {

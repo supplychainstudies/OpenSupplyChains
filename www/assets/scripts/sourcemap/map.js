@@ -23,21 +23,21 @@ Sourcemap.Map.prototype.defaults = {
     "cloudmade_tiles": true, "popups": true,
     "stop_popups": true, "hop_popups": true,
     "arrow_popups": true, "popup_width": 200,
-    "popup_height": 90,
+    "popup_height": 100, "animation_enabled":false,
     "draw_hops": true, "hops_as_arcs": true,
     "hops_as_bezier": false, "arrows_on_hops": true,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
-            "strokeWidth": 1,
+            "strokeWidth": 2,
             "strokeColor": "#fff",
             "fontColor": "#eee",
             "fontSize": "${size}",
             "fillOpacity": 0.8
         },
         "select": {
-            "fillColor": "#ffd800",
+            "fillColor": "#C9FF23",
             "fillOpacity": 1.0,
             "strokeColor": "${color}"
         }
@@ -111,15 +111,24 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "Google Streets",
         {
             'sphericalMercator': true, "wrapeDateLine": true,
-            "type": google.maps.MapTypeId.TERRAIN
+            "type": google.maps.MapTypeId.TERRAIN,
+            "animationEnabled": this.options.animation_enabled
         }
     ));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "Cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
-        "styleId": 999,
-        "wrapDateLine": true
+        "styleId": 4993,
+        "wrapDateLine": this.options.animation_enabled
     }));
+    
+    this.map.addLayer( new OpenLayers.Layer.Google(
+        "Google Satellite", {
+        "sphericalMercator": true,
+        "type": google.maps.MapTypeId.HYBRID,
+        "wrapDateLine": true, "animationEnabled": this.options.animation_enabled
+    })); 
+    
     this.broadcast('map:base_layer_initialized', this);
     return this;
 }
@@ -340,7 +349,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     var new_arrow = false;
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
-            "color": "#072", "size": 11, "supplychain_instance_id": scid,
+            "color": "#072", "size": 7, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id
             

@@ -62,10 +62,10 @@ Sourcemap.magic = {
                 } else {
                     var mkup = '';
                 }
-                $('#flickr-photoset-'+setid).html(mkup)
+                $('#flickr-photoset-'+setid).html(mkup).width(400);
                 return Sourcemap.embed_overlay_show($(Sourcemap.embed_overlay_content).html());
             });
-            return '<div style="height: 400px; width: 300px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'">Loading...</div>';
+            return '<div style="height: 400px; width: 300px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'"></div>';
         }
     }
 };
@@ -411,13 +411,14 @@ $(document).ready(function() {
             }); 
             $(Sourcemap.embed_overlay).width((max_width/.8));
             
-            var total_height = 0;           
-            $(Sourcemap.embed_overlay).css({"display":"block"});
+            var total_height = 0;        
+            var hidden_height = ($(Sourcemap.embed_overlay).css("display") == "none");
+            if(hidden_height) { $(Sourcemap.embed_overlay).css({"display":"block"}); }
             $('#overlay-content > *').each(function(){
                 var this_height = $(this).height();
                 total_height += this_height;      
             });
-            $(Sourcemap.embed_overlay).css({"display":"none"});
+            if(hidden_height) { $(Sourcemap.embed_overlay).css({"display":"none"}); }
             // Todo - this should not be hardcoded to 100, but it works.... need to understand the calc
             $(Sourcemap.embed_overlay).height((total_height+100));
 

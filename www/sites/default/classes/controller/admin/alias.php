@@ -70,9 +70,7 @@ class Controller_Admin_Alias extends Controller_Admin {
 	    }
 
 	    
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
 	
 	Message::instance()->set('Total Aliases '.$supplychain_alias_count);
 	Breadcrumbs::instance()->add('Management', 'admin/')
@@ -87,9 +85,7 @@ class Controller_Admin_Alias extends Controller_Admin {
 	    $supplychain_alias->delete();
 	    
 	    $this->request->redirect("admin/alias/");
-	} else {
-	    $this->request->redirect('auth/');
-	}	
+	} 
     }
 	
 

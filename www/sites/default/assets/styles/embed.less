@@ -81,8 +81,7 @@ body#embedded-supplychain {
         margin: 0 auto;
         /*display:-moz-inline-stack;*/
         /*display:inline-block;*/
-        max-height: 90%; max-width: 90%;
-        min-width: 500px;
+        max-height: 90%; max-width: 90%; 
         min-width:450px;
         .dark_gradient();
         .rounded(0.5em);
@@ -104,10 +103,10 @@ body#embedded-supplychain {
             color:#bbb;
         }
         #overlay-content {
-            overflow:hidden;
-                        
+            overflow:hidden;                       
             width:80%;
-            padding:0; margin:auto;
+            padding:0; margin:0;
+            float:left;
             iframe, object {
                 display:block;
                 margin: 0;
@@ -202,14 +201,13 @@ body#embedded-supplychain {
             clear: none;
             margin: 0 .5em;
             overflow:hidden;
-            min-width: 400px;
-            width: 100%;
+            width: 100%; 
             > .description {
                 max-width: 90%;
             }
             > .block {
-                overflow: hidden;
                 max-width: 90%;
+                overflow: hidden;
                 margin-top: 1em;
             }
             > .url {
@@ -310,7 +308,7 @@ body#embedded-supplychain {
             max-width: 16em;
             background: #ccc !important;
             background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)) !important;
-            background: -moz-linear-gradient(top,  #fff,  #ccc);
+            background: -moz-linear-gradient(top,  #fff,  #ccc) !important;
             .rounded(.25em);
             position:relative;
             .popup-wrapper {                

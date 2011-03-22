@@ -73,15 +73,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         $subject = 'Email confirmation for Sourcemap account';
         $body = View::factory('email/confirm')->bind('email_vars', $email_vars);
         
-        $headers  = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= 'From: Sourcemap Team <smita@sourcemap.org>' . "\r\n";
-        
-	try {
-	    mail($to, $subject, $body, $headers);
+	try {	    
+	    Email_Template::send_email($to, $subject, $body);
 	} catch (Exception $e) {
 	    Message::instance()->set('Sorry, could not send an email.');
-	}        
+	}
     }
 
     public function action_confirm(){
@@ -110,7 +106,6 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     
     public function action_loginopenid() {
 	
-	$errors = "";
 	if(isset($_POST['token'])) {
 	    $token = $_POST['token'];
 	 

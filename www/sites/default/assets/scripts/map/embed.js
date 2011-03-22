@@ -303,9 +303,9 @@ $(document).ready(function() {
         
         Sourcemap.map_instance.map.zoomTo(zoom);
 
-        // set up banner overlay. todo: make this optional.
-        var overlay = $('<div id="embed-banner"></div>');
-        if(Sourcemap.embed_params && Sourcemap.embed_params.banner) {
+        // set up banner overlay. 
+        if(Sourcemap.embed_params && Sourcemap.embed_params.banner && Sourcemap.embed_params.banner.match(/^yes$/)) {
+            var overlay = $('<div id="embed-banner"></div>');
             Sourcemap.map_overlay = overlay;
             $(Sourcemap.map_instance.map.div).css("position", "relative");
             $(Sourcemap.map_instance.map.div).append(overlay);
@@ -315,7 +315,7 @@ $(document).ready(function() {
         }
 
         // Set up dialog
-        Sourcemap.embed_dialog = $('<div id="embed-dialog"><h1>Message!</h1><p>Some text...</p></div>');       
+        Sourcemap.embed_dialog = $('<div id="embed-dialog">Loading...</div>');       
         $(document.body).prepend(Sourcemap.embed_dialog);
         Sourcemap.template('embed/overlay/dialog', function(p, tx, th) {
         }, sc);

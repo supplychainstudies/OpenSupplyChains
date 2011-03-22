@@ -49,9 +49,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Groups', 'admin/groups');
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
  
     public function action_details($id) {
@@ -74,9 +72,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Groups', 'admin/groups')
 		->add(ucwords($group->name), 'admin/groups/'.$id);
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
 
 
@@ -107,9 +103,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    }
 	    
 	    $this->request->redirect("admin/groups/");
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
 
     public function action_add_member($id) {
@@ -138,10 +132,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    }
 	    $this->request->redirect("admin/groups/".$id);
 	    
-	} else {
-	    $this->request->redirect('auth/');
-	}	
-
+	} 
     }
 
         public function action_delete_member($id) {
@@ -179,12 +170,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 		}
 		
 		$this->request->redirect("admin/groups/");
-	    } else {
-		$this->request->redirect('auth/');
-	    }	
+	    }
 	}
-	
-  
-
-	   
+		   
   }

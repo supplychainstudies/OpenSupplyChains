@@ -42,8 +42,6 @@ class Controller_Admin_Users extends Controller_Admin {
 	    Message::instance()->set('Total users '.$user_count);
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Users', 'admin/users');
-	} else {
-	    $this->request->redirect('auth/');
 	}
     }
     
@@ -81,8 +79,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    $this->template->members = $members;
 	    $this->template->owners = $owners;
 	    $this->template->last_login = $last_login;
-	    
-	    
+	    	    
 	    // this is to reset the password
 	    $post = Validate::factory($_POST);
 	    $post->rule('email', 'not_empty')
@@ -112,7 +109,7 @@ class Controller_Admin_Users extends Controller_Admin {
 			Message::instance()->set('Password reset failed!');
 		    }
 		    
-		    $this->request->redirect("admin/users/".$id);
+		    //  $this->request->redirect("admin/users/".$id);
 		} else {
 		    Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
 		}
@@ -123,9 +120,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Users', 'admin/users')
 		->add(ucwords($user->username), 'admin/users/'.$user->id);
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
 	
     }
 
@@ -170,9 +165,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    }
 
 	    $this->request->redirect("admin/users/");
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
 
 
@@ -198,9 +191,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    }
 	    
 	    $this->request->redirect("admin/users/".$id);
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
     
     public function action_add_role($id) {
@@ -223,9 +214,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    }  
 	    
 	    $this->request->redirect("admin/users/".$id);
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
 
 
@@ -240,8 +229,6 @@ class Controller_Admin_Users extends Controller_Admin {
 	    }
 	    
 	    $this->request->redirect("admin/users/");
-	} else {
-	    $this->request->redirect('auth/');
-	}	
+	} 
     }
 }

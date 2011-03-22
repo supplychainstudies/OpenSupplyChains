@@ -43,8 +43,6 @@ class Controller_Admin_Roles extends Controller_Admin {
 	    Message::instance()->set('Total roles '.$role_count);
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Roles', 'admin/roles');
-	} else {
-	    $this->request->redirect('auth/');
 	}
     }
     
@@ -69,8 +67,6 @@ class Controller_Admin_Roles extends Controller_Admin {
 	    }
 	    
 	    $this->request->redirect("admin/roles/");
-	} else {
-	    $this->request->redirect('auth/');
 	}
     }
 
@@ -86,9 +82,7 @@ class Controller_Admin_Roles extends Controller_Admin {
 	    }
 	    
 	    $this->request->redirect("admin/roles/");
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
 
   }

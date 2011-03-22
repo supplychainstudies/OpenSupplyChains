@@ -18,19 +18,22 @@
     public function __construct($request) {
         parent::__construct($request);
         $this->current_user = Auth::instance()->get_user();
-	    $this->admin = ORM::factory('role')
+	$this->admin = ORM::factory('role')
             ->where('name', '=', 'admin')->find();
-	    if($this->current_user && $this->current_user->has('roles', $this->admin)) {
-            // pass
-        } else {
+	if($this->current_user && $this->current_user->has('roles', $this->admin)) {
+	    // pass
+	} else {
             Message::instance()->set(
                 'You\'re not allowed to access the management dashboard.', Message::ERROR
-            );
-            $this->request->redirect('auth/');
-        }
+		);
+	    $search = array('index', 'details');
+	    $uri = str_replace($search, "", $this->request->uri());
+	    $this->request->redirect('auth/?next='.urlencode($uri));
+	} 
     }
-
+    
     public function action_index() {
+
 	$supplychain = ORM::factory('supplychain');
 	$user = ORM::factory('user');
 	$usergroup = ORM::factory('usergroup');
@@ -57,8 +60,7 @@
 	    ->count_all();
 	
 	
-	//today's updates	
-	
+	//today's updates		
 	$start_time = strtotime(strftime('%Y-%m-%d 00:00:00'));
 
 	$get_usercreated_today = $user->where('created', 'BETWEEN', array($start_time, $today))

@@ -4,7 +4,7 @@
 <input type="text" name="username" class="input text" /><br />
 <label for="password">password:</label><br />
 <input type="password" name="password" class="input text password" /><br />
-<input type="hidden" name="next" value="<?= $_GET['next']; ?>"/>
+      <input type="hidden" name="next" <?php if (isset($_GET['next'])) { ?> value="<?= $_GET['next']; ?>" <?}?>/>
 <input type="submit" value="sign in" />
 </form>
 <?php else: ?>

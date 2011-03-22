@@ -410,6 +410,17 @@ $(document).ready(function() {
              if (this_width > max_width) { max_width = this_width;}
             }); 
             $(Sourcemap.embed_overlay).width((max_width/.8));
+            
+            var total_height = 0;           
+            $(Sourcemap.embed_overlay).css({"display":"block"});
+            $('#overlay-content > *').each(function(){
+                var this_height = $(this).height();
+                total_height += this_height;      
+            });
+            $(Sourcemap.embed_overlay).css({"display":"none"});
+            // Todo - this should not be hardcoded to 100, but it works.... need to understand the calc
+            $(Sourcemap.embed_overlay).height((total_height+100));
+
             var h = $(Sourcemap.embed_overlay).height();
             $(Sourcemap.embed_overlay).find('#overlay-nav')
                 .css({"height": h}).show();
@@ -435,6 +446,7 @@ $(document).ready(function() {
             Sourcemap.map_tour.start();           
         }
         Sourcemap.embed_overlay_hide();
+        $(Sourcemap.map_instance.map.div).css("background", "#eeeeee");        
     });
     
     // side-scrolling next/prev for browsing content
@@ -531,6 +543,14 @@ $(document).ready(function() {
          if (this_width > max_width) { max_width = this_width;}
         }); 
         $(Sourcemap.embed_overlay).width((max_width/.8));
+        
+        var total_height = 0;           
+        $('#overlay-content > *').each(function(){
+            var this_height = $(this).height();
+            total_height += this_height;      
+        });
+        // Todo - this should not be hardcoded to 100, but it works.... need to understand the calc
+        $(Sourcemap.embed_overlay).height((total_height+100));
         
         var h = $(Sourcemap.embed_overlay).height();
         $(Sourcemap.embed_overlay).find('#overlay-nav').css({"height": h}).show();

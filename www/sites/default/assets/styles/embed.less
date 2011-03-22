@@ -82,6 +82,7 @@ body#embedded-supplychain {
         /*display:-moz-inline-stack;*/
         /*display:inline-block;*/
         max-height: 90%; max-width: 90%; 
+        min-width:450px;
         .dark_gradient();
         .rounded(0.5em);
         position: absolute;
@@ -137,9 +138,9 @@ body#embedded-supplychain {
                 display: block;
                 height: 100%;
                 width: 100%;
-                border:0;
-                &:active, &:hover {
-                   border:0;
+                border:none !important;
+                &:active, &:hover, &:visited, &:link {
+                   border:none !important;
                 }
             }
             &:hover { opacity:1;}
@@ -323,6 +324,7 @@ body#embedded-supplychain {
                    margin-bottom:0.6em;
                }
                .popup-description {
+                   font-size:0.8em;
                    margin-bottom: 1em;
                }
                .popup-more-link {

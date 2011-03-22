@@ -29,14 +29,14 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     }
 
     public function action_login() {
-        $post = Validate::factory($_POST);
+	$post = Validate::factory($_POST);
         $post->rule('username', 'not_empty')
             ->rule('username', 'max_length', array(318))
             ->rule('username', 'min_length', array(4))
             ->rule('password', 'not_empty')
             ->rule('password', 'max_length', array(16))
             ->rule('password', 'min_length', array(6))
-            ->filter(true, 'trim');
+	    ->filter(true, 'trim');
         if($post->check()) {
             $post = (object)$post->as_array();
             if(Auth::instance()->login($post->username, $post->password)) {
@@ -47,7 +47,11 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         } else {
             Message::instance()->set('Invalid username/password combo.', Message::ERROR);
         }
-        $this->request->redirect('auth/');
+	if (!empty($post->next)) {
+	    $this->request->redirect($post->next);
+	} else {
+	    $this->request->redirect('auth/');
+	}
     }
 
     public function action_logout() {

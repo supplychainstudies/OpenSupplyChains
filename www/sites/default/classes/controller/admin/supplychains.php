@@ -50,13 +50,13 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    Message::instance()->set('Total supplychains '.$count);
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Supply Chains', 'admin/supplychains');
-	} else {
-	    $this->request->redirect('auth/');
-	}
-
+	} 
     }
 
-
+    /*
+     * Lists all the details associated with supplychain_id
+     * 
+     */
     public function action_details($id) {
 
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
@@ -115,7 +115,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		->filter(true, 'trim');
 	    
 	    if(strtolower(Request::$method) === 'post' && $post->check()) {
-		$check = false;
 		$post = (object)$post->as_array();
 		
 		$site_added = $post->site;
@@ -139,9 +138,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    Breadcrumbs::instance()->add('Management', 'admin/')
                 ->add('Supply Chains', 'admin/supplychains')
                 ->add(ucwords($id), 'admin/supplychains/'.$id);
-        } else {
-	    $this->request->redirect('auth/');
-	}
+        }
     }
 
 
@@ -157,17 +154,18 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		$alias = $post->alias;  
 		$site = $post->site;  
 		$supplychain_alias= ORM::factory('supplychain_alias', array('site' => $site, 'alias' => $alias, 'supplychain_id' => $id));
-		$supplychain_alias->delete();	    
 		
-	    } elseif(strtolower(Request::$method === 'post')) {
-		Message::instance()->set('Could not delete role.', Message::ERROR);
+		try {
+		    $supplychain_alias->delete();	    
+		} catch (Exception $e) {
+		    Message::instance()->set('Could not delete role.', Message::ERROR);
+		}
+		
 	    } else {
 		Message::instance()->set('Bad request.');
 	    }
 	    
 	    $this->request->redirect("admin/supplychains/".$id);
-	} else {
-	    $this->request->redirect('auth/');
 	}
     }
 
@@ -182,15 +180,16 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		$supplychain = ORM::factory('supplychain', $id);
 		$post->perms == "public" ? $perms=1 : $perms=0;
 		$supplychain->other_perms = $perms;
-		$supplychain->save();
-		Message::instance()->set('Supplychain permissions changed!.');
-	    } else {
-		Message::instance()->set('Bad request.');
+		try {
+		    $supplychain->save();
+		    Message::instance()->set('Supplychain permissions changed!.');
+		} catch (Exception $e) {
+		    Message::instance()->set('Permission not changed, please try again.');
+		}
+		$this->request->redirect("admin/supplychains/".$id);
+
 	    }
-	    $this->request->redirect("admin/supplychains/".$id);
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	} 
     }
 
     
@@ -198,12 +197,14 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	
 	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
 	    $supplychain = ORM::factory('supplychain', $id);
-	    $supplychain->delete();
-	    
-	    $this->request->redirect("admin/supplychains/");
-	} else {
-	    $this->request->redirect('auth/');
-	}
+	
+	    try {
+		$supplychain->delete();	    
+		$this->request->redirect("admin/supplychains/");
+	    } catch (Exception $e) {
+		Message::instance()->set('Could not delete the supplychain.');
+	    }
+	} 
     }
 
 
@@ -229,21 +230,18 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		case "Read and Write":
 		    $usergroup_perms = 3;
 		}
-		
-		$supplychain->usergroup_perms = $usergroup_perms;
-		$supplychain->save();
-		Message::instance()->set('Group permissions changed!.');
-	    } else {
-		Message::instance()->set('Bad request.');
+		try {
+		    $supplychain->usergroup_perms = $usergroup_perms;
+		    $supplychain->save();
+		    Message::instance()->set('Group permissions changed!.');
+		} catch (Exception $e) {
+		    Message::instance()->set('Permissions not changed, please try again.');
+		}
 	    }
 	    $this->request->redirect("admin/supplychains/".$id);
-	} else {
-	    $this->request->redirect('auth/');
-	}
-	     
+	} 	     
     }
 
-
-}
+  }
 
 

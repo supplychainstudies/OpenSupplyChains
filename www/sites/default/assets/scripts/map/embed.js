@@ -304,7 +304,7 @@ $(document).ready(function() {
         Sourcemap.map_instance.map.zoomTo(zoom);
 
         // set up banner overlay. 
-        if(Sourcemap.embed_params && Sourcemap.embed_params.banner && Sourcemap.embed_params.banner.match(/^yes$/)) {
+        if(Sourcemap.embed_params && Sourcemap.embed_params.banner) {
             var overlay = $('<div id="embed-banner"></div>');
             Sourcemap.map_overlay = overlay;
             $(Sourcemap.map_instance.map.div).css("position", "relative");

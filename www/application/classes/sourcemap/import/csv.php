@@ -52,7 +52,7 @@ class Sourcemap_Import_Csv {
                         $latcol = $h;
                     } elseif(is_null($loncol) && preg_match('/^(lng)|(lon(g(itude)?)?)$/i', $h)) {
                         $loncol = $h;
-                    } elseif(is_null($addresscol) && preg_match('/address/i', $h)) {
+                    } elseif((is_null($addresscol) &&  preg_match('/place ?name/i', $h)) || preg_match('/address/i', $h)) {
                         $addresscol = $h;
                     }
                 }

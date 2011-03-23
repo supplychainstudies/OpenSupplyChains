@@ -386,7 +386,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         }
     }
     if(this.prepareHopFeature instanceof Function) {
-        this.prepareHopFeature.call(this, hop, new_feature);
+        this.prepareHopFeature.call(this, hop, new_feature, new_arrow);
     }
     this.getHopLayer(scid).addFeatures([new_feature]);
     if(new_arrow)

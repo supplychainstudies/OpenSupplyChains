@@ -179,8 +179,9 @@ $(document).ready(function() {
             if(!color) color = "#006633";
             ftr.attributes.color = color;
         },
-        'prep_hop': function(hop, ftr) {
+        'prep_hop': function(hop, ftr, arrow) {
             ftr.attributes.color = hop.getAttr('color', '#006633');
+            if(arrow) arrow.attributes.color = hop.getAttr('color', '#006633');
         }        
     });
 

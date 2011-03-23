@@ -48,8 +48,14 @@ Sourcemap.TemplateLoader.prototype.get_id = function(tpl) {
 }
 
 Sourcemap.TemplateLoader.prototype.load = function(templates, callback) {
-    if(!templates) return;
-    if(!templates.length) return;
+    if(!templates) {
+        alert(templates);
+        return;
+    }
+    if(!templates.length) {
+        alert(templates);
+        return;
+    }
     for(var t=0; t<templates.length; t++) {
         if(Sourcemap.loaded_templates[this.get_id(templates[t])]) {
             this.__callbackWrapper(templates[t], Sourcemap.loaded_templates[this.get_id(templates[t])], callback);

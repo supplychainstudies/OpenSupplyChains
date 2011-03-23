@@ -48,7 +48,6 @@ Sourcemap.TemplateLoader.prototype.get_id = function(tpl) {
 }
 
 Sourcemap.TemplateLoader.prototype.load = function(templates, callback) {
-    console.log(templates);
     for(var t=0; t<templates.length; t++) {
         if(Sourcemap.loaded_templates[this.get_id(templates[t])]) {
             this.__callbackWrapper(templates[t], Sourcemap.loaded_templates[this.get_id(templates[t])], callback);
@@ -83,7 +82,6 @@ Sourcemap.template = function(tpath, ucallback, context, scope) {
     if(scope) {
         ucallback = $.proxy(ucallback, scope);
     }
-    console.log(tpath);
     Sourcemap.load_templates([tpath], function(tpl, txt, loader) {
         Sourcemap.broadcast("template:loaded", tpath, txt);
         var thtml = $('<script type="text/html">'+txt+'</script>').jqote(context);

@@ -183,7 +183,7 @@ $(document).ready(function() {
 
     // short-circuit panTo method to ease, even if we're at
     // a high zoom level
-    Sourcemap.map_instance.map.panTo = function(lonlat) {
+    /*Sourcemap.map_instance.map.panTo = function(lonlat) {
         if(true) {
             if (!this.panTween) {
                 this.panTween = new OpenLayers.Tween(this.panMethod);
@@ -228,7 +228,7 @@ $(document).ready(function() {
         } else {
             this.setCenter(lonlat);
         }
-    }
+    }*/
 
     // get scid from inline script
     var scid = Sourcemap.embed_supplychain_id;

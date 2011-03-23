@@ -209,9 +209,26 @@ body#embedded-supplychain {
                 max-width: 90%;
                 overflow: hidden;
                 margin-top: 1em;
-            }
+            }          
             > .url {
                 margin-top: 1em;
+            }
+            .block.greenfact {
+                font-size:0.8em;
+                &:before {
+                    color:#fff;
+                    content: "Green Fact: ";
+                }
+            }
+            .url.moreinfo a {
+                display:block;
+                text-align:center;
+                background:#000;
+                .rounded(0.5em);
+                padding:0.5em;
+                color:#fff;
+                cursor:pointer;
+                text-decoration:none;
             }
         }
     }

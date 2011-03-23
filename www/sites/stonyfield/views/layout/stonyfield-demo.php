@@ -9,11 +9,12 @@ Stonyfield Yogurt - Sourcemap
     body {
         font-family: sans-serif;
         background-color: #525b0c;
-        padding: 1em;
+        padding: 0 1em;
+        margin-top:0;
     }
     #wrapper {
         width: 957px;
-        margin: auto;
+        margin: 0 auto;
         overflow: hidden;
         background-color: #85951b;
     }
@@ -43,8 +44,19 @@ Stonyfield Yogurt - Sourcemap
         clear: both;
     }
     ul.map-nav { width: 100%; background-color: white; margin: 0; padding: 0;}
-    ul.map-nav li { margin-top: 0; display: inline; padding: .25em; background-color: #ccc; }
-    ul.map-nav li a { color: black; }
+    ul.map-nav li { 
+        border-top-left-radius:3px;	      
+        -moz-border-radius-topleft:3px;
+        -webkit-border-top-left-radius:3px;
+        border-top-right-radius:3px;	      
+        -moz-border-radius-topright:3px;
+        -webkit-border-top-right-radius:3px;
+        -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        margin-top: 0; display: inline; padding: .25em; background-color: #ccc; margin-left:0.25em 
+    }
+    ul.map-nav li a { color: black; text-decoration:none; }
     ul.map-nav li.dairy { background-color: #60cb59; }
     ul.map-nav.dairy li.dairy,
     ul.map-nav.sweeteners li.sweeteners,
@@ -63,6 +75,19 @@ Stonyfield Yogurt - Sourcemap
         position: absolute;
     }
     ul.map-nav li.dairy:hover ul > li {
+        border-top-left-radius:0;	      
+        -moz-border-radius-topleft:0;
+        -webkit-border-top-left-radius:0;
+        border-top-right-radius:0;	      
+        -moz-border-radius-topright:0;
+        -webkit-border-top-right-radius:0;
+        
+        border-bottom-left-radius:3px;	      
+        -moz-border-radius-bottomleft:3px;
+        -webkit-border-bottom-left-radius:3px;
+        border-bottom-right-radius:3px;	      
+        -moz-border-radius-bottomright:3px;
+        -webkit-border-bottom-right-radius:3px;
         display: block;
         float: left;
         position: relative;

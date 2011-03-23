@@ -178,7 +178,10 @@ $(document).ready(function() {
             // default color
             if(!color) color = "#006633";
             ftr.attributes.color = color;
-        }
+        },
+        'prep_hop': function(hop, ftr) {
+            ftr.attributes.color = hop.getAttr('color', '#006633');
+        }        
     });
 
     // short-circuit panTo method to ease, even if we're at
@@ -326,20 +329,24 @@ $(document).ready(function() {
         }, sc);
         Sourcemap.dialog_show = function() {
             Sourcemap.embed_dialog.slideDown("normal", function() {
-                var shrink = $(Sourcemap.map_instance.map.div).outerHeight() 
+                /*var shrink = $(Sourcemap.map_instance.map.div).outerHeight() 
                              - $(Sourcemap.embed_dialog).outerHeight();
-                $(Sourcemap.map_instance.map.div).css({"height":shrink});
+                $(Sourcemap.map_instance.map.div).css({"height":shrink});*/
             });            
         }
         Sourcemap.dialog_hide = function() {
             Sourcemap.embed_dialog.slideUp("normal", function() {
-                $(Sourcemap.map_instance.map.div).css({"height":"100%"});
+                //$(Sourcemap.map_instance.map.div).css({"height":"100%"});
             });
         }
                 
         // Set up tileswithcer 
         if(Sourcemap.embed_params && Sourcemap.embed_params.tileswitcher) {       
-            var tileswitcher = $('<div id="tileswitcher" class="terrain"><div id="current-tile">Terrain</div><ul id="available-tiles"><li id="styled"></li><li id="terrain"></li><li id="satellite"></li></ul></div>');
+            var tileswitcher = $('<div id="tileswitcher" class="terrain">'+
+                '<div id="current-tile">Terrain</div><ul id="available-tiles">'+
+                '<li id="styled"></li><li id="terrain"></li><li id="satellite">'+
+                '</li></ul></div>'
+            );
             $(Sourcemap.map_instance.map.div).append(tileswitcher);
             $("#tileswitcher #available-tiles li").click(function() {
                 var newtile = $(this).attr("id");

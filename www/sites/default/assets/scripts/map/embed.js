@@ -10,7 +10,7 @@ Sourcemap.magic = {
         "link": function(lnk) {
             if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
                 return '<p class="error">Invalid YouTube link.</p>';
-            var mkup = '<iframe class="youtube-player" type="text/html" width="400" height="300" '+
+            var mkup = '<iframe class="youtube-player" type="text/html" width="500" height="400" '+
                 'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'?autoplay=1"'+ 
                 'frameborder="0" allowfullscreen></iframe>';
             return mkup;
@@ -20,7 +20,7 @@ Sourcemap.magic = {
         "link": function(lnk) {
             var mkup = '<iframe class="vimeo-player" src="http://player.vimeo.com/video/'+
                 (lnk.match(/\/(\d+)$/))[1]+'?title=0&amp;byline=0&amp;portrait=0&autoplay=1" '+
-                'width="400" height="300" frameborder="0"></iframe>';
+                'width="500" height="400" frameborder="0"></iframe>';
             return mkup;
         }
     },
@@ -146,6 +146,7 @@ $(document).ready(function() {
         "prep_stop": function(stop, ftr) {
             var sz = 5;
             var vol = parseFloat(stop.getAttr("percentage"));
+            // todo: get rid of this
             if(!isNaN(vol)) {
                 if(vol < 1) {
                     sz = 5;
@@ -160,19 +161,23 @@ $(document).ready(function() {
             ftr.attributes.size = sz;
             var color = stop.getAttr("color", null);
             var cat = stop.getAttr('category');
-            switch(cat) {
-                case "FS":
-                    color = "#66cc33";
-                    break;
-                case "D":
-                    color = "#339933";
-                    break;
-                default:
-                    color = "#006633";
-                    break;
+            if(!color) {
+                // todo: get rid of this
+                switch(cat) {
+                    case "FS":
+                        color = "#66cc33";
+                        break;
+                    case "D":
+                        color = "#339933";
+                        break;
+                    default:
+                        color = "#006633";
+                        break;
+                }
             }
-            if(color)
-                ftr.attributes.color = color;
+            // default color
+            if(!color) color = "#006633";
+            ftr.attributes.color = color;
         }
     });
 

@@ -545,10 +545,10 @@ $(document).ready(function() {
     };
 
     // Misc UI things
-    $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 1020 * 100))+"%");
+    $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 640 * 100))+"%");
     
     $(window).resize(function () { 
-        $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 1020 * 100))+"%");
+        $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 640 * 100))+"%");
         
         var max_width = 0;
         $('#overlay-content > *').each(function(){

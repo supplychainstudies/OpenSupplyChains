@@ -14,7 +14,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     public $template = 'register';
 
     public function action_index() {
-    
+
         $this->layout->scripts = array(
             'sourcemap-core', 'sourcemap-template', 'sourcemap-working', 'sourcemap-social'
         );
@@ -47,10 +47,17 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 		$create->username = $post->username;                
 		$create->email = $post->email;
 		$create->password = $post->password;
+
 		try {
 		    $create->save();  
 		    $created = ORM::factory('user', $create->id)->created;
 		    $hash_value = Auth::instance()->hash($post->username.$post->email.$created);
+		    if(isset($post->identifier) && !empty($post->identifier)) {
+			$openidusers = ORM::factory('openidusers');
+			$openidusers->identifier = $identifier;
+			$openidusers->user_id = $create->id;
+			$openidusers->save();
+		    }
 		    $this->email_user($post->username, $post->email, $hash_value);	    
 		} catch (Exception $e){
 		    Message::instance()->set('Could not register the user.');

@@ -36,6 +36,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             ->rule('password', 'not_empty')
             ->rule('password', 'max_length', array(16))
             ->rule('password', 'min_length', array(6))
+	    ->rule('next', 'max_length', array(500))
 	    ->filter(true, 'trim');
         if($post->check()) {
             $post = (object)$post->as_array();

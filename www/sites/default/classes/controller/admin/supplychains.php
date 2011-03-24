@@ -112,6 +112,8 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    $post = Validate::factory($_POST);
 	    $post->rule('site', 'not_empty')
 		->rule('alias', 'not_empty')
+		->filter('site', 'strip_tags')
+		->filter('alias', 'strip_tags')
 		->filter(true, 'trim');
 	    
 	    if(strtolower(Request::$method) === 'post' && $post->check()) {
@@ -148,6 +150,8 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    $post = Validate::factory($_POST);
 	    $post->rule('alias', 'not_empty')
 		->rule('site', 'not_empty')
+		->filter('alias', 'strip_tags')
+		->filter('site', 'strip_tags')
 		->filter(true, 'trim');
 	    if(strtolower(Request::$method) === 'post' && $post->check()) {
 		$post = (object)$post->as_array();

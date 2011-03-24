@@ -256,18 +256,21 @@ body#embedded-supplychain {
             background: url("../images/embed-zoom-zoommax.png") center center no-repeat;
             .background_size(100%, 100%);
             display: none;
+            cursor:pointer;
         }    
         .olControlZoomInItemInactive {
             width: 1.5em;
             height: 1.5em;
             background: url("../images/embed-zoom-zoomin.png") center center no-repeat;
             .background_size(100%, 100%);
+            cursor:pointer;
         }
         .olControlZoomOutItemInactive {
             width: 1.5em;
             height: 1.5em;
             background: url("../images/embed-zoom-zoomout.png") center center no-repeat;
             .background_size(100%, 100%);
+            cursor:pointer;
         }
     }
     .sourcemap-tour-control-panel {
@@ -305,10 +308,12 @@ body#embedded-supplychain {
         .sourcemap-tour-prev {
             background: url("../images/embed-tour-prev.png") center center no-repeat;
             .background_size(100%, 100%);
+            cursor:pointer;
         }
         .sourcemap-tour-play {
             background: url("../images/embed-tour-stop.png") center center no-repeat;
             .background_size(100%, 100%);
+            cursor:pointer;
             &.stopped {
                 background-image: url("../images/embed-tour-play.png");
             }
@@ -316,11 +321,13 @@ body#embedded-supplychain {
         .sourcemap-tour-next {
             background: url("../images/embed-tour-next.png") center center no-repeat;
             .background_size(100%, 100%);
+            cursor:pointer;
         }
     }
     .olPopup {        
         .olPopupContent {
             max-width: 20em;
+            min-width:5em;
             background: #ccc !important;
             background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)) !important;
             background: -moz-linear-gradient(top,  #fff,  #ccc) !important;
@@ -346,15 +353,13 @@ body#embedded-supplychain {
                }
                .popup-more-link {
                    display:block;
-                   .rounded(0.25em);
-                   position:absolute;
+                   .rounded(0.25em);                  
                    text-align:center;
                    color:#888;
                    font-size:0.8em;
                    text-decoration:none;
                    text-align:center;
-                   bottom:0; left:0; right:0;
-                   margin:0.25em 1em 0.5em 1em;
+                   margin:0.25em auto 0 auto;
                    padding:0.25em;
                    border:1px solid #aaa;
                    background:#eee;
@@ -433,7 +438,7 @@ body#embedded-supplychain {
     #tileswitcher li#satellite, .satellite {
         background: rgba(30,30,30,0.6) url("../images/tile-sat-preview.png") center center no-repeat;
     }
-    #tileswitcher li#styled, .styled {
+    #tileswitcher li#stylized, .stylized {
         background: rgba(30,30,30,0.6) url("../images/tile-map-preview.png") center center no-repeat;
     }
     #tileswitcher li#terrain, .terrain {

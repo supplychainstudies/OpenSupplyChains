@@ -101,8 +101,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
                     'tour_interval' => 5, 'banner' => 'yes',
-                    'tileswitcher' => 'no', 'geoloc' => true, 
-                    'downstream_sc' => null
+                    'tileswitcher' => 'yes', 'geoloc' => true, 
+                    'downstream_sc' => null, 'basetileset' => 'terrain'
                 );
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 
@@ -116,6 +116,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('geoloc', 'not_empty')
                     ->rule('banner', 'regex', array('/yes|no/i'))
                     ->rule('tileswitcher', 'regex', array('/yes|no/i'))
+                    ->rule('basetileset', 'regex', array('/terrain|satellite|stylized/i'))
                     ->rule('downstream_sc', 'numeric');
                 if($v->check()) {
                     $params = $v->as_array();

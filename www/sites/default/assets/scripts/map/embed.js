@@ -343,9 +343,9 @@ $(document).ready(function() {
                 
         // Set up tileswithcer 
         if(Sourcemap.embed_params && Sourcemap.embed_params.tileswitcher) {       
-            var tileswitcher = $('<div id="tileswitcher" class="terrain">'+
-                '<div id="current-tile">Terrain</div><ul id="available-tiles">'+
-                '<li id="styled"></li><li id="terrain"></li><li id="satellite">'+
+            var tileswitcher = $('<div id="tileswitcher" class="'+Sourcemap.embed_params.basetileset+'">'+
+                '<div id="current-tile">'+Sourcemap.embed_params.basetileset+'</div><ul id="available-tiles">'+
+                '<li id="stylized"></li><li id="terrain"></li><li id="satellite">'+
                 '</li></ul></div>'
             );
             $(Sourcemap.map_instance.map.div).append(tileswitcher);
@@ -353,23 +353,9 @@ $(document).ready(function() {
                 var newtile = $(this).attr("id");
                 $("#tileswitcher").attr("class",  newtile);
                 $("#tileswitcher #current-tile").text(newtile);
-
-                // This is a little wonky, sorry
-                if(newtile == "terrain") {
-                   Sourcemap.map_instance.map.setBaseLayer(
-                       Sourcemap.map_instance.map.getLayersByName("Google Streets").pop()
-                   );
-                }       
-                else if(newtile == "styled") {
-                   Sourcemap.map_instance.map.setBaseLayer(
-                       Sourcemap.map_instance.map.getLayersByName("Cloudmade").pop()
-                   );                   
-                }  
-                else if(newtile == "satellite") {
-                   Sourcemap.map_instance.map.setBaseLayer(
-                       Sourcemap.map_instance.map.getLayersByName("Google Satellite").pop()
-                   );   
-                }
+                Sourcemap.map_instance.map.setBaseLayer(
+                   Sourcemap.map_instance.map.getLayersByName(newtile).pop()
+                );             
             });
         }
         
@@ -546,10 +532,10 @@ $(document).ready(function() {
     };
 
     // Misc UI things
-    $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 640 * 100))+"%");
+    $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(document.body.clientWidth / 640 * 100)))+"%");
     
     $(window).resize(function () { 
-        $("body").css("font-size", Math.min(100,Math.floor(document.body.clientWidth / 640 * 100))+"%");
+        $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(document.body.clientWidth / 640 * 100)))+"%");
         
         var max_width = 0;
         $('#overlay-content > *').each(function(){

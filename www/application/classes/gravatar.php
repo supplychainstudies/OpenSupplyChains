@@ -1,7 +1,7 @@
 <?php
 class Gravatar {
 
-    public static $_avatar_base = 'http://www.gravatar.com/avatar/%s?d=identicon';
+    public static $_avatar_base = 'http://www.gravatar.com/avatar/%s?d=retro'; // identicon | retro
 
     public static function avatar($email) {
         return sprintf(self::$_avatar_base, self::hash($email));

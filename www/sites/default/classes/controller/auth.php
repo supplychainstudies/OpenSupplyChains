@@ -92,15 +92,11 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 	$to = $email;
 	$subject = 'Your Sourcemap account information';
 	$body = View::factory('email/password_template')->bind('email_vars', $email_vars);
-	
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
-	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-	$headers .= 'From: Sourcemap Team <info@sourcemap.org>' . "\r\n";
-	
-	$mail_sent = mail($to, $subject, $body, $headers);
-	
-	echo $mail_sent ? "Mail sent" : "Mail failed"; 
-       
+	try {
+	    Sourcemap_Email_Template::send_email($to, $subject, $body);
+	} catch (Exception $e) {
+	    Message::instance()->set('Sorry, could not send an email.');
+	}	       
     }
     
 

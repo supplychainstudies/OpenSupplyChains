@@ -22,7 +22,11 @@ class Model_User extends Model_Auth_User {
         ),
         'owned_groups' => array(
             'model' => 'usergroup', 'foreign_key' => 'owner_id'
+	),
+	'openidusers' => array(
+            'model' => 'openidusers', 'foreign_key' => 'user_id'
         )
+	       
 	);
 
     const FACTIVE = 1;

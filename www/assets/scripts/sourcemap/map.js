@@ -148,6 +148,8 @@ Sourcemap.Map.prototype.initControls = function() {
             this.addControl('layer_switcher',
                 new OpenLayers.Control.LayerSwitcher()
             );
+        } else if(this.options.tileswitcher) {
+            this.initTileSwitcher();
         }
         this.addControl('select', 
             new OpenLayers.Control.SelectFeature(layers, {
@@ -186,6 +188,26 @@ Sourcemap.Map.prototype.initControls = function() {
     });
     this.broadcast('map:controls_initialized', this, ['select']);
     return this;
+}
+
+Sourcemap.Map.prototype.initTileSwitcher = function() {
+    this.tileswitcher_div = $('<div id="tileswitcher" class="'+this.options.basetileset+'">'+
+        '<div id="current-tile">'+this.options.basetileset+'</div><ul id="available-tiles">'+
+        '<li id="stylized"></li><li id="terrain"></li><li id="satellite">'+
+        '</li></ul></div>'
+    );
+    $(this.map.div).append(tileswitcher);
+    $("#tileswitcher #available-tiles li").click($.proxy(function() {
+        var newtile = $(this).attr("id");
+        $("#tileswitcher").attr("class",  newtile);
+        $("#tileswitcher #current-tile").text(newtile);
+
+        // This is a little wonky, sorry
+        this.map.map.setBaseLayer(
+            this.map.map.getLayersByName(newtile).pop()
+        );
+    }, this));
+
 }
 
 Sourcemap.Map.prototype.updateControls = function() {
@@ -303,8 +325,8 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
-    new_feature.attributes.size = 6;
-    new_feature.attributes.color = '#072';
+    new_feature.attributes.size = stop.getAttr("size", false) || 6;
+    new_feature.attributes.color = stop.getAttr("color", false) || '#006633';
     var new_popup = false;
     if(this.options.popups && this.options.stop_popups) {
         var puid = stop.instance_id+'-popup';

@@ -3,6 +3,6 @@
 <h4 class="popup-title"><%= _S.ttrunc(this.stop.getAttr("name", "Stop"), 16) %></h4>
 <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", "")), 24) %></h5>
 <% if(this.stop.getAttr("description", false)) { %><p class="popup-description"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("description","")), 64, true) %></p><% } %>
-<% if(this.morelink) {%><a class="popup-more-link" href="javascript: Sourcemap.embed_stop_details('<%= this.stop.instance_id %>','<%= this.feature.attributes.supplychain_instance_id %>', 0);">More</a><% } %>
+<% if(this.morelink) {%><a class="popup-more-link" href="javascript: void(0);">More</a><% } %>
 
 </div>

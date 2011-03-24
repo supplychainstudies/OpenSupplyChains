@@ -109,7 +109,6 @@ class Controller_Admin_Users extends Controller_Admin {
 			Message::instance()->set('Password reset failed!');
 		    }
 		    
-		    //  $this->request->redirect("admin/users/".$id);
 		} else {
 		    Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
 		}
@@ -132,6 +131,7 @@ class Controller_Admin_Users extends Controller_Admin {
 	    $post->rule('email', 'not_empty')
 		->rule('username', 'not_empty')
 		->rule('email', 'validate::email')
+		->filter('username', 'strip_tags')
 		->filter(true, 'trim');
             
 	    if(strtolower(Request::$method) === 'post' && $post->check()) {

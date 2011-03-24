@@ -77,7 +77,7 @@ Sourcemap.Map.Embed.prototype.defaults.magic = {
                 }
                 */
                 if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
-                    var mkup = '<object width="400" height="300"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
+                    var mkup = '<object width="500" height="400"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
                         data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
                         data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
                         '<param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=71649"></param> '+
@@ -87,12 +87,12 @@ Sourcemap.Map.Embed.prototype.defaults.magic = {
                         '%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+data.photoset.ownername.toLowerCase()+
                         '%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to=" width="400" height="300"></embed></object>';
                 } else {
-                    var mkup = '';
+                    var mkup = 'Phot set not found.';
                 }
                 $('#flickr-photoset-'+setid).html(mkup).width(400);
                 return;
             }, this));
-            return '<div style="height: 400px; width: 300px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'"></div>';
+            return '<div style="height: 500px; width: 400px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'"></div>';
         }
     }
 };
@@ -227,8 +227,9 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
 }
 
 Sourcemap.Map.Embed.prototype.initEvents = function() {
-    Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map) {
+    Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
         if(!this.map || this.map !== map) return;
+        if(this.options.banner) this.initBanner();
         if(this.options.tour) {
             this.initTour();
         } else {
@@ -313,13 +314,21 @@ Sourcemap.Map.Embed.prototype.initTour = function() {
     return this;
 }
 
-Sourcemap.Map.Embed.prototype.initBanner = function() {
+Sourcemap.Map.Embed.prototype.initBanner = function(sc) {
     this.banner_div = $('<div id="embed-banner"></div>');
     $(this.map.map.div).css("position", "relative");
-    $(this.map.map.div).append(overlay);
-    Sourcemap.template('embed/overlay/supplychain', $.proxy(function(p, tx, th) {
+    $(this.map.map.div).append(this.banner_div);
+    if(!sc) {
+        // todo: this is bad, but it's worst case
+        sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+    }
+    Sourcemap.template('embed/overlay/supplychain', function(p, tx, th) {
         $(this.banner_div).html(th);
-    }, this), sc, this.options.tpl_base_path);
+    }, sc, this, this.options.tpl_base_path);
     return this;
 }
 
@@ -469,7 +478,6 @@ Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
                     }
                 }
                 if(idx >= 0) {
-                    console.log('idx: '+idx);
                     this.embed.showStopDetails(
                         this.stop.instance_id, this.supplychain.instance_id, idx
                     );

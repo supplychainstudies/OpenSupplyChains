@@ -108,7 +108,7 @@ Sourcemap.Map.prototype.initMap = function() {
 
 Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.Google(
-        "Google Streets",
+        "terrain",
         {
             'sphericalMercator': true, "wrapeDateLine": true,
             "type": google.maps.MapTypeId.TERRAIN,
@@ -116,19 +116,20 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         }
     ));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
-        "Cloudmade", {
+        "stylized", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 4993,
         "wrapDateLine": this.options.animation_enabled
     }));
     
     this.map.addLayer( new OpenLayers.Layer.Google(
-        "Google Satellite", {
+        "satellite", {
         "sphericalMercator": true,
         "type": google.maps.MapTypeId.HYBRID,
         "wrapDateLine": true, "animationEnabled": this.options.animation_enabled
     })); 
     
+    this.map.setBaseLayer( this.map.getLayersByName(Sourcemap.embed_params.basetileset).pop());
     this.broadcast('map:base_layer_initialized', this);
     return this;
 }

@@ -52,6 +52,8 @@ class Controller_Admin_Roles extends Controller_Admin {
 	    $post = Validate::factory($_POST);
 	    $post->rule('role', 'not_empty')
 		->rule('description', 'not_empty')
+		->filter('role', 'strip_tags')
+		->filter('description', 'strip_tags')
 		->filter(true, 'trim');
 	    if(strtolower(Request::$method) === 'post' && $post->check()) {
 		$post = (object)$post->as_array();

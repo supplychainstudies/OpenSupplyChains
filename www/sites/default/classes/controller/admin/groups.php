@@ -82,6 +82,7 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    $post = Validate::factory($_POST);
 	    $post->rule('username', 'not_empty')
 		->rule('groupname', 'not_empty')
+		->rule('groupname', 'strip_tags')
 		->filter(true, 'trim');
 	    if(strtolower(Request::$method) === 'post' && $post->check()) {
 		$post = (object)$post->as_array();

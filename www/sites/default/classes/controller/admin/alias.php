@@ -43,6 +43,8 @@ class Controller_Admin_Alias extends Controller_Admin {
 	    $post = Validate::factory($_POST);
 	    $post->rule('site', 'not_empty')
 		->rule('alias', 'not_empty')
+		->filter('site', 'strip_tags')
+		->filter('alias', 'strip_tags')
 		->rule('supplychain_id', 'not_empty')
 		->filter(true, 'trim');
 	    

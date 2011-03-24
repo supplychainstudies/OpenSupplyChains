@@ -57,7 +57,7 @@ Sourcemap.MapTour.prototype.initControls = function() {
 Sourcemap.MapTour.prototype.initEvents = function() {
     this.map.map.events.on({
         "click": function(e) {
-            this.wait();
+            this.stop().wait();
         },
         "scope": this 
     });
@@ -70,6 +70,29 @@ Sourcemap.MapTour.prototype.initEvents = function() {
             this.stop().wait();
         }
     }, this);
+    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        if(map === this.map) {
+            this.map.controls.select.unselectAll({"except": ftr});
+            if(this.timeout) this.stop();
+        }
+    }, this));
+    // callback for map tour advance or retreat event
+    Sourcemap.listen('map_tour:positionchange',$.proxy(function(evt, maptour) {
+        // update tour status indicator
+        if(maptour === this) {
+            var currentindex = maptour.ftr_index+1;
+            var totalcount = maptour.features.length+1;
+            var widthpercent = (currentindex/totalcount*100*.8)+"%";
+            $(".tour-progress-bar").css({"width":widthpercent});
+
+            /*if($(Sourcemap.embed_overlay).data("state") == 1) {
+                Sourcemap.embed_stop_details(
+                    Sourcemap.map_tour.getCurrentStop().instance_id, 
+                    Sourcemap.map_tour.getCurrentFeature().attributes.supplychain_instance_id, 0
+                );
+            }*/
+        }
+    }, this));
     return this;
 }
 
@@ -132,7 +155,7 @@ Sourcemap.MapTour.prototype.next = function() {
             //setTimeout($.proxy(function() { 
             //    this.map.map.zoomTo(this.map.map.getNumZoomLevels()-1); 
             //}, this), 3000);
-            Sourcemap.map_instance.map.panTween = new OpenLayers.Tween();
+            this.map.panTween = new OpenLayers.Tween();
             this.map.map.panTo(this.getFeatureLonLat(next_ftr));
         } else {
             this.map.map.moveTo(this.getFeatureLonLat(next_ftr));

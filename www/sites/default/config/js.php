@@ -6,6 +6,7 @@ return array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',
                 'assets/scripts/sourcemap/map/visualization/tour.js',
+                'assets/scripts/sourcemap/map/embed.js',
                 'sites/default/assets/scripts/map/embed.js'
             ),
             'requires' => array(

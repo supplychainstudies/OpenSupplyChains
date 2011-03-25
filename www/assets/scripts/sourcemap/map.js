@@ -19,7 +19,7 @@ Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
     "zoom_control": false,
-    "layer_switcher": false, "google_tiles": true,
+    "ol_layer_switcher": false, "google_tiles": true,
     "cloudmade_tiles": true, "popups": true,
     "stop_popups": true, "hop_popups": true,
     "arrow_popups": true, "popup_width": 200,
@@ -108,13 +108,11 @@ Sourcemap.Map.prototype.initMap = function() {
 
 Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.Google(
-        "terrain",
-        {
+        "terrain", {
             'sphericalMercator': true, "wrapeDateLine": true,
             "type": google.maps.MapTypeId.TERRAIN,
             "animationEnabled": this.options.animation_enabled
-        }
-    ));
+    }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "stylized", {
         "key": "BC9A493B41014CAABB98F0471D759707",
@@ -144,11 +142,12 @@ Sourcemap.Map.prototype.initControls = function() {
     var layers = [];
     for(var k in this.layers) layers.push(this.layers[k]);
     if(layers.length) {
-        if(this.options.layer_switcher) {
+        if(this.options.ol_layer_switcher) {
             this.addControl('layer_switcher',
                 new OpenLayers.Control.LayerSwitcher()
             );
-        } else if(this.options.tileswitcher) {
+        }  
+        if(Sourcemap.embed_params.tileswitcher) {
             this.initTileSwitcher();
         }
         this.addControl('select', 
@@ -191,21 +190,18 @@ Sourcemap.Map.prototype.initControls = function() {
 }
 
 Sourcemap.Map.prototype.initTileSwitcher = function() {
-    this.tileswitcher_div = $('<div id="tileswitcher" class="'+this.options.basetileset+'">'+
-        '<div id="current-tile">'+this.options.basetileset+'</div><ul id="available-tiles">'+
+    this.tileswitcher_div = $('<div id="tileswitcher" class="'+Sourcemap.embed_params.basetileset+'">'+
+        '<div id="current-tile">'+Sourcemap.embed_params.basetileset+'</div><ul id="available-tiles">'+
         '<li id="stylized"></li><li id="terrain"></li><li id="satellite">'+
         '</li></ul></div>'
     );
-    $(this.map.div).append(tileswitcher);
-    $("#tileswitcher #available-tiles li").click($.proxy(function() {
-        var newtile = $(this).attr("id");
+    $(this.map.div).append(this.tileswitcher_div);
+    $("#tileswitcher #available-tiles li").click($.proxy(function(event) {
+        var newtile = $(event.currentTarget).attr("id");
         $("#tileswitcher").attr("class",  newtile);
         $("#tileswitcher #current-tile").text(newtile);
 
-        // This is a little wonky, sorry
-        this.map.map.setBaseLayer(
-            this.map.map.getLayersByName(newtile).pop()
-        );
+        this.map.setBaseLayer( this.map.getLayersByName(newtile).pop() );
     }, this));
 
 }

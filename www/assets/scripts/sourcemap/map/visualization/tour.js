@@ -85,12 +85,6 @@ Sourcemap.MapTour.prototype.initEvents = function() {
             var widthpercent = (currentindex/totalcount*100*.8)+"%";
             $(".tour-progress-bar").css({"width":widthpercent});
 
-            /*if($(Sourcemap.embed_overlay).data("state") == 1) {
-                Sourcemap.embed_stop_details(
-                    Sourcemap.map_tour.getCurrentStop().instance_id, 
-                    Sourcemap.map_tour.getCurrentFeature().attributes.supplychain_instance_id, 0
-                );
-            }*/
         }
     }, this));
     return this;

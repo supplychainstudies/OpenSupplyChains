@@ -1,5 +1,5 @@
-<h2 id="overlay-title"><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
-<% if(this.stop.attributes.placename != undefined) { %><h3 id="overlay-placename">from <span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
+<h2 id="detail-title"><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
+<% if(this.stop.attributes.placename != undefined) { %><h3 id="detail-placename">from <span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
 
 <% if(this.magic_word === "description") { %>
     <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
@@ -24,13 +24,13 @@
 <%= this.embed.magic.flickr.setid.call(this.embed, this.stop.getAttr("flickr:setid")) %>
 </div>
 <% } %>
-<div style="float: left; clear: none"></div>
 <div class="content-nav">
 <% for(var i=0; i<this.embed.magic_word_sequence.length; i++) { %>
     <% if(this.stop.getAttr(this.embed.magic_word_sequence[i], false)) { %>
         <div id="content-item-<%= i %>" class="content-item <%= _S.htesc(this.embed.magic_word_sequence[i].replace(/\W+/, "-")) %><%= (this.magic_word === this.embed.magic_word_sequence[i] ? " selected" : "") %>">
-            <a href="javascript: void(0);"><%= this.embed.magic_word_sequence[i] %></a>
+            <a href="javascript: void(0);"></a>
         </div>  
     <% } %>
 <% } %>
+<div class="clear"></div>
 </div>

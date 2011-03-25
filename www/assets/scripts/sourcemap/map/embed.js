@@ -1,6 +1,6 @@
 // todo: put this somewhere else
-// jQuery fxn to center an overlayed element
-jQuery.fn.overlay_center = function () {
+// jQuery fxn to center an detailed element
+jQuery.fn.detail_center = function () {
     this.css("position","absolute");
     this.css("top", ($(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
     this.css("left", ($(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
@@ -37,7 +37,7 @@ Sourcemap.Map.Embed.prototype.defaults.magic = {
         "link": function(lnk) {
             if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
                 return '<p class="error">Invalid YouTube link.</p>';
-            var mkup = '<iframe class="youtube-player" type="text/html" width="500" height="400" '+
+            var mkup = '<iframe class="youtube-player" type="text/html"'+
                 'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'?autoplay=1"'+ 
                 'frameborder="0" allowfullscreen></iframe>';
             return mkup;
@@ -47,7 +47,7 @@ Sourcemap.Map.Embed.prototype.defaults.magic = {
         "link": function(lnk) {
             var mkup = '<iframe class="vimeo-player" src="http://player.vimeo.com/video/'+
                 (lnk.match(/\/(\d+)$/))[1]+'?title=0&amp;byline=0&amp;portrait=0&autoplay=1" '+
-                'width="500" height="400" frameborder="0"></iframe>';
+                'frameborder="0"></iframe>';
             return mkup;
         }
     },
@@ -77,22 +77,24 @@ Sourcemap.Map.Embed.prototype.defaults.magic = {
                 }
                 */
                 if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
-                    var mkup = '<object width="500" height="400"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
+                    var mkup = '<object> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
                         data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
                         data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
                         '<param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=71649"></param> '+
-                        '<param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash" '+
+                        '<param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash"'+
                         'src="http://www.flickr.com/apps/slideshow/show.swf?v=71649" allowFullScreen="true" '+
                         'flashvars="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+data.photoset.ownername.toLowerCase()+
                         '%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+data.photoset.ownername.toLowerCase()+
-                        '%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to=" width="400" height="300"></embed></object>';
+                        '%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></embed></object>';
                 } else {
-                    var mkup = 'Phot set not found.';
+                    var mkup = 'Photo set not found.';
                 }
-                $('#flickr-photoset-'+setid).html(mkup).width(400);
+                $('#flickr-photoset-'+setid).replaceWith(mkup);
+                $(window).resize();                
+                
                 return;
             }, this));
-            return '<div style="height: 500px; width: 400px; overflow: hidden;" class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'"></div>';
+            return '<div class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'"></div>';
         }
     }
 };
@@ -103,11 +105,11 @@ Sourcemap.Map.Embed.prototype.init = function() {
     this.magic_word_cur_idx = this.options.magic_word_cur_idx;
     this.magic = this.options.magic;
     this.initMap();
-    this.initDialog();
+    this.initDetailPane();
     this.initEvents();
     // todo: put this somewhere else.
-    $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(document.body.clientWidth / 640 * 100)))+"%"); 
-    
+    var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
+    $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
 }
 
 Sourcemap.Map.Embed.prototype.initMap = function() {
@@ -242,53 +244,70 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
     }, this));
     // embed activity fades 
     $("html").mouseenter(function() {
-        $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length == 4) {        
+            $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+                .fadeIn("fast");
+        }
+    });
+    $("html").mousemove(function() {
+        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length == 4) {
+            $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
             .fadeIn("fast");
+            $("html").unbind("mousemove");
+        }
     });
     $("html").mouseleave(function() {
         $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
             .fadeOut("fast");
     });
-
-    // Misc UI things
-    // i get weird behavior with this
-    // is it necessary? - ru
-    /*
+    
     $(window).resize($.proxy(function () { 
-        $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(document.body.clientWidth / 640 * 100)))+"%");
+        var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
+        $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
         
+        $(this.detailpane).width(1).height(1);
         var max_width = 0;
-        $('#overlay-content > *').each(function(){
-         var this_width = $(this).width();
-         if (this_width > max_width) { max_width = this_width;}
+        $('#detail-content > *').each(function(){ 
+            var this_width = $(this).width();
+            if (this_width > max_width) { max_width = this_width;}
         }); 
-        $(this.dialog).width((max_width/.8));
-        
-        var total_height = 0;           
-        $('#overlay-content > *').each(function(){
-            var this_height = $(this).height();
-            total_height += this_height;      
+        $(this.detailpane).width((max_width/.8));
+
+        var total_height = 0;        
+        var hidden_height = ($(this.detailpane).css("display") == "none");
+        if(hidden_height) { $(this.detailpane).css({"display":"block"}); }
+        $('#detail-content > *').each(function(){
+            if(this.tagName == "IFRAME") {
+                $(this).width($('#detail-content').width()).height($(this).width() * 0.8);
+            } else if(this.tagName == "OBJECT") { 
+                $(this).width($('#detail-content').width()).height($(this).width() * 0.8);         
+                $(this).children("embed").width($('#detail-content').width()).height($(this).width() * 0.8);                                       
+            }
+           total_height +=  $(this).outerHeight(true);      
         });
-        // Todo - this should not be hardcoded to 100, but it works.... need to understand the calc
-        $(this.dialog).height((total_height+100));
-        
-        var h = $(this.dialog).height();
-        $(this.dialog).find('#overlay-nav').css({"height": h}).show();
-        var h2 = ($(this.dialog).outerHeight() / 2);
+        if(hidden_height) { $(this.detailpane).css({"display":"none"}); }
+        // todo - this should not be hardcoded to 100, but it works.... need to understand the calc
+        $(this.detailpane).height((total_height));
+
+        var h = $(this.detailpane).height();
+        $(this.detailpane).find('#detail-nav')
+           .css({"height": h}).show();
+
+        var h2 = ($(this.detailpane).outerHeight() / 2);
         var dt  = Math.floor(($(this.map.map.div).innerHeight()-(h2*2)) / 2);
-        var w2 = ($(this.dialog).outerWidth() / 2);
+        var w2 = ($(this.detailpane).outerWidth() / 2);
         var dl = Math.floor(($(this.map.map.div).innerWidth() - (w2*2)) / 2);
-        $(this.dialog).css({"left": dl+"px"});
-        $(this.dialog).css({"top": dt+"px"});    
-        
-        if($(this.dialog).css("display") == "block") {
+        $(this.detailpane).css({"left": dl+"px"});
+        $(this.detailpane).css({"top": dt+"px"});
+
+        /*if($(this.embed_dialog).css("display") == "block") {
             var shrink = $(window).height() 
-                         - $(this.dialog).outerHeight();
+                         - $(this.embed_dialog).outerHeight();
             $(this.map.map.div).css({"height":shrink});
-        }   
+        }   */
         
     }, this));
-    */
+
 }
 
 Sourcemap.Map.Embed.prototype.initTour = function() {
@@ -332,101 +351,72 @@ Sourcemap.Map.Embed.prototype.initBanner = function(sc) {
     return this;
 }
 
-Sourcemap.Map.Embed.prototype.initDialog = function() {
+Sourcemap.Map.Embed.prototype.initDetailPane = function() {
    
-    // set up overlay
-    this.dialog = $('<div id="embed-overlay"></div>');
+    // set up detail pane
+    this.detailpane = $('<div id="detail-pane"></div>');
     // todo: bind events, not inline javascript
-    this.dialog_prev_el = $('<div id="overlay-nav" class="prev"><a href="javascript: void(0);"></a></div>');
-    this.dialog_next_el = $('<div id="overlay-nav" class="next"><a href="javascript: void(0);"></a></div>');
-    $(this.dialog_prev_el).click($.proxy(function() { this.dialogPrev(); }, this));
-    $(this.dialog_next_el).click($.proxy(function() { this.dialogNext(); }, this));
-    this.dialog_content = $('<div id="overlay-content" class="content"></div>');
-    this.dialog.append(this.dialog_prev_el)
-        .append(this.dialog_content).append(this.dialog_next_el);
-    $(this.map.map.div).append(this.dialog);
-    $(this.dialog).data("state", 1); // todo: check this?
+    this.detailpane_prev_el = $('<div id="detail-nav" class="prev"><a href="javascript: void(0);"></a></div>');
+    this.detailpane_next_el = $('<div id="detail-nav" class="next"><a href="javascript: void(0);"></a></div>');
+    $(this.detailpane_prev_el).click($.proxy(function() { this.detailPanePrev(); }, this));
+    $(this.detailpane_next_el).click($.proxy(function() { this.detailPaneNext(); }, this));
+    this.detailpane_content = $('<div id="detail-content" class="content"></div>');
+    this.detailpane.append(this.detailpane_prev_el)
+        .append(this.detailpane_content).append(this.detailpane_next_el);
+    $(this.map.map.div).append(this.detailpane);
+    $(this.detailpane).data("state", 1); // todo: check this?
     // close on click-out
     this.map.map.events.on({
         "click": function(e) {
-            if($(this.dialog).data("state")) {
-                this.hideDialog();
+            if($(this.detailpane).data("state")) {
+                this.hideDetailPane();
             }
         },
         "scope": this 
     });
 
     // Setup dimmer
-    /*
-    this.dimmed = $('<div id="dimmed-overlay"></div>');
-    $(this.map.div).append(this.dimmed);
-    this.dimmed.click($.proxy(function() {
-        this.hideDialog();
+    this.curtain = $('<div id="curtain" class="hidden"></div>');
+    $(this.map.map.div).append(this.curtain);
+    this.curtain.click($.proxy(function() {
+        this.hideDetailPane();
     }, this));
-    */
 }
 
-Sourcemap.Map.Embed.prototype.showDialog = function(mkup) {
-    if(this.dialog) {
-        $("#dimmed-overlay").fadeIn();
-        // update overlay content and position
-        if(mkup) $(this.dialog_content).html(mkup);
+Sourcemap.Map.Embed.prototype.showDetailPane = function(mkup) {
+    if(this.detailpane) {
+        $(this.curtain).removeClass("hidden").fadeIn();
+        // update detailpane content and position
+        if(mkup) $(this.detailpane_content).html(mkup);
         
         this.map.controls.select.unselectAll();
         
-        var max_width = 0;
-        $('#overlay-content > *').each(function(){
-         var this_width = $(this).width();
-         if (this_width > max_width) { max_width = this_width;}
-        }); 
-        $(this.dialog).width((max_width/.8));
+        $(window).resize();
         
-        var total_height = 0;        
-        var hidden_height = ($(this.dialog).css("display") == "none");
-        if(hidden_height) { $(this.dialog).css({"display":"block"}); }
-        $('#overlay-content > *').each(function(){
-            var this_height = $(this).height();
-            total_height += this_height;      
-        });
-        if(hidden_height) { $(this.dialog).css({"display":"none"}); }
-        // todo - this should not be hardcoded to 100, but it works.... need to understand the calc
-        $(this.dialog).height((total_height+100));
-
-        var h = $(this.dialog).height();
-        $(this.dialog).find('#overlay-nav')
-            .css({"height": h}).show();
-
-        var h2 = ($(this.dialog).outerHeight() / 2);
-        var dt  = Math.floor(($(this.map.map.div).innerHeight()-(h2*2)) / 2);
-        var w2 = ($(this.dialog).outerWidth() / 2);
-        var dl = Math.floor(($(this.map.map.div).innerWidth() - (w2*2)) / 2);
-        $(this.dialog).css({"left": dl+"px"});
-        $(this.dialog).css({"top": dt+"px"});
-        
-        var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
-        $(this.dialog).fadeIn(fade, function() {
+        var fade = $(this.detailpane).css("display") == "block" ? 0 : 100;
+        $(this.detailpane).fadeIn(fade, function() {
         }).data("state", 1);
         
         this.tour.stop();
 
-        /*this.dialog.slideDown("normal", function() {
+        /*this.embed_dialog.slideDown("normal", function() {
             var shrink = $(this.map.map.div).outerHeight() 
-                         - $(this.dialog).outerHeight();
+                         - $(this.embed_dialog).outerHeight();
             $(this.map.map.div).css({"height":shrink});
         });*/
     }
 }
 
-Sourcemap.Map.Embed.prototype.hideDialog = function() {
-    if(this.dialog) {
-        $("#dimmed-overlay").fadeOut();           
-        this.dialog_content.empty();
-        $(this.dialog).find('#overlay-nav').css({"height": "auto"}).hide();
-        $(this.dialog).hide().data("state", 0);
+Sourcemap.Map.Embed.prototype.hideDetailPane = function() {
+    if(this.detailpane) {
+        $("#curtain").fadeOut(function() {$(this).addClass("hidden")});           
+        this.detailpane_content.empty();
+        $(this.detailpane).find('#detail-nav').css({"height": "auto"}).hide();
+        $(this.detailpane).hide().data("state", 0);
         this.tour.wait();
 
-        /*Sourcemap.embed_dialog.slideUp("normal", function() {
-            //$(Sourcemap.map_instance.map.div).css({"height":"100%"});
+        /*this.embed_dialog.slideUp("normal", function() {
+            $(this.map.map.div).css({"height":"100%"});
         });*/
     }
 }
@@ -445,7 +435,7 @@ Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
         }
     }
 
-    // load stop details template and show in embed overlay
+    // load stop details template and show in embed detail pane
     var sc = this.map.supplychains[scid];
     var stop = sc.findStop(stid);
 
@@ -461,14 +451,14 @@ Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
 
     if(stop.getAttr(magic_word, false) === false) magic_word = false;
 
-    $(this.overlay).data("state", -1); // loading
+    $(this.detailpane).data("state", -1); // loading
 
     // load template and render
     // todo: make this intelligible
     Sourcemap.template('embed/details/stop', function(p, tx, th) {
-            $(this.embed.dialog_content).empty();
-            this.embed.showDialog(th);
-            $(this.embed.dialog_content).find('.content-item a').click($.proxy(function(evt) {
+            $(this.embed.detailpane_content).empty();
+            this.embed.showDetailPane(th);
+            $(this.embed.detailpane_content).find('.content-item a').click($.proxy(function(evt) {
                 var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
                 var idx = -1;
                 for(var i=0; i<this.embed.magic_word_sequence.length; i++) {
@@ -494,8 +484,8 @@ Sourcemap.Map.Embed.prototype.showHopDetails = function(hid, scid) {
     // todo: this.
 }
 
-Sourcemap.Map.Embed.prototype.dialogNext = function() {
-    if($(this.dialog).data("state") === -1) return;
+Sourcemap.Map.Embed.prototype.detailPaneNext = function() {
+    if($(this.detailpane).data("state") === -1) return;
     var nxt_seq_idx = this.magic_word_sequence_cur_idx >= 0 && this.magic_word_sequence_cur_idx < this.magic_word_sequence.length - 1 ?
         this.magic_word_sequence_cur_idx + 1 : -1;
     if(nxt_seq_idx < 0) {
@@ -525,7 +515,7 @@ Sourcemap.Map.Embed.prototype.dialogNext = function() {
         };
         if(!magic_word) {
             this.magic_word_sequence_cur_idx = -1;
-            return this.dialogNext();
+            return this.detailPaneNext();
         }
         this.magic_word_sequence_cur_idx = nxt_seq_idx;
         this.showStopDetails(stop.instance_id, scid, this.magic_word_sequence_cur_idx); 
@@ -536,8 +526,8 @@ Sourcemap.Map.Embed.prototype.dialogNext = function() {
     }
 }
 
-Sourcemap.Map.Embed.prototype.dialogPrev = function() {
-    if($(this.dialog).data("state") === -1) return;
+Sourcemap.Map.Embed.prototype.detailPanePrev = function() {
+    if($(this.detailpane).data("state") === -1) return;
     var prv_seq_idx = this.magic_word_sequence_cur_idx >= 0 ? this.magic_word_sequence_cur_idx - 1 : 0;
     if(prv_seq_idx < 0) {
         this.tour.prev();
@@ -565,7 +555,7 @@ Sourcemap.Map.Embed.prototype.dialogPrev = function() {
         };
         if(!magic_word) {
             this.magic_word_sequence_cur_idx = 0;
-            return this.dialogPrev();
+            return this.detailpanePrev();
         }
         this.magic_word_sequence_cur_idx = prv_seq_idx;
         this.showStopDetails(stop.instance_id, scid, this.magic_word_sequence_cur_idx); 

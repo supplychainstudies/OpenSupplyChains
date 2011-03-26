@@ -265,6 +265,14 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
         var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
         $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
         
+        // Display, but hide this while we calculate
+        $(this.detailpane).css({"left": dl+"px"});
+        $(this.detailpane).css({"top": dt+"px"});
+        
+        var hidden_height = ($(this.detailpane).css("display") == "none");
+        if(hidden_height) { $(this.detailpane).css({"display":"block"}); }
+        
+        // Calculate the minimum needed width
         $(this.detailpane).width(1).height(1);
         var max_width = 0;
         $('#detail-content > *').each(function(){ 
@@ -273,9 +281,8 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
         }); 
         $(this.detailpane).width((max_width/.8));
 
+        // Calculate the ideal height
         var total_height = 0;        
-        var hidden_height = ($(this.detailpane).css("display") == "none");
-        if(hidden_height) { $(this.detailpane).css({"display":"block"}); }
         $('#detail-content > *').each(function(){
             if(this.tagName == "IFRAME") {
                 $(this).width($('#detail-content').width()).height($(this).width() * 0.8);
@@ -285,18 +292,17 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
             }
            total_height +=  $(this).outerHeight(true);      
         });
-        if(hidden_height) { $(this.detailpane).css({"display":"none"}); }
-        // todo - this should not be hardcoded to 100, but it works.... need to understand the calc
         $(this.detailpane).height((total_height));
+        $(this.detailpane).find('#detail-nav').css({"height": total_height}).show();
 
-        var h = $(this.detailpane).height();
-        $(this.detailpane).find('#detail-nav')
-           .css({"height": h}).show();
-
+        // Get positioning
         var h2 = ($(this.detailpane).outerHeight() / 2);
         var dt  = Math.floor(($(this.map.map.div).innerHeight()-(h2*2)) / 2);
         var w2 = ($(this.detailpane).outerWidth() / 2);
         var dl = Math.floor(($(this.map.map.div).innerWidth() - (w2*2)) / 2);
+        
+        // Undisplay and set correct position
+        if(hidden_height) { $(this.detailpane).css({"display":"none"}); }                
         $(this.detailpane).css({"left": dl+"px"});
         $(this.detailpane).css({"top": dt+"px"});
 

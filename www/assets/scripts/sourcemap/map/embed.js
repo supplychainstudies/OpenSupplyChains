@@ -378,6 +378,7 @@ Sourcemap.Map.Embed.prototype.initDetailPane = function() {
             if($(this.detailpane).data("state")) {
                 this.hideDetailPane();
             }
+            this.tour.stop().wait();
         },
         "scope": this 
     });

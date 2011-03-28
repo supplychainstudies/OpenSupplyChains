@@ -166,6 +166,7 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
         }        
     });
 
+    $(this.map.map.div).css("position", "relative");
     // make and place custom zoom controls
     var ze = new OpenLayers.Control.ZoomToMaxExtent({"title": "zoom all the way out"});
     var zi = new OpenLayers.Control.ZoomIn({"title": "zoom in"});
@@ -244,13 +245,13 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
     }, this));
     // embed activity fades 
     $("html").mouseenter(function() {
-        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length == 4) {        
+        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=3) {        
             $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
                 .fadeIn("fast");
         }
     });
     $("html").mousemove(function() {
-        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length == 4) {
+        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=3) {
             $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
             .fadeIn("fast");
             $("html").unbind("mousemove");
@@ -341,7 +342,6 @@ Sourcemap.Map.Embed.prototype.initTour = function() {
 
 Sourcemap.Map.Embed.prototype.initBanner = function(sc) {
     this.banner_div = $('<div id="embed-banner"></div>');
-    $(this.map.map.div).css("position", "relative");
     $(this.map.map.div).append(this.banner_div);
     if(!sc) {
         // todo: this is bad, but it's worst case

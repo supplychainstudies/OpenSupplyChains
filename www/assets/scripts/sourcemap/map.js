@@ -19,7 +19,8 @@ Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
     "zoom_control": false,
-    "ol_layer_switcher": false, "google_tiles": true,
+    "ol_layer_switcher": false, "tileswitcher": false,
+    "google_tiles": true,
     "cloudmade_tiles": true, "popups": true,
     "stop_popups": true, "hop_popups": true,
     "arrow_popups": true, "popup_width": 200,
@@ -147,7 +148,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 new OpenLayers.Control.LayerSwitcher()
             );
         }  
-        if(Sourcemap.embed_params.tileswitcher) {
+        if(this.options.tileswitcher) {
             this.initTileSwitcher();
         }
         this.addControl('select', 

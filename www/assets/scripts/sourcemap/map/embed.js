@@ -245,13 +245,13 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
     }, this));
     // embed activity fades 
     $("html").mouseenter(function() {
-        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=3) {        
+        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=2) {        
             $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
                 .fadeIn("fast");
         }
     });
     $("html").mousemove(function() {
-        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=3) {
+        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length>=2) {
             $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
             .fadeIn("fast");
             $("html").unbind("mousemove");

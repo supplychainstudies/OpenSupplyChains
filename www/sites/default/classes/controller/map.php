@@ -102,7 +102,8 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'tour' => 'yes', 'tour_start_delay' => 7,
                     'tour_interval' => 5, 'banner' => 'yes',
                     'tileswitcher' => 'no', 'geoloc' => true, 
-                    'downstream_sc' => null, 'basetileset' => 'terrain'
+                    'downstream_sc' => null, 'basetileset' => 'terrain',
+                    'locate_user' => 'no'
                 );
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 
@@ -116,6 +117,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('geoloc', 'not_empty')
                     ->rule('banner', 'regex', array('/yes|no/i'))
                     ->rule('tileswitcher', 'regex', array('/yes|no/i'))
+                    ->rule('locate_user', 'regex', array('/yes|no/i'))
                     ->rule('basetileset', 'regex', array('/terrain|satellite|stylized/i'))
                     ->rule('downstream_sc', 'numeric');
                 if($v->check()) {
@@ -128,11 +130,13 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                         strtolower(trim($params['banner'])) === 'yes' ? true : false;
                     $params['tileswitcher'] =
                         strtolower(trim($params['tileswitcher'])) === 'yes' ? true : false;
+                    $params['locate_user'] =
+                        strtolower(trim($params['locate_user'])) === 'yes' ? true : false;
                     
                     if($params['geoloc']) {
                         $params['iploc'] = false;
                         if(isset($_SERVER['REMOTE_ADDR'])) {
-                            # $_SERVER['REMOTE_ADDR'] = '128.59.48.24'; // ny, ny (columbia.edu)
+                            $_SERVER['REMOTE_ADDR'] = '128.59.48.24'; // ny, ny (columbia.edu)
                             $params['iploc'] = $iploc = Sourcemap_Ip::find_ip($_SERVER['REMOTE_ADDR']);
                             $iploc = $iploc ? $iploc[0] : null;
                             if($params['downstream_sc'] && $iploc) {

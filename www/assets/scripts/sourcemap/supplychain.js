@@ -198,6 +198,17 @@ Sourcemap.Stop.prototype.getAttr = function(k, d) {
     else return d;
 }
 
+Sourcemap.Stop.prototype.setAttr = function(k, v) {
+    if(((typeof k) === "object") && !v) {
+        for(var ok in k) {
+            this.setAttr(ok, k[ok]);
+        }
+    } else if(((typeof v) === "undefined") && ((typeof this.attributes[k]) !== "undefined")) {
+        delete this.attributes[v];
+    } else this.attributes[k] = v;
+    return this;
+}
+
 Sourcemap.Stop.prototype.getLabel = function() {
     var label = false;
     var search_keys = ["name", "label", "org.sourcemap.name", 

@@ -27,7 +27,8 @@ Sourcemap.Map.Embed.prototype.defaults = {
     "banner": true, "watermark": false, "magic_word_sequence": [
         "description", "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
-    "tour_order_strategy": "upstream", "tileswitcher": false
+    "tour_order_strategy": "upstream", "tileswitcher": false,
+    "locate_user": true, "user_loc": false, "user_loc_color": "#ff0000"
     
 }
 
@@ -110,7 +111,6 @@ Sourcemap.Map.Embed.prototype.init = function() {
     // todo: put this somewhere else.
     var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
     $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
-    this.broadcast("embed:initialized", this);
 }
 
 Sourcemap.Map.Embed.prototype.initMap = function() {
@@ -362,7 +362,10 @@ Sourcemap.Map.Embed.prototype.initBanner = function(sc) {
 Sourcemap.Map.Embed.prototype.initDialog = function() {
    
     // set up detail pane
-    this.dialog = $('<div id="detail-pane"></div>');
+    if(!this.dialog) {
+        this.dialog = $('<div id="detail-pane"></div>');
+        $(this.map.map.div).append(this.dialog);
+    } else $(this.dialog).empty();
     // todo: bind events, not inline javascript
     this.dialog_prev_el = $('<div id="detail-nav" class="prev"><a href="javascript: void(0);"></a></div>');
     this.dialog_next_el = $('<div id="detail-nav" class="next"><a href="javascript: void(0);"></a></div>');
@@ -371,7 +374,6 @@ Sourcemap.Map.Embed.prototype.initDialog = function() {
     this.dialog_content = $('<div id="detail-content" class="content"></div>');
     this.dialog.append(this.dialog_prev_el)
         .append(this.dialog_content).append(this.dialog_next_el);
-    $(this.map.map.div).append(this.dialog);
     $(this.dialog).data("state", 1); // todo: check this?
     // close on click-out
     this.map.map.events.on({
@@ -385,11 +387,13 @@ Sourcemap.Map.Embed.prototype.initDialog = function() {
     });
 
     // Setup dimmer
-    this.curtain = $('<div id="curtain" class="hidden"></div>');
-    $(this.map.map.div).append(this.curtain);
-    this.curtain.click($.proxy(function() {
-        this.hideDialog();
-    }, this));
+    if(!this.curtain) {
+        this.curtain = $('<div id="curtain" class="hidden"></div>');
+        $(this.map.map.div).append(this.curtain);
+        this.curtain.click($.proxy(function() {
+            this.hideDialog();
+        }, this));
+    }
 }
 
 Sourcemap.Map.Embed.prototype.showDialog = function(mkup, no_controls) {
@@ -397,10 +401,10 @@ Sourcemap.Map.Embed.prototype.showDialog = function(mkup, no_controls) {
         $(this.curtain).removeClass("hidden").fadeIn();
         // update dialog content and position
         if(mkup && no_controls) {
-            $(this.dialog).html(mkup).data({"state": 2}); // no controls
+            $(this.dialog).html(mkup); // wipe controls
         } else if(mkup) {
-            if($(this.dialog).data("state") === 2)
-                this.initDialog();
+            this.dialog.empty();
+            this.initDialog();
             $(this.dialog_content).html(mkup);
         }
         
@@ -409,8 +413,7 @@ Sourcemap.Map.Embed.prototype.showDialog = function(mkup, no_controls) {
         $(window).resize();
         
         var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
-        $(this.dialog).fadeIn(fade, function() {
-        }).data("state", 1);
+        $(this.dialog).fadeIn(fade, function() {}).data("state", 1);
         
         this.tour.stop();
 
@@ -428,7 +431,7 @@ Sourcemap.Map.Embed.prototype.hideDialog = function() {
         this.dialog_content.empty();
         $(this.dialog).find('#detail-nav').css({"height": "auto"}).hide();
         $(this.dialog).hide().data("state", 0);
-        this.tour.wait();
+        //this.tour.wait();
 
         /*this.embed_dialog.slideUp("normal", function() {
             $(this.map.map.div).css({"height":"100%"});
@@ -579,4 +582,74 @@ Sourcemap.Map.Embed.prototype.dialogPrev = function() {
     } else {
         throw new Error('Unexpected feature...not a stop or a hop.');
     }
+}
+
+Sourcemap.Map.Embed.prototype.showLocationDialog = function(msg) {
+    var msg = msg ? msg : false;
+    $(this.dialog).data("state", -1);
+    Sourcemap.template("embed/location", function(p, txt, th) {
+        this.showDialog(th, true);
+        $(this.dialog).find('#update-user-loc').click($.proxy(function(evt) {
+            var new_loc = $(this.embed.dialog).find('#new-user-loc').val();
+            if(this.embed.user_loc && (new_loc === this.embed.user_loc.placename)) {
+                // pass, no change
+                this.embed.mapUserLoc();
+                this.embed.hideDialog();
+            } else {
+                $.ajax({"url": 'services/geocode', "type": "GET",
+                    "success": $.proxy(function(resp) {
+                        if(resp && resp.results) {
+                            this.embed.user_loc = resp.results[0];
+                            this.embed.showLocationConfirm();
+                        } else {
+                            // no results!
+                            this.embed.showLocationDialog('Sorry, that location could not be found.');
+                        }
+                    }, this),
+                    "error": function(resp) {
+                    }, "data": {"placename": new_loc},
+                    "processData": true
+                });
+            }
+        }, {"embed": this}));
+    }, {"embed": this, "err_msg": msg, "user_loc": this.user_loc}, this)
+}
+
+Sourcemap.Map.Embed.prototype.showLocationConfirm = function() {
+    $(this.dialog).data("state", -1);
+    Sourcemap.template('embed/location/confirm', function(p, tx, th) {
+        this.showDialog(th, true);
+        $(this.dialog).find('#user-loc-accept').click($.proxy(function(evt) {
+            this.hideDialog();
+            this.mapUserLoc();
+        }, this));
+        $(this.dialog).find('#user-loc-reject').click($.proxy(function(evt) {
+            this.showLocationDialog();
+        }, this));
+    }, this, this);
+}
+
+Sourcemap.Map.Embed.prototype.mapUserLoc = function() {
+    var user_stop = new Sourcemap.Stop();
+    user_stop.setAttr({
+        "color": this.options.user_loc_color,
+        "name": "You", "placename": this.user_loc.placename
+    });
+    var wkt = new OpenLayers.Format.WKT();
+    user_stop.geometry = wkt.read(
+        'POINT('+this.user_loc.longitude+' '+this.user_loc.latitude+')'
+    ).geometry;
+    user_stop.geometry = wkt.write((new OpenLayers.Feature.Vector(user_stop.geometry.transform(
+        new OpenLayers.Projection('EPSG:4326'), this.map.map.getProjectionObject()
+    ))));
+    var scid = null;
+    for(scid in this.map.supplychains) break;
+    this.map.mapStop(user_stop, scid);
+    if(this.tour) {
+        this.tour.stop();
+        var ftr = this.map.findFeaturesForStop(scid, user_stop.instance_id).stop;
+        this.tour.features.splice(0, 0, ftr);
+        this.tour.start();
+    }
+    return this;
 }

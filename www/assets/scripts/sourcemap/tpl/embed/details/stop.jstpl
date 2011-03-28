@@ -1,5 +1,5 @@
 <h2 id="detail-title"><%= _S.htesc(this.stop.getAttr("name", "Stop")) %></h2>
-<% if(this.stop.attributes.placename != undefined) { %><h3 id="detail-placename">from <span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
+<% if(this.stop.attributes.placename != undefined) { %><h3 id="detail-placename"><span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
 
 <% if(this.magic_word === "description") { %>
     <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>

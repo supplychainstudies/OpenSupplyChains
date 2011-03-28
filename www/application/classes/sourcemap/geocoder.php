@@ -39,6 +39,22 @@ class Sourcemap_Geocoder {
                 $loc->latitude = $loc->lat;
                 $loc->longitude = $loc->lng;
                 $loc->lon = $loc->lng;
+                if(isset($r->address_components) && $r->address_components) {
+                    $components = array();
+                    foreach($r->address_components as $aci => $ac) {
+                        $t = $ac->types;
+                        if(in_array('political', $t) && in_array('country', $t)) {
+                            $components['country'] = $ac->long_name;
+                        } elseif(in_array('political', $t) && in_array('administrative_area_level_1', $t)) {
+                            $components['province'] = $ac->long_name;
+                        } elseif(in_array('political', $t) && in_array('administrative_area_level_2', $t)) {
+                            $components['county'] = $ac->long_name;
+                        } elseif(in_array('political', $t) && in_array('locality', $t)) {
+                            $components['city'] = $ac->long_name;
+                        }
+                    }
+                    foreach($components as $plk => $pln) $loc->$plk = $pln;
+                }
                 $ret[] = $loc;
             }
         } else {

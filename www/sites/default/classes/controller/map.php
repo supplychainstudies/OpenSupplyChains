@@ -101,7 +101,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
                     'tour_interval' => 5, 'banner' => 'yes',
-                    'tileswitcher' => 'yes', 'geoloc' => true, 
+                    'tileswitcher' => 'no', 'geoloc' => true, 
                     'downstream_sc' => null, 'basetileset' => 'terrain'
                 );
                 foreach($params as $k => $v) 

@@ -27,7 +27,7 @@ Sourcemap.Map.Embed.prototype.defaults = {
     "banner": true, "watermark": false, "magic_word_sequence": [
         "description", "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
-    "tour_order_strategy": "upstream"
+    "tour_order_strategy": "upstream", "tileswitcher": false
     
 }
 
@@ -114,6 +114,7 @@ Sourcemap.Map.Embed.prototype.init = function() {
 
 Sourcemap.Map.Embed.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id, {
+        "tileswitcher": this.options.tileswitcher,
         "prep_popup": $.proxy(function(ref, ftr, pop) {
             var t = ['popup'];
             var tscope = {"popup": pop, "feature": ftr, 'embed': this};

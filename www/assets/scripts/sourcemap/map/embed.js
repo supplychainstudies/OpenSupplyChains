@@ -105,7 +105,7 @@ Sourcemap.Map.Embed.prototype.init = function() {
     this.magic_word_cur_idx = this.options.magic_word_cur_idx;
     this.magic = this.options.magic;
     this.initMap();
-    this.initDialog();
+    this.initDetailPane();
     this.initEvents();
     // todo: put this somewhere else.
     var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
@@ -266,20 +266,20 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
         $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
         
         // Display, but hide this while we calculate
-        $(this.dialog).css({"left": dl+"px"});
-        $(this.dialog).css({"top": dt+"px"});
+        $(this.detailpane).css({"left": dl+"px"});
+        $(this.detailpane).css({"top": dt+"px"});
         
-        var hidden_height = ($(this.dialog).css("display") == "none");
-        if(hidden_height) { $(this.dialog).css({"display":"block"}); }
+        var hidden_height = ($(this.detailpane).css("display") == "none");
+        if(hidden_height) { $(this.detailpane).css({"display":"block"}); }
         
         // Calculate the minimum needed width
-        $(this.dialog).width(1).height(1);
+        $(this.detailpane).width(1).height(1);
         var max_width = 0;
         $('#detail-content > *').each(function(){ 
             var this_width = $(this).width();
             if (this_width > max_width) { max_width = this_width;}
         }); 
-        $(this.dialog).width((max_width/.8));
+        $(this.detailpane).width((max_width/.8));
 
         // Calculate the ideal height
         var total_height = 0;        
@@ -292,23 +292,23 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
             }
            total_height +=  $(this).outerHeight(true);      
         });
-        $(this.dialog).height((total_height));
-        $(this.dialog).find('#detail-nav').css({"height": total_height}).show();
+        $(this.detailpane).height((total_height));
+        $(this.detailpane).find('#detail-nav').css({"height": total_height}).show();
 
         // Get positioning
-        var h2 = ($(this.dialog).outerHeight() / 2);
+        var h2 = ($(this.detailpane).outerHeight() / 2);
         var dt  = Math.floor(($(this.map.map.div).innerHeight()-(h2*2)) / 2);
-        var w2 = ($(this.dialog).outerWidth() / 2);
+        var w2 = ($(this.detailpane).outerWidth() / 2);
         var dl = Math.floor(($(this.map.map.div).innerWidth() - (w2*2)) / 2);
         
         // Undisplay and set correct position
-        if(hidden_height) { $(this.dialog).css({"display":"none"}); }                
-        $(this.dialog).css({"left": dl+"px"});
-        $(this.dialog).css({"top": dt+"px"});
+        if(hidden_height) { $(this.detailpane).css({"display":"none"}); }                
+        $(this.detailpane).css({"left": dl+"px"});
+        $(this.detailpane).css({"top": dt+"px"});
 
-        /*if($(this.embed_dialog).css("display") == "block") {
+        /*if($(this.embed_detailpane).css("display") == "block") {
             var shrink = $(window).height() 
-                         - $(this.embed_dialog).outerHeight();
+                         - $(this.embed_detailpane).outerHeight();
             $(this.map.map.div).css({"height":shrink});
         }   */
         
@@ -357,25 +357,25 @@ Sourcemap.Map.Embed.prototype.initBanner = function(sc) {
     return this;
 }
 
-Sourcemap.Map.Embed.prototype.initDialog = function() {
+Sourcemap.Map.Embed.prototype.initDetailPane = function() {
    
     // set up detail pane
-    this.dialog = $('<div id="detail-pane"></div>');
+    this.detailpane = $('<div id="detail-pane"></div>');
     // todo: bind events, not inline javascript
-    this.dialog_prev_el = $('<div id="detail-nav" class="prev"><a href="javascript: void(0);"></a></div>');
-    this.dialog_next_el = $('<div id="detail-nav" class="next"><a href="javascript: void(0);"></a></div>');
-    $(this.dialog_prev_el).click($.proxy(function() { this.dialogPrev(); }, this));
-    $(this.dialog_next_el).click($.proxy(function() { this.dialogNext(); }, this));
-    this.dialog_content = $('<div id="detail-content" class="content"></div>');
-    this.dialog.append(this.dialog_prev_el)
-        .append(this.dialog_content).append(this.dialog_next_el);
-    $(this.map.map.div).append(this.dialog);
-    $(this.dialog).data("state", 1); // todo: check this?
+    this.detailpane_prev_el = $('<div id="detail-nav" class="prev"><a href="javascript: void(0);"></a></div>');
+    this.detailpane_next_el = $('<div id="detail-nav" class="next"><a href="javascript: void(0);"></a></div>');
+    $(this.detailpane_prev_el).click($.proxy(function() { this.detailPanePrev(); }, this));
+    $(this.detailpane_next_el).click($.proxy(function() { this.detailPaneNext(); }, this));
+    this.detailpane_content = $('<div id="detail-content" class="content"></div>');
+    this.detailpane.append(this.detailpane_prev_el)
+        .append(this.detailpane_content).append(this.detailpane_next_el);
+    $(this.map.map.div).append(this.detailpane);
+    $(this.detailpane).data("state", 1); // todo: check this?
     // close on click-out
     this.map.map.events.on({
         "click": function(e) {
-            if($(this.dialog).data("state")) {
-                this.hideDialog();
+            if($(this.detailpane).data("state")) {
+                this.hideDetailPane();
             }
         },
         "scope": this 
@@ -385,43 +385,43 @@ Sourcemap.Map.Embed.prototype.initDialog = function() {
     this.curtain = $('<div id="curtain" class="hidden"></div>');
     $(this.map.map.div).append(this.curtain);
     this.curtain.click($.proxy(function() {
-        this.hideDialog();
+        this.hideDetailPane();
     }, this));
 }
 
-Sourcemap.Map.Embed.prototype.showDialog = function(mkup) {
-    if(this.dialog) {
+Sourcemap.Map.Embed.prototype.showDetailPane = function(mkup) {
+    if(this.detailpane) {
         $(this.curtain).removeClass("hidden").fadeIn();
-        // update dialog content and position
-        if(mkup) $(this.dialog_content).html(mkup);
+        // update detailpane content and position
+        if(mkup) $(this.detailpane_content).html(mkup);
         
         this.map.controls.select.unselectAll();
         
         $(window).resize();
         
-        var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
-        $(this.dialog).fadeIn(fade, function() {
+        var fade = $(this.detailpane).css("display") == "block" ? 0 : 100;
+        $(this.detailpane).fadeIn(fade, function() {
         }).data("state", 1);
         
         this.tour.stop();
 
-        /*this.embed_dialog.slideDown("normal", function() {
+        /*this.embed_detailpane.slideDown("normal", function() {
             var shrink = $(this.map.map.div).outerHeight() 
-                         - $(this.embed_dialog).outerHeight();
+                         - $(this.embed_detailpane).outerHeight();
             $(this.map.map.div).css({"height":shrink});
         });*/
     }
 }
 
-Sourcemap.Map.Embed.prototype.hideDialog = function() {
-    if(this.dialog) {
+Sourcemap.Map.Embed.prototype.hideDetailPane = function() {
+    if(this.detailpane) {
         $("#curtain").fadeOut(function() {$(this).addClass("hidden")});           
-        this.dialog_content.empty();
-        $(this.dialog).find('#detail-nav').css({"height": "auto"}).hide();
-        $(this.dialog).hide().data("state", 0);
+        this.detailpane_content.empty();
+        $(this.detailpane).find('#detail-nav').css({"height": "auto"}).hide();
+        $(this.detailpane).hide().data("state", 0);
         this.tour.wait();
 
-        /*this.embed_dialog.slideUp("normal", function() {
+        /*this.embed_detailpane.slideUp("normal", function() {
             $(this.map.map.div).css({"height":"100%"});
         });*/
     }
@@ -457,14 +457,14 @@ Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
 
     if(stop.getAttr(magic_word, false) === false) magic_word = false;
 
-    $(this.dialog).data("state", -1); // loading
+    $(this.detailpane).data("state", -1); // loading
 
     // load template and render
     // todo: make this intelligible
     Sourcemap.template('embed/details/stop', function(p, tx, th) {
-            $(this.embed.dialog_content).empty();
-            this.embed.showDialog(th);
-            $(this.embed.dialog_content).find('.content-item a').click($.proxy(function(evt) {
+            $(this.embed.detailpane_content).empty();
+            this.embed.showDetailPane(th);
+            $(this.embed.detailpane_content).find('.content-item a').click($.proxy(function(evt) {
                 var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
                 var idx = -1;
                 for(var i=0; i<this.embed.magic_word_sequence.length; i++) {
@@ -490,8 +490,8 @@ Sourcemap.Map.Embed.prototype.showHopDetails = function(hid, scid) {
     // todo: this.
 }
 
-Sourcemap.Map.Embed.prototype.dialogNext = function() {
-    if($(this.dialog).data("state") === -1) return;
+Sourcemap.Map.Embed.prototype.detailPaneNext = function() {
+    if($(this.detailpane).data("state") === -1) return;
     var nxt_seq_idx = this.magic_word_sequence_cur_idx >= 0 && this.magic_word_sequence_cur_idx < this.magic_word_sequence.length - 1 ?
         this.magic_word_sequence_cur_idx + 1 : -1;
     if(nxt_seq_idx < 0) {
@@ -521,7 +521,7 @@ Sourcemap.Map.Embed.prototype.dialogNext = function() {
         };
         if(!magic_word) {
             this.magic_word_sequence_cur_idx = -1;
-            return this.dialogNext();
+            return this.detailPaneNext();
         }
         this.magic_word_sequence_cur_idx = nxt_seq_idx;
         this.showStopDetails(stop.instance_id, scid, this.magic_word_sequence_cur_idx); 
@@ -532,8 +532,8 @@ Sourcemap.Map.Embed.prototype.dialogNext = function() {
     }
 }
 
-Sourcemap.Map.Embed.prototype.dialogPrev = function() {
-    if($(this.dialog).data("state") === -1) return;
+Sourcemap.Map.Embed.prototype.detailPanePrev = function() {
+    if($(this.detailpane).data("state") === -1) return;
     var prv_seq_idx = this.magic_word_sequence_cur_idx >= 0 ? this.magic_word_sequence_cur_idx - 1 : 0;
     if(prv_seq_idx < 0) {
         this.tour.prev();
@@ -561,7 +561,7 @@ Sourcemap.Map.Embed.prototype.dialogPrev = function() {
         };
         if(!magic_word) {
             this.magic_word_sequence_cur_idx = 0;
-            return this.dialogPrev();
+            return this.detailPanePrev();
         }
         this.magic_word_sequence_cur_idx = prv_seq_idx;
         this.showStopDetails(stop.instance_id, scid, this.magic_word_sequence_cur_idx); 

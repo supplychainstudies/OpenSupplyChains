@@ -136,7 +136,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     if($params['geoloc']) {
                         $params['iploc'] = false;
                         if(isset($_SERVER['REMOTE_ADDR'])) {
-                            $_SERVER['REMOTE_ADDR'] = '128.59.48.24'; // ny, ny (columbia.edu)
+                            //$_SERVER['REMOTE_ADDR'] = '128.59.48.24'; // ny, ny (columbia.edu)
                             $params['iploc'] = $iploc = Sourcemap_Ip::find_ip($_SERVER['REMOTE_ADDR']);
                             $iploc = $iploc ? $iploc[0] : null;
                             if($params['downstream_sc'] && $iploc) {

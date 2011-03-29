@@ -1,3 +1,10 @@
+<head>
+<?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags(
+        'sites/default/assets/styles/reset.css', 
+        'assets/styles/general.less'
+    ) ?>
+</head>
+
 <div class="register-form" style="float: left; width: 5.2em">
 <fieldset>
 <form name="register" method="post" action="register" id="register_form">

@@ -90,14 +90,17 @@ Sourcemap.MapTour.prototype.initEvents = function() {
     return this;
 }
 
-Sourcemap.MapTour.prototype.getFeatures = function() {
+Sourcemap.MapTour.prototype.getFeatures = function(order) {
     var map = this.map;
     var features = [];
+    var order = order || false;
     for(var k in map.supplychains) {
         var sc = map.supplychains[k];
         var g = new Sourcemap.Supplychain.Graph(map.supplychains[k]);
-        var order = g.depthFirstOrder();
-        order = order.concat(g.islands());
+        if(!order) {
+            order = g.depthFirstOrder();
+            order = order.concat(g.islands());
+        }
         for(var i=0; i<order.length; i++)
             features.push(map.mapped_features[order[i]]);
     }

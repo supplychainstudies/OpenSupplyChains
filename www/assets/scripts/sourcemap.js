@@ -293,3 +293,27 @@ Sourcemap.tlinkify = function(str) {
     regex = new RegExp(regex);
     return txt.replace(regex, '<a href="$1">$1</a>');
 }
+
+Sourcemap.okeys = function(o) {
+    var keys = [];
+    for(var k in o) keys.push(k);
+    return keys;
+}
+
+Sourcemap.ovals = function(o) {
+    var vals = [];
+    for(var k in o) vals.push(o[k]);
+    return vals;
+}
+
+Sourcemap.oksort = function(o, cmp) {
+    var cmp = cmp ? cmp : function(a, b) { return a.v > b.v ? 1 : (a.v < b.v ? -1 : 0); };
+    var keys = Sourcemap.okeys(o);
+    var vals = Sourcemap.ovals(o);
+    var olist = [];
+    for(var ki=0; ki<keys.length; ki++) olist.push({"k": keys[ki], "v": vals[ki]});
+    olist.sort(cmp);
+    var sorted = [];
+    for(var ki=0; ki<olist.length; ki++) sorted.push(olist[ki].k);
+    return sorted;
+}

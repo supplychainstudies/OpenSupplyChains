@@ -116,7 +116,7 @@ Sourcemap.Supplychain.Graph.prototype.depthFirstOrder = function(upstream) {
     var traverse_fn = upstream ? 'inboundEdges' : 'outboundEdges';
     var traverse_dir = upstream ? 'from' : 'to';
     while(cur = stack.pop()) {
-        if(order.indexOf(cur) > 0)
+        if(order.indexOf(cur) >= 0)
             continue;
         else
             order.push(cur);
@@ -124,6 +124,35 @@ Sourcemap.Supplychain.Graph.prototype.depthFirstOrder = function(upstream) {
         for(var i=0; i<out.length; i++) {
             if(stack.indexOf(out[i][traverse_dir]) < 0) {
                 stack.push(out[i][traverse_dir]);
+            }
+        }
+    }
+    return order;
+}
+
+Sourcemap.Supplychain.Graph.prototype.fromClosestLeafOrder = function(from_stop) {
+    var leaves = this.leaves();
+    var wkt = new OpenLayers.Format.WKT();
+    var from_stop_id = from_stop.instance_id;
+    var from_point = wkt.read(from_stop.geometry).geometry;
+    var leaf_dist = {};
+    for(var li=0; li<leaves.length; li++) {
+        var l_point = wkt.read(this.supplychain.findStop(leaves[li]).geometry).geometry;
+        leaf_dist[leaves[li]] = from_point.distanceTo(l_point);
+    }
+    var korder = Sourcemap.oksort(leaf_dist);
+    var closest_leaf = korder[0];
+    var stack = [closest_leaf];
+    var order = [];
+    while(cur = stack.pop()) {
+        if(order.indexOf(cur) >= 0)
+            continue;
+        else
+            order.push(cur);
+        var inbound = this.inboundEdges(cur);
+        for(var i=0; i<inbound.length; i++) {
+            if(stack.indexOf(inbound[i]['from']) < 0) {
+                stack.push(inbound[i]['from']);
             }
         }
     }

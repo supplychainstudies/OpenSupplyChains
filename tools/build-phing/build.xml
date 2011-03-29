@@ -51,9 +51,9 @@
         <exclude name="**/.*.swp" />
     </fileset>
     </copy>
+    <phingcall target="write-rev" />
     <phingcall target="build-css" />
     <phingcall target="build-js" />
-    <phingcall target="write-rev" />
 </target>
 
 <target name="build-jsmin">

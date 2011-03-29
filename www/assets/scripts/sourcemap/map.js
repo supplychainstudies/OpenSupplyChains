@@ -128,7 +128,11 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "wrapDateLine": true, "animationEnabled": this.options.animation_enabled
     })); 
     
-    this.map.setBaseLayer( this.map.getLayersByName(Sourcemap.embed_params.basetileset).pop());
+    if(this.options.basetileset) {
+        this.map.setBaseLayer(
+            this.map.getLayersByName(this.options.basetileset).pop()
+        );
+    }
     this.broadcast('map:base_layer_initialized', this);
     return this;
 }

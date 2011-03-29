@@ -86,6 +86,19 @@ class Sourcemap {
         return self::$env;
     }
 
+    public static function revision() {
+        static $rev = null;
+        if($rev === null) {
+            $p = DOCROOT.'revision.txt';
+            if(file_exists($p) && is_readable($p)) {
+                $contents = @file_get_contents($p);
+                if($contents) $rev = trim($contents);
+                else $rev = false;
+            }
+        }
+        return $rev;
+    }
+
     public static function sites_path() {
         static $path;
         if(!$path) {

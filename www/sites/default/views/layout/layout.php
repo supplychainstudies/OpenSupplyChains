@@ -17,7 +17,7 @@
 
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags(
         'sites/default/assets/styles/reset.css', 
-        'sites/default/assets/styles/general.less?v=2'
+        'assets/styles/general.less'
     ) ?>
 </head>
 

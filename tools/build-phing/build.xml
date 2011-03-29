@@ -53,6 +53,7 @@
     </copy>
     <phingcall target="build-css" />
     <phingcall target="build-js" />
+    <phingcall target="write-rev" />
 </target>
 
 <target name="build-jsmin">
@@ -105,6 +106,10 @@
     </php>
     <exec command="cat ${jsfile_abs} | ${phing.home}jsmin/jsmin > ${dirname}/${basename}.min.js" />
     <copy file="${dirname}/${basename}.min.js" tofile="${dirname}/${basename}.js" overwrite="true" />
+</target>
+
+<target name="write-rev">
+    <exec command="svnversion > ${builddir}revision.txt" />
 </target>
 
 <!-- ============================================  -->

@@ -111,7 +111,18 @@ class Sourcemap_JS {
         $args = func_get_args();
         $scripts = call_user_func_array(array('self', 'scripts'), $args);
         $tags = array();
-        foreach($scripts as $i => $script) $tags[] = HTML::script($script);
+        if($rev = Sourcemap::revision()) $rev = "_v=$rev";
+        else $rev = '';
+        foreach($scripts as $i => $script) {
+            if($rev && !preg_match('/^https?:\/\//', $script)) {
+                if(strstr($script, '?')) {
+                    $script .= "&$rev";
+                } else {
+                    $script .= "?$rev";
+                }
+            }
+            $tags[] = HTML::script($script);
+        }
         return join("\n", $tags);
     }
 }

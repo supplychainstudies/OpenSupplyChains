@@ -16,10 +16,19 @@ class Sourcemap_CSS {
         $tags = array();
         foreach($styles as $si => $style) {
             if(self::$convert_less)
-                $style = preg_replace('/\.less(\?v=\w+)?$/', '.css\1', $style);
-            if(preg_match('/\.less(\?v=\w+)?$/', $style)) {
+                $style = preg_replace('/\.less$/', '.css', $style);
+            
+            if(preg_match('/\.less$/', $style)) {
+                // add revision as GET param to avoid old, cached css/less
+                if($rev = Sourcemap::revision()) {
+                    $style .= '?_v='.$rev;
+                }
                 $tags[] = '<link rel="stylesheet/less" href="'.$style.'" type="text/css" />';
             } else {
+                // add revision as GET param to avoid old, cached css/less
+                if($rev = Sourcemap::revision()) {
+                    $style .= '?_v='.$rev;
+                }
                 $tags[] = '<link rel="stylesheet" href="'.$style.'" type="text/css"/>';
             }
         }

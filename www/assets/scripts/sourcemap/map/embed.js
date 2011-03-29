@@ -648,6 +648,9 @@ Sourcemap.Map.Embed.prototype.mapUserLoc = function() {
     if(this.tour) {
         this.tour.stop();
         var ftr = this.map.findFeaturesForStop(scid, user_stop.instance_id).stop;
+        var g = new Sourcemap.Supplychain.Graph(this.map.supplychains[scid]);
+        var order = g.fromClosestLeafOrder(user_stop);
+        this.tour.features = this.tour.getFeatures(order);
         this.tour.features.splice(0, 0, ftr);
         this.tour.start();
     }

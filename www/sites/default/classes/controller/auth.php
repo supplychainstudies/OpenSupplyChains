@@ -91,7 +91,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 	$email_vars = array('username' => $username, 'password' => $temp_password);
 	$to = $email;
 	$subject = 'Your Sourcemap account information';
-	$body = View::factory('email/password_template')->bind('email_vars', $email_vars);
+	$view = View::factory('email/password_template')->bind('email_vars', $email_vars);
+	$body = Sourcemap_Markdown::parse($view);
 	try {
 	    Sourcemap_Email_Template::send_email($to, $subject, $body);
 	} catch (Exception $e) {

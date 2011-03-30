@@ -652,6 +652,7 @@ Sourcemap.Map.Embed.prototype.mapUserLoc = function() {
         var order = g.fromClosestLeafOrder(user_stop);
         this.tour.features = this.tour.getFeatures(order);
         this.tour.features.splice(0, 0, ftr);
+        this.map.map.zoomIn();
         this.tour.start();
     }
     return this;

@@ -7,7 +7,7 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 
-
+  //require_once("markdown.php");
 
 class Controller_Register extends Sourcemap_Controller_Layout {
 
@@ -83,7 +83,18 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 	
         $to = $email;
         $subject = 'Email confirmation for Sourcemap account';
-        $body = View::factory('email/confirm')->bind('email_vars', $email_vars);
+//        $body = View::factory('email/confirm')->bind('email_vars', $email_vars);
+	
+	try {
+	    
+	    $body = Markdown_Convert::Markdown('Dear '.$email_vars['username'].' ,
+Thank you for creating a Sourcemap account with us. 
+Please click on the below link to confim your email address:
+
+- The Sourcemap Team');
+	} catch (Exception $e) {
+	    Message::instance()->set('Sorry, could not email.');
+	}
         
 	try {        
 	    Sourcemap_Email_Template::send_email($to, $subject, $body);
@@ -162,7 +173,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         
         $user = ORM::factory('user');
         $all_users = $user->find_all()->as_array(null, 'username');
-                $all_emails = $user->find_all()->as_array(null, 'email');
+	$all_emails = $user->find_all()->as_array(null, 'email');
         $auto_password = text::random($type = 'alnum', $length = 6);  
         
             
@@ -196,8 +207,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     return $username;
     }
 
- 
+  }
+  
 
-    
-}
 

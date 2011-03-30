@@ -79,13 +79,13 @@ Sourcemap.Map.Embed.prototype.defaults.magic = {
                 */
                 if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
                     var mkup = '<object> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
-                        data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
-                        data.photoset.ownername.toLowerCase()+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
+                        data.photoset.owner+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
+                        data.photoset.owner+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
                         '<param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=71649"></param> '+
                         '<param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash"'+
                         'src="http://www.flickr.com/apps/slideshow/show.swf?v=71649" allowFullScreen="true" '+
-                        'flashvars="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+data.photoset.ownername.toLowerCase()+
-                        '%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+data.photoset.ownername.toLowerCase()+
+                        'flashvars="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+data.photoset.owner+
+                        '%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+data.photoset.owner+
                         '%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></embed></object>';
                 } else {
                     var mkup = 'Photo set not found.';
@@ -650,9 +650,11 @@ Sourcemap.Map.Embed.prototype.mapUserLoc = function() {
         var ftr = this.map.findFeaturesForStop(scid, user_stop.instance_id).stop;
         var g = new Sourcemap.Supplychain.Graph(this.map.supplychains[scid]);
         var order = g.fromClosestLeafOrder(user_stop);
+        if(!order.length) order = g.islands();
         this.tour.features = this.tour.getFeatures(order);
         this.tour.features.splice(0, 0, ftr);
         this.map.map.zoomIn();
+        this.map.supplychains[scid].stops.push(user_stop);
         this.tour.start();
     }
     return this;

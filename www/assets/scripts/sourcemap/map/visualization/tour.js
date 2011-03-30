@@ -120,6 +120,7 @@ Sourcemap.MapTour.prototype.wait = function() {
 }
 
 Sourcemap.MapTour.prototype.start = function() {
+    if(!this.features.length) return this;
     if(this.timeout) this.clearTimeout(this.timeout);
     this.stopped = false;
     Sourcemap.broadcast('map_tour:start', this);
@@ -138,6 +139,7 @@ Sourcemap.MapTour.prototype.stop = function() {
 }
 
 Sourcemap.MapTour.prototype.next = function() {
+    if(!this.features.length) return this;
     this.clearTimeout();
     var next_index = this.ftr_index >= this.features.length ?
         0 : this.ftr_index+1;
@@ -169,6 +171,7 @@ Sourcemap.MapTour.prototype.next = function() {
 
 Sourcemap.MapTour.prototype.prev = function() {
     this.clearTimeout();
+    if(!this.features.length) return this;
     var prev_index = this.ftr_index <= 0 ?
         this.features.length-1 : this.ftr_index-1;
     var current_ftr = this.features[this.ftr_index] || null;

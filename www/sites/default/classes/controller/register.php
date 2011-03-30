@@ -7,7 +7,6 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 
-  //require_once("markdown.php");
 
 class Controller_Register extends Sourcemap_Controller_Layout {
 

@@ -2839,6 +2839,6 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 			return $matches[0];
 		}
 	}
-
+}
 
   

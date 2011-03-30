@@ -87,7 +87,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 	
 	try {
 	    
-	    $body = Markdown_Convert::Markdown('Dear '.$email_vars['username'].' ,
+	    $body = Sourcemap_Markdown::parse('Dear '.$email_vars['username'].' ,
 Thank you for creating a Sourcemap account with us. 
 Please click on the below link to confim your email address:
 

@@ -83,15 +83,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 	
         $to = $email;
         $subject = 'Email confirmation for Sourcemap account';
-//        $body = View::factory('email/confirm')->bind('email_vars', $email_vars);
+	$view = View::factory('email/confirm')->bind('email_vars', $email_vars);
 	
 	try {
 	    
-	    $body = Sourcemap_Markdown::parse('Dear '.$email_vars['username'].' ,
-Thank you for creating a Sourcemap account with us. 
-Please click on the below link to confim your email address:
-
-- The Sourcemap Team');
+	    $body = Sourcemap_Markdown::parse($view);
 	} catch (Exception $e) {
 	    Message::instance()->set('Sorry, could not email.');
 	}

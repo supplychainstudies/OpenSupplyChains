@@ -9,10 +9,10 @@
         <div class="block greenfact"><%= _S.htesc(this.stop.getAttr("block:greenfact")) %></div>
     <% } %>
     <% if(this.stop.getAttr("url:moreinfo", false)) { %>
-        <div class="url moreinfo">
+        <div class="url moreinfo"> 
             <%= $("<a></a>").attr("href", this.stop.getAttr("url:moreinfo"))
                 .text(this.stop.getAttr("urltitle:moreinfo", "Learn More")).attr("target", "blank")
-                .attr("outerHTML") %>
+                .wrap("<div></div>").parent().html() %>
         </div>
     <% } %>
 <% } %>

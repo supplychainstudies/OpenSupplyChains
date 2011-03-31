@@ -27,7 +27,7 @@ Sourcemap.TemplateLoader.prototype.fetch = function(tpl, callback) {
     var __that = this;
     var __tpl = tpl;
     $.ajax({
-        "type": "get", "url": tpl_path, "dataType": "text",
+        "type": "get", "url": tpl_path+"?r="+(new Date()).getTime(), "dataType": "text",
         "success": function(resptxt) {
             delete Sourcemap.template_queue[Sourcemap.template_queue.indexOf(__tpl)];
             __that.__callbackWrapper.call(__that, __tpl, resptxt, __callback);

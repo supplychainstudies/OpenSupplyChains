@@ -269,8 +269,8 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
         $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
         
         // Display, but hide this while we calculate
-        $(this.dialog).css({"left": dl+"px"});
-        $(this.dialog).css({"top": dt+"px"});
+        $(this.detailpane).css({"left": "-100000px"});
+        $(this.detailpane).css({"top": "-100000px"});
         
         var hidden_height = ($(this.dialog).css("display") == "none");
         if(hidden_height) { $(this.dialog).css({"display":"block"}); }

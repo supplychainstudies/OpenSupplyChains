@@ -55,7 +55,18 @@ class Sourcemap_Controller_Service extends Controller_REST {
             $this->request->put_raw = Request::$raw_req_body;
             $this->request->put_data = $this->_unserialize($this->request->put_raw);
         } else {
-            $this->_format = isset($_GET['f']) ? $_GET['f'] : $this->_default_format;
+            if(isset($_GET['f'])) {
+                $this->_format = $_GET['f'];
+            } elseif($this->request->param('format')) {
+                $this->_format = $this->request->param('format');
+            } else {
+                $this->_format = $this->_default_format;
+            }
+            if($this->_format === 'jsonp') {
+                if(isset($_GET['callback']) && preg_match('/^[\w\.]+$/', $_GET['callback'])) {
+                    $this->_jsonp_callback = $_GET['callback'];
+                }
+            }
         }
         return $pbefore;
     }

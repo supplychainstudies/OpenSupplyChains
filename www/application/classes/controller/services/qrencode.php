@@ -17,8 +17,7 @@ class Controller_Services_Qrencode extends Controller_Services {
         if(isset($_GET['q'])) {
             $this->response = Sourcemap_QRencode::encode($_GET['q'], $sz);
         } else {
-            header('HTTP/1.1 400 Bad Request');
-            die("Sourcemap id required.");
+            return $this->_bad_request('Missing parameter "q".');
         }
     }
 }

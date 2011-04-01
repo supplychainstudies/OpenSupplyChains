@@ -1,5 +1,7 @@
 <?php
 
 return array(
-    'cloudmade_api_key' => '8ee2a50541944fb9bcedded5165f09d9'
+    'cloudmade_api_key' => '8ee2a50541944fb9bcedded5165f09d9',
+    'bitly_account_name' => 'sourcemap',
+    'bitly_api_key' => 'R_bb7ac79b9125aa56806c4f5b94985e4a'
 );

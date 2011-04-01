@@ -118,9 +118,10 @@ Sourcemap::init();
  */
 
 if(!defined('SUPPRESS_DEFAULT_ROUTES')) {
-    Route::set('services', 'services(/<controller>(/<id>))')
+    Route::set('services', 'services(/<controller>(/<id>(.<format>)))')
         ->defaults(array(
-            'directory' => 'services', 'controller' => 'services', 'action' => 'index'
+            'directory' => 'services', 'controller' => 'services', 
+            'action' => 'index', 'format' => 'json'
         ));
 
     Route::set('default', '(<controller>(/<action>(/<id>)))')

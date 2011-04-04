@@ -22,6 +22,11 @@ return array(
                 'jquery'
             )
         ),
+        'showdown' => array(
+            'scripts' => array(
+                'assets/scripts/showdown.js',
+            )
+        ),
         'sourcemap-jquery' => array(
             'scripts' => array(
                 'assets/scripts/jquery/jquery.js',
@@ -99,6 +104,17 @@ return array(
         'modernizr' => array(
             'scripts' => array(
                 'assets/scripts/modernizr/modernizr.js'
+            )
+        ),
+        'sourcemap-embed' => array(
+            'scripts' => array(
+                'assets/scripts/sourcemap/supplychain/graph.js',
+                'assets/scripts/sourcemap/map/visualization/tour.js',
+                'assets/scripts/sourcemap/map/embed.js',
+                'sites/default/assets/scripts/map/embed.js'
+            ),
+            'requires' => array(
+                'sourcemap-template', 'sourcemap-map', 'showdown'
             )
         )
     )

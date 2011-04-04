@@ -2,7 +2,8 @@
 
 return array(
     'packages' => array(
-        'sourcemap-embed' => array(
+        # moved to global js package config
+        /*'sourcemap-embed' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',
                 'assets/scripts/sourcemap/map/visualization/tour.js',
@@ -10,9 +11,9 @@ return array(
                 'sites/default/assets/scripts/map/embed.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-map'
+                'sourcemap-template', 'sourcemap-map', 'showdown'
             )
-        ),
+        ),*/
         'sourcemap-edit' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',

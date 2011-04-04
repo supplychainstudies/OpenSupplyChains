@@ -263,7 +263,7 @@ Sourcemap.humanDate = function(then, now) {
 Sourcemap.htesc = function(str) {
     var esc = str;
     try {
-        esc = $(str).text();
+        esc = $('<div/>').text(str).html();
     } catch(e) {
         // pass
         esc = str;
@@ -292,6 +292,12 @@ Sourcemap.tlinkify = function(str) {
     var regex = /((((http|https):\/\/([\w\d]+\.){1,2})|www\.[\w\d-]+\.)([\w\d]{2,3})((\/[\d\w%\.]+)+)?(\?([\d\w%]+=[\d\w%]+&?)+)?)/g;
     regex = new RegExp(regex);
     return txt.replace(regex, '<a href="$1">$1</a>');
+}
+
+Sourcemap.markdown = function(mrkdn) {
+    if(!Showdown || !Showdown.converter) 
+        throw new Exception('Showdown missing.');
+    return (new Showdown.converter()).makeHtml(_S.htesc(mrkdn));
 }
 
 Sourcemap.okeys = function(o) {

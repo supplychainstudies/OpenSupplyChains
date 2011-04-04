@@ -24,27 +24,35 @@ class CloudMade_StaticMap {
     }
 
     public static function get_image($raw_sc) {
-        $params = array('center' => "0,0", 'zoom' => 2, 'size' => '1024x768', 'styleid' => 4993, 'format' => 'png32');
+        $params = array('size' => '1024x768', 'styleid' => 4993, 'format' => 'png32');
         $markers = array();
         $paths = array();
+        $stop_dict = array();
+        $min_lat = $max_lat = $min_lon = $max_lon = null;
         foreach($raw_sc->stops as $i => $stop) {
             # todo: address hard limit of 100 stops.
             if($pt = Sourcemap_Proj_Point::fromGeometry($stop->geometry)) {
                 $pt = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $pt);
+                if($min_lat === null || ($pt->y < $min_lat)) $min_lat = $pt->y;
+                if($max_lat === null || ($pt->y > $max_lat)) $max_lat = $pt->y;
+                if($min_lon === null || ($pt->x < $min_lon)) $min_lon = $pt->x;
+                if($max_lon === null || ($pt->x > $max_lon)) $max_lon = $pt->x;
                 $markerimg = "http://chart.apis.google.com/chart?cht=it&chs=16x16&chco=008000&chx=ffffff,8&chf=bg,s,00000000&ext=.png";
                 $markers[] = 'url:'.urlencode($markerimg).'|opacity:1|'.$pt->y.','.$pt->x;
-                if($i > 0) {
-                    $fromst = Sourcemap_Proj_Point::fromGeometry($raw_sc->stops[$i-1]->geometry);
-                    $fromst = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $fromst);
-                    $bentpts = self::make_bent_line($fromst, $pt);
-                    $pts = array();
-                    foreach($bentpts as $bpi => $bp) $pts[] = sprintf("%f,%f", $bp->y, $bp->x);
-                    $paths[] = 'color:green|weight:3|opacity:1|'.join('|', $pts);
-                }
             }
+            $stop_dict[$stop->local_stop_id] = $stop;
         }
+        $bbox = array($min_lat, $min_lon, $max_lat, $max_lon);
         foreach($raw_sc->hops as $i => $hop) {
             $geom = Sourcemap_Wkt::read($hop->geometry);
+            $fromst = Sourcemap_Proj_Point::fromGeometry($stop_dict[$hop->from_stop_id]->geometry);
+            $fromst = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $fromst);
+            $tost = Sourcemap_Proj_Point::fromGeometry($stop_dict[$hop->to_stop_id]->geometry);
+            $tost = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $tost);
+            $bentpts = self::make_bent_line($fromst, $tost);
+            $pts = array();
+            foreach($bentpts as $bpi => $bp) $pts[] = sprintf("%f,%f", $bp->y, $bp->x);
+            $paths[] = 'color:green|weight:3|opacity:1|'.join('|', $pts);
         }
         $ps = array();
         foreach($params as $k => $v) {
@@ -56,6 +64,9 @@ class CloudMade_StaticMap {
         foreach($paths as $i => $p) {
             $ps[] = 'path='.$p;
         }
+        $ps[] = sprintf("bbox=%s", join(',', $bbox));
+        //$ps[] = sprintf("center=%f,%f", ($max_lat - $min_lat)/2+$min_lat, ($max_lon-$min_lon)/2+$min_lon);
+        //$ps[] = "zoom=3";
         $ps = join($ps, '&');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, self::get_base_url());
@@ -66,7 +77,7 @@ class CloudMade_StaticMap {
     }
 
     public static function make_bent_line($from, $to) {
-        $r = 32;
+        $r = 8;
         $pts = array();
         $dx = $to->x - $from->x;
         $dy = $to->y - $from->y;

@@ -1,0 +1,180 @@
+#!/usr/bin/env php
+<?php
+// fetches and converts sourcemap data from
+// original sourcemap web services and generates
+// json suitable for posting to the new SM api
+if(php_sapi_name() !== 'cli') die('cli only');
+
+if($argc == 2)
+    define('FETCH_URL', $argv[1]);
+else
+    die("Supplychain url required as first parameter.\n");
+
+// sourcemap-specific bootstrap
+define('SOURCEMAP_DIR', getenv('SOURCEMAP_DIR') ? 
+    rtrim(getenv('SOURCEMAP_DIR'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR : 
+    realpath(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR
+);
+define('SUPPRESS_REQUEST', true);
+
+require_once(SOURCEMAP_DIR.'/www/index.php');
+
+// true means keep old key, false means use parent key (e.g. part, not stop)
+// a string means change to the given key
+// an array means copy to all the keys in the array
+$migrate_sc_attrs = array(
+    'name' => true,
+    'emissions' => 'emissions:total',
+    'weight' => true, //kg
+    'embodied' => array('legacy:emissions', 'emissions:embodied'),
+    'transport' => array('legacy:emissions', 'emissions:transport'),
+    'shipping' => array('legacy:distance', 'distance:transport'),
+    'slug' => 'alias:preferred',
+    'creator' => 'legacy:creator'
+);
+
+$migrate_st_attrs = array(
+    'name' => false,
+    'placename' => true,
+    'category' => true,
+    'emissions' => 'emissions:total',
+    'weight' => true, //kg
+    'embodied' => array('legacy:emissions', 'emissions:embodied'),
+    'transport' => array('legacy:emissions', 'emissions:transport'),
+    'shipping' => array('legacy:distance', 'distance:transport')
+);
+
+function fetch_sc($url) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    $resp = curl_exec($ch);
+    $scdata = @json_decode($resp);
+    return $scdata;
+}
+
+function get_old_sc_attributes($oldsc) {
+    global $migrate_sc_attrs;
+    $mattrs = $migrate_sc_attrs;
+    $attrs = new stdClass();
+    foreach($mattrs as $oldkey => $mv) {
+        if(isset($oldsc->{$oldkey})) {
+            if($mv === true) {
+                $attrs->{$oldkey} = $oldsc->{$oldkey};
+            } elseif(is_array($mv)) {
+                foreach($mv as $mvi => $mvk) {
+                    $attrs->{$mvk} = $oldsc->{$oldkey};
+                }
+            } elseif(is_string($mv)) {
+                $attrs->{$mv} = $oldsc->{$oldkey};
+            }
+        }
+    }
+    return $attrs;
+}
+
+function get_old_sc_stops($oldsc) {
+    $newstops = array();
+    foreach($oldsc->stops as $oldstname => $oldst) {
+        $newstop = new stdClass();
+        $pt = new Sourcemap_Proj_Point($oldst->lon, $oldst->lat);
+        $pt = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $pt);
+        $newstop->geometry = Sourcemap_Wkt::write(Sourcemap_Wkt::POINT, $pt);
+        $newstop->attributes = get_old_pt_stop_attributes($oldsc, $oldst);
+        $newstop->local_stop_id = $oldst->id;
+        $newstops[$oldst->id] = $newstop;
+    }
+    foreach($oldsc->parts as $pi => $oldpart) {
+        foreach($oldpart->stops as $oldstname => $oldst) {
+            $newstop = new stdClass();
+            $pt = new Sourcemap_Proj_Point($oldst->lon, $oldst->lat);
+            $pt = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $pt);
+            $newstop->geometry = Sourcemap_Wkt::write(Sourcemap_Wkt::POINT, $pt);
+            $newstop->attributes = get_old_pt_stop_attributes($oldpart, $oldst);
+            $newstop->local_stop_id = $oldst->id;
+            $newstops[$oldst->id] = $newstop;
+        }
+    }
+    return $newstops;
+}
+
+function get_old_sc_stop_attributes($oldsc, $oldst) {
+    $attrs = new stdClass();
+    return $attrs;
+}
+
+function get_old_pt_stop_attributes($oldpart, $oldst) {
+    global $migrate_st_attrs;
+    $mattrs = $migrate_st_attrs;
+    $attrs = new stdClass();
+    foreach($mattrs as $oldkey => $mv) {
+        if($mv === false) { // get value from parent part
+            $attrs->{$oldkey} = $oldpart->{$oldkey};
+            continue;
+        }
+        if(isset($oldst->{$oldkey})) {
+            if($mv === true) {
+                $attrs->{$oldkey} = $oldst->{$oldkey};
+            } elseif(is_array($mv)) {
+                foreach($mv as $mvi => $mvk) {
+                    $attrs->{$mvk} = $oldst->{$oldkey};
+                }
+            } elseif(is_string($mv)) {
+                $attrs->{$mv} = $oldst->{$oldkey};
+            }
+        }
+    }
+    return $attrs;
+
+}
+
+function get_old_sc_hops($oldsc, $newstops) { // outbound hops.
+    $newhops = array();
+    foreach($oldsc->stops as $i => $oldstop) {
+        foreach($oldstop->hops->outgoing as $hi => $oldhop) {
+            $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id);
+        }
+    }
+    foreach($oldsc->parts as $pi => $oldpart) {
+        foreach($oldpart->stops as $i => $oldstop) {
+            foreach($oldstop->hops->outgoing as $hi => $oldhop) {
+                $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id);
+            }
+        }
+    }
+    $hops = array();
+    foreach($newhops as $i => $hoparr) {
+        list($oldfrom, $oldto) = $hoparr;
+        $newhop = new stdClass();
+        $frompt = Sourcemap_Wkt::read($newstops[$oldfrom]->geometry);
+        $frompt = new Sourcemap_Proj_Point($frompt[1][0], $frompt[1][1]);
+        $topt = Sourcemap_Wkt::read($newstops[$oldto]->geometry);
+        $topt = new Sourcemap_Proj_Point($topt[1][0], $topt[1][1]);
+        $newhop->geometry = Sourcemap_Wkt::write(Sourcemap_Wkt::MULTILINESTRING, array($frompt, $topt));
+        $newhop->from_stop_id = $oldfrom;
+        $newhop->to_stop_id = $oldto;
+        $newhop->attributes = get_old_sc_hop_attributes();
+        $hops[] = $newhop;
+    }
+    return $hops;
+}
+
+function get_old_sc_hop_attributes() {
+    return new stdClass();
+}
+
+$oldsc = fetch_sc(FETCH_URL);
+if(!$oldsc) die('Could not fetch: '.FETCH_URL);
+$newstops = get_old_sc_stops($oldsc);
+$newhops = get_old_sc_hops($oldsc, $newstops);
+$newsc = new stdClass();
+$newsc->attributes = get_old_sc_attributes($oldsc);
+$newsc->stops = array_values($newstops);
+$newsc->hops = $newhops;
+if(!ORM::factory('supplychain')->validate_raw_supplychain($newsc)) {
+    die('Invalid supplychain generated. Reed really blew it.'."\n");
+} else {
+    $wrapper = new stdClass();
+    $wrapper->supplychain = $newsc;
+    print json_encode($wrapper);
+}

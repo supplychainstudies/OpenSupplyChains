@@ -143,7 +143,7 @@ class Model_Supplychain extends ORM {
             $stopmodel = ORM::factory('stop');
             foreach($data->stops as $stop) {
                 $valid = $valid && $stopmodel->validate_raw_stop($stop, $stop_ids);
-                $stop_ids[] = $stop->id;
+                $stop_ids[] = $stop->local_stop_id;
             }
             if($data->hops) {
                 $hopmodel = ORM::factory('hop');

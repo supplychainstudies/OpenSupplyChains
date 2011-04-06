@@ -28,7 +28,8 @@ Sourcemap.Map.Embed.prototype.defaults = {
         "description", "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
     "tour_order_strategy": "upstream", "tileswitcher": false,
-    "locate_user": true, "user_loc": false, "user_loc_color": "#ff0000"
+    "locate_user": true, "user_loc": false, "user_loc_color": "#ff0000",
+    "tileset": "terrain" // terrain, cloudmade, etc. (check map.js)
     
 }
 
@@ -167,6 +168,7 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
             if(arrow) arrow.attributes.color = hop.getAttr('color', '#006633');
         }        
     });
+    this.map.setBaseLayer(this.options.tileset);
 
     $(this.map.map.div).css("position", "relative");
     // make and place custom zoom controls

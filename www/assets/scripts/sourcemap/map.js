@@ -115,7 +115,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
             "animationEnabled": this.options.animation_enabled
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
-        "stylized", {
+        "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 4993,
         "wrapDateLine": this.options.animation_enabled
@@ -134,6 +134,11 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         );
     }
     this.broadcast('map:base_layer_initialized', this);
+    return this;
+}
+
+Sourcemap.Map.prototype.setBaseLayer = function(nm) {
+    this.map.setBaseLayer(this.map.getLayersByName(nm).pop());
     return this;
 }
 

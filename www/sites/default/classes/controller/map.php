@@ -102,7 +102,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'tour' => 'yes', 'tour_start_delay' => 7,
                     'tour_interval' => 5, 'banner' => 'yes',
                     'tileswitcher' => 'no', 'geoloc' => true, 
-                    'downstream_sc' => null, 'basetileset' => 'terrain',
+                    'downstream_sc' => null, 'tileset' => 'terrain',
                     'locate_user' => 'no'
                 );
                 foreach($params as $k => $v) 
@@ -118,7 +118,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('banner', 'regex', array('/yes|no/i'))
                     ->rule('tileswitcher', 'regex', array('/yes|no/i'))
                     ->rule('locate_user', 'regex', array('/yes|no/i'))
-                    ->rule('basetileset', 'regex', array('/terrain|satellite|stylized/i'))
+                    ->rule('tileset', 'regex', array('/terrain|satellite|cloudmade/i'))
                     ->rule('downstream_sc', 'numeric');
                 if($v->check()) {
                     $params = $v->as_array();
@@ -132,6 +132,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                         strtolower(trim($params['tileswitcher'])) === 'yes' ? true : false;
                     $params['locate_user'] =
                         strtolower(trim($params['locate_user'])) === 'yes' ? true : false;
+                    $params['tileset'] = strtolower(trim($params['tileset']));
                     
                     if($params['geoloc']) {
                         $params['iploc'] = false;

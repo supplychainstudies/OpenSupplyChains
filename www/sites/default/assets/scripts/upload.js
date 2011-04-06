@@ -12,14 +12,4 @@ $('#submit').click(function() {
 	 a = eval(resp);
 };
 
-function include(key)
-{
- 
-  var script  = document.createElement('script');
-  script.src  = "https://spreadsheets.google.com/feeds/cells/"+key+"/od6/public/basic?alt=json&callback=myFunc";
-  script.type = 'text/javascript';
-  script.defer = true;
- 
-  document.getElementsByTagName('head').item(0).appendChild(script);
- 
-}
+

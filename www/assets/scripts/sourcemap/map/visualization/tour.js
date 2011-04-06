@@ -57,7 +57,8 @@ Sourcemap.MapTour.prototype.initControls = function() {
 Sourcemap.MapTour.prototype.initEvents = function() {
     this.map.map.events.on({
         "click": function(e) {
-            this.stop().wait();
+            console.log('stop');
+            this.stop();//.wait();
         },
         "scope": this 
     });

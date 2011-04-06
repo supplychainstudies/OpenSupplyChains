@@ -39,6 +39,15 @@ return array(
             'requires' => array(
                 'sourcemap-jquery'
             )
-        )
+        ),
+	'sourcemap-upload' => array(
+            'scripts' => array(
+                'sites/default/assets/scripts/upload.js'
+	    ),
+            'requires' => array(
+                'sourcemap-jquery'
+            )
+       )
+
     )
 );

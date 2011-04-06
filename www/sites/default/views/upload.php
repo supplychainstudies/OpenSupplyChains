@@ -13,18 +13,4 @@
 
 </div>
   
-<?php /*
-<script type="text/javascript">
-     var a = "";
-     var myFunc = function(resp){
-	 a = resp;
-
-     };
-
-
-</script>
-
-<script type="text/javascript" src="https://spreadsheets.google.com/feeds/cells/0Aqwz6ZHrexb7dFk1VWF3RUJuaGZLRmt5anNobmY3Q2c/od6/public/basic?alt=json&callback=myFunc"></script>
-      */?>
-
 

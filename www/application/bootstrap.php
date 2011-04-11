@@ -121,7 +121,7 @@ if(!defined('SUPPRESS_DEFAULT_ROUTES')) {
     Route::set('services', 'services(/<controller>(/<id>(.<format>)))')
         ->defaults(array(
             'directory' => 'services', 'controller' => 'services', 
-            'action' => 'index', 'format' => 'json'
+            'action' => 'index'
         ));
 
     Route::set('default', '(<controller>(/<action>(/<id>)))')

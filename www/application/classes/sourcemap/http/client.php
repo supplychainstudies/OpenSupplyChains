@@ -52,14 +52,18 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($this->_ch, CURLOPT_USERAGENT, $this->user_agent);
         curl_setopt($this->_ch, CURLOPT_URL, $url);
+        foreach($this->headers as $hk => $hv) {
+            curl_setopt($this->_ch, CURLOPT_HTTPHEADER, sprintf("%s: %s", $hk, $hv));
+        }
         $this->raw_response = curl_exec($this->_ch);
         $this->response = Sourcemap_Http_Response::factory($this->raw_response);
         return $this->response;
     }
 
-    public static function do_get($url, $parameters=null) {
+    public static function do_get($url, $parameters=null, $headers=null) {
         $client = new self($url);
-        $client = $parameters ? $parameters : array();
+        $client->parameters = $parameters ? $parameters : array();
+        $client->headers = $headers ? $headers : array();
         try {
             $response = $client->execute();
         } catch(Exception $e) {

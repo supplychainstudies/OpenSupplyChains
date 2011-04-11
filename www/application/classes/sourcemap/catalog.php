@@ -31,13 +31,7 @@ abstract class Sourcemap_Catalog {
     public function unserialize($response) {
         $results = json_decode($response->body);
         $wrapped = array(
-            'catalog' => array(
-                'name' => array(
-                    'long' => $this->long_name,
-                    'short' => $this->short_name
-                ),
-                'attribution' => $this->attribution
-            ),
+            'catalog' => $this->get_metadata(),
             'parameters' => $this->parameters,
             'results' => $results
         );
@@ -54,6 +48,16 @@ abstract class Sourcemap_Catalog {
         }
         $cache_key = sprintf("%s%s", self::CACHE_PREFIX, join(':', $pts));
         return $cache_key;
+    }
+
+    public function get_metadata() {
+        return array(
+            'name' => array(
+                'long' => $this->long_name,
+                'short' => $this->short_name
+            ),
+            'attribution' => $this->attribution
+        );
     }
 
     public static function get($catalog, $parameters=null) {
@@ -76,5 +80,18 @@ abstract class Sourcemap_Catalog {
         $cls = "Sourcemap_Catalog_$catalog";
         $rc = new ReflectionClass($cls);
         return $rc->newInstance($parameters);
+    }
+
+    public static function available_catalogs() {
+        $catdir = dirname(__FILE__).'/catalog/';
+        $dh = dir($catdir);
+        $catalogs = array();
+        while(($f = $dh->read()) !== false) {
+            if(preg_match('/^\w+\.php$/', $f)) {
+                $cat = str_replace('.php', '', $f);
+                $catalogs[$cat] = self::factory(ucfirst($cat))->get_metadata();
+            }
+        }
+        return $catalogs;
     }
 }

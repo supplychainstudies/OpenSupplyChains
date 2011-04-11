@@ -6,6 +6,7 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
     protected $_ch = null;
     public $raw_response = null;
     public $user_agent = null;
+    public $parameters = null;
 
     const GET = 'GET';
     const POST = 'POST';
@@ -20,6 +21,7 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
         $this->url = $url;
         $this->method = self::GET;
         $this->user_agent = sprintf('Sourcemap HTTP Client (%d)', Sourcemap::revision());
+        $this->parameters = array();
         $this->_ch = curl_init();
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->_ch, CURLOPT_HEADER, true);
@@ -27,10 +29,13 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
 
     public function execute() {
         if(!$this->url) return false;
-        curl_setopt($this->_ch, CURLOPT_URL, $this->url);
         $method = self::GET;
+        $url = $this->url;
         switch($this->method) {
             case self::GET:
+                $method = $this->method;
+                $url .= $this->parameters ? '?'.http_build_query($this->parameters) : '';
+                break;
             case self::POST:
             case self::PUT:
             case self::DELETE:
@@ -44,6 +49,7 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
         }
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($this->_ch, CURLOPT_USERAGENT, $this->user_agent);
+        curl_setopt($this->_ch, CURLOPT_URL, $url);
         $this->raw_response = curl_exec($this->_ch);
         $this->response = Sourcemap_Http_Response::factory($this->raw_response);
         return $this->response;

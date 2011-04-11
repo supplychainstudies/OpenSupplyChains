@@ -7,6 +7,7 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
     public $raw_response = null;
     public $user_agent = null;
     public $parameters = null;
+    public $headers = null;
 
     const GET = 'GET';
     const POST = 'POST';
@@ -22,6 +23,7 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
         $this->method = self::GET;
         $this->user_agent = sprintf('Sourcemap HTTP Client (%d)', Sourcemap::revision());
         $this->parameters = array();
+        $this->headers = array();
         $this->_ch = curl_init();
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->_ch, CURLOPT_HEADER, true);
@@ -55,8 +57,9 @@ class Sourcemap_Http_Client { // cUrl library wrapper.
         return $this->response;
     }
 
-    public static function do_get($url) {
+    public static function do_get($url, $parameters=null) {
         $client = new self($url);
+        $client = $parameters ? $parameters : array();
         try {
             $response = $client->execute();
         } catch(Exception $e) {

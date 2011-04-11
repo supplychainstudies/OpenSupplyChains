@@ -66,11 +66,11 @@ Sourcemap.MapTour.prototype.initEvents = function() {
         'map:supplychain_added', 'map:supplychain_removed', 
         'map:supplychain_updated'
     ];
-    Sourcemap.listen(map_changes, function(evt, map) {
+    /*Sourcemap.listen(map_changes, function(evt, map) {
         if(map === this.map) {
-            this.stop().wait();
+            this.stop();//.wait();
         }
-    }, this);
+    }, this);*/
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(map === this.map) {
             this.map.controls.select.unselectAll({"except": ftr});

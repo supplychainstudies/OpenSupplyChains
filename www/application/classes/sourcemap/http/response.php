@@ -31,7 +31,7 @@ class Sourcemap_Http_Response {
         if(!$lines) return false;
         $status_line = trim(array_shift($lines));
         $m = null;
-        if(!preg_match('/^HTTP\/(1\.0|1\.1)\s+(\d{3})\s+(\w+)$/', $status_line, $m)) {
+        if(!preg_match('/^HTTP\/(1\.0|1\.1)\s+(\d{3})\s+(.+)$/', $status_line, $m)) {
             return false;
         }
         list($status_line, $ver, $code, $msg) = $m;

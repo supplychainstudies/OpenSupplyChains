@@ -62,6 +62,19 @@ class Google_Oauth {
         return $resp_data;
     }
 
+    public function get_token_auth_header($auth_tok, $url) {
+        $hdr = array();
+        $params = $this->get_token_params($auth_tok);
+        $params['oauth_signature'] = self::get_sig(
+            $url, $params, self::SIGHMAC,
+            $auth_tok['oauth_token_secret']
+        );
+        foreach($params as $k => $v) {
+            $hdr[] = sprintf('%s="%s"', $k, urlencode($v));
+        }
+        return 'OAuth '.join(', ', $hdr);
+    }
+
     public function get_acc_token_auth_header($auth_tok) {
         $hdr = array();
         $params = $this->get_acc_token_params($auth_tok);
@@ -85,6 +98,14 @@ class Google_Oauth {
             $hdr[] = sprintf('%s="%s"', $k, urlencode($v));
         }
         return 'OAuth '.join(', ', $hdr);
+    }
+
+    public function get_token_params($auth_tok) {
+        $params = $this->get_req_token_params();
+        unset($params['oauth_callback']);
+        unset($params['xoauth_displayname']);
+        $params['oauth_token'] = $auth_tok['oauth_token'];
+        return $params;
     }
 
     public function get_acc_token_params($auth_tok) {

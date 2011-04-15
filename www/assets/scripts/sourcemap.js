@@ -219,9 +219,46 @@ Sourcemap.loadSupplychain = function(remote_id, callback) {
     );
 }
 
-Sourcemap.saveSupplychain = function(supplychain_id) {
-    // save supplychain
-    // this.broadcast('supplychainSaved', this, supplychain); asynch!
+Sourcemap.saveSupplychain = function(supplychain, o) {
+    var o = o || {};
+    var scid = o.supplychain_id ? o.supplychain_id : null;
+    var succ = o.success ? o.success : null;
+    var fail = o.failure ? o.failure : null;
+    var scid = scid || null;
+    var payload = null;
+    if(typeof supplychain === "string") payload = supplychain;
+    else payload = JSON.stringify({"supplychain": supplychain});
+    $.ajax({
+        "url": 'services/supplychains/'+(scid ? scid : ''),
+        "type": scid ? 'PUT' : 'POST', // put to update, post to create
+        "contentType": 'application/json', "data": payload,
+        "dataType": "json", "success": $.proxy(function(data) {
+            var new_uri = null; // indicates 'created'
+            if(data && data.created) {
+                new_uri = data.created;
+                var scid = data.created.split('/').pop();
+            } else if(data && data.success) {
+                var scid = this.supplychain_id;
+            }
+            if(this.succ && ((typeof this.succ) === "function")) {
+                this.succ(this.supplychain, this.scid);
+            }
+            Sourcemap.broadcast("supplychainSaveSuccess", this.supplychain, scid, new_uri);
+        }, {
+            "supplychain_id": scid, "supplychain": supplychain, 
+            "success": succ, "failure": fail
+        }),
+        "failure": $.proxy(function(data) {
+            if(this.fail && ((typeof this.fail) === "function")) {
+                this.fail(this.supplychain, this.scid);
+            }
+            Sourcemap.broadcast("supplychainSaveFailure", this.supplychain, this.supplychain_id);
+        }, {
+            "supplychain_id": scid, "supplychain": supplychain,
+            "success": succ, "failure": fail
+        })
+    });
+    return;
 }
 
 Sourcemap.humanDate = function(then, now) {

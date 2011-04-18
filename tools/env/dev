@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # env
-export SOURCEMAP_ENV="dev"
+export SOURCEMAP_ENV="development"
 
 # db
-export SMAP_DB="smap"
-export SMAP_DBUSER="smap"
-export SMAP_DBPASS="smap"
+export SMAP_DB="sourcemap"
+export SMAP_DBUSER="sourcemap"
+export SMAP_DBPASS="sourcemap"
 export SMAP_DBHOST="localhost"
 
-export SOURCEMAP_DIR="/home/reed/devel/mit/sourcemap/smap/trunk/"
+export SOURCEMAP_DIR="/home/maalox/sourcemap/trunk/"
 
 # for phing
 export PHP_CLASSPATH="${SOURCEMAP_DIR}www/application/classes/"

@@ -14,12 +14,11 @@ function toggleDetailPane() {
 
 jQuery(document).ready(function(){
 
-    $( "#view-pane" ).accordion();
     $(".place-details, #detail-pane .close").click(function() {toggleDetailPane();});
     $("#fullscreen-button").click(function() {
         if($("#map").css("position") == "fixed") {
             $("#map").css("z-index", "").css("position","static").css("height","600px")
-                     .css("left","").css("top","").css("width","100%").css("margin-left","221px")
+                     .css("left","").css("top","").css("width","100%")
                      .css("-webkit-box-shadow","inset 5px 5px 5px rgba(0, 0, 0, 0.2)");
             $("#map").css("width",(parseInt($("#map").css('width'),10)-221));
         } else {

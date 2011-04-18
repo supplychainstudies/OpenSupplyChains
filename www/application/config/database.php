@@ -13,9 +13,9 @@ return array
 			 * string   password    database password
 			 * boolean  persistent  use persistent connections?
 			 */
-			'dsn'        => 'pgsql:host=localhost;dbname=smap',
-			'username'   => 'smap',
-			'password'   => 'smap',
+			'dsn'        => 'pgsql:host=localhost;dbname=sourcemap',
+			'username'   => 'sourcemap',
+			'password'   => 'sourcemap',
 			'persistent' => FALSE,
 		),
 		/**

@@ -5,6 +5,39 @@ class Google_Spreadsheets {
 
     const URL_LIST = 'spreadsheets/private/full/';
 
+    public static function get_worksheet_cells($oauth_acc_token, $key, $wsid, $scope='private') {
+        $scope = $scope ? $scope : 'private';
+        $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
+        $url = self::URL_BASE."cells/$key/$wsid/$scope/full";
+        $oauth_header = $oauth->get_token_auth_header($oauth_acc_token, $url);
+        $response = Sourcemap_Http_Client::do_get($url, null, array(
+            'Authorization' => $oauth_header,
+        ));
+        if(!$response->status_ok()) 
+            throw new Exception('Could not authorize.');
+        return self::parse_worksheet_cells($response->body);
+    }
+
+    public static function parse_worksheet_cells($atom) {
+        $xml = simplexml_load_string($atom);
+        $rows = (int)$xml->{'gs$rowCount'};
+        $cols = (int)$xml->{'gs$colCount'};
+        $cells = array();
+        for($i=0; $i<$rows; $i++) {
+            $cells[$i] = array();
+            for($j=0; $j<$cols; $j++) $cells[$i][$j] = null;
+        }
+        foreach($xml->entry as $cell) {
+            $gs = $cell->children('gs', true);
+            $gs = $gs->attributes();
+            $i = $gs['row'] - 1;
+            $j = (int)$gs['col'] - 1;
+            $cells[$i][$j] = (string)$cell->content;
+        }
+        return $cells;
+
+    }
+
     public static function get_sheet_worksheets($oauth_acc_token, $key) {
         $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
         $url = self::URL_BASE."worksheets/$key/private/full";

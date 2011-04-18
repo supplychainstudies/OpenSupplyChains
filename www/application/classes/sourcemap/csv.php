@@ -98,12 +98,19 @@ class Sourcemap_Csv {
         return $vs;
     }
 
-    function make_csv_row($arr, $delim=',', $encap='"') {
+    public static function make_csv_row($arr, $delim=',', $encap='"') {
         $csv_arr = array();
         foreach($arr as $i => $s) {
             if($encap) $s = str_replace($encap, '\\'.$encap, $s);
             $csv_arr[] = (string)$s == '' ? '' : $encap.$s.$encap;
         }
         return implode($delim, $csv_arr);
+    }
+
+    public static function arr2csv($arr, $delim=',', $encap='"') {
+        $csv = '';
+        for($i=0; $i<count($arr); $i++)
+            $csv .= self::make_csv_row($arr[$i], $delim, $encap)."\n";
+        return $csv;
     }
 }

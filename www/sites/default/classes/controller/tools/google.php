@@ -13,7 +13,7 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
 
     public function action_index() {
         if(Session::instance()->get('g_oauth_access_token')) {
-            $this->request->redirect('/tools/google/list/');
+            $this->request->redirect('/tools/google/list');
         }
         $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
         $oauth->_req_token_callback = Url::site('/tools/google/auth', true);
@@ -67,11 +67,20 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
     }
 
     public function action_import() {
-        if(!isset($_GET['k'])) {
-            Message::instance()->set('Spreadsheet key required.');
+        if(!($acc_token = Session::instance()->get('g_oauth_access_token'))) {
+            Message::instance()->set('You haven\'t given us permission to fetch spreadsheets.');
+            $this->request->redirect('/tools/google/');
+        }
+        if(!isset($_GET['k'], $_GET['wsid'])) {
+            Message::instance()->set('Spreadsheet key and worksheet id required.');
             $this->request->redirect('/tools/google/list');
         }
-        die('get the effing sheet.');
+        $csv = Sourcemap_Csv::arr2csv(
+            Google_Spreadsheets::get_worksheet_cells(
+                $acc_token, $_GET['k'], $_GET['wsid']
+            )
+        );
+        die($csv);
     }
 
     public function action_worksheets() {

@@ -157,15 +157,15 @@ if (!defined('SUPPRESS_REQUEST')) {
                     <style>
                         body > * {
                             padding: .5em;
+                            font-family: Helvetica, Arial, sans-serif;
                         }
                         header {
-                            font-size: 3em;
+                            font-size: 1.2em;
                             color: #006600;
                             background-color: #eee;
                             border-bottom: 1px solid #ccc;
                         }
                         .article-content p {
-                            font-size: 2em;
                             margin: .25em;
                             margin-bottom: .5em;
                         }
@@ -178,6 +178,9 @@ if (!defined('SUPPRESS_REQUEST')) {
                     <div class="article-content">
                         <p>This is the part of the map where it says, "Here be monsters."</p><p>Please, <a href="/">go back</a>.</p>
                     </div>
+                    <!--
+                        <?= $e ?>
+                    -->
                 </body>
             </html>
 HTML;

@@ -23,57 +23,8 @@
 </head>
 
 <body id="supplychain">
-    <div id="branding">
-        <a href="">        
-        <header id="masthead">
-            <h1>Sourcemap</h1>
-        </header>
-        </a>
-        <nav id="main-navigation">
-            <ul class="nav">
-                <li class="register-link"><a href="">Join us</a> or <a href="">Log in</a></li>          
-                <li id="browse-navigation">
-                    <h3>Browse</h3>            
-                    <ul>
-                        <li><a href="">Sourcemaps</a></li>
-                        <li>
-                            <a href="">Carbon Catalogue</a>
-                            <ul>
-                                <li><a href="">Part Catalogue</a></li>
-                                <li><a href="">Transport Cat.</a></li>
-                                <li><a href="">Power Cat.</a></li>
-                                <li><a href="">Process Cat.</a></li>
-                                <li><a href="">Endoflife Cat.</a></li>                                                                     
-                            </ul>
-                        </li>
-                        <li><a href="">Members</a></li>      
-                        <li><a href="">Groups</a></li>                    
-                                      
-                    </ul>
-                </li>
-                <li id="info-navigation">
-                    <h3>Info</h3>
-                    <ul>
-                        <li><a href="">About Us</a></li>
-                        <li><a href="">Who We Are</a></li>
-                        <li><a href="">Join Us!</a></li>
-                        <li><a href="">API and Code</a></li>
-                        <li>
-                            <a href="">Help</a>
-                            <ul>
-                                <li><a href="">Data References</a></li>
-                                <li><a href="">FAQs</a></li>                                    
-                            </ul>                                
-                        </li>
-                        <li><a href="">Get In Touch</a></li>                    
-                    </ul>
-                </li>
-            </ul>
-            <div id="search"><input id="search-field" type="search" results="0" placeholder="Search" /></div>
-        </nav>
-        <div class="clear"></div>
-        
-    </div> <!-- branding -->
+    
+    <?= View::factory('partial/branding') ?>
     <div id="bar">
         <nav id="page-navigation">
             <h2><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h2>

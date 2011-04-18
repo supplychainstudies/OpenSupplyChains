@@ -27,4 +27,10 @@ class Sourcemap_Controller_Layout extends Controller_Template {
         }
         return $pret;
     }
+
+    public function _forbidden($msg='Forbidden') {
+        $this->template = View::factory('error');
+        $this->template->error_message = $msg;
+        return;
+    }
 }

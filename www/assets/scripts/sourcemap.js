@@ -240,8 +240,8 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
             } else if(data && data.success) {
                 var scid = this.supplychain_id;
             }
-            if(this.succ && ((typeof this.succ) === "function")) {
-                this.succ(this.supplychain, this.scid);
+            if(this.success && ((typeof this.success) === "function")) {
+                this.success(this.supplychain, this.supplychain_id, new_uri);
             }
             Sourcemap.broadcast("supplychainSaveSuccess", this.supplychain, scid, new_uri);
         }, {
@@ -249,8 +249,8 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
             "success": succ, "failure": fail
         }),
         "failure": $.proxy(function(data) {
-            if(this.fail && ((typeof this.fail) === "function")) {
-                this.fail(this.supplychain, this.scid);
+            if(this.failure && ((typeof this.failure) === "function")) {
+                this.failure(this.supplychain, this.supplychain_id);
             }
             Sourcemap.broadcast("supplychainSaveFailure", this.supplychain, this.supplychain_id);
         }, {

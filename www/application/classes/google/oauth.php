@@ -43,7 +43,6 @@ class Google_Oauth {
         $resp_data = false;
         if($response->status_ok()) {
             parse_str($response->body, $resp_data);
-            $resp = $resp_data;
         }
         return $resp_data;
     }

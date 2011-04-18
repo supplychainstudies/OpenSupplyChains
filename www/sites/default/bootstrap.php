@@ -7,7 +7,7 @@ if(!class_exists('Kohana')) die('stop. drop. shut \'em down. whoa. that\'s how r
 
 
 
-Route::set('tools/tool/action', 'tools/<controller>/<action>')
+Route::set('tools/tool/action', 'tools/<controller>(/<action>)')
     ->defaults(array(
         'directory' => 'tools',
         'controller' => 'tools',
@@ -32,8 +32,10 @@ Route::set('admin/collection/action', 'admin/<controller>/<action>', array(
 
 Route::set('admin/collection/id/action', 'admin/<controller>(/<id>(/<action>))', array(
         'id' => '\d+', 
-        'action' => 'delete_role|add_role|add_member|delete_member|delete_alias|change_perms|delete_user|delete_supplychain|delete_group|delete_role_entry|change_usergroup_perms|delete_supplychain_alias'))
-    ->defaults(array(
+        'action' => 'delete_role|add_role|add_member|delete_member|'.
+            'delete_alias|change_perms|delete_user|delete_supplychain|'.
+            'delete_group|delete_role_entry|change_usergroup_perms|delete_supplychain_alias'
+    ))->defaults(array(
         'directory' => 'admin', 
         'controller' => 'users', 
         'action' => 'details'

@@ -96,7 +96,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 );
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css',
-                    '/assets/styles/embed.less'
+                    'assets/styles/embed.less'
                 );
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,

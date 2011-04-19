@@ -331,7 +331,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
-    new_feature.attributes.size = stop.getAttr("size", false) || 6;
+    new_feature.attributes.size = stop.getAttr("size", false) || 8;
     new_feature.attributes.color = stop.getAttr("color", false) || '#006633';
     var new_popup = false;
     if(this.options.popups && this.options.stop_popups) {

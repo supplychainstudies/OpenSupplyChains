@@ -40,7 +40,6 @@ class Controller_Admin_Roles extends Controller_Admin {
 	    
 	    $role_count = $role->count_all();
 	    
-	    Message::instance()->set('Total roles '.$role_count);
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Roles', 'admin/roles');
 	}

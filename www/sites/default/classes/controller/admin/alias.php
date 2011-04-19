@@ -74,7 +74,6 @@ class Controller_Admin_Alias extends Controller_Admin {
 	    
 	} 
 	
-	Message::instance()->set('Total Aliases '.$supplychain_alias_count);
 	Breadcrumbs::instance()->add('Management', 'admin/')
 	    ->add('Aliases', 'admin/alias');
 	

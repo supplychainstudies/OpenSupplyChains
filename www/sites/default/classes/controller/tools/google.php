@@ -14,7 +14,7 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
     public function before() {
         if(!Auth::instance()->get_user()) {
             Message::instance()->set('You must be logged in to use the importer.');
-            $this->request->redirect('');
+            $this->request->redirect('/auth?next=/tools/google');
         }
         parent::before();
     }
@@ -114,11 +114,12 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
             $replace_into = null;
         }
         try {
+            $new_sc->user_id = Auth::instance()->get_user()->id;
             $scid = ORM::factory('supplychain')->save_raw_supplychain($new_sc, $replace_into);
             $new_sc = ORM::factory('supplychain', $scid);
             $new_sc->other_perms |= Sourcemap::READ;
             $new_sc->save();
-            Message::instance()->set('Your spreadsheet was imported.');
+            Message::instance()->set('Your spreadsheet was imported.', Message::SUCCESS);
             $this->request->redirect('/map/view/'.$scid);
         } catch(Exception $e) {
             Message::instance()->set('The supplychain you tried to replace is invalid.');

@@ -23,8 +23,8 @@
 </head>
 
 <body id="supplychain">
-    
     <?= View::factory('partial/branding') ?>
+    <header><?= Message::instance()->get() ? Message::instance()->render() : false ?></header>
     <div id="bar">
         <nav id="page-navigation">
             <h2><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h2>

@@ -7,7 +7,6 @@
  * @license    http://blog.sourcemap.org/terms-of-service
  */
 
-
 class Controller_Admin_Supplychains extends Controller_Admin { 
  
 
@@ -29,7 +28,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		      'items_per_page' => $items,
 		    ));
 
-	    $supplychains = $supplychain->order_by('id', 'ASC')
+	    $supplychains = $supplychain->order_by('modified', 'ASC')
 		->limit($pagination->items_per_page)
 		->offset($pagination->offset)
 		->find_all();        
@@ -39,15 +38,15 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 	    foreach($supplychains as $supplychain) {
             $scid = $supplychain->id;
             $supplychains_array[$scid] = (array)$supplychains_array[$scid];
-	    $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychains_array[$scid]['created']);
             $supplychains_array[$scid]['owner'] = $supplychain->owner->username;
+	    $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychains_array[$scid]['created']);
+	    $supplychains_array[$scid]['title'] = $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
 	    }
-	    
-        
+
 	    $this->template->page_links = $pagination->render();
 	    $this->template->offset = $pagination->offset;
 	    $this->template->list = $supplychains_array;
-	    Message::instance()->set('Total supplychains '.$count);
+
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Supply Chains', 'admin/supplychains');
 	} 

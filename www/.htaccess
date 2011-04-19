@@ -1,8 +1,6 @@
 # Turn on URL rewriting
 RewriteEngine On
 
-SetEnv SOURCEMAP_ENV development
-
 # Protect hidden files from being viewed
 <Files .*>
 	Order Deny,Allow

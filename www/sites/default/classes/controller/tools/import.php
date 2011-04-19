@@ -39,6 +39,11 @@ class Controller_Tools_Import extends Sourcemap_Controller_Layout {
                 if(isset($posted->supplychain_name) && is_string($posted->supplychain_name)) {
                     $attr = ORM::factory('supplychain_attribute');
                     $attr->supplychain_id = $new_sc_id;
+                    $attr->key = 'title';
+                    $attr->value = substr($posted->supplychain_name, 0, 64);
+                    $attr->save();
+                    $attr = ORM::factory('supplychain_attribute');
+                    $attr->supplychain_id = $new_sc_id;
                     $attr->key = 'name';
                     $attr->value = substr($posted->supplychain_name, 0, 64);
                     $attr->save();

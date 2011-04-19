@@ -45,8 +45,6 @@ class Controller_Admin_Groups extends Controller_Admin {
 	    
 	    $group_count = $usergroup->count_all();
 	    
-	    Message::instance()->set('Total groups '.$group_count);
-	    
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Groups', 'admin/groups');
 	} 

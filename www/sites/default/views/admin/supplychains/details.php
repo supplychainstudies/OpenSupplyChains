@@ -39,12 +39,12 @@
 <input type="submit" value="Save" /></form><br />
 
 <?php if(!empty($owner_group)): ?>
- <strong>Groupname:</strong> <?=HTML::chars($owner_group)?>
+ <strong>Owned by group:</strong> <?=HTML::chars($owner_group)?>
 <?php endif;?>
 
 
 <form name="group-permissions" method="post" action="admin/supplychains/<?=$id?>/change_usergroup_perms">
- <strong>Reset Group Permissions:</strong> 
+ <strong>Group Permissions:</strong> 
 <select name="groupperm">
       <?php foreach($group_permissions_array as $i => $group_perm): ?>
       <option value="<?=$group_perm ?>" <?php if($group_perm == $usergroup_perms):?>selected<?php endif; ?>><?= HTML::chars($group_perm); ?>

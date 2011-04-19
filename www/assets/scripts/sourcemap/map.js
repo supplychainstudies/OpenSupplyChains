@@ -592,7 +592,6 @@ Sourcemap.Map.prototype.hidePopup = function(feature) {
 
 Sourcemap.Popup = function(id, ll, csz, chtm, clsbx, clscb) {
     var id = id; var ll = ll; var csz = csz; var clsbx = true;
-    var clscb = null;
     OpenLayers.Popup.prototype.initialize.apply(this, arguments);
     this.initialize.apply(this, arguments);
 }
@@ -601,7 +600,6 @@ Sourcemap.Popup.prototype = new OpenLayers.Popup();
 Sourcemap.Popup.prototype.ANCHOR_HT = 16;
 
 Sourcemap.Popup.prototype.initialize = function() {
-    if(this.closeDiv) $(this.closeDiv).remove();
     this.closeDiv = false;
     $(this.div).css({"background-color": 'none', "visibility": "none"});
     this.bottom_div = $('<div class="sourcemap-popup-bottom"></div>');

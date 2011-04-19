@@ -11,6 +11,14 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
     public $layout = 'layout';
     public $template = 'google';
 
+    public function before() {
+        if(!Auth::instance()->get_user()) {
+            Message::instance()->set('You must be logged in to use the importer.');
+            $this->request->redirect('');
+        }
+        parent::before();
+    }
+
     public function action_index() {
         if(Session::instance()->get('g_oauth_access_token')) {
             $this->request->redirect('/tools/google/list');
@@ -71,16 +79,51 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
             Message::instance()->set('You haven\'t given us permission to fetch spreadsheets.');
             $this->request->redirect('/tools/google/');
         }
-        if(!isset($_GET['k'], $_GET['wsid'])) {
+        if(Request::$method !== 'POST') {
+            Message::instance()->set('Please choose a spreadsheet to import.');
+            $this->request->redirect('/tools/google/list');
+        }
+        // todo: validation
+        if(!isset($_POST['k'], $_POST['stops-wsid'])) {
             Message::instance()->set('Spreadsheet key and worksheet id required.');
             $this->request->redirect('/tools/google/list');
         }
         $csv = Sourcemap_Csv::arr2csv(
             Google_Spreadsheets::get_worksheet_cells(
-                $acc_token, $_GET['k'], $_GET['wsid']
+                $acc_token, $_POST['k'], $_POST['stops-wsid']
             )
         );
-        die($csv);
+        if($csv && isset($_POST['hops-wsid']) && $_POST['hops-wsid']) {
+            $hops_csv = Sourcemap_Csv::arr2csv(
+                Google_Spreadsheets::get_worksheet_cells(
+                    $acc_token, $_POST['k'], $_POST['hops-wsid']
+                )
+            );
+        } else $hops_csv = null;
+        header('Content-Type: text/plain');
+        $new_sc = Sourcemap_Import_Csv::csv2sc($csv, $hops_csv, array('headers' => true));
+        if(isset($_POST['replace-into']) && $_POST['replace-into']) {
+            $exists = ORM::factory('supplychain')->where('id', '=', $_POST['replace-into'])->find();
+            if($exists && $exists->user_id == Auth::instance()->get_user()->id) {
+                $replace_into = $exists->id;
+            } else {
+                Message::instance()->set('The supplychain you tried to replace is invalid.');
+                $this->request->redirect('/tools/google/worksheets/?k='.$_POST['k']);
+            }
+        } else {
+            $replace_into = null;
+        }
+        try {
+            $scid = ORM::factory('supplychain')->save_raw_supplychain($new_sc, $replace_into);
+            $new_sc = ORM::factory('supplychain', $scid);
+            $new_sc->other_perms |= Sourcemap::READ;
+            $new_sc->save();
+            Message::instance()->set('Your spreadsheet was imported.');
+            $this->request->redirect('/map/view/'.$scid);
+        } catch(Exception $e) {
+            Message::instance()->set('The supplychain you tried to replace is invalid.');
+            $this->request->redirect('/tools/google/worksheets/?k='.$_POST['k']);
+        }
     }
 
     public function action_worksheets() {
@@ -100,5 +143,7 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
         $this->template = View::factory('google/worksheets');
         $this->template->worksheets = $worksheets;
         $this->template->spreadsheet_key = $_GET['k'];
+        $this->template->user_supplychains = ORM::factory('supplychain')
+            ->where('user_id', '=', Auth::instance()->get_user()->id)->find_all();
     }
   }

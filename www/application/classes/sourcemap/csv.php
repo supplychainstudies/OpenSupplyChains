@@ -100,7 +100,10 @@ class Sourcemap_Csv {
 
     public static function make_csv_row($arr, $delim=',', $encap='"') {
         $csv_arr = array();
-        foreach($arr as $i => $s) {
+        $mink = min(array_keys($arr));
+        $maxk = max(array_keys($arr));
+        for($i=$mink; $i<=$maxk; $i++) {
+            $s = isset($arr[$i]) ? $arr[$i] : '';
             if($encap) $s = str_replace($encap, '\\'.$encap, $s);
             $csv_arr[] = (string)$s == '' ? '' : $encap.$s.$encap;
         }

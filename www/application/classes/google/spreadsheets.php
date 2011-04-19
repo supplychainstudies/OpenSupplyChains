@@ -31,11 +31,10 @@ class Google_Spreadsheets {
             $gs = $cell->children('gs', true);
             $gs = $gs->attributes();
             $i = $gs['row'] - 1;
-            $j = (int)$gs['col'] - 1;
+            $j = $gs['col'] - 1;
             $cells[$i][$j] = (string)$cell->content;
         }
         return $cells;
-
     }
 
     public static function get_sheet_worksheets($oauth_acc_token, $key) {

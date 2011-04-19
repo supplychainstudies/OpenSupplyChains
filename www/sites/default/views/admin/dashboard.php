@@ -1,11 +1,11 @@
-<h2>Management Dashboard</h2>
+The last administrator login was on <strong><?= $admin_lastlogin?></strong><br /><br />
 
-<strong>Updates since last week:</strong> <strong><?= $supplychain_lastweek?></strong> supplychains have been created, <strong><?= $user_lastweek?></strong> users have been created  and <strong><?= $user_lastlogin?></strong> users have logged in since last week.<br />
-The administrator last login was on <strong><?= $admin_lastlogin?></strong><br /><br />
-The maximum number of stops entered so far are <strong><?= $stop?></strong> (<a href="map/view/<?= $supplychain_id?>">view map</a>)<br />
-The maximum number of hops entered so far are <strong><?= $hop?></strong> (<a href="map/view/<?= $supplychain_hop_id?>">view map</a>)<br /><br />
+<?if($supplychain_lastweek != 0  || $user_lastweek != 0 || $user_lastlogin){?><strong>In the last week</strong> <?if($supplychain_lastweek != 0) {?><strong><?= $supplychain_lastweek?></strong> supplychains have been created, <?}?><?if($user_lastweek) {?><strong><?= $user_lastweek?></strong> users have been created  and <?}?><?if($user_lastlogin){ ?>the number of user(s) log in is <strong><?= $user_lastlogin?></strong><?} }?><br /><br />
 
-<strong>Today's Updates:</strong> <strong><?= $user_today?></strong> users have been created today and <strong><?= $supplychain_today?></strong> supplychains have been created today.
+The largest map so far has <strong><?= $stop?></strong> stops(<a href="map/view/<?= $supplychain_id?>">view map</a>).<br /><br />
+
+
+    <?if($user_today != 0 || $supplychain_today !=0) {?><strong>Today we have</strong> <?if($user_today != 0) {?><strong><?= $user_today?></strong> users creating their accounts<?}?> <?if($supplychain_today != 0){?><strong><?= $supplychain_today?></strong> supplychains have been created today.<?}}?>
 
 <dl>
 <dt><a href="admin/supplychains">Supplychains</a></dt>

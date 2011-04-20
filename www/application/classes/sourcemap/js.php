@@ -78,7 +78,7 @@ class Sourcemap_JS {
     public static function scripts() {
         $args = func_get_args();
         if(self::$bundle) {
-            $pkgs = call_user_func_array(array('self', 'packages'), $args);
+            $pkgs = self::flatten($args);
             $scripts = array();
             foreach($pkgs as $si => $pkg) {
                 $pscripts = self::get_package_scripts($pkg);
@@ -125,4 +125,17 @@ class Sourcemap_JS {
         }
         return join("\n", $tags);
     }
+
+    public static function flatten() {
+        $args = func_get_args();
+        $flat = array();
+        foreach($args as $i => $arg) {
+            if(is_array($arg)) {
+                $f = call_user_func_array(array('self', 'flatten'), $arg);
+                foreach($f as $j => $ff) $flat[] = $ff;
+            } else $flat[] = $arg;
+        }
+        return $flat;
+    }
+
 }

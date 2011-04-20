@@ -29,7 +29,7 @@ return array(
                 'sites/default/assets/scripts/map/view.js'
             ),
             'requires' => array(
-                'modernizr', 'less', 'sourcemap-map', 'sourcemap-template'
+                'less', 'sourcemap-map', 'sourcemap-template'
             )
         ),
         'sourcemap-social' => array(
@@ -39,15 +39,6 @@ return array(
             'requires' => array(
                 'sourcemap-jquery'
             )
-        ),
-	'sourcemap-upload' => array(
-            'scripts' => array(
-                'sites/default/assets/scripts/upload.js'
-	    ),
-            'requires' => array(
-                'sourcemap-jquery'
-            )
-       )
-
+        )
     )
 );

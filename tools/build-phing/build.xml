@@ -105,7 +105,7 @@
         <param value="${jsfile_abs}" />
     </php>
     <exec command="cat ${jsfile_abs} | ${phing.home}jsmin/jsmin > ${dirname}/${basename}.min.js" />
-    <copy file="${dirname}/${basename}.min.js" tofile="${dirname}/${basename}.js" overwrite="true" />
+    <!-- copy file="${dirname}/${basename}.min.js" tofile="${dirname}/${basename}.js" overwrite="true" /-->
 </target>
 
 <target name="write-rev">

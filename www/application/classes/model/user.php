@@ -10,9 +10,16 @@ class Model_User extends Model_Auth_User {
 
     public $_table_names_plural = false;
 
-	protected $_has_many = array(
-		'user_tokens' => array('model' => 'user_token'),
-		'roles' => array(
+    protected $_has_one = array(
+        'profile' => array(
+            'model' => 'user_profile', 'foreign_key' => 'user_id',
+            'far_key' => 'id'
+        )
+    );
+
+    protected $_has_many = array(
+        'user_tokens' => array('model' => 'user_token'),
+        'roles' => array(
             'model' => 'role', 'through' => 'user_role',
             'foreign_key' => 'user_id', 'far_key' => 'role_id'
         ),
@@ -22,12 +29,12 @@ class Model_User extends Model_Auth_User {
         ),
         'owned_groups' => array(
             'model' => 'usergroup', 'foreign_key' => 'owner_id'
-	),
-	'openidusers' => array(
+        ),
+        //todo: make this make sense
+        'openidusers' => array(
             'model' => 'openidusers', 'foreign_key' => 'user_id'
-        )
-	       
-	);
+        )           
+    );
 
     const FACTIVE = 1;
     #const FSUSPENDED = 64;

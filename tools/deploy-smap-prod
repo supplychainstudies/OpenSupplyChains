@@ -1,0 +1,53 @@
+#!/bin/bash
+
+usage="2 arguments required: target directory and symbolic link to point at it."
+
+if [ "$#" -ne 2 ]; then
+    echo "$usage"
+    exit 1
+fi
+
+source env/prod
+
+newbuilddir=`date +sourcemap_deploy_%Y-%m-%d_%H%M%S_%N`
+newrollbackdir=`date +sourcemap_rollback_%Y-%m-%d_%H%M%S_%N`
+
+builddir="${SOURCEMAP_DIR}build"
+targetdir="$1"
+if [ ! -d "$1" ]; then
+    echo "invalid target"
+    echo "$usage"
+    exit 1
+fi
+
+linknm="$2"
+
+rollbackdir="${targetdir}/${newrollbackdir}"
+
+if [ -d "${rollbackdir}" ]; then
+    echo "rollback dir ${rollbackdir} exists. bailing."
+    exit 1
+else
+    if [ -h "${linknm}" ]; then
+        #mkdir "${rollbackdir}"
+        echo "copying current link target of ${linknm} to ${rollbackdir}"
+        cp -RL "${linknm}" "${rollbackdir}"
+    fi
+fi
+
+deploydir="${targetdir}/${newbuilddir}"
+
+if [ -d "${deploydir}" ]; then
+    echo "deploy dir ${deploydir} exists. bailing."
+    exit 1
+else
+    mkdir "${deploydir}"
+    echo "copying files from ${builddir} to ${deploydir}"
+    cp --recursive "${builddir}"/* "${deploydir}"
+fi
+
+echo "Pointing link ${linknm} to ${deploydir}..."
+if [ -h "${linknm}" ]; then
+    rm "${linknm}"
+fi
+ln -s "${deploydir}" "${linknm}"

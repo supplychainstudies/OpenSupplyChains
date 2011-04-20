@@ -43,7 +43,8 @@ foreach($sites as $i => $site) {
     if(!is_dir($bundle_dir)) mkdir($bundle_dir);
 
     foreach(Sourcemap_JS::$pkgs as $pkg_tag => $pconf) {
-        $scripts = Sourcemap_JS::$pkgs[$pkg_tag]['scripts'];
+        //$scripts = Sourcemap_JS::$pkgs[$pkg_tag]['scripts'];
+        $scripts = Sourcemap_JS::scripts($pkg_tag);
         $script_content = array();
         foreach($scripts as $si => $script) {
             if(preg_match('/^http/', $script))

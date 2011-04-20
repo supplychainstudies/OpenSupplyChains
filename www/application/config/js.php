@@ -40,7 +40,7 @@ return array(
                 'assets/scripts/sourcemap/supplychain.js'
             ),
             'requires' => array(
-                'modernizr', 'less', 'sourcemap-jquery', 'openlayers'
+                'less', 'sourcemap-jquery', 'openlayers'
             )
         ),
         'sourcemap-template' => array(

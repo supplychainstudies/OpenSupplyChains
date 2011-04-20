@@ -23,10 +23,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->template->supplychain_id = $supplychain->id;
-                $this->layout->scripts = array(
-                    'modernizr', 'less', 'map-view', 'sourcemap-core', 
-                    'sourcemap-template', 'sourcemap-working'
-                );
+                $this->layout->scripts = array('map-view');
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css', 
                     'assets/styles/general.less'

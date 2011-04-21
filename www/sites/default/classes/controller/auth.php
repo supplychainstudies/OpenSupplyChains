@@ -51,7 +51,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         if (!empty($post->next)) {
             $this->request->redirect($post->next);
         } else {
-            $this->request->redirect('auth/');
+            $this->request->redirect('home/');
         }
     }
 

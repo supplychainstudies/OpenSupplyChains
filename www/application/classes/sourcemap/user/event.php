@@ -12,11 +12,19 @@ class Sourcemap_User_Event {
     const FAVEDSC = 8;
     const COMMENTEDSC = 16;
     const SENTMSG = 32;
+    const ANNOUNCE = 64; // for system-wide notices
+
+    public $timestamp;
+
+    public function __construct() {
+        $this->timestamp = time();
+    }
 
     protected static $_tags = array(
         'signedup' => 1, 'createdsc' => 2,
         'updatedsc' => 4, 'favedsc' => 8,
-        'commentedsc' => 16, 'sentmsg' => 32
+        'commentedsc' => 16, 'sentmsg' => 32,
+        'announce' => 64
     );
 
     public static function factory($type) {
@@ -95,7 +103,6 @@ class Sourcemap_User_Event {
         $evt->scope_id = $scope_id;
         $evt->scope = $scope;
         $evt->data = $this->get_serialized_data();
-        print_r($evt);
         return $evt->save();
     }
 

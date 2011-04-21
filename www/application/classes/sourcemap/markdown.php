@@ -7,4 +7,8 @@ class Sourcemap_Markdown {
         }
         return Markdown($str);
     }
+
+    public static function markdown($str) {
+        return self::parse($str);
+    }
 }

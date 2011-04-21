@@ -20,4 +20,6 @@ The largest map so far has <strong><?= $stop?></strong> stops(<a href="map/view/
 <dd>Manage Aliases.</dd>
 <dt><a href="admin/analytics">Analytics</a></dt>
 <dd>Sourcemap Analytics.</dd>
+<dt><a href="admin/announcements">Announcements</a></dt>
+<dd>Sourcemap Analytics.</dd>
 </dl>

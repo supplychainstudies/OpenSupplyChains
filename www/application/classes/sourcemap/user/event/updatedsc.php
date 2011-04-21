@@ -1,7 +1,7 @@
 <?php
-class Sourcemap_User_Event_Createdsc extends Sourcemap_User_Event {
+class Sourcemap_User_Event_Updatedsc extends Sourcemap_User_Event {
 
-    protected $_tag = 'createdsc';
+    protected $_tag = 'updatedsc';
 
     public function __construct($user_id, $scid, $timestamp=null) {
         $this->user_id = $user_id;
@@ -22,8 +22,8 @@ class Sourcemap_User_Event_Createdsc extends Sourcemap_User_Event {
     }
 
     public static function load($data) {
-        if(isset($data['user_id']) && ($user = ORM::factory('user', $data['user_id']))) {
-            $data['username'] = $user->username;
+        if($user_id = $data['user_id']) {
+            $data['username'] = ORM::factory('user', $data['user_id'])->find()->username;
         }
         return $data;
     }

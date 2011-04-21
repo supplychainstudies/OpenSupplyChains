@@ -122,7 +122,7 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             Message::instance()->set('Your spreadsheet was imported.', Message::SUCCESS);
             $this->request->redirect('/map/view/'.$scid);
         } catch(Exception $e) {
-            Message::instance()->set('The supplychain you tried to replace is invalid.');
+            Message::instance()->set('There was a problem importing your spreadsheet: '.$e);
             $this->request->redirect('/tools/import/google/worksheets/?k='.$_POST['k']);
         }
     }

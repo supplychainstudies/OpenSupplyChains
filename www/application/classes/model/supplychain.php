@@ -241,6 +241,12 @@ class Model_Supplychain extends ORM {
             throw new Exception('Could not save raw supplychain with id "'.$scid.'"('.$e->getMessage().')');
         }
         $this->_db->query(null, 'COMMIT', true);
+        $evt = isset($new_sc) ? Sourcemap_User_Event::CREATEDSC : Sourcemap_User_Event::UPDATEDSC;
+        try {
+            Sourcemap_User_Event::factory($evt, $sc->user_id, $scid)->trigger();
+        } catch(Exception $e) {
+            // pass
+        }
         return $scid;
     }
 

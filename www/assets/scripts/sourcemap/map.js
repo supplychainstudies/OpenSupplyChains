@@ -339,7 +339,10 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         var ll = new OpenLayers.LonLat(new_feature.geometry.x, new_feature.geometry.y);
         var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
         var sc = this.findSupplychain(scid);
-        var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true);
+        var cb = function() { this.sourcemap.controls.select.unselectAll(); }
+        var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
+        new_popup.feature = new_feature;
+        new_popup.sourcemap = this;
         new_popup.hide();
     }
     if(this.prepareStopFeature instanceof Function) {
@@ -591,7 +594,6 @@ Sourcemap.Map.prototype.hidePopup = function(feature) {
 }
 
 Sourcemap.Popup = function(id, ll, csz, chtm, clsbx, clscb) {
-    var id = id; var ll = ll; var csz = csz; var clsbx = true;
     OpenLayers.Popup.prototype.initialize.apply(this, arguments);
     this.initialize.apply(this, arguments);
 }

@@ -5,12 +5,9 @@ if(!class_exists('Kohana')) die('stop. drop. shut \'em down. whoa. that\'s how r
  * defaults for the URI.
  */
 
-
-
-Route::set('tools/tool/action', 'tools/<controller>(/<action>)')
+Route::set('tools/import/action', 'tools/import/<controller>(/<action>)')
     ->defaults(array(
-        'directory' => 'tools',
-        'controller' => 'tools',
+        'directory' => 'tools/import',
         'action' => 'index'
     ));
 

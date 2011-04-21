@@ -20,4 +20,11 @@ class Sourcemap_User_Event_Createdsc extends Sourcemap_User_Event {
             'supplychain_id' => $this->scid
         );
     }
+
+    public static function load($data) {
+        if($user_id = $data['user_id']) {
+            $data['username'] = ORM::factory('user', $data['user_id'])->find()->username;
+        }
+        return $data;
+    }
 }

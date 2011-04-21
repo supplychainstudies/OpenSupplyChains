@@ -33,7 +33,6 @@
     <div id="content">          
          <article>
              <header>
-                <h1><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h1>                 
                 <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
                 <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
              </header>

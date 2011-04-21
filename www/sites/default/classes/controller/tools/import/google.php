@@ -6,25 +6,25 @@
  * @copyright  (c) Sourcemap
  * @license    http://blog.sourcemap.org/terms-of-service
  */
-class Controller_Tools_Google extends Sourcemap_Controller_Layout {
+class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
 
     public $layout = 'layout';
-    public $template = 'google';
+    public $template = 'tools/import/google';
 
     public function before() {
         if(!Auth::instance()->get_user()) {
             Message::instance()->set('You must be logged in to use the importer.');
-            $this->request->redirect('/auth?next=/tools/google');
+            $this->request->redirect('/auth?next=/tools/import/google');
         }
         parent::before();
     }
 
     public function action_index() {
         if(Session::instance()->get('g_oauth_access_token')) {
-            $this->request->redirect('/tools/google/list');
+            $this->request->redirect('/tools/import/google/list');
         }
         $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
-        $oauth->_req_token_callback = Url::site('/tools/google/auth', true);
+        $oauth->_req_token_callback = Url::site('/tools/import/google/auth', true);
         $auth_token = $oauth->get_req_token();
         if(!$auth_token) throw new Exception('Could not obtain auth token.');
         $secret = $auth_token['oauth_token_secret'];
@@ -56,37 +56,37 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
             );
         } else {
             Message::instance()->set('Invalid OAuth token or identifier. Try again.');
-            $this->redirect('/tools/google/');
+            $this->redirect('/tools/import/google/');
         }
         $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
         $acc_token = $oauth->get_acc_token($auth_tok);
         Session::instance()->set('g_oauth_access_token', $acc_token);
-        $this->request->redirect('/tools/google/list');
+        $this->request->redirect('/tools/import/google/list');
     }
 
     public function action_list() {
         if(!($acc_token = Session::instance()->get('g_oauth_access_token'))) {
             Message::instance()->set('You haven\'t given us permission to fetch spreadsheets.');
-            $this->request->redirect('/tools/google/');
+            $this->request->redirect('/tools/import/google/');
         }
         $list = Google_Spreadsheets::get_list($acc_token);
-        $this->template = View::factory('google/list');
+        $this->template = View::factory('tools/import/google/list');
         $this->template->list = $list;
     }
 
     public function action_import() {
         if(!($acc_token = Session::instance()->get('g_oauth_access_token'))) {
             Message::instance()->set('You haven\'t given us permission to fetch spreadsheets.');
-            $this->request->redirect('/tools/google/');
+            $this->request->redirect('/tools/import/google/');
         }
         if(Request::$method !== 'POST') {
             Message::instance()->set('Please choose a spreadsheet to import.');
-            $this->request->redirect('/tools/google/list');
+            $this->request->redirect('/tools/import/google/list');
         }
         // todo: validation
         if(!isset($_POST['k'], $_POST['stops-wsid'])) {
             Message::instance()->set('Spreadsheet key and worksheet id required.');
-            $this->request->redirect('/tools/google/list');
+            $this->request->redirect('/tools/import/google/list');
         }
         $csv = Sourcemap_Csv::arr2csv(
             Google_Spreadsheets::get_worksheet_cells(
@@ -108,7 +108,7 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
                 $replace_into = $exists->id;
             } else {
                 Message::instance()->set('The supplychain you tried to replace is invalid.');
-                $this->request->redirect('/tools/google/worksheets/?k='.$_POST['k']);
+                $this->request->redirect('/tools/import/google/worksheets/?k='.$_POST['k']);
             }
         } else {
             $replace_into = null;
@@ -123,25 +123,25 @@ class Controller_Tools_Google extends Sourcemap_Controller_Layout {
             $this->request->redirect('/map/view/'.$scid);
         } catch(Exception $e) {
             Message::instance()->set('The supplychain you tried to replace is invalid.');
-            $this->request->redirect('/tools/google/worksheets/?k='.$_POST['k']);
+            $this->request->redirect('/tools/import/google/worksheets/?k='.$_POST['k']);
         }
     }
 
     public function action_worksheets() {
         if(!($acc_token = Session::instance()->get('g_oauth_access_token'))) {
             Message::instance()->set('You haven\'t given us permission to fetch spreadsheets.');
-            $this->request->redirect('/tools/google/');
+            $this->request->redirect('/tools/import/google/');
         }
         if(!isset($_GET['k'])) {
             Message::instance()->set('Worksheet key required.');
-            $this->request->redirect('/tools/google/list');
+            $this->request->redirect('/tools/import/google/list');
         }
         $worksheets = Google_Spreadsheets::get_sheet_worksheets($acc_token, $_GET['k']);
         if(!$worksheets) {
             Message::instance()->set('Could not fetch worksheets for that spreadsheet.');
-            $this->request->redirect('/tools/google/list');
+            $this->request->redirect('/tools/import/google/list');
         }
-        $this->template = View::factory('google/worksheets');
+        $this->template = View::factory('tools/import/google/worksheets');
         $this->template->worksheets = $worksheets;
         $this->template->spreadsheet_key = $_GET['k'];
         $this->template->user_supplychains = ORM::factory('supplychain')

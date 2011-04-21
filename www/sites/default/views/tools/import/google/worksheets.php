@@ -1,5 +1,5 @@
 <?php if(isset($worksheets, $spreadsheet_key) && $worksheets): ?>
-<form action="/tools/google/import" method="post">
+<form action="/tools/import/google/import" method="post">
 <input type="hidden" name="k" value="<?= HTML::chars($spreadsheet_key) ?>" />
 <label for="stops-wsid">Stops Worksheet:</label><br />
 <select name="stops-wsid">

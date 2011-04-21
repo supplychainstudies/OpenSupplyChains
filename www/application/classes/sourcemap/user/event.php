@@ -102,4 +102,46 @@ class Sourcemap_User_Event {
     protected function get_serialized_data() {
         return json_encode($this->get_data());
     }
+
+    public static function unserialize_data($data) {
+        return @json_decode($data);
+    }
+
+    public static function load_event_data($type, $data) {
+        $type = self::tag($type);
+        $cls = __CLASS__.'_'.str_replace(' ', '_', ucwords(str_replace('_', ' ', $type)));
+        $ld = array($cls, 'load');
+        if(is_callable($ld)) {
+            $data = call_user_func($ld, $data);
+        }
+        return $data;
+    }
+
+    public static function get_user_stream($user_id, $limit=10) {
+        $user_groups = array();
+        $user = ORM::factory('user', $user_id);
+        foreach($user->groups->find_all() as $i => $group) {
+            $user_groups[] = $group->id;
+        }
+        $q = ORM::factory('user_event')->
+            where_open()->where('scope', '=', self::USER)->
+               and_where('scope_id', '=', $user_id)->
+            where_close();
+        if($user_groups) {
+            $q->or_where_open()->where('scope', '=', self::GROUP)->
+                and_where('scope_id', 'in', $user_groups)->
+            or_where_close();
+        }
+        $q = $q->or_where('scope', '=', self::EVERYBODY);
+        $q->order_by('timestamp', 'desc');
+        $q->limit($limit);
+        $evts = array();
+        foreach($q->find_all() as $i => $evt) {
+            $evt = $evt->as_array();
+            $evt['data'] = self::load_event_data($evt['event'], (array)self::unserialize_data($evt['data']));
+            $evt['type'] = $evt['tag'] = self::tag($evt['event']);
+            $evts[] = $evt;
+        }
+        return $evts;
+    }
 }

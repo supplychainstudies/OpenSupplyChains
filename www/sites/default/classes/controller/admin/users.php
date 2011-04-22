@@ -16,219 +16,200 @@ class Controller_Admin_Users extends Controller_Admin {
 
     public function action_index() {
 
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-	    $user = ORM::factory('user');
-	    $page = max($this->request->param('page'), 1);
-	    $items = 20;
-	    $offset = ($items * ($page - 1));
-	    $count = $user->count_all();
-	    $pagination = Pagination::factory(array(
-						  'current_page' => array(
-						      'source' => 'query_string', 
-						      'key' => 'page'
-						      ),
-						  'total_items' => $user->count_all(),
-						  'items_per_page' => $items,
-						  ));
-	    $this->template->users = $user->order_by('username', 'ASC')
-		->limit($pagination->items_per_page)
-		->offset($pagination->offset)
-		->find_all()->as_array(null, array('id', 'username', 'email'));
-	    $this->template->page_links = $pagination->render();
-	    $this->template->offset = $pagination->offset;
-	    
-	    $user_count = $user->count_all();
-	    
-	    Message::instance()->set('Total users '.$user_count);
-	    Breadcrumbs::instance()->add('Management', 'admin/')
-		->add('Users', 'admin/users');
-	}
+        $user = ORM::factory('user');
+        $page = max($this->request->param('page'), 1);
+        $items = 20;
+        $offset = ($items * ($page - 1));
+        $count = $user->count_all();
+        $pagination = Pagination::factory(array(
+                          'current_page' => array(
+                              'source' => 'query_string', 
+                              'key' => 'page'
+                              ),
+                          'total_items' => $user->count_all(),
+                          'items_per_page' => $items,
+                          ));
+        $this->template->users = $user->order_by('username', 'ASC')
+        ->limit($pagination->items_per_page)
+        ->offset($pagination->offset)
+        ->find_all()->as_array(null, array('id', 'username', 'email'));
+        $this->template->page_links = $pagination->render();
+        $this->template->offset = $pagination->offset;
+        
+        $user_count = $user->count_all();
+        
+        Breadcrumbs::instance()->add('Management', 'admin/')
+        ->add('Users', 'admin/users');
     }
     
     
-    public function action_details($id) {	
-	
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-	    $this->template = View::factory('admin/users/details');
-	    $user = ORM::factory('user', $id);
-	    
-	    $get_last_login = $user->last_login;
-	    $last_login =  date("F j, Y, g:i a", $get_last_login);
+    public function action_details($id) {    
+    
+        $this->template = View::factory('admin/users/details');
+        $user = ORM::factory('user', $id);
+        
+        $get_last_login = $user->last_login;
+        $last_login =  date("F j, Y, g:i a", $get_last_login);
 
 
-	    $roles = array();
-	    foreach($user->roles->find_all()->as_array() as $i => $role) {
-		$roles[] = $role->as_array();
-	    }	    
-	    
-	    $all_roles = ORM::factory('role')->find_all()->as_array('id', array('id', 'name'));
-	    
-	    $members = array();
-	    foreach($user->groups->find_all()->as_array() as $i => $usergroup) {
-		$members[] = $usergroup->as_array();
-	    }
-	    
-	    $owners = array();
-	    foreach($user->owned_groups->find_all()->as_array() as $i => $usergroup) {
-		$owners[] = $usergroup->as_array();
-	    }
-	    
-	    $this->template->user = $user;
-	    $this->template->roles = $roles;
-	    $this->template->all_roles = $all_roles;
-	    $this->template->members = $members;
-	    $this->template->owners = $owners;
-	    $this->template->last_login = $last_login;
-	    	    
-	    // this is to reset the password
-	    $post = Validate::factory($_POST);
-	    $post->rule('email', 'not_empty')
-		->rule('password', 'not_empty')
-		->rule('password', 'max_length', array(16))
-		->rule('password', 'min_length', array(6))
-		->rule('confirmpassword', 'not_empty')
-		->rule('confirmpassword', 'max_length', array(16))
-		->rule('confirmpassword', 'min_length', array(6))
-		->rule('email', 'validate::email')
-		->filter(true, 'trim');
-	    
-	    if(strtolower(Request::$method) === 'post' && $post->check()) {
-		$post = (object)$post->as_array();
-		
-		if($post->password == $post->confirmpassword) {
-		    $user_row = ORM::factory('user')
-			->where('email', '=', $post->email)
-			->find();
-		    
-		    $user_row->password = $post->password;
+        $roles = array();
+        foreach($user->roles->find_all()->as_array() as $i => $role) {
+        $roles[] = $role->as_array();
+        }        
+        
+        $all_roles = ORM::factory('role')->find_all()->as_array('id', array('id', 'name'));
+        
+        $members = array();
+        foreach($user->groups->find_all()->as_array() as $i => $usergroup) {
+        $members[] = $usergroup->as_array();
+        }
+        
+        $owners = array();
+        foreach($user->owned_groups->find_all()->as_array() as $i => $usergroup) {
+        $owners[] = $usergroup->as_array();
+        }
+        
+        $this->template->user = $user;
+        $this->template->roles = $roles;
+        $this->template->all_roles = $all_roles;
+        $this->template->members = $members;
+        $this->template->owners = $owners;
+        $this->template->last_login = $last_login;
+                
+        // this is to reset the password
+        $post = Validate::factory($_POST);
+        $post->rule('email', 'not_empty')
+            ->rule('password', 'not_empty')
+            ->rule('password', 'max_length', array(16))
+            ->rule('password', 'min_length', array(6))
+            ->rule('confirmpassword', 'not_empty')
+            ->rule('confirmpassword', 'max_length', array(16))
+            ->rule('confirmpassword', 'min_length', array(6))
+            ->rule('email', 'validate::email')
+            ->filter(true, 'trim');
+        
+        if(strtolower(Request::$method) === 'post' && $post->check()) {
+            $post = (object)$post->as_array();
+            
+            if($post->password == $post->confirmpassword) {
+                $user_row = ORM::factory('user')
+                ->where('email', '=', $post->email)
+                ->find();
+                
+                $user_row->password = $post->password;
 
-		    try {
-			$user_row->save();
-			Message::instance()->set('Password changed successfully!');
-		    } catch (Exception $e) {
-			Message::instance()->set('Password reset failed!');
-		    }
-		    
-		} else {
-		    Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
-		}
-	    } elseif(strtolower(Request::$method) === 'post') {
-		Message::instance()->set('Invalid Password Reset.', Message::ERROR);
-	    }
-	    
-	    Breadcrumbs::instance()->add('Management', 'admin/')
-		->add('Users', 'admin/users')
-		->add(ucwords($user->username), 'admin/users/'.$user->id);
-	} 
-	
+                try {
+                $user_row->save();
+                Message::instance()->set('Password changed successfully!');
+                } catch (Exception $e) {
+                Message::instance()->set('Password reset failed!');
+                }
+                
+            } else {
+                Message::instance()->set('Please enter again - passwords did not match.', Message::ERROR);
+            }
+        } elseif(strtolower(Request::$method) === 'post') {
+                Message::instance()->set('Invalid Password Reset.', Message::ERROR);
+        }
+        
+        Breadcrumbs::instance()->add('Management', 'admin/')
+            ->add('Users', 'admin/users')
+            ->add(ucwords($user->username), 'admin/users/'.$user->id);
+    
     }
 
 
     public function action_create() {
 
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-	    $post = Validate::factory($_POST);
-	    $post->rule('email', 'not_empty')
-		->rule('username', 'not_empty')
-		->rule('email', 'validate::email')
-		->filter('username', 'strip_tags')
-		->filter(true, 'trim');
+        $post = Validate::factory($_POST);
+        $post->rule('email', 'not_empty')
+            ->rule('username', 'not_empty')
+            ->rule('email', 'validate::email')
+            ->filter('username', 'strip_tags')
+            ->filter(true, 'trim');
             
-	    if(strtolower(Request::$method) === 'post' && $post->check()) {
-		$post = (object)$post->as_array();
-		
-		$password = text::random($type = 'alnum', $length = 6);
-		$create = ORM::factory('user');
-		$create->username = $post->username;                
-		$create->email = $post->email;
-		$create->password = $password;
-		
-		try {
-		    $create->save();
-		} catch (Exception $e) {
-		    Message::instance()->set('Could not create user. User already exists.');
-		}
-		    		    
-		//add a default login role when a new user is created
-		$role = ORM::factory('role', array('name' => 'login'));
-		
-		try {
-		    $create->add('roles', $role)->save();
-		} catch(Exception $e) {
-		    Message::instance()->set('Could not create user login role.');
-		}
-		
-	    } elseif (strtolower(Request::$method === 'post')) {
-		Message::instance()->set('Could not delete role.', Message::ERROR);
-	    }else {
-		Message::instance()->set('Bad request.');
-	    }
+        if(strtolower(Request::$method) === 'post' && $post->check()) {
+            $post = (object)$post->as_array();
+            
+            $password = text::random($type = 'alnum', $length = 6);
+            $create = ORM::factory('user');
+            $create->username = $post->username;                
+            $create->email = $post->email;
+            $create->password = $password;
+            
+            try {
+                $create->save();
+            } catch (Exception $e) {
+                Message::instance()->set('Could not create user. User already exists.');
+                $this->request->redirect("admin/users/");
+            }
+                            
+            //add a default login role when a new user is created
+            $role = ORM::factory('role', array('name' => 'login'));
+            
+            try {
+                $create->add('roles', $role)->save();
+            } catch(Exception $e) {
+                Message::instance()->set('Could not create user login role.');
+                $this->request->redirect("admin/users/");
+            }
+            
+        } elseif (strtolower(Request::$method === 'post')) {
+            Message::instance()->set('Could not delete role.', Message::ERROR);
+        }else {
+            Message::instance()->set('Bad request.');
+        }
 
-	    $this->request->redirect("admin/users/");
-	} 
+        $this->request->redirect("admin/users/");
     }
 
 
     public function action_delete_role($id) {
-
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-	    $post = Validate::factory($_POST);
-	    $post->rule('role', 'not_empty')
-		->filter(true, 'trim');
-	    if(strtolower(Request::$method) === 'post' && $post->check()) {
-		$post = (object)$post->as_array();
-		$role = $post->role;  
-		$role_id = ORM::factory('role', array('name' => $role));
-		
-		try {
-		    $user = ORM::factory('user', $id)->remove('roles', $role_id)->save();
-		} catch (Exception $e) {
-		    Message::instance()->set('Could not delete role.', Message::ERROR);
-		}
-		
-	    } else {
-		Message::instance()->set('Bad request.');
-	    }
-	    
-	    $this->request->redirect("admin/users/".$id);
-	} 
+        $post = Validate::factory($_POST);
+        $post->rule('role', 'not_empty')
+            ->filter(true, 'trim');
+        if(strtolower(Request::$method) === 'post' && $post->check()) {
+            $post = (object)$post->as_array();
+            $role = $post->role;  
+            $role_id = ORM::factory('role', array('name' => $role));
+            
+            try {
+                $user = ORM::factory('user', $id)->remove('roles', $role_id)->save();
+            } catch (Exception $e) {
+                Message::instance()->set('Could not delete role.', Message::ERROR);
+            }
+        } else {
+            Message::instance()->set('Bad request.');
+        }
+        $this->request->redirect("admin/users/".$id);
     }
     
     public function action_add_role($id) {
-
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-	    $check =  false;
-	    $post = Validate::factory($_POST);
-	    $post->rule('addrole', 'not_empty')->filter(true, 'trim');
-	    if($post->check()) {
-		$post = (object)$post->as_array();
-		$user = ORM::factory('user', $id);
-		$role = ORM::factory('role', array('name' => $post->addrole));
-		
-		try {
-		    $user->add('roles', $role)->save();
-		} catch (Exception $e) {
-		    Message::instance()->set('Could not add the role.');
-		}
-		
-	    }  
-	    
-	    $this->request->redirect("admin/users/".$id);
-	} 
+        $check =  false;
+        $post = Validate::factory($_POST);
+        $post->rule('addrole', 'not_empty')->filter(true, 'trim');
+        if($post->check()) {
+            $post = (object)$post->as_array();
+            $user = ORM::factory('user', $id);
+            $role = ORM::factory('role', array('name' => $post->addrole));
+            
+            try {
+                $user->add('roles', $role)->save();
+            } catch (Exception $e) {
+                Message::instance()->set('Could not add the role.');
+            }
+        }  
+        $this->request->redirect("admin/users/".$id);
     }
 
 
     public function action_delete_user($id) {
-	
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
-	    $user = ORM::factory('user', $id);
-	    try {
-		$user->delete();
-	    } catch (Exception $e) {
-		Message::instance()->set('Could not delete the user.');
-	    }
-	    
-	    $this->request->redirect("admin/users/");
-	} 
+        $user = ORM::factory('user', $id);
+        try {
+            $user->delete();
+        } catch (Exception $e) {
+            Message::instance()->set('Could not delete the user.');
+        }
+        $this->request->redirect("admin/users/");
     }
 }

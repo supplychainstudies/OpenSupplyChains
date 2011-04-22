@@ -8,7 +8,7 @@
  */
 
 
- class Controller_Admin extends Sourcemap_Controller_Layout {
+class Controller_Admin extends Sourcemap_Controller_Layout {
 
     public $layout = 'admin';
     public $template = 'admin/dashboard';
@@ -25,6 +25,7 @@
             );
         } 
         parent::before();
+        $this->layout->page_title = 'Sourcemap Management';
     }
     
     public function action_index() {

@@ -18,8 +18,7 @@ class Sourcemap_ORM extends Kohana_ORM {
 	 * @param   ORM      related ORM model
 	 * @return  boolean
 	 */
-	public function has($alias, $model)
-	{
+	public function has($alias, $model) {
 		// Return count of matches as boolean
 		return (bool) DB::select(array(DB::expr('COUNT(*)'), 'records_found'))
 			->from($this->_has_many[$alias]['through'])

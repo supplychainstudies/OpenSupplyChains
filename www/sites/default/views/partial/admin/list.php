@@ -27,8 +27,8 @@
                 $partial = false;
             }
         ?>
-        <?php foreach($list as $lk => $item): ?>
-            <tr>
+        <?php $icount = 0; foreach($list as $lk => $item): ?>
+            <tr class="<?= $icount++ % 2 ? 'odd' : 'even' ?>">
                 <?php if($partial): ?>
                     <?php $partial->item = is_object($item) ? $item : (object)$item; ?>
                     <?= $partial ?>

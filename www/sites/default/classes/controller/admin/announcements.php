@@ -73,6 +73,7 @@ class Controller_Admin_Announcements extends Controller_Admin {
         $post->rule('user_event_id', 'not_empty')
             ->rule('user_event_id', 'is_numeric');
         if($post->check()) {
+            $post = (object)$post->as_array();
             $evt = ORM::factory('user_event', $post->user_event_id);
             if($evt && $evt->loaded()) {
                 $evt->delete();

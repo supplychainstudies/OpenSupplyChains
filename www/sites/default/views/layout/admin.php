@@ -13,7 +13,7 @@ body {
     padding: 0;
     color: #333;
     background-color: #ddd;
-    border-bottom: 1px solid #072;
+    border-bottom: 1px solid #222;
     height: 100%;
 }
 #masthead h1 {

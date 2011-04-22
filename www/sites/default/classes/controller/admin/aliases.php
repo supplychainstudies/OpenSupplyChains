@@ -27,7 +27,6 @@ class Controller_Admin_Aliases extends Controller_Admin {
             'total_items' => $supplychain_alias->count_all(),
             'items_per_page' => $items,
         ));
-        die(print_r($pagination, true));
         $this->template->supplychain_alias = $supplychain_alias->limit($pagination->items_per_page)
             ->offset($pagination->offset)
             ->find_all()->as_array(null, array('id', 'site', 'alias', 'supplychain_id'));

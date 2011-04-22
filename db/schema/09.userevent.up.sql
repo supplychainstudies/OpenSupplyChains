@@ -26,7 +26,6 @@ create table user_message (
     to_user_id integer not null references "user"(id),
     subject varchar(256) not null default '',
     body text not null default '',
-    flags integer not null default 0,
     constraint usermessage_id_pkey primary key (id)
 );
 
@@ -34,7 +33,7 @@ create table user_favorite (
     id serial,
     timestamp integer not null,
     user_id integer not null references "user"(id),
-    supplychain_id integer not null references ,
+    supplychain_id integer not null references supplychain(id),
     constraint user_message_id_pkey primary key (id)
 );
 
@@ -43,7 +42,7 @@ create table supplychain_comment (
     flags integer not null default 0,
     timestamp integer not null,
     user_id integer not null references "user"(id),
-    supplychain_id integer not null references "supplychain_id"(id),
+    supplychain_id integer not null references "supplychain"(id),
     body text,
     constraint supplychain_comment_id_pkey primary key (id)
 );

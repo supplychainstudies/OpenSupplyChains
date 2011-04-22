@@ -30,6 +30,10 @@ class Model_User extends Model_Auth_User {
         'owned_groups' => array(
             'model' => 'usergroup', 'foreign_key' => 'owner_id'
         ),
+        'favorites' => array(
+            'model' => 'supplychain', 'through' => 'user_favorite',
+            'foreign_key' => 'user_id', 'far_key' => 'supplychain_id'
+        ),
         //todo: make this make sense
         'openidusers' => array(
             'model' => 'openidusers', 'foreign_key' => 'user_id'

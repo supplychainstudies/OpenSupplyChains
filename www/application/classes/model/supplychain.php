@@ -38,6 +38,14 @@ class Model_Supplychain extends ORM {
         'alias' => array(
             'model' => 'supplychain_alias',
             'foreign_key' => 'supplychain_id'
+        ),
+        'favorited_by' => array(
+            'model' => 'user',
+            'through' => 'user_favorite'
+        ),
+        'comments' => array(
+            'model' => 'supplychain_comment',
+            'foreign_key' => 'supplychain_id'
         )
     );
 

@@ -37,8 +37,20 @@ class CloudMade_StaticMap {
                 if($max_lat === null || ($pt->y > $max_lat)) $max_lat = $pt->y;
                 if($min_lon === null || ($pt->x < $min_lon)) $min_lon = $pt->x;
                 if($max_lon === null || ($pt->x > $max_lon)) $max_lon = $pt->x;
-                $markerimg = "http://chart.apis.google.com/chart?cht=it&chs=16x16&chco=008000&chx=ffffff,8&chf=bg,s,00000000&ext=.png";
-                $markers[] = 'url:'.urlencode($markerimg).'|opacity:1|'.$pt->y.','.$pt->x;
+                $color = '008000';
+                if(isset($stop->attributes, $stop->attributes->color)) {
+                    $stcolor = $stop->attributes->color;
+                    if(preg_match('/^#?([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/', $stcolor))
+                        $color = ltrim($stcolor, '#');
+                }
+                $sz = 16;
+                if(isset($stop->attributes, $stop->attributes->size) && is_numeric($stop->attributes->size)) {
+                    $sz = (int)$stop->attributes->size;
+                    $sz += 16;
+                }
+                #$markerimg = "http://chart.apis.google.com/chart?cht=it&chs={$sz}x{$sz}&chco=$color&chx=ffffff,8&chf=bg,s,00000000&ext=.png";
+                $markerimg = "http://chart.apis.google.com/chart?cht=it&chs={$sz}x{$sz}&chco=$color&chx=ffffff,8&chf=bg,s,00000000&ext=.png";
+                $markers[] = 'url:'.urlencode($markerimg).'|opacity:0.85|'.$pt->y.','.$pt->x;
             }
             $stop_dict[$stop->local_stop_id] = $stop;
         }

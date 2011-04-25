@@ -115,6 +115,11 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
         }
         try {
             $new_sc->user_id = Auth::instance()->get_user()->id;
+            $title = false;
+            if($replace_into && ($title = $exists->attributes->where('key', 'in', array('title', 'name'))->find())) {
+                $title = $title->value;
+            }
+            $new_sc->attributes = (object)array('title' => $title ? $title : 'Imported Sourcemap');
             $scid = ORM::factory('supplychain')->save_raw_supplychain($new_sc, $replace_into);
             $new_sc = ORM::factory('supplychain', $scid);
             $new_sc->other_perms |= Sourcemap::READ;

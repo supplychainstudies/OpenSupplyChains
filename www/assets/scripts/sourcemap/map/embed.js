@@ -371,12 +371,17 @@ Sourcemap.Map.Embed.prototype.initDialog = function() {
     // todo: bind events, not inline javascript
     this.dialog_prev_el = $('<div id="detail-nav" class="prev"><a href="javascript: void(0);"></a></div>');
     this.dialog_next_el = $('<div id="detail-nav" class="next"><a href="javascript: void(0);"></a></div>');
+    this.dialog_close = $('<div id="detail-close" class="close"><a href="javascript: void(0);"></a></div>'); 
     $(this.dialog_prev_el).click($.proxy(function() { this.dialogPrev(); }, this));
     $(this.dialog_next_el).click($.proxy(function() { this.dialogNext(); }, this));
+    $(this.dialog_close).click($.proxy(function() { this.dialogClose(); }, this));
     this.dialog_content = $('<div id="detail-content" class="content"></div>');
-    this.dialog.append(this.dialog_prev_el)
-        .append(this.dialog_content).append(this.dialog_next_el);
+    this.dialog.append(this.dialog_close)
+        .append(this.dialog_prev_el)
+        .append(this.dialog_content)
+        .append(this.dialog_next_el);
     $(this.dialog).data("state", 1); // todo: check this?
+
     // close on click-out
     this.map.map.events.on({
         "click": function(e) {
@@ -584,6 +589,13 @@ Sourcemap.Map.Embed.prototype.dialogPrev = function() {
     } else {
         throw new Error('Unexpected feature...not a stop or a hop.');
     }
+}
+
+Sourcemap.Map.Embed.prototype.dialogClose = function() {
+    if($(this.dialog).data("state")) {
+        this.hideDialog();
+    }
+    this.tour.stop();//.wait();
 }
 
 Sourcemap.Map.Embed.prototype.showLocationDialog = function(msg) {

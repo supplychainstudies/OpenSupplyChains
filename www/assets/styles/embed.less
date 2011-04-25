@@ -125,6 +125,19 @@ body#embedded-supplychain {
                 color: red;
             }
         }
+        #detail-close{
+            background: url("../images/embed-tour-close.png") right center no-repeat;
+            .background_size(1.5em, 1.5em);
+            height: 1.5em;
+            width: 1.5em;
+            float: right;
+            a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+            }
+        }
 
         #detail-title {
             color:#fff;
@@ -379,146 +392,137 @@ body#embedded-supplychain {
             font-size: 1.1em;
             .popup-wrapper {                
                 padding:0.5em;
-                h4.popup-title {
-                    border-bottom: 1px solid #ccc;
-                    color: #333;
-                }
-               h5.popup-placename {
-                   font-weight: normal;
-                   font-size:0.7em;
-                   color: #555;
-                   margin-bottom:1em;
-               }
-               .popup-description {
-                   font-size:0.8em;
-                   margin-top:-0.5em;
-                   margin-bottom: 1em;
-               }
-               .popup-more-link {
-                   display:block;
-                   .rounded(0.25em);                  
-                   text-align:center;
-                   color:#888;
-                   font-size:0.8em;
-                   text-decoration:none;
-                   text-align:center;
-                   margin:0.25em auto 0 auto;
-                   padding:0.25em;
-                   border:1px solid #aaa;
-                   background:#eee;
-                   &:hover {
-                       .brand_gradient();
-                       border:1px solid #fff;
-                       color:#fff;
-                   }
-                   
-               }   
             }
+            margin-bottom:1em;
         }
+        .popup-description {
+            font-size:0.8em;
+            margin-top:-0.5em;
+            margin-bottom: 1em;
+        }
+        .popup-more-link {
+            display:block;
+            .rounded(0.25em);                  
+            text-align:center;
+            color:#888;
+            font-size:0.8em;
+            text-decoration:none;
+            text-align:center;
+            margin:0.25em auto 0 auto;
+            padding:0.25em;
+            border:1px solid #aaa;
+            background:#eee;
+            &:hover {
+                .brand_gradient();
+                border:1px solid #fff;
+                color:#fff;
+            }
+                   
+       }   
     }
+}
 
-    #tileswitcher {
-        display:none;
-        z-index: 1008;
+#tileswitcher {
+    display:none;
+    z-index: 1008;
+    overflow:hidden;
+    cursor:pointer;
+    position:absolute;
+    bottom:0.25em;
+    right:1em;
+    width:2em;
+    height:1.5em;
+    -webkit-border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    border-radius: 0.5em;
+    -webkit-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
+    box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
+    padding:0.5em;
+    &:hover {
+        overflow:visible;
+    }
+    #current-tile {
+        text-transform:capitalize;
         overflow:hidden;
-        cursor:pointer;
-        position:absolute;
-        bottom:0.25em;
-        right:1em;
-        width:2em;
-        height:1.5em;
         -webkit-border-radius: 0.5em;
         -moz-border-radius: 0.5em;
         border-radius: 0.5em;
-        -webkit-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
-        -moz-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
-        box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
-        padding:0.5em;
-        &:hover {
-            overflow:visible;
-        }
-        #current-tile {
-            text-transform:capitalize;
-            overflow:hidden;
+        font-size:0.7em;
+        position:absolute;
+        bottom:0; left:0;
+        width:100%;
+        text-align:center;
+        color:#ccc;
+        background:rgba(0,0,0,0.8);
+    }
+    #available-tiles {
+        z-index:1008;
+        height:2.5em;
+        display:block;
+        position:absolute;
+        top:0; right:3em;
+        width:10.5em;
+        padding:0; 
+
+        li {
+            display:none;
+            margin-right:0.5em;
+            float:left;
+            width:2em;
+            height:1.5em;
             -webkit-border-radius: 0.5em;
             -moz-border-radius: 0.5em;
             border-radius: 0.5em;
-            font-size:0.7em;
-            position:absolute;
-            bottom:0; left:0;
-            width:100%;
-            text-align:center;
-            color:#ccc;
-            background:rgba(0,0,0,0.8);
+            -webkit-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
+            box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
+            padding:0.5em;
         }
-        #available-tiles {
-            z-index:1008;
-            height:2.5em;
-            display:block;
-            position:absolute;
-            top:0; right:3em;
-            width:10.5em;
-            padding:0; 
+    }
+}
+#tileswitcher:hover #available-tiles li {
+    display:block;
+}
+#tileswitcher li#satellite, .satellite {
+    background: rgba(30,30,30,0.6) url("../images/tile-sat-preview.png") center center no-repeat;
+}
+#tileswitcher li#stylized, .stylized {
+    background: rgba(30,30,30,0.6) url("../images/tile-map-preview.png") center center no-repeat;
+}
+#tileswitcher li#terrain, .terrain {
+    background: rgba(30,30,30,0.6) url("../images/tile-terrain-preview.png") center center no-repeat ;
+}
 
-            li {
-                display:none;
-                margin-right:0.5em;
-                float:left;
-                width:2em;
-                height:1.5em;
-                -webkit-border-radius: 0.5em;
-                -moz-border-radius: 0.5em;
-                border-radius: 0.5em;
-                -webkit-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
-                -moz-box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
-                box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.2);
-                padding:0.5em;
-            }
-        }
-    }
-    #tileswitcher:hover #available-tiles li {
-        display:block;
-    }
-    #tileswitcher li#satellite, .satellite {
-        background: rgba(30,30,30,0.6) url("../images/tile-sat-preview.png") center center no-repeat;
-    }
-    #tileswitcher li#stylized, .stylized {
-        background: rgba(30,30,30,0.6) url("../images/tile-map-preview.png") center center no-repeat;
-    }
-    #tileswitcher li#terrain, .terrain {
-        background: rgba(30,30,30,0.6) url("../images/tile-terrain-preview.png") center center no-repeat ;
-    }
-    
-    #embed-dialog {
-        display:none;
-        height:2em;
-        padding:1em;
-        width:100%;
-        background: #ccc !important;
-        background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)) !important;
-        background: -moz-linear-gradient(top,  #fff,  #ccc);
-        border-bottom:2px solid #444;
-    }
-    #watermark {
-        display:none;
-        height:100%; width:100%;
-        background: url("../../../../assets/images/logo-light.png") center center no-repeat;
-        text-align:center;
-        position:absolute;
-        top:0; bottom:0; left:0; right:0;
-        z-index:0;
-        opacity:0.05;      
-    }
-    #curtain {
-        display:none;
-        height:100%; width:100%;
-        background: rgba(0,0,0,0.5);
-        text-align:center;
-        position:absolute;
-        top:0; bottom:0; left:0; right:0;   
-        z-index: 1010;        
-    }
-    #curtain.hidden {
-        z-index:0;
-    }
+#embed-dialog {
+    display:none;
+    height:2em;
+    padding:1em;
+    width:100%;
+    background: #ccc !important;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)) !important;
+    background: -moz-linear-gradient(top,  #fff,  #ccc);
+    border-bottom:2px solid #444;
+}
+#watermark {
+    display:none;
+    height:100%; width:100%;
+    background: url("../../../../assets/images/logo-light.png") center center no-repeat;
+    text-align:center;
+    position:absolute;
+    top:0; bottom:0; left:0; right:0;
+    z-index:0;
+    opacity:0.05;      
+}
+#curtain {
+    display:none;
+    height:100%; width:100%;
+    background: rgba(0,0,0,0.5);
+    text-align:center;
+    position:absolute;
+    top:0; bottom:0; left:0; right:0;   
+    z-index: 1010;        
+}
+#curtain.hidden {
+    z-index:0;
 }

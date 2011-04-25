@@ -160,6 +160,7 @@ Sourcemap.Map.prototype.initControls = function() {
         if(this.options.tileswitcher) {
             this.initTileSwitcher();
         }
+        console.log(this);
         this.addControl('select', 
             new OpenLayers.Control.SelectFeature(layers, {
                 "geometryTypes": ["OpenLayers.Geometry.Point", "OpenLayers.Geometry.MultiLineString"],
@@ -657,5 +658,26 @@ Sourcemap.Popup.prototype.show = function() {
     $(this.div).fadeIn(this.fade_in, $.proxy(function() {
         $(this.div).find('*').fadeIn(this.fade_in);
     }, this));
+}
+
+Sourcemap.Popup.prototype.addCloseBox = function(callback) {
+
+        this.closeDiv = OpenLayers.Util.createDiv(
+            this.id + "_close", null, new OpenLayers.Size(17, 17)
+        );
+        this.closeDiv.className = "olPopupCloseBox";
+        
+        var contentDivPadding = this.getContentDivPadding();
+
+        this.closeDiv.style.left = "12.4em";
+        this.closeDiv.style.top = contentDivPadding.top + "px";
+        this.groupDiv.appendChild(this.closeDiv);
+
+        var closePopup = callback || function(e) {
+            this.hide();
+            OpenLayers.Event.stop(e);
+        };
+        OpenLayers.Event.observe(this.closeDiv, "click",
+                OpenLayers.Function.bindAsEventListener(closePopup, this));
 }
 

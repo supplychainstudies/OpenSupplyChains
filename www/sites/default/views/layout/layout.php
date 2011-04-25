@@ -1,5 +1,4 @@
 <!doctype html>  
-
 <html lang="en" class="no-js">
 <head>
     <meta charset="utf-8">
@@ -20,16 +19,9 @@
         'assets/styles/general.less'
     ) ?>
 </head>
-
 <body class="fixed">
     <div id="top-notice"></div>
-    <?= View::factory('partial/branding') ?>
-    <div id="bar">
-        <nav id="page-navigation">
-            <h2><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></h2>
-            <div class="clear"></div>
-        </nav>
-    </div> <!-- bar -->
+    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <div id="content">          
          <article>
              <header>
@@ -87,14 +79,9 @@
         </div>                
     </div>
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
-  
   <!--[if lt IE 7 ]>
     <script src="js/libs/dd_belatedpng.js"></script>
     <script> DD_belatedPNG.fix('img, .png_bg'); 
   <![endif]-->
-
-
-
-  
 </body>
 </html>

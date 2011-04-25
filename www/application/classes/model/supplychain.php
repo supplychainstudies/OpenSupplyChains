@@ -166,6 +166,7 @@ class Model_Supplychain extends ORM {
     }
 
     public function save_raw_supplychain($sc, $scid=null) {
+        $this->_db->query(null, 'BEGIN', true);
         if(!$scid) {
             # todo: create here.
             $new_sc = ORM::factory('supplychain');
@@ -177,10 +178,19 @@ class Model_Supplychain extends ORM {
             $this->_db->query(Database::DELETE, $sql, true);
             $sql = sprintf('delete from stop where supplychain_id = %d', $scid);
             $this->_db->query(Database::DELETE, $sql, true);
+            $sql = sprintf('delete from hop where supplychain_id = %d', $scid);
+            $this->_db->query(Database::DELETE, $sql, true);
         }
         # todo: concurrency? check last rev?
-        $this->_db->query(null, 'BEGIN', true);
         try {
+            $scattr_sql = 'insert into supplychain_attribute (supplychain_id, "key", "value") '.
+                'values (:supplychain_id, :key, :value)';
+            $scattr_insert_query = DB::query(Database::INSERT, $scattr_sql);
+            foreach($sc->attributes as $k => $v) {
+                list($nothing, $affected) = $scattr_insert_query->param(':supplychain_id', $scid)
+                    ->param(':key', $k)->param(':value', $v)->execute();
+                if(!$affected) throw new Exception('Could not insert supplychain attribute: "'.$k.'".');
+            }
             $sql = sprintf('insert into stop (supplychain_id, local_stop_id, geometry) values '.
                 '(:supplychain_id, :local_stop_id, ST_SetSRID(ST_GeometryFromText(:geometry), %d))',
                 Sourcemap::PROJ

@@ -72,10 +72,10 @@ body {
     margin: auto;
 }
 
-#summary strong {
+#summary strong, .good-news {
     color: #50aa50;
 }
-#summary strong.bad-news {
+#summary strong.bad-news, .bad-news {
     color: #aa5050;
 }
 

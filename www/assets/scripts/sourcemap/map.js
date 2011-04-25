@@ -160,7 +160,6 @@ Sourcemap.Map.prototype.initControls = function() {
         if(this.options.tileswitcher) {
             this.initTileSwitcher();
         }
-        console.log(this);
         this.addControl('select', 
             new OpenLayers.Control.SelectFeature(layers, {
                 "geometryTypes": ["OpenLayers.Geometry.Point", "OpenLayers.Geometry.MultiLineString"],
@@ -321,7 +320,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
             this.mapHop(supplychain.hops[i], scid);
         }
     }
-    this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
+    if(supplychain.stops.length)
+        this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 

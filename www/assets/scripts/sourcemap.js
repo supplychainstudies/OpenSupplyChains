@@ -5,6 +5,10 @@ Sourcemap.ERROR = 1;
 Sourcemap.WARNING = 2;
 Sourcemap.INFO = 4;
 
+Sourcemap.READ = 1;
+Sourcemap.WRITE = 2;
+Sourcemap.DELETE = 8;
+
 Sourcemap.options = {
     "log_level": Sourcemap.ERROR | Sourcemap.WARNING //| Sourcemap.INFO
 };
@@ -142,6 +146,8 @@ Sourcemap.factory = function(type, data) {
             instance.remote_id = sc.id;
             instance.created = sc.created;
             instance.attributes = sc.attributes;
+            instance.usergroup_perms = sc.usergroup_perms;
+            instance.other_perms = sc.other_perms;
             break;
         default:
             instance = false;

@@ -7,12 +7,12 @@ In the last week,
     <strong class="bad-news">nobody</strong> created any supplychains,
 <?php endif; ?>
 <?php if($user_lastweek > 0): ?>
-    <strong><?= $user_lastweek?></strong> users registered (or were created) and 
+    <strong><?= $user_lastweek?></strong> user<?= $user_lastweek > 1 ? 's' : '' ?> registered (or <?= $user_lastweek > 1 ? 'were' : 'was' ?> created) and 
 <?php else: ?>
     <strong class="bad-news">no new users</strong> registered, and
 <?php endif; ?>
 <?php if($user_lastlogin > 0): ?>
-    <strong><?= $user_lastlogin ?> users</strong> have logged in at least once.
+    <strong><?= $user_lastlogin ?> user<?= $user_lastlogin > 1 ? 's' : '' ?></strong> <?= $user_lastlogin > 1 ? 'have' : 'has' ?> logged in at least once.
 <?php else: ?>
     <strong class="bad-news">nobody</strong> logged in at all.
 <?php endif; ?>
@@ -29,13 +29,13 @@ There don't seem to be any supplychains yet. <a href="map/create">Make some</a>!
 <p>
 Today,
 <?php if($user_today > 0): ?>
-    <strong><?= $user_today ?></strong> users have registered,
+    <strong><?= $user_today ?></strong> <?= $user_today > 1 ? 'users have' : 'user has' ?> registered,
 <?php else: ?> 
     <strong class="bad-news">nobody</strong> has registered,
 <?php endif; ?>
 and
 <?php if($supplychain_today > 0): ?>
-    <strong><?= $supplychain_today ?></strong> supplychains have been created.
+    <strong><?= $supplychain_today ?></strong> <?= $supplychain_today > 1 ? 'supplychains have' : 'supplychain has' ?> been created.
 <?php else: ?>
     <strong class="bad-news">zero</strong> supplychains have been created.
 <?php endif; ?>

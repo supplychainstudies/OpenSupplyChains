@@ -4,6 +4,8 @@ Sourcemap.Supplychain = function() {
     this.stops = [];
     this.hops = [];
     this.attributes = {};
+    this.usergroup_perms = 0;
+    this.other_perms = 0;
     this.broadcast('supplychain:instantiated', this);
 }
 

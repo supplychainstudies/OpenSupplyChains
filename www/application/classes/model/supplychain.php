@@ -242,7 +242,7 @@ class Model_Supplychain extends ORM {
                     'update supplychain set usergroup_perms = %d where id = %d', 
                     $sc->usergroup_perms, $scid
                 );
-                $this->_db->query(Database::UPDATE, $sql);
+                $this->_db->query(Database::UPDATE, $sql, true);
             }
             if(isset($sc->other_perms)) {
                 $sc->other_perms = (int)$sc->other_perms;
@@ -250,12 +250,10 @@ class Model_Supplychain extends ORM {
                     'update supplychain set other_perms = %d where id = %d', 
                     $sc->other_perms, $scid
                 );
-                $this->_db->query(Database::UPDATE, $sql);
+                $this->_db->query(Database::UPDATE, $sql, true);
             }
         } catch(Exception $e) {
             $this->_db->query(null, 'ROLLBACK', true);
-            if(isset($new_sc))
-                $new_sc->delete();
             throw new Exception('Could not save raw supplychain with id "'.$scid.'"('.$e->getMessage().')');
         }
         $this->_db->query(null, 'COMMIT', true);

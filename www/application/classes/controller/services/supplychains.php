@@ -111,6 +111,7 @@
             return $this->_forbidden('You must be logged in to create supplychains.');
         }
         if((int)$current_user->id !== (int)$supplychain->user_id) {
+            // todo: use user_can method
             $user_groups = ORM::factory('user', $current_user)
                 ->groups->find_all()->as_array('id', true);
             return $this->_forbidden(
@@ -124,7 +125,6 @@
                 $supplychain->save_raw_supplychain($raw_sc, $id);
             }
         } catch(Exception $e) {
-            die($e);
             return $this->_bad_request('Could not save supplychain: '.$e->getMessage());
         }
         $this->request->status = 202;

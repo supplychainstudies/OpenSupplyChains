@@ -76,9 +76,12 @@ class CloudMade_StaticMap {
         foreach($paths as $i => $p) {
             $ps[] = 'path='.$p;
         }
-        $ps[] = sprintf("bbox=%s", join(',', $bbox));
-        //$ps[] = sprintf("center=%f,%f", ($max_lat - $min_lat)/2+$min_lat, ($max_lon-$min_lon)/2+$min_lon);
-        //$ps[] = "zoom=3";
+        if($bbox[0] || $bbox[1] || $bbox[2])  {
+            $ps[] = sprintf("bbox=%s", join(',', $bbox));
+        } else {
+            $ps[] = 'center=0,0';
+            $ps[] = 'zoom=2';
+        }
         $ps = join($ps, '&');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, self::get_base_url());

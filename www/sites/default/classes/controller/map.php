@@ -46,6 +46,11 @@ class Controller_Map extends Sourcemap_Controller_Layout {
         if(!is_numeric($supplychain_id)) {
             $supplychain_id = $this->_match_alias($supplychain_id);
         }
+        header('Content-Type: image/png');
+        $raw_sc = ORM::factory('supplychain')->kitchen_sink($supplychain_id);
+        $sm = new Sourcemap_Map_Static($raw_sc);
+        imagepng($sm->render());
+        die();
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
@@ -53,7 +58,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 header('Content-Type: image/png');
                 $cache_file = Kohana::$cache_dir.'static-map-'.$supplychain_id.'.png';
-                if(file_exists($cache_file)) {
+                if(false && file_exists($cache_file)) {
                     print file_get_contents($cache_file);
                     header('X-Cache-Hit: true');
                 } else {

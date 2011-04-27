@@ -27,7 +27,7 @@ class Controller_Tools_Import_Csv extends Sourcemap_Controller_Layout {
                 }
                 $sc->user_id = Auth::instance()->get_user()->id;
                 $update = false;
-                if(isset($posted->replace_into)) {
+                if(isset($posted->replace_into) && $posted->replace_into > 0) {
                     if(!(ORM::factory('supplychain', $posted->replace_into)->owner->id == $sc->user_id)) {
                         Message::instance()->set('That supplychain doesn\'t exist or doesn\'t belong to you.');
                         $this->request->redirect('tools/import/csv');

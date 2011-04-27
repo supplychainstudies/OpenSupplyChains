@@ -31,16 +31,15 @@ Sourcemap.Map.prototype.defaults = {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
-            "strokeWidth": 2,
+            "strokeWidth": 0,
             "strokeColor": "#fff",
             "fontColor": "#eee",
             "fontSize": "${size}",
-            "fillOpacity": 0.8
+            "fillOpacity": 0.7
         },
         "select": {
-            "fillColor": "#C9FF23",
-            "fillOpacity": 1.0,
-            "strokeColor": "${color}"
+            "fillColor": "${color}",
+            "fillOpacity": 1.0
         }
     }, 
     "hop_style": {
@@ -50,8 +49,8 @@ Sourcemap.Map.prototype.defaults = {
             "fillColor": "${color}",
             "strokeWidth": "${width}",
             "strokeColor": "${color}",
-            "fillOpacity": 0.9,
-            "strokeOpacity": 0.8,
+            "fillOpacity": 0.6,
+            "strokeOpacity": 0.6,
             "rotation": "${angle}"
         },
         "select": {
@@ -332,7 +331,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
-    new_feature.attributes.size = stop.getAttr("size", false) || 8;
+    new_feature.attributes.size = Math.max(stop.getAttr("size", false), 11);
     new_feature.attributes.color = stop.getAttr("color", false) || '#006633';
     var new_popup = false;
     if(this.options.popups && this.options.stop_popups) {

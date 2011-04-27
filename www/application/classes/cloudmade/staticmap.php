@@ -92,11 +92,11 @@ class CloudMade_StaticMap {
     }
 
     public static function make_bent_line($from, $to) {
-        $r = 8;
+        $r = 16;
         $pts = array();
         $dx = $to->x - $from->x;
         $dy = $to->y - $from->y;
-        $maxdisp = sqrt($dx*$dx+$dy*$dy) * 0.05;
+        $maxdisp = sqrt($dx*$dx+$dy*$dy) * 0.08;
         if($dx == 0 || $dy == 0) {
             $pts[] = $from;
         } else {

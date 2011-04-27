@@ -247,7 +247,7 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
                 var scid = this.supplychain_id;
             }
             if(this.success && ((typeof this.success) === "function")) {
-                this.success(this.supplychain, this.supplychain_id, new_uri);
+                this.success(this.supplychain, scid, new_uri);
             }
             Sourcemap.broadcast("supplychainSaveSuccess", this.supplychain, scid, new_uri);
         }, {

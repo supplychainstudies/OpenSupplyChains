@@ -98,7 +98,7 @@ class Model_Supplychain extends ORM {
                         h.from_stop_id=ha.from_stop_id and
                         h.to_stop_id=ha.to_stop_id
                     )
-                where h.supplychain_id = %d", $scid);
+                where h.supplychain_id = %d order by h.id asc", $scid);
             $rows = $this->_db->query(Database::SELECT, $sql, true);
             foreach($rows as $i => $row) {
                 $hkey = sprintf("%d-%d", $row->from_stop_id, $row->to_stop_id);

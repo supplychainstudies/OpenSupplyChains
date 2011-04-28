@@ -100,7 +100,6 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
                 )
             );
         } else $hops_csv = null;
-        header('Content-Type: text/plain');
         $new_sc = Sourcemap_Import_Csv::csv2sc($csv, $hops_csv, array('headers' => true));
         if(isset($_POST['replace-into']) && $_POST['replace-into']) {
             $exists = ORM::factory('supplychain')->where('id', '=', $_POST['replace-into'])->find();

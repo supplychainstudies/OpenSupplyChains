@@ -23,6 +23,7 @@ class Controller_Admin extends Sourcemap_Controller_Layout {
             Message::instance()->set(
                 'You\'re not allowed to access the management dashboard.', Message::ERROR
             );
+            $this->request->redirect('auth');
         } 
         parent::before();
         $this->layout->page_title = 'Sourcemap Management';

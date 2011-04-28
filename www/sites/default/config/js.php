@@ -24,6 +24,11 @@ return array(
                 'sourcemap-template', 'sourcemap-map'
             )
         ),
+        'sourcemap-create' => array(
+            'scripts' => array(
+                'assets/scripts/sourcemap/supplychain/create.js',
+            ),
+        ),
         'map-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/view.js'

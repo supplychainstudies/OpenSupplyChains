@@ -1,7 +1,9 @@
 /* include site-wide variables and fxns */
 @import "sourcemap";
 
-/* Page Styles */
+/* PAGE STYLES 
+ * -------------------------------------------------------------- */
+
 html { height:100%;}
 body {
     padding:0 1% 0 1%;
@@ -34,7 +36,9 @@ body.fixed {
     }
 }
 
-/* Branding & Masthead */
+/* BRANDING & MASTHEAD 
+ * -------------------------------------------------------------- */
+
 #branding {
     margin:5px auto 0 auto;
     > a { 
@@ -146,7 +150,9 @@ ul.nav {
     padding-left: 1em;
 }
 
-/* Splash (Home Page) Styles */
+/* SPLASH (HOME PAGE) STYLES 
+ * -------------------------------------------------------------- */
+
 #splash {
     margin:0 auto 10px auto;
     .brand_gradient();
@@ -253,7 +259,52 @@ ul.nav {
     padding:10px 0;
 }
 
-/* Main Content */
+/* FORM STYLES 
+ * -------------------------------------------------------------- */
+
+@height: 1.2em;
+
+.form{
+    input[type=text]{
+        height: @height;
+        clear:both;
+        float:left;
+    }
+    input[type=submit]{
+        height: @height;
+        clear:both;
+        float:left;
+        margin: .3em;
+    }
+    label{
+        clear:both;
+        float:left;
+    } 
+    .status {
+        height:@height;
+        width:2em;
+        float: left;
+        background: url('../images/form-active.png') center transparent no-repeat;
+        background-size: @height @height;
+        --moz-background-size: @height @height;
+    }
+    .status.inactive{
+        background: url('../images/form-inactive.png') center transparent no-repeat;
+    }
+    .error {
+        float:left;
+        height: @height;
+        width: 15em;
+    }
+    .inactive {
+        background: #eee;
+    }
+}
+
+
+/* MAIN CONTENT 
+ * -------------------------------------------------------------- */
+
 #page-navigation {
     margin:0 auto;
     padding:5px 10px;
@@ -266,6 +317,7 @@ ul.nav {
         color:#fff;
     }
 }
+
 #content {
     position:relative;
     color:#111;
@@ -315,7 +367,9 @@ ul.nav {
     #secondary-navigation { clear:both; }
 }
 
-/* Supplychain */
+/* SUPPLYCHAIN 
+-------------------------------------------------------------- */
+
 #supplychain-title {
     color:#000;
     font-size:1.4em;
@@ -345,7 +399,9 @@ ul.nav {
 }
 #creation-meta {}
 
-/* Map Styles */
+/* MAP STYLES 
+ * -------------------------------------------------------------- */
+
 #map {
    background:url("http://staticmaps.cloudmade.com/8ee2a50541944fb9bcedded5165f09d9/staticmap?bbox=51.35,-0.05,51.45,0.05&size=700x600");
     
@@ -463,7 +519,9 @@ ul.nav {
     }
 }
 
-/* Secondary Map Content */
+/* SECONDARY MAP CONTENT 
+ * -------------------------------------------------------------- */
+
 #map-secondary-content {}
 
 #discussion-section {
@@ -537,7 +595,9 @@ ul.nav {
     }
 }
 
-/* Dashboard Styles */
+/* DASHBOARD STYLES 
+ * -------------------------------------------------------------- */
+
 #dashboard-profile {
     height:100px;
     background:@background;
@@ -644,7 +704,10 @@ ul.nav {
         }
     }
 }
-/* Footer Styles */
+
+/* FOOTER STYLES 
+ * -------------------------------------------------------------- */
+
 #footer {
     margin:0 -1%;
     padding:10px 1.5% 0 1.5%;
@@ -675,7 +738,9 @@ ul.nav {
     }
 }
 
-/* Modal Structures */
+/* MODAL STRUCTURES 
+ * -------------------------------------------------------------- */
+
 .overlay {
     display:none;
     width:100%;
@@ -732,7 +797,10 @@ ul.nav {
     color:#fff;
     font-size:2em;
 }
-/* Additional Classes */
+
+/* ADDITIONAL GENERAL USE CLASSES 
+ * -------------------------------------------------------------- */
+
 .button {
     	background: #eee url("../images/button-overlay.png") repeat-x; 
     	display: inline-block; 
@@ -793,5 +861,10 @@ ul.nav {
     border:1px solid #eee;
 }
 
+.clear{
+    clear:both;
+}
 
-
+.highlighted{
+    color:@brand-color;
+}

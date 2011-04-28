@@ -16,7 +16,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 
     public function action_index() {	
 	
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
 	    $supplychain = ORM::factory('supplychain');
 	    $page = max($this->request->param('page'), 1);
 	    $items = 20;
@@ -49,7 +48,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 
 	    Breadcrumbs::instance()->add('Management', 'admin/')
 		->add('Supply Chains', 'admin/supplychains');
-	} 
     }
 
     /*
@@ -58,7 +56,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
      */
     public function action_details($id) {
 
-	if($this->current_user && $this->current_user->has('roles', $this->admin)) {  
 	    $this->template = View::factory('admin/supplychains/details');
 	    
 	    $supplychain = ORM::factory('supplychain', $id);
@@ -135,7 +132,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 		
 		$this->request->redirect("admin/supplychains/".$id);
 		
-	    }
 	    Breadcrumbs::instance()->add('Management', 'admin/')
                 ->add('Supply Chains', 'admin/supplychains')
                 ->add(ucwords($id), 'admin/supplychains/'.$id);

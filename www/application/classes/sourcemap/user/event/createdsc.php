@@ -25,6 +25,14 @@ class Sourcemap_User_Event_Createdsc extends Sourcemap_User_Event {
         if(isset($data['user_id']) && ($user = ORM::factory('user', $data['user_id'])->find())) {
             $data['username'] = $user->username;
         }
+        if(isset($data['supplychain_id'])) {
+            $attr = ORM::factory('supplychain_attribute')
+                ->where('supplychain_id', '=', $data['supplychain_id'])
+                ->and_where('key', '=', 'title')->find();
+            if($attr->loaded()) {
+                $data['supplychain_title'] = (string)$attr->value;
+            }
+        }
         return $data;
     }
 }

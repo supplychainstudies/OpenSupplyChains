@@ -32,7 +32,7 @@ class Google_Spreadsheets {
             $gs = $gs->attributes();
             $i = $gs['row'] - 1;
             $j = $gs['col'] - 1;
-            $cells[$i][$j] = (string)$cell->content;
+            $cells[$i][$j] = preg_replace('/\s+/', ' ', (string)$cell->content);
         }
         return $cells;
     }

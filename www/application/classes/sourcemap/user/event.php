@@ -51,7 +51,7 @@ class Sourcemap_User_Event {
 
     public static function tags($flags) {
         $tags = array();
-        foreach($self::$_tags as $tag => $flag) {
+        foreach(self::$_tags as $tag => $flag) {
             if($flags & $flag) $tags[] = $tag;
         }
         return $tags;

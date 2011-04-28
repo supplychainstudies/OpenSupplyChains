@@ -57,7 +57,7 @@ class Google_Oauth {
         if($response->status_ok()) {
             parse_str($response->body, $resp_data);
             $resp_data = $resp_data;
-        } else error_log(__METHOD__.': fail : '.print_r($response, true));
+        }
         return $resp_data;
     }
 

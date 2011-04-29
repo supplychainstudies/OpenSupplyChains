@@ -263,6 +263,7 @@ class Model_Supplychain extends ORM {
         } catch(Exception $e) {
             // pass
         }
+        Cache::instance()->delete('supplychain-'.$scid);
         return $scid;
     }
 

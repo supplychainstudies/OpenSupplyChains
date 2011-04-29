@@ -128,6 +128,14 @@ div.olControlMousePosition {
     padding:5px;
     overflow: auto;
 }    
+
+.olPopupCloseBox{
+    background: url("img/close.gif") no-repeat;
+    cursor: pointer;
+    top: .3em;
+    right: .3em;
+}
+
 .olControlNavToolbar { 
     width:0px;
     height:0px;
@@ -308,13 +316,6 @@ div.olControlSaveFeaturesItemInactive {
     top: 36px;
     left: 0px;
     background-position: 0px 18px;
-}
-
-.olPopupCloseBox {
-    background: url("img/close.gif") no-repeat;
-    cursor: pointer;
-    left: 12.4em;
-    top: .2em;
 }
 
 .olFramedCloudPopupContent {

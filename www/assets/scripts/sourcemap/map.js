@@ -339,8 +339,10 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         var ll = new OpenLayers.LonLat(new_feature.geometry.x, new_feature.geometry.y);
         var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
         var sc = this.findSupplychain(scid);
-        var cb = function() { this.sourcemap.controls.select.unselectAll(); }
-        var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
+        var cb = function() { 
+            this.sourcemap.controls.select.unselectAll(); 
+        }
+        var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), false, cb);
         new_popup.feature = new_feature;
         new_popup.sourcemap = this;
         new_popup.hide();
@@ -395,7 +397,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         var sc = this.findSupplychain(scid);
         var fromst = sc.findStop(hop.from_stop_id);
         var tost = sc.findStop(hop.to_stop_id);
-        var new_popup = new Sourcemap.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), true);
+        var new_popup = new Sourcemap.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), false);
         new_popup.hide();
     }
     new_feature.attributes.supplychain_instance_id = scid;
@@ -659,24 +661,25 @@ Sourcemap.Popup.prototype.show = function() {
     }, this));
 }
 
-Sourcemap.Popup.prototype.addCloseBox = function(callback) {
+// Similar to addCloseBox, but returns the close box div 
+// rather than appending it.  Useful for working with templates.
+
+Sourcemap.Popup.prototype.getCloseBox = function(callback) {
 
         this.closeDiv = OpenLayers.Util.createDiv(
             this.id + "_close", null, new OpenLayers.Size(17, 17)
         );
         this.closeDiv.className = "olPopupCloseBox";
-        
-        var contentDivPadding = this.getContentDivPadding();
 
-        this.closeDiv.style.left = "12.4em";
-        this.closeDiv.style.top = contentDivPadding.top + "px";
-        this.groupDiv.appendChild(this.closeDiv);
-
-        var closePopup = callback || function(e) {
+        var closePopup = function(e) {
             this.hide();
+            this.sourcemap.controls.select.unselectAll(); 
             OpenLayers.Event.stop(e);
         };
         OpenLayers.Event.observe(this.closeDiv, "click",
                 OpenLayers.Function.bindAsEventListener(closePopup, this));
+        
+        return this.closeDiv;
+
 }
 

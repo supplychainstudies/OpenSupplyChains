@@ -153,7 +153,7 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
                         );
                     }
                 }, this));
-                this.popup.contentDiv.appendChild(this.popup.getCloseBox())
+                this.popup.contentDiv.appendChild(this.popup.getCloseBox());
                 this.popup.updateSize();
                 this.popup.updatePosition();
             }, tscope), tscope, null, this.options.tpl_base_path);

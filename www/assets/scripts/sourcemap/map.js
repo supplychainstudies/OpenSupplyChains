@@ -397,7 +397,10 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         var sc = this.findSupplychain(scid);
         var fromst = sc.findStop(hop.from_stop_id);
         var tost = sc.findStop(hop.to_stop_id);
-        var new_popup = new Sourcemap.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), false);
+        var cb = function() { 
+            this.sourcemap.controls.select.unselectAll(); 
+        }
+        var new_popup = new Sourcemap.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), true, cb);
         new_popup.hide();
     }
     new_feature.attributes.supplychain_instance_id = scid;
@@ -663,7 +666,7 @@ Sourcemap.Popup.prototype.show = function() {
 
 // Similar to addCloseBox, but returns the close box div 
 // rather than appending it.  Useful for working with templates.
-
+/*
 Sourcemap.Popup.prototype.getCloseBox = function() {
 
         this.closeDiv = OpenLayers.Util.createDiv(
@@ -687,29 +690,24 @@ Sourcemap.Popup.prototype.getCloseBox = function() {
 
 }
 
-
 Sourcemap.Popup.prototype.addCloseBox = function(callback) {
+    this.closeDiv = OpenLayers.Util.createDiv(
+        this.id + "_close", null, new OpenLayers.Size(17, 17)
+    );
+    this.closeDiv.className = "olPopupCloseBox";
 
-        this.closeDiv = OpenLayers.Util.createDiv(
-            this.id + "_close", null, new OpenLayers.Size(17, 17)
-        );
-        this.closeDiv.className = "olPopupCloseBox";
+    // use the content div's css padding to determine if we should
+    //  padd the close div
+    var contentDivPadding = 0; 
+    this.getContentDivPadding();
 
-        // use the content div's css padding to determine if we should
-        //  padd the close div
-        var contentDivPadding = 0; 
-        this.getContentDivPadding();
+    this.closeDiv.style.right = contentDivPadding.right + "px";
+    this.closeDiv.style.top = contentDivPadding.top + "px";
 
-        this.closeDiv.style.right = contentDivPadding.right + "px";
-        this.closeDiv.style.top = contentDivPadding.top + "px";
-
-        var closePopup = callback || function(e) {
-            this.hide();
-            OpenLayers.Event.stop(e);
-        };
-
-
-    }
-
-
+    var closePopup = callback || function(e) {
+        this.hide();
+        OpenLayers.Event.stop(e);
+    };
+}
+*/
 

@@ -106,7 +106,7 @@ class Google_Spreadsheets {
     }
 
     public static function get_key_from_link($link) {
-        $pattern = '/https:\/\/spreadsheets\.google\.com\/feeds\/worksheets\/([0-9a-zA-Z_]+)\/private\/(full|values)/';
+        $pattern = '/https:\/\/spreadsheets\.google\.com\/feeds\/worksheets\/([0-9a-zA-Z_-]+)\/private\/(full|values)/';
         $matches = array();
         $skey = false;
         preg_match($pattern, $link, $matches);
@@ -117,7 +117,7 @@ class Google_Spreadsheets {
     }
 
     public static function get_key_and_id_from_link($link) {
-        $pattern = '/https:\/\/spreadsheets\.google\.com\/feeds\/list\/([0-9a-zA-Z_]+)\/([0-9a-zA-Z_]+)\/private\/(full|values)/';
+        $pattern = '/https:\/\/spreadsheets\.google\.com\/feeds\/list\/([0-9a-zA-Z_-]+)\/([0-9a-zA-Z_-]+)\/private\/(full|values)/';
         $matches = array();
         $skey = false;
         preg_match($pattern, $link, $matches);

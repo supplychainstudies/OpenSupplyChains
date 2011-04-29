@@ -64,7 +64,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     //imagepng($img, $cache_file);
                     file_put_contents($cache_file, $img_data);
                     print $img_data;
-                    imagepng($img);
+                    //imagepng($img);
                 }
                 exit;
             } else {

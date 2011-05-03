@@ -35,7 +35,12 @@ Sourcemap.Map.prototype.defaults = {
             "strokeColor": "#fff",
             "fontColor": "#eee",
             "fontSize": "${size}",
-            "fillOpacity": 0.7
+            "fillOpacity": 0.7,
+            "label": "${label}",
+            "labelAlign": "cm",
+            "labelXOffset": 0,
+            "labelYOffset": -5, // fixme: this is bad
+            "fontSize": "2em",
         },
         "select": {
             "fillColor": "${color}",
@@ -44,8 +49,10 @@ Sourcemap.Map.prototype.defaults = {
         "hascontent": {
             "label": "*",
             "labelAlign": "cm",
+            "labelXOffset": 0,
+            "labelYOffset": -5,
             "fontSize": "2em",
-            "filleColor": "${color}"
+            "fillColor": "${color}"
         }
     }, 
     "hop_style": {

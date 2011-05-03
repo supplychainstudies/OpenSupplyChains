@@ -40,6 +40,12 @@ Sourcemap.Map.prototype.defaults = {
         "select": {
             "fillColor": "${color}",
             "fillOpacity": 1.0
+        },
+        "hascontent": {
+            "label": "*",
+            "labelAlign": "cm",
+            "fontSize": "2em",
+            "filleColor": "${color}"
         }
     }, 
     "hop_style": {

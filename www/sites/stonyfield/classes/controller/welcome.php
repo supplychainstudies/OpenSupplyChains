@@ -24,4 +24,9 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         $this->template->scalias = $scalias;
         $this->template->scid = $scid;
     }
+
+    public function action_milk() {
+        $this->template = View::factory('milk');
+        $this->layout->scripts = 'stonyfield-imap';
+    }
 }

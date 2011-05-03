@@ -9,6 +9,14 @@ return array(
             'requires' => array(
                 'sourcemap-template', 'sourcemap-map'
             )
+        ),
+        'stonyfield-imap' => array(
+            'scripts' => array(
+                'sites/stonyfield/assets/scripts/jquery.maphilight.min.js'
+            ),
+            'requires' => array(
+                'jquery'
+            )
         )
     )
 );

@@ -95,6 +95,7 @@ Stonyfield Yogurt - Sourcemap
         left: ;
     }
 </style>
+<?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
 </head>
 <body>
 <div id="wrapper">
@@ -108,7 +109,6 @@ Stonyfield Yogurt - Sourcemap
         <div class="clear">&nbsp;</div>
     </div>
 </div>
-<?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
 <script>
 /*
 $(document).ready(function() {
@@ -118,7 +118,7 @@ $(document).ready(function() {
     Sourcemap.TPL_PATH = "sites/stonyfield/assets/scripts/tpl/";
 
     // supplychains to map
-    var scid = <?= $supplychain_id ?>;
+    var scid = <?= isset($supplychain_id) ? $supplychain_id : false ?>;
     
     // new map instance with custom stop and popup decoratorsa
     Sourcemap.map_instance = new Sourcemap.Map('map', {

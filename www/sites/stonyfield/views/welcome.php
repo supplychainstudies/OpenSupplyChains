@@ -1,7 +1,7 @@
 <ul class="map-nav<?= isset($scalias) ? " $scalias" : '' ?>">
-    <li class="yogurt"><a href="yogurt">Everything</a></li>
-    <li class="dairy"><a href="#">Milk</a>
-        <ul>
+    <li class="yogurt"><a href="yogurt">Home</a></li>
+    <li class="dairy"><a href="milk">Milk</a>
+        <!--ul>
             <li><a href="northeast">Northeast</a></li>
             <li><a href="southeast">Southeast</a></li>
             <li><a href="greatlakes">Great Lakes</a></li>
@@ -10,7 +10,7 @@
             <li><a href="mountain">Mountain</a></li>
             <li><a href="northwest">Northwest</a></li>
             <li><a href="california">California</a></li>
-        </ul>
+        </ul-->
     </li>
     <li class="sweeteners"><a href="sweeteners">Fruit and Sweeteners</a></li>
     <li class="other"><a href="other">Other Ingredients</a></li>

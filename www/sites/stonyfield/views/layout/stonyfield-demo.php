@@ -28,11 +28,10 @@ Stonyfield Yogurt - Sourcemap
         background-image: url("sites/stonyfield/assets/images/stonyfield-demo-banner.png");
     }
     #map, .tabs-map {
-        min-height: 400px;
-        height: 600px;
         width: 100%;
         background-color: #fff;
     }
+    div.dateline { color: #525b0c; margin-left: 1em; }
     #foot {}
     #foot img {
         float: right;
@@ -63,8 +62,8 @@ Stonyfield Yogurt - Sourcemap
     ul.map-nav.yogurt li.yogurt,
     ul.map-nav.other li.other
     { font-weight: bold; }
-    ul.map-nav li.sweeteners { background-color: #f7c370; }
-    ul.map-nav li.other { background-color: #70d0f8; }
+    ul.map-nav li.sweeteners { background-color: #f7c370; background-color: #f36b21 }
+    ul.map-nav li.other { background-color: #ffcc00; }
 
     ul.map-nav li.dairy ul {
         display: none;
@@ -103,6 +102,7 @@ Stonyfield Yogurt - Sourcemap
     </div>
     <div id="content"><?= $content ?>
         <div class="clear">&nbsp;</div>
+        <div class="dateline">Last updated on May 04, 2011</div>
     </div>
     <div class="clear">&nbsp;</div>
     <div id="foot">

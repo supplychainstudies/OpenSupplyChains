@@ -162,8 +162,8 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
         "prep_stop": function(stop, ftr) {
             // todo: magic words for size (other than "size")?
             if(stop.getAttr("youtube:link", false) || stop.getAttr("vimeo:link", false) || stop.getAttr("flickr:setid", false)) {
-                ftr.renderIntent = "hascontent";
-            }
+                ftr.attributes.label = "*";
+            } else ftr.attributes.label = "";
         },
         // callback for decorating hop feature and its arrow
         'prep_hop': function(hop, ftr, arrow) {

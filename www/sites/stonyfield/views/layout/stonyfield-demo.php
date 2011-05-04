@@ -31,7 +31,15 @@ Stonyfield Yogurt - Sourcemap
         width: 100%;
         background-color: #fff;
     }
-    div.dateline { color: #525b0c; margin-left: 1em; }
+    div.dateline { 
+        color: #525b0c; 
+        margin-left: 1em; 
+    }
+    div.instructions { 
+        color: #525b0c; 
+        margin-left: 1em;  
+        font-style: italic; 
+    }
     #foot {}
     #foot img {
         float: right;

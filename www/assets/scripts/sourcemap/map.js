@@ -346,6 +346,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.stop_instance_id = stop.instance_id;
     new_feature.attributes.size = Math.max(stop.getAttr("size", false), 11);
     new_feature.attributes.color = stop.getAttr("color", false) || '#006633';
+    new_feature.attributes.label = stop.getAttr("label", false) || '';
     var new_popup = false;
     if(this.options.popups && this.options.stop_popups) {
         var puid = stop.instance_id+'-popup';

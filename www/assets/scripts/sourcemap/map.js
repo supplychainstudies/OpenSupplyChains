@@ -34,13 +34,13 @@ Sourcemap.Map.prototype.defaults = {
             "strokeWidth": 0,
             "strokeColor": "#fff",
             "fontColor": "#eee",
-            "fontSize": "${size}",
+            "fontSize": "1.5em",
+            "fontFamily": "Georgia, serif",
             "fillOpacity": 0.7,
             "label": "${label}",
             "labelAlign": "cm",
             "labelXOffset": 0,
-            "labelYOffset": -5, // fixme: this is bad
-            "fontSize": "2em",
+            "labelYOffset": -4, // fixme: this is bad
         },
         "select": {
             "fillColor": "${color}",
@@ -50,8 +50,8 @@ Sourcemap.Map.prototype.defaults = {
             "label": "*",
             "labelAlign": "cm",
             "labelXOffset": 0,
-            "labelYOffset": -5,
-            "fontSize": "2em",
+            "labelYOffset": -4,
+            "fontSize": "em",
             "fillColor": "${color}"
         }
     }, 

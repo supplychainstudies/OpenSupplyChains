@@ -73,8 +73,8 @@ export PGUSER PGPASSWORD PGHOST PGDATABASE
 SCHEMAFILES=$(find "${SMAP_SCHEMADIR}" -name "*.${mdir}.sql" -o -name "*.${mdir}.sql" | $sortcmd) 
 
 DATESTR=`date "+%Y%m%d.%H%M%S"`
-DBOUTPUT="db-migrate.${DATESTR}.${mdir}.out"
-DUMPOUTPUT="${DATESTR}.${mdir}.dump"
+DBOUTPUT="db-migrate.${1}.${DATESTR}.${mdir}.out"
+DUMPOUTPUT="${1}.${DATESTR}.${mdir}.dump"
 
 echo -e "\t- Backing up current schema and data..."
 pg_dump | bzip2 -cz > "${DUMPOUTPUT}.bz2"

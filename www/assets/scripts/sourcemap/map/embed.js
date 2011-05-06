@@ -510,7 +510,62 @@ Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
 }
 
 Sourcemap.Map.Embed.prototype.showHopDetails = function(hid, scid) {
-    // todo: this.
+   // make sure the target magic word index is valid
+    var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
+    
+    // sync tour
+    var tftrs = this.tour.features;
+    for(var tfi=0; tfi< tftrs.length; tfi++) {
+        var tfattrs = tftrs[tfi].attributes;
+        if(tfattrs.hop_instance_id && tfattrs.hop_instance_id == hid) {
+            this.tour.ftr_index = tfi;
+            break;
+        }
+    }
+
+    // load hop details template and show in embed detail pane
+    var sc = this.map.supplychains[scid];
+    var hop = sc.findHop(hid);
+
+    // get magic word...make sure it's valid
+    var magic_word = this.magic_word_sequence[seq_idx];
+    while(((hop.getAttr(magic_word, false) === false) || (!hop.getAttr(magic_word).length || hop.getAttr(magic_word).length == 1)) 
+        && seq_idx < this.magic_word_sequence.length-1) {
+        magic_word = this.magic_word_sequence[++seq_idx];
+    }
+    
+    // sync cur seq idx
+    this.magic_word_sequence_cur_idx = seq_idx;
+
+    if(hop.getAttr(magic_word, false) === false) magic_word = false;
+
+    $(this.dialog).data("state", -1); // loading
+
+    // load template and render
+    // todo: make this intelligible
+    Sourcemap.template('embed/details/hop', function(p, tx, th) {
+            $(this.embed.dialog_content).empty();
+            this.embed.showDialog(th);
+            $(this.embed.dialog_content).find('.content-item a').click($.proxy(function(evt) {
+                var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
+                var idx = -1;
+                for(var i=0; i<this.embed.magic_word_sequence.length; i++) {
+                    if(clicked_idx === i) {
+                        idx = i;
+                        break;
+                    }
+                }
+                if(idx >= 0) {
+                    this.embed.showHopDetails(
+                        this.hop.instance_id, this.supplychain.instance_id, idx
+                    );
+                }
+            }, this));
+        }, 
+        {"hop": hop, "supplychain": sc, "magic_word": magic_word, 'embed': this},
+        {"embed": this, "magic_word": magic_word, "hop": hop, "supplychain": sc},
+        this.options.tpl_base_path
+    );
 }
 
 Sourcemap.Map.Embed.prototype.dialogNext = function() {
@@ -549,6 +604,19 @@ Sourcemap.Map.Embed.prototype.dialogNext = function() {
         this.magic_word_sequence_cur_idx = nxt_seq_idx;
         this.showStopDetails(stop.instance_id, scid, this.magic_word_sequence_cur_idx); 
     } else if(hop = this.tour.getCurrentHop()) {
+        var magic_word = false;
+         while(!magic_word && nxt_seq_idx < this.magic_word_sequence.length) {
+            magic_word = this.magic_word_sequence[nxt_seq_idx];
+            if(magic_word && stop.getAttr(magic_word, false) == false) {
+                magic_word = false;
+            }
+            if(!magic_word) nxt_seq_idx++;
+        };
+        if(!magic_word) {
+            this.magic_word_sequence_cur_idx = -1;
+            return this.dialogNext();
+        }
+        this.magic_word_sequence_cur_idx = nxt_seq_idx;
         this.showHopDetails(hop.instance_id, scid, this.magic_word_sequence_cur_idx);
     } else {
         throw new Error('Unexpected feature...not a stop or a hop.');

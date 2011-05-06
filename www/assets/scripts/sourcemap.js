@@ -366,3 +366,51 @@ Sourcemap.oksort = function(o, cmp) {
     for(var ki=0; ki<olist.length; ki++) sorted.push(olist[ki].k);
     return sorted;
 }
+
+Sourcemap.hexc2rgb = function(hexc) {
+    if(hexc.charAt(0) == "#") hexc = hexc.substr(1);
+    if(hexc.match(/^[0-9A-Fa-f]{3}$/)) {
+        hexc = hexc.replace((new RegExp("([0-9a-fA-F])", "g")), "$1$1");
+    }
+    var r, g, b;
+    if(hexc.match(/^[0-9a-fA-F]{6}$/)) {
+        hexc = parseInt(hexc, 16);
+        r = (hexc & 0xff0000) >> (8*2);
+        g = (hexc & 0x00ff00) >> 8;
+        b = (hexc & 0x0000ff)
+    } else throw new Error('Invalid hex color.');
+    return [r,g,b];
+}
+
+Sourcemap.rgb2hexc = function(rgb) {
+    if(!rgb.length || rgb.length < 3)
+        throw new Error('Invalid rgb.');
+    var r = rgb[0];
+    var g = rgb[1];
+    var b = rgb[2];
+    var hexc = 0;
+    hexc = (new Number(r)) << (8*2);
+    hexc |= (new Number(g)) << 8;
+    hexc |= (new Number(b));
+    hexc = hexc.toString(16);
+    while(hexc.length < 6) hexc = "0"+hexc;
+    return "#"+hexc;
+}
+
+Sourcemap.Color = function(r, g, b) {
+    this.r = r || 0;
+    this.g = g || 0;
+    this.b = b || 0;
+}
+
+Sourcemap.Color.prototype.fromHex = function(hexc) {
+    var rgb = Sourcemap.hexc2rgb(hexc);
+    this.r = rgb[0];
+    this.g = rgb[1];
+    this.b = rgb[2];
+    return this;
+}
+
+Sourcemap.Color.prototype.toString = function() {
+    return Sourcemap.rgb2hexc([this.r, this.g, this.b]);
+}

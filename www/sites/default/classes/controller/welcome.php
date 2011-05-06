@@ -10,6 +10,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             ->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)
             ->limit(12)->order_by('created', 'desc')
             ->find_all()->as_array('id', true);
+        $supplychains = array();
         foreach($supplychain_rows as $i => $sc) {
             $ks =  ORM::factory('supplychain')->kitchen_sink($sc->id);
             $ks->owner = ORM::factory('user', $sc->user_id)->find();

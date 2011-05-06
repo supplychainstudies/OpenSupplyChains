@@ -415,6 +415,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
             this.sourcemap.controls.select.unselectAll(); 
         }
         var new_popup = new Sourcemap.Popup(puid, ll, sz, fromst.getLabel()+" to "+tost.getLabel(), true, cb);
+        new_popup.sourcemap = this;
         new_popup.hide();
     }
     new_feature.attributes.supplychain_instance_id = scid;

@@ -1,5 +1,6 @@
 <div class="popup-wrapper">
-    <h4 class="popup-title"><%= this.hop.getAttr("org.sourcemap.name", "org.sourcemap.label", "name", "Hop") %></h4>
-    <h5 class="popup-placename"><%= this.hop.getAttr("org.sourcemap.placename", "n/a") %></h5>
-    <p class="popup-description"><%= this.hop.getAttr("org.sourcemap.desc.short", "") %></p>
+    <h4 class="popup-title"><%= _S.ttrunc(this.hop.getAttr("name", "Transit"), 16) %></h4>
+    <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("placename", "")), 24) %></h5>
+    <% if(this.hop.getAttr("description", false)) { %><p class="popup-description"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("description","")), 64, true) %></p><% } %>
+    <% if(this.morelink) {%><a class="popup-more-link" href="javascript: void(0);">More</a><% } %>
 </div>

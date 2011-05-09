@@ -19,7 +19,7 @@
         'assets/styles/general.less'
     ) ?>
 </head>
-<body class="fixed">
+<body class="main">
     <div id="top-notice"></div>
     <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <div id="content">          
@@ -41,22 +41,6 @@
     </div>
     <footer id="footer">
         <div id="footer-content">
-        <div id="footer-callouts">
-            <div class="footer-box">
-                <h3>Contact us</h3>
-                <p>Interested in helping? Partnering? Just have some questions? Contact us at <a>info[at]sourcemap[dot]org</a>.</p> 
-            </div>
-            <div class="footer-box">               
-                <h3>Creative Commons</h3>
-                <p>All of our user generated content (maps, comments, etc.) is licensed <a href="">BY-SA Creative commons 3.0</a>.</p> 
-            </div>
-            <div class="footer-box">               
-                <h3>Open Data</h3>
-                <p>Sourcemap is committed to open data. All of our data is <a href="">PDDL (1.0)</a> and available at <a href="">data.sourcemap.org</a>.</p> 
-            </div>
-            <div class="clear"></div>
-            <p>Sourcemap (TM). For more information on how we use your data, read our <a href="">privacy policy</a>. For more information on how you can use the site, read our <a href="">terms of service</a>.</p>
-        </div>
         <div id="footer-about">
             <h3>About Sourcemap</h3>
             <p>We built Sourcemap so that everyone can access the information needed to make sustainable choices and share them with the world. The project is free, opensource, and volunteer driven. For more news, check the <a href="">Sourcemap Blog</a>.</p>

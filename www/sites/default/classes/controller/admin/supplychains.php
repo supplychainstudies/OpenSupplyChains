@@ -198,7 +198,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         } catch (Exception $e) {
         Message::instance()->set('Could not delete the supplychain.');
         }
-    } 
     }
 
 
@@ -233,6 +232,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         }
         $this->request->redirect("admin/supplychains/".$id);
 
- }
+    }
+}
 
 

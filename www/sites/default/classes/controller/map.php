@@ -52,18 +52,21 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 header('Content-Type: image/png');
-                $cache_file = Kohana::$cache_dir.'static-map-'.$supplychain_id.'.png';
-                if(file_exists($cache_file)) {
-                    print file_get_contents($cache_file);
+                //$cache_file = Kohana::$cache_dir.'static-map-'.$supplychain_id.'.png';
+                $cache_key = "static-map-{$supplychain_id}-png";
+                $exists = Cache::instance()->get($cache_key);
+                if($exists) {
                     header('X-Cache-Hit: true');
+                    print $exists;
                 } else {
                     $img_data = CloudMade_StaticMap::get_image($supplychain->kitchen_sink($supplychain_id));
                     //$raw_sc = $supplychain->kitchen_sink($supplychain_id);
                     //$sm = new Sourcemap_Map_Static($raw_sc);
                     //$img = $sm->render();
                     //imagepng($img, $cache_file);
-                    file_put_contents($cache_file, $img_data);
+                    //file_put_contents($cache_file, $img_data);
                     print $img_data;
+                    Cache::instance()->set($cache_key, $img_data);
                     //imagepng($img);
                 }
                 exit;

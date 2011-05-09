@@ -28,9 +28,9 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             ));
 
         $supplychains = $supplychain->order_by('modified', 'ASC')
-        ->limit($pagination->items_per_page)
-        ->offset($pagination->offset)
-        ->find_all();        
+            ->limit($pagination->items_per_page)
+            ->offset($pagination->offset)
+            ->find_all();        
         $supplychains_array = $supplychains->as_array('id', array('id', 'created')); 
         
         $attributes = array();
@@ -38,8 +38,8 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             $scid = $supplychain->id;
             $supplychains_array[$scid] = (array)$supplychains_array[$scid];
             $supplychains_array[$scid]['owner'] = $supplychain->owner->username;
-        $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychains_array[$scid]['created']);
-        $supplychains_array[$scid]['title'] = $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
+            $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychains_array[$scid]['created']);
+            $supplychains_array[$scid]['title'] = $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
         }
 
         $this->template->page_links = $pagination->render();
@@ -68,18 +68,22 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $permissions_array = array("public", "private");
         $group_permissions_array = array("Nothing", "Read", "Write", "Read and Write");
         
+        // todo: fix this (masks)
         switch($supplychain->usergroup_perms) {
-        case 0:
-        $usergroup_perms = "Nothing";
-        break;
-        case 1:
-        $usergroup_perms = "Read";
-        break;
-        case 2:
-        $usergroup_perms = "Write";
-        break;
-        case 3:
-        $usergroup_perms = "Read and Write";
+            case 0:
+                $usergroup_perms = "Nothing";
+                break;
+            case 1:
+                $usergroup_perms = "Read";
+                break;
+            case 2:
+                $usergroup_perms = "Write";
+                break;
+            case 3:
+                $usergroup_perms = "Read and Write";
+                break;
+            default:
+                
         }
         
         
@@ -113,29 +117,30 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         ->filter(true, 'trim');
         
         if(strtolower(Request::$method) === 'post' && $post->check()) {
-        $post = (object)$post->as_array();
-        
-        $site_added = $post->site;
-        $alias_added = $post->alias;
-        
-                
-        $supplychain_alias = ORM::factory('supplychain_alias');
-        $supplychain_alias->supplychain_id = $id;
-        $supplychain_alias->site = $site_added;
-        $supplychain_alias->alias = $alias_added;
-        
-        try {
-            $supplychain_alias->save();
-        } catch(Exception $e) {
-            Message::instance()->set('Could not create alias. Violates the unique (site, alias)');
-        }        
-        
-        $this->request->redirect("admin/supplychains/".$id);
-        
+            $post = (object)$post->as_array();
+            
+            $site_added = $post->site;
+            $alias_added = $post->alias;
+            
+                    
+            $supplychain_alias = ORM::factory('supplychain_alias');
+            $supplychain_alias->supplychain_id = $id;
+            $supplychain_alias->site = $site_added;
+            $supplychain_alias->alias = $alias_added;
+            
+            try {
+                $supplychain_alias->save();
+            } catch(Exception $e) {
+                Message::instance()->set('Could not create alias. Violates the unique (site, alias)');
+            }        
+            
+            $this->request->redirect("admin/supplychains/".$id);
+        }
+
         Breadcrumbs::instance()->add('Management', 'admin/')
                 ->add('Supply Chains', 'admin/supplychains')
                 ->add(ucwords($id), 'admin/supplychains/'.$id);
-        }
+
     }
 
 

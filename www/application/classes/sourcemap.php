@@ -7,6 +7,9 @@ class Sourcemap {
     const WRITE = 2;
     const DELETE = 8;
 
+    // supplychain flags
+    const FEATURED = 8;
+
     // env constants
     const DEV = 'development';
     const STAGING = 'staging';

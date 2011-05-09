@@ -21,6 +21,7 @@ class Sourcemap {
     public static function init() {
         if(isset(Kohana::$environment))
             self::$env = Kohana::$environment;
+        Cache::$default = 'default';
         Sourcemap_JS::add_packages(
             isset(Kohana::config('js')->packages) ? 
                 Kohana::config('js')->packages : array()

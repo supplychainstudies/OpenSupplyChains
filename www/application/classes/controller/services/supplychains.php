@@ -9,7 +9,7 @@
  class Controller_Services_Supplychains extends Sourcemap_Controller_Service {
     public function action_get() {
         $id = $this->request->param('id', false);
-        if(!preg_match('/^\d+$/', $id)) {
+        if($id && !preg_match('/^\d+$/', $id)) {
             $alias = ORM::factory('supplychain_alias')
             ->where('site', '=', SOURCEMAP_SITE)
             ->where('alias', '=', $id)
@@ -22,11 +22,7 @@
             }
         }
         if($id) {
-            try {
-                $cached = Cache::instance()->get('supplychain-'.$id);
-            } catch(Exception $e) {
-                $cached = false;
-            }
+            $cached = Cache::instance()->get('supplychain-'.$id);
             if($cached) {
                 $this->_cache_hit = true;
                 $this->response = array(
@@ -37,39 +33,49 @@
                 try {
                     $fetched = ORM::factory('supplychain')->kitchen_sink($id);
                 } catch(Exception $e) {
-                    // pass
-                    die($e);
                     $fetched = false;
                 }
                 if(!$fetched) {
                     return $this->_not_found('Supplychain not found.');
                 }
-                try {
-                    Cache::instance()->set('supplychain-'.$id, $fetched);
-                } catch(Exception $e) {
-                    //pass
-                    die($e);
-                }
+                Cache::instance()->set('supplychain-'.$id, $fetched);
                 $this->response = array(
                     'supplychain' => $fetched
                 );
             }
         } else {
-            $params = $this->_list_parameters();
+            $switch_keys = array('featured');
+            $switches = array();
+            foreach($_GET as $k => $v) {
+                $k = strtolower($k);
+                if(in_array($k, $switch_keys)) {
+                    if(strtolower($v) === 'yes')
+                        $switches[] = $k;
+                    break;
+                }
+            }
+            $lparams = $this->_list_parameters();
             $cache_key = sprintf("supplychains-%d-%d", 
-                $params->offset, $params->limit
+                $lparams->offset, $lparams->limit
             );
+            sort($switches);
+            $cache_key .= '-'.join('-', $switches);
             if($supplychains = Cache::instance()->get($cache_key)) {
                 // pass
             } else {
                 $supplychains = ORM::factory('supplychain')
-                    ->offset($params->offset)->limit($params->limit)
-                    ->find_all()->as_array('id', array('id', 'created'));
+                    ->offset($lparams->offset)->limit($lparams->limit);
+                if(in_array('featured', $switches)) {
+                    $supplychains->where(DB::expr('(flags & '.Sourcemap::FEATURED.')'), '>', 0);
+                }
+                $supplychains = $supplychains->find_all()
+                    ->as_array('id', array('id', 'created'));
                 Cache::instance()->set($cache_key, $supplychains);
             }
             $this->response = array(
                 'supplychains' => $supplychains,
-                'parameters' => $params, 
+                'parameters' => $lparams,
+                'switches' => $switches,
                 'total' => ORM::factory('supplychain')->count_all()
             );
         }

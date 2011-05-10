@@ -83,7 +83,6 @@ img {
     height: auto;
 }
 
-
 .serif-font {
     font-family: 
         Georgia,
@@ -103,6 +102,10 @@ img {
 
 html { height:100%;}
 body {
+    .serif-font;
+    font-size:1em;
+    line-height:1.6em;
+
     padding:0 1% 0 1%;
     width:98%;
     /*min-width:1020px;*/
@@ -116,6 +119,15 @@ body {
         color:@heading-color;
     }
 }
+
+h1,h2,h3,h4,h5,h6{
+    .sansserif-font;
+    margin: .5em 0;
+}
+h1 {
+    font-size: 1.2em;
+}
+
 body.main{
     #branding, #content, #footer-content, #page-navigation, .splash-text {
         /*width:1020px;*/
@@ -156,8 +168,8 @@ body.main{
         background:url("../images/logo.png") top left no-repeat;
         background-size: 100%;
         --moz-background-size: 100%;
-        height: 5em;
-        width: 10em;
+        height: 6em;
+        width: 13em;
         float:left;
         h1{
             display:none;
@@ -165,11 +177,11 @@ body.main{
     }
     
     #search{
-         .fourcol;
+         width: 50%;
          float: left;
          font-size:14px;
          .rounded(16px);
-         padding:18px 4px 4px;
+         padding:22px 4px 4px;
          input{
          width: 100%;
          }
@@ -178,6 +190,7 @@ body.main{
     ul.nav {
         float:left;
         list-style:none;
+        padding:20px 4px 4px;
         .sansserif-font;
         li.register-link {
             border:none;
@@ -203,10 +216,11 @@ body.main{
                 display:block;
             }
             > ul {
+                font-size:.8em;
+                line-height:1em;
                 border:1px solid #ccc;
                 background:#eee;
                 position:absolute;
-                top:3em;
                 width:130px;
                 padding:0;
                 list-style:none;
@@ -218,7 +232,7 @@ body.main{
                        border:none;
                    }
                    > ul {
-                       padding:5px;
+                       margin:5px;
                        list-style:none;
                        > li {
                            font-weight:normal;
@@ -243,8 +257,20 @@ body.main{
     padding-left: 1em;
 }
 
-/* HOME STYLES 
+/* WELCOME PAGE STYLES 
  * -------------------------------------------------------------- */
+
+#slider{
+    .map{
+        .description{
+            .fourcol;
+            .last;
+            float:right;
+            background: rgba(255,255,255,.8);
+            height: 100%;
+        }
+    }
+}
 
 .map-thumb {
     border: .2em solid #ccc; 

@@ -100,6 +100,13 @@ tbody td {
 fieldset {
     border: 1px solid #ddd;
 }
+.attr-list { 
+    font-family: monospace;
+}
+.attr-list dt {
+    border-bottom: .1em solid #ddd;
+    font-weight: bold;
+}
 </style>
 </head>
 <body>

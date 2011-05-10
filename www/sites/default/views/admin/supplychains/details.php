@@ -7,25 +7,27 @@
 <input type="submit" value="Create Alias" />
 </form><br />
 
-<?php if(!empty($owner)): ?>
-		       <strong>Owner:</strong> <?= HTML::chars($owner)?><br />
-<?php endif;?>
 
-<?php if(!empty($stop_count)): ?>
-      <strong>Number of stops:</strong> <?= $stop_count;?><br />
-<?php endif;?>
+<h3><?= isset($attributes['title']) ? HTML::characters($attributes['title']) : 'Untitled Sourcemap' ?></h3>
+<?php if($flags & Sourcemap::FEATURED): ?><p class="featured good-news">** This map is a <a href="admin/featured">featured</a> map. **</p><?php endif; ?>
+<p><?php if($owner): ?>
+This map belongs to <a href="admin/users/<?= $owner_id ?>"><?= HTML::chars($owner)?></a>.
+<? else: ?>
+This map belongs to <span class="bad-news">*nobody*</span>.
+<?php endif;?> It has <?= $stop_count ?> stop<?= $stop_count == 1 ? '' : 's' ?>
+ and <?= $hop_count ?> hop<?= $hop_count == 1 ? '' : 's' ?>.
 
-<?php if(!empty($hop_count)): ?>
- <strong>Number of hops:</strong> <?=$hop_count;?><br />
-<?php endif;?>
-
-<?php if(!empty($attributes)): ?>
- <?php $last_attribute = end($attributes);?>
- <strong>Attribute(s):</strong>  
- <?php foreach($attributes as $attribute): ?>
- <?= Html::chars($attribute['key']) ?>
- <?php if($attribute != $last_attribute) {?>, <?}?>
- <?php endforeach;?>
+<h3>Attribute(s):</h3>
+<?php if($attributes): ?>
+    <dl class="attr-list">
+    <?php foreach($attributes as $k => $v): ?>
+        <dt><?= HTML::chars($k) ?></dt>
+        <dd>
+            <?= substr(HTML::chars($v), 0, 32) ?>
+            <?php if(strlen(HTML::chars($v)) > 32): ?>...<?php endif; ?>
+        </dd>
+     <?php endforeach;?>
+    </dl>
 <?php endif;?>
 
 <form name="permissions" method="post" action="admin/supplychains/<?=$id?>/change_perms">

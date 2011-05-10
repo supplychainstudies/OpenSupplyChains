@@ -29,6 +29,10 @@ div.anythingSlider.activeSlider .anythingWindow {
     border-color: #eaeaea;
 }
 
+div.anythingSlider .anythingControls .start-stop{
+    display:none;
+}
+
 /**** DO NOT CHANGE BELOW THIS LINE ****/
 /* anythingSlider viewport window */
 div.anythingSlider .anythingWindow {

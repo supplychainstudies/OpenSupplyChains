@@ -1,7 +1,5 @@
 <?php // Returns featured maps ?>
 
-
-
 <ul id="slider">
     <li>
         <div class="map-featured" style="background-image: url('map/static/50');">

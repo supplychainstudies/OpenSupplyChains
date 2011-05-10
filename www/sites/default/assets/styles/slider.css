@@ -8,7 +8,6 @@
 
 /******* SET DEFAULT DIMENSIONS HERE ********/
 div.anythingSlider {
-    width: 700px;
     height: 390px;
     margin: 0 auto;
 }
@@ -16,7 +15,7 @@ div.anythingSlider {
 /****** SET COLORS HERE *******/
 /* Default State */
 div.anythingSlider .thumbNav a.cur, div.anythingSlider .thumbNav a {
-    background: #777;
+    background: #eaeaea;
 }
 div.anythingSlider .anythingWindow {
     border-top: 3px solid #777;
@@ -24,10 +23,10 @@ div.anythingSlider .anythingWindow {
 }
 /* Active State */
 div.anythingSlider.activeSlider .thumbNav a.cur, div.anythingSlider.activeSlider .thumbNav a {
-    background-color: #7C9127;
+    background-color: #eaeaea;
 }
 div.anythingSlider.activeSlider .anythingWindow {
-    border-color: #7C9127;
+    border-color: #eaeaea;
 }
 
 /**** DO NOT CHANGE BELOW THIS LINE ****/

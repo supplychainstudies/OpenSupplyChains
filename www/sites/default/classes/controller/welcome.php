@@ -1,10 +1,22 @@
 <?php
+/**
+ * Description Home Page 
+ * @package    Sourcemap
+ * @author     Alex Ose 
+ * @copyright  (c) Sourcemap
+ * @license    http://blog.sourcemap.org/terms-of-service
+ */
+
 class Controller_Welcome extends Sourcemap_Controller_Layout {
 
     public $layout = 'base';
     public $template = 'welcome';
-
+    
     public function action_index() {
+        $this->layout->scripts = array(
+            'sourcemap-welcome'
+        );
+
         $this->layout->page_title = 'Welcome to Sourcemap.';
         $supplychain_rows = ORM::factory('supplychain')
             ->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)

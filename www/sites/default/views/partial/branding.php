@@ -7,6 +7,7 @@
         <div id="search">
             <input id="search-field" type="search" results="0" placeholder="Search" />
         </div>
+        <!-- todo: this should be dynamic -->
         <ul class="nav">
             <li id="browse-navigation">
                 <h3>Browse</h3>            

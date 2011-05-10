@@ -27,6 +27,7 @@
 
         <div id="top-notice"></div>
         <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <div class="clear"></div>
         <div id="content">
              <header>
                 <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
@@ -40,7 +41,6 @@
              <nav id="secondary-navigation"></nav>
         </div>
         <footer id="footer">
-
 
         <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
           

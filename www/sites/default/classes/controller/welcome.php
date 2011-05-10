@@ -14,9 +14,10 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
     
     public function action_index() {
         $this->layout->scripts = array(
+            'sourcemap-core',
             'sourcemap-welcome'
         );
-
+        
         $this->layout->page_title = 'Welcome to Sourcemap.';
         $supplychain_rows = ORM::factory('supplychain')
             ->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)

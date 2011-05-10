@@ -60,24 +60,27 @@
             );
             sort($switches);
             $cache_key .= '-'.join('-', $switches);
-            if($supplychains = Cache::instance()->get($cache_key)) {
+            $supplychains = ORM::factory('supplychain');
+            if($supplychain_list = Cache::instance()->get($cache_key)) {
                 // pass
             } else {
-                $supplychains = ORM::factory('supplychain')
-                    ->offset($lparams->offset)->limit($lparams->limit);
                 if(in_array('featured', $switches)) {
                     $supplychains->where(DB::expr('(flags & '.Sourcemap::FEATURED.')'), '>', 0);
+                    $supplychains->and_where(DB::expr('(other_perms & '.Sourcemap::READ.')'), '>', 0);
                 }
-                $supplychains = $supplychains->find_all()
-                    ->as_array('id', array('id', 'created'));
-                Cache::instance()->set($cache_key, $supplychains);
+                $c = $supplychains->reset(false)->count_all();
+                $supplychains->offset($lparams->offset)->limit($lparams->limit);
+                $supplychain_list = array(
+                    'supplychains' => $supplychains->find_all()
+                        ->as_array(null, array('id', 'created')),
+                    'total' => $c,
+                    'limit' => $lparams->limit,
+                    'offset' => $lparams->offset,
+                    'switches' => $switches
+                );
+                Cache::instance()->set($cache_key, $supplychain_list);
             }
-            $this->response = array(
-                'supplychains' => $supplychains,
-                'parameters' => $lparams,
-                'switches' => $switches,
-                'total' => ORM::factory('supplychain')->count_all()
-            );
+            $this->response = $supplychain_list;
         }
     }
 

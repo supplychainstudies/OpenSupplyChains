@@ -87,7 +87,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         }
         
         
-        $attributes= $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
+        $attributes= $supplychain->attributes->find_all()->as_array('key', 'value');
         
         $alias = $supplychain->alias->find_all()->as_array(null, array('supplychain_id', 'site', 'alias'));
         
@@ -104,8 +104,10 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $this->template->id = $id;
         $this->template->owner_group = $owner_group['name'];
         $this->template->owner = $owner['username'];
+        $this->template->owner_id = $owner['id'];
         $this->template->usergroup_perms = $usergroup_perms;
         $this->template->group_permissions_array = $group_permissions_array;
+        $this->template->flags = $supplychain->flags;
         
         
         //create an alias

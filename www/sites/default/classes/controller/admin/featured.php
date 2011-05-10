@@ -19,14 +19,13 @@ class Controller_Admin_Featured extends Controller_Admin {
         $page = max($this->request->param('page'), 1);
         $items = 20;
         $offset = ($items * ($page - 1));
-        $count = $supplychain->count_all();
-        $pagination = Pagination::factory(
-        array('current_page' => array('source' => 'query_string', 'key' => 'page'),
-              'total_items' => $supplychain->count_all(),
-              'items_per_page' => $items,
-            ));
         $supplychain = $supplychain->where(DB::expr('flags & '.Sourcemap::FEATURED), '>', 0);
         $supplychain = $supplychain->and_where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0);
+        $pagination = Pagination::factory(array(
+            'current_page' => array('source' => 'query_string', 'key' => 'page'),
+            'total_items' => $supplychain->reset(false)->count_all(),
+            'items_per_page' => $items
+        ));
         $supplychains = $supplychain->order_by('modified', 'ASC')
             ->limit($pagination->items_per_page)
             ->offset($pagination->offset)
@@ -39,7 +38,7 @@ class Controller_Admin_Featured extends Controller_Admin {
             $supplychains_array[$scid] = (array)$supplychains_array[$scid];
             $supplychains_array[$scid]['owner'] = $supplychain->owner->username;
             $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychains_array[$scid]['created']);
-            $supplychains_array[$scid]['title'] = $supplychain->attributes->find_all()->as_array(null, array('key', 'value'));
+            $supplychains_array[$scid]['attributes'] = $supplychain->attributes->find_all()->as_array('key', 'value');
         }
 
         $this->template->page_links = $pagination->render();

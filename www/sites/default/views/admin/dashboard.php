@@ -57,4 +57,6 @@ and
 <dd>Sourcemap Analytics.</dd>
 <dt><a href="admin/announcements">Announcements</a></dt>
 <dd>Sourcemap Analytics.</dd>
+<dt><a href="admin/featured">Featured Supplychains</a></dt>
+<dd>Choose which maps are "featured".</dd>
 </dl>

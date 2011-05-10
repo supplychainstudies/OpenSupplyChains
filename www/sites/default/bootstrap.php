@@ -13,8 +13,7 @@ Route::set('tools/import/action', 'tools/import/<controller>(/<action>)')
 
 Route::set('admin/dashboard', 'admin', array())
     ->defaults(array(
-        'directory' => 'admin',
-        'controller' => 'dashboard',
+        'controller' => 'admin',
         'action' => 'index'
 ));
 

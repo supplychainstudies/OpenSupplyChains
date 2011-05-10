@@ -2,13 +2,9 @@
 <td><?= Html::chars($item->created) ?></td>
 <td><?= Html::chars($item->owner) ?></td>
 <td>
-    <?php foreach($item->title as $title): ?>
-    <?php if($title['key'] == "name" || "title"): ?>
-        <?=HTML::chars($title['value'])?></td>
-    <?php else: ?>
-        n/a
+    <?php if(isset($item->attributes['title'])): ?>
+        <?= HTML::chars($item->attributes['title']) ?>
     <?php endif; ?>
-    <?php endforeach; ?>
 </td>
 
 <td>

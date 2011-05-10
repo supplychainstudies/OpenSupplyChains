@@ -29,6 +29,15 @@ return array(
                 'assets/scripts/sourcemap/supplychain/create.js',
             ),
         ),
+        'sourcemap-welcome' => array(
+            'scripts' => array(
+                'sites/default/assets/scripts/slider/anythingslider.min.js',
+                'sites/default/assets/scripts/slider/easing.1.2.js',
+            ),
+            'requires' => array(
+                'sourcemap-jquery'
+            )
+        ),
         'map-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/view.js'

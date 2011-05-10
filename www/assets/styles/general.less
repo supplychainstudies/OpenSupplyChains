@@ -1,6 +1,104 @@
 /* include site-wide variables and fxns */
 @import "sourcemap";
 
+
+/* ==================================================================================================================== */
+/* ! The 1140px Grid V2 by Andy Taylor \ http://cssgrid.net \ http://www.twitter.com/andytlr \ http://www.andytlr.com   */
+/* ==================================================================================================================== */
+
+.container {
+padding-left: 20px;
+padding-right: 20px;
+}
+
+.row {
+width: 100%;
+max-width: 1140px;
+min-width: 755px;
+margin: 0 auto;
+}
+
+.onecol, .twocol, .threecol, .fourcol, .fivecol, .sixcol, .sevencol, .eightcol, .ninecol, .tencol, .elevencol {
+margin-right: 3.8%;
+float: left;
+min-height: 1px;
+}
+
+.row .onecol {
+width: 4.85%;
+}
+
+.row .twocol {
+width: 13.45%;
+}
+
+.row .threecol {
+width: 22.05%;
+}
+
+.row .fourcol {
+width: 30.75%;
+}
+
+.row .fivecol {
+width: 39.45%;
+}
+
+.row .sixcol {
+width: 48%;
+}
+
+.row .sevencol {
+width: 56.75%;
+}
+
+.row .eightcol {
+width: 65.4%;
+}
+.row .ninecol {
+width: 74.05%;
+}
+
+.row .tencol {
+width: 82.7%;
+}
+
+.row .elevencol {
+width: 91.35%;
+}
+
+.row .twelvecol {
+width: 100%;
+float: left;
+}
+
+.last {
+margin-right: 0px;
+}
+
+img, object, embed {
+max-width: 100%;
+}
+
+img {
+    height: auto;
+}
+
+
+.serif-font {
+    font-family: 
+        Georgia,
+        serif;
+}
+
+.sansserif-font{
+     font-family: 
+        'Gotham Book', 
+        Gotham-Book, 
+        Arial, 
+        sans-serif;
+}
+
 /* PAGE STYLES 
  * -------------------------------------------------------------- */
 
@@ -36,10 +134,15 @@ body.main{
     }
 }
 
+#container{
+}
+
 /* BRANDING & MASTHEAD 
  * -------------------------------------------------------------- */
 
 #branding {
+    .row;
+    font-size: 1em; 
     margin:5px auto 0 auto;
     > a { 
         text-decoration:none;
@@ -49,96 +152,88 @@ body.main{
         display: none;
     }
     img {border:none;}
-}
-#masthead {
-    font-size:0;
-    background:url("../images/logo.png") top left no-repeat;
-    width:226px;
-    height:61px;
-    float:left;
-}
-#main-navigation {
-    float:right;
-    width:580px;  
-    margin-top:15px;  
-    
-    li.register-link {
-        border:none;
-        width: 150px;
-    }
-}
-
-ul.nav {    
-    > li {
-        .rounded(4px);
-        z-index:10;
+    #masthead {
+        .threecol;
+        background:url("../images/logo.png") top left no-repeat;
+        background-size: 100%;
+        --moz-background-size: 100%;
+        height: 5em;
+        width: 10em;
         float:left;
-        border:1px solid #ccc;
-        padding:5px;
-        position:relative;
-        width:120px;
-        margin:0 5px;
-        > h3 {
-            color:#000;
-            cursor:pointer;        
-        }
-        &:hover {
-            border-bottom-left-radius:0;	      
-            -moz-border-radius-bottomleft:0;
-            -webkit-border-bottom-left-radius:0;
-            border-bottom-left-radius:0;	      
-            -moz-border-radius-bottomleft:0;
-            -webkit-border-bottom-right-radius:0;
-        }
-        &:hover > ul {
-            display:block;
-        }
-        > ul {
-            border-bottom-left-radius:4px;	      
-            -moz-border-radius-bottomleft:4px;
-            -webkit-border-bottom-left-radius:4px;
-            border-bottom-left-radius:4px;	      
-            -moz-border-radius-bottomleft:4px;
-            -webkit-border-bottom-right-radius:4px;
-            .box_shadow_inset(1px,1px,1px);
-            .box_shadow(4px,4px,4px);
-            
-            border:1px solid #ccc;
-            background:#eee;
-            position:absolute;
-            top:25px;
-            left:-1px;
-            width:130px;
+        h1{
             display:none;
-           > li {
-               font-weight:bold;
-               padding:5px;
-               border-top:1px solid #ccc;
-               &:first-child {
-                   border:none;
-               }
-               > ul > li {
-                   font-weight:normal;
-                   
-                   padding:5px 5px 0 0;
-                   &:before {
-                       content: "\00BB \0020"
+        }
+    }
+    
+    #search{
+         .fourcol;
+         float: left;
+         font-size:14px;
+         .rounded(16px);
+         padding:18px 4px 4px;
+         input{
+         width: 100%;
+         }
+    }
+
+    ul.nav {
+        .fourcol;
+        float:left;
+        list-style:none;
+        .sansserif-font;
+        li.register-link {
+            border:none;
+            font-size: .8em;
+        }
+        > li {
+            .rounded(4px);
+            z-index:10;
+            float:left;
+            padding:5px;
+            position:relative;
+            margin:0 5px;
+            > h3 {
+                font-size:.8em;
+                font-weight: normal;
+                margin:0;
+                color:#000;
+                cursor:pointer;        
+            }
+            &:hover {
+            }
+            &:hover > ul {
+                display:block;
+            }
+            > ul {
+                border:1px solid #ccc;
+                background:#eee;
+                position:absolute;
+                top:3em;
+                width:130px;
+                padding:0;
+                list-style:none;
+                display:none;
+               > li {
+                   padding:5px;
+                   border-top:1px solid #ccc;
+                   &:first-child {
+                       border:none;
+                   }
+                   > ul {
+                       padding:5px;
+                       list-style:none;
+                       > li {
+                           font-weight:normal;
+                           
+                           padding:5px 5px 0 0;
+                           &:before {
+                               content: "\00BB \0020"
+                           }
+                       }
                    }
                }
-           }
+            }
         }
-    }
-}
-
-#   osearch {
-    float:right;
-    font-size:1.6em;
-    #search-field {
-        width:120px;
-        font-size:14px;
-        .rounded(16px);
-        border:1px solid #ccc;
-        padding:4px;        
     }
 }
 
@@ -225,21 +320,12 @@ ul.nav {
     margin: 0 auto;
     padding:0 5px 10px 5px;
     article {
-        float:left;
-        padding:10px 0;
-        width:80%;
         h2 {
-            font-size:1.4em;
             margin-bottom:5px;            
         }
         header {
-            padding-bottom:5px;
-            margin-bottom:5px;
-            border-bottom:1px solid #ccc;
         }
         header, .article-content, footer {
-            padding-left:10px;
-            padding-right:10px; 
         }
     }
     aside {

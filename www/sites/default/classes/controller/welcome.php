@@ -16,9 +16,5 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             $supplychains[] = $ks;
         }
         $this->template->supplychains = $supplychains;
-        $this->layout->scripts = array(
-        );
-        $this->layout->styles = array(
-        );
     }
 }

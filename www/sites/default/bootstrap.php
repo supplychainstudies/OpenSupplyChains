@@ -11,36 +11,32 @@ Route::set('tools/import/action', 'tools/import/<controller>(/<action>)')
         'action' => 'index'
     ));
 
-Route::set('admin/collection/id', 'admin/<controller>/<id>', array(
-        'id' => '\d+'
-    ))->defaults(array(
-        'directory' => 'admin', 
-        'controller' => 'admin', 
-        'action' => 'details'
-    ));
+Route::set('admin/dashboard', 'admin', array())
+    ->defaults(array(
+        'directory' => 'admin',
+        'controller' => 'dashboard',
+        'action' => 'index'
+));
+
+Route::set('admin/collection', 'admin/<controller>', array())
+    ->defaults(array(
+        'directory' => 'admin',
+        'controller' => 'dashboard',
+        'action' => 'index'
+));
+
+Route::set('admin/collection/id/action', 'admin/<controller>/<id>(/<action>)', array(
+    'id' => '\d+'
+))->defaults(array(
+    'directory' => 'admin', 
+    'controller' => 'dashboard', 
+    'action' => 'details'
+));
 
 Route::set('admin/collection/action', 'admin/<controller>/<action>', array())
     ->defaults(array(
-        'directory' => 'admin', 
-        'controller' => 'dashboard', 
+        'directory' => 'admin',
+        'controller' => 'dashboard',
         'action' => 'index'
-    ));
+));
 
-Route::set('admin/collection', 'admin/<controller>')
-    ->defaults(array(
-        'directory' => 'admin', 
-        'controller' => 'admin', 
-        'action' => 'index'
-    ));
-
-
-Route::set('admin/collection/id/action', 'admin/<controller>(/<id>(/<action>))', array(
-        'id' => '\d+', 
-        'action' => 'delete_role|add_role|add_member|delete_member|'.
-            'delete_alias|change_perms|delete_user|delete_supplychain|'.
-            'delete_group|delete_role_entry|change_usergroup_perms|delete_supplychain_alias'
-    ))->defaults(array(
-        'directory' => 'admin', 
-        'controller' => 'users', 
-        'action' => 'details'
-	));

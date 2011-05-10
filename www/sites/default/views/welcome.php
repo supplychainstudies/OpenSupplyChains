@@ -1,6 +1,27 @@
-
 <?php // Returns featured maps ?>
 
+
+
+<ul id="slider">
+    <li>
+        <div class="map-featured" style="background-image: url('map/static/50');">
+            <a href="map/view/50">Featured Map Title</a><br />
+            created by <a href="user/1">Alex</a> at 5:30pm
+        </div>
+    </li>
+    <li>
+        <div class="map-featured" style="background-image: url('map/static/50');">
+            <a href="map/view/50">Featured Map Title</a><br />
+            created by <a href="user/1">Alex</a> at 5:30pm
+        </div>
+    </li>
+    <li>
+        <div class="map-featured" style="background-image: url('map/static/50');">
+            <a href="map/view/50">Featured Map Title</a><br />
+            created by <a href="user/1">Alex</a> at 5:30pm
+        </div>
+    </li>
+</ul><!-- #slider -->
 
 
 <?php //Returns rows of map-thumb ?>

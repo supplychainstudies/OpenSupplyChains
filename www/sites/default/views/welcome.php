@@ -46,14 +46,35 @@
 
 <?php extract((array)$details); ?>
 <?php $title = isset($details->attributes->title) ? $details->attributes->title : 'Untitled'; ?>
-<div class="map-thumb" style="background-image: url('map/static/<?= $id ?>');">
+<div class="map-item <?php if ((($id+2) % 3) == 0){ ?>last<?php } ?>">
+    <div class="map-thumb" style="background-image: url('map/static/<?= $id ?>');">
+    </div>
     <a href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a><br />
     created by <a href="user/<?= $user_id ?>"><?= HTML::chars($owner->username) ?></a> at <?= date('H:ia', $created) ?>
-</div>
+</div><!-- .map-item -->
 
 <?php if ((($id+2) % 3) == 0){ ?>
     </div><!-- .row -->
 <?php } ?>
 
 <?php endforeach; ?>
-<div style="float: left; clear: both; width: 100%">&nbsp;</div>
+<div class="clear">&nbsp;</div>
+<div class="twitter">
+    <ul>
+        <li>
+            <div style="background-image: url('http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg')">
+            </div>
+            <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
+        </li>
+        <li>
+            <div style="background-image: url('http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg')">
+            </div>
+            <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
+        </li>
+        <li>
+            <div style="background-image: url('http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg')">
+            </div>
+            <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
+        </li>
+    </ul>
+</div>

@@ -1,6 +1,4 @@
 <?php
-
-
 class Sourcemap_Map_Static {
 
     const MAX_ZOOM = 12;
@@ -24,7 +22,8 @@ class Sourcemap_Map_Static {
     public function stitch_tiles() {
         list($y0, $x0, $y1, $x1) = $this->bbox;
         $this->tiles_bounds = Cloudmade_Tiles::get_tileset_bounds(Cloudmade_Tiles::get_tile_numbers($x0, $y0, $x1, $y1));
-        $this->tile_urls = Cloudmade_Tiles::get_tile_urls($x0, $y0, $x1, $y1);
+        $this->zoom = self::MAX_ZOOM;
+        $this->tile_urls = Cloudmade_Tiles::get_tile_urls($x0, $y0, $x1, $y1, &$this->zoom);
         $this->tiles_img = Cloudmade_Tiles::stitch_tiles($this->tile_urls);
         $this->w = imagesx($this->tiles_img);
         $this->h = imagesy($this->tiles_img);
@@ -32,67 +31,45 @@ class Sourcemap_Map_Static {
 
     public function render() {
         $this->stitch_tiles();
+        $nw = new Sourcemap_Proj_Point($this->tiles_bounds[1], $this->tiles_bounds[0]);
+        list($nwxt,$nwyt) = Cloudmade_Tiles::get_tile_number($nw->y, $nw->x, $this->zoom);
+        $se = new Sourcemap_Proj_Point($this->tiles_bounds[3], $this->tiles_bounds[2]);
+        list($sext,$seyt) = Cloudmade_Tiles::get_tile_number($se->y, $se->x, $this->zoom);
         foreach($this->raw_sc->stops as $stop) {
             $pt = Sourcemap_Proj_Point::fromGeometry($stop->geometry);
-            $nw = new Sourcemap_Proj_Point($this->tiles_bounds[1], $this->tiles_bounds[0]);
-            $nw = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $nw);
-            $se = new Sourcemap_Proj_Point($this->tiles_bounds[3], $this->tiles_bounds[2]);
-            $se = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $se);
-            $xsc = $this->w / abs($se->x - $nw->x);
-            $ysc = $this->h / abs($nw->y - $se->y);
-            $x = ($xsc * abs($pt->x - $nw->x));
-            $y = ($ysc * abs($pt->y - $nw->y));
+            $pt = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $pt);
+            $lon = $pt->x;
+            $lat = $pt->y;
+            list($xt, $yt) = Cloudmade_Tiles::get_tile_number($lat, $lon, $this->zoom);
+            list($xto, $yto) = Cloudmade_Tiles::get_tile_offset($lat, $lon, $this->zoom);
+            $x = ($xt - $nwxt)*256 + $xto;
+            $y = ($yt - $nwyt)*256 + $yto;
             $stops[$stop->local_stop_id] = (object)array('stop' => $stop, 'x' => $x, 'y' => $y);
         }
         foreach($this->raw_sc->hops as $i => $hop) {
             $from = $stops[$hop->from_stop_id];
             $to = $stops[$hop->to_stop_id];
             $this->draw_hop2($hop, $from, $to);
-            break;
         }
         foreach($stops as $sid => $st) {
-            //$this->draw_stop($st->stop, $st->x, $st->y);
+            $this->draw_stop($st->stop, $st->x, $st->y);
         }
-        return $this->tiles_img;
+        ob_start();
+        imagepng($this->tiles_img);
+        $imgdata = ob_get_contents();
+        ob_end_clean();
+        return $imgdata;
     }
 
     public function draw_stop($stop, $x, $y) {
         $color = imagecolorallocate($this->tiles_img, 0xa0, 0x00, 0xa0);
         self::imagefilledellipseaa($this->tiles_img, $x, $y, 16, 16, $color);
-        //imagefilledellipse($this->tiles_img, $x, $y, 16, 16, $color);
         return true;
     }
 
     public function draw_hop2($hop, $from, $to) {
-        $theta = deg2rad(45);
-        $fx = $from->x;
-        $fy = -$from->y;
-        $tx = $to->x;
-        $ty = -$to->y;
-        $dx = $tx - $fx;
-        $dy = $fy - $ty;
-        $mx = $fx + ($dx/2);
-        $my = -(($dy/2) - $fy);
-        $ab = sqrt($dx*$dx+$dy*$dy);
-        $Am = $ab/2;
-        $R = $Am / sin($theta/2);
-        $ddx = $R * sin((deg2rad(90)-$theta)/2);
-        $ddy = $R * cos((deg2rad(90)-$theta)/2);
-        $cx = $fx + $ddx;
-        $cy = -$fy + $ddy;
-        $r = $Am / cos($theta/2);
-        //header('Content-Type: text/plain');
-        //die("f:({$from->x},{$from->y} t: {$to->x},{$to->y} d:($dx, $dy) m:($mx, $my) ab: $ab Am: $Am R: $R ddx: $ddx ddy: $ddy cx: $cx cy: $cy, r: $r\n");
         $color = imagecolorallocate($this->tiles_img, 0x00, 0x00, 0x00);
-        $color2 = imagecolorallocate($this->tiles_img, 0x00, 0x00, 0xff);
-        $color3 = imagecolorallocate($this->tiles_img, 0xff, 0x00, 0xff);
-        imageline($this->tiles_img, $cx, $cy, $fx, -$fy, $color);
-        imageline($this->tiles_img, $cx, $cy, $tx, -$ty, $color);
-        imagearc($this->tiles_img, $cx, $cy, $R*2, $R*2, 0,360, $color);
-        imagefilledellipse($this->tiles_img, $fx, -$fy, 12, 12, $color);
-        imagefilledellipse($this->tiles_img, $tx, -$ty, 12, 12, $color2);
-        imagefilledellipse($this->tiles_img, $mx, -$my, 6, 6, $color2);
-        imagefilledellipse($this->tiles_img, $cx, $cy, 12, 12, $color3);
+        imageline($this->tiles_img, $from->x, $from->y, $to->x, $to->y, $color);
     }
 
     public function draw_hop($hop, $from, $to) {
@@ -134,7 +111,6 @@ class Sourcemap_Map_Static {
         }
         return true;
     }
-
 
     // methods below from http://personal.3d-box.com/php/filledellipseaa.php
     // Parses a color value to an array.

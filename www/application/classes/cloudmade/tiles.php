@@ -15,6 +15,14 @@ class Cloudmade_Tiles {
         return array($xtile, $ytile);
     }
 
+    public static function get_tile_offset($lat, $lon, $zoom=0) {
+        $xtile = (($lon + 180) / 360) * pow(2, $zoom);
+        $xtile -= floor($xtile);
+        $ytile = (1 - log(tan(deg2rad($lat)) + 1 / cos(deg2rad($lat))) / pi()) /2 * pow(2, $zoom);
+        $ytile -= floor($ytile);
+        return array($xtile*256, $ytile*256);
+    }
+
     public static function get_tile_nw($xtile, $ytile, $zoom) {
         $n = pow(2, $zoom);
         $lon = $xtile / $n * 360.0 - 180.0;
@@ -22,15 +30,17 @@ class Cloudmade_Tiles {
         return array($lat, $lon);
     }
 
-    public static function get_tile_numbers($x0, $y0, $x1, $y1, $z=self::MAX_ZOOM) {
+    public static function get_tile_numbers($x0, $y0, $x1, $y1, &$z=self::MAX_ZOOM) {
         $nw = self::get_tile_number($y0, $x0, $z);
         list($nwx, $nwy) = $nw;
         $se = self::get_tile_number($y1, $x1, $z);
-        list($sex, $sey) = $se; // hehehehehehe...
+        list($sex, $sey) = $se;
         $rows = ($nwy - $sey) + 1;
         $cols = ($sex - $nwx) + 1;
-        if($z > 0 && ($cols > self::TARGET_TILE_NUM/2 || $rows > self::TARGET_TILE_NUM/2))
-            return self::get_tile_numbers($x0, $y0, $x1, $y1, $z-1);
+        if($z > 0 && ($cols > self::TARGET_TILE_NUM/2 || $rows > self::TARGET_TILE_NUM/2)) {
+            $z--;
+            return self::get_tile_numbers($x0, $y0, $x1, $y1, &$z);
+        }
         $tiles = array();
         for($yi=$sey; $yi<=$nwy; $yi++) {
             $row = array();

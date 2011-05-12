@@ -81,10 +81,10 @@ class Controller_Admin extends Sourcemap_Controller_Layout {
         foreach ($supplychain_array as $supplychain_single) {
             $hop_count = $supplychain_single->hops->count_all();
             if ($hop_count > $hop) { 
-            $hop = $stop_count;
-            $supplychain_hop_id = $supplychain_single->id;
+                $hop = $stop_count;
+                $supplychain_hop_id = $supplychain_single->id;
             } else {
-            $hop = $hop;
+                $hop = $hop;
             }
         }
         

@@ -107,6 +107,20 @@ fieldset {
     border-bottom: .1em solid #ddd;
     font-weight: bold;
 }
+div.righty-tighty {
+    float: right;
+}
+.taxonomy-tree {
+    padding: 0;
+    margin: 0;
+}
+.taxonomy-tree ul.children {
+    list-style-type: none;
+    margin: 0;
+}
+.taxonomy-tree > ul.children {
+    border-left: 1px solid #333;
+}
 </style>
 </head>
 <body>

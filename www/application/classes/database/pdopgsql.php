@@ -31,4 +31,16 @@ class Database_PDOPGSQL extends Kohana_Database_PDOPGSQL {
     public function get_connection() {
         return $this->_connection;
     }
+
+    public function begin() {
+        return $this->query(null, 'BEGIN', true);
+    }
+
+    public function commit() {
+        return $this->query(null, 'COMMIT', true);
+    }
+
+    public function rollback() {
+        return $this->query(null, 'ROLLBACK', true);
+    }
 }

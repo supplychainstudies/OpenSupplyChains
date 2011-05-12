@@ -1,8 +1,13 @@
 <?php
 class Sourcemap_Map_Static {
 
-    const MAX_ZOOM = 12;
+    const MAX_ZOOM = 17;
     const MIN_ZOOM = 1;
+
+    const MAX_SZ = 128;
+    const MIN_SZ = 16;
+
+    const DEFAULT_ST_COLOR = '#006600';
 
     public $zoom;
     public $w;
@@ -33,8 +38,9 @@ class Sourcemap_Map_Static {
         $this->stitch_tiles();
         $nw = new Sourcemap_Proj_Point($this->tiles_bounds[1], $this->tiles_bounds[0]);
         list($nwxt,$nwyt) = Cloudmade_Tiles::get_tile_number($nw->y, $nw->x, $this->zoom);
-        $se = new Sourcemap_Proj_Point($this->tiles_bounds[3], $this->tiles_bounds[2]);
-        list($sext,$seyt) = Cloudmade_Tiles::get_tile_number($se->y, $se->x, $this->zoom);
+        #$se = new Sourcemap_Proj_Point($this->tiles_bounds[3], $this->tiles_bounds[2]);
+        #list($sext,$seyt) = Cloudmade_Tiles::get_tile_number($se->y, $se->x, $this->zoom);
+        $stops = array();
         foreach($this->raw_sc->stops as $stop) {
             $pt = Sourcemap_Proj_Point::fromGeometry($stop->geometry);
             $pt = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $pt);
@@ -62,8 +68,16 @@ class Sourcemap_Map_Static {
     }
 
     public function draw_stop($stop, $x, $y) {
-        $color = imagecolorallocate($this->tiles_img, 0xa0, 0x00, 0xa0);
-        self::imagefilledellipseaa($this->tiles_img, $x, $y, 16, 16, $color);
+        $sz = isset($stop->attributes->size) ? $stop->attributes->size : self::MIN_SZ;
+        $sz = min(self::MAX_SZ, max(self::MIN_SZ, $sz));
+        if(isset($stop->attributes->color)) {
+            $smcolor = new Sourcemap_Color($stop->attributes->color);
+        } else {
+            $smcolor = new Sourcemap_Color(self::DEFAULT_ST_COLOR);
+        }
+        list($r, $g, $b) = $smcolor->get_rgb();
+        $color = imagecolorallocatealpha($this->tiles_img, $r, $g, $b, (0xff/2)*.5);
+        imagefilledellipse($this->tiles_img, $x, $y, $sz, $sz, $color);
         return true;
     }
 

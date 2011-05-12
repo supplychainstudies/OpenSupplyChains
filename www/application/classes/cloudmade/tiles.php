@@ -1,13 +1,14 @@
 <?php
 class Cloudmade_Tiles {
 
-    const TARGET_TILE_NUM = 8;
-    const MAX_ZOOM = 12;
-    const MIN_ZOOM = 1;
+    const TARGET_TILE_NUM = 1;
+    const MAX_TILES = 16;
+    const MAX_ZOOM = 18;
+    const MIN_ZOOM = 4;
 
     const BASE_TILE_URL = 'http://tile.cloudmade.com/%s/%d/256/';
     const TILE_EXT = '.png';
-    const TILE_STYLE = 4993;
+    const TILE_STYLE = 5870;//5393;//31542;//22677;//11838;//4993;
 
     public static function get_tile_number($lat, $lon, $zoom=0) {
         $xtile = floor((($lon + 180) / 360) * pow(2, $zoom));
@@ -31,15 +32,16 @@ class Cloudmade_Tiles {
     }
 
     public static function get_tile_numbers($x0, $y0, $x1, $y1, &$z=self::MAX_ZOOM) {
+        $z = max(min($z, self::MAX_ZOOM), self::MIN_ZOOM);
         $nw = self::get_tile_number($y0, $x0, $z);
         list($nwx, $nwy) = $nw;
         $se = self::get_tile_number($y1, $x1, $z);
         list($sex, $sey) = $se;
         $rows = ($nwy - $sey) + 1;
         $cols = ($sex - $nwx) + 1;
-        if($z > 0 && ($cols > self::TARGET_TILE_NUM/2 || $rows > self::TARGET_TILE_NUM/2)) {
+        if(($cols*$rows) > self::MAX_TILES && $z > self::MIN_ZOOM) {
             $z--;
-            return self::get_tile_numbers($x0, $y0, $x1, $y1, &$z);
+            return self::get_tile_numbers($x0, $y0, $x1, $y1, $z);
         }
         $tiles = array();
         for($yi=$sey; $yi<=$nwy; $yi++) {

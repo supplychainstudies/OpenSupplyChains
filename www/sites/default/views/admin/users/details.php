@@ -1,8 +1,12 @@
-<?php if (isset($reset) && ($reset == true)): ?>
-      Password is reset successfully!<br />
-	  <?php endif;?>
-
+<div class="user-details<?= $user->has_flag(Sourcemap::VERIFIED) ? ' verified' : '' ?>">
 <?= HTML::chars($user->username)?> last logged in on <?= $last_login?><br />
+<fieldset><legend>Flags</legend>
+<form name="user-verification" method="post" action="admin/users/<?= $user->id ?>/flags">
+<label for="verfified">Verified</label>
+<input type="checkbox" name="verified" <?= $user->has_flag(Sourcemap::VERIFIED) ? 'checked' : '' ?> />
+<input type="submit" value="update" />
+</form>
+</fieldset>
 
 <form name="user-info" method="post" action="">
 <label for="username">username:</label><br />
@@ -16,54 +20,48 @@
 <input type="submit" value="reset" />
 </form><br />
 
-      <?php if(isset($roles) && count($roles)>0):?>
+<?php if(isset($roles) && $roles):?>
   <strong>User Role</strong><br />
-    <?php foreach ($roles as $i => $k) { ?>
-	 <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete_role"><?= HTML::chars($roles[$i]['name'])?> <input type="hidden" name="role" value="<?=$roles[$i]['name']?>"><input type="submit" value="delete"/></form> 
-       <? }?><br />
-      <?php endif;?>
+    <?php foreach ($roles as $i => $k): ?>
+     <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete_role">
+        <?= HTML::chars($roles[$i]['name'])?> 
+        <input type="hidden" name="role" value="<?= HTML::chars($roles[$i]['name']) ?>">
+        <input type="submit" value="delete"/></form> 
+    <? endforeach; ?><br />
+<?php endif;?>
 
 
        
-<?php if(count($roles) != count($all_roles)) { ?>
-  <strong>Change or add the user role:</strong>
-<form name="change-role" method="post" action="admin/users/<?= $user->id?>/add_role">
-<select name="addrole">
-<?php foreach ($all_roles as $role) { ?>			
-    <?php $skip = false; 
-       foreach($roles as $roler) {
-         if($roler['name'] == $role->name) {
-	   $skip = true; 
-	   break; 
-	 }
-      } 
-      if($skip) {
-	continue;
-      }?>
-<br />
-					    
- <option value="<?php echo $role->name; ?>"><?= Html::chars($role->name) ?></option>
-
-   <?php }?>
-   </select><input type="submit" value="add role"/></form>
-
-<? } ?><br />
+<?php if(count($roles) != count($all_roles)): ?>
+    <strong>Change or add the user role:</strong>
+    <form name="change-role" method="post" action="admin/users/<?= $user->id?>/add_role">
+    <select name="addrole">
+    <?php foreach ($all_roles as $role): ?>
+        <?php foreach($roles as $roler): ?>
+             <?php if($roler['name'] == $role->name) continue; ?>
+             <option value="<?= HTML::chars($role->name); ?>"><?= HTML::chars($role->name) ?></option>
+       <?php endforeach; ?>
+    <?php endforeach; ?>
+    </select>
+    <input type="submit" value="add role"/></form>
+<?php endif; ?><br />
 
 <?php if(!empty($members)): ?>
-<strong>Group Membership:</strong>
-       <?php $last_member = end($members);?>
-<?php foreach ($members as $member) { ?>
-    <a href="admin/groups/<?=$member['id'];?>"><?=HTML::chars($member['name']) ?></a>
-   <?php if ($member != $last_member) {?>, <?}?>
- <?php     }?><br />
+    <strong>Group Membership:</strong>
+    <?php foreach ($members as $i => $memberof): ?>
+        <a href="admin/groups/<?=$member['id'];?>">
+            <?=HTML::chars($memberof['name']) ?>
+        </a>
+        <?= $i < (count($memberof)-1) ? ', ' : '' ?>
+     <?php endforeach; ?><br />
  <?php endif; ?>
 
-
-<?php if(!empty($owners)): ?>
+<?php if($owners): ?>
   <strong>Group Ownership:</strong>
-<?php $last_owner = end($owners);?>
-<?php foreach ($owners as $owner) { ?>
-    <a href="admin/groups/<?=$owner['id'];?>"><?=HTML::chars($owner['name']) ?></a>
- <?php if($owner != $last_owner) {?>, <?}?>
- <?php    }?>
-     <?php endif; ?>
+    <?php foreach ($owners as $i => $owned): ?>
+        <a href="admin/groups/<?=$owned['id'];?>">
+            <?=HTML::chars($owned['name']) ?>
+        </a><?= $i < (count($owned)-1) ? ', ' : '' ?>
+    <?php endforeach; ?>
+<?php endif; ?>
+</div>

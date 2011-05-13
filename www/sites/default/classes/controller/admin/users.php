@@ -191,8 +191,11 @@ class Controller_Admin_Users extends Controller_Admin {
         if($post->check()) {
             $post = (object)$post->as_array();
             $user = ORM::factory('user', $id);
+            if(!$user->loaded()) {
+                Message::instance()->set('That user does not exist.');
+                $this->request->redirect('admin/users');
+            }
             $role = ORM::factory('role', array('name' => $post->addrole));
-            
             try {
                 $user->add('roles', $role)->save();
             } catch (Exception $e) {
@@ -211,5 +214,25 @@ class Controller_Admin_Users extends Controller_Admin {
             Message::instance()->set('Could not delete the user.');
         }
         $this->request->redirect("admin/users/");
+    }
+
+    public function action_flags($id) {
+        $user = ORM::factory('user', $id);
+        if(!$user->loaded()) {
+            Message::instance()->set('That user does not exist.');
+            $this->request->redirect('admin/users');
+        }
+        $flagkeys = array(
+            'verified' => Sourcemap::VERIFIED
+        );
+        foreach($flagkeys as $k => $v) {
+            if(isset($_POST[$k]))
+                $user->flags |= $v;
+            else
+                $user->flags &= ~$v;
+        }
+        $user->save();
+        Message::instance()->set('Flags updated.', Message::SUCCESS);
+        $this->request->redirect('admin/users/'.$user->id);
     }
 }

@@ -10,6 +10,10 @@ class Sourcemap {
     // supplychain flags
     const FEATURED = 8;
 
+    // user flags (see model/user)
+    const ACTIVE = 1;
+    const VERIFIED = 64;
+
     // env constants
     const DEV = 'development';
     const STAGING = 'staging';

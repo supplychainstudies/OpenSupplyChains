@@ -19,6 +19,11 @@ class Model_Supplychain extends ORM {
         ),
         'owner_group' => array(
             'model' => 'usergroup', 'foreign_key' => 'usergroup_id'
+        ),
+        'taxonomy' => array(
+            'model' => 'category',
+            'far_key' => 'id',
+            'foreign_key' => 'category'
         )
     );
 
@@ -118,6 +123,7 @@ class Model_Supplychain extends ORM {
                 where sca.supplychain_id=%d", $scid
             );
             $owner = $sc->owner;
+            $cat = $sc->taxonomy;
             $sc = (object)$sc->as_array();
             $sc->attributes = new stdClass();
             $rows = $this->_db->query(Database::SELECT, $sql, true);
@@ -130,6 +136,8 @@ class Model_Supplychain extends ORM {
                 'id' => $owner->id, 'name' => $owner->username,
                 'avatar' => Gravatar::avatar($owner->email)
             );
+            $sc->taxonomy = 
+                ($cat && $cat->loaded()) ? Sourcemap_Taxonomy::load_ancestors($cat->id) : null;
         } else throw new Exception('Supplychain not found.');
         return $sc;
     }

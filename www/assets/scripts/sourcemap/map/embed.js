@@ -427,12 +427,6 @@ Sourcemap.Map.Embed.prototype.showDialog = function(mkup, no_controls) {
         $(this.dialog).fadeIn(fade, function() {}).data("state", 1);
         
         this.tour.stop();
-
-        /*this.embed_dialog.slideDown("normal", function() {
-            var shrink = $(this.map.map.div).outerHeight() 
-                         - $(this.embed_dialog).outerHeight();
-            $(this.map.map.div).css({"height":shrink});
-        });*/
     }
 }
 
@@ -442,11 +436,6 @@ Sourcemap.Map.Embed.prototype.hideDialog = function() {
         this.dialog_content.empty();
         $(this.dialog).find('#detail-nav').css({"height": "auto"}).hide();
         $(this.dialog).hide().data("state", 0);
-        //this.tour.wait();
-
-        /*this.embed_dialog.slideUp("normal", function() {
-            $(this.map.map.div).css({"height":"100%"});
-        });*/
     }
 }
 

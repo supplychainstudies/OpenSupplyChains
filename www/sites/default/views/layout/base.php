@@ -14,47 +14,42 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
-    <style>
-        body { font-family: Helvetica, Arial, sans-serif; font-size: 110%; color: #111; }
-        #masthead .div {
-            display: inline-block;
-        }
-        #masthead .logo-container {
-            font-size: 200%;
-        }
-        #masthead #masthead-utility {
-            display: inline;
-            width: 60%;
-        }
-        a { text-decoration: none; color: #222; font-weight: bold;}
-        a:hover { color: #eee; background-color: #333; }
-        ul.flat-nav {
-            list-style-type: none;
-            display: inline-block;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            display: none;
-        }
-        ul.flat-nav > li {
-            display: inline;
-            margin-left: .2em;
-        }
-    </style>
-</head>
-<body class="fixed">
-    <div id="masthead"><div class="logo-container"><a href="">Sourcemap</a></div><div id="masthead-utility">Browse | Create</div></div>
-    <ul class="flat-nav" id="primary-nav">
-        <li><a href="#">one</a></li>
-        <li><a href="#">two</a></li>
-        <li><a href="#">three</a></li>
-    </ul>
-    <?= $content ?>
-    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
-  <!--[if lt IE 7 ]>
-    <script src="js/libs/dd_belatedpng.js"></script>
-    <script> DD_belatedPNG.fix('img, .png_bg'); 
-  <![endif]-->
+    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags(
+        'sites/default/assets/styles/reset.css',
+        'sites/default/assets/styles/default.less',
+        'assets/styles/general.less',
+        'sites/default/assets/styles/slider.css' // todo: this should only get loaded from welcome.php
+    )?>
+   
+    </head>
+    <body>
+
+    <div class="container">
+
+        <div id="top-notice"></div>
+        <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <div class="clear"></div>
+        <div id="content">
+             <header>
+                <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+                <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+             </header>
+             <div class="article-content">
+                <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
+             </div>
+             <aside id="sidebar">
+             </aside>
+             <nav id="secondary-navigation"></nav>
+        </div>
+        <footer id="footer">
+
+        <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
+          
+        <!--[if lt IE 7 ]>
+            <script src="js/libs/dd_belatedpng.js"></script>
+            <script> DD_belatedPNG.fix('img, .png_bg'); 
+        <![endif]-->
+
+    </div><!-- #container -->
 </body>
 </html>

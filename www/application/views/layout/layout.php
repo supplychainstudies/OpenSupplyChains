@@ -15,7 +15,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <?php if(isset($styles)): ?>
-        <?= Sourcemap_CSS::link_tags($styles) : '' ?>
+        <?= Sourcemap_CSS::link_tags($styles) ?>
     <?php endif; ?>
 </head>
 <body>

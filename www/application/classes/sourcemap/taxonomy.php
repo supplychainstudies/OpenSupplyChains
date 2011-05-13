@@ -38,6 +38,32 @@ class Sourcemap_Taxonomy {
         return self::arr2tree($tree);
     }
 
+    public static function load_ancestors($cat_id) {
+        $cat = ORM::factory('category', $cat_id);
+        $a = false;
+        if($cat->loaded()) {
+            $m = ORM::factory('category');
+            $a = $m->where('left', '<=', $cat->left)
+                ->and_where('right', '>=', $cat->right)
+                ->order_by('left', 'asc')
+                ->find_all()->as_array(null, true);
+        }
+        return $a;
+    }
+
+    public static function load_children($cat_id) {
+        $cat = ORM::factory('category', $cat_id);
+        $ch = false;
+        if($cat->loaded()) {
+            $m = ORM::factory('category');
+            $ch = $m->where('left', '>=', $cat->left)
+                ->and_where('right', '<=', $cat->right)
+                ->order_by('left', 'asc')
+                ->find_all()->as_array(null, true);
+        }
+        return $ch;
+    }
+
     public function __construct($l, $r, $d=null) {
         $this->l = $l;
         $this->r = $r;

@@ -1,6 +1,13 @@
 <?php
 class Model_Category extends ORM {
+
     public $_table_names_plural = false;
+
+    public $_has_many = array(
+        'supplychain' => array(
+            'foreign_key' => 'category'
+        )
+    );
 
     public function drop_subtree() {
         if(!$this->loaded()) {

@@ -11,7 +11,8 @@ abstract class Sourcemap_Catalog {
     public $parameters = null;
     public $headers = null;
 
-    protected $_cache = false;
+    public $_cache = false;
+    public $_cache_ttl = 60; // seconds
 
     public function __construct($parameters=null) {
         $this->parameters = $parameters ? $parameters : null;
@@ -21,9 +22,13 @@ abstract class Sourcemap_Catalog {
 
     public function teardown() {}
 
+    public function get_url() {
+        return $this->url;
+    }
+
     public function fetch() {
         $response = Sourcemap_Http_Client::do_get(
-            $this->url, $this->parameters, $this->headers
+            $this->get_url(), $this->parameters, $this->headers
         );
         return $response->status_ok() ? $this->unserialize($response) : false;
     }
@@ -39,7 +44,7 @@ abstract class Sourcemap_Catalog {
     }
 
     public function get_cache_key() {
-        $pkeys = array_keys($this->parameters);
+        $pkeys = is_array($this->parameters) ? array_keys($this->parameters) : array();
         sort($pkeys);
         $pts = array();
         for($i=0; $i<count($pkeys); $i++) {
@@ -65,11 +70,12 @@ abstract class Sourcemap_Catalog {
         if(!$cat) return false;
         if($cat->_cache && ($cached = Cache::instance()->get($cat->get_cache_key()))) {
             $got = $cached;
+            if($got && is_array($got)) $got['cache_hit'] = true;
         } else {
             $cat->setup();
             $got = $cat->fetch();
             if($cat->_cache) {
-                Cache::instance()->set($cat->get_cache_key(), $got);
+                Cache::instance()->set($cat->get_cache_key(), $got, $cat->_cache_ttl);
             }
             $cat->teardown();
         }

@@ -23,6 +23,9 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
             }
         }
         $this->action = $action;
+        parent::__construct($params);
+        $this->parameters['limit'] = $this->limit;
+        $this->parameters['offset'] = $this->offset;
     }
 
     public function get_url() {

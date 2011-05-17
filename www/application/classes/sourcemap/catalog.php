@@ -14,8 +14,18 @@ abstract class Sourcemap_Catalog {
     public $_cache = false;
     public $_cache_ttl = 60; // seconds
 
+    public $minlimit = 1;
+    public $maxlimit = 25;
+
     public function __construct($parameters=null) {
         $this->parameters = $parameters ? $parameters : null;
+        $this->limit = isset($parameters['l']) ? 
+            min(max($this->minlimit, (int)$parameters['l']), $this->maxlimit) : 
+            $this->maxlimit;
+        $this->offset = isset($parameters['o']) ?   
+            (int)$parameters['o'] : 0;
+        if(isset($parameters['l'])) unset($this->parameters['l']);
+        if(isset($parameters['o'])) unset($this->parameters['o']);
     }
 
     public function setup() {}

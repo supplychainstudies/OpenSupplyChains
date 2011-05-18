@@ -112,7 +112,7 @@ class Cloudmade_Tiles {
                 if(!$stitched) {
                     $stitched = imagecreatetruecolor($tile_w*$cols, $tile_h*$rows);
                     imagealphablending($stitched, true);
-                    imageantialias($stitched, true);
+        //            imageantialias($stitched, true);
                     imagesavealpha($stitched, true);
                 }
                 imagecopy($stitched, $tile, $tile_w*$x, $tile_h*$y, 0, 0, $tile_w, $tile_h);

@@ -47,12 +47,20 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $supplychain_id = $this->_match_alias($supplychain_id);
         }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
+        $szs = array(
+            "sml" => array(160, 105),
+            "med" => array(250, 170),
+            "lrg" => array(730, 400),
+            "hug" => array(1024, 768)
+        );
+        $map_size = isset($_GET['sz']) && in_array($_GET['sz'], array_keys($szs)) ?
+            $_GET['sz'] : 'sml';
         if($supplychain->loaded()) {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 header('Content-Type: image/png');
-                $cache_key = "static-map-{$supplychain_id}-png";
+                $cache_key = "static-map-{$supplychain_id}-{$map_size}-png";
                 $exists = Cache::instance()->get($cache_key);
                 if($exists) {
                     header('X-Cache-Hit: true');
@@ -60,9 +68,24 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 } else {
                     $raw_sc = $supplychain->kitchen_sink($supplychain_id);
                     $sm = new Sourcemap_Map_Static($raw_sc);
-                    $img_data = $sm->render();
-                    print $img_data;
-                    Cache::instance()->set($cache_key, $img_data);
+                    $tiles_img = $sm->render();
+                    $imgs = array();
+                    foreach($szs as $k => $v) {
+                        $resized = imagecreatetruecolor($v[0], $v[1]);
+                        imagecopyresized($resized, $tiles_img, 0, 0, 0, 0, $v[0], $v[1], $sm->w, $sm->h);
+                        ob_start();
+                        imagepng($resized);
+                        $resized = ob_get_contents();
+                        ob_end_clean();
+                        Cache::instance()->set("static-map-{$supplychain_id}-{$k}-png", $resized);
+                        if($k === $map_size) print $resized;
+                    }
+                    ob_start();
+                    imagepng($tiles_img);
+                    $baseimg = ob_get_contents();
+                    ob_end_clean();
+                    Cache::instance()->set("static-map-{$supplychain_id}-base-png", $baseimg);
+                    //Cache::instance()->get($cache_key, $img_data);
                 }
                 exit;
             } else {

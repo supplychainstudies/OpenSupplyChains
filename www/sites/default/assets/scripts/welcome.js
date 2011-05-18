@@ -4,4 +4,3 @@ $(function () {
         easing: 'easeInOutExpo'
     });
 });
-

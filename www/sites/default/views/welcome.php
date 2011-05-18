@@ -3,7 +3,8 @@
 <div class="row">
     <ul id="slider">
         <li>
-            <div class="map" style="background-image: url('map/static/50');">
+            <div class="map">
+                <img src="map/static/50" />
                 <div class="description">
                     <a href="map/view/50">Featured Map Title</a><br />
                     created by <a href="user/1">Alex</a> at 5:30pm
@@ -11,7 +12,8 @@
             </div>
         </li>
         <li>
-            <div class="map" style="background-image: url('map/static/50');">
+            <div class="map">
+                <img src="map/static/50" />
                 <div class="description">
                     <a href="map/view/50">Featured Map Title</a><br />
                     created by <a href="user/1">Alex</a> at 5:30pm
@@ -19,7 +21,8 @@
             </div>
         </li>
         <li>
-            <div class="map" style="background-image: url('map/static/50');">
+            <div class="map">
+                <img src="map/static/50" />
                 <div class="description">
                     <a href="map/view/50">Featured Map Title</a><br />
                     created by <a href="user/1">Alex</a> at 5:30pm
@@ -46,13 +49,11 @@
 
 <?php extract((array)$details); ?>
 <?php $title = isset($details->attributes->title) ? $details->attributes->title : 'Untitled'; ?>
-<div class="map-item <?php if ((($id+2) % 3) == 0){ ?>last<?php } ?>">
-    <div class="map-thumb" style="background-image: url('map/static/<?= $id ?>');">
-    </div>
-    <a href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a><br />
-    created by <a href="user/<?= $user_id ?>"><?= HTML::chars($owner->username) ?></a> at <?= date('H:ia', $created) ?>
-</div><!-- .map-item -->
-
+        <div class="map-item fourcol<?php if ((($id+2) % 3) == 0){ ?> last<?php } ?>">
+            <img src="map/static/<?= $id ?>" /> 
+            <a href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a><br />
+            created by <a href="user/<?= $user_id ?>"><?= HTML::chars($owner->username) ?></a> at <?= date('H:ia', $created) ?>
+        </div><!-- .map-item -->
 <?php if ((($id+2) % 3) == 0){ ?>
     </div><!-- .row -->
 <?php } ?>

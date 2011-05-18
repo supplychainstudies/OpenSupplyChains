@@ -56,15 +56,17 @@ class Sourcemap_Map_Static {
             $from = $stops[$hop->from_stop_id];
             $to = $stops[$hop->to_stop_id];
             $this->draw_hop2($hop, $from, $to);
+            $this->draw_hop($hop, $from, $to);
         }
         foreach($stops as $sid => $st) {
             $this->draw_stop($st->stop, $st->x, $st->y);
         }
-        ob_start();
+        /*ob_start();
         imagepng($this->tiles_img);
         $imgdata = ob_get_contents();
         ob_end_clean();
-        return $imgdata;
+        return $imgdata;*/
+        return $this->tiles_img;
     }
 
     public function draw_stop($stop, $x, $y) {
@@ -81,50 +83,44 @@ class Sourcemap_Map_Static {
         return true;
     }
 
+    public function draw_hop($hop, $from, $to) {
+        
+        $xo = $this->w / 2;
+        $yo = $this->h / 2;
+        $xf = $from->x - $xo;
+        $yf = $from->y - $yo;
+        $xt = $to->x - $xo;
+        $yt = $to->y - $yo;
+
+        $mx = $xf+(($xt-$xf)/2);
+        $my = $yf+(($yt-$yf)/2);
+
+        $w = abs($xt-$xf);
+        $h = abs($yt-$yf);
+
+        $fa = atan2($yo+$yf, $xo+$xf);
+        $ta = atan2($yo+$yt, $xo+$xt);
+
+        /*header('Content-Type: text/plain');
+        print "f: {$from->x}, {$from->y}\n";
+        print "t: {$to->x}, {$to->y}\n";
+        print "o: $xo, $yo\n";
+        print "f: $xf, $yf\n";
+        print "t: $xt, $yt\n";
+        print "m: $mx, $my\n";
+        die();*/
+
+        $sz = 4;
+        $color = imagecolorallocate($this->tiles_img, 0xff, 0x00, 0x00);
+        imagefilledellipse($this->tiles_img, $xo+$mx, $yo+$my, $sz, $sz, $color);
+        imagearc($this->tiles_img, $xo+$mx, $yo+$my, $w, $h, $fa, $ta, $color);
+    }
+    
     public function draw_hop2($hop, $from, $to) {
         $color = imagecolorallocate($this->tiles_img, 0x00, 0x00, 0x00);
         imageline($this->tiles_img, $from->x, $from->y, $to->x, $to->y, $color);
     }
 
-    public function draw_hop($hop, $from, $to) {
-
-        $color = imagecolorallocate($this->tiles_img, 0x00, 0x00, 0x00);
-
-        $dx = $to->x - $from->x;
-        $dy = $to->y - $from->y;
-
-        $theta = (pi()/2) - atan($dy/$dx);
-        $maxdisp = sqrt($dx*$dx+$dy*$dy) * 0.03;
-        $resolution = 64;
-
-        $x = $from->x;
-        $y = $from->y;
-
-        if($dx == 0 && $dy == 0) {
-            // pass  -  draw straight line
-        } else {
-            $absintheta = abs(sin($theta));
-            $abcostheta = abs(cos($theta));
-            for($p=0; $p<$resolution; $p++) {
-                $relamt = sin($p/$resolution*pi()) * $maxdisp;
-                if($absintheta < $abcostheta) {
-                    $relamt *= abs(sin(pi()*$dx/$dy));
-                }
-                $ddx = cos($theta+pi()) * $relamt;
-                $ddy = sin(-$theta) * $relamt;
-
-                $x1 = $from->x + ($dx*$p/$resolution) + $ddx;
-                $y1 = $from->y + ($dy*$p/$resolution) + $ddy;
-
-                imagesetthickness($this->tiles_img, 8);
-                imageline($this->tiles_img, $x, $y, $x1, $y1, $color);
-
-                $x = $x1;
-                $y = $y1;
-            }
-        }
-        return true;
-    }
 
     // methods below from http://personal.3d-box.com/php/filledellipseaa.php
     // Parses a color value to an array.

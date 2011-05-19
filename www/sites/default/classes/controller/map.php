@@ -54,7 +54,6 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 header('Content-Type: image/png');
                 $cache_key = "static-map-{$supplychain_id}-png";
                 $exists = Cache::instance()->get($cache_key);
-                $exists = false;
                 if($exists) {
                     header('X-Cache-Hit: true');
                     print $exists;

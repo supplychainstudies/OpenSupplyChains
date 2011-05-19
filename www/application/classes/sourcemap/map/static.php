@@ -5,9 +5,9 @@ class Sourcemap_Map_Static {
     const MIN_SZ = 13172;//65536;
 
     const MAX_W = 9;
-    const MIN_W = 6;
-    const MAX_H = 3;
-    const MIN_H = 2;
+    const MIN_W = 9;
+    const MAX_H = 4;
+    const MIN_H = 4;
 
     const MAX_STOP_SZ = 256;
     const MIN_STOP_SZ = 24;
@@ -33,25 +33,72 @@ class Sourcemap_Map_Static {
 
     public function stitch_tiles() {
         list($y0, $x0, $y1, $x1) = $this->bbox;
-        if($x0 == $x1 || $x1 - $x0 < self::BBOFFLON) {
+        /*if($x0 == $x1 || $x1 - $x0 < self::BBOFFLON) {
             if($x0 > -180+self::BBOFFLON/2) $x0 -= self::BBOFFLON / 2;
             if($x1 < 180-self::BBOFFLON/2) $x1 += self::BBOFFLON / 2;
         }
         if($y0 == $y1 || $y1 - $y0 < self::BBOFFLAT) {
             if($y0 > -88.5+self::BBOFFLAT/2) $y0 += self::BBOFFLAT / 2;
             if($y1 < 88.5-self::BBOFFLAT/2) $y1 -= self::BBOFFLAT / 2;
-        }
+        }*/
         $this->zoom = Cloudmade_Tiles::MAX_ZOOM;
 
         while((list($cols, $rows) = Cloudmade_Tiles::get_tiles_dim($x0, $y0, $x1, $y1, $this->zoom)) 
-            && ($rows*$cols) > self::MAX_H*self::MAX_W) {
+            && ($cols > self::MAX_W || $rows > self::MAX_H)) {
                 $this->zoom--;
             
         }
         $this->bbox = array($y0, $x0, $y1, $x1);
+        list($ntx, $nty) = Cloudmade_Tiles::get_tile_number($y1, $x1, $this->zoom);
+        // fit horizontally
         while($cols < self::MIN_W) {
-            $x1 += self::BBOFFLON;
-            error_log($cols." : ".$x1);
+            list($mtx, $mty) = Cloudmade_Tiles::get_tile_number($y0, $x0, $this->zoom);
+            list($ntx, $nty) = Cloudmade_Tiles::get_tile_number($y1, $x1, $this->zoom);
+            if(!isset($stmx)) $stmx = 0;
+            else $stmx++;
+            $toright = false; $toleft = false;
+            if(!($stmx % 2)) {
+                if($ntx < pow(2, $this->zoom)-1) $toright = true;
+                elseif($mtx > 0) $toleft = true;
+            } else {
+                if($mtx > 0) $toleft = true;
+                elseif($ntx < pow(2, $this->zoom)-1) $toright = true;
+            }
+            if($toright) {
+                $ntx++;
+                list($ny, $nx) = Cloudmade_Tiles::get_tile_nw($ntx, $nty, $this->zoom);
+                $x1 = $nx;
+            } elseif($toleft) {
+                $mtx--;
+                list($my, $mx) = Cloudmade_Tiles::get_tile_nw($mtx, $mty, $this->zoom);
+                $x0 = $mx;
+            } else break;
+            list($cols, $rows) = Cloudmade_Tiles::get_tiles_dim($x0, $y0, $x1, $y1, $this->zoom); 
+        }
+        // fit vertically
+        while($rows < self::MIN_H) {
+            list($mtx, $mty) = Cloudmade_Tiles::get_tile_number($y0, $x0, $this->zoom);
+            list($ntx, $nty) = Cloudmade_Tiles::get_tile_number($y1, $x1, $this->zoom);
+            if(!isset($stmy)) $stmy = 0;
+            else $stmy++;
+            $todown = false; $toup = false;
+            if(!($stmy % 2)) {
+                error_log('even');
+                if($nty < pow(2, $this->zoom)-1) $todown = true;
+                elseif($mty > 0) $toup = true;
+            } else {
+                if($mty > 0) $toup = true;
+                elseif($nty < pow(2, $this->zoom)-1) $todown = true;
+            }
+            if($todown) {
+                $nty++;
+                list($ny, $nx) = Cloudmade_Tiles::get_tile_nw($ntx, $nty, $this->zoom);
+                $y1 = $ny;
+            } elseif($toup) {
+                $mty--;
+                list($my, $mx) = Cloudmade_Tiles::get_tile_nw($mtx, $mty, $this->zoom);
+                $y0 = $my;
+            } else break;
             list($cols, $rows) = Cloudmade_Tiles::get_tiles_dim($x0, $y0, $x1, $y1, $this->zoom); 
         }
         $this->tile_numbers = Cloudmade_Tiles::get_tile_numbers($x0, $y0, $x1, $y1, $this->zoom);

@@ -4,6 +4,18 @@ class Controller_Map extends Sourcemap_Controller_Layout {
     public $layout = 'map';
     public $template = 'map/view';
 
+    public static $image_sizes = array(
+        'l' => array(1000, 600),
+        'm' => array(730, 400),
+        's' => array(250, 170),
+        't' => array(160, 105)
+    );
+    public static $default_image_size = 's';
+
+    public static $image_thumbs = array(
+        'm' => array(160,105)
+    );
+
     protected function _match_alias($alias) {
         $found = ORM::factory('supplychain_alias')
             ->where('site', '=', Kohana::config('sourcemap.site'))
@@ -47,12 +59,27 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $supplychain_id = $this->_match_alias($supplychain_id);
         }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
+        $valid_size = false;
+        if(isset($_GET['s'])) {
+            if(isset(self::$image_sizes[$_GET['s']])) $valid_size = true;
+            elseif($_GET['s'] == 'o') $valid_size = true;
+            else {
+                foreach(self::$image_thumbs as $tk => $tv) {
+                    if("th-$tk" == $_GET['s']) {
+                        $valid_size = true;
+                        break;
+                    }
+                }
+            }
+        }
+        $sz = $valid_size ? $_GET['s'] : self::$default_image_size;
         if($supplychain->loaded()) {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 header('Content-Type: image/png');
-                $cache_key = "static-map-{$supplychain_id}-png";
+                $ckeyfmt = "static-map-%010d-%s-png";
+                $cache_key = sprintf($ckeyfmt, $supplychain_id, $sz);
                 $exists = Cache::instance()->get($cache_key);
                 if($exists) {
                     header('X-Cache-Hit: true');
@@ -60,13 +87,26 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 } else {
                     $raw_sc = $supplychain->kitchen_sink($supplychain_id);
                     $sm = new Sourcemap_Map_Static($raw_sc);
-                    $img_data = $sm->render();
-                    ob_start();
-                    imagepng($img_data);
-                    $img_data = ob_get_contents();
-                    ob_end_clean();
-                    print $img_data;
-                    Cache::instance()->set($cache_key, $img_data);
+                    $oimg = $sm->render();
+                    $szs = self::$image_sizes;
+                    $szs['o'] = array($sm->w, $sm->h);
+                    foreach($szs as $k => $v) {
+                        list($w, $h) = $v;
+                        $ckey = sprintf($ckeyfmt, $supplychain_id, $k);
+                        $rimg = Sourcemap_Map_Static::resize($oimg, $w, $h);
+                        Cache::instance()->set($ckey, ($rimgb = Sourcemap_Map_Static::to_binary($rimg)), 60*60*24*30);
+                        if($k == $sz) print $rimgb;
+                        if(isset(self::$image_thumbs[$k])) {
+                            list($thw, $thh) = self::$image_thumbs[$k];
+                            $thx = ($w/2) - ($thw/2);
+                            $thy = ($h/2) - ($thh/2);
+                            $thumb = imagecreatetruecolor($thw, $thh);
+                            imagecopyresampled($thumb, $rimg, 0, 0, $thx, $thy, $thw, $thh, $thw, $thh);
+                            $thumbb = Sourcemap_Map_Static::to_binary($thumb);
+                            Cache::instance()->set(sprintf($ckeyfmt, $supplychain_id, "th-$k"), $thumbb);
+                            if("th-$k" == $sz) print $thumbb;
+                        }
+                    }
                 }
                 exit;
             } else {

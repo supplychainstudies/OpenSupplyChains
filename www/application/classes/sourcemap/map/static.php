@@ -26,6 +26,25 @@ class Sourcemap_Map_Static {
     public $tile_urls;
     public $bbox;
 
+    public static function resize($img, $w, $h) {
+        // prefer width.
+        $iw = imagesx($img);
+        $ih = imagesy($img);
+        $p = $iw/$ih;
+        $h = $w / $p;
+        $rimg = imagecreatetruecolor($w, $h);
+        imagecopyresampled($rimg, $img, 0, 0, 0, 0, $w, $h, $iw, $ih);
+        return $rimg;
+    }
+
+    public static function to_binary($img) { // todo: other fmts, png only for now
+        ob_start();
+        imagepng($img);
+        $ibin = ob_get_contents();
+        ob_end_clean();
+        return $ibin;
+    }
+
     public function __construct($raw_sc) {
         $this->raw_sc = $raw_sc;
         $this->bbox = Cloudmade_Tiles::get_sc_bbox($raw_sc);
@@ -83,7 +102,6 @@ class Sourcemap_Map_Static {
             else $stmy++;
             $todown = false; $toup = false;
             if(!($stmy % 2)) {
-                error_log('even');
                 if($nty < pow(2, $this->zoom)-1) $todown = true;
                 elseif($mty > 0) $toup = true;
             } else {
@@ -174,15 +192,6 @@ class Sourcemap_Map_Static {
 
         $fa = atan2($yo+$yf, $xo+$xf);
         $ta = atan2($yo+$yt, $xo+$xt);
-
-        /*header('Content-Type: text/plain');
-        print "f: {$from->x}, {$from->y}\n";
-        print "t: {$to->x}, {$to->y}\n";
-        print "o: $xo, $yo\n";
-        print "f: $xf, $yf\n";
-        print "t: $xt, $yt\n";
-        print "m: $mx, $my\n";
-        die();*/
 
         $sz = 4;
         $color = imagecolorallocate($this->tiles_img, 0xff, 0x00, 0x00);

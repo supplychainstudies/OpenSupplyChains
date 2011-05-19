@@ -3,12 +3,17 @@ class Sourcemap_Search {
 
     const CACHE_PREFIX = 'search-';
 
+    const DBONLY = 0;
+    const SPHINX = 1;
+
     public $default_limit = 25;
     public $max_limit = 100;
     public $min_limit = 1;
 
 
     public $search_type = 'simple';
+    public $search_method = null;
+
     public $parameters = array();
 
     public $results = null;
@@ -20,9 +25,9 @@ class Sourcemap_Search {
     public $cache_ttl = 60; // seconds
 
 
-    public static function factory($type, $p=null) {
+    public static function factory($p=null, $t=null) {
         //$cls = "Sourcemap_Search_$type";
-        $cls = $type === 'simple' ? 'Sourcemap_Search' : 'Sourcemap_Search_'.$type;
+        $cls = 'Sourcemap_Search_'.$t;
         $rc = new ReflectionClass($cls);
         return $rc->newInstance($p);
     }
@@ -61,7 +66,7 @@ class Sourcemap_Search {
             $pkey = $pkeys[$i];
             $pts[] = sprintf("%s:%s", $pkey, $this->parameters[$pkey]);
         }
-        $cache_key = sprintf("%s%s", self::CACHE_PREFIX, join(':', $pts));
+        $cache_key = sprintf("%s-%s-%s", self::CACHE_PREFIX, $this->search_type, join(':', $pts));
         return $cache_key;
 
     }
@@ -82,6 +87,7 @@ class Sourcemap_Search {
         $this->offset = isset($p['o']) ? $p['o'] : 0;
         $this->offset = max(0, $this->offset);
         $this->parameters = is_array($p) ? $p : array();
+        $this->search_method = self::DBONLY;
     }
 
     public function __isset($k) {
@@ -107,7 +113,7 @@ class Sourcemap_Search {
     public function set_limit($l) {
         $l = (int)$l;
         $this->limit = max(
-            min($this->limit, $this->max_limit), $this->min_limit
+            min($l, $this->max_limit), $this->min_limit
         );
         return $this;
     }

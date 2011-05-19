@@ -38,3 +38,11 @@ Route::set('admin/collection/action', 'admin/<controller>/<action>', array())
         'controller' => 'dashboard',
         'action' => 'index'
 ));
+
+Route::set('static maps', 'map/static/<id>.<sz>.png', array(
+    'id' => '[a-z0-9]+', 'sz' => '(t|s|m|l|o|th-m)'
+))->defaults(array(
+    'controller' => 'map',
+    'action' => 'static',
+    'sz' => 'th-m'
+));

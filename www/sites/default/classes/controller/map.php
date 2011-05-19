@@ -10,7 +10,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
         's' => array(250, 170),
         't' => array(160, 105)
     );
-    public static $default_image_size = 's';
+    public static $default_image_size = 'th-m';
 
     public static $image_thumbs = array(
         'm' => array(160,105)
@@ -54,25 +54,24 @@ class Controller_Map extends Sourcemap_Controller_Layout {
         }
     }
 
-    public function action_static($supplychain_id) {
+    public function action_static($supplychain_id, $sz=null) {
         if(!is_numeric($supplychain_id)) {
             $supplychain_id = $this->_match_alias($supplychain_id);
         }
         $supplychain = ORM::factory('supplychain', $supplychain_id);
+        error_log($sz);
         $valid_size = false;
-        if(isset($_GET['s'])) {
-            if(isset(self::$image_sizes[$_GET['s']])) $valid_size = true;
-            elseif($_GET['s'] == 'o') $valid_size = true;
-            else {
-                foreach(self::$image_thumbs as $tk => $tv) {
-                    if("th-$tk" == $_GET['s']) {
-                        $valid_size = true;
-                        break;
-                    }
+        if(isset(self::$image_sizes[$sz])) $valid_size = true;
+        elseif($sz == 'o') $valid_size = true;
+        else {
+            foreach(self::$image_thumbs as $tk => $tv) {
+                if("th-$tk" == $sz) {
+                    $valid_size = true;
+                    break;
                 }
             }
         }
-        $sz = $valid_size ? $_GET['s'] : self::$default_image_size;
+        $sz = $valid_size ? $sz : self::$default_image_size;
         if($supplychain->loaded()) {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;

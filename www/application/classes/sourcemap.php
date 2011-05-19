@@ -9,6 +9,7 @@ class Sourcemap {
 
     // supplychain flags
     const FEATURED = 8;
+    const NOSTATIC = 32;
 
     // user flags (see model/user)
     const ACTIVE = 1;

@@ -26,6 +26,45 @@ class Sourcemap_Map_Static {
     public $tile_urls;
     public $bbox;
 
+    public static $image_sizes = array(
+        'l' => array(1000, 600),
+        'm' => array(730, 400),
+        's' => array(250, 170),
+        't' => array(160, 105)
+    );
+
+    public static $default_image_size = 'th-m';
+
+    public static $image_thumbs = array(
+        'm' => array(160,105)
+    );
+
+
+
+    public static function make_all($scid, $sizes, $thumbs) {
+        $raw_sc = ORM::factory('supplychain')->kitchen_sink($scid);
+        $sm = new Sourcemap_Map_Static($raw_sc);
+        $oimg = $sm->render();
+        $szs = $sizes;
+        $szs['o'] = array($sm->w, $sm->h);
+        foreach($szs as $k => $v) {
+            list($w, $h) = $v;
+            $ckey = sprintf($ckeyfmt, $supplychain_id, $k);
+            $rimg = Sourcemap_Map_Static::resize($oimg, $w, $h);
+            Cache::instance()->set($ckey, ($rimgb = Sourcemap_Map_Static::to_binary($rimg)), 60*60*24*30*12);
+            if(isset($thumbs[$k])) {
+                list($thw, $thh) = $thumbs[$k];
+                $thx = ($w/2) - ($thw/2);
+                $thy = ($h/2) - ($thh/2);
+                $thumb = imagecreatetruecolor($thw, $thh);
+                imagecopyresampled($thumb, $rimg, 0, 0, $thx, $thy, $thw, $thh, $thw, $thh);
+                $thumbb = Sourcemap_Map_Static::to_binary($thumb);
+                Cache::instance()->set(sprintf($ckeyfmt, $supplychain_id, "th-$k"), $thumbb);
+            }
+        }
+        return true;
+    }
+
     public static function resize($img, $w, $h) {
         // prefer width.
         $iw = imagesx($img);

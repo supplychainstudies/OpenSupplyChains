@@ -43,6 +43,16 @@ h1 {
     font-size: 1.2em;
 }
 
+a {
+    .sansserif-font;
+    text-decoration: none;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+
+
 body.main{
     #branding, #content, #footer-content, #page-navigation, .splash-text {
         /*width:1020px;*/
@@ -88,7 +98,7 @@ body.main{
             display:none;
         }
     }
-    #livesearch{
+    #header-search{
         font-size:14px;
         border: solid 1px;
         -webkit-appearance: none;
@@ -101,6 +111,15 @@ body.main{
         li{
             float:left;
             margin: 0 0 0 1em;
+            a {
+                text-transform: lowercase;
+                font-size: .7em;
+                color: #333;
+                &:hover{
+                    color: #555;
+                    text-decoration: underline;
+                }
+            }
         }
     }
 }
@@ -578,32 +597,9 @@ body.main{
  * -------------------------------------------------------------- */
 
 #footer {
-    margin:0 -1%;
-    padding:10px 1.5% 0 1.5%;
     color:#777;
-    border-top:1px solid #999;
-    background:#eee;
-    background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(@background)); 
-    background: -moz-linear-gradient(top,  #eee,  @background);   
-    #footer-content {
-        margin:0 auto;
-    }
-    .footer-box {
-        float:left;
-        padding:0 2% 10px 0;
-        width:28%;
-    }
-    #footer-callouts {
-        float:left;
-        padding:10px 0;
-        width:72%;
-    }
-    #footer-about {
-        width:25%;
-        float:right;
-        padding:10px 0 10px 1%;
-        margin-left:1%;
-        border-left:1px solid #ddd;
+    ul{
+        list-style:none;
     }
 }
 

@@ -48,7 +48,7 @@
     <?php extract((array)$details); ?>
     <?php $title = isset($details->attributes->title) ? $details->attributes->title : 'Untitled'; ?>
         <div class="map-item fourcol <?php if ($id == 3){ ?> last<?php } ?>">
-            <img src="map/static/<?= $id ?>" alt="" /> 
+            <img src="map/static/<?= $id ?>.s.png" alt="" /> 
             <a href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a><br />
             created by <a href="user/<?= $user_id ?>"><?= HTML::chars($owner->username) ?></a> at <?= date('H:ia', $created) ?>
         </div><!-- .map-item -->

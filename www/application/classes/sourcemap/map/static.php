@@ -1,13 +1,20 @@
 <?php
 class Sourcemap_Map_Static {
 
-    const MAX_ZOOM = 17;
-    const MIN_ZOOM = 1;
+    const MAX_SZ = 524288;//262144;
+    const MIN_SZ = 13172;//65536;
 
-    const MAX_SZ = 128;
-    const MIN_SZ = 16;
+    const MAX_W = 8;
+    const MIN_W = 4;
+    const MAX_H = 4;
+    const MIN_H = 2;
 
+    const MAX_STOP_SZ = 256;
+    const MIN_STOP_SZ = 24;
     const DEFAULT_ST_COLOR = '#006600';
+
+    const BBOFFLAT = .10; // degrees
+    const BBOFFLON = .25; // degrees
 
     public $zoom;
     public $w;
@@ -26,9 +33,28 @@ class Sourcemap_Map_Static {
 
     public function stitch_tiles() {
         list($y0, $x0, $y1, $x1) = $this->bbox;
-        $this->tiles_bounds = Cloudmade_Tiles::get_tileset_bounds(Cloudmade_Tiles::get_tile_numbers($x0, $y0, $x1, $y1));
-        $this->zoom = self::MAX_ZOOM;
-        $this->tile_urls = Cloudmade_Tiles::get_tile_urls($x0, $y0, $x1, $y1, &$this->zoom);
+        if($x0 == $x1 || $x1 - $x0 > self::BBOFFLON) {
+            if($x0 > -180+self::BBOFFLON/2) $x0 -= self::BBOFFLON / 2;
+            if($x1 < 180-self::BBOFFLON/2) $x1 += self::BBOFFLON / 2;
+        }
+        if($y0 == $y1 || $y1 - $y0 > self::BBOFFLAT) {
+            if($y0 > -88.5+self::BBOFFLAT/2) $y0 += self::BBOFFLAT / 2;
+            if($y1 < 88.5-self::BBOFFLAT/2) $y1 -= self::BBOFFLAT / 2;
+        }
+        $this->zoom = Cloudmade_Tiles::MAX_ZOOM;
+
+        while((list($cols, $rows) = Cloudmade_Tiles::get_tiles_dim($x0, $y0, $x1, $y1, $this->zoom)) 
+            && ($rows*$cols) > self::MAX_H*self::MAX_W) {
+                $this->zoom--;
+            
+        }
+        $this->bbox = array($y0, $x0, $y1, $x1);
+        /*while($rows*$cols < self::MIN_W*self::MIN_H) {
+            list($cols, $rows) = Cloudmade_Tiles::get_tiles_dim($x0, $y0, $x1, $y1, $this->zoom); 
+        }*/
+        $this->tile_numbers = Cloudmade_Tiles::get_tile_numbers($x0, $y0, $x1, $y1, $this->zoom);
+        $this->tile_urls = Cloudmade_Tiles::get_tile_urls($this->tile_numbers);
+        $this->tiles_bounds = Cloudmade_Tiles::get_tileset_bounds($this->tile_numbers);
         $this->tiles_img = Cloudmade_Tiles::stitch_tiles($this->tile_urls);
         $this->w = imagesx($this->tiles_img);
         $this->h = imagesy($this->tiles_img);
@@ -36,8 +62,7 @@ class Sourcemap_Map_Static {
 
     public function render() {
         $this->stitch_tiles();
-        $nw = new Sourcemap_Proj_Point($this->tiles_bounds[1], $this->tiles_bounds[0]);
-        list($nwxt,$nwyt) = Cloudmade_Tiles::get_tile_number($nw->y, $nw->x, $this->zoom);
+        list($nwxt, $nwyt, $throwaway) = $this->tile_numbers[0][0];
         #$se = new Sourcemap_Proj_Point($this->tiles_bounds[3], $this->tiles_bounds[2]);
         #list($sext,$seyt) = Cloudmade_Tiles::get_tile_number($se->y, $se->x, $this->zoom);
         $stops = array();
@@ -56,7 +81,7 @@ class Sourcemap_Map_Static {
             $from = $stops[$hop->from_stop_id];
             $to = $stops[$hop->to_stop_id];
             $this->draw_hop2($hop, $from, $to);
-            $this->draw_hop($hop, $from, $to);
+            //$this->draw_hop($hop, $from, $to);
         }
         foreach($stops as $sid => $st) {
             $this->draw_stop($st->stop, $st->x, $st->y);
@@ -70,8 +95,8 @@ class Sourcemap_Map_Static {
     }
 
     public function draw_stop($stop, $x, $y) {
-        $sz = isset($stop->attributes->size) ? $stop->attributes->size : self::MIN_SZ;
-        $sz = min(self::MAX_SZ, max(self::MIN_SZ, $sz));
+        $sz = isset($stop->attributes->size) ? $stop->attributes->size : self::MIN_STOP_SZ;
+        $sz = min(self::MAX_STOP_SZ, max(self::MIN_STOP_SZ, $sz));
         if(isset($stop->attributes->color)) {
             $smcolor = new Sourcemap_Color($stop->attributes->color);
         } else {

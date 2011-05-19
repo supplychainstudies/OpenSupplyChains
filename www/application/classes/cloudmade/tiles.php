@@ -1,30 +1,30 @@
 <?php
 class Cloudmade_Tiles {
 
+    const TILE_SZ = 65536;
+
     const TARGET_TILE_NUM = 1;
-    const MAX_TILES = 16;
-    const MIN_TILES = 10;
     const MAX_ZOOM = 18;
-    const MIN_ZOOM = 4;
+    const MIN_ZOOM = 1;
 
     const BASE_TILE_URL = 'http://tile.cloudmade.com/%s/%d/256/';
     const TILE_EXT = '.png';
     const TILE_STYLE = 5870;//5393;//31542;//22677;//11838;//4993;
 
     public static function get_tile_number($lat, $lon, $zoom=0) {
-        #print __METHOD__.": $lat, $lon, $zoom\n";
         $xtile = floor((($lon + 180) / 360) * pow(2, $zoom));
         $dlat = deg2rad($lat);
         $ytile = floor((1-log(tan($dlat)+1/cos($dlat))/pi())/2*pow(2,$zoom));
-        #print __METHOD__.": $xtile, $ytile, $zoom\n";
         return array($xtile, $ytile);
     }
 
     public static function get_tile_offset($lat, $lon, $zoom=0) {
         $xtile = (($lon + 180) / 360) * pow(2, $zoom);
         $xtile -= floor($xtile);
-        $ytile = (1 - log(tan(deg2rad($lat)) + 1 / cos(deg2rad($lat))) / pi()) /2 * pow(2, $zoom);
+        $dlat = deg2rad($lat);
+        $ytile = (1-log(tan($dlat)+1/cos($dlat))/pi())/2*pow(2,$zoom);
         $ytile -= floor($ytile);
+        $tw = $th = sqrt(self::TILE_SZ);
         return array($xtile*256, $ytile*256);
     }
 
@@ -35,51 +35,15 @@ class Cloudmade_Tiles {
         return array($lat, $lon);
     }
 
-    public static function get_tile_numbers($x0, $y0, $x1, $y1, &$z=self::MAX_ZOOM, $force=false) {
-        $z = max(min($z, self::MAX_ZOOM), self::MIN_ZOOM);
+    public static function get_tile_numbers($x0, $y0, $x1, $y1, $z=self::MAX_ZOOM) {
+        if($z > self::MAX_ZOOM) throw new Exception('Zoom too high.');
+        if($z < self::MIN_ZOOM) throw new Exception('Zoom too low.');
         $nw = self::get_tile_number($y0, $x0, $z);
         list($nwx, $nwy) = $nw;
         $se = self::get_tile_number($y1, $x1, $z);
         list($sex, $sey) = $se;
-        error_log( "c0: $nwx, $nwy to $sex, $sey");
         $rows = ($sey - $nwy) + 1;
         $cols = ($sex - $nwx) + 1;
-        error_log( "c/r: $cols, $rows, $z");
-        if(!$force && ($cols*$rows) > self::MAX_TILES && $z > self::MIN_ZOOM) {
-            $z--;
-            return self::get_tile_numbers($x0, $y0, $x1, $y1, $z);
-        }
-        if(($rows*$cols) < self::MIN_TILES) {
-            if($z == self::MAX_ZOOM) {
-                $cs = ceil(sqrt(self::MIN_TILES));
-                $ddiff = (2*$cs) - ($rows+$cols);
-                $cols += $ddiff/2;
-                $rows += $ddiff/2;
-                $sex += $ddiff/2;
-                $sey += $ddiff/2;
-            } else {
-                $z++;
-                error_log( "nomin c/r: $cols, $rows, $z");
-                return self::get_tile_numbers($x0, $y0, $x1, $y1, $z, true);
-            }
-        }
-        $addcols = 0;
-        $addrows = 0;
-        while(((($cols+$addcols)/($rows+$addrows)) != 1.5)) {
-            while(($rows+$addrows) > ($cols+$addcols)) $addcols++;
-            while((($cols+$addcols)/($rows+$addrows)) < 1.5) $addcols++;
-            if((($cols+$addcols)/($rows+$addrows)) == 1.5) break;
-            $addrows++;
-        }
-        //$maxtd = floor(sqrt(pow(2, $z)));
-        //while(($cols+$addcols) > $maxtd) $addcols--;
-        //while(($rows+$addrows) > $maxtd) $addrows--;
-        $rows += $addrows;
-        $cols += $addcols;
-        $sex += $addcols;
-        $sey += $addrows;
-        
-        #print "c1: $nwx, $nwy to $sex, $sey\n";
         $tiles = array();
         for($yi=$nwy; $yi<=$sey; $yi++) {
             $row = array();
@@ -88,26 +52,32 @@ class Cloudmade_Tiles {
             }
             $tiles[] = $row;
         }
-        error_log("$cols, $rows, $z");
         return $tiles;
     }
 
+    public static function get_tiles_dim($x0, $y0, $x1, $y1, $z=self::MAX_ZOOM) {
+        if($z > self::MAX_ZOOM) throw new Exception('Zoom too high.');
+        if($z < self::MIN_ZOOM) throw new Exception('Zoom too low.');
+        $nw = self::get_tile_number($y0, $x0, $z);
+        list($nwx, $nwy) = $nw;
+        $se = self::get_tile_number($y1, $x1, $z);
+        list($sex, $sey) = $se;
+        $rows = ($sey - $nwy) + 1;
+        $cols = ($sex - $nwx) + 1;
+        return array($cols, $rows);
+    }
+
     public static function get_tileset_bounds($tileset) {
-        if(!isset($tileset[0][0])) {
-            header('Content-Type: text/plain');
-            #print_r($tileset);
-            die();
-        }
         $nw = $tileset[0][0];
         $s = $tileset[count($tileset)-1];
         $se = array($s[count($s)-1][0]+1, $s[count($s)-1][1]+1, $s[count($s)-1][2]);
         $nw = call_user_func_array(array('self', 'get_tile_nw'), $nw);
         $se = call_user_func_array(array('self', 'get_tile_nw'), $se);
-        return array($nw[0], $nw[1], $se[0], $se[1]);
+        return array($nw[1], $nw[0], $se[1], $se[0]);
     }
 
-    public static function get_tile_urls($x0, $y0, $x1, $y1, $z=self::MAX_ZOOM) {
-        $ns = self::get_tile_numbers($x0, $y0, $x1, $y1, $z);
+    public static function get_tile_urls($numbers) {
+        $ns = $numbers;
         $urls = array();
         foreach($ns as $yi => $row) {
             $new_row = array();
@@ -155,7 +125,7 @@ class Cloudmade_Tiles {
                 if(!$stitched) {
                     $stitched = imagecreatetruecolor($tile_w*$cols, $tile_h*$rows);
                     imagealphablending($stitched, true);
-        //            imageantialias($stitched, true);
+                    imageantialias($stitched, true);
                     imagesavealpha($stitched, true);
                 }
                 imagecopy($stitched, $tile, $tile_w*$x, $tile_h*$y, 0, 0, $tile_w, $tile_h);

@@ -2,11 +2,6 @@
 
 return array(
     'packages' => array(
-        'sourcemap-search' => array(
-            'scripts' => array(
-                'assets/scripts/search.js'
-            ),
-        ),
         'sourcemap-edit' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',
@@ -14,7 +9,7 @@ return array(
                 'sites/default/assets/scripts/supplychain/edit.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-map', 'sourcemap-search'
+                'sourcemap-template', 'sourcemap-map'
             )
         ),
         'sourcemap-create' => array(
@@ -29,7 +24,7 @@ return array(
                 'sites/default/assets/scripts/welcome.js'
             ),
             'requires' => array(
-                'sourcemap-jquery', 'sourcemap-search'
+                'sourcemap-jquery'
             )
         ),
         'map-view' => array(
@@ -37,7 +32,7 @@ return array(
                 'sites/default/assets/scripts/map/view.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-map', 'sourcemap-template'
+                'less', 'sourcemap-map'
             )
         ),
         'sourcemap-social' => array(

@@ -96,8 +96,6 @@ div.anythingSlider .thumbNav a {
     padding: 2px 8px;
     height: 18px;
     margin: 0 5px 0 0;
-    background-image: url(../images/cellshade.png);
-    background-repeat: repeat-x;
     text-align: center;
     outline: 0;
     -moz-border-radius-bottomleft: 5px;
@@ -115,7 +113,6 @@ div.anythingSlider.rtl .thumbNav { float: left; }    /* move nav link group to l
 /* Autoplay Start/Stop button */
 div.anythingSlider .start-stop {
     z-index: 10;
-    background: green url(../images/cellshade.png) repeat-x center top;
     color: white;
     padding: 2px 5px;
     width: 40px;

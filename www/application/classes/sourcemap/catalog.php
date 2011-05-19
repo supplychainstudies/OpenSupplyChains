@@ -12,7 +12,7 @@ abstract class Sourcemap_Catalog {
     public $headers = null;
 
     public $_cache = false;
-    public $_cache_ttl = 60; // seconds
+    public $_cache_ttl = 2592000; // seconds
 
     public $minlimit = 1;
     public $maxlimit = 25;

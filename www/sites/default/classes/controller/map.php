@@ -4,6 +4,10 @@ class Controller_Map extends Sourcemap_Controller_Layout {
     public $layout = 'map';
     public $template = 'map/view';
 
+    public static function placeholder_image() {
+        return Sourcemap::assets_path().'images/static-map-generating.png';
+    }
+
     protected function _match_alias($alias) {
         $found = ORM::factory('supplychain_alias')
             ->where('site', '=', Kohana::config('sourcemap.site'))
@@ -83,9 +87,21 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     header('X-Cache-Hit: true');
                     print $exists;
                 } else {
-                    $placeholder = imagecreatetruecolor($szdim[0], $szdim[1]);
-                    imagecolorallocate($placeholder, 0, 0, 255);
-                    imagepng($placeholder);
+                    // make blank image and set "no static map" flag
+                    // on supplychain record.
+                    if($pimg = imagecreatefrompng(self::placeholder_image())) {
+                        // pass
+                        $pimgw = imagesx($pimg); $pimgh = imagesy($pimg);
+                        $rpimgw = $szdim[0]; $rpimgh = $szdim[0]*($pimgh/$pimgw);
+                        $rpimg = imagecreatetruecolor($rpimgw, $rpimgh);
+                        imagecopyresampled($rpimg, $pimg, 0, 0, 0, 0, $rpimgw, $rpimgh, $pimgw, $pimgh);
+                        imagedestroy($pimg);
+                        $pimg = $rpimg;
+                    } else {
+                        $pimg = imagecreatetruecolor($szdim[0], $szdim[1]);
+                        imagecolorallocate($pimg, 0, 0, 255);
+                    }
+                    imagepng($pimg);
                     $supplychain->flags |= Sourcemap::NOSTATIC;
                     $supplychain->save();
                 }

@@ -24,32 +24,29 @@
     </head>
     <body>
 
-    <div class="container">
+    <div id="top-notice"></div>
+    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <div class="clear"></div>
+    <div id="content">
+         <header>
+            <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+            <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+         </header>
+         <div class="article-content">
+            <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
+         </div>
+         <aside id="sidebar">
+         </aside>
+         <nav id="secondary-navigation"></nav>
+    </div>
+    <footer id="footer">
 
-        <div id="top-notice"></div>
-        <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-        <div class="clear"></div>
-        <div id="content">
-             <header>
-                <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
-                <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
-             </header>
-             <div class="article-content">
-                <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
-             </div>
-             <aside id="sidebar">
-             </aside>
-             <nav id="secondary-navigation"></nav>
-        </div>
-        <footer id="footer">
+    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
+      
+    <!--[if lt IE 7 ]>
+        <script src="js/libs/dd_belatedpng.js"></script>
+        <script> DD_belatedPNG.fix('img, .png_bg'); 
+    <![endif]-->
 
-        <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
-          
-        <!--[if lt IE 7 ]>
-            <script src="js/libs/dd_belatedpng.js"></script>
-            <script> DD_belatedPNG.fix('img, .png_bg'); 
-        <![endif]-->
-
-    </div><!-- #container -->
 </body>
 </html>

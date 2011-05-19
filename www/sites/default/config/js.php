@@ -2,18 +2,11 @@
 
 return array(
     'packages' => array(
-        # moved to global js package config
-        /*'sourcemap-embed' => array(
+        'sourcemap-search' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap/supplychain/graph.js',
-                'assets/scripts/sourcemap/map/visualization/tour.js',
-                'assets/scripts/sourcemap/map/embed.js',
-                'sites/default/assets/scripts/map/embed.js'
+                'assets/scripts/search.js'
             ),
-            'requires' => array(
-                'sourcemap-template', 'sourcemap-map', 'showdown'
-            )
-        ),*/
+        ),
         'sourcemap-edit' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',
@@ -21,7 +14,7 @@ return array(
                 'sites/default/assets/scripts/supplychain/edit.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-map'
+                'sourcemap-template', 'sourcemap-map', 'sourcemap-search'
             )
         ),
         'sourcemap-create' => array(
@@ -36,7 +29,7 @@ return array(
                 'sites/default/assets/scripts/welcome.js'
             ),
             'requires' => array(
-                'sourcemap-jquery'
+                'sourcemap-jquery', 'sourcemap-search'
             )
         ),
         'map-view' => array(

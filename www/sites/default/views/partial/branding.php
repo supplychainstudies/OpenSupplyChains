@@ -4,10 +4,9 @@
             <h1>Sourcemap</h1>
         </header>
         </a>
-        <div id="search">
+        <div id="livesearch">
             <input id="search-field" type="search" results="0" placeholder="Search" />
         </div>
-        <!-- todo: this should be dynamic -->
         <ul class="nav">
             <li id="browse-navigation">
                 <a href="browse">Browse</a>            

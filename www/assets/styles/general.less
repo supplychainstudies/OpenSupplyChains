@@ -24,10 +24,6 @@ body {
     .serif-font;
     font-size:1em;
     line-height:1.6em;
-
-    padding:0 1% 0 1%;
-    width:98%;
-    /*min-width:1020px;*/
     margin:0 auto;
     background: @background;
     a:hover, a:active, a:visited, a, a:link {
@@ -70,10 +66,9 @@ body.main{
 /* BRANDING & MASTHEAD 
  * -------------------------------------------------------------- */
 
+
 #branding {
-    .row;
     font-size: 1em; 
-    margin:5px auto 0 auto;
     > a { 
         text-decoration:none;
         color:transparent;
@@ -83,7 +78,6 @@ body.main{
     }
     img {border:none;}
     #masthead {
-        .threecol;
         background:url("../images/logo.png") top left no-repeat;
         background-size: 100%;
         --moz-background-size: 100%;
@@ -93,20 +87,19 @@ body.main{
             display:none;
         }
     }
-    #search{
-         .sevencol; 
-         font-size:14px;
-         .rounded(16px);
-         input{
-         width: 100%;
-         }
+    #livesearch{
+        font-size:14px;
+        border: solid 1px;
+        -webkit-appearance: none;
+        width: 100%;
+        margin-top: 1.85em;
     }
-    ul.nav{
+    nav{
         list-style:none;
-        min-width: 20em;
-        float:left;
+        margin-top: 1.4em;
         li{
-            .onecol;
+            float:left;
+            margin: 0 0 0 1em;
         }
     }
 }
@@ -122,14 +115,19 @@ body.main{
 /* WELCOME PAGE STYLES 
  * -------------------------------------------------------------- */
 
-#slider{
-    .map{
-        .description{
-            .fourcol;
-            .last;
-            float:right;
-            background: rgba(255,255,255,.8);
-            height: 100%;
+.dark-background{
+    background-color:#eee;
+}
+
+.featured{
+    .dark-background;
+    #slider{
+        .map{
+            .description{
+                float:right;
+                background: rgba(255,255,255,.8);
+                height: 100%;
+            }
         }
     }
 }

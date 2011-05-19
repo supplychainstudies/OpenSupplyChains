@@ -1,6 +1,6 @@
 <?php // Returns featured maps ?>
 
-<div class="row">
+<div class="row featured">
     <ul id="slider">
         <li>
             <div class="map">

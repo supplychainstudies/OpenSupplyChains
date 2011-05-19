@@ -4,9 +4,9 @@ class Sourcemap_Map_Static {
     const MAX_SZ = 524288;//262144;
     const MIN_SZ = 13172;//65536;
 
-    const MAX_W = 8;
-    const MIN_W = 4;
-    const MAX_H = 4;
+    const MAX_W = 9;
+    const MIN_W = 6;
+    const MAX_H = 3;
     const MIN_H = 2;
 
     const MAX_STOP_SZ = 256;
@@ -33,11 +33,11 @@ class Sourcemap_Map_Static {
 
     public function stitch_tiles() {
         list($y0, $x0, $y1, $x1) = $this->bbox;
-        if($x0 == $x1 || $x1 - $x0 > self::BBOFFLON) {
+        if($x0 == $x1 || $x1 - $x0 < self::BBOFFLON) {
             if($x0 > -180+self::BBOFFLON/2) $x0 -= self::BBOFFLON / 2;
             if($x1 < 180-self::BBOFFLON/2) $x1 += self::BBOFFLON / 2;
         }
-        if($y0 == $y1 || $y1 - $y0 > self::BBOFFLAT) {
+        if($y0 == $y1 || $y1 - $y0 < self::BBOFFLAT) {
             if($y0 > -88.5+self::BBOFFLAT/2) $y0 += self::BBOFFLAT / 2;
             if($y1 < 88.5-self::BBOFFLAT/2) $y1 -= self::BBOFFLAT / 2;
         }
@@ -49,9 +49,11 @@ class Sourcemap_Map_Static {
             
         }
         $this->bbox = array($y0, $x0, $y1, $x1);
-        /*while($rows*$cols < self::MIN_W*self::MIN_H) {
+        while($cols < self::MIN_W) {
+            $x1 += self::BBOFFLON;
+            error_log($cols." : ".$x1);
             list($cols, $rows) = Cloudmade_Tiles::get_tiles_dim($x0, $y0, $x1, $y1, $this->zoom); 
-        }*/
+        }
         $this->tile_numbers = Cloudmade_Tiles::get_tile_numbers($x0, $y0, $x1, $y1, $this->zoom);
         $this->tile_urls = Cloudmade_Tiles::get_tile_urls($this->tile_numbers);
         $this->tiles_bounds = Cloudmade_Tiles::get_tileset_bounds($this->tile_numbers);

@@ -38,4 +38,3 @@ Route::set('admin/collection/action', 'admin/<controller>/<action>', array())
         'controller' => 'dashboard',
         'action' => 'index'
 ));
-

@@ -60,6 +60,14 @@ class Sourcemap {
         return $rev;
     }
 
+    public static function assets_path() {
+        //todo: make this configurable
+        static $assets_path;
+        if(!$assets_path)
+            $assets_path = dirname(dirname(dirname(__FILE__))).'/assets/';
+        return $assets_path;
+    }
+
     public static function sites_path() {
         static $path;
         if(!$path) {

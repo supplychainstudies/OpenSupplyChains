@@ -8,7 +8,10 @@
                 </a>
             </div>
             <div class="sixcol">
-                <input id="livesearch" type="search" results="0" placeholder="Search" />
+                <form>
+                    <input id="header-search" type="search" results="0" placeholder="Search" onkeyup="showResult(this.value)" />
+                    <div id="livesearch"></div>
+                </form>
             </div>
             <div class="threecol last">
                 <nav>

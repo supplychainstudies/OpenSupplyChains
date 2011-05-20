@@ -83,7 +83,7 @@ body.main{
 
 
 #branding {
-    height: 90px;
+    height: 4em;
     font-size: 1em; 
     > a { 
         text-decoration:none;
@@ -167,10 +167,22 @@ body.main{
     .dark-background;
     #slider{
         .map{
+            img{
+                border: 3px solid #fff;
+                float:left;
+                width: 66%;
+            }
             .description{
-                float:right;
-                background: rgba(255,255,255,.8);
-                height: 100%;
+                width: 30%;
+                float:left;
+                text-align:center;
+                h2{
+                    font-size: 1.2em;
+                    font-weight: normal;
+                }
+                p{
+                    padding: 20px;
+                }
             }
         }
     }
@@ -762,6 +774,11 @@ body.main{
 
 .clear{
     clear:both;
+}
+
+.spacer{
+    clear: both;
+    height: 20px;
 }
 
 .highlighted{

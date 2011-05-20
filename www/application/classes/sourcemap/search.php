@@ -1,7 +1,7 @@
 <?php
 class Sourcemap_Search {
 
-    const CACHE_PREFIX = 'search-';
+    const CACHE_PREFIX = 'search';
 
     const DBONLY = 0;
     const SPHINX = 1;
@@ -111,7 +111,6 @@ class Sourcemap_Search {
     }
 
     public function set_limit($l) {
-        $l = (int)$l;
         $this->limit = max(
             min($l, $this->max_limit), $this->min_limit
         );

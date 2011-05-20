@@ -16,14 +16,19 @@
 
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags(
         'sites/default/assets/styles/reset.css',
-        'sites/default/assets/styles/default.less',
         'assets/styles/general.less',
+        'sites/default/assets/styles/default.less',
         'sites/default/assets/styles/slider.css' // todo: this should only get loaded from welcome.php
     )?>
    
     </head>
     <body>
-        <div id="top-notice"></div>
+    <div class="overlay">
+        <div id="registration" class="dialog">
+            <?= View::factory('partial/registration', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        </div>
+    </div>
+    <div id="top-notice"></div>
         <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         <header>
             <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>

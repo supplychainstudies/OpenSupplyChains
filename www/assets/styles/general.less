@@ -44,10 +44,15 @@ h1 {
 }
 
 a {
+    color: @link-color;
     .sansserif-font;
     text-decoration: none;
     &:hover{
+        color: @link-hover-color;
         text-decoration: underline;
+    }
+    &:visited{
+        color: @link-color;
     }
 }
 
@@ -171,16 +176,26 @@ body.main{
     }
 }
 
-.map-item{
-    .fourcol;
+.border{
+    border: 2px solid #888;
 }
 
-.map-thumb {
-    border: .2em solid #ccc; 
-    background-position: -300px -300px; 
-    height: 10em; 
-    width: 100%;
+.map-item{
+    margin:0 auto;
+    text-align: center;
+    img{
+        .border;
+    }
+    a.title{
+        .sansserif-font;
+        color: @link-color;
+    }
+    span{
+        .serif-font;
+    }
 }
+
+
 
 /* FORM STYLES 
  * -------------------------------------------------------------- */

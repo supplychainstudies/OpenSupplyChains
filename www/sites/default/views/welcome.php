@@ -43,28 +43,32 @@
      
     <div class="row">
     <?php //todo: return the three most popular maps.  for now we're just pulling the first three. ?>
+    <?php $i = 0;?>
     <?php foreach($supplychains as $id => $details): ?>
-    <?php if ($id == 3){ break; } ?>
+    <?php if ($i == 3){ break; } ?>
     <?php extract((array)$details); ?>
     <?php $title = isset($details->attributes->title) ? $details->attributes->title : 'Untitled'; ?>
-        <div class="map-item fourcol <?php if ($id == 3){ ?> last<?php } ?>">
-            <img src="map/static/<?= $id ?>.s.png" alt="" /> 
-            <a href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a><br />
-            created by <a href="user/<?= $user_id ?>"><?= HTML::chars($owner->username) ?></a> at <?= date('H:ia', $created) ?>
+        <div class="map-item fourcol<?php if ($i == 2){ ?> last<?php } ?>">
+            <img src="map/static/<?= $id ?>.m.png" alt="" />
+            <br />
+            <a class="title" href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a>
+            <br />
+            <span>created by <a href="user/<?= $user_id ?>"><?= HTML::chars($owner->username) ?></a> at <?= date('H:ia', $created) ?></span>
         </div><!-- .map-item -->
-    </div><!-- .row -->
+    <?php $i++; ?>
     <?php endforeach; ?>
+    </div><!-- .row -->
 </div><!-- .container -->
 
 <div class="container">
     <div class="row">
-        <div class="fourcol">
+        <div class="threecol">
             <h3>New</h3>
         </div>
-        <div class="fourcol">
+        <div class="threecol">
             <h3>Popular</h3>
         </div>
-        <div class="fourcol">
+        <div class="sixcol last">
             <h3>News</h3>
             <div class="news">
                 <ul>

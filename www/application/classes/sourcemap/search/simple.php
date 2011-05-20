@@ -11,6 +11,10 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $results[] = $scm->kitchen_sink($row->id);
         }
         $this->results->results = $results;
+        $this->results->limit = $this->limit;
+        $this->results->offset = $this->offset;
+        $this->results->hits_ret = count($results);
+        $this->results->hits_tot = "wait for it...";
         return $this->results;
     }
 }

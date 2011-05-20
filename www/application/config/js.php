@@ -40,13 +40,16 @@ return array(
                 'assets/scripts/sourcemap/supplychain.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-jquery', 'openlayers', 'sourcemap-search'
+                'less', 'sourcemap-search', 'sourcemap-jquery', 'openlayers' 
             )
         ),
         'sourcemap-search' => array(
             'scripts' => array(
                 'assets/scripts/search.js'
             ),
+            'requires' => array(
+                'sourcemap-jquery'
+            )
         ),
         'sourcemap-template' => array(
             'scripts' => array(

@@ -1,6 +1,6 @@
 <div style="padding: 2em; text-align: center; margin: 0 auto; width: 624px">
     <div class="instructions">Select a region from the map below:</div>
-    <img id="milk-map" src="sites/organicvalley/assets/images/milk-map.png" usemap="#usa" />
+    <img id="milk-map" src="sites/wholefoods/assets/images/milk-map.png" usemap="#usa" />
     <map name="usa"> 
         <div style="text-align:center; width:624px; margin-left:auto; margin-right:auto;"> 
         <area shape="poly" coords="11,101,87,121,94,93,94,87,93,86,104,68,101,61,112,18,56,1,34,5,10,86,8,98" 

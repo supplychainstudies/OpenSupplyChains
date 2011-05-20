@@ -1,7 +1,7 @@
 <?php
 return array(
     'packages' => array(
-        'organicvalley-embed' => array(
+        'wholefoods-embed' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',
                 'assets/scripts/sourcemap/map/visualization/tour.js',
@@ -10,9 +10,9 @@ return array(
                 'sourcemap-template', 'sourcemap-map'
             )
         ),
-        'organicvalley-imap' => array(
+        'wholefoods-imap' => array(
             'scripts' => array(
-                'sites/organicvalley/assets/scripts/jquery.maphilight.min.js'
+                'sites/wholefoods/assets/scripts/jquery.maphilight.min.js'
             ),
             'requires' => array(
                 'jquery'

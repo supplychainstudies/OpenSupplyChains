@@ -46,7 +46,7 @@ class Sourcemap_Search {
     }
 
 
-    public static function find($params, $type) {
+    public static function find($params=null, $type=null) {
         return self::factory($params, $type)->search();
     }
 

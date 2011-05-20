@@ -2,7 +2,12 @@
 
 return array(
     'packages' => array(
-        'sourcemap-edit' => array(
+    'sourcemap-core' => array(
+        'scripts' => array(
+            'sites/default/assets/scripts/curtain.js',
+            )
+        ),
+    'sourcemap-edit' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',
                 'assets/scripts/sourcemap/supplychain/editor/tabbed.js',

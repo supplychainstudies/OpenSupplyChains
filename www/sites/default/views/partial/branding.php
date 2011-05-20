@@ -7,9 +7,9 @@
                     </header>
                 </a>
             </div>
-            <div class="sixcol">
-                <form>
-                    <input id="header-search" type="search" results="0" placeholder="Search" onkeyup="showResult(this.value)" />
+            <div id="header-search-div" class="sixcol">
+                <form method="post" action="/search/">
+                    <input id="header-search" type="search" results="0" placeholder="Search" />
                     <div id="livesearch"></div>
                 </form>
             </div>

@@ -159,6 +159,7 @@ body.main{
 /* WELCOME PAGE STYLES 
  * -------------------------------------------------------------- */
 
+
 .dark-background{
     background-color:#eee;
 }
@@ -653,29 +654,21 @@ body.main{
 /* MODAL STRUCTURES 
  * -------------------------------------------------------------- */
 
-.overlay {
+#simplemodal-overlay, .overlay {
     display:none;
     width:100%;
     height:100%;
     position:fixed;
     top:0; left:0;
-    background:#333;
-    background:rgba(0,0,0,0.6);
+    opacity:.8;
+    background:#ddd;
+    background:rgba(200,200,200,0.8);
     z-index:1000;
 }
-.dialog {
-    clear:both; position:static;
+#simplemodal-container, .dialog {
     background:@background;
-    top:50%; left:0; bottom:50%; right:0;
     margin:auto;
     width:600px; height:300px;
-    border-bottom-left-radius:8px;	      
-    -moz-border-radius-bottomleft:8px;
-    -webkit-border-bottom-left-radius:8px;
-    border-bottom-right-radius:8px;	      
-    -moz-border-radius-bottomright:8px;
-    -webkit-border-bottom-right-radius:8px;
-    .box_shadow(4px,4px,4px);
     header {
         h3 { color:#fff; }
         background:#eee;

@@ -25,7 +25,9 @@
     <body>
     <div class="overlay">
         <div id="registration" class="dialog">
-            <?= View::factory('partial/registration', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+            <div class="dialog-content">
+                <?= View::factory('partial/registration', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+            </div>
         </div>
     </div>
     <div id="top-notice"></div>

@@ -1,3 +1,8 @@
+$('a[href$="register"]').click(function(e){
+    e.preventDefault();
+    $.modal($('#registration'),{ opacity: 95 });
+});
+
 /*
  * SimpleModal 1.4.1 - jQuery Plugin
  * http://www.ericmmartin.com/projects/simplemodal/

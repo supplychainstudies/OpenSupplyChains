@@ -50,6 +50,9 @@
     </div>
      
     <div class="row">
+
+    
+
     <?php //todo: return the three most popular maps.  for now we're just pulling the first three. ?>
     <?php $i = 0;?>
     <?php foreach($supplychains as $id => $details): ?>
@@ -57,7 +60,7 @@
     <?php extract((array)$details); ?>
     <?php $title = isset($details->attributes->title) ? $details->attributes->title : 'Untitled'; ?>
         <div class="map-item fourcol<?php if ($i == 2){ ?> last<?php } ?>">
-            <img src="map/static/<?= $id ?>.m.png" alt="" />
+            <img src="map/static/<?= $id ?>.s.png" alt="" />
             <br />
             <a class="title" href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a>
             <br />

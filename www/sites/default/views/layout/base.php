@@ -39,8 +39,10 @@
         
         <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
         
+        <div class="clear"></div>
+
         <footer id="footer">
-        <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+            <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         </footer>
         <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
           

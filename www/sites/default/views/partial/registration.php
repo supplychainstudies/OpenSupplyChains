@@ -16,10 +16,9 @@
      
      <label for="identifier"></label><input type="hidden" name="identifier"  <?if (isset($identifier)) {?> value="<?=$identifier?>"<?}?>/> 
 <input type="submit" value="Register" name="register" /></form>
-<br />
-
+</fieldset>
 </div>
-     <div class="social-signin" style="float: right";>     
-<iframe src="http://sourcemap1.rpxnow.com/openid/embed?token_url=http%3A%2F%2Falpha.sourcemap.org%2Fregister%2Floginopenid"  scrolling="no"  frameBorder="no"  allowtransparency="true"  style="width:400px;height:240px"></iframe>  
 
+<div class="social-signin" style="float: right";>     
+    <iframe src="http://sourcemap1.rpxnow.com/openid/embed?token_url=http%3A%2F%2Falpha.sourcemap.org%2Fregister%2Floginopenid"  scrolling="no"  frameBorder="no"  allowtransparency="true"  style="width:400px;height:240px"></iframe>  
 </div>

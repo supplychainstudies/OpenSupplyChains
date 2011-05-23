@@ -13,7 +13,10 @@
         </div><!-- .fourcol -->
         
         <div class="fourcol">
+            <h3>
             <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        
+        <div class="fourcol last">
         </div><!-- .fourcol -->
     </div><!-- .row -->
 </div><!-- .container -->

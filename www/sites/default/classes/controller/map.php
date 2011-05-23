@@ -87,8 +87,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     header('X-Cache-Hit: true');
                     print $exists;
                 } else {
-                    // make blank image and set "no static map" flag
-                    // on supplychain record.
+                    // make blank image and enqueue job to generate
                     if($pimg = imagecreatefrompng(self::placeholder_image())) {
                         // pass
                         $pimgw = imagesx($pimg); $pimgh = imagesy($pimg);
@@ -102,8 +101,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                         imagecolorallocate($pimg, 0, 0, 255);
                     }
                     imagepng($pimg);
-                    $supplychain->flags |= Sourcemap::NOSTATIC;
-                    $supplychain->save();
+                    Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, $supplychain->id);
                 }
                 exit;
             } else {

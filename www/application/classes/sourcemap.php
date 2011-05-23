@@ -9,7 +9,7 @@ class Sourcemap {
 
     // supplychain flags
     const FEATURED = 8;
-    const NOSTATIC = 32;
+    #const NOSTATIC = 32;
 
     // user flags (see model/user)
     const ACTIVE = 1;
@@ -25,6 +25,8 @@ class Sourcemap {
     public static $_sess_save_path;
 
     public static $env = self::PRODUCTION;
+
+    public static $job_queue = null;
 
     public static function init() {
         if(isset(Kohana::$environment))
@@ -101,5 +103,19 @@ class Sourcemap {
         if(!$site) $site = SOURCEMAP_SITE;
         if($new_site) $site = $new_site;
         return $site;
+    }
+
+    public static function enqueue($type, $params=null) {
+        if(Kohana::config('sourcemap.job_queue')) {
+            if(!self::$job_queue) {
+                Sourcemap::$job_queue = Sourcemap_Job_Queue::instance(
+                    Kohana::config('sourcemap.job_queue_host'), 
+                    Kohana::config('sourcemap.job_queue_port')
+                );
+            }
+            $job = Sourcemap_Job::factory($type, $params);
+            return Sourcemap::$job_queue->enqueue($job);
+        }
+        return false;
     }
 }

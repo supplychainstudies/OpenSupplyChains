@@ -49,53 +49,50 @@
         </div>
         <div class="onecol last"></div>
     </div>
-     
-    <div class="row">
+</div>
 
-    <?php //todo: return the three most popular maps.  for now we're just pulling the first three. ?>
-    <?php $i = 0;?>
-    <?php foreach($supplychains as $id => $details): ?>
-    <?php if ($i == 3){ break; } ?>
-    <?php extract((array)$details); ?>
-    <?php $title = isset($details->attributes->title) ? $details->attributes->title : 'Untitled'; ?>
-        <div class="map-item fourcol<?php if ($i == 2){ ?> last<?php } ?>">
-            <img src="map/static/<?= $id ?>.s.png" alt="" />
-            <br />
-            <a class="title" href="map/view/<?= $id ?>"><?= HTML::chars($title) ?></a>
-            <br />
-            <span>created by <a href="user/<?= $user_id ?>"><?= HTML::chars($owner->username) ?></a> at <?= date('H:ia', $created) ?></span>
-        </div><!-- .map-item -->
-    <?php $i++; ?>
-    <?php endforeach; ?>
+
+<div class="container">
+    <div class="row">
+        <div class="twelvecol">
+            <h3>Popular Today</h3>
+        </div> 
+    </div>
+    <div class="row">
+        <?= View::factory('partial/thumbs/featured', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div><!-- .row -->
 </div><!-- .container -->
 
 <div class="spacer"></div>
 <div class="container">
     <div class="row">
-        <div class="threecol">
+        <div class="twocol">
             <h3>New</h3>
+            <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         </div>
-        <div class="threecol">
-            <h3>Popular</h3>
+        <div class="twocol">
+            <h3>&nbsp;</h3>
+            <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         </div>
-        <div class="sixcol last">
-            <h3>News</h3>
+        <div class="twocol">
+            <h3>&nbsp;</h3>
+            <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        </div>
+        <div class="onecol"></div>
+        <div class="fivecol last">
             <div class="news">
+                <h3>What's new?</h3>
                 <ul>
                     <li>
-                        <div style="background-image: url('http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg')">
-                        </div>
+                        <img src="http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg" alt="" />
                         <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
                     </li>
                     <li>
-                        <div style="background-image: url('http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg')">
-                        </div>
+                        <img src="http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg" alt="" />
                         <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
                     </li>
                     <li>
-                        <div style="background-image: url('http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg')">
-                        </div>
+                        <img src="http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg" alt="" />
                         <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
                     </li>
                 </ul>

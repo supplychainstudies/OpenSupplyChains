@@ -31,8 +31,8 @@ Sourcemap.Map.prototype.defaults = {
         "default": {
             "pointRadius": "${size}",
             "fillColor": "${color}",
-            "strokeWidth": 0,
-            "strokeColor": "#fff",
+            "strokeWidth": "${strokeWidth}",
+            "strokeColor": "${strokeColor}",
             "fontColor": "#eee",
             "fontSize": "1.5em",
             "fontFamily": "Georgia, serif",
@@ -47,7 +47,8 @@ Sourcemap.Map.prototype.defaults = {
             "fillOpacity": 1.0
         },
         "hascontent": {
-            "label": "*",
+            "strokeWidth": 1,
+            "strokeColor": "#fff",
             "labelAlign": "cm",
             "labelXOffset": 0,
             "labelYOffset": -4,

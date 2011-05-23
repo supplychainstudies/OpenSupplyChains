@@ -41,8 +41,8 @@
 <div class="container">
     <div class="row">
         <div class="onecol"></div>
-        <div class="tencol">
-            <h1>Sourcemap helps you understand where things come from.</h1>
+        <div class="tencol intro">
+            <h1>Sourcemap is a platform for researching, optimizing and sharing supply chains.</h1>
             <p>Nam congue rutrum diam non malesuada. Mauris lobortis magna eget libero sollicitudin suscipit. In consectetur adipiscing ligula, nec ultricies mauris volutpat eget. </p>
             <p>Integer consectetur turpis eu orci convallis volutpat. Sed accumsan mattis urna et dictum. In blandit, sapien id cursus vehicula, nisi arcu convallis tortor, sed pharetra turpis orci interdum quam. Cras vitae est velit. Vestibulum commodo gravida orci non rhoncus. Aliquam consequat orci eget risus blandit vitae convallis urna blandit.</p>
             <p>Sed semper eros at urna sodales a tempus enim scelerisque. Aenean mauris lacus, ultricies a sodales eget, semper sed arcu. Aliquam diam ligula, hendrerit vel pretium ac, dapibus sed erat. </p>
@@ -67,7 +67,7 @@
 <div class="container">
     <div class="row">
         <div class="twocol">
-            <h3>New</h3>
+            <h3>Recent</h3>
             <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         </div>
         <div class="twocol">
@@ -81,7 +81,7 @@
         <div class="onecol"></div>
         <div class="fivecol last">
             <div class="news">
-                <h3>What's new?</h3>
+                <h3>From Headquarters</h3>
                 <ul>
                     <li>
                         <img src="http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg" alt="" />

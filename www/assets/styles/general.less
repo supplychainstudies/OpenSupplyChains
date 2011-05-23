@@ -108,21 +108,55 @@ body.main{
         margin-top: 1.85em;
     }
     #livesearch{
+        .sansserif-font;
+        font-size:.9em;
+        text-align: center;
+        border: 1px solid #333;
         background: #fff;
         z-index: 999;
+        display:none;
         ul{
             list-style:none;
             margin: 0;
             li{
+                float:left;
+                width: 100%;
+                padding: 10px 0;
                 &:hover{
                     background:#eee;
+                    cursor: pointer;
                 }
-                a{
-                    color: #333;
-                    &:hover{
-                        background: #eee;
-                        text-decoration: none;
+                div{
+                    width: auto;
+                    height: auto;
+                    float: left;
+                    padding: 0 20px;
+                    a{
+                        color: #333;
+                        &:hover{
+                            background: #ddd;
+                            text-decoration: none;
+                        }
                     }
+                    span{
+                        color: #888;
+                        font-style: italic;
+                        a{
+                            color: #888;
+                        }
+                    }
+                    &.search-thumb{
+                        float:right;
+                        padding-left: 0;
+                        img {
+                            width: 120px;
+                        }
+                    }
+                }
+                &.more{
+                    clear: both;
+                    text-transform: lowercase;
+                    border-top: 1px solid #333;
                 }
             }
         }

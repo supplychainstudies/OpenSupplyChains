@@ -1,47 +1,12 @@
 /***
-@title:
-Live Search
-
-@version:
-2.0
-
-@author:
-Andreas Lagerkvist
-
-@date:
-2008-08-31
-
-@url:
-http://andreaslagerkvist.com/jquery/live-search/
-
-@license:
-http://creativecommons.org/licenses/by/3.0/
-
-@copyright:
-2008 Andreas Lagerkvist (andreaslagerkvist.com)
-
-@requires:
-jquery, jquery.liveSearch.css
-
-@does:
-Use this plug-in to turn a normal form-input in to a live ajax search widget. The plug-in displays any HTML you like in the results and the search-results are updated live as the user types.
-
-@howto:
-jQuery('#q').liveSearch({url: '/ajax/search.php?q='}); would add the live-search container next to the input#q element and fill it with the contents of /ajax/search.php?q=THE-INPUTS-VALUE onkeyup of the input.
-
-@exampleHTML:
-<form method="post" action="/search/">
-
-    <p>
-        <label>
-            Enter search terms<br />
-            <input type="text" name="q" />
-        </label> <input type="submit" value="Go" />
-    </p>
-
-</form>
-
-@exampleJS:
+@title: Live Search
+@version: 2.0
+@author: Alex Ose.  Based on code from Andreas Lagerkvist
+@date: 2008-08-31
+@url: http://andreaslagerkvist.com/jquery/live-search/
+@license: http://creativecommons.org/licenses/by/3.0/
+@copyright: 2008 Andreas Lagerkvist (andreaslagerkvist.com)
+@requires: jquery, jquery.liveSearch.css
 ***/
 
 jQuery.fn.liveSearch = function (conf) {
@@ -64,17 +29,18 @@ jQuery.fn.liveSearch = function (conf) {
                         .hide()
                         .slideUp(0);
 
-        // Close live-search when clicking outside it
-        jQuery(document.body).click(function(event) {
-            var clicked = jQuery(event.target);
-
-            if (!(clicked.is('#' + config.id) || clicked.parents('#' + config.id).length || clicked.is('input'))) {
-                liveSearch.slideUp(config.duration, function () {
-                    config.onSlideUp();
-                });
-            }
-        });
     }
+    
+    // Close live-search when clicking outside it
+    jQuery(document.body).click(function(event) {
+        var clicked = jQuery(event.target);
+
+        if (!(clicked.is('#' + config.id) || clicked.parents('#' + config.id).length || clicked.is('input'))) {
+            liveSearch.slideUp(config.duration, function () {
+                config.onSlideUp();
+            });
+        }
+    });
 
     return this.each(function () {
         var input                           = jQuery(this).attr('autocomplete', 'off');
@@ -163,11 +129,36 @@ jQuery.fn.liveSearch = function (conf) {
                                 // Build output
                                 var html = "<ul>";
                                 for (var i = 0; i < json.results.length; i++) { 
-                                    html += "<li class=\"search-result\">"
-                                    html += "<a href=\"\">"
+
+                                    // todo:  turn this into a JSTPL template
+                                    html += "<li class=\"search-result\">";
+                                    html += "<div>";
+                                    html += "<a class=\"title\" href=\"/map/view/"+ json.results[i].id + "\">";
                                     html += json.results[i].attributes.name;
-                                    html += "</a>"
-                                    html += "<li class=\"result\">"
+                                    html += "</a><br/>";
+                                    html += "<span class=\"info\">";
+                                    html += "By <a class=\"title\" href=\"\">";
+                                    html += json.results[i].owner.name;
+                                    html += "</a>, <a class=\"date\" href=\"\">";
+                                    var myDate = new Date(json.results[i].created);
+                                    html += myDate.toUTCString();
+                                    html += "</a>"; 
+                                    html += "</span>";
+                                    html += "</div>";
+                                    html += "<div class=\"search-thumb\"\>";
+                                    html += "<img src=\"/map/static/";
+                                    html += json.results[i].id;
+                                    html += ".t.png\" alt=\"\" />";
+                                    html += "</div>";
+                                    html += "<div class=\"clear\"></div>";
+                                    html += "</li>";
+                                    
+                                    if (i == 2){
+                                        html += "<li class=\"more\">More Results...</li>";
+                                        break;
+                                    }
+ 
+                                
                                 }
                                 html += "</ul>";
                                 liveSearch.html(html);

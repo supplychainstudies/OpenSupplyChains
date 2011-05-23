@@ -24,9 +24,9 @@
                         </li>
                         <li id="account-navigation">
                             <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
-                            <span class="username"><?= HTML::chars($current_user->username) ?>&nbsp;|&nbsp;<a href="auth/logout">Log out</a></span>
+                            <a href="/home"><?= HTML::chars($current_user->username) ?></a>&nbsp;|&nbsp;<a href="auth/logout">Log out</a></span>
                             <?php else:  // Otherwise, this ?>
-                            <a href="register">Register</a> | <a href="auth">Log in</a>
+                            <a href="/register">Register</a> | <a href="auth">Log in</a>
                             <?php endif; ?>
                         </li>
                     </ul>

@@ -1,4 +1,4 @@
-<div class="container dark-background">
+<div class="container dark-background footer">
     <div class="row">
         <div class="threecol">
             <h3>Carbon Catalog</h3>
@@ -37,8 +37,9 @@
             </ul>
         </div>
     </div><!-- .row -->
+    <div class="spacer"></div>
 </div><!-- .container -->
-<div class="container">
+<div class="container black-background footer">
     <div class="row">
         <div class="eightcol">
             <h3>Copyright</h3>
@@ -49,4 +50,5 @@
             <p>We built Sourcemap so that everyone can access the information needed to make sustainable choices and share them with the world. The project is free, opensource, and volunteer driven. For more news, check the Sourcemap Blog.</p>
         </div>
     </div><!-- .row -->
+    <div class="clear"></div>
 </div><!-- .container -->

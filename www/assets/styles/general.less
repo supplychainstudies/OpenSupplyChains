@@ -30,18 +30,16 @@ body {
     a:hover, a:active, a:visited, a, a:link {
         /*color:@brand-color;*/
     }
-    h1,h2 { font-size:2em;}
-    h2,h3,h4,h5 {
-        color:@heading-color;
-    }
 }
 
 h1,h2,h3,h4,h5,h6{
     .sansserif-font;
     margin: .5em 0;
+    font-weight: normal;
 }
 h1 {
-    font-size: 1.2em;
+    font-size: 1.4em;
+    line-height:2em;
 }
 
 a {
@@ -56,8 +54,6 @@ a {
         color: @link-color;
     }
 }
-
-
 
 body.main{
     #branding, #content, #footer-content, #page-navigation, .splash-text {
@@ -117,7 +113,7 @@ body.main{
         display:none;
         ul{
             list-style:none;
-            margin: 0;
+            margin: 10px 0 0 0;
             li{
                 float:left;
                 width: 100%;
@@ -192,8 +188,23 @@ body.main{
 
 
 .dark-background{
-    background-color:#eee;
+    background-color:#eaeaea;
 }
+
+.black-background{
+    background-color:#333;
+    color: #eaeaea;
+    a{
+        color: #eaeaea;
+    }
+}
+
+.intro{
+    p{
+        margin: 12px 0;
+    }
+}
+
 
 .featured{
     .dark-background;
@@ -221,11 +232,12 @@ body.main{
 }
 
 .border{
-    border: 2px solid #888;
+    padding: 2px;
+    border: 1px solid #7e7e7e;
 }
 
 .map-item{
-    margin:0 auto;
+    margin:0 auto 20px;
     text-align: center;
     img{
         .border;
@@ -239,7 +251,22 @@ body.main{
     }
 }
 
-
+.news{
+    ul{
+        list-style: none;
+        li{
+            float:left;
+            padding: 0 0 20px;
+            img{
+                float: left;
+                padding: 10px 15px 10px 0;
+            }
+            p{
+                
+            }
+        }
+    }
+}
 
 /* FORM STYLES 
  * -------------------------------------------------------------- */
@@ -675,11 +702,8 @@ body.main{
 /* FOOTER STYLES 
  * -------------------------------------------------------------- */
 
-#footer {
-    color:#777;
-    ul{
-        list-style:none;
-    }
+.footer {
+    padding: 20px 0;
 }
 
 /* MODAL STRUCTURES 

@@ -43,14 +43,13 @@
         <div class="onecol"></div>
         <div class="tencol intro">
             <h1>Sourcemap is a platform for researching, optimizing and sharing supply chains.</h1>
-            <p>Nam congue rutrum diam non malesuada. Mauris lobortis magna eget libero sollicitudin suscipit. In consectetur adipiscing ligula, nec ultricies mauris volutpat eget. </p>
             <p>Integer consectetur turpis eu orci convallis volutpat. Sed accumsan mattis urna et dictum. In blandit, sapien id cursus vehicula, nisi arcu convallis tortor, sed pharetra turpis orci interdum quam. Cras vitae est velit. Vestibulum commodo gravida orci non rhoncus. Aliquam consequat orci eget risus blandit vitae convallis urna blandit.</p>
-            <p>Sed semper eros at urna sodales a tempus enim scelerisque. Aenean mauris lacus, ultricies a sodales eget, semper sed arcu. Aliquam diam ligula, hendrerit vel pretium ac, dapibus sed erat. </p>
         </div>
         <div class="onecol last"></div>
     </div>
 </div>
 
+<div class="spacer"></div>
 
 <div class="container">
     <div class="row">

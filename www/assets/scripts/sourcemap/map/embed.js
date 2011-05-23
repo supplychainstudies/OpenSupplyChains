@@ -24,7 +24,7 @@ Sourcemap.Map.Embed.prototype.broadcast = function() {
 Sourcemap.Map.Embed.prototype.defaults = {
     "auto_init": true,
     "map_element_id": 'sourcemap-map-embed',
-    "banner": true, "watermark": false, "magic_word_sequence": [
+    "banner": true, "watermark": true, "magic_word_sequence": [
         "description", "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
     "tour_order_strategy": "upstream", "tileswitcher": false,
@@ -163,6 +163,12 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
             // todo: magic words for size (other than "size")?
             if(stop.getAttr("youtube:link", false) || stop.getAttr("vimeo:link", false) || stop.getAttr("flickr:setid", false)) {
                 ftr.attributes.label = "*";
+                if (!ftr.style) { 
+                    ftr.style = {};
+                }
+                console.log(ftr);
+                ftr.attributes.strokeWidth = 3;
+                ftr.attributes.strokeColor = "#fff";
             } else ftr.attributes.label = "";
         },
         // callback for decorating hop feature and its arrow
@@ -248,25 +254,25 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
         }
         if(this.options.watermark) {
             this.watermark = $('<div id="watermark"></div>');
-            $(this.map.map.div).append(watermark);
+            $(this.map.map.div).append(this.watermark);
         }
     }, this));
     // embed activity fades 
     $("html").mouseenter(function() {
-        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=2) {        
-            $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+        if($("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=2) {        
+            $("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
                 .fadeIn("fast");
         }
     });
     $("html").mousemove(function() {
-        if($("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length>=2) {
-            $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+        if($("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length>=2) {
+            $("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
             .fadeIn("fast");
             $("html").unbind("mousemove");
         }
     });
     $("html").mouseleave(function() {
-        $("#embed-banner, #tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+        $("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
             .fadeOut("fast");
     });
     

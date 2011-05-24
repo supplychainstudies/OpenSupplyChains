@@ -248,10 +248,10 @@ body#embedded-supplychain {
     .olControlAttribution { bottom:0 !important; a { color:#fff}}
     .olControlPanel {
         display:none;
-        height: 1.5em;
+        height: 30px;
         width: 14em;
         bottom: 0; left:42%; right:58%;
-        padding:0.5em 2.25em 0.5em 0;
+        padding:10px 32px 10px 0;
         background: url('../images/embed-dock.png') center bottom transparent no-repeat;
         .background_size(100%, 100%);
          div {
@@ -271,16 +271,16 @@ body#embedded-supplychain {
             cursor:pointer;
         }    
         .olControlZoomInItemInactive {
-            width: 1.5em;
-            height: 1.5em;
-            background: url("../images/embed-zoom-zoomin.png") center center no-repeat;
+            width: 30px;
+            height: 30px;
+            background: url("../images/embed-zoom-zoomin-small.png") center center no-repeat;
             .background_size(100%, 100%);
             cursor:pointer;
         }
         .olControlZoomOutItemInactive {
-            width: 1.5em;
-            height: 1.5em;
-            background: url("../images/embed-zoom-zoomout.png") center center no-repeat;
+            width: 30px;
+            height: 30px;
+            background: url("../images/embed-zoom-zoomout-small.png") center center no-repeat;
             .background_size(100%, 100%);
             cursor:pointer;
         }
@@ -288,19 +288,17 @@ body#embedded-supplychain {
     .sourcemap-tour-control-panel {
         display:none;
         z-index: 1008;
-        width: 6em;
-        height: 1.5em;
+        width: 100px;
+        height: 30px;
         position: absolute;
         bottom: 0; left:43%; right:57%;
         margin:0 auto;
-        padding:0.5em 1.25em;
+        padding:10px 20px;
         
         .tour-progress-bar {
             display: none;
         }
         div {
-            width: 2em;
-            height: 1.5em;
             float:left;
             clear: none;
             .background_size(100%, 100%);
@@ -311,30 +309,32 @@ body#embedded-supplychain {
             }
         }
         .sourcemap-tour-prev {
-            background: url("../images/embed-tour-prev.png") center center no-repeat;
-            .background_size(100%, 100%);
+            height: 30px; width: 30px;
+            background: url("../images/embed-tour-prev-small.png") center center no-repeat;
             cursor:pointer;
         }
         .sourcemap-tour-play {
-            background: url("../images/embed-tour-stop.png") center center no-repeat;
-            .background_size(100%, 100%);
+            height: 30px; width: 30px;
+            background: url("../images/embed-tour-stop-small.png") center center no-repeat;
             cursor:pointer;
             &.stopped {
-                background-image: url("../images/embed-tour-play.png");
+                background-image: url("../images/embed-tour-play-small.png");
             }
         }
         .sourcemap-tour-next {
-            background: url("../images/embed-tour-next.png") center center no-repeat;
-            .background_size(100%, 100%);
+            height: 30px; width: 30px;
+            background: url("../images/embed-tour-next-small.png") center center no-repeat;
             cursor:pointer;
         }
     }
     .olPopup {
         .olPopupContent {
             min-width:5em;
+            max-height:170px;
             background: #fff !important;
             position:relative;
             font-size: 1.1em;
+            overflow: hidden;
             .popup-wrapper {                
                 padding:0.5em;
             }

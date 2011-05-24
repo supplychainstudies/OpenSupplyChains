@@ -119,19 +119,26 @@ body#embedded-supplychain {
                 cursor: pointer;
             }
         }
-        #detail-title {
-        }
-        #detail-placename {
-        }
         #detail-content {
             overflow:hidden;                       
-            width:80%;
+            width:83%;
             padding:0; margin:0;
             float:left;
             iframe, object {
                 display:block;
                 margin: 0;
                 background:#444;
+            }
+            h2{
+                font-size: 1.5em;
+            }
+            h3{
+                font-size: 1.2em;
+                font-style: italic;
+                color:#aaa;
+                margin-bottom: 15px;
+            }
+            .description{
             }
             .youtube-player, .vimeo-player {
                 background: url("../images/embed-video-icon.png") center center no-repeat #444;
@@ -174,16 +181,21 @@ body#embedded-supplychain {
             .background_size(3em, 3em);
         }
         .content-nav {
-            width:100%; height:2.5em;
+            margin: 30px auto;
+            width:50%; height:2.3em;
+            border: 1px dashed #aaa;
             .content-item {
+                width: 2em;
+                height: 2em;
+                margin: 0 0 0 10px;
+                float: left;
                 a {
                     text-decoration:none;
                     font-size:0;
                     height:100%; width:100%;
                     display:block;
                 }
-                &:hover { border:2px solid @highlight-color; }
-                &.selected { border: 2px solid #fff; }
+                &:hover { background-color: #eaeaea; }
                 &:first-child { margin-left:0 !important; }
             }
             .description {
@@ -238,7 +250,7 @@ body#embedded-supplychain {
         display:none;
         height: 1.5em;
         width: 14em;
-        bottom: 0; left:45%; right:55%;
+        bottom: 0; left:42%; right:58%;
         padding:0.5em 2.25em 0.5em 0;
         background: url('../images/embed-dock.png') center bottom transparent no-repeat;
         .background_size(100%, 100%);
@@ -279,7 +291,7 @@ body#embedded-supplychain {
         width: 6em;
         height: 1.5em;
         position: absolute;
-        bottom: 0; left:46%; right:54%;
+        bottom: 0; left:43%; right:57%;
         margin:0 auto;
         padding:0.5em 1.25em;
         

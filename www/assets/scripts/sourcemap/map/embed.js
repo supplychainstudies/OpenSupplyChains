@@ -159,13 +159,19 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
             }, tscope), tscope, null, this.options.tpl_base_path);
         }, this),
         // callback for Sourcemap.Map to decorate a stop feature
-        "prep_stop": function(stop, ftr) {
+        "prep_stop": $.proxy(function(stop, ftr) {
             // todo: magic words for size (other than "size")?
-            if(stop.getAttr("youtube:link", false) || stop.getAttr("vimeo:link", false) || stop.getAttr("flickr:setid", false)) {
+            var hasmagic = false;
+            for(var ski=0; ski<this.magic_word_sequence.length; ski++) {
+                var sk = this.magic_word_sequence[ski];
+                if(stop.getAttr(sk, false))
+                    hasmagic = true;
+            }
+            if(hasmagic) {
                 ftr.attributes.strokeWidth = 1;
                 ftr.attributes.strokeColor = "#fff";
             } else ftr.attributes.label = "";
-        },
+        }, this),
         // callback for decorating hop feature and its arrow
         'prep_hop': function(hop, ftr, arrow) {
             // set arc and related arrow color

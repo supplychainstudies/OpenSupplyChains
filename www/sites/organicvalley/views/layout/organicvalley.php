@@ -20,11 +20,6 @@
   <meta name="generator" content="TYPO3 4.4 CMS" />
   <meta name="viewport" content="width=960" />
   <meta http-equiv="X-UA-Compatible" content="IE=IE8" />
-  <script type="text/javascript">
-//<![CDATA[
-  (function(g,b,d){var c=b.head||b.getElementsByTagName("head"),D="readyState",E="onreadystatechange",F="DOMContentLoaded",G="addEventListener",H=setTimeout;function f(){$LAB.script("http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js").wait().script('http://ovfm.ov.coop/fileadmin/marquee/scripts/s3.z.min.js').script('/typo3conf/ext/user_farmer/pi1/static/farmer-z.js').script('http://www.google-analytics.com/ga.js').wait(function(){ _gaq.push(['_setAccount','UA-71711-1']); _gaq.push(['_setLocalRemoteServerMode']); _gaq.push(['_trackPageview']); });}H(function(){if("item"in c){if(!c[0]){H(arguments.callee,25);return}c=c[0]}var a=b.createElement("script"),e=false;a.onload=a[E]=function(){if((a[D]&&a[D]!=="complete"&&a[D]!=="loaded")||e){return false}a.onload=a[E]=null;e=true;f()};a.src="http://ovfm.ov.coop/fileadmin/marquee/scripts/LAB12.z.min.js";c.insertBefore(a,c.firstChild)},0);if(b[D]==null&&b[G]){b[D]="loading";b[G](F,d=function(){b.removeEventListener(F,d,false);b[D]="complete"},false)}})(this,document);
-  //]]>
-  </script>
   <link rel="stylesheet" type="text/css" href=
   "http://ovfm.ov.coop/fileadmin/marquee/stylesheets/bc8.z.min.css" />
   <link rel="stylesheet" type="text/css" href=
@@ -68,7 +63,7 @@
       <ul>
         <li class="home"><a href="/" title="Return to homepage"><span>Home</span></a></li>
 
-        <li>&raquo;&nbsp;<a href="http://www.organicvalley.coop/who-is-your-farmer/index/" target="_self">Where Does it Come From?</a></li>
+        <li>&raquo;&nbsp;<a href="/" target="_self">Where Does it Come From?</a></li>
 
         <li>&raquo;&nbsp;Overview</li>
       </ul>
@@ -275,7 +270,7 @@
             <li class="home"><a href="/" title=
             "Return to homepage"><span>Home</span></a></li>
 
-            <li>&raquo;&nbsp;<a href="who-is-your-farmer/index/" target="_self">Who's
+            <li>&raquo;&nbsp;<a href="/" target="_self">Who's
             Your Farmer</a></li>
 
             <li>&raquo;&nbsp;Overview</li>

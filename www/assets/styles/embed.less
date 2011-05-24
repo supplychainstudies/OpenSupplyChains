@@ -173,20 +173,20 @@ body#embedded-supplychain {
             &:hover { opacity:1;}
         }
         #detail-nav.prev {
-            background: url("../images/embed-tour-prev.png") left center no-repeat;                        
-            .background_size(3em, 3em);
+            background: url("../images/embed-tour-prev-small.png") left center no-repeat;                        
+            .background_size(2em, 2em);
         }
         #detail-nav.next {
-            background: url("../images/embed-tour-next.png") right center no-repeat;
-            .background_size(3em, 3em);
+            background: url("../images/embed-tour-next-small.png") right center no-repeat;
+            .background_size(2em, 2em);
         }
         .content-nav {
-            margin: 30px auto;
-            width:50%; height:2.3em;
-            border: 1px dashed #aaa;
+            clear:both;
+            margin: 20px auto;
+            width:50%; height:52px;
             .content-item {
-                width: 2em;
-                height: 2em;
+                width: 48px;
+                height: 48px;
                 margin: 0 0 0 10px;
                 float: left;
                 a {
@@ -330,11 +330,11 @@ body#embedded-supplychain {
     .olPopup {
         .olPopupContent {
             min-width:5em;
-            max-height:170px;
             background: #fff !important;
             position:relative;
             font-size: 1.1em;
             overflow: hidden;
+            padding: 0;
             .popup-wrapper {                
                 padding:0.5em;
             }
@@ -438,8 +438,8 @@ body#embedded-supplychain {
 }
 #watermark {
     display:block;
-    width: 7em;
-    height: 1.18em;
+    width: 110px;
+    height: 17px;
     background: url("../images/embed-watermark.png") center center no-repeat;
     .background_size(100%, 100%);
     text-align:center;

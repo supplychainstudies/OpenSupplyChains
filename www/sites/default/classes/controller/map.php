@@ -98,7 +98,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     } elseif($pimg = imagecreatefrompng(self::placeholder_image())) {
                         // pass
                         $pimgw = imagesx($pimg); $pimgh = imagesy($pimg);
-                        $rpimgw = $szdim[0]; $rpimgh = $szdim[0]*($pimgh/$pimgw);
+                        $rpimgw = $szdim[2] - $szdim[0]; $rpimgh = $szdim[3] - $szdim[1];
                         $rpimg = imagecreatetruecolor($rpimgw, $rpimgh);
                         imagecopyresampled($rpimg, $pimg, 0, 0, 0, 0, $rpimgw, $rpimgh, $pimgw, $pimgh);
                         imagedestroy($pimg);

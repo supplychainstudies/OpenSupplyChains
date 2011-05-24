@@ -170,7 +170,10 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
             if(hasmagic) {
                 ftr.attributes.strokeWidth = 1;
                 ftr.attributes.strokeColor = "#fff";
-            } else ftr.attributes.label = "";
+            } else {
+                ftr.attributes.label = "";
+                ftr.attributes.strokeWidth = 0;
+            }
         }, this),
         // callback for decorating hop feature and its arrow
         'prep_hop': function(hop, ftr, arrow) {

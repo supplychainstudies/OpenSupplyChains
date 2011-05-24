@@ -162,12 +162,7 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
         "prep_stop": function(stop, ftr) {
             // todo: magic words for size (other than "size")?
             if(stop.getAttr("youtube:link", false) || stop.getAttr("vimeo:link", false) || stop.getAttr("flickr:setid", false)) {
-                ftr.attributes.label = "*";
-                if (!ftr.style) { 
-                    ftr.style = {};
-                }
-                console.log(ftr);
-                ftr.attributes.strokeWidth = 3;
+                ftr.attributes.strokeWidth = 1;
                 ftr.attributes.strokeColor = "#fff";
             } else ftr.attributes.label = "";
         },
@@ -190,6 +185,7 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
     $(ze.div).text("0");
     var cpanel = new OpenLayers.Control.Panel({"defaultControl": ze});
     cpanel.addControls([zo, ze, zi]);
+    console.log(this.map.map);
     this.map.map.addControl(cpanel);
 
 

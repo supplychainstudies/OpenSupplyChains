@@ -88,7 +88,14 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     print $exists;
                 } else {
                     // make blank image and enqueue job to generate
-                    if($pimg = imagecreatefrompng(self::placeholder_image())) {
+                    $maptic_url = Kohana::config('sourcemap.maptic_baseurl').
+                        sprintf('static-map-sc%06d-%s.png', $supplychain_id, $sz);
+                    $fetched = @file_get_contents($maptic_url);
+                    if($fetched) {
+                        print $fetched;
+                        Cache::instance()->set($cache_key, $fetched, 3600);
+                        exit;
+                    } elseif($pimg = imagecreatefrompng(self::placeholder_image())) {
                         // pass
                         $pimgw = imagesx($pimg); $pimgh = imagesy($pimg);
                         $rpimgw = $szdim[0]; $rpimgh = $szdim[0]*($pimgh/$pimgw);
@@ -101,7 +108,12 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                         imagecolorallocate($pimg, 0, 0, 255);
                     }
                     imagepng($pimg);
-                    Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, $supplychain->id);
+                    //header('Content-Type: text/plain');
+                    Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
+                        'supplychain' => $supplychain->kitchen_sink($supplychain->id),
+                        'sizes' => Sourcemap_Map_Static::$image_sizes,
+                        'thumbs' => Sourcemap_Map_Static::$image_thumbs
+                    ));
                 }
                 exit;
             } else {

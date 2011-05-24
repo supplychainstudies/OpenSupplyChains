@@ -36,10 +36,8 @@ class Sourcemap_Map_Static {
     public static $default_image_size = 'th-m';
 
     public static $image_thumbs = array(
-        'm' => array(160,105)
+        'm' => array(400, 200, 560, 305)
     );
-
-
 
     public static function make_all($scid, $sizes, $thumbs) {
         $raw_sc = ORM::factory('supplychain')->kitchen_sink($scid);

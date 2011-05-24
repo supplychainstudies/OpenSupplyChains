@@ -53,7 +53,12 @@ Sourcemap.TemplateLoader.prototype.load = function(templates, callback) {
         if(Sourcemap.loaded_templates[this.get_id(templates[t])]) {
             this.__callbackWrapper(templates[t], Sourcemap.loaded_templates[this.get_id(templates[t])], callback);
         } else if(Sourcemap.template_queue.indexOf(this.get_id(templates[t])) >= 0) {
-            setTimeout($.proxy(this.load, this), this.defer_interval, [templates[t]], callback);
+            var __that = this;
+            var __t = templates[t];
+            var __cb = callback;
+            // use closure here because ie7 doesn't do
+            // args in settimeout...
+            setTimeout($.proxy(function() { __that.load([__t], __cb); }, this), this.defer_interval);
         } else {
             this.fetch(templates[t], callback);
         }
@@ -83,10 +88,6 @@ Sourcemap.template = function(tpath, ucallback, context, scope, tpl_base_path) {
     }
     if(scope) {
         ucallback = $.proxy(ucallback, scope);
-    }
-    if(console && console.log) {
-        console.log(tpath);
-        console.log([tpath]);
     }
     Sourcemap.load_templates([tpath], function(tpl, txt, loader) {
         Sourcemap.broadcast("template:loaded", tpath, txt);

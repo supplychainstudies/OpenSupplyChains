@@ -631,6 +631,7 @@ Sourcemap.Popup.prototype.initialize = function() {
         "background-position": "center", "background-repeat": "no-repeat",
         "height": this.ANCHOR_HT+"px", "width": "100%", "background-color": "none"
     });
+    $(this.bottom_div).parent('.olPopup').css("height", "auto");
     $(this.div).append(this.bottom_div);
     this.fade_in = this.fade_in === undefined ? "fast" : this.fade_in;
 }

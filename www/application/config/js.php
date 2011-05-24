@@ -122,7 +122,7 @@ return array(
                 'sites/default/assets/scripts/map/embed.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-map', 'showdown'
+                'sourcemap-template', 'sourcemap-map', 'showdown', 'modernizr'
             )
         )
     )

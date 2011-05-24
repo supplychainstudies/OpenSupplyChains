@@ -84,8 +84,11 @@ Sourcemap.template = function(tpath, ucallback, context, scope, tpl_base_path) {
     if(scope) {
         ucallback = $.proxy(ucallback, scope);
     }
-    var tpls = new Array(tpath);
-    Sourcemap.load_templates(tpls, function(tpl, txt, loader) {
+    if(console && console.log) {
+        console.log(tpath);
+        console.log([tpath]);
+    }
+    Sourcemap.load_templates([tpath], function(tpl, txt, loader) {
         Sourcemap.broadcast("template:loaded", tpath, txt);
         var thtml = '';
         try {

@@ -624,7 +624,7 @@ Sourcemap.Popup.prototype.ANCHOR_HT = 16;
 
 Sourcemap.Popup.prototype.initialize = function() {
     this.closeDiv = false;
-    $(this.div).css({"background-color": 'none', "visibility": "none"});
+    $(this.div).css({"background-color": 'none', "visibility": "none", height:"auto"});
     this.bottom_div = $('<div class="sourcemap-popup-bottom"></div>');
     $(this.bottom_div).css({
         "background-image": "url(assets/images/popup-anchor-16x16.png)",

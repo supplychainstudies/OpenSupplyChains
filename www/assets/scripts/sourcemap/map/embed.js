@@ -191,7 +191,6 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
     $(ze.div).text("0");
     var cpanel = new OpenLayers.Control.Panel({"defaultControl": ze});
     cpanel.addControls([zo, ze, zi]);
-    console.log(this.map.map);
     this.map.map.addControl(cpanel);
 
 

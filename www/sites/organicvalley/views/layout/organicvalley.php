@@ -91,13 +91,13 @@
   <div id="sectionnav" class="grid_4 pull_20">
     <div id="submenu">
       <ul>
-        <li class="selected"><a href="organicvalley">Home</a></li>
+        <li class="selected"><a href="">Home</a></li>
 
-        <li class="close"><a href="milk">Milk</a></li>
+        <li class="close"><a href="">Milk</a></li>
 
-        <li class="close"><a href="eggs">Eggs</a></li>
+        <li class="close"><a href="">Eggs</a></li>
 
-        <li class="close"><a href="cheese">Cheese</a></li>
+        <li class="close"><a href="">Cheese</a></li>
 
       </ul>
 

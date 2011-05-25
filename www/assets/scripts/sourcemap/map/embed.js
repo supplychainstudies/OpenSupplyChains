@@ -168,11 +168,10 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
                     hasmagic = true;
             }
             if(hasmagic) {
-                ftr.attributes.strokeWidth = 1;
+                ftr.attributes.strokeWidth = 2;
                 ftr.attributes.strokeColor = "#fff";
             } else {
                 ftr.attributes.label = "";
-                ftr.attributes.strokeWidth = 0;
             }
         }, this),
         // callback for decorating hop feature and its arrow

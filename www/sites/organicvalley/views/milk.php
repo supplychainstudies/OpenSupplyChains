@@ -19,6 +19,7 @@
         href="midwest" alt="Midwest" title="Midwest"   /> 
         <area shape="poly" coords="247,226,104,205,101,220,97,220,92,233,42,158,54,114,88,121,92,85,105,66,101,61,111,17,189,31,238,38,229,162,252,165," 
         href="mountain" alt="Rockies" title="Rockies"   /> 
+        </div>
     </map> 
     <div style="clear: both; width: 100%">&nbsp;</div>
 </div>

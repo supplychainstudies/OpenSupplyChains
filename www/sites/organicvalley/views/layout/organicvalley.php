@@ -79,7 +79,7 @@
       <div class="user-farmer-pi1">
           <div id="map">
             <?= $content ?>
-                    </div>
+          </div>
       </div>
     </div><!--TYPO3SEARCH_end-->
   </div>

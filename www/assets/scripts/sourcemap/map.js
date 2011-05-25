@@ -346,8 +346,13 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
     new_feature.attributes.size = Math.max(stop.getAttr("size", false), 11);
-    new_feature.attributes.color = stop.getAttr("color", false) || '#006633';
+    new_feature.attributes.color = stop.getAttr("color", false) || '#60CB59';
     new_feature.attributes.label = stop.getAttr("label", false) || '';
+    stcolor = new Sourcemap.Color();
+    stcolor = stcolor.fromHex(new_feature.attributes.color);
+    stcolor.r -= 32; stcolor.g -= 32; stcolor.b -= 32;
+    new_feature.attributes.strokeColor = stcolor.toString();
+    new_feature.attributes.strokeWidth = 2;
     var new_popup = false;
     if(this.options.popups && this.options.stop_popups) {
         var puid = stop.instance_id+'-popup';

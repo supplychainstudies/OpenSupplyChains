@@ -16,6 +16,10 @@
   "http://www.organicvalley.coop/fileadmin/marquee/images/favicon.ico" type=
   "image/x-ico; charset=binary" />
 
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script type="text/javascript" src="/sites/organicvalley/assets/scripts/jquery.maphilight.min.js"></script>
+  
+
   <title>Organic Valley - Meet the Farmers</title>
   <meta name="generator" content="TYPO3 4.4 CMS" />
   <meta name="viewport" content="width=960" />

@@ -350,7 +350,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.label = stop.getAttr("label", false) || '';
     stcolor = new Sourcemap.Color();
     stcolor = stcolor.fromHex(new_feature.attributes.color);
-    stcolor.r -= 32; stcolor.g -= 32; stcolor.b -= 32;
+    stcolor.r -= 8; stcolor.g -= 8; stcolor.b -= 8;
     new_feature.attributes.strokeColor = stcolor.toString();
     new_feature.attributes.strokeWidth = 2;
     var new_popup = false;

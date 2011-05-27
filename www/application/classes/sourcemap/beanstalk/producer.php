@@ -11,7 +11,7 @@ class Sourcemap_Beanstalk_Producer extends Sourcemap_Beanstalk_Client {
 
     const MAXTTR = 6000;
     const MINTTR = 120;
-    const DEFTTR = 120;
+    const DEFTTR = 300;
 
     public function put($data, $pri=null, $delay=null, $ttr=null) {
         if(!$this->_conxn) return false;

@@ -24,7 +24,7 @@ return array(
         ),
         'sourcemap-welcome' => array(
             'scripts' => array(
-                'sites/default/assets/scripts/slider/anythingslider.min.js',
+                'sites/default/assets/scripts/slider/anythingslider.js',
                 'sites/default/assets/scripts/slider/easing.1.2.js',
                 'sites/default/assets/scripts/welcome.js'
             ),

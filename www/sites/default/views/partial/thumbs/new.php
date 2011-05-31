@@ -6,10 +6,12 @@ $i = 0;
 foreach($results as $item):
 ?>
     <div class="map-item">
-    <img src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
+    <a href="/map/view/<?php print $item->id; ?>">
+    <img class="thumb" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
     <br />
     <h4><?php foreach ($item->attributes as $attribute){ print $attribute; } ?></h4>
     <br />
+    </a>
     </div>
     <?php $i++;
 endforeach;

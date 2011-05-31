@@ -1,8 +1,13 @@
 <?php
 class Controller_Home extends Sourcemap_Controller_Layout {
+
+    public $layout = 'base';
     public $template = 'home';
 
     public function action_index() {
+        $this->layout->scripts = array(
+            'sourcemap-core',
+        );
         if(!($user = Auth::instance()->get_user())) {
             $this->request->redirect('');
         }

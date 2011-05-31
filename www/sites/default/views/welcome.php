@@ -1,38 +1,8 @@
 <?php // Returns featured maps ?>
+<div class="clear"></div>
 <div class="container dark-background">
     <div class="row featured">
-        <ul id="slider">
-            <li>
-                <div class="map">
-                    <img src="map/static/3.m.png" alt="" />
-                    <div class="description">
-                        <h2><a href="map/view/50">Featured Map Title</a><br /></h2>
-                        <p>Sed semper eros at urna sodales a tempus enim scelerisque. Aenean mauris lacus, ultricies a sodales eget, semper sed arcu. Aliquam diam ligula, hendrerit vel pretium ac, dapibus sed erat. </p>
-                        created by <a href="user/1">Alex</a> at 5:30pm
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="map">
-                    <img src="map/static/3.m.png" alt="" />
-                    <div class="description">
-                        <h2><a href="map/view/50">Featured Map Title</a><br /></h2>
-                        <p>Sed semper eros at urna sodales a tempus enim scelerisque. Aenean mauris lacus, ultricies a sodales eget, semper sed arcu. Aliquam diam ligula, hendrerit vel pretium ac, dapibus sed erat. </p>
-                        created by <a href="user/1">Alex</a> at 5:30pm
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="map">
-                    <img src="map/static/3.m.png" alt="" />
-                    <div class="description">
-                        <h2><a href="map/view/50">Featured Map Title</a><br /></h2>
-                        <p>Sed semper eros at urna sodales a tempus enim scelerisque. Aenean mauris lacus, ultricies a sodales eget, semper sed arcu. Aliquam diam ligula, hendrerit vel pretium ac, dapibus sed erat. </p>
-                        created by <a href="user/1">Alex</a> at 5:30pm
-                    </div>
-                </div>
-            </li>
-        </ul><!-- #slider -->
+        <?= View::factory('partial/thumbs/slider', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div><!-- .row -->
 </div><!-- .container -->
 
@@ -40,12 +10,10 @@
 
 <div class="container">
     <div class="row">
-        <div class="onecol"></div>
-        <div class="tencol intro">
+        <div class="twelvecol intro">
             <h1>Sourcemap is a platform for researching, optimizing and sharing supply chains.</h1>
             <p>Integer consectetur turpis eu orci convallis volutpat. Sed accumsan mattis urna et dictum. In blandit, sapien id cursus vehicula, nisi arcu convallis tortor, sed pharetra turpis orci interdum quam. Cras vitae est velit. Vestibulum commodo gravida orci non rhoncus. Aliquam consequat orci eget risus blandit vitae convallis urna blandit.</p>
         </div>
-        <div class="onecol last"></div>
     </div>
 </div>
 

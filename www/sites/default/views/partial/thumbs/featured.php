@@ -1,12 +1,12 @@
 <?php // Display the three featured items ?>
-
+<div class="container_16">
 <?php 
 $data=Sourcemap_Search::Find(array('l'=>3));
 $results = $data->results;
 $i = 0;
 foreach($results as $item):
 ?>
-    <div class="map-item fourcol<?php if($i == 2): ?> last<? endif; ?>">
+    <div class="map-item grid_5">
     <a href="/map/view/<?php print $item->id; ?>">
     <img class="small" src="/map/static/<?php print $item->id; ?>.s.png" alt="" />
     <br />
@@ -18,3 +18,5 @@ foreach($results as $item):
     <?php $i++;
 endforeach;
 ?>
+
+</div>

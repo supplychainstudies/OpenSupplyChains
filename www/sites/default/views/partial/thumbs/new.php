@@ -5,7 +5,7 @@ $results = $data->results;
 $i = 0;
 foreach($results as $item):
 ?>
-    <div class="map-item">
+    <div class="map-item grid grid-3">
     <a href="/map/view/<?php print $item->id; ?>">
     <img class="thumb" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
     <br />

@@ -3,9 +3,8 @@ $(function () {
         buildArrows: false,
         delay: 5000,
         easing: 'easeInOutExpo',
-        expand: true,
-        resizeContents: false,
         hashtags: false,
-        width: '100%'
+        width: '960px',
+        height: '356px'
     });
 });

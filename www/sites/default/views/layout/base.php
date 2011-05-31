@@ -36,8 +36,9 @@
                 <div id="top-notice"></div>
             </div>
         </div>
+        <div class="clear"></div>
     </div>
-    
+
     <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <header>
         <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>

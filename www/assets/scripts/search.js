@@ -132,17 +132,18 @@ jQuery.fn.liveSearch = function (conf) {
 
                                     // todo:  turn this into a JSTPL template
                                     html += "<li class=\"search-result\">";
+                                    html += "<a class=\"map-link\" href=\"/map/view/"+ json.results[i].id + "\">";
+                                    html += "</a>";
                                     html += "<div>";
-                                    html += "<a class=\"title\" href=\"/map/view/"+ json.results[i].id + "\">";
                                     html += json.results[i].attributes.name;
-                                    html += "</a><br/>";
+                                    html += "<br />";
                                     html += "<span class=\"info\">";
-                                    html += "By <a class=\"title\" href=\"\">";
+                                    html += "By ";
                                     html += json.results[i].owner.name;
-                                    html += "</a>, <a class=\"date\" href=\"\">";
+                                    html += "</span>";
+                                    html += "<span class=\"date\" href=\"\">";
                                     var myDate = new Date(json.results[i].created);
                                     html += myDate.toUTCString();
-                                    html += "</a>"; 
                                     html += "</span>";
                                     html += "</div>";
                                     html += "<div class=\"search-thumb\"\>";

@@ -109,31 +109,16 @@ body.main{
                     background:#eee;
                     cursor: pointer;
                 }
-                div{
-                    width: auto;
-                    height: auto;
-                    float: left;
-                    padding: 0 20px;
-                    a{
-                        color: #333;
-                        &:hover{
-                            background: #ddd;
-                            text-decoration: none;
-                        }
-                    }
-                    span{
-                        color: #888;
-                        font-style: italic;
-                        a{
-                            color: #888;
-                        }
-                    }
-                    &.search-thumb{
-                        float:right;
-                        padding-left: 0;
-                        img {
-                            width: 120px;
-                        }
+                a{
+                    color: #333;
+                    position:absolute; 
+                    width:100%;
+                    height:100%; 
+                    top:0;
+                    left: 0; 
+                    z-index: 1;  
+                    &:hover{
+                        text-decoration: none;
                     }
                 }
                 &.more{
@@ -142,6 +127,27 @@ body.main{
                     border-top: 1px solid #333;
                 }
             }
+        .search-result{
+            position: relative;
+            div{
+                width: 250px;
+                float: left;
+                &.search-thumb{
+                    padding-left: 10px;
+                    width: 120px;
+                    img {
+                        width: 100%;
+                    }
+                }
+                span{
+                    color: #888;
+                    font-style: italic;
+                    a{
+                        color: #888;
+                    }
+                }
+            }
+        }
         }
     }
     nav{

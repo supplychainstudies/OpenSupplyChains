@@ -41,7 +41,7 @@
 </div>
 <div class="footer black-background">
     <div class="container_16">
-        <div class="grid_8">
+        <div class="grid_10">
             <h3>Copyright</h3>
             <p>Sourcemap &#8482;. For more information on how we use your data, read our privacy policy. For more information on how you can use the site, read our terms of service.</p>
         </div>

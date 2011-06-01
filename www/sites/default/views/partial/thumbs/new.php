@@ -9,9 +9,7 @@ if ($data):
         <div class="map-item grid grid-3">
         <a href="/map/view/<?php print $item->id; ?>">
         <img class="thumb" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
-        <br />
         <h4><?php print $item->attributes->title;?></h4>
-        <br />
         </a>
         </div>
     <?php $i++;

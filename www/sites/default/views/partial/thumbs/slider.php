@@ -12,7 +12,7 @@ if ($data):
             <a href="/map/view/<?php print $item->id; ?>">
             <img class="medium" src="/map/static/<?php print $item->id; ?>.m.png" alt="" />
             <div class="description">    
-            <h2><?php foreach ($item->attributes as $attribute){ print $attribute; } ?></a></h2>
+            <h2><?php print $item->attributes->title;?></h2>
             <p>
             created by <a href="user/<?php print $item->owner->id; ?>"><?php print $item->owner->name; ?></a> 
             <br />

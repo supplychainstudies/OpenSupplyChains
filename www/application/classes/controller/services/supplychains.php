@@ -21,7 +21,15 @@
                 $id = $alias[$id];
             }
         }
+        $current_user = Auth::instance()->get_user();
+        if($current_user) $user_id = $current_user->id;
+        else $user_id = null;
         if($id) {
+            $exists = ORM::factory('supplychain', $id);
+            if(!$exists) return $this->_not_found('Supplychain not found.');
+            if(!$exists->user_can($user_id, Sourcemap::READ))
+                return $this->_forbidden('You don\'t have permission '.
+                    'to view that supplychain.');
             $cached = Cache::instance()->get('supplychain-'.$id);
             if($cached) {
                 $this->_cache_hit = true;
@@ -36,13 +44,15 @@
                     $fetched = false;
                 }
                 if(!$fetched) {
-                    return $this->_not_found('Supplychain not found.');
+                    return $this->_not_found('Error retrieving supplychain.');
                 }
                 Cache::instance()->set('supplychain-'.$id, $fetched);
                 $this->response = array(
                     'supplychain' => $fetched
                 );
             }
+            $editable = $exists->user_can($user_id, Sourcemap::WRITE);
+            $this->response['editable'] = $editable;
         } else {
             $switch_keys = array('featured');
             $switches = array();
@@ -107,7 +117,6 @@
     }
 
     public function action_put() {
-        error_log(__METHOD__);
         $id = $this->request->param('id', false);
         if(!$id) {
             return $this->_bad_request('No id.');
@@ -117,9 +126,9 @@
         }
         $current_user = Auth::instance()->logged_in() ? Auth::instance()->get_user() : false;
         if(!$current_user) {
-            return $this->_forbidden('You must be logged in to create supplychains.');
+            return $this->_forbidden('You must be logged in to create or edit supplychains.');
         }
-        if((int)$current_user->id !== (int)$supplychain->user_id) {
+        if(!$supplychain->user_can($current_user->id, Sourcemap::WRITE)) {
             // todo: use user_can method
             $user_groups = ORM::factory('user', $current_user)
                 ->groups->find_all()->as_array('id', true);

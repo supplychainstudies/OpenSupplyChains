@@ -36,82 +36,80 @@
     <div class="clear"></div>
 
 
-    <div class="container">
-        <div class="row">
-            <div class="eightcol"> 
-                <div id="map-secondary-content">
-                    <div id="discussion-section">
-                        <h3>Comment</h3>
-                        <div id="comment-form">
-                            <textarea id="comment-area"></textarea>
-                        </div>
-                        <input id="comment-submit" type="submit" text="Comment"/>
-                        <div class="clear"></div>
-                        <ul id="comments">
-                            <li class="comment">
-                                <div class="comment-meta">
-                                    <img class="user-avatar" src="http://www.gravatar.com/avatar/56b80ca11f9b256ad2b13de751c0ae9f?s=32" />
-                                    <p class="comment-meta-text">
-                                        Added by <a class="user-link" href="">hock</a> ten minutes ago.
-                                    </p>
-                                    <div class="clear"></div>                        
-                                </div>
-                                <div class="comment-body">
-                                    <p>This is a comment about sourcemap. Cool, cool, cool comment. I think that it is very commentable. Commentable? Is that even a word.</p>
-                                </div>
-                            </li>
-                            <li class="comment">
-                                <div class="comment-meta">
-                                    <img class="user-avatar" src="http://www.gravatar.com/avatar/56b80ca11f9b256ad2b13de751c0ae9f?s=32" />
-                                    <p class="comment-meta-text">
-                                        Added by <a class="user-link" href="">hock</a> ten minutes ago.
-                                    </p>
-                                    <div class="clear"></div>                        
-                                </div>
-                                <div class="comment-body">
-                                    <p>This is a comment about sourcemap. Cool, cool, cool comment. I think that it is very commentable. Commentable? Is that even a word.</p>
-                                </div>
-                            </li>
-                            <li class="comment">
-                                <div class="comment-meta">
-                                    <img class="user-avatar" src="http://www.gravatar.com/avatar/56b80ca11f9b256ad2b13de751c0ae9f?s=32" />
-                                    <p class="comment-meta-text">
-                                        Added by <a class="user-link" href="">hock</a> ten minutes ago.
-                                    </p>
-                                    <div class="clear"></div>                        
-                                </div>
-                                <div class="comment-body">
-                                    <p>This is a comment about sourcemap. Cool, cool, cool comment. I think that it is very commentable. Commentable? Is that even a word.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div><!-- #discussion-section -->
-                </div><!-- #map-secondary-content -->
-            </div><!-- .eightcol -->
-            <div class="fourcol last"> 
-                <div id="qrcode-badge">
-                    <img class="qrcode" src="http://chart.apis.google.com/chart?chs=70x70&chf=bg,s,ffffffff&cht=qr&chl=http://www.sourcemap.org&choe=UTF-8&chld=L|0" />
-                    <div class="qrcode-about">You can share this physically with a qrcode.</div>
+    <div class="container_16">
+        <div class="grid_10"> 
+            <div id="map-secondary-content">
+                <div id="discussion-section">
+                    <h3>Comment</h3>
+                    <div id="comment-form">
+                        <textarea id="comment-area"></textarea>
+                    </div>
+                    <input id="comment-submit" type="submit" text="Comment"/>
                     <div class="clear"></div>
-                </div>
-                <h3>Similar Supplychains</h3>
-                <ul id="similar-supplychains">
-                    <li><a href="">Ikea Product Map</a></li>
-                    <li><a href="">Ikea Product Map with details.</a></li>
-                    <li><a href="">Ikea Product Map</a></li>
-                    <li><a href="">Ikea Product Map with details.</a></li>
-                    <li><a href="">Ikea Product Map with details.</a></li>
-                </ul>
-                <h3>Related Geographies</h3>
-                <ul id="related-geographies">
-                    <li><a href="">Ikea Product Map</a></li>
-                    <li><a href="">Ikea Product Map with details.</a></li>
-                    <li><a href="">Ikea Product Map</a></li>
-                    <li><a href="">Ikea Product Map with details.</a></li>
-                    <li><a href="">Ikea Product Map with details.</a></li>
-                </ul>
-            </div><!-- .fourcol -->
-        </div><!-- .row -->
+                    <ul id="comments">
+                        <li class="comment">
+                            <div class="comment-meta">
+                                <img class="user-avatar" src="http://www.gravatar.com/avatar/56b80ca11f9b256ad2b13de751c0ae9f?s=32" />
+                                <p class="comment-meta-text">
+                                    Added by <a class="user-link" href="">hock</a> ten minutes ago.
+                                </p>
+                                <div class="clear"></div>                        
+                            </div>
+                            <div class="comment-body">
+                                <p>This is a comment about sourcemap. Cool, cool, cool comment. I think that it is very commentable. Commentable? Is that even a word.</p>
+                            </div>
+                        </li>
+                        <li class="comment">
+                            <div class="comment-meta">
+                                <img class="user-avatar" src="http://www.gravatar.com/avatar/56b80ca11f9b256ad2b13de751c0ae9f?s=32" />
+                                <p class="comment-meta-text">
+                                    Added by <a class="user-link" href="">hock</a> ten minutes ago.
+                                </p>
+                                <div class="clear"></div>                        
+                            </div>
+                            <div class="comment-body">
+                                <p>This is a comment about sourcemap. Cool, cool, cool comment. I think that it is very commentable. Commentable? Is that even a word.</p>
+                            </div>
+                        </li>
+                        <li class="comment">
+                            <div class="comment-meta">
+                                <img class="user-avatar" src="http://www.gravatar.com/avatar/56b80ca11f9b256ad2b13de751c0ae9f?s=32" />
+                                <p class="comment-meta-text">
+                                    Added by <a class="user-link" href="">hock</a> ten minutes ago.
+                                </p>
+                                <div class="clear"></div>                        
+                            </div>
+                            <div class="comment-body">
+                                <p>This is a comment about sourcemap. Cool, cool, cool comment. I think that it is very commentable. Commentable? Is that even a word.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- #discussion-section -->
+            </div><!-- #map-secondary-content -->
+        </div><!-- .grid_10 -->
+        <div class="grid_6"> 
+            <div id="qrcode-badge">
+                <img class="qrcode" src="http://chart.apis.google.com/chart?chs=70x70&chf=bg,s,ffffffff&cht=qr&chl=http://www.sourcemap.org&choe=UTF-8&chld=L|0" />
+                <div class="qrcode-about">You can share this physically with a qrcode.</div>
+                <div class="clear"></div>
+            </div>
+            <h3>Similar Supplychains</h3>
+            <ul id="similar-supplychains">
+                <li><a href="">Ikea Product Map</a></li>
+                <li><a href="">Ikea Product Map with details.</a></li>
+                <li><a href="">Ikea Product Map</a></li>
+                <li><a href="">Ikea Product Map with details.</a></li>
+                <li><a href="">Ikea Product Map with details.</a></li>
+            </ul>
+            <h3>Related Geographies</h3>
+            <ul id="related-geographies">
+                <li><a href="">Ikea Product Map</a></li>
+                <li><a href="">Ikea Product Map with details.</a></li>
+                <li><a href="">Ikea Product Map</a></li>
+                <li><a href="">Ikea Product Map with details.</a></li>
+                <li><a href="">Ikea Product Map with details.</a></li>
+            </ul>
+        </div><!-- .grid_6 -->
     </div><!-- .container -->
     <div class="clear"></div>
 </div>

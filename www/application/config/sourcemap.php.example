@@ -5,5 +5,10 @@ return array(
     'cache_dir' => SOURCEMAP_CACHE_PATH,
     'upload_dir' => '/tmp/',
     'debug' => true,
-    'site' => SOURCEMAP_SITE
+    'site' => SOURCEMAP_SITE,
+    'trigger_user_events' => true,
+    'job_queue' => true,
+    'job_queue_host' => '127.0.0.1',
+    'job_queue_port' => 11300,
+    'maptic_baseurl' => 'http://maptic.local/'
 );

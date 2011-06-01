@@ -30,20 +30,17 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="twelvecol">
-                <div id="top-notice"></div>
-            </div>
+
+    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <div class="container_16">
+        <div class="grid_16">
+            <header>
+                <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+                <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+            </header>
         </div>
         <div class="clear"></div>
     </div>
-
-    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-    <header>
-        <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
-        <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
-    </header>
     
     <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
     

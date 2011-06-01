@@ -291,7 +291,6 @@ body.main{
     .error {
         float:left;
         height: @height;
-        width: 15em;
     }
     .inactive {
         background: #eee;
@@ -693,6 +692,9 @@ body.main{
 
 .footer {
     padding: 20px 0;
+    ul{
+        list-style: none;
+    }
 }
 
 /* MODAL STRUCTURES 
@@ -783,21 +785,14 @@ body.main{
 }
 .status-messages {
     .status-message {
-        background-color: #ccc;
         color: #333;
         padding: .25em;
-        border-left: .25em solid #999;
+        border: 1px dashed #333;
         &.error {
-            background-color: #ffc0c0;
-            border-color: #ff8080;
         }
         &.warning {
-            background-color: #ffff66;
-            border-color: #ff9900;
         }
         &.success {
-            background-color: #99ff99;
-            border-color: #55ff55;
         }
     }
 }

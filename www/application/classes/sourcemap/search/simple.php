@@ -8,7 +8,14 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             ->where(DB::expr("other_perms & ".(int)Sourcemap::READ), '>', 0)
             ->find_all();
         foreach($rows as $i => $row) {
-            $results[] = $scm->kitchen_sink($row->id);
+            $cached = Cache::instance()->get('supplychain-'.$row->id);
+            if($cached) {
+                $sc = $cached;
+            } else {
+                $sc = $scm->kitchen_sink($row->id);
+                Cache::instance()->set('supplychain-'.$row->id, $sc);
+            }
+            $results[] = $sc;
         }
         $this->results->results = $results;
         $this->results->limit = $this->limit;

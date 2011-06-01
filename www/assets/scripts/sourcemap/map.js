@@ -21,7 +21,7 @@ Sourcemap.Map.prototype.defaults = {
     "zoom_control": false,
     "ol_layer_switcher": false, "tileswitcher": false,
     "google_tiles": true,
-    "cloudmade_tiles": true, "popups": true,
+    "cloudmade_tiles": false, "popups": true,
     "stop_popups": true, "hop_popups": true,
     "arrow_popups": true, "popup_width": 200,
     "popup_height": 100, "animation_enabled":false,
@@ -130,7 +130,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
-        "styleId": 4993,
+        "styleId": 6726,
         "wrapDateLine": this.options.animation_enabled
     }));
     

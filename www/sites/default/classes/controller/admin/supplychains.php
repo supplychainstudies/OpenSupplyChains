@@ -185,9 +185,9 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $supplychain->other_perms = $perms;
         try {
             $supplychain->save();
-            Message::instance()->set('Supplychain permissions changed!.');
+            Message::instance()->set('Supplychain permissions changed!', Message::SUCCESS);
         } catch (Exception $e) {
-            Message::instance()->set('Permission not changed, please try again.');
+            Message::instance()->set('Permissions not changed, please try again.');
         }
         $this->request->redirect("admin/supplychains/".$id);
 

@@ -20,8 +20,8 @@ Sourcemap.Map.prototype.defaults = {
     "supplychains_uri": "services/supplychains/",
     "zoom_control": false,
     "ol_layer_switcher": false, "tileswitcher": false,
-    "google_tiles": true,
-    "cloudmade_tiles": false, "popups": true,
+    "google_tiles": false, "basetileset": "cloudmade",
+    "cloudmade_tiles": true, "popups": true,
     "stop_popups": true, "hop_popups": true,
     "arrow_popups": true, "popup_width": 200,
     "popup_height": 100, "animation_enabled":false,
@@ -130,7 +130,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
-        "styleId": 6726,
+        "styleId": 13860,
         "wrapDateLine": this.options.animation_enabled
     }));
     
@@ -212,7 +212,7 @@ Sourcemap.Map.prototype.initControls = function() {
     return this;
 }
 
-Sourcemap.Map.prototype.initTileSwitcher = function() {
+/*Sourcemap.Map.prototype.initTileSwitcher = function() {
     this.tileswitcher_div = $('<div id="tileswitcher" class="'+Sourcemap.embed_params.basetileset+'">'+
         '<div id="current-tile">'+Sourcemap.embed_params.basetileset+'</div><ul id="available-tiles">'+
         '<li id="stylized"></li><li id="terrain"></li><li id="satellite">'+
@@ -227,7 +227,7 @@ Sourcemap.Map.prototype.initTileSwitcher = function() {
         this.map.setBaseLayer( this.map.getLayersByName(newtile).pop() );
     }, this));
 
-}
+}*/
 
 Sourcemap.Map.prototype.updateControls = function() {
     var layers = [];

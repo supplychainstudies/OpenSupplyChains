@@ -1,7 +1,7 @@
 <?php // Display the three featured items ?>
     <ul id="slider">
 <?php 
-$data=Sourcemap_Search::Find(array('l'=>3));
+$data = Sourcemap_Search::Find(array('l'=>3));
 if ($data):
     $results = $data->results;
     $i = 0;
@@ -12,7 +12,7 @@ if ($data):
             <a href="/map/view/<?php print $item->id; ?>">
             <img class="medium" src="/map/static/<?php print $item->id; ?>.m.png" alt="" />
             <div class="description">    
-            <h2><?php print $item->attributes->title;?></h2>
+            <h2><?= print isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h2>
             <p>
             created by <a href="user/<?php print $item->owner->id; ?>"><?php print $item->owner->name; ?></a> 
             <br />

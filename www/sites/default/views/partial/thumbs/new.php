@@ -9,7 +9,7 @@ if ($data):
         <div class="map-item grid grid-3">
         <a href="/map/view/<?php print $item->id; ?>">
         <img class="thumb" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
-        <h4><?= isset($item->attribuets->title) ? $item->attributes->title : "A Sourcemap" ?></h4>
+        <h4><?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h4>
         </a>
         </div>
     <?php $i++;

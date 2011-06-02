@@ -11,7 +11,7 @@ if ($data):
         <a href="/map/view/<?php print $item->id; ?>">
         <img class="small" src="/map/static/<?php print $item->id; ?>.s.png" alt="" />
         <br />
-        <h4><?php print $item->attributes->title;?></h4>
+        <h4><?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h4>
         <h5>Created by <?php print $item->owner->name; ?> on <?php print date("F j, Y",$item->created);?></h5>
         <br />
         </a>

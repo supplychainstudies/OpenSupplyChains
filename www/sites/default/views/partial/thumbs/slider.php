@@ -9,15 +9,17 @@ if ($data):
     ?>
         <li>
             <div class="map">
-            <a href="/map/view/<?php print $item->id; ?>">
-            <img class="medium" src="/map/static/<?php print $item->id; ?>.m.png" alt="" />
-            <div class="description">    
-            <h2><?= print isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h2>
-            <p>
-            created by <a href="user/<?php print $item->owner->id; ?>"><?php print $item->owner->name; ?></a> 
-            <br />
-            on <?php print date("F j, Y",$item->created);?></h5>
-            <br />
+                <a href="/map/view/<?php print $item->id; ?>">
+                    <img class="medium" src="/map/static/<?php print $item->id; ?>.m.png" alt="" />
+                </a>
+                <div class="description">    
+                    <h2><?= print isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h2>
+                    <p>
+                    created by <a href="user/<?php print $item->owner->id; ?>"><?php print $item->owner->name; ?></a> 
+                    <br />
+                    on <?php print date("F j, Y",$item->created);?>
+                    <br />
+                </div>
             </div>
         </li>
         <?php $i++;

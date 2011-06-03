@@ -8,8 +8,8 @@
 /* Navigation Links */
 div.anythingSlider .anythingControls {
     position: absolute;
-    bottom: 35px;
-    right: 185px;
+    bottom: 25px;
+    right: 143px;
     z-index: 100;
     opacity: 0.90;
     filter: alpha(opacity=90);
@@ -21,7 +21,11 @@ div.anythingSlider .thumbNav {
 }
 div.anythingSlider .thumbNav li {
     display: block;
+    padding-right: 5px;
     float: left;
+}
+div.anythingSlider .thumbNav li.last {
+    padding-right: 0;
 }
 div.anythingSlider .thumbNav a {
     display: block;
@@ -42,15 +46,6 @@ div.anythingSlider {
 
 /****** SET COLORS HERE *******/
 /* Default State */
-div.anythingSlider .thumbNav a.cur, div.anythingSlider .thumbNav a {
-    background: #eaeaea;
-}
-div.anythingSlider .anythingWindow {
-}
-/* Active State */
-div.anythingSlider.activeSlider .thumbNav a.cur, div.anythingSlider.activeSlider .thumbNav a {
-    background-color: #eaeaea;
-}
 div.anythingSlider.activeSlider .anythingWindow {
     border-color: #eaeaea;
 }
@@ -58,6 +53,7 @@ div.anythingSlider.activeSlider .anythingWindow {
 div.anythingSlider .anythingControls .start-stop{
     display:none;
 }
+
 /**** DO NOT CHANGE BELOW THIS LINE ****/
 /* anythingSlider viewport window */
 div.anythingSlider .anythingWindow {

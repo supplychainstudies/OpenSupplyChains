@@ -12,10 +12,10 @@ if ($data):
                 <a href="/map/view/<?php print $item->id; ?>">
                     <img class="medium" src="/map/static/<?php print $item->id; ?>.m.png" alt="" />
                 </a>
-                <div class="description">    
-                    <h2><?= print isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h2>
+                <div class="description">
+                    <h2><?= print isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></h2>
                     <p>
-                    created by <a href="user/<?php print $item->owner->id; ?>"><?php print $item->owner->name; ?></a> 
+                    created by <a href="user/<?php print $item->owner->id; ?>"><?= print isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a> 
                     <br />
                     on <?php print date("F j, Y",$item->created);?>
                     <br />

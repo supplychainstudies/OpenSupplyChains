@@ -22,7 +22,7 @@
     )?>
    
     </head>
-    <body>
+    <body class="main">
     <div class="overlay">
         <div id="registration" class="dialog">
             <div class="dialog-content">

@@ -22,8 +22,10 @@
             }
         }
         $current_user = Auth::instance()->get_user();
-        if($current_user) $user_id = $current_user->id;
-        else $user_id = null;
+        if($current_user) { 
+            $current_user = (object)$current_user->as_array();
+            $user_id = $current_user->id;
+        } else $user_id = null;
         if($id) {
             $exists = ORM::factory('supplychain', $id);
             if(!$exists) return $this->_not_found('Supplychain not found.');

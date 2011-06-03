@@ -148,7 +148,6 @@ class Model_Supplychain extends ORM {
             throw new Exception('Bad supplychain: attributes must be array.');
         }
         if(!isset($data->stops, $data->hops)) {
-            die(print_r($data, true));
             throw new Exception('Bad supplychain: missing stops or hops.');
         }
         if(!is_array($data->stops) || !is_array($data->hops)) {
@@ -301,7 +300,7 @@ class Model_Supplychain extends ORM {
             // admin?
             if(!$can && $user) {
                 $admin = ORM::factory('role')
-                    ->where('name', '=', 'administrator')->find();
+                    ->where('name', '=', 'admin')->find();
                 if($user->has('roles', $admin)) {
                     $can = true;
                 }

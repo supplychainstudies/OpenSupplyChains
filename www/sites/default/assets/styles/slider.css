@@ -9,7 +9,7 @@
 div.anythingSlider .anythingControls {
     position: absolute;
     bottom: 25px;
-    right: 143px;
+    right: 128px;
     z-index: 100;
     opacity: 0.90;
     filter: alpha(opacity=90);

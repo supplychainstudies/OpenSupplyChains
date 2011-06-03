@@ -51,8 +51,8 @@ jQuery.fn.liveSearch = function (conf) {
             var tmpOffset   = input.offset();
             var inputDim    = {
                 left:       tmpOffset.left, 
-                top:        tmpOffset.top, 
-                width:      input.outerWidth(), 
+                top:        tmpOffset.top -1 , 
+                width:      input.outerWidth() - 2, 
                 height:     input.outerHeight()
             };
 
@@ -135,12 +135,12 @@ jQuery.fn.liveSearch = function (conf) {
                                     html += "<a class=\"map-link\" href=\"/map/view/"+ json.results[i].id + "\">";
                                     html += "</a>";
                                     html += "<div>";
-                                    html += json.results[i].attributes.name;
+                                    html += json.results[i].attributes.title;
                                     html += "<br />";
                                     html += "<span class=\"info\">";
                                     html += "By ";
                                     html += json.results[i].owner.name;
-                                    html += "</span>";
+                                    html += "</span> ";
                                     html += "<span class=\"date\" href=\"\">";
                                     var myDate = new Date(json.results[i].created);
                                     html += myDate.toUTCString();

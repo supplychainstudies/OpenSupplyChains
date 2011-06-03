@@ -10,9 +10,12 @@ if ($data):
         <div class="map-item grid_5">
         <a href="/map/view/<?php print $item->id; ?>">
         <img class="small" src="/map/static/<?php print $item->id; ?>.s.png" alt="" />
+        </a>
         <br />
-        <h4><?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h4>
-        <h5>Created by <?php print $item->owner->name; ?> on <?php print date("F j, Y",$item->created);?></h5>
+        <h4><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></h4>
+        <h5>By <?= isset($item->owner->name) ? $item->owner->name : "Unknown Owner" ?>
+        <br/>
+        Published <?php print date("F j, Y",$item->created);?></h5>
         <br />
         </a>
         </div>

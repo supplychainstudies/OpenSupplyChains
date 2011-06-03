@@ -5,6 +5,6 @@ $(function () {
         easing: 'easeInOutExpo',
         hashtags: false,
         width: '960px',
-        height: '356px'
+        height: '356px',
     });
 });

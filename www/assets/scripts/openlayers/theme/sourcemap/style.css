@@ -99,13 +99,6 @@ div.olControlMousePosition {
     cursor: move;
     border: 2px dotted red;
 }
-.olControlOverviewMapRectReplacement {
-    overflow: hidden;
-    cursor: move;
-    background-image: url("img/overview_replacement.gif");
-    background-repeat: no-repeat;
-    background-position: center;
-}
 
 .olLayerGeoRSSDescription {
     float:left;
@@ -149,13 +142,6 @@ div.olControlMousePosition {
   position: relative;
 }
 
-.olControlNavigationHistory {
-   background-image: url("img/navigation_history.png");
-   background-repeat: no-repeat;
-   width:  24px;
-   height: 24px;
-
-}
 .olControlNavigationHistoryPreviousItemActive { 
   background-position: 0px 0px;
 }
@@ -167,72 +153,6 @@ div.olControlMousePosition {
 }
 .olControlNavigationHistoryNextItemInactive { 
    background-position: -24px -24px;
-}
-
-.olControlNavToolbar .olControlNavigationItemActive { 
-  background-image: url("img/panning-hand-on.png");
-  background-repeat: no-repeat;
-}
-.olControlNavToolbar .olControlNavigationItemInactive { 
-  background-image: url("img/panning-hand-off.png");
-  background-repeat: no-repeat;
-}
-.olControlNavToolbar .olControlZoomBoxItemActive { 
-  background-image: url("img/drag-rectangle-on.png");
-  background-color: orange;
-  background-repeat: no-repeat;
-}
-.olControlNavToolbar .olControlZoomBoxItemInactive { 
-  background-image: url("img/drag-rectangle-off.png");
-  background-repeat: no-repeat;
-}
-.olControlEditingToolbar  {
-    float:right;
-    right: 0px;
-    height: 30px; 
-    width: 200px;
-}
-.olControlEditingToolbar div { 
-  background-image: url("img/editing_tool_bar.png");
-  background-repeat: no-repeat;
-  float:right;
-  width:  24px;
-  height: 24px;
-  margin: 5px;
-}
-.olControlEditingToolbar .olControlNavigationItemActive { 
-  background-position: -103px -23px; 
-}
-.olControlEditingToolbar .olControlNavigationItemInactive { 
-  background-position: -103px -0px; 
-}
-.olControlEditingToolbar .olControlDrawFeaturePointItemActive { 
-  background-position: -77px -23px; 
-}
-.olControlEditingToolbar .olControlDrawFeaturePointItemInactive { 
-  background-position: -77px -0px; 
-}
-.olControlEditingToolbar .olControlDrawFeaturePathItemInactive { 
-  background-position: -51px 0px; 
-}
-.olControlEditingToolbar .olControlDrawFeaturePathItemActive { 
-  background-position: -51px -23px; 
-}
-.olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive { 
-  background-position: -26px 0px; 
-}
-.olControlEditingToolbar .olControlDrawFeaturePolygonItemActive { 
-  background-position: -26px -23px ;                                                                   
-}
-div.olControlSaveFeaturesItemActive { 
-    background-image: url(img/save_features_on.png);
-    background-repeat: no-repeat;
-    background-position: 0px 1px;
-}
-div.olControlSaveFeaturesItemInactive { 
-    background-image: url(img/save_features_off.png);
-    background-repeat: no-repeat;
-    background-position: 0px 1px;
 }
 
 .olHandlerBoxZoomBox {
@@ -257,14 +177,6 @@ div.olControlSaveFeaturesItemInactive {
     left: 5px;
 }  
 
-.olControlPanPanel div {
-    background-image: url(img/pan-panel.png);
-    height: 18px;
-    width: 18px;
-    cursor: pointer;
-    position: absolute;
-}
-
 .olControlPanPanel .olControlPanNorthItemInactive {
     top: 0px;
     left: 9px;
@@ -288,15 +200,15 @@ div.olControlSaveFeaturesItemInactive {
 }
 
 .olControlZoomPanel {
-    top: 51px;
+    top: 30px;
     left: 14px;
 } 
 
 .olControlZoomPanel div {
     background-image: url(img/zoom-panel.png);
     position: absolute;
-    height: 18px;
-    width: 18px;
+    height: 32px;
+    width: 32px;
     cursor: pointer;
 }
 
@@ -307,15 +219,13 @@ div.olControlSaveFeaturesItemInactive {
 }
 
 .olControlZoomPanel .olControlZoomToMaxExtentItemInactive {
-    top: 18px;
-    left: 0px;
-    background-position: 0px -18px;
+    display:none;
 }
 
 .olControlZoomPanel .olControlZoomOutItemInactive {
-    top: 36px;
+    top: 42px;
     left: 0px;
-    background-position: 0px 18px;
+    background-position: 0px 32px;
 }
 
 .olFramedCloudPopupContent {

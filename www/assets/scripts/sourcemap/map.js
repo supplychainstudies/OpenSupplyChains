@@ -18,7 +18,7 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
-    "zoom_control": false,
+    "zoom_control": true,
     "ol_layer_switcher": false, "tileswitcher": false,
     "google_tiles": false, "basetileset": "cloudmade",
     "cloudmade_tiles": true, "popups": true,

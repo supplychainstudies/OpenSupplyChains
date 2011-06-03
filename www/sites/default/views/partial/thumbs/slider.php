@@ -1,5 +1,5 @@
 <?php // Display the three featured items ?>
-    <ul id="slider">
+<ul id="slider">
 <?php 
 $data = Sourcemap_Search::Find(array('l'=>3));
 if ($data):

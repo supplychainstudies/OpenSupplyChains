@@ -30,7 +30,6 @@ Sourcemap.Map.Embed.prototype.defaults = {
     "tour_order_strategy": "upstream", "tileswitcher": false,
     "locate_user": true, "user_loc": false, "user_loc_color": "#ff0000",
     "tileset": "terrain" // terrain, cloudmade, etc. (check map.js)
-    
 }
 
 // callbacks for magic attributes
@@ -100,7 +99,6 @@ Sourcemap.Map.Embed.prototype.defaults.magic = {
         }
     }
 };
-
 
 Sourcemap.Map.Embed.prototype.init = function() {
     this.magic_word_sequence = this.options.magic_word_sequence;
@@ -194,7 +192,6 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
     var cpanel = new OpenLayers.Control.Panel({"defaultControl": ze});
     cpanel.addControls([zo, ze, zi]);
     this.map.map.addControl(cpanel);
-
 
     // short-circuit panTo method to ease, even if we're at
     // a high zoom level

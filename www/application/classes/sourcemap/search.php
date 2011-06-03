@@ -45,13 +45,12 @@ class Sourcemap_Search {
         return $searches;
     }
 
-
     public static function find($params=null, $type='simple') {
         return self::factory($params, $type)->search();
     }
 
     public static function simple($query) {
-        return self::find('simple', array('q' => $query));
+        return self::find(array('q' => $query), 'simple');
     }
 
     public static function cache_key(Sourcemap_Search $s) {

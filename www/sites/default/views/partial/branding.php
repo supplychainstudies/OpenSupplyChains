@@ -6,7 +6,7 @@
                 </header>
             </a>
         </div>
-        <div id="header-search-div" class="grid_7">
+        <div id="header-search-div" class="grid_8">
             <form method="post" action="/search/">
                 <input id="header-search" type="search" results="0" placeholder="Search" />
                 <div id="livesearch"></div>

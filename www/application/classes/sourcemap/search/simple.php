@@ -8,6 +8,8 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             ->where(DB::expr("other_perms & ".(int)Sourcemap::READ), '>', 0)
             ->find_all();
         */
+        if(!isset($this->parameters['q']))
+            $this->parameters['q'] = '';
         $sql = 'select distinct sc.id as supplychain_id from stop_attribute sa '.
             'left join supplychain sc on (sa.supplychain_id=sc.id) '.
             'where lower(sa.value) like \'%\'||:query||\'%\' limit :limit offset :offset';

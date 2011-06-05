@@ -10,7 +10,7 @@ Sourcemap.WRITE = 2;
 Sourcemap.DELETE = 8;
 
 Sourcemap.options = {
-    "log_level": Sourcemap.ERROR | Sourcemap.WARNING //| Sourcemap.INFO
+    "log_level": Sourcemap.ERROR | Sourcemap.WARNING | Sourcemap.INFO
 };
 
 Sourcemap.log = function(message, level) {
@@ -148,6 +148,7 @@ Sourcemap.factory = function(type, data) {
             instance.attributes = sc.attributes;
             instance.usergroup_perms = sc.usergroup_perms;
             instance.other_perms = sc.other_perms;
+            instance.editable = data.editable;
             break;
         default:
             instance = false;
@@ -218,6 +219,7 @@ Sourcemap.loadSupplychain = function(remote_id, callback) {
     var _remote_id = remote_id;
     $.get('services/supplychains/'+remote_id, {},  function(data) {
             var sc = Sourcemap.factory('supplychain', data.supplychain);
+            sc.editable = data.editable;
             callback.apply(this, [sc]);
             // notice this event fires _after_ the callback runs.
             _that.broadcast('supplychain:loaded', this, sc);

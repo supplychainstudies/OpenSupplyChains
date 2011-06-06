@@ -34,7 +34,6 @@
     </div>
     <div class="clear"></div>
 
-
     <div class="container_16">
         <div class="grid_10"> 
             <div id="map-secondary-content">

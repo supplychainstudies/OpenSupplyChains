@@ -183,6 +183,7 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
 
     $(this.map.map.div).css("position", "relative");
     // make and place custom zoom controls
+    /*
     var ze = new OpenLayers.Control.ZoomToMaxExtent({"title": "zoom all the way out"});
     var zi = new OpenLayers.Control.ZoomIn({"title": "zoom in"});
     var zo = new OpenLayers.Control.ZoomOut({"title": "zoom out"});
@@ -192,6 +193,7 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
     var cpanel = new OpenLayers.Control.Panel({"defaultControl": ze});
     cpanel.addControls([zo, ze, zi]);
     this.map.map.addControl(cpanel);
+    */
 
     // short-circuit panTo method to ease, even if we're at
     // a high zoom level
@@ -259,20 +261,20 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
     }, this));
     // embed activity fades 
     $("html").mouseenter(function() {
-        if($("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length >=2) {        
-            $("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+        if($(".sourcemap-tour-control-panel").length >=1) {        
+            $(".sourcemap-tour-control-panel")
                 .fadeIn("fast");
         }
     });
     $("html").mousemove(function() {
-        if($("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel").length>=2) {
-            $("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+        if($(".sourcemap-tour-control-panel").length>=1) {
+            $(".sourcemap-tour-control-panel")
             .fadeIn("fast");
             $("html").unbind("mousemove");
         }
     });
     $("html").mouseleave(function() {
-        $("#tileswitcher, .sourcemap-tour-control-panel, .olControlPanel")
+        $(".sourcemap-tour-control-panel")
             .fadeOut("fast");
     });
     

@@ -249,24 +249,30 @@ body#embedded-supplychain {
     .sourcemap-tour-control-panel {
         display:none;
         z-index: 1008;
-        height: 3em;
+        width: 100%;
+        bottom: 0; left: 0;
         position: absolute;
-        bottom: 0; left:50%;
-        margin-left: -7em;
-        background: url('../images/embed-dock.png') center bottom transparent no-repeat;
+        overflow: hidden;
         text-align: center;
-        .background_size(100%, 100%);
-            
-        .tourControlsWrap {
-            float:left;
-            margin: 10px auto; 
-            padding: 0 30px;
-            div{
-                padding: 0 1px;
-                display: inline-block;
-                opacity: 0.8;
-                &:hover {
-                    opacity: 1.0;
+        .tourControlsOuterWrap {
+            float: left;
+            position:relative;
+            left: 50%;
+            .tourControlsInnerWrap {
+                float:left;
+                position: relative;
+                left: -50%;
+                height: 35px;
+                background: url('../images/embed-dock.png') center bottom transparent no-repeat;
+                .background_size(100%, 100%);
+                padding: 0 30px;
+                div{
+                    padding: 10px 2px 0 2px;
+                    display: inline-block;
+                    opacity: 0.8;
+                    &:hover {
+                        opacity: 1.0;
+                    }
                 }
             }
         }

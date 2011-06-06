@@ -245,66 +245,29 @@ body#embedded-supplychain {
         float:left;
     }
     .olControlAttribution { bottom:0 !important; a { color:#fff}}
-    .olControlPanel {
-        display:none;
-        height: 30px;
-        width: 14em;
-        bottom: 0; left:40%; right:60%;
-        padding:10px 32px 10px 0;
-        background: url('../images/embed-dock.png') center bottom transparent no-repeat;
-        .background_size(100%, 100%);
-         div {
-            float: right;
-            opacity: 0.8;
-            clear: none;
-            &:hover {
-                opacity: 1.0;
-            }
-        }
-        .olControlZoomToMaxExtentItemActive {
-            width: 1.5em;
-            height: 1.5em;
-            background: url("../images/embed-zoom-zoommax.png") center center no-repeat;
-            .background_size(100%, 100%);
-            display: none;
-            cursor:pointer;
-        }    
-        .olControlZoomInItemInactive {
-            width: 30px;
-            height: 30px;
-            background: url("../images/embed-zoom-zoomin-small.png") center center no-repeat;
-            .background_size(100%, 100%);
-            cursor:pointer;
-        }
-        .olControlZoomOutItemInactive {
-            width: 30px;
-            height: 30px;
-            background: url("../images/embed-zoom-zoomout-small.png") center center no-repeat;
-            .background_size(100%, 100%);
-            cursor:pointer;
-        }
-    }
+    
     .sourcemap-tour-control-panel {
         display:none;
         z-index: 1008;
-        width: 100px;
-        height: 30px;
+        height: 3em;
         position: absolute;
-        bottom: 0; left:41%; right:59%;
-        margin:0 auto;
-        padding:10px 20px;
-        
-        .tour-progress-bar {
-            display: none;
-        }
-        div {
+        bottom: 0; left:50%;
+        margin-left: -7em;
+        background: url('../images/embed-dock.png') center bottom transparent no-repeat;
+        text-align: center;
+        .background_size(100%, 100%);
+            
+        .tourControlsWrap {
             float:left;
-            clear: none;
-            .background_size(100%, 100%);
-            background-repeat: no-repeat;
-            opacity: 0.8;
-            &:hover {
-                opacity: 1.0;
+            margin: 10px auto; 
+            padding: 0 30px;
+            div{
+                padding: 0 1px;
+                display: inline-block;
+                opacity: 0.8;
+                &:hover {
+                    opacity: 1.0;
+                }
             }
         }
         .sourcemap-tour-prev {

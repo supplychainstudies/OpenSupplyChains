@@ -31,14 +31,15 @@ Sourcemap.MapTour.prototype.init = function() {
 
 Sourcemap.MapTour.prototype.initControls = function() {
     this.controls_div_id = this.instance_id+'-controls';
-    this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel">'
-                    + '<div class="tour-progress-bar"></div></div>');
+    this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel olControlPanel"></div>');
+    this.wrap = $('<div class="tourControlsWrap"></div>'); //Needed for centering
     this.control_prev = $('<div class="sourcemap-tour-prev"></div>');
     this.control_next = $('<div class="sourcemap-tour-next"></div>');
     this.control_play = $('<div class="sourcemap-tour-play stopped"></div>');
     $(this.map.map.div).append(this.controls);
-    $(this.controls).append(this.control_prev).append(this.control_play)
+    $(this.wrap).append(this.control_prev).append(this.control_play)
         .append(this.control_next);
+    $(this.controls).append(this.wrap);
     this.control_prev.click($.proxy(function() {
         this.prev();
     }, this));

@@ -394,7 +394,8 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         var to_pt = wkt.read(sc.findStop(hop.to_stop_id).geometry).geometry;
     }
     if(this.options.hops_as_arcs) {
-        var new_feature = new OpenLayers.Feature.Vector(this.makeBentLine(from_pt, to_pt));
+        //var new_feature = new OpenLayers.Feature.Vector(this.makeBentLine(from_pt, to_pt));
+        var new_feature = new OpenLayers.Feature.Vector(this.makeGreatCircleRoute(from_pt, to_pt));
     } else if(this.options.hops_as_bezier) {
         var new_feature = new OpenLayers.Feature.Vector(this.makeBezierCurve(from_pt, to_pt));
     } else {
@@ -489,6 +490,19 @@ Sourcemap.Map.prototype.makeBezierCurve = function(from, to) {
     if(!to.equals(pts[pts.length-1]))
         pts.push(to.clone());
     return new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(pts)]);
+}
+
+Sourcemap.Map.prototype.makeGreatCircleRoute = function(from, to) {
+    var psrc = this.map.projection;
+    var pdst = new OpenLayers.Projection('EPSG:4326');
+    var from = from.transform(psrc, pdst);
+    var to = to.transform(psrc, pdst);
+    var rt = Sourcemap.great_circle_route({"x": from.x, "y": from.y}, {"x": to.x, "y": to.y}, 5);
+    var rtpts = [];
+    for(var i=0; i<rt.length; i++) rtpts.push(new OpenLayers.Geometry.Point(rt[i].x, rt[i].y));
+    var rtgeo = new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(rtpts)])
+    rtgeo.transform(pdst, psrc);
+    return rtgeo;
 }
 
 Sourcemap.Map.prototype.makeBentLine = function(from, to) {

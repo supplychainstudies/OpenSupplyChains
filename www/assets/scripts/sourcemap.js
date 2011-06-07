@@ -10,7 +10,7 @@ Sourcemap.WRITE = 2;
 Sourcemap.DELETE = 8;
 
 Sourcemap.options = {
-    "log_level": Sourcemap.ERROR | Sourcemap.WARNING | Sourcemap.INFO
+    "log_level": Sourcemap.ERROR | Sourcemap.WARNING //| Sourcemap.INFO
 };
 
 Sourcemap.log = function(message, level) {
@@ -416,3 +416,105 @@ Sourcemap.Color.prototype.fromHex = function(hexc) {
 Sourcemap.Color.prototype.toString = function() {
     return Sourcemap.rgb2hexc([this.r, this.g, this.b]);
 }
+
+Sourcemap.R = 6371 //km
+
+Sourcemap.radians = function(deg) {
+    return deg*Math.PI/180;
+}
+
+Sourcemap.degrees = function(rad) {
+    return rad*180.0/Math.PI;
+}
+
+Sourcemap.dms2decdeg = function(d, m, s) {
+    dd = Number(d);
+    dd = dd + m/60.0;
+    dd = dd + s/Math.pow(60.0,2.0);
+    return dd;
+}
+
+Sourcemap.haversine = function(pt1, pt2) {
+    // Calculate great circle distance between points on a spheriod.
+    var R = Sourcemap.R;
+    var lat1 = pt1.y;
+    var lon1 = pt1.x;
+    var lat2 = pt2.y;
+    var lon2 = pt2.x;
+    lat1 = Sourcemap.radians(lat1);
+    lon1 = Sourcemap.radians(lon1);
+    lat2 = Sourcemap.radians(lat2);
+    lon2 = Sourcemap.radians(lon2);
+    var dLat = lat2-lat1;
+    var dLon = lon2-lon1;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+        Math.cos(lat1) * Math.cos(lat2) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d;
+}
+
+Sourcemap.great_circle_bearing = function(pt1, pt2) {
+    var lat1 = pt1.y;
+    var lon1 = pt1.x;
+    var lat2 = pt2.y;
+    var lon2 = pt2.x;
+    lat1 = Sourcemap.radians(lat1)
+    lon1 = Sourcemap.radians(lon1)
+    lat2 = Sourcemap.radians(lat2)
+    lon2 = Sourcemap.radians(lon2)
+    var dLon = lon2 - lon1
+    var y = Math.sin(dLon)*Math.cos(lat2)
+    var x = Math.cos(lat1)*Math.sin(lat2) - 
+        Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon)
+    var brng = Sourcemap.degrees(Math.atan2(y, x))
+    return brng
+}
+
+Sourcemap.great_circle_midpoint = function(pt1, pt2) {
+    var lat1 = pt1.y;
+    var lon1 = pt1.x;
+    var lat2 = pt2.y;
+    var lon2 = pt2.x;
+    lat1 = Sourcemap.radians(lat1);
+    lon1 = Sourcemap.radians(lon1);
+    lat2 = Sourcemap.radians(lat2);
+    lon2 = Sourcemap.radians(lon2);
+    var dLon = lon2 - lon1;
+    var Bx = Math.cos(lat2) * Math.cos(dLon);
+    var By = Math.cos(lat2) * Math.sin(dLon);
+    var lat3 = Math.atan2(Math.sin(lat1)+Math.sin(lat2),
+        Math.sqrt((Math.cos(lat1)+Bx)*(Math.cos(lat1)+Bx) + By*By));
+    var lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+    return {"y": Sourcemap.degrees(lat3), "x": Sourcemap.degrees(lon3)};
+}
+
+Sourcemap.great_circle_endpoint = function(pt1, brng, d) {
+    var R = Sourcemap.R;
+    var lat1 = pt1.y;
+    var lon1 = pt1.x;
+    lat1 = Sourcemap.radians(lat1);
+    lon1 = Sourcemap.radians(lon1);
+    lat2 = Math.asin(Math.sin(lat1)*Math.cos(d/R) + 
+            Math.cos(lat1)*Math.sin(d/R)*Math.cos(brng));
+    lon2 = lon1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(lat1), 
+            Math.cos(d/R)-Math.sin(lat1)*Math.sin(lat2));
+    return {"y": Sourcemap.degrees(lat2), "x": Sourcemap.degrees(lon2)};
+}
+
+Sourcemap.great_circle_route = function(pt1, pt2, ttl) {
+    console.log('grt circl rt: '+ttl);
+    var mp = Sourcemap.great_circle_midpoint(pt1, pt2);
+    var rt = [pt1];
+    if(ttl > 0) {
+        var ttl = ttl - 1;
+        rt = rt.concat(Sourcemap.great_circle_route(pt1, mp, ttl));
+        rt = rt.concat(Sourcemap.great_circle_route(mp, pt2, ttl));
+    }
+    rt.push(pt2);
+    //var rtuniq = []
+    // todo: find and discard duplicates...
+    return rt;
+}
+

@@ -504,7 +504,6 @@ Sourcemap.great_circle_endpoint = function(pt1, brng, d) {
 }
 
 Sourcemap.great_circle_route = function(pt1, pt2, ttl) {
-    console.log('grt circl rt: '+ttl);
     var mp = Sourcemap.great_circle_midpoint(pt1, pt2);
     var rt = [pt1];
     if(ttl > 0) {

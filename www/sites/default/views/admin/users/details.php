@@ -64,4 +64,18 @@
         </a><?= $i < (count($owned)-1) ? ', ' : '' ?>
     <?php endforeach; ?>
 <?php endif; ?>
+
+<?php if($apikeys): ?>
+    <strong>API Keys</strong>
+    <?php foreach($apikeys as $i => $apikey): ?>
+        <div><?= $i ?></div>
+    <?php endforeach; ?>
+<?php endif; ?>
+<fieldset>
+<legend>Add an API Key for <?= HTML::chars($user->username) ?></legend>
+<form method="post" action="admin/apikeys/add">
+<input type="hidden" name="user_id" value="<?= $user->id ?>" />
+<input type="submit" value="Create API Key" />
+</form>
+</fieldset>
 </div>

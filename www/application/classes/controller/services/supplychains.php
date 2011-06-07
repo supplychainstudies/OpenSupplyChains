@@ -21,7 +21,7 @@
                 $id = $alias[$id];
             }
         }
-        $current_user = Auth::instance()->get_user();
+        $current_user = $this->get_current_user();
         if($current_user) { 
             $current_user = (object)$current_user->as_array();
             $user_id = $current_user->id;
@@ -97,7 +97,7 @@
     }
 
     public function action_post() {
-        $current_user = Auth::instance()->get_user();
+        $current_user = $this->get_current_user();
         if(!$current_user) {
             return $this->_forbidden('You must be logged in to create supplychains.');
         }
@@ -126,7 +126,7 @@
         if(!($supplychain = ORM::factory('supplychain', $id))) {
             return $this->_not_found('That supplychain does not exist.');
         }
-        $current_user = Auth::instance()->logged_in() ? Auth::instance()->get_user() : false;
+        $current_user = $this->get_current_user();
         if(!$current_user) {
             return $this->_forbidden('You must be logged in to create or edit supplychains.');
         }

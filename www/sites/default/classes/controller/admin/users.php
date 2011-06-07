@@ -54,20 +54,22 @@ class Controller_Admin_Users extends Controller_Admin {
 
         $roles = array();
         foreach($user->roles->find_all()->as_array() as $i => $role) {
-        $roles[] = $role->as_array();
+            $roles[] = $role->as_array();
         }        
         
         $all_roles = ORM::factory('role')->find_all()->as_array('id', array('id', 'name'));
         
         $members = array();
         foreach($user->groups->find_all()->as_array() as $i => $usergroup) {
-        $members[] = $usergroup->as_array();
+            $members[] = $usergroup->as_array();
         }
         
         $owners = array();
         foreach($user->owned_groups->find_all()->as_array() as $i => $usergroup) {
-        $owners[] = $usergroup->as_array();
+            $owners[] = $usergroup->as_array();
         }
+
+        $apikeys = $user->apikeys->find_all()->as_array('apikey', true);
         
         $this->template->user = $user;
         $this->template->roles = $roles;
@@ -75,8 +77,10 @@ class Controller_Admin_Users extends Controller_Admin {
         $this->template->members = $members;
         $this->template->owners = $owners;
         $this->template->last_login = $last_login;
+        $this->template->apikeys = $apikeys;
                 
         // this is to reset the password
+        // todo: move this.
         $post = Validate::factory($_POST);
         $post->rule('email', 'not_empty')
             ->rule('password', 'not_empty')

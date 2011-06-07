@@ -28,11 +28,18 @@ class Controller_Admin_APIKeys extends Controller_Admin {
             'items_per_page' => $items,
         ));
         
-        $this->template->apikeys = $apikeys->order_by('created', 'desc')
+        $apikeysa = $apikeys->order_by('created', 'desc')
             ->limit($pagination->items_per_page)
             ->offset($pagination->offset)
             ->find_all()
             ->as_array('apikey', true);
+
+        $apikeyowners = $apikeys->user->find_all()->as_array('id', true);
+        foreach($apikeysa as $i => $apikey) {
+            $apikeysa[$i]->owner = (object)$apikeyowners[$apikey->user_id];
+        }
+
+        $this->template->apikeys = $apikeysa;
         $this->template->page_links = $pagination->render();
         $this->template->offset = $pagination->offset;
         

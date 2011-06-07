@@ -11,6 +11,12 @@ class Sourcemap_Controller_Layout extends Controller_Template {
     public $layout = 'base';
     public $template = 'template';
 
+    public $default_styles = array(
+        'sites/default/assets/styles/reset.css',
+        'assets/styles/general.less',
+        'sites/default/assets/styles/default.less'
+    );
+
     public function before() {
         $pret = parent::before();
         if($this->auto_render === true) {
@@ -22,6 +28,8 @@ class Sourcemap_Controller_Layout extends Controller_Template {
     public function after() {
         $pret = parent::after();
         if($this->auto_render === true) {
+            if(!isset($this->layout->styles) || !$this->layout->styles) 
+                $this->layout->styles = $this->default_styles;
             $this->layout->content = $this->request->response;
             $this->request->response = $this->layout;
         }

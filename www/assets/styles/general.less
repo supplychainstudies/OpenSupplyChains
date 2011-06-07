@@ -71,6 +71,10 @@ body.main{
 /* BRANDING & MASTHEAD 
  * -------------------------------------------------------------- */
 
+.overlay {
+    display: none;
+}
+
 #branding {
     height: 4em;
     font-size: 1em; 
@@ -88,7 +92,7 @@ body.main{
         }
     }
     #header-search{
-        font-size:14px;
+        font-size:16px;
         border: solid 1px;
         -webkit-appearance: none;
         width: 100%;
@@ -272,10 +276,15 @@ body.main{
 /* FORM STYLES 
  * -------------------------------------------------------------- */
 
-@height: 1.2em;
+@height: 1.5em;
 
 .form{
-    input[type=text]{
+    legend {
+        font-weight: bold;
+        font-size: 1.4em;
+        border-bottom: 1px solid #ccc;
+    }
+    select,input[type=text]{
         height: @height;
         clear:both;
         float:left;

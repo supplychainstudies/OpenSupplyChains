@@ -14,12 +14,7 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : Sourcemap_CSS::link_tags(
-        'sites/default/assets/styles/reset.css',
-        'assets/styles/general.less',
-        'sites/default/assets/styles/default.less',
-        'sites/default/assets/styles/slider.css' // todo: this should only get loaded from welcome.php
-    )?>
+    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
    
     </head>
     <body class="main">

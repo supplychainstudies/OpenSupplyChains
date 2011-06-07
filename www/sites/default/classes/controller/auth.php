@@ -9,7 +9,7 @@
 
 class Controller_Auth extends Sourcemap_Controller_Layout {
     
-    public $layout = 'layout';
+    public $layout = 'base';
     public $template = 'auth';
 
     public function action_index() {

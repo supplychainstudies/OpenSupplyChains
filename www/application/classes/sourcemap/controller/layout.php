@@ -8,7 +8,7 @@
  */
 class Sourcemap_Controller_Layout extends Controller_Template {
 
-    public $layout = 'layout';
+    public $layout = 'base';
     public $template = 'template';
 
     public function before() {

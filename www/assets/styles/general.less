@@ -816,12 +816,22 @@ body.main{
     .status-message {
         color: #333;
         padding: .25em;
-        border: 1px dashed #333;
+        border: 0 0 1px 0 solid #333;
         &.error {
+            background-color: #ffc0c0;
+            border-color: #ff8080;
         }
         &.warning {
+            background-color: #ffff66;
+            border-color: #ff9900;
         }
         &.success {
+            background-color: #99ff99;
+            border-color: #55ff55;
+        }
+        &.info {
+            background-color: #9999ff;
+            border-color: #5555ff;
         }
     }
 }

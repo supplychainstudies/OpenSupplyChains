@@ -9,7 +9,7 @@
 
 class Controller_Create extends Sourcemap_Controller_Layout {
 
-    public $layout = 'layout';
+    public $layout = 'base';
     public $template = 'create';
     
     public function action_index() {

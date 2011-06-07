@@ -19,10 +19,8 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-core', 'sourcemap-template', 'sourcemap-create' 
         );
-        $this->layout->styles = array(
-            'assets/styles/style.css', 
-            'assets/styles/sourcemap.less?v=2'
-        );
+
+        $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
     }
 }
   

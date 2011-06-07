@@ -53,6 +53,7 @@ $('.form fieldset form').submit(function(e) {
     sc.attributes.title = $("#title").val();
     sc.attributes.description = $("#desc").val();
     sc.attributes.tags = $("#tags").val();
+    sc.category = $('#category').val();
     
     // Save the supplychain and retrieve its url using a custom callback
     var o = {};

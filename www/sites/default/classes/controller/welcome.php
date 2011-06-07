@@ -17,6 +17,9 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             'sourcemap-core',
             'sourcemap-welcome'
         );
+
+        $this->layout->styles = $this->default_styles;
+        $this->layout->styles[] = 'sites/default/assets/styles/slider.css';
         
         $this->layout->page_title = 'Welcome to Sourcemap.';
         $supplychain_rows = ORM::factory('supplychain')

@@ -135,7 +135,7 @@ jQuery.fn.liveSearch = function (conf) {
                                     html += "<a class=\"map-link\" href=\"/map/view/"+ json.results[i].id + "\">";
                                     html += "</a>";
                                     html += "<div>";
-                                    html += json.results[i].attributes.title;
+                                    html += json.results[i].attributes.title || "An Unnamed Sourcemap";
                                     html += "<br />";
                                     html += "<span class=\"info\">";
                                     html += "By ";

@@ -259,6 +259,17 @@ class Model_Supplychain extends ORM {
                 );
                 $this->_db->query(Database::UPDATE, $sql, true);
             }
+            if(isset($sc->category)) {
+                if(ORM::factory('category', $sc->category)->loaded()) {
+                    $sql = sprintf(
+                        'update supplychain set category = %d where id = %d',
+                        $sc->category, $scid
+                    );
+                    $this->_db->query(Database::UPDATE, $sql, true);
+                } else {
+                    throw new Exception('Invalid category '.(int)$sc->category);
+                }
+            }
         } catch(Exception $e) {
             $this->_db->query(null, 'ROLLBACK', true);
             throw new Exception('Could not save raw supplychain with id "'.$scid.'"('.$e->getMessage().')');

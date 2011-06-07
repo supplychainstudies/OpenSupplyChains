@@ -9,6 +9,10 @@
 class Sourcemap_Controller_Service extends Controller_REST {
 
     const HDR_CACHE_HIT = 'X-Sourcemap-Cache-Hit';
+
+    const HDR_API_KEY = 'X-Sourcemap-API-Key';
+    const HDR_API_TOKEN = 'X-Sourcemap-API-Token';
+    const HDR_API_TIME = 'Date';
     
     public $_action_map = array(
         'GET' => 'get',
@@ -37,6 +41,8 @@ class Sourcemap_Controller_Service extends Controller_REST {
     );
 
     public $_cache_hit = false;
+
+    public $_api_user = false;
 
     // Collection options
     public $_max_page_sz = 25;
@@ -68,6 +74,8 @@ class Sourcemap_Controller_Service extends Controller_REST {
                 }
             }
         }
+        if($api_user = $this->_auth_api_key())
+            $this->_api_user = $api_user;
         return $pbefore;
     }
 
@@ -78,6 +86,63 @@ class Sourcemap_Controller_Service extends Controller_REST {
         if($this->_cache_hit)
             $this->request->headers[self::HDR_CACHE_HIT] = 'true';
         return parent::after();
+    }
+
+    public function _auth_api_user() {
+        $api_user = false;
+        $servervals = isset($_SERVER) ? array_keys($_SERVER) : array();
+        foreach($servervals as $ki => $k) $servervals[$ki] = strtolower($k);
+        if(isset($servervals[strtolower(self::HDR_API_KEY)])) {
+            $reqapikey = trim($servervals[strtolower(self::HDR_API_KEY)]);
+            if(isset($servervals[strtolower(self::HDR_API_TOKEN)])) {
+                $reqapitoken = trim($servervals[strtolower(self::HDR_API_TOKEN)]);
+                if(isset($servervals[strtolower(self::HDR_API_TIME)])) {
+                    $reqdate = trim($servervals[strtolower(self::HDR_API_TIME)]);
+                    $reqtime = strptime($reqdate, '%r'); // rfc2822
+                    if(abs($reqtime - time()) > self::APIKEY_DATE_MARGIN) {
+                        throw new Exception(
+                            sprintf('Date header value is out of bounds: %d (%d +/- %d).', $reqtime, time(), self::API_DATE_MARGIN)
+                        );
+                    }
+                } else {
+                    throw new Exception(sprintf('Missing "%s" header.', self::HDR_API_TIME));
+                }
+            } else {
+                throw new Exception('Missing token header.');
+            }
+            $apikeym = ORM::factory('user_apikey')->where('apikey', '=', $reqapikey)->find();
+            if($apikeym->loaded()) {
+                $tgthash = md5(sprintf('%s-%s-%s', $reqdate, $apikeym->apikey, $apikeym->apisecret));
+                if(!$tgthash === $reqapitoken) {
+                    throw new Exception(sprintf('Invalid token "%s".', $reqapitoken));
+                }
+                else die('AUTH\'D');
+            } else {
+                throw new Exception('Invalid API key.');
+            }
+        }
+        return $api_user;
+    }
+
+    public function get_current_user() {
+        if($auth_user = Auth::instance()->get_user()) {
+            $this->_current_user = $auth_user;
+            $this->_api_user = false;
+        } elseif($api_user = $this->_auth_api_key()) {
+            $this->_current_user = $api_user;
+            $this->_api_user = $api_user;
+        } else {
+            $this->_current_user = false;
+            $this->_api_user = false;
+        }
+        return $this->_current_user;
+    }
+
+    public function get_api_user() {
+        $api_user = false;
+        if($this->get_current_user())
+            $api_user = $this->_api_user;
+        return $api_user;
     }
 
     protected function _list_parameters() {

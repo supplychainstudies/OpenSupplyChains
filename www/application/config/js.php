@@ -61,6 +61,7 @@ return array(
         ),
         'sourcemap-map' => array(
             'scripts' => array(
+                'assets/scripts/sourcemap/map/magicwords.js',
                 'assets/scripts/sourcemap/map.js'
             ),
             'requires' => array(

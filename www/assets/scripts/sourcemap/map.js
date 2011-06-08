@@ -109,11 +109,6 @@ Sourcemap.Map.prototype.initMap = function() {
             -20037508.43, -20037508.43,
             20037508.43, 20037508.43
         ),
-        /*"restrictedExtent": new OpenLayers.Bounds(
-            -20037508.43, -20037508.43,
-            20037508.43, 20037508.43
-        ),*/
-        //"minZoomLevel": 2,
         "controls": controls
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
@@ -212,23 +207,6 @@ Sourcemap.Map.prototype.initControls = function() {
     this.broadcast('map:controls_initialized', this, ['select']);
     return this;
 }
-
-/*Sourcemap.Map.prototype.initTileSwitcher = function() {
-    this.tileswitcher_div = $('<div id="tileswitcher" class="'+Sourcemap.embed_params.basetileset+'">'+
-        '<div id="current-tile">'+Sourcemap.embed_params.basetileset+'</div><ul id="available-tiles">'+
-        '<li id="stylized"></li><li id="terrain"></li><li id="satellite">'+
-        '</li></ul></div>'
-    );
-    $(this.map.div).append(this.tileswitcher_div);
-    $("#tileswitcher #available-tiles li").click($.proxy(function(event) {
-        var newtile = $(event.currentTarget).attr("id");
-        $("#tileswitcher").attr("class",  newtile);
-        $("#tileswitcher #current-tile").text(newtile);
-
-        this.map.setBaseLayer( this.map.getLayersByName(newtile).pop() );
-    }, this));
-
-}*/
 
 Sourcemap.Map.prototype.updateControls = function() {
     var layers = [];
@@ -395,7 +373,6 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         var to_pt = wkt.read(sc.findStop(hop.to_stop_id).geometry).geometry;
     }
     if(this.options.hops_as_arcs) {
-        //var new_feature = new OpenLayers.Feature.Vector(this.makeBentLine(from_pt, to_pt));
         var new_feature = new OpenLayers.Feature.Vector(this.makeGreatCircleRoute(from_pt, to_pt));
     } else if(this.options.hops_as_bezier) {
         var new_feature = new OpenLayers.Feature.Vector(this.makeBezierCurve(from_pt, to_pt));
@@ -516,41 +493,6 @@ Sourcemap.Map.prototype.makeGreatCircleRoute = function(from, to) {
     var rtgeo = new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(rtpts)])
     rtgeo.transform(pdst, psrc);
     return rtgeo;
-}
-
-Sourcemap.Map.prototype.makeBentLine = function(from, to) {
-    // dzwarg's "polyline" bent line routine,
-    // minus the many-globes business
-    var resolution = 20;
-    var points = [];
-    var dx = to.x - from.x;
-    var dy = to.y - from.y;
-    var theta = (Math.PI/2) - Math.atan(dy/dx);
-    var maxdisp = Math.sqrt(dx*dx+dy*dy) * 0.05;
-
-    if(dx == 0 && dy == 0) {
-        points.push(new OpenLayers.Geometry.Point(from.x, from.y));
-    } else {
-        var absintheta = Math.abs(Math.sin(theta));
-        var abcostheta = Math.abs(Math.cos(theta));
-        for(var p=0; p<resolution; p++) {
-            var relamt = Math.sin(p/resolution*Math.PI) * maxdisp;
-            if(absintheta < abcostheta) {
-                relamt *= Math.abs(Math.sin(Math.PI*dx/dy));
-            }
-            var ddx = Math.cos(theta+Math.PI) * relamt;
-            var ddy = Math.sin(theta) * relamt;
-
-            points.push(
-                new OpenLayers.Geometry.Point(
-                    from.x + (dx*p/resolution) + ddx,
-                    from.y + (dy*p/resolution) + ddy
-                )
-            );
-        }
-    }
-    points.push(new OpenLayers.Geometry.Point(to.x, to.y));
-    return new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(points)]);
 }
 
 Sourcemap.Map.prototype.clearMap = function() {
@@ -712,51 +654,3 @@ Sourcemap.Popup.prototype.show = function() {
         $(this.div).find('*').fadeIn(this.fade_in);
     }, this));
 }
-
-// Similar to addCloseBox, but returns the close box div 
-// rather than appending it.  Useful for working with templates.
-/*
-Sourcemap.Popup.prototype.getCloseBox = function() {
-
-        this.closeDiv = OpenLayers.Util.createDiv(
-            this.id + "_close", null, new OpenLayers.Size(17, 17)
-        );
-        this.closeDiv.className = "olPopupCloseBox";
-
-        var contentDivPadding = 0; 
-        this.getContentDivPadding();
-        
-        var closePopup = function(e) {
-            this.hide();
-            this.sourcemap.controls.select.unselectAll(); 
-            OpenLayers.Event.stop(e);
-        };
-        
-        OpenLayers.Event.observe(this.closeDiv, "click",
-            OpenLayers.Function.bindAsEventListener(closePopup, this));
-        
-        return this.closeDiv;
-
-}
-
-Sourcemap.Popup.prototype.addCloseBox = function(callback) {
-    this.closeDiv = OpenLayers.Util.createDiv(
-        this.id + "_close", null, new OpenLayers.Size(17, 17)
-    );
-    this.closeDiv.className = "olPopupCloseBox";
-
-    // use the content div's css padding to determine if we should
-    //  padd the close div
-    var contentDivPadding = 0; 
-    this.getContentDivPadding();
-
-    this.closeDiv.style.right = contentDivPadding.right + "px";
-    this.closeDiv.style.top = contentDivPadding.top + "px";
-
-    var closePopup = callback || function(e) {
-        this.hide();
-        OpenLayers.Event.stop(e);
-    };
-}
-*/
-

@@ -29,7 +29,7 @@ Sourcemap.Map.Embed.prototype.defaults = {
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
     "tour_order_strategy": "upstream", "tileswitcher": false,
     "locate_user": true, "user_loc": false, "user_loc_color": "#ff0000",
-    "tileset": "terrain" // terrain, cloudmade, etc. (check map.js)
+    "tileset": "cloudmade" // terrain, cloudmade, etc. (check map.js)
 }
 
 // callbacks for magic attributes
@@ -175,11 +175,11 @@ Sourcemap.Map.Embed.prototype.initMap = function() {
         // callback for decorating hop feature and its arrow
         'prep_hop': function(hop, ftr, arrow) {
             // set arc and related arrow color
-            ftr.attributes.color = hop.getAttr('color', '#006633');
-            if(arrow) arrow.attributes.color = hop.getAttr('color', '#006633');
+            //ftr.attributes.color = hop.getAttr('color', '#006633');
+            //if(arrow) arrow.attributes.color = hop.getAttr('color', '#006633');
         }        
     });
-    this.map.setBaseLayer(this.options.tileset);
+    //this.map.setBaseLayer(this.options.tileset);
 
     $(this.map.map.div).css("position", "relative");
     // make and place custom zoom controls

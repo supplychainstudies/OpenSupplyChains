@@ -27,6 +27,7 @@ Sourcemap.Map.prototype.defaults = {
     "popup_height": 100, "animation_enabled":false,
     "draw_hops": true, "hops_as_arcs": true,
     "hops_as_bezier": false, "arrows_on_hops": true,
+    "default_feature_color": "#60cb59",
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -43,7 +44,7 @@ Sourcemap.Map.prototype.defaults = {
             "labelYOffset": -4, // fixme: this is bad
         },
         "select": {
-            "fillColor": "${color}",
+            "fillColor": "#ffffff",
             "fillOpacity": 1.0
         },
         "hascontent": {
@@ -346,7 +347,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
     new_feature.attributes.size = Math.max(stop.getAttr("size", false), 11);
-    new_feature.attributes.color = stop.getAttr("color", false) || '#60CB59';
+    new_feature.attributes.color = stop.getAttr("color", false) || this.options.default_feature_color;
     new_feature.attributes.label = stop.getAttr("label", false) || '';
     stcolor = new Sourcemap.Color();
     stcolor = stcolor.fromHex(new_feature.attributes.color);
@@ -404,7 +405,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     var new_arrow = false;
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
-            "color": "#072", "size": 7, "supplychain_instance_id": scid,
+            "color": this.options.default_feature_color, "size": 7, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id
             
@@ -430,7 +431,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     new_feature.attributes.width = 2;
-    new_feature.attributes.color = '#072';
+    new_feature.attributes.color = this.options.default_feature_color;
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     // save references to features
     this.mapped_features[hop.local_id] = new_feature;
@@ -455,11 +456,23 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
 Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     if(!OpenLayers.Renderer.symbol.arrow)
         OpenLayers.Renderer.symbol.arrow = [-5, 5,  0,3,  5, 5,  0, -5,  -5, 5];
+    
+    var psrc = this.map.projection;
+    var pdst = new OpenLayers.Projection('EPSG:4326');
+
     var verts = hop_geom.getVertices();
     var from_pt = verts[0];
     var to_pt = verts[verts.length-1];
-    var mid_pt = verts[Math.ceil(verts.length/2)];
-    var angle = (Math.atan2(to_pt.x-from_pt.x, to_pt.y-from_pt.y)/Math.PI)*180;
+    
+    var from = from_pt.clone().transform(psrc, pdst);
+    var to = to_pt.clone().transform(psrc, pdst);
+
+    var mid_pt = Sourcemap.great_circle_midpoint(from, to);
+    var angle = Sourcemap.great_circle_bearing(mid_pt, to);
+
+    mid_pt = new OpenLayers.Geometry.Point(mid_pt.x, mid_pt.y);
+    mid_pt = mid_pt.transform(pdst, psrc);
+
     var attrs = {"type": "arrow", "width": 0, "angle": angle};
     var o = o || {};
     for(var k in o) attrs[k] = o[k];

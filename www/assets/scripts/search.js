@@ -120,7 +120,7 @@ jQuery.fn.liveSearch = function (conf) {
 
                     // Start a new ajax-request in X ms
                     this.timer = setTimeout(function () {
-                        jQuery.getJSON(config.url, function (json) {
+                        jQuery.getJSON(config.url+'?q='+q, function (json) {
                             input.removeClass(config.loadingClass);
 
                             // Show live-search if results and search-term aren't empty

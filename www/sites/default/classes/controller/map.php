@@ -114,7 +114,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     imagepng($pimg);
                     //header('Content-Type: text/plain');
                     Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
-                        'supplychain' => $supplychain->kitchen_sink($supplychain->id),
+                        'supplychain_id' => $supplychain->id,
                         'sizes' => Sourcemap_Map_Static::$image_sizes,
                         'thumbs' => Sourcemap_Map_Static::$image_thumbs
                     ));

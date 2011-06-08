@@ -44,9 +44,11 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                 Message::instance()->set('Welcome, '.$post->username.'.', Message::SUCCESS);
             } else {
                 Message::instance()->set('Invalid username/password combo.', Message::ERROR);
+                $this->request->redirect('auth');
             }
         } else {
             Message::instance()->set('Invalid username/password combo.', Message::ERROR);
+            $this->request->redirect('auth');
         }
         if (!empty($post->next)) {
             $this->request->redirect($post->next);
@@ -77,59 +79,158 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             $post = (object)$post->as_array();
             $email = $post->email;
             $user = ORM::factory('user')->where('email', '=', $email)->find();
-            $temp_password = text::random($type = 'alnum', $length = 6);
-            $user_temp = ORM::factory('user', $user->id);   
-            $user_temp->password = $temp_password;
-            $user_temp->save();
-            $this->email_password($user->username, $email, $temp_password);
+            if($user->loaded()) {
+                $s = sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password);
+                $h = md5($s);
+                $un = strrev(base64_encode($user->username));
+                $em = strrev(base64_encode($user->email));
+                $t = sprintf('%s-%s-%s', $un, $h, $em);
+                if($this->email_reset_ticket($user->username, $user->email, $t)) {
+                    $this->template->email_sent = true;
+                }
+                $this->request->redirect('auth');
+            } else {
+                Message::instance()->set('I don\'t recognize you.');
+                $this->request->redirect('auth/forgot_password');
+            }
+        } else {
+            // pass
         }
     }
 
-    public function email_password($username, $email, $temp_password) {
-        $email_vars = array('username' => $username, 'password' => $temp_password);
+    public function email_reset_ticket($username, $email, $ticket) {
+        //$email_vars = array('username' => $username, 'password' => $temp_password);
         $to = $email;
         $subject = 'Your Sourcemap account information';
-        $view = View::factory('email/password_template')->bind('email_vars', $email_vars);
-        $body = Sourcemap_Markdown::parse($view);
+        //$view = View::factory('email/password_template')->bind('email_vars', $email_vars);
+        //$body = Sourcemap_Markdown::parse($view);
+        $body = "You (or somebody else) requested a password reset at Sourcemap.com.\n";
+        $body .= "To reset your password, follow the link below. If this seems suspicious, \n";
+        $body .= "contact ".Sourcemap::$admin_email." immediately.\n";
+        $body .= URL::site('auth/reset_password?t='.$ticket, true);
+        $sent = false;
         try {
-            Sourcemap_Email_Template::send_email($to, $subject, $body);
+            //Sourcemap_Email_Template::send_email($to, $subject, $body);
+            $sent = mail($email, 'SOURCEMAP: Password Reset', $body);
+            Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
             Message::instance()->set('Sorry, could not send an email.');
-        }           
+        }
+        return $sent;
     }
     
 
     public function action_reset_password() {
 
         $this->template = View::factory('auth/reset_password');
-        $current_user_id = Auth::instance()->get_user();
-        $current_user = ORM::factory('user', Auth::instance()->get_user());
-        $user_name = ORM::factory('user', $current_user_id)->username;
-        $this->template->current_user_id = $current_user_id;
-        $this->template->current_user = $current_user;
 
-        //create a temp password and email that to the user.
-        
+        $current_user = Auth::instance()->get_user();
+
         $post = Validate::factory($_POST);
-        $post->rule('old', 'not_empty')
-            ->rule('new', 'not_empty')
+        $post->rule('new', 'not_empty')
+            ->rule('new_confirm', 'not_empty')
+            ->rule('new_confirm', 'matches', array('new'))
             ->filter(true, 'trim');
-        
-        if(strtolower(Request::$method) === 'post' && $post->check()) {
-            $post = (object)$post->as_array();
-            $old_password = $post->old;
-            $new_password = $post->new;
 
+        if(strtolower(Request::$method) === 'post') {
+ 
+            // make sure the user has a valid reset ticket or is logged in.
+            $tregex = '/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/';
+            if(!$current_user && isset($_POST['t']) && preg_match($tregex, $_POST['t'])) {
+                list($un, $h, $em) = explode('-', $_POST['t']);
+                $un = base64_decode(strrev($un));
+                $em = base64_decode(strrev($em));
+                $user = ORM::factory('user')->where('email', '=', $em)->find();
+                if($user->loaded()) {
+                    if($user->username == $un) {
+                        $tgth = md5(sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password));
+                        if($tgth === $h) {
+                            $current_user = $user;
+                            if($post->check()) {
+                                $user->password = $post['new'];
+                                $user->save();
+                                Auth::instance()->login($user->username, $post['new']);
+                                Message::instance()->set('Password reset.', Message::SUCCESS);
+                                // todo: notify via email of reset?
+                                return $this->request->redirect('auth');
+                            } else {
+                                // pass
+                            }
+                        } else {
+                            Message::instance()->set('That token has expired.');
+                            return $this->request->redirect('auth');
+                        }
+                    } else {
+                        Message::instance()->set('That didn\'t work.');
+                        return $this->request->redirect('auth');
+                    }
+                } else {
+                    Message::instance()->set('I don\'t recognize you.');
+                    return $this->request->redirect('auth');
+                }
+            } 
             
-            if(Auth::instance()->check_password($old_password)) {
-            $user = ORM::factory('user', $current_user_id);
-            $user->password = $new_password;
-            $user->save();
-            Message::instance()->set('Password changed successfully!');
+            if(!$current_user) {
+                Message::instance()->set('You can\'t do that.');
+                $this->request->redirect('auth');
+            } elseif($post->check()) { // && $tgth === $current_user->password) {
+                // user is logged in...reset password...
+                // todo: notify user via email?
+                $current_user->password = $post['new'];
+                $current_user->save();
+                Message::instance()->set('Your password has been reset.', Message::SUCCESS);
+                $this->request->redirect('auth');
             } else {
-            Message::instance()->set('Password did not match, try again');
+                Message::instance()->set('Please try again.', Message::ERROR);
+                if(isset($_POST['t'])) {
+                    $this->request->redirect('auth/reset_password?t='.$_POST['t']);
+                } else {
+                    $this->request->redirect('auth/reset_password');
+                }
             }
-        } 
+
+        } else {
+            
+            $get = Validate::factory($_GET);
+            $get->rule('t', 'not_empty')
+                ->rule('t', 'regex', array('/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/'));
+
+            if(!$current_user && isset($_GET['t'])) {
+                if($get->check()) {
+                    list($un, $h, $em) = explode('-', $get['t']);
+                    $un = base64_decode(strrev($un));
+                    $em = base64_decode(strrev($em));
+                    $user = ORM::factory('user')->where('email', '=', $em)->find();
+                    if($user->loaded()) {
+                        if($user->username == $un) {
+                            $tgth = md5(sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password));
+                            if($tgth === $h) {
+                                $current_user = $user;
+                                $this->template->ticket = $get['t'];
+                            } else {
+                                Message::instance()->set('That token has expired.');
+                                return $this->request->redirect('auth');
+                            }
+                        } else {
+                            Message::instance()->set('That didn\'t work.');
+                            return $this->request->redirect('auth');
+                        }
+                    } else {
+                        Message::instance()->set('I don\'t recognize you.');
+                        return $this->request->redirect('auth');
+                    }
+                } else {
+                    Message::instance()->set('That didn\'t work.');
+                    return $this->request->redirect('auth');
+                }
+            } elseif(!$current_user) {
+                Message::instance()->set('You can\'t do that.');
+                $this->request->redirect('auth');
+            }
+
+           
+
+        }
     }
 
 

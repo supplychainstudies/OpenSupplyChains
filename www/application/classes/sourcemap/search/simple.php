@@ -2,28 +2,26 @@
 class Sourcemap_Search_Simple extends Sourcemap_Search {
     public function fetch() {
         parent::fetch();
-        //$scm = ORM::factory('supplychain');
-        /*$rows = $scm->limit($this->limit)
-            ->offset($this->offset)
-            ->where(DB::expr("other_perms & ".(int)Sourcemap::READ), '>', 0)
-            ->find_all();
-        */
         if(!isset($this->parameters['q']))
             $this->parameters['q'] = '';
         $sql = 'select distinct sc.id as supplychain_id from stop_attribute sa '.
             'left join supplychain sc on (sa.supplychain_id=sc.id) '.
-            'where lower(sa.value) like \'%\'||:query||\'%\' limit :limit offset :offset';
+            'where lower(sa.value) like \'%\'||:query||\'%\' '.
+            'and other_perms & :readflag > 0 limit :limit offset :offset';
         $query = DB::query(Database::SELECT, $sql);
         $query->param(':query', $this->parameters['q'])
+            ->param(':readflag', Sourcemap::READ)
             ->param(':limit', $this->limit)
             ->param(':offset', $this->offset);
         $rows = $query->execute();
 
-        $ctsql = 'select distinct count(sc.id) as hits from stop_attribute sa '.
+        $ctsql = 'select count(distinct sc.id) as hits from stop_attribute sa '.
             'left join supplychain sc on (sa.supplychain_id=sc.id) '.
-            'where lower(sa.value) like \'%\'||:query||\'%\'';
+            'where lower(sa.value) like \'%\'||:query||\'%\' '.
+            'and other_perms & :readflag > 0';
         $ctquery = DB::query(Database::SELECT, $ctsql);
-        $ctquery->param(':query', $this->parameters['q']);
+        $ctquery->param(':query', $this->parameters['q'])
+            ->param(':readflag', Sourcemap::READ);
 
         $results = array();
         foreach($rows as $i => $row) {

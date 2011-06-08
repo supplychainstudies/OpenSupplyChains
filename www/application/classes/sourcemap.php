@@ -20,6 +20,8 @@ class Sourcemap {
     const STAGING = 'staging';
     const PRODUCTION = 'production';
 
+    public static $admin_email = 'admin@sourcemap.com';
+
     public static $session_dir = '/tmp';
 
     public static $_sess_save_path;

@@ -429,7 +429,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.hop_instance_id = hop.instance_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
-    new_feature.attributes.width = 4;
+    new_feature.attributes.width = 2;
     new_feature.attributes.color = '#072';
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     // save references to features

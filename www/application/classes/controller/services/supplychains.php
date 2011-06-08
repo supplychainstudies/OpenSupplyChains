@@ -105,7 +105,7 @@
         try {
             if($this->_validate_raw_supplychain($posted)) {
                 $raw_sc = $posted->supplychain;
-                $raw_sc->user_id = $current_user;
+                $raw_sc->user_id = $current_user->id;
                 $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
                 $this->request->status = 201;
                 $this->request->headers['Location'] = 'services/supplychains/'.$new_scid;
@@ -132,7 +132,7 @@
         }
         if(!$supplychain->user_can($current_user->id, Sourcemap::WRITE)) {
             // todo: use user_can method
-            $user_groups = ORM::factory('user', $current_user)
+            $user_groups = ORM::factory('user', $current_user->id)
                 ->groups->find_all()->as_array('id', true);
             return $this->_forbidden(
                 'You do not have permission to edit this supplychain.'

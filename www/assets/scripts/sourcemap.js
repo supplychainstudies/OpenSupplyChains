@@ -10,7 +10,7 @@ Sourcemap.WRITE = 2;
 Sourcemap.DELETE = 8;
 
 Sourcemap.options = {
-    "log_level": Sourcemap.ERROR | Sourcemap.WARNING // | Sourcemap.INFO
+    "log_level": Sourcemap.ERROR | Sourcemap.WARNING | Sourcemap.INFO
 };
 
 Sourcemap.log = function(message, level) {

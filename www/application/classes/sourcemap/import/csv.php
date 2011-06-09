@@ -108,12 +108,12 @@ class Sourcemap_Import_Csv {
                 }
                 $new_stop['attributes'][$k] = $v;
             }
-            if(is_null($addresscol) && $lat && $lon) {
+            if(!isset($new_stop['attributes']['placename']) && $lat && $lon) {
                 $results = Sourcemap_Geocoder::geocode((new Sourcemap_Proj_Point($lon, $lat)));
                 if($results) {
                     $result = $results[0];
-                    $lat = $result->lat;
-                    $lon = $result->lng;
+                    //$lat = $result->lat;
+                    //$lon = $result->lng;
                     if(!isset($record['placename']))
                         $new_stop['attributes']['placename'] = $result->placename;
                 }

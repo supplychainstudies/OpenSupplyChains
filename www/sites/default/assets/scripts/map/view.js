@@ -1,10 +1,22 @@
-$(document).ready(function() { 
-    Sourcemap.map_instance = new Sourcemap.Map('sourcemap-map-view'); 
-    var scid = supplychain_id; 
+$(document).ready(function() {
+
+    Sourcemap.view_params = Sourcemap.view_params || {};
+    Sourcemap.view_instance = new Sourcemap.Map.Base(Sourcemap.view_params);
+
+    Sourcemap.listen("map:supplychain_mapped", function(evt, map, sc) {
+        var view = Sourcemap.view_instance;
+        embed.user_loc = Sourcemap.view_params.iploc ? Sourcemap.view_params.iploc[0] : false;
+        if(view.options.locate_user) {
+            view.showLocationDialog();
+        }
+    });
+
+    // get scid from inline script
+    var scid = Sourcemap.view_supplychain_id;
+
+    // fetch supplychain
     Sourcemap.loadSupplychain(scid, function(sc) { 
         if(sc.editable) Sourcemap.log("Supplychain "+sc.remote_id+" is editable."); 
         Sourcemap.map_instance.addSupplychain(sc); 
     }); 
- 
-    //Sourcemap.template('map/view/place', function(tpl, txt, loader) { console.log('loaded template: '+tpl); }); 
-}); 
+});

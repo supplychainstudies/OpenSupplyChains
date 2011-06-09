@@ -1,9 +1,8 @@
-
 Sourcemap.Map.Base = function(o) {
-    this.broadcast('map_embed:instantiated', this);
+    this.broadcast('map_base:instantiated', this);
     var o = o || {};
     Sourcemap.Configurable.call(this, o);
-    this.instance_id = Sourcemap.instance_id("sourcemap-embed");
+    this.instance_id = Sourcemap.instance_id("sourcemap-base");
 }
 
 Sourcemap.Map.Base.prototype = new Sourcemap.Configurable();
@@ -173,7 +172,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             $(this.map.map.div).append(this.watermark);
         }
     }, this));
-    // embed activity fades 
     $("html").mouseenter(function() {
         if($(".sourcemap-tour-control-panel").length >=1) {        
             $(".sourcemap-tour-control-panel")
@@ -237,12 +235,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         $(this.dialog).css({"left": dl+"px"});
         $(this.dialog).css({"top": dt+"px"});
 
-        /*if($(this.embed_dialog).css("display") == "block") {
-            var shrink = $(window).height() 
-                         - $(this.embed_dialog).outerHeight();
-            $(this.map.map.div).css({"height":shrink});
-        }   */
-        
     }, this));
 
 }

@@ -90,6 +90,7 @@ Sourcemap.Map.prototype.init = function() {
     this.prepareHopFeature = this.options.prep_hop ? this.options.prep_hop : false;
     this.preparePopup = this.options.prep_popup ? this.options.prep_popup : false;
     this.broadcast('map:initialized', this);
+    console.log(this);
     return this;
 }
 Sourcemap.Map.prototype.initMap = function() {

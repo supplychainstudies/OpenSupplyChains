@@ -13,9 +13,12 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     public $template = 'create';
     
     public function action_index() {
-        if(!Auth::instance()->get_user())
-            return $this->_forbidden('You must be logged in to create a map.');
 
+        if(!Auth::instance()->get_user()) {
+            Message::instance()->set('You must be logged in to create maps.');
+            $this->request->redirect('auth');
+        }
+        
         $this->layout->scripts = array(
             'sourcemap-core', 'sourcemap-template', 'sourcemap-create' 
         );

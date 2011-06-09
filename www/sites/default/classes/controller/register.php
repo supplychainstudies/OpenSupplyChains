@@ -10,199 +10,132 @@
 
 class Controller_Register extends Sourcemap_Controller_Layout {
 
-    public $layout = 'layout';
+    public $layout = 'base';
     public $template = 'register';
     
     public function action_index() {
-
-        $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template', 'sourcemap-working', 'sourcemap-social'
-        );
-        $this->layout->styles = array(
-            'assets/styles/style.css', 
-            'assets/styles/sourcemap.less?v=2'
-        );
-    
-        $post = Validate::factory($_POST);
-        $post->rule('username', 'not_empty')
-            ->rule('username', 'max_length', array(318))
-            ->rule('username', 'min_length', array(4))
-            ->rule('email', 'not_empty')
-            ->rule('email', 'max_length', array(318))
-            ->rule('email', 'min_length', array(4))
-            ->rule('password', 'not_empty')
-            ->rule('password', 'max_length', array(16))
-            ->rule('password', 'min_length', array(6))
-            ->rule('confirm_password', 'not_empty')
-            ->rule('confirm_password', 'max_length', array(16))
-            ->rule('confirm_password', 'min_length', array(6))
-            ->rule('email', 'validate::email')
-	    ->rule('identifier', 'max_length', array(100000))
-            ->filter(true, 'trim');
-
-	
-        if(strtolower(Request::$method) === 'post' && $post->check()) {
-            $post = (object)$post->as_array();
-	    
-	    if($post->password == $post->confirm_password) {
-                $create = ORM::factory('user');
-		$create->username = $post->username;                
-		$create->email = $post->email;
-		$create->password = $post->password;
-		
-		try {
-		    $create->save();  
-		    $created = ORM::factory('user', $create->id)->created;		    
-		    
-		    if(!empty($post->identifier)) {
-			$openidusers = ORM::factory('openidusers');
-			$openidusers->identifier = $post->identifier;
-			$openidusers->user_id = $create->id;
-			$openidusers->save();
-			
-		    }
-		    $hash_value = Auth::instance()->hash($post->username.$post->email.$created);
-		    $this->email_user($post->username, $post->email, $hash_value);        
-		} catch (Exception $e){
-		    Message::instance()->set('Could not register the user.');
-		}
-		
-	    } else {
-		Message::instance()->set('Passwords did not match.');
-	    }
-	}
-    }
-    
-    
-    public function email_user($username, $email, $hash_value) {
-
-        $email_vars = array(
-            'username' => $username,
-            'hash_value' => $hash_value);
-	
-        $to = $email;
-        $subject = 'Email confirmation for Sourcemap account';
-	$view = View::factory('email/confirm')->bind('email_vars', $email_vars);
-	
-	try {
-	    
-	    $body = Sourcemap_Markdown::parse($view);
-	} catch (Exception $e) {
-	    Message::instance()->set('Sorry, could not email.');
-	}
         
-	try {        
-	    Sourcemap_Email_Template::send_email($to, $subject, $body);
-	} catch (Exception $e) {
-	    Message::instance()->set('Sorry, could not send an email.');
-	}
-    }
+        $f = Sourcemap_Form::factory('register')
+            ->method('post')
+            ->action('register');
 
-    public function action_confirm(){
-    
-        $hash = $_GET['u'];
-	$users = ORM::factory('user')->find_all()->as_array('id', array('id','username', 'email', 'created'));
-        foreach($users as $user) {
-            if (Auth::instance()->hash($user->username.$user->email.$user->created) == $hash) {
-		$user_confirm = ORM::factory('user', $user->id);
-		$user_confirm->flags =2;
-		
-		try {
-		    $user_confirm->save();    
-		    //add a default login role when a new user is created
-		    $role = ORM::factory('role', array('name' => 'login'));
-		    $user_confirm->add('roles', $role)->save();
-		    Message::instance()->set('Thank you, your registration is now complete.');
-		} catch (Exception $e) {
-		    Message::instance()->set('Could not complete the registration.');
-		}
-		
-	    }
-	}
-    }
+        $f->input('email', null, 1)
+            ->input('username', null, 2)
+            ->password('password', null, 3)
+            ->password('password_confirm', null, 4)
+            ->submit('register', 'Go!', 5);
 
-    
-    public function action_loginopenid() {
-	
-	$this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template', 'sourcemap-working', 'sourcemap-social'
-        );
+        $f->field('email')->label('Email')
+            ->add_class('required');
+        $f->field('username')->label('Username')
+            ->add_class('required');
+        $f->field('password')->label('Password')
+            ->add_class('required');
+        $f->field('password_confirm')->label('Password (again)')
+            ->add_class('required');
 
-	if(isset($_POST['token'])) {
-	    $token = $_POST['token'];
-	 
-	    $apikey = '0cb119b5123b1731a13c0979937af366504944a4';
-	    $post_data = array('token' => $_POST['token'],
-			       'apiKey'=> $apikey,
-			       'format' => 'json');
+        $this->template->register_form = $f;
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_URL, 'https://rpxnow.com/api/v2/auth_info');
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        $raw_json = curl_exec($curl);
-        curl_close($curl);         
-        
-        $auth_info = json_decode($raw_json, true);        
+        if(strtolower(Request::$method) === 'post') {
+            $f->values($_POST);
+            $post = Validate::factory($_POST);
+            $post->rule('email', 'not_empty')
+                ->rule('email', 'email')
+                ->rule('username', 'not_empty')
+                ->rule('username', 'alpha_dash')
+                ->rule('username', 'min_length', array(4))
+                ->rule('username', 'max_length', array(32))
+                ->rule('password', 'min_length', array(4))
+                ->rule('password_confirm', 'matches', array('password'));
 
-        if ($auth_info['stat'] == 'ok') {
-        $profile = $auth_info['profile'];
-        if (isset($profile['identifier'])) {
-            $identifier = $profile['identifier'];
-        }
-        if (isset($profile['name'])) {
-            $name = $profile['name'];
-            if (isset($name['givenName'])) {
-            $username = $name['givenName'];
+            $this->template->posted = $post->as_array();
+
+            if($post->check()) {
+                // check for username in use
+                $exists = ORM::factory('user')
+                    ->where('username', '=', $post['username'])
+                    ->find()->loaded();
+                if($exists) {
+                    Message::instance()->set('That username is taken.');
+                    $f->field('username')->add_class('error');
+                    return;
+                }
+                // check for email in use
+                $exists = ORM::factory('user')
+                    ->where('email', '=', $post['email'])
+                    ->find()->loaded();
+                if($exists) {
+                    Message::instance()->set('An account exists for that email address.');
+                    $f->field('email')->add_class('error');
+                    return;
+                }
+
+                $new_user = ORM::factory('user');
+                $new_user->username = $post['username'];
+                $new_user->email = $post['email'];
+                $new_user->password = $post['password'];
+                $new_user->save();
+                if(!$new_user->id) {
+                    Message::instance()
+                        ->set('Could not complete registration. Please contact support.');
+                    return $this->request->redirect('register');
+                }
+
+                //send a notification
+                $subj = 'SOURCEMAP: Your new account.';
+                $h = md5(sprintf('%s-%s', $new_user->username, $new_user->email));
+                $lid = strrev(base64_encode($new_user->username));
+                $url = URL::site("register/confirm?t=$lid-$h", true);
+                $msgbody = 'Welcome to Sourcemap. Your username is "'.$new_user->username.'".'."\n\n";
+                $msgbody .= 'Go to the url below to activate your account.'."\n\n";
+                $msgbody .= $url."\n\n";
+                $msgbody .= "-- The Sourcemap Team\n";
+                try {
+                    $sent = mail($new_user->email,  $subj, $msgbody);
+                    Message::instance()->set('Please check your email for further instructions.', Message::INFO);
+                } catch (Exception $e) {
+                    Message::instance()->set('Sorry, could not complete registration. Please contact support.'.$e);
+                }
+                return $this->request->redirect('register');
             } else {
-            $username = $profile['displayName'];
+                Message::instance()->set('Check the information below and try again.');
+                $this->template->errors = $post->errors();
+                $f->errors($post->errors());
             }
-        }     
-        
-        if (isset($profile['verifiedEmail'])) {
-            $email = $profile['verifiedEmail'];
-        }
-        
-        $user = ORM::factory('user');
-        $all_users = $user->find_all()->as_array(null, 'username');
-	$all_emails = $user->find_all()->as_array(null, 'email');
-        $auto_password = text::random($type = 'alnum', $length = 6);  
-        
-            
-        if(!in_array($email, $all_emails)){
-            $username = $this->get_username($username, $all_users);
-            
         } else {
-            $get_user = $user->where('email', '=', $email)->find();
-            $username = $get_user->username;
-            
-        }
-
+            // pass
         }
     }
-    $this->template->email = $email;
-    $this->template->username = $username;
-    $this->template->password = $auto_password;
-    $this->template->identifier = $identifier;
     
+    
+    public function action_confirm(){
+        $get = Validate::factory($_GET);
+        $get->rule('t', 'regex', array('/^[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}$/'));
+        if($get->check()) {
+            list($uh, $h) = explode('-', $get['t']);
+            // check token
+            $username = base64_decode(strrev($uh));
+            $user = ORM::factory('user')->where('username', '=', $username)
+                ->find();
+            $login = ORM::factory('role')->where('name', '=', 'login')
+                ->find();
+            if($user->loaded()) {
+                // see if acct is already confirmed
+                if($user->has('roles', $login)) {
+                    Message::instance()->set('That token has expired.');
+                    return $this->request->redirect('auth');
+                }
+            } else {
+                Message::instance()->set('Invalid confirmation token.');
+                return $this->request->redirect('auth');
+            }
+            // add login role
+            $user->add('roles', $login);
+            Message::instance()->set('Your account has been confirmed. Please log in.', Message::SUCCESS);
+            return $this->request->redirect('auth');
+        } else {
+            Message::instance()->set('Invalid confirmation token.');
+            return $this->request->redirect('auth');
+        }
     }
-
-
-    public function get_username($username, $all_users){
-    $count =0;
-    $test = in_array($username, $all_users);
-    while($test) {
-        $count++;
-        $test = in_array($username."-".$count, $all_users);
-        $username = $username."-".$count;
-    }
-    return $username;
-    }
-
-  }
-  
-
-
+}

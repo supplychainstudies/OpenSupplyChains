@@ -26,7 +26,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
-                $this->template->supplychain_id = $supplychain->id;
+                $this->layout->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array('map-view');
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css', 

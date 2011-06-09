@@ -132,11 +132,16 @@
     </div>
   
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
-  
-  <!--[if lt IE 7 ]>
+
+    <!--[if lt IE 7 ]>
     <script src="js/libs/dd_belatedpng.js"></script>
     <script> DD_belatedPNG.fix('img, .png_bg'); 
-  <![endif]-->
+    <![endif]-->
+
+    <script>
+        Sourcemap.view_supplychain_id = <?= isset($supplychain_id) ? $supplychain_id : '"null"' ?>;
+        Sourcemap.view_params = <?= isset($embed_params) ? json_encode($embed_params) : '{}' ?>;
+    </script>
   
 </body>
 </html>

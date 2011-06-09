@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     Sourcemap.embed_params = Sourcemap.embed_params || {};
-    Sourcemap.embed_instance = new Sourcemap.Map.Embed(Sourcemap.embed_params);
+    Sourcemap.embed_instance = new Sourcemap.Map.Base(Sourcemap.embed_params);
 
     Sourcemap.listen("map:supplychain_mapped", function(evt, map, sc) {
         var embed = Sourcemap.embed_instance;

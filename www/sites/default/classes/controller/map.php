@@ -30,6 +30,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 $this->layout->scripts = array('map-view');
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css', 
+                    'sites/default/assets/styles/default.less', 
                     'assets/styles/general.less'
                 );
             } else {

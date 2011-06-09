@@ -61,11 +61,12 @@ return array(
         ),
         'sourcemap-map' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap/map/magicwords.js',
-                'assets/scripts/sourcemap/map.js'
+                'assets/scripts/sourcemap/map.js',
+                'assets/scripts/sourcemap/map/base.js',
+                'assets/scripts/sourcemap/map/magicwords.js'
             ),
             'requires' => array(
-                'sourcemap-core', 'google-maps', 'openlayers-cloudmade'
+                'sourcemap-template', 'sourcemap-core', 'google-maps', 'openlayers-cloudmade' 
             )
         ),
         'sourcemap-tabbed-edit' => array(
@@ -73,7 +74,7 @@ return array(
                 'assets/scripts/sourcemap/geocode.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-map'
+                'sourcemap-map'
             )
         ),
         'sourcemap-working' => array(
@@ -123,7 +124,7 @@ return array(
                 'sites/default/assets/scripts/map/embed.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-map', 'showdown'
+                'sourcemap-map', 'showdown'
             )
         )
     )

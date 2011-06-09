@@ -155,7 +155,10 @@ jQuery.fn.liveSearch = function (conf) {
                                     html += "</li>";
                                     
                                     if (i == 2){
-                                        html += "<li class=\"more\">More Results...</li>";
+                                        html += $('<div></div>').append($('<li></li>').addClass("more").append(
+                                                $('<a>More Results...</a>').attr("href", "search?q="+escape(q))
+                                            ).append('<div class="clear"></div>')
+                                        ).html();
                                         break;
                                     }
  

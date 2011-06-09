@@ -14,7 +14,7 @@ Sourcemap.Map.Base.prototype.broadcast = function() {
 
 Sourcemap.Map.Base.prototype.defaults = {
     "auto_init": true,
-    "map_element_id": 'sourcemap-map-base',
+    "map_element_id": 'sourcemap-map-embed',
     "banner": true, "watermark": true, "magic_word_sequence": [
         "description", "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
@@ -88,7 +88,7 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id, {
-        "tileswitcher": this.options.tileswitcher,
+        //"tileswitcher": this.options.tileswitcher,
         "prep_popup": $.proxy(function(ref, ftr, pop) {
             var t = ['popup'];
             var tscope = {"popup": pop, "feature": ftr, 'base': this};

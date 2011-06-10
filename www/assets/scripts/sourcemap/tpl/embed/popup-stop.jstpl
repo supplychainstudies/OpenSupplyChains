@@ -1,0 +1,6 @@
+<div class="popup-wrapper">
+    <h4 class="popup-title"><%= _S.ttrunc(this.stop.getAttr("name", "Stop"), 16) %></h4>
+    <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", "")), 24) %></h5>
+    <% if(this.stop.getAttr("description", false)) { %><p class="popup-description"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("description","")), 140, true) %></p><% } %>
+    <% if(this.morelink) {%><a class="popup-more-link" href="javascript: void(0);">More</a><% } %>
+</div>

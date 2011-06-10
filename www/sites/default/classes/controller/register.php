@@ -15,6 +15,8 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     
     public function action_index() {
         
+        $this->layout->scripts = array('sourcemap-core');
+
         $f = Sourcemap_Form::factory('register')
             ->method('post')
             ->action('register');
@@ -26,12 +28,15 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             ->submit('register', 'Go!', 5);
 
         $f->field('email')->label('Email')
+            ->add_class('email')
             ->add_class('required');
         $f->field('username')->label('Username')
+            ->add_class('alphadash')
             ->add_class('required');
         $f->field('password')->label('Password')
             ->add_class('required');
         $f->field('password_confirm')->label('Password (again)')
+            ->add_class('confirm')
             ->add_class('required');
 
         $this->template->register_form = $f;
@@ -45,8 +50,10 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 ->rule('username', 'alpha_dash')
                 ->rule('username', 'min_length', array(4))
                 ->rule('username', 'max_length', array(32))
+                ->rule('password', 'not_empty')
                 ->rule('password', 'min_length', array(4))
-                ->rule('password_confirm', 'matches', array('password'));
+                ->rule('password_confirm', 'matches', array('password'))
+                ->rule('password_confirm', 'not_empty');
 
             $this->template->posted = $post->as_array();
 
@@ -90,6 +97,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $msgbody .= 'Go to the url below to activate your account.'."\n\n";
                 $msgbody .= $url."\n\n";
                 $msgbody .= "-- The Sourcemap Team\n";
+
                 try {
                     $sent = mail($new_user->email,  $subj, $msgbody);
                     Message::instance()->set('Please check your email for further instructions.', Message::INFO);
@@ -100,7 +108,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             } else {
                 Message::instance()->set('Check the information below and try again.');
                 $this->template->errors = $post->errors();
-                $f->errors($post->errors());
+                $f->errors($post->errors('forms/register'));
             }
         } else {
             // pass
@@ -131,7 +139,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             }
             // add login role
             $user->add('roles', $login);
-            Message::instance()->set('Your account has been confirmed. Please log in.', Message::SUCCESS);
+            Message::instance()->set('Your account has been confirmed. Please log in (and start mapping).', Message::SUCCESS);
             return $this->request->redirect('auth');
         } else {
             Message::instance()->set('Invalid confirmation token.');

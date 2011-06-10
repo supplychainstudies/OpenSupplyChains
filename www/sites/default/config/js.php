@@ -4,6 +4,7 @@ return array(
     'packages' => array(
     'sourcemap-core' => array(
         'scripts' => array(
+            'assets/scripts/sourcemap/form.js',
             'sites/default/assets/scripts/curtain.js',
             )
         ),

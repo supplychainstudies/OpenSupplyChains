@@ -39,6 +39,8 @@ class Sourcemap_Form_Field {
                 'type' => $this->_type
             ));
 
+            if($err = $this->errors()) $s .= "\n".'<div class="error preserve">'.$err.'</div>';
+
             if($this->errors()) $this->remove_class('error');
 
             $s .= "\n<div class=\"clear\"></div>\n";

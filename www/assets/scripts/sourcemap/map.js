@@ -2,6 +2,8 @@ Sourcemap.Map = function(element_id, o) {
     this.broadcast('map:instantiated', this);
     this.layers = {};
     this.controls = {};
+    this.dock_controls = {};
+    this.dock_el = null;
     var o = o || {};
     o.element_id = element_id;
     Sourcemap.Configurable.call(this, o);
@@ -77,7 +79,7 @@ Sourcemap.Map.prototype.defaults = {
 }
 
 Sourcemap.Map.prototype.init = function() {
-    this.initMap().initBaseLayer().initLayers().initControls();
+    this.initMap().initBaseLayer().initLayers().initControls().initDock();
     var p = new OpenLayers.LonLat(-122.8764, 42.3263);
     p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.getProjectionObject());
     this.map.setCenter(p);
@@ -154,6 +156,70 @@ Sourcemap.Map.prototype.setBaseLayer = function(nm) {
 Sourcemap.Map.prototype.initLayers = function() {
     this.broadcast('map:layers_initialized', this);
     return this;
+}
+
+Sourcemap.Map.prototype.initDock = function() {
+    this.dock_controls = this.dock_controls || {};
+    this.dock_el = $('<div class="dock"></div>');
+    $(this.map.div).css("position", "relative").append(this.dock_el);
+    this.dockAdd('zoomin', {
+        "ordinal": 2,
+        "icon_url": "sites/default/assets/images/dock/zoomin.png",
+        "callbacks": {
+            "click": function() {
+                this.map.zoomIn();
+            }
+        }
+    });
+    this.dockAdd('zoomout', {
+        "ordinal": 1,
+        "icon_url": "sites/default/assets/images/dock/zoomout.png",
+        "callbacks": {
+            "click": function() {
+                this.map.zoomOut();
+            }
+        }
+    });
+    return this;
+}
+
+Sourcemap.Map.prototype.dockAdd = function(nm, o) {
+    console.log('dockadd '+nm);
+    var icon_url = o.icon_url ? o.icon_url : null;
+    var callbacks = o.callbacks ? o.callbacks : {};
+    this.dockRemove(nm);
+    this.dock_controls[nm] = o;
+    var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'"><img src="'+icon_url+'" /></div>');
+    $(this.dock_el).append(cel);
+    if(callbacks.click) {
+        $(cel).click($.proxy(callbacks.click, this));
+    }
+    return this.dockPack();
+}
+
+Sourcemap.Map.prototype.dockControlEl = function(nm) {
+    return $(this.dock_el).find('.control.'+nm.replace(/\s+/, '-'));
+}
+
+Sourcemap.Map.prototype.dockPack = function() {
+    var controls = [];
+    for(var c in this.dock_controls) {
+        var ctrl = this.dock_controls[c];
+        var o = ctrl.ordinal ? ctrl.ordinal : 9999;
+        controls.push([c,o]);
+    }
+    controls.sort(function(a,b) { return a[1] > b[1] ? 1 : (a[1] < b[1] ? -1 : 0); });
+    var order = [];
+    for(var i=0; i<controls.length; i++) {
+        this.dock_el.append(this.dockControlEl(controls[i][0]));
+    }
+    return this;
+}
+
+Sourcemap.Map.prototype.dockRemove = function(nm) {
+    if(this.dock_controls[nm]) delete this.dock_controls[nm];
+    if(this.dockControlEl(nm)) this.dockControlEl(nm).remove();
+    return this.dockPack();
 }
 
 Sourcemap.Map.prototype.initControls = function() {

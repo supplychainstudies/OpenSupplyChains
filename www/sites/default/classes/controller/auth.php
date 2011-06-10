@@ -61,6 +61,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         $auth = Auth::instance();
         if($auth->logged_in()) {
             $auth->logout(true);
+            Message::instance()->set('Come back soon.', Message::INFO);
         }
         $this->request->redirect('');
     }

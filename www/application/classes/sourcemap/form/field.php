@@ -1,6 +1,7 @@
 <?php
 class Sourcemap_Form_Field {
 
+    const SELECT = 'select';
     const INPUT = 'input';
     const TEXT = 'text';
     const PASSWORD = 'password';
@@ -30,14 +31,11 @@ class Sourcemap_Form_Field {
             throw new Exception('Template-based forms not implemented.');
         } else {
             if($this->_label)
-                $s = Form::label($this->_name, $this->label());
+                $s = $this->_makeLabel();
 
             if($this->errors()) $this->add_class('error');
 
-            $s .= Form::input($this->_name, $this->_value, array(
-                'class' => $this->css_class(),
-                'type' => $this->_type
-            ));
+            $s .= $this->_makeInput();
 
             if($err = $this->errors()) $s .= "\n".'<div class="error preserve">'.$err.'</div>';
 
@@ -47,10 +45,24 @@ class Sourcemap_Form_Field {
         }
         return $s;
     }
+    
+    protected function _makeLabel() {
+        return Form::label($this->_name, $this->label().':');
+    }
+
+    protected function _makeInput() {
+        return Form::input($this->_name, $this->_value, array(
+            'class' => $this->css_class(),
+            'type' => $this->_type
+        ));
+    }
 
     public static function factory($t=null) {
         $instance = false;
         switch($t) {
+            case self::SELECT:
+                $cls = 'Sourcemap_Form_Field_Select';
+                break;
             case self::PASSWORD:
                 $cls = 'Sourcemap_Form_Field_Password';
                 break;

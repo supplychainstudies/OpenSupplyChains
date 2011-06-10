@@ -1,4 +1,6 @@
 <?php
+// todo: groups -> fieldsets
+
 class Sourcemap_Form {
     
     public static $use_templates = false;
@@ -113,13 +115,13 @@ class Sourcemap_Form {
         return $this;
     }
 
-    public function field($f, $t=null, $v=null, $wt=null) { // name, type, default value, weight
-        if($t || $v || $wt) {
+    public function field($f, $t=null, $l=null, $wt=null) { // name, type, default value, weight
+        if($t || $l || $wt) {
             $nm = $f;
             $f = Sourcemap_Form_Field::factory($t);
             $this->_fields[$nm] = $f;
             $f->name($nm);
-            $f->value($v);
+            $f->label($l);
             if($wt !== null) $f->weight($wt);
         } else {
             $f = $this->get_field($f);
@@ -128,12 +130,16 @@ class Sourcemap_Form {
         return $this;
     }
 
-    public function input($f, $v=null, $wt=null) {
-        return $this->field($f, Sourcemap_Form_Field::INPUT, $v, $wt);
+    public function input($f, $l=null, $wt=null) {
+        return $this->field($f, Sourcemap_Form_Field::INPUT, $l, $wt);
     }
     
-    public function password($f, $v=null, $wt=null) {
-       return $this->field($f, Sourcemap_Form_Field::PASSWORD, $v, $wt);
+    public function password($f, $l=null, $wt=null) {
+       return $this->field($f, Sourcemap_Form_Field::PASSWORD, $l, $wt);
+    }
+
+    public function select($f, $l=null, $wt=null) {
+        return $this->field($f, Sourcemap_Form_Field::SELECT, $l, $wt);
     }
 
     public function submit($f, $v=null, $wt=null) {

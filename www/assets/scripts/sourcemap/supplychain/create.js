@@ -1,5 +1,4 @@
 $('.form fieldset form').submit(function(e) {
-    $(".form .error").hide();
  
     // Create new supplychain object
     var sc = new Sourcemap.Supplychain();

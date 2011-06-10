@@ -21,10 +21,10 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             ->method('post')
             ->action('register');
 
-        $f->input('email', null, 1)
-            ->input('username', null, 2)
-            ->password('password', null, 3)
-            ->password('password_confirm', null, 4)
+        $f->input('email', 'Email', 1)
+            ->input('username', 'Username', 2)
+            ->password('password', 'Password', 3)
+            ->password('password_confirm', 'Password (again)', 4)
             ->submit('register', 'Go!', 5);
 
         $f->field('email')->label('Email')
@@ -117,6 +117,13 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     
     
     public function action_confirm(){
+        if(Auth::instance()->get_user()) {
+            Message::instance()->set(
+                'You\'re already logged in. Log out and click the '.
+                'confirmation url again.', Message::INFO
+            );
+            return $this->request->redirect('home');
+        }
         $get = Validate::factory($_GET);
         $get->rule('t', 'regex', array('/^[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}$/'));
         if($get->check()) {

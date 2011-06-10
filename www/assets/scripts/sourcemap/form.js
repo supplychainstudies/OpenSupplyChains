@@ -21,6 +21,10 @@ Sourcemap.Form.Validators = {
     "confirm": function(v, f, r, a) {
         var m = f.replace('_confirm', '');
         return this.field_el(m).val() == v;
+    },
+    "tags": function(v, f, r, a) {
+        var p = /^(\s+)?(\w+(\s+)?)*$/; 
+        return v.length ? p.test(v) : true;
     }
 }
 
@@ -28,14 +32,16 @@ Sourcemap.Form.ValidatorClassMap = {
     "required": "not_empty",
     "email": "email",
     "alphadash": "alphadash",
-    "confirm": "confirm"
+    "confirm": "confirm",
+    "tags": "tags"
 }
 
 Sourcemap.Form.ValidatorEMsgs = {
     "required": "Required.",
     "email": "Must be a valid email address.",
     "alphadash": "May contain only letters, numbers, underscores, and dashes.",
-    "confirm": 'Doesn\'t match.'
+    "confirm": 'Doesn\'t match.',
+    "tags": 'List tags separated by spaces.'
 }
 
 Sourcemap.Form.prototype.init = function() {
@@ -55,7 +61,7 @@ Sourcemap.Form.prototype.init = function() {
                 );
             }
         }
-        if(fel.hasClass('required') || this.field_rules(field).length)
+        if(fel.hasClass('required') || this.field_rules(fn).length)
             this.add_status_el(fn);
     }
     var fso = this.fields(); var fs = []; for(var fn in fso) fs.push(fso[fn]);
@@ -73,14 +79,14 @@ Sourcemap.Form.prototype.update = function() {
         this.rm_error_el(fn);
     }
     if(this.check()) {
-        // pass
+        this.el().find('input[type="submit"]').removeAttr('disabled');
     } else {
+        this.el().find('input[type="submit"]').attr('disabled', 'disabled');
         var es = this.errors();
         for(var roi=0; roi<es.length; roi++) {
             var ro = es[roi];
             var fn = ro.f;
             var emsg = ro.emsg ? ro.emsg : 'Invalid.';
-            console.log(fn+': '+emsg);
             this.field_status(fn).addClass('invalid');
             if(this.field_error(fn) && this.field_error(fn).hasClass('preserve'))
                 continue;
@@ -144,10 +150,10 @@ Sourcemap.Form.prototype.check = function() {
             }
         }
     }
+    return !this._errors.length;
 }
 
 Sourcemap.Form.prototype.check_rule = function(rdat, val) {
-    console.log('check '+rdat.r+': '+val);
     if(!rdat || !(rdat.f && rdat.r))
         return false;
 
@@ -190,7 +196,7 @@ Sourcemap.Form.prototype.field_hilite = function(field) {
 
 Sourcemap.Form.prototype.add_hilite_el = function(field) {
     if(!this.field_hilite(field)) {
-        var l = this.field_label();
+        var l = this.field_label(field);
         if(l) l.after('<span class="highlighted">*</span>');
     }
     return this;
@@ -212,11 +218,9 @@ Sourcemap.Form.prototype.field_status = function(field) {
 }
 
 Sourcemap.Form.prototype.add_status_el = function(field) {
-    var l = this.field_label(field);
-    if(l && !this.field_status(field)) {
-        l.next().after('<div class="status invalid"></div>');
-    } else if(l) {
-        l.after('<div class="status invalid"></div>');
+    var f = this.field_el(field);
+    if(f && !this.field_status(field)) {
+        f.after('<div class="status invalid"></div>');
     }
     return this;
 }

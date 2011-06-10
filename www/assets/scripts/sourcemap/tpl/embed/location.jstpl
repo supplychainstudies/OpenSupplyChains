@@ -1,6 +1,0 @@
-<h2 id="detail-title">Where are you?</h2>
-<div id="user-loc-dialog">
-<% if(this.err_msg) { %><p class="error"><%= this.err_msg %></p><% } %>
-<input type="text" class="text-input" value="<% if(this.user_loc) { %><%= _S.htesc(this.user_loc.placename) %><% } %>" id="new-user-loc" /><br />
-<button id="update-user-loc">OK</button>
-</div>

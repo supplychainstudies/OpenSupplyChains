@@ -1,7 +1,0 @@
-<h2 id="detail-title">Is this right?</h2>
-<div id="user-loc-dialog">
-<p class="current-user-loc">
-<%= this.user_loc.placename %>
-</p>
-<button id="user-loc-accept">OK</button><button id="user-loc-reject">Try again</button>
-</div>

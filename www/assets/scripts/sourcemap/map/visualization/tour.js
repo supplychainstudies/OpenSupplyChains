@@ -30,13 +30,21 @@ Sourcemap.MapTour.prototype.init = function() {
 }
 
 Sourcemap.MapTour.prototype.initControls = function() {
-    this.controls_div_id = this.instance_id+'-controls';
-    this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel olControlPanel"></div>');
-    this.innerWrap = $('<div class="tourControlsInnerWrap"></div>'); //Needed for centering
-    this.outerWrap= $('<div class="tourControlsOuterWrap"></div>'); 
-    this.control_prev = $('<div class="sourcemap-tour-prev"></div>');
-    this.control_next = $('<div class="sourcemap-tour-next"></div>');
-    this.control_play = $('<div class="sourcemap-tour-play stopped"></div>');
+    //this.controls_div_id = this.instance_id+'-controls';
+    //this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel olControlPanel"></div>');
+    //this.innerWrap = $('<div class="tourControlsInnerWrap"></div>'); //Needed for centering
+    //this.outerWrap= $('<div class="tourControlsOuterWrap"></div>'); 
+    //this.control_prev = $('<div class="sourcemap-tour-prev"></div>');
+    //this.control_next = $('<div class="sourcemap-tour-next"></div>');
+    //this.control_play = $('<div class="sourcemap-tour-play stopped"></div>');
+    this.map.dockAdd('tour-play', {
+        "icon_url": "sites/default/assets/images/dock/tour-play.png",
+        "callbacks": {
+            "click": function(evt) {
+                this.start();
+            }
+        }
+    });
     $(this.map.map.div).append(this.controls);
     $(this.innerWrap).append(this.control_prev).append(this.control_play)
         .append(this.control_next);

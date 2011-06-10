@@ -19,65 +19,14 @@ Sourcemap.Map.Base.prototype.defaults = {
         "description", "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
     "tour_order_strategy": "upstream", "tileswitcher": false,
-    "locate_user": true, "user_loc": false, "user_loc_color": "#ff0000",
-    "tileset": "cloudmade" // terrain, cloudmade, etc. (check map.js)
+    "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000",
+    "tileset": "cloudmade", // terrain, cloudmade, etc. (check map.js)
+    "tour": false
 }
-
-// callbacks for magic attributes
-Sourcemap.Map.Base.prototype.defaults.magic = {
-    "youtube": {
-        "link": function(lnk) {
-            if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
-                return '<p class="error">Invalid YouTube link.</p>';
-            var mkup = '<iframe class="youtube-player" type="text/html"'+
-                'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'?autoplay=1"'+ 
-                'frameborder="0" allowfullscreen></iframe>';
-            return mkup;
-        }
-    },
-    "vimeo": {
-        "link": function(lnk) {
-            var mkup = '<iframe class="vimeo-player" src="http://player.vimeo.com/video/'+
-                (lnk.match(/\/(\d+)$/))[1]+'?title=0&amp;byline=0&amp;portrait=0&autoplay=1" '+
-                'frameborder="0"></iframe>';
-            return mkup;
-        }
-    },
-    "flickr": {
-        "api_key": "06ea60fff75fc5721cfd11d823634ab8",
-        "setid": function(setid, elid) {
-            var url = "http://www.flickr.com/services/rest/?jsoncallback=?";
-            $.getJSON(url, {
-                "method": "flickr.photosets.getPhotos", "format": "json",
-                "api_key": this.magic.flickr.api_key, "photoset_id": setid
-            }, $.proxy(function(data) {
-                if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
-                    var mkup = '<object> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
-                        data.photoset.owner+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
-                        data.photoset.owner+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
-                        '<param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=71649"></param> '+
-                        '<param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash"'+
-                        'src="http://www.flickr.com/apps/slideshow/show.swf?v=71649" allowFullScreen="true" '+
-                        'flashvars="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+data.photoset.owner+
-                        '%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+data.photoset.owner+
-                        '%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></embed></object>';
-                } else {
-                    var mkup = 'Photo set not found.';
-                }
-                $('#flickr-photoset-'+setid).replaceWith(mkup);
-                $(window).resize();                
-                
-                return;
-            }, this));
-            return '<div class="flickr-slideshow-wrapper" id="flickr-photoset-'+setid+'"></div>';
-        }
-    }
-};
-
 Sourcemap.Map.Base.prototype.init = function() {
     this.magic_word_sequence = this.options.magic_word_sequence;
     this.magic_word_cur_idx = this.options.magic_word_cur_idx;
-    this.magic = this.options.magic;
+    this.magic = this.options.magic || Sourcemap.MagicWords.popup_content;
     this.initMap();
     this.initDialog();
     this.initEvents();
@@ -358,12 +307,14 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
     var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
     
     // sync tour
-    var tftrs = this.tour.features;
-    for(var tfi=0; tfi< tftrs.length; tfi++) {
-        var tfattrs = tftrs[tfi].attributes;
-        if(tfattrs.stop_instance_id && tfattrs.stop_instance_id == stid) {
-            this.tour.ftr_index = tfi;
-            break;
+    if(this.tour) {
+        var tftrs = this.tour.features;
+        for(var tfi=0; tfi< tftrs.length; tfi++) {
+            var tfattrs = tftrs[tfi].attributes;
+            if(tfattrs.stop_instance_id && tfattrs.stop_instance_id == stid) {
+                this.tour.ftr_index = tfi;
+                break;
+            }
         }
     }
 

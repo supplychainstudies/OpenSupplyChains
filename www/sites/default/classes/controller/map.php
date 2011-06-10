@@ -31,6 +31,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css', 
                     'sites/default/assets/styles/default.less', 
+                    'assets/styles/base.less',
                     'assets/styles/general.less'
                 );
             } else {
@@ -152,6 +153,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 );
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css',
+                    'assets/styles/base.less',
                     'assets/styles/embed.less'
                 );
                 $params = array(

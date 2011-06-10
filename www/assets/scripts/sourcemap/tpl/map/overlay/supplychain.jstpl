@@ -7,12 +7,6 @@
     </div>
     <div id="map-share" class="grid_3">
         Share
-        <!--
-        <ul id="share-list dropdown">
-            <li id="facebook-share"><a href="http://facebook.com">Like us</a></li>
-            <li id="twitter-share"><a href="javascript: window.location = 'http://twitter.com/?status=Sourcemap';">Tweet us</a></li>
-        </ul>
-        -->
     </div>
 </div>
 

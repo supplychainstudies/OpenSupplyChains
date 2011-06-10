@@ -98,7 +98,6 @@ Sourcemap.Map.prototype.initMap = function() {
             new OpenLayers.Control.ArgParser(),
             new OpenLayers.Control.Attribution()
     ];
-    console.log(controls);
     if(this.options.zoom_control) 
         controls.push(new OpenLayers.Control.ZoomPanel());
     var options = {
@@ -293,6 +292,12 @@ Sourcemap.Map.prototype.getDataExtent = function() {
 
 Sourcemap.Map.prototype.addControl = function(label, control) {
     this.map.addControl(control);
+    this.controls[label] = control;
+    return this;
+}
+
+Sourcemap.Map.prototype.removeControl = function(label, control) {
+    this.map.removeControl(control);
     this.controls[label] = control;
     return this;
 }

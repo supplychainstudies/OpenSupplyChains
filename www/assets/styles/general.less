@@ -76,7 +76,7 @@ body.main{
 }
 
 #branding {
-    height: 4em;
+    height: 3.5em;
     font-size: 1em; 
     > a { 
         text-decoration:none;
@@ -96,7 +96,7 @@ body.main{
         border: solid 1px;
         -webkit-appearance: none;
         width: 100%;
-        margin-top: 1.85em;
+        margin-top: 1.6em;
     }
     #livesearch{
         .sansserif-font;
@@ -160,13 +160,13 @@ body.main{
     }
     nav{
         list-style:none;
-        font-size: .8em;
         li{
             float:left;
-            margin: 1.2em 0 0 1em;
+            margin: 1em 0 0 1em;
             a {
+                .sansserif-font;
+                font-size: .9em;
                 text-transform: lowercase;
-                font-size: .7em;
                 color: #333;
                 &:hover{
                     color: #555;
@@ -228,7 +228,12 @@ body.main{
                 }
                 p{
                     padding: 4px 0 4px 35px;
-                    font-size: .7em;
+                    &.author{
+                        color: #ccc;
+                        a{
+                            color: #ccc;
+                        }
+                    }
                 }
             }
         }
@@ -344,10 +349,6 @@ body.main{
     article {
         h2 {
             margin-bottom:5px;            
-        }
-        header {
-        }
-        header, .article-content, footer {
         }
     }
     aside {
@@ -610,7 +611,7 @@ body.main{
     height:100%;
     position:fixed;
     top:0; left:0;
-    opacity:.8;
+    .transparent;
     background:#ddd;
     background:rgba(200,200,200,0.8);
     z-index:1000;
@@ -676,13 +677,6 @@ body.main{
     }
 }
 .button:hover { background-color: #ccc; color: #333; }
-
-.orange{ background-color: #F36B21; }
-.yellow{ background-color: #FFCC00; }
-.brown{ background-color: #B07E09; }
-.green{ background-color: #60CB59; }
-
-
 
 .center {
     text-align: center;

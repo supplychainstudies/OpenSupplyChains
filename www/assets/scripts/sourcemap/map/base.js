@@ -108,7 +108,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                     hasmagic = true;
             }
             tscope.morelink = hasmagic;
-            Sourcemap.template('embed/'+t.join('-'), $.proxy(function(p, tx, th) {
+            Sourcemap.template('map/'+t.join('-'), $.proxy(function(p, tx, th) {
                 $(this.popup.contentDiv).html(th);
                 $(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
                     if(this.stop) { 
@@ -367,7 +367,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
         }
     }
 
-    // load stop details template and show in embed detail pane
+    // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
     var stop = sc.findStop(stid);
 
@@ -387,7 +387,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
 
     // load template and render
     // todo: make this intelligible
-    Sourcemap.template('embed/details/stop', function(p, tx, th) {
+    Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
             $(this.base.dialog_content).find('.content-item a').click($.proxy(function(evt) {
@@ -446,7 +446,7 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 
     // load template and render
     // todo: make this intelligible
-    Sourcemap.template('embed/details/hop', function(p, tx, th) {
+    Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
             $(this.base.dialog_content).find('.content-item a').click($.proxy(function(evt) {
@@ -576,7 +576,7 @@ Sourcemap.Map.Base.prototype.dialogClose = function() {
 Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {
     var msg = msg ? msg : false;
     $(this.dialog).data("state", -1);
-    Sourcemap.template("embed/location", function(p, txt, th) {
+    Sourcemap.template("map/location", function(p, txt, th) {
         this.showDialog(th, true);
         $(this.dialog).find('#update-user-loc').click($.proxy(function(evt) {
             var new_loc = $(this.base.dialog).find('#new-user-loc').val();
@@ -606,7 +606,7 @@ Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {
 
 Sourcemap.Map.Base.prototype.showLocationConfirm = function() {
     $(this.dialog).data("state", -1);
-    Sourcemap.template('embed/location/confirm', function(p, tx, th) {
+    Sourcemap.template('map/location/confirm', function(p, tx, th) {
         this.showDialog(th, true);
         $(this.dialog).find('#user-loc-accept').click($.proxy(function(evt) {
             this.hideDialog();

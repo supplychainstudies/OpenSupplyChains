@@ -17,11 +17,12 @@ if ($data):
                     <p>
                         <?= isset($item->description) ? $item->description : "This map's description seems to be missing.  Perhaps we should go add one!" ?></h2>
                     </p>
-                    <p>
-                    created by <a href="user/<?php $item->owner->id; ?>"><?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a> 
-                    <br />
-                    on <?php print date("F j, Y",$item->created);?>
-                    <br />
+                    <p class="author">
+                        By <a href="user/<?php $item->owner->id; ?>"><?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a> 
+                        <br />
+                        <?php print date("F j, Y",$item->created);?>
+                        <br />
+                    </p>
                 </div>
             </div>
         </li>

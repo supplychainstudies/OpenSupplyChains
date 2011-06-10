@@ -16,6 +16,19 @@ body {
     a:hover, a:active, a:visited, a, a:link {
         /*color:@brand-color;*/
     }
+    #branding, #content, #footer-content, #page-navigation, .splash-text {
+        padding-left:0;
+        padding-right:0;
+    }
+    #content {
+        article {
+            max-width:760px;
+        }
+        #sidebar {
+            max-width:220px;            
+        }
+        border-left:1px solid #ccc;
+    }
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -51,23 +64,6 @@ img a:hover{
     text-underline: none;
 }
 
-body.main{
-    font-size: 1.2em;
-    #branding, #content, #footer-content, #page-navigation, .splash-text {
-        padding-left:0;
-        padding-right:0;
-    }
-    #content {
-        article {
-            max-width:760px;
-        }
-        #sidebar {
-            max-width:220px;            
-        }
-        border-left:1px solid #ccc;
-    }
-}
-
 /* BRANDING & MASTHEAD 
  * -------------------------------------------------------------- */
 
@@ -77,7 +73,6 @@ body.main{
 
 #branding {
     height: 3.5em;
-    font-size: 1em; 
     > a { 
         text-decoration:none;
         color:transparent;
@@ -100,7 +95,6 @@ body.main{
     }
     #livesearch{
         .sansserif-font;
-        font-size:.9em;
         text-align: center;
         border: 1px solid #333;
         background: #fff;
@@ -162,10 +156,9 @@ body.main{
         list-style:none;
         li{
             float:left;
-            margin: 1em 0 0 1em;
+            margin: 1.35em 0 0 1em;
             a {
                 .sansserif-font;
-                font-size: .9em;
                 text-transform: lowercase;
                 color: #333;
                 &:hover{

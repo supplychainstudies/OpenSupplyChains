@@ -147,6 +147,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             // add login role
             $user->add('roles', $login);
             Message::instance()->set('Your account has been confirmed. Please log in (and start mapping).', Message::SUCCESS);
+            Sourcemap_User_Event::factory($evt, $sc->user_id)->trigger();
             return $this->request->redirect('auth');
         } else {
             Message::instance()->set('Invalid confirmation token.');

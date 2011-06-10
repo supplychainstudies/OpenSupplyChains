@@ -83,8 +83,11 @@ class Sourcemap_Search {
     public function __construct($p=null) {
         if(isset($p['l'])) $this->set_limit($p['l']);
         else $this->set_limit($this->default_limit);
-        $this->offset = isset($p['o']) ? $p['o'] : 0;
-        $this->offset = max(0, $this->offset);
+        if(isset($p['p'])) $this->set_page($p['p']);
+        else {
+            $this->offset = isset($p['o']) ? $p['o'] : 0;
+            $this->offset = max(0, $this->offset);
+        }
         $this->parameters = is_array($p) ? $p : array();
         $this->search_method = self::DBONLY;
     }
@@ -109,6 +112,11 @@ class Sourcemap_Search {
         );
     }
 
+    public function set_page($p) {
+        $this->set_offset(($p-1) * $this->limit);
+        return $this;
+    }
+
     public function set_limit($l) {
         $this->limit = max(
             min($l, $this->max_limit), $this->min_limit
@@ -118,7 +126,7 @@ class Sourcemap_Search {
 
     public function set_offset($o) {
         $o = (int)$o;
-        $this->offset = max(0, $this->offset);
+        $this->offset = max(0, $o);
         return $this;
     }
 

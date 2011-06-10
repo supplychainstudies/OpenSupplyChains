@@ -1,10 +1,11 @@
 <?php
 class Gravatar {
 
-    public static $_avatar_base = 'http://www.gravatar.com/avatar/%s?d=retro'; // identicon | retro
+    public static $_avatar_base = 'http://www.gravatar.com/avatar/%s?d=%s&s=%d'; // identicon | retro
 
-    public static function avatar($email) {
-        return sprintf(self::$_avatar_base, self::hash($email));
+    public static function avatar($email, $sz=64, $d='identicon') {
+        $sz = min(512, max(1, $sz), $sz);
+        return sprintf(self::$_avatar_base, self::hash($email), urlencode($d), $sz);
     }
 
     public static function hash($email) {

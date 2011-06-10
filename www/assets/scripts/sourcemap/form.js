@@ -66,6 +66,7 @@ Sourcemap.Form.prototype.init = function() {
     }
     var fso = this.fields(); var fs = []; for(var fn in fso) fs.push(fso[fn]);
     this.update();
+    $(this.el()).find('div.error').hide();
 }
 
 Sourcemap.Form.prototype.update = function() {
@@ -94,6 +95,7 @@ Sourcemap.Form.prototype.update = function() {
             this.field_error(fn).text(emsg);
         }
     }
+    $(this.el()).find('div.error').show();
 }
 
 Sourcemap.Form.prototype.fields = function() {

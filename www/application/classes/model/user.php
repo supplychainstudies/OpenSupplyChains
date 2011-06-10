@@ -37,6 +37,9 @@ class Model_User extends Model_Auth_User {
         'apikeys' => array(
             'model' => 'user_apikey', 'foreign_key' => 'user_id'
         ),
+        'supplychains' => array(
+            'model' => 'supplychain', 'foreign_key' => 'user_id'
+        ),
         //todo: make this make sense
         'openidusers' => array(
             'model' => 'openidusers', 'foreign_key' => 'user_id'

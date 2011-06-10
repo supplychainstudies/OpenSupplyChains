@@ -17,6 +17,8 @@
             <p class="teaser"><?= HTML::chars($result->attributes->teaser) ?></p>
             <?php elseif(isset($result->attributes->description) && $result->attributes->description): ?>
             <p class="teaser"><?= HTML::chars($result->attributes->description) ?></p>
+            <?php else: ?>
+            <p class="teaser">-- No description. --</p>
             <?php endif; ?>
         </div>
         <div class="clear"></div>

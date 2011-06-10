@@ -98,6 +98,7 @@ Sourcemap.Map.prototype.initMap = function() {
             new OpenLayers.Control.ArgParser(),
             new OpenLayers.Control.Attribution()
     ];
+    console.log(controls);
     if(this.options.zoom_control) 
         controls.push(new OpenLayers.Control.ZoomPanel());
     var options = {

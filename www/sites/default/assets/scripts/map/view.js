@@ -18,5 +18,8 @@ $(document).ready(function() {
     Sourcemap.loadSupplychain(scid, function(sc) {
         Sourcemap.log("Supplychain "+sc.remote_id+" is editable.");
         Sourcemap.view_instance.map.addSupplychain(sc);
+        control = new OpenLayers.Control.Button();
+        control.div = 'sourcemap-banner';
+        Sourcemap.view_instance.map.map.addControl(control);
     });
 });

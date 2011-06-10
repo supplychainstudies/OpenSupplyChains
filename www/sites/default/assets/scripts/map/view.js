@@ -13,7 +13,6 @@ $(document).ready(function() {
 
     // get scid from inline script
     var scid = Sourcemap.view_supplychain_id;
-    console.log(Sourcemap);
 
     // fetch supplychain
     Sourcemap.loadSupplychain(scid, function(sc) {

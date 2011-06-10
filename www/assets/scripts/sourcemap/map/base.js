@@ -263,7 +263,7 @@ Sourcemap.Map.Base.prototype.initTour = function() {
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
-    this.banner_div = $('<div id="embed-banner"></div>');
+    this.banner_div = $('<div id="map-banner"></div>');
     $(this.map.map.div).append(this.banner_div);
     if(!sc) {
         // todo: this is bad, but it's worst case
@@ -273,7 +273,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             break;
         }
     }
-    Sourcemap.template('embed/overlay/supplychain', function(p, tx, th) {
+    Sourcemap.template('map/overlay/supplychain', function(p, tx, th) {
         $(this.banner_div).html(th);
     }, sc, this, this.options.tpl_base_path);
     return this;

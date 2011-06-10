@@ -27,10 +27,6 @@
     <header><?= Message::instance()->get() ? Message::instance()->render() : false ?></header>
     <div id="map">
         <?= $content ?>
-        <ul id="map-actions">
-            <li id="fullscreen-button">Fullscreen <div class="icon"></div></li>
-            <li id="share-button">Share <div class="icon"></div></li>
-        </ul>
     </div>
     <div class="clear"></div>
 

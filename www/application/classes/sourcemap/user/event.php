@@ -13,6 +13,7 @@ class Sourcemap_User_Event {
     const COMMENTEDSC = 16;
     const SENTMSG = 32;
     const ANNOUNCE = 64; // for system-wide notices
+    const REGISTERED = 128;
 
     public $timestamp;
 
@@ -24,7 +25,7 @@ class Sourcemap_User_Event {
         'signedup' => 1, 'createdsc' => 2,
         'updatedsc' => 4, 'favedsc' => 8,
         'commentedsc' => 16, 'sentmsg' => 32,
-        'announce' => 64
+        'announce' => 64, 'registered' => 128 
     );
 
     public static function factory($type) {

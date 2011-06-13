@@ -11,7 +11,7 @@
     <meta name="author" content="">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/placeholders/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>

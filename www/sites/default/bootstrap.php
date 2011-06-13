@@ -9,7 +9,15 @@ Route::set('tools/import/action', 'tools/import/<controller>(/<action>)')
     ->defaults(array(
         'directory' => 'tools/import',
         'action' => 'index'
-    ));
+    )
+);
+
+Route::set('userprofile', 'user/<id>')
+    ->defaults(array(
+        'controller' => 'user',
+        'action' => 'index'
+    )
+);
 
 Route::set('admin/dashboard', 'admin', array())
     ->defaults(array(

@@ -160,8 +160,12 @@ Sourcemap.Map.prototype.initLayers = function() {
 
 Sourcemap.Map.prototype.initDock = function() {
     this.dock_controls = this.dock_controls || {};
-    this.dock_el = $('<div class="dock"></div>');
-    $(this.map.div).css("position", "relative").append(this.dock_el);
+    // Needed for centering
+    this.dock_outerwrap = $('<div class="sourcemap-dock-outerwrap"></div>');
+    this.dock_content = $('<div class="sourcemap-dock-content"></div>');
+    this.dock_element = $('<div class="sourcemap-dock"></div>');
+    $(this.map.div).css("position", "relative").append(
+        this.dock_element.append(this.dock_outerwrap.append(this.dock_content)));
     this.dockAdd('zoomin', {
         "ordinal": 2,
         "icon_url": "sites/default/assets/images/dock/zoomin.png",
@@ -190,7 +194,7 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
     this.dockRemove(nm);
     this.dock_controls[nm] = o;
     var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'"><img src="'+icon_url+'" /></div>');
-    $(this.dock_el).append(cel);
+    $(this.dock_content).append(cel);
     if(callbacks.click) {
         $(cel).click($.proxy(callbacks.click, this));
     }
@@ -198,7 +202,7 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
 }
 
 Sourcemap.Map.prototype.dockControlEl = function(nm) {
-    return $(this.dock_el).find('.control.'+nm.replace(/\s+/, '-'));
+    return $(this.dock_content).find('.control.'+nm.replace(/\s+/, '-'));
 }
 
 Sourcemap.Map.prototype.dockPack = function() {
@@ -211,7 +215,7 @@ Sourcemap.Map.prototype.dockPack = function() {
     controls.sort(function(a,b) { return a[1] > b[1] ? 1 : (a[1] < b[1] ? -1 : 0); });
     var order = [];
     for(var i=0; i<controls.length; i++) {
-        this.dock_el.append(this.dockControlEl(controls[i][0]));
+        this.dock_content.append(this.dockControlEl(controls[i][0]));
     }
     return this;
 }

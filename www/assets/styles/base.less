@@ -53,8 +53,7 @@
             color:#444;
             text-decoration: underline;
         }
-               
-   }   
+    }   
 }
 
 #detail-pane {
@@ -236,27 +235,26 @@
     bottom:0 !important; 
 }
 
-.sourcemap-tour-control-panel {
-    display:none;
+.sourcemap-dock {
     z-index: 1008;
     width: 100%;
     bottom: 0; left: 0;
     position: absolute;
+    height: 6em;
     overflow: hidden;
     text-align: center;
-    .tourControlsOuterWrap {
+    .sourcemap-dock-outerwrap {
         float: left;
         position:relative;
         left: 50%;
-        .tourControlsInnerWrap {
+        .sourcemap-dock-content {
             float:left;
             position: relative;
             left: -50%;
             height: 35px;
-            background: url('../images/embed-dock.png') center bottom transparent no-repeat;
-            .background_size(100%, 100%);
             padding: 0 30px;
             div{
+                background: url("../images/dock/button-background.png");
                 padding: 10px 2px 0 2px;
                 display: inline-block;
                 opacity: 0.8;

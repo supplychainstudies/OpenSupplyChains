@@ -47,23 +47,19 @@
     </div>
     <div class="grid_1">&nbsp;</div>
     <div class="grid_6">
-        <div class="news">
-            <h3 class="section">From Headquarters</h3>
-            <ul>
-                <li>
-                    <img src="http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg" alt="" />
-                    <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
-                </li>
-                <li>
-                    <img src="http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg" alt="" />
-                    <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
-                </li>
-                <li>
-                    <img src="http://s1.anscdn.net/resources/00000001084/8c868bdbe653f6e.jpg" alt="" />
-                    <p>Phasellus aliquam tellus et orci scelerisque et aliquet libero posuere. Nunc ac tellus ac mauris blandit feugiat. Nulla at felis neque.</p>
-                </li>
-            </ul>
-        </div>
+        <?php if($news): ?>
+            <h3 class="section">News From Headquarters</h3>
+            <div class="news">
+                <ul>
+                    <?php foreach($news as $i => $news_item): ?>
+                    <li class="news-item">
+                        <img src="assets/images/favicon.ico" alt="" />
+                        <p><?= HTML::chars($news_item->title) ?><br /><a href="http://blog.sourcemap.com">&raquo Read more</a></p>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
 </div><!-- .container_16 -->
 

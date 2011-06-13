@@ -32,6 +32,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
             $ks->owner = ORM::factory('user', $sc->user_id)->find();
             $supplychains[] = $ks;
         }
+        $this->template->news = Blognews::fetch(4);
         $this->template->supplychains = $supplychains;
     }
 }

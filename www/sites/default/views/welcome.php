@@ -54,7 +54,12 @@
                     <?php foreach($news as $i => $news_item): ?>
                     <li class="news-item">
                         <img src="assets/images/favicon.ico" alt="" />
-                        <p><?= HTML::chars($news_item->title) ?><br /><a href="http://blog.sourcemap.com">&raquo Read more</a></p>
+                        <h5 class="title"><?= HTML::chars($news_item->title) ?></h5>
+                        <p>
+                            
+                            <?= substr(HTML::chars($news_item->body), 0, 140) ?><br />
+                            <a href="http://blog.sourcemap.com">&raquo Read more</a>
+                        </p>
                     </li>
                     <?php endforeach; ?>
                 </ul>

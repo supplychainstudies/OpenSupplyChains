@@ -40,7 +40,6 @@ div.anythingSlider .thumbNav a {
     padding: 0;
     outline: 0;
     opacity: .8;
-    border: 2px solid;
 }
 
 div.anythingSlider .thumbNav a.cur {

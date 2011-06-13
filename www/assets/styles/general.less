@@ -800,3 +800,66 @@ img a:hover{
         }
     }
 }
+
+.classic-list {
+    li {
+        list-style-position: outside;
+        list-style-type: upper-alpha;
+        ol {
+            margin: .3em;
+            margin-left: .8em;
+            li {
+                list-style-type: decimal;
+                ol {
+                    li {
+                        list-style-type: lower-alpha;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.codeface {
+    font-family: monospace;
+    background-color: #ddd;
+}
+
+.code-sample {
+    white-space: pre;
+    font-family: monospace;
+    background-color: #ddd;
+    border: 1px solid #888;
+    padding: .2em;
+    margin-top: .25em;
+    margin-bottom: .25em;
+    .rounded(.5em);
+}
+
+.documentation {
+    a {
+        color: orange;
+    }
+    .section {
+        h2 {
+            text-align: right;
+            background-color: #bbb;
+            border-bottom: .1em solid #888;
+            color: #eee;
+            padding-right: .5em;
+            font-size: 2em;
+        }
+        h3 {
+            font-size: 2em;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+        p {
+            .sansserif-font;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        margin-bottom: 1em;
+    }
+    margin-bottom: 2em;
+}

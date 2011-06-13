@@ -63,7 +63,8 @@ return array(
             'scripts' => array(
                 'assets/scripts/sourcemap/map/magicwords.js',
                 'assets/scripts/sourcemap/map.js',
-                'assets/scripts/sourcemap/map/base.js'
+                'assets/scripts/sourcemap/map/base.js',
+                'assets/scripts/sourcemap/map/editor.js'
             ),
             'requires' => array(
                 'sourcemap-template', 'sourcemap-core', 'google-maps', 'openlayers-cloudmade' 

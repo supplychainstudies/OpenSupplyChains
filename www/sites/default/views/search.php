@@ -1,8 +1,11 @@
 <div class="grid search-results">
+    <div class="container_16">
+    <h1>Search Results for "<?= HTML::chars($search_result->parameters['q']) ?>"</h1>
+    </div>
     <?php if(isset($search_result->results) && $search_result && $search_result->results): ?>
-        <div class="container_16 pager">
+        <!--div class="container_16 pager">
             <?= $pager->render() ?>
-        </div>
+        </div-->
         <?php foreach($search_result->results as $i => $result): ?>
             <div class="container_16 search-result">
                 <?= View::factory('partial/search/result', array('result' => $result)) ?>

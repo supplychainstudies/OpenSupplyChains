@@ -50,16 +50,12 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                 $qrcode_query = URL::query(array('q' => URL::site('map/view/'.$supplychain->id, true), 'sz' => 8));
                 $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;
             } else {
-                $this->request->status = 403;
-                $this->layout = View::factory('layout/error');
-                $this->template = View::factory('error');
-                $this->template->error_message = 'This map is private.';
+                Message::instance()->set('That map is private.');
+                $this->request->redirect('browse');
             }
         } else {
-            $this->request->status = 404;
-            $this->layout = View::factory('layout/error');
-            $this->template = View::factory('error');
-            $this->template->error_message = 'That map could not be found.';
+            Message::instance()->set('That map could not be found.');
+            $this->request->redirect('browse');
         }
     }
 

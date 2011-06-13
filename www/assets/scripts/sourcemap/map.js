@@ -100,8 +100,8 @@ Sourcemap.Map.prototype.initMap = function() {
             new OpenLayers.Control.ArgParser(),
             new OpenLayers.Control.Attribution()
     ];
-    if(this.options.zoom_control) 
-        controls.push(new OpenLayers.Control.ZoomPanel());
+    //if(this.options.zoom_control) 
+    //    controls.push(new OpenLayers.Control.ZoomPanel());
     var options = {
         "theme": "assets/scripts/openlayers/theme/sourcemap/style.css",
         "projection": new OpenLayers.Projection("EPSG:900913"),

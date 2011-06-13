@@ -1,7 +1,7 @@
 <?php
 class Controller_Map extends Sourcemap_Controller_Layout {
     
-    public $layout = 'map';
+    public $layout = 'base';
     public $template = 'map/view';
 
     public static function placeholder_image() {
@@ -34,6 +34,19 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     'assets/styles/base.less',
                     'assets/styles/general.less'
                 );
+                // comments
+                $c = $supplychain->comments->find_all();
+                $comment_data = array();
+                foreach($c as $i => $comment) {
+                    $arr = $comment->as_array();
+                    $arr['username'] = $comment->user->username;
+                    $arr['avatar'] = Gravatar::avatar($comment->user->email);
+                    $comment_data[] = $arr;
+                }
+                $this->template->comments = $comment_data;
+                // qrcode url
+                $qrcode_query = URL::query(array('q' => URL::site('map/view/'.$supplychain->id, true), 'sz' => 8));
+                $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;
             } else {
                 $this->request->status = 403;
                 $this->layout = View::factory('layout/error');

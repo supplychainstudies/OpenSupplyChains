@@ -15,6 +15,9 @@ class Sourcemap {
     const ACTIVE = 1;
     const VERIFIED = 64;
 
+    // add'l comment flags
+    const ABUSE = 2;
+
     // env constants
     const DEV = 'development';
     const STAGING = 'staging';

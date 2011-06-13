@@ -27,6 +27,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout->supplychain_id = $supplychain_id;
+                $this->template->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array('map-view');
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css', 
@@ -41,9 +42,10 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                     $arr = $comment->as_array();
                     $arr['username'] = $comment->user->username;
                     $arr['avatar'] = Gravatar::avatar($comment->user->email);
-                    $comment_data[] = $arr;
+                    $comment_data[] = (object)$arr;
                 }
                 $this->template->comments = $comment_data;
+                $this->template->can_comment = (bool)$current_user_id;
                 // qrcode url
                 $qrcode_query = URL::query(array('q' => URL::site('map/view/'.$supplychain->id, true), 'sz' => 8));
                 $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;
@@ -238,6 +240,42 @@ class Controller_Map extends Sourcemap_Controller_Layout {
             $this->layout = View::factory('layout/error');
             $this->template = View::factory('error');
             $this->template->error_message = 'That map could not be found.';
+        }
+    }
+
+    public function action_comment($scid) {
+        if(!($current_user = Auth::instance()->get_user()) || !$current_user->loaded()) {
+            $this->request->status = 403;
+            Message::instance()->set('You must be logged in to comment.');
+            return $this->request->redirect('');
+        }
+        $sc = ORM::factory('supplychain', $scid);
+        if($sc->loaded()) {
+            $p = Validate::factory($_POST);
+            $p->rule('body', 'not_empty');
+            if($p->check()) {
+                $new_comment = ORM::factory('supplychain_comment');
+                $new_comment->body = $p['body'];
+                $new_comment->user_id = $current_user->id;
+                $new_comment->supplychain_id = $scid;
+                $new_comment->timestamp = time();
+                try {
+                    $new_comment->save();
+                    Message::instance()->set('Your comment was saved.', Message::SUCCESS);
+                } catch(Exception $e) {
+                    $this->request->status = 500;
+                    Message::instance()->set('There was a problem saving your comment.');
+                }
+                return $this->request->redirect('map/view/'.$scid.'#comments');
+            } else {
+                $this->request->status = 400;
+                Message::instance()->set('What good is a comment if it\'s empty?');
+                return $this->request->redirect('map/view/'.$scid.'#comments');
+            }
+        } else {
+            $this->request->status = 400;
+            Message::instance()->set('You can\'t comment on nothing.');
+            return $this->request->redirect('');
         }
     }
 }

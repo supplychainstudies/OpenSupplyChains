@@ -16,7 +16,32 @@ $(document).ready(function() {
 
     // fetch supplychain
     Sourcemap.loadSupplychain(scid, function(sc) {
-        Sourcemap.log("Supplychain "+sc.remote_id+" is editable.");
+        if(sc.editable){
+            Sourcemap.log("Supplychain "+sc.remote_id+" is editable.");
+            // Append the "Add Stop" button to the dock
+            Sourcemap.view_instance.map.dockAdd('addstop', {
+                "icon_url": "sites/default/assets/images/dock/add.png",
+                "callbacks": {
+                    "click": function() {
+                        var geometry = this.map.center;
+                        attributes = {};
+                        var new_stop = new Sourcemap.Stop(
+                            geometry, attributes
+                        );
+                        sc.addStop(new_stop);
+                        // Reload supplychain
+                        // todo: create an event for this and bind a reload function to it
+                        this.getStopLayer(sc.instance_id).removeAllFeatures();
+                        this.getHopLayer(sc.instance_id).removeAllFeatures();
+                        console.log(sc);
+                        this.mapSupplychain(sc.instance_id);
+                    }
+                }
+            });
+            
+        // Append the "Save" button to the banner
+        // var savebutton = $('<div class="banner-item '+nm.replace(/\s+/, '-')+'"><img src="'+icon_url+'" /></div>');
+        }
         Sourcemap.view_instance.map.addSupplychain(sc);
         control = new OpenLayers.Control.Button();
         control.div = 'sourcemap-banner';

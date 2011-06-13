@@ -803,7 +803,7 @@ img a:hover{
 
 .classic-list {
     li {
-        list-style-position: outside;
+        list-style-position: inside;
         list-style-type: upper-alpha;
         ol {
             margin: .3em;
@@ -822,21 +822,26 @@ img a:hover{
 
 .codeface {
     font-family: monospace;
-    background-color: #ddd;
+    background-color: #efefef;
 }
 
 .code-sample {
     white-space: pre;
     font-family: monospace;
-    background-color: #ddd;
-    border: 1px solid #888;
-    padding: .2em;
+    background-color: #efefef;
     margin-top: .25em;
     margin-bottom: .25em;
     .rounded(.5em);
+    font-weight: bold;
 }
 
 .documentation {
+    .toc {
+        border: 1px solid #bbb;
+        padding-left: .2em;
+        .rounded(.2em);
+        .sansserif-font;
+    }
     a {
         color: orange;
     }
@@ -853,6 +858,11 @@ img a:hover{
             font-size: 2em;
             font-weight: bold;
             border-bottom: 1px solid #ddd;
+        }
+        h4 {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #D4C272;
         }
         p {
             .sansserif-font;

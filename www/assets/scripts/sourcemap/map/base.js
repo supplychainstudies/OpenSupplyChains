@@ -33,6 +33,22 @@ Sourcemap.Map.Base.prototype.init = function() {
     // todo: put this somewhere else.
     var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
     $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
+
+
+    // make this work
+    alert('sup');
+    $(".tab_content").hide(); 
+    $("ul.tabs li:first").addClass("active").show(); //Activate first tab
+    $(".tab_content:first").show(); 
+    $("ul.tabs li").click(function() {
+        $("ul.tabs li").removeClass("active"); 
+        $(this).addClass("active"); 
+        $(".tab_content").hide(); 
+        var activeTab = $(this).find("a").attr("href"); 
+        $(activeTab).fadeIn(); 
+        return false;
+    });
+
 }
 
 Sourcemap.Map.Base.prototype.initMap = function() {
@@ -74,9 +90,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                         );
                     }
                 }, this));
-                // Offset popup so that it touches the edge of the stop
-                this.popup.div.offsetTop = '-4px';
-                this.popup.updateSize();
+                //this.popup.updateSize();
                 this.popup.updatePosition();
             }, tscope), tscope, null, this.options.tpl_base_path);
         }, this),
@@ -106,6 +120,9 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     //this.map.setBaseLayer(this.options.tileset);
 
     $(this.map.map.div).css("position", "relative");
+
+
+
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -122,23 +139,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             $(this.map.map.div).append(this.watermark);
         }
     }, this));
-    $("html").mouseenter(function() {
-        if($(".sourcemap-tour-control-panel").length >=1) {        
-            $(".sourcemap-tour-control-panel")
-                .fadeIn("fast");
-        }
-    });
-    $("html").mousemove(function() {
-        if($(".sourcemap-tour-control-panel").length>=1) {
-            $(".sourcemap-tour-control-panel")
-            .fadeIn("fast");
-            $("html").unbind("mousemove");
-        }
-    });
-    $("html").mouseleave(function() {
-        $(".sourcemap-tour-control-panel")
-            .fadeOut("fast");
-    });
     
     $(window).resize($.proxy(function () { 
         var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
@@ -608,3 +608,4 @@ jQuery.fn.detail_center = function () {
     this.css("left", ($(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
     return this;
 }
+

@@ -188,7 +188,6 @@ Sourcemap.Map.prototype.initDock = function() {
 }
 
 Sourcemap.Map.prototype.dockAdd = function(nm, o) {
-    console.log('dockadd '+nm);
     var icon_url = o.icon_url ? o.icon_url : null;
     var callbacks = o.callbacks ? o.callbacks : {};
     this.dockRemove(nm);
@@ -417,8 +416,10 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         var cb = function() { 
             this.sourcemap.controls.select.unselectAll(); 
         }
+        // Offset popup so that it touches the outside edge of the stop
         var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
         new_popup.feature = new_feature;
+        Sourcemap.Popup.prototype.OFFSET_HT = -(new_popup.feature.attributes.size);
         new_popup.sourcemap = this;
         new_popup.hide();
     }
@@ -674,7 +675,7 @@ Sourcemap.Popup.prototype.ANCHOR_HT = 16;
 
 Sourcemap.Popup.prototype.initialize = function() {
     this.closeDiv = false;
-    $(this.div).css({"background-color": 'none', "visibility": "none", height:"auto"});
+    $(this.div).css({"background-color": 'none', "visibility": "none", height:"auto", 'margin-top':this.OFFSET_HT});
     this.bottom_div = $('<div class="sourcemap-popup-bottom"></div>');
     $(this.bottom_div).css({
         "background-image": "url(assets/images/popup-anchor-16x16.png)",

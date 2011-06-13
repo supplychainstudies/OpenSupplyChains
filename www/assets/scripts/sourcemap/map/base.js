@@ -74,7 +74,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                         );
                     }
                 }, this));
-                //this.popup.contentDiv.appendChild(this.popup.getCloseBox());
+                // Offset popup so that it touches the edge of the stop
+                this.popup.div.offsetTop = '-4px';
                 this.popup.updateSize();
                 this.popup.updatePosition();
             }, tscope), tscope, null, this.options.tpl_base_path);

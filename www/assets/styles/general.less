@@ -45,6 +45,9 @@ h1 {
 h2.section{
     border-bottom: 1px solid #dedede;
 }
+h2 {
+    font-size: 1.3em;
+}
 
 a {
     color: @link-color;
@@ -742,14 +745,23 @@ img a:hover{
 /* SEARCH STYLES */
 
 .search-results {
+    .pager {
+        .sansserif-font;
+    }
     .search-result {
+        padding-top: .25em;
+        border-top: 1px solid #fff;
+        border-bottom: 1px solid #fff;
         &:hover {
+            background-color: #f8f8f8;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
             /*font-weight: bold;*/
             a {
                 color: orange;
             }
             img {
-                border: .2em solid orange;
+                border: .2em solid #888;
             }
         }
         img {
@@ -759,6 +771,7 @@ img a:hover{
         h4.title {
             margin: 0;
             padding: 0;
+            font-size: 1.3em;
         }
         p.dates {
             font-family: monospace;

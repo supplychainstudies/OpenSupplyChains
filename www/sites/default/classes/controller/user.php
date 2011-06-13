@@ -21,7 +21,11 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $user->avatar = Gravatar::avatar($user->email);
             unset($user->email);
             $this->template->user = $user;
-            // todo: recent maps.
+            $scs = ORM::factory('supplychain')->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)
+                ->and_where('user_id', '=', $user->id)->limit(5)
+                ->order_by('created', 'desc')
+                ->find_all();
+            $this->template->supplychains = $scs->as_array('id', true);
         } else {
             Message::instance()->set('That user doesn\'t exist.');
             return $this->request->redirect('');

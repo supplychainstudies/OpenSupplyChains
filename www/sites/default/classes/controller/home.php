@@ -19,7 +19,8 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         unset($user_arr['password']);
 
         $scs = array();
-        foreach($user->supplychains->find_all() as $i => $sc) {
+        // todo: group ownership?
+        foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {
             $scs[] = $sc->kitchen_sink($sc->id);
         }
 

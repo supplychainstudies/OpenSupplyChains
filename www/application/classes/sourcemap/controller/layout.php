@@ -14,7 +14,6 @@ class Sourcemap_Controller_Layout extends Controller_Template {
     public $default_styles = array(
         'sites/default/assets/styles/reset.css',
         'assets/styles/general.less',
-        'sites/default/assets/styles/default.less'
     );
 
     public function before() {

@@ -379,6 +379,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     var supplychain = this.findSupplychain(scid);
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Supplychain not found/Sourcemap.Supplychain required.');
+    if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
+    if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     for(var i=0; i<supplychain.stops.length; i++) {
         this.mapStop(supplychain.stops[i], scid);
     }
@@ -436,6 +438,21 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     }
     this.getStopLayer(scid).addFeatures([new_feature]);
     this.broadcast('map:stop_mapped', this, this.findSupplychain(scid), stop, new_feature);
+}
+
+Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
+    var stl = this.getStopLayer(scid);
+    var f = false;
+    if(stl) {
+        for(var i=0; i<stl.features.length; i++) {
+            var stlf = stl.features[i];
+            if(stlf.attributes.stop_instance_id == stid) {
+                f = stlf;
+                break;
+            }
+        }
+    }
+    return f;
 }
 
 // todo: removeStop

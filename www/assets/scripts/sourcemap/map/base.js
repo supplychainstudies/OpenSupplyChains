@@ -36,8 +36,9 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 
     // make this work
-    alert('sup');
-    $(".tab_content").hide(); 
+    //alert('sup');
+    // no tabs in the small popup
+    /*$(".tab_content").hide(); 
     $("ul.tabs li:first").addClass("active").show(); //Activate first tab
     $(".tab_content:first").show(); 
     $("ul.tabs li").click(function() {
@@ -47,7 +48,7 @@ Sourcemap.Map.Base.prototype.init = function() {
         var activeTab = $(this).find("a").attr("href"); 
         $(activeTab).fadeIn(); 
         return false;
-    });
+    });*/
 
 }
 

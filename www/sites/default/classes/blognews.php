@@ -26,7 +26,6 @@ class Blognews {
                 );
             }
         } catch(Exception $e) {
-            die($e);
             $news = false;
         }
     

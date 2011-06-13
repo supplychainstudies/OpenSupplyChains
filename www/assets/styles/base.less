@@ -236,11 +236,12 @@
 }
 
 .sourcemap-dock {
+    @dock-height: 3em;
     z-index: 1008;
     width: 100%;
     bottom: 0; left: 0;
     position: absolute;
-    height: 6em;
+    height: @dock-height;
     overflow: hidden;
     text-align: center;
     .sourcemap-dock-outerwrap {
@@ -251,15 +252,19 @@
             float:left;
             position: relative;
             left: -50%;
-            height: 35px;
-            padding: 0 30px;
             div{
-                background: url("../images/dock/button-background.png");
-                padding: 10px 2px 0 2px;
+                background: url("../../sites/default/assets/images/dock/button-background.png");
+                .background_size(100%,100%);
+                margin: .5em;
                 display: inline-block;
-                opacity: 0.8;
+                text-align: center;
+                opacity: 0.85;
                 &:hover {
                     opacity: 1.0;
+                }
+                img{
+                    height: @dock-height - 1em;
+                    padding: .5em;
                 }
             }
         }
@@ -430,25 +435,6 @@
         }
         .segment.transport-carbon {
             background:#667683;
-        }
-    }
-}
-
-/* DOCKKKKKKKK */
-
-.dock {
-    background-color: red;
-    min-width: 70%;
-    min-height: 100px;
-    position: absolute;
-    bottom: 0;
-    .control {
-        float: left;
-        width: auto;
-        background-color: blue;
-        cursor: pointer;
-        &:hover {
-            background-color: purple;
         }
     }
 }

@@ -7,17 +7,23 @@
         <div class="grid_10"> 
             <div id="map-secondary-content">
                 <div id="discussion-section">
-                    <h3>Comment</h3>
-                    <div id="comment-form">
-                        <textarea id="comment-area"></textarea>
+                    <h3>Discussion</h3>
+                    <?php if($can_comment): ?>
+                    <div id="comment-form" class="form">
+                        <fieldset><legend>Comment</legend>
+                        <form method="post" action="map/comment/<?= $supplychain_id ?>">
+                            <textarea name="body" id="comment-area"></textarea>
+                            <input id="comment-submit" type="submit" text="Comment"/>
+                        </form>
+                        </fieldset>
                     </div>
-                    <input id="comment-submit" type="submit" text="Comment"/>
                     <div class="clear"></div>
+                    <?php endif; ?>
                     <?php if($comments): ?>
                     <ul id="comments">
                         <?php foreach($comments as $i => $comment): ?>
                             <li class="comment">
-                            <?= View::factory('partial/comment') ?>
+                            <?= View::factory('partial/comment', array('comment' => $comment)) ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>

@@ -3,16 +3,21 @@
     <div class="documentation">
         <h1>Sourcemap Developer Tools</h1>
         <div class="container_16">
-            <div class="grid_6">
+            <div class="grid_4">
                 <div class="toc">
                 <ol class="classic-list">
                     <li><a href="api#intro">Introduction</a></li>
                     <li><a href="api#api">API</a>
                         <ol>
-                            <li>Overview</li>
-                            <li>Authentication</li>
-                            <li>Supplychains</li>
-                            <li>Search</li>
+                            <li><a href="api#api-overview">Overview</a></li>
+                            <li><a href="api#api-authentication">Authentication</a></li>
+                            <li><a href="api#api-supplychains">Supplychains</a>
+                                <ol>
+                                    <li>Fetching Supplychains</li>
+                                    <li>Creating/Updating Supplychains</li>
+                                </ol>
+                            </li>
+                            <li><a href="api#api-search">Search</a></li>
                             <li>QR Codes</li>
                             <li>Static Maps</li>
                         </ol>
@@ -22,7 +27,7 @@
                 </div>
             </div>
 
-            <div class="grid_10">
+            <div class="grid_12">
                 <div class="section" id="intro">
                     <h2>Introduction</h2>
                     <p>
@@ -90,14 +95,168 @@ $apitoken = md5(sprintf('%s-%s-%s', $date, $apikey, $apisecret));
                         </div>
                     </div><!-- end subsection api-overview -->
 
-                    <div class="subsection" id="api-supplychain">
+                    <div class="subsection" id="api-supplychains">
                         <h3>Supplychains</h3>
-                        <p>The supplychains service provides an endpoint for fetching lists of public supplychains. You can
-                            set the limit and offset values using the query string parameters <span class="codeface">l</span>
-                            and <span class="codeface">o</span>, respectively.
+                        <div class="subsubsection" id="api-supplychains-get">
+                            <h4>&raquo; Fetching Supplychains</h4>
+                            <p>The supplychains service provides an endpoint for fetching lists of public supplychains. You can
+                                set the limit and offset values using the query string parameters <span class="codeface">l</span>
+                                and <span class="codeface">o</span>, respectively.
+                            </p>
+                            <div class="code-sample bash">
+curl -is 'http://sourcemap.com/services/supplychains/?l=10&amp;o=25'
+                            </div>
+                            <div class="code-sample json">
+{
+    "supplychains":[
+        {"id":27,"created":1300813400},
+        {"id":28,"created":1300908605},
+        {"id":29,"created":1300912711},
+        {"id":30,"created":1300913070},
+        {"id":31,"created":1302014532},
+        {"id":32,"created":1302014685},
+        {"id":33,"created":1302014775},
+        {"id":34,"created":1302889435},
+        {"id":35,"created":1302890553},
+        {"id":36,"created":1302890575},
+    ],
+    "total":128,
+    "limit":10,
+    "offset":25
+}
+
+                            </div>
+                            <p>
+                                The <span class="codeface">supplychains</span> endpoint isn't a good method for finding
+                                supplychains based on their attributes. This is better accomplished using our <a href="">search</a>
+                                services.
+                            </p>
+                            <p> 
+                                Individual supplychains may be accessed using paths of the form <span class="codeface">services/supplychains/[id]</span>
+                                where <span class="codeface">[id]</span> is a supplychain ID.
+                            </p>
+                            <div class="code-sample bash">
+    curl -is 'http://sourcemap.com/services/supplychains/12345'
+                            </div>
+                            <p>Would return the following:</p>
+                            <div class="code-sample json">
+HTTP/1.1 200 OK
+Date: Mon, 1 Jan 2099 19:59:55 GMT
+Content-Length: 1515
+Content-Type: application/json
+
+{
+    "supplychain":{
+        "category":null,"created":1298652652,
+        "flags":32,"id":1,"modified":1306106036,
+        "other_perms":1,"usergroup_id":null,
+        "usergroup_perms":0,"user_id":234,
+        "owner":{
+            "id":444,"name":"somefakeuserguy",
+            "avatar":"http:\/\/www.gravatar.com\/avatar\/..."
+        },
+        "taxonomy":null,
+        "attributes":{},
+        "stops":[
+            {
+                "local_stop_id":5,"id":5,"geometry":
+                    "POINT(-9349165.430522 4044184.943345)",
+                "attributes":{
+                    "name":"Facility #5"
+                }
+            },{
+                "local_stop_id":4,"id":4,"geometry":
+                    "POINT(-10634992.255936 3485526.892738)",
+                "attributes":{
+                    "name":"Facility #4"
+                }
+            },{
+                "local_stop_id":3,"id":3,"geometry":
+                    "POINT(-12489606.041822 3954200.282625)",
+                "attributes":{
+                    "name":"Facility #3"
+                }
+            },{
+                "local_stop_id":2,"id":2,"geometry":
+                    "POINT(-7929147.678904 5239202.289146)",
+                "attributes":{
+                    "name":"Facility #2"
+                }
+            },{
+                "local_stop_id":1,"id":1,"geometry":
+                    "POINT(-10804007.180522 3869332.593955)",
+                "attributes":{
+                    "name":"Facility #1"
+                }
+            }
+        ],
+        "hops":[
+            {
+                "from_stop_id":3,"to_stop_id":1,
+                "geometry":
+                    "MULTILINESTRING((-12489606.041822 3954200.282625,
+                    -10804007.180522 3869332.593955))",
+                "attributes":{}
+            },{
+                "from_stop_id":3,"to_stop_id":2,
+                "geometry":
+                    "MULTILINESTRING((-12489606.041822 3954200.282625,
+                    -7929147.678904 5239202.289146))",
+                "attributes":{}
+            },{
+                "from_stop_id":3,"to_stop_id":4,
+                "geometry":
+                    "MULTILINESTRING((-12489606.041822 3954200.282625,
+                    -10634992.255936 3485526.892738))",
+                "attributes":{}
+            },{
+                "from_stop_id":3,"to_stop_id":5,
+                "geometry":
+                    "MULTILINESTRING((-12489606.041822 3954200.282625,
+                    -9349165.430522 4044184.943345))",
+                "attributes":{}
+            }
+        ]
+    },"editable":false
+}
+                            </div>
+                        </div><!-- end subsubsection supplychain-get -->
+                    </div><!-- end subsection supplychains -->
+
+                    <div class="subsection" id="search">
+                        <h3>Search</h3>
+                        <p>The <span class="codeface">simple</span> search feature allows
+                            API consumers to search supplychains by keyword and/or category.
                         </p>
                         <div class="code-sample bash">
-curl -is http://sourcemap.com/services/supplychain/?l=25&amp;o=25
+HTTP/1.1 200 OK
+Date: Mon, 1 Jan 2099 20:15:11 GMT
+Content-Length: 432
+Content-Type: application/json
+
+{
+    "search_type":"simple","offset":0,"limit":25,
+    "hits_tot":1,"hits_ret":1,
+    "parameters":{
+        "q":"texas"
+    },
+    "results":[
+        {
+            "category":null,"created":1300738955,"flags":0,
+            "id":26,"modified":1300738995,
+            "other_perms":1,"usergroup_id":null,
+            "usergroup_perms":0,"user_id":1,
+            "attributes":{
+                "name":"BSR2010"
+            },
+            "owner":{
+                "created":1298652655,"id":1,"last_login":1307583315,
+                "logins":40,"username":"administrator",
+                "name":"administrator"
+            }
+        }
+    ],
+    "cache_hit":true}
                         </div>
                     </div>
                 </div><!-- end section api -->

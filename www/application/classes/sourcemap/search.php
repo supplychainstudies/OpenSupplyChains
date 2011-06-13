@@ -21,7 +21,7 @@ class Sourcemap_Search {
     public $offset = 0;
     public $limit = 0;
 
-    public $cache = false;
+    public $cache = true;
     public $cache_ttl = 60; // seconds
 
 

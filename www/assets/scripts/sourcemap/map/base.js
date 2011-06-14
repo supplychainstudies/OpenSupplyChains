@@ -33,23 +33,6 @@ Sourcemap.Map.Base.prototype.init = function() {
     // todo: put this somewhere else.
     var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
     $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
-
-
-    // make this work
-    //alert('sup');
-    // no tabs in the small popup
-    /*$(".tab_content").hide(); 
-    $("ul.tabs li:first").addClass("active").show(); //Activate first tab
-    $(".tab_content:first").show(); 
-    $("ul.tabs li").click(function() {
-        $("ul.tabs li").removeClass("active"); 
-        $(this).addClass("active"); 
-        $(".tab_content").hide(); 
-        var activeTab = $(this).find("a").attr("href"); 
-        $(activeTab).fadeIn(); 
-        return false;
-    });*/
-
 }
 
 Sourcemap.Map.Base.prototype.initMap = function() {
@@ -75,8 +58,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             }
             tscope.morelink = hasmagic;
             Sourcemap.template('map/'+t.join('-'), $.proxy(function(p, tx, th) {
-                $(this.popup.contentDiv).html(th);
-                $(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
+                this.popup.setContentHTML(th.html());
+                /*$(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
                     if(this.stop) { 
                         this.base.showStopDetails(
                             this.stop.instance_id, 
@@ -90,7 +73,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                             this.base.magic_word_sequence_idx
                         );
                     }
-                }, this));
+                }, this));*/
                 //this.popup.updateSize();
                 this.popup.updatePosition();
             }, tscope), tscope, null, this.options.tpl_base_path);
@@ -214,8 +197,12 @@ Sourcemap.Map.Base.prototype.initTour = function() {
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
-    this.banner_div = $('<div id="map-banner"></div>');
-    $(this.map.map.div).append(this.banner_div);
+    this.banner_div = $(this.map.map.div).find('.map-banner').length ? 
+        $(this.map.map.div).find('.map-banner') : false;
+    if(!this.banner_div) {
+        this.banner_div = $('<div class="map-banner"></div>');
+        $(this.map.map.div).append(this.banner_div);
+    }
     if(!sc) {
         // todo: this is bad, but it's worst case
         sc = false;
@@ -257,7 +244,7 @@ Sourcemap.Map.Base.prototype.initDialog = function() {
             if($(this.dialog).data("state")) {
                 this.hideDialog();
             }
-            this.tour.stop();//.wait();
+            if(this.tour) this.tour.stop();//.wait();
         },
         "scope": this 
     });

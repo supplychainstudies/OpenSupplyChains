@@ -1,5 +1,5 @@
 <div class="popup-wrapper">
-        <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", "")), 24) %></h5>
+        <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "")), 24) %></h5>
         <% if(this.stop.getAttr("description", false)) { %>
             <p class="popup-description">
                 <%= _S.ttrunc(_S.htesc(this.stop.getAttr("description","")), 140, true) %>

@@ -27,7 +27,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
                         new OpenLayers.Geometry.Point(this.map.map.center.lon, this.map.map.center.lat)
                     )
                 );
-                attributes = {};
+                attributes = {
+                    "title": "New Stop"
+                };
                 // make a new stop
                 var new_stop = new Sourcemap.Stop(
                     geometry, attributes
@@ -41,11 +43,12 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 // add a stop to the supplychain object
                 sc.addStop(new_stop);
                 // redraw the supplychain
-                this.map.mapSupplychain(sc.instance_id);
+                //this.map.mapSupplychain(sc.instance_id);
+                this.map.mapStop(new_stop, sc.instance_id);
                 // get the new feature
                 var f = this.map.stopFeature(sc.instance_id, new_stop.instance_id)
                 // select the new feature
-                this.map.controls.select.select(f);
+                //this.map.controls.select.select(f);
             }, this)
         }
     });

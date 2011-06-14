@@ -6,11 +6,15 @@ if ($data):
     $i = 0;
     foreach($results as $item):
         ?>
-        <div class="map-item grid grid-3">
-        <a href="/map/view/<?php print $item->id; ?>">
-        <img class="thumb" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
-        <h4><?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?></h4>
-        </a>
+        <div class="map-item grid-3">
+            <a href="/map/view/<?php print $item->id; ?>">
+            <img class="thumb" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
+            </a>
+            <h4>
+                <a href="/map/view/<?php print $item->id; ?>">
+                <?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?>
+                </a>
+            </h4>
         </div>
     <?php $i++;
     endforeach;

@@ -1,6 +1,7 @@
 <!doctype html>  
 <html lang="en" class="no-js">
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
@@ -15,33 +16,37 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
-   
-    </head>
-    <body class="main">
-    <div class="overlay">
-        <div id="registration" class="dialog">
-            <div class="dialog-content">
-                <?= View::factory('partial/registration', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+
+</head>
+<body class="main">
+    <div id="wrapper">
+        <div class="overlay">
+            <div id="registration" class="dialog">
+                <div class="dialog-content">
+                    <?= View::factory('register', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+                </div>
             </div>
         </div>
-    </div>
 
-    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-    <div class="container_16">
-        <div class="grid_16">
-            <header>
-                <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
-                <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
-            </header>
+        <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <div class="container_16">
+            <div class="grid_16">
+                <header>
+                    <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+                    <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+                </header>
+            </div>
         </div>
+            
         <div class="clear"></div>
+        
+        <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
+        <div id="push"></div>
+    </div><!-- #wrapper -->
+    <div id="footer">
+         <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     
-    <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
-    
-    <div class="clear"></div>
-
-    <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less') ?>
       
     <!--[if lt IE 7 ]>

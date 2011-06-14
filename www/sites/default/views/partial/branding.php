@@ -35,6 +35,5 @@
             </form>
             <div id="livesearch"></div>
         </div> <!-- #header -->
-    </div> <!-- #branding -->
-    <div class="clear"></div>
+    </div> <!-- #masthead -->
 

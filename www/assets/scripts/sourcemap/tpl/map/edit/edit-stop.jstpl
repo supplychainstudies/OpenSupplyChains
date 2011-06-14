@@ -1,7 +1,21 @@
-<h3>Stop <%= this.local_stop_id %></h3>
 <div class="form">
     <fieldset><legend>Edit</legend>
+        <form name="edit-ref">
+        <label for="address">Move to:</label>
+        <% var el = $("<input />").attr("type", "text").attr("name", "address"); el[0].setAttribute("value", this.ref.getAttr("address", "")); %>
+        <%= $("<div></div>").append(el).html() %>
         <label for="title">Title</label>
-        <%= $("<div></div>").append($("<input />").attr("type", "text").attr("name", "title").attr("value", this.stop.getAttr("title", ""))).html() %>
+        <% var el = $("<input />").attr("type", "text").attr("name", "title"); el[0].setAttribute("value", this.ref.getAttr("title", "")); %>
+        <%= $("<div></div>").append(el).html() %>
+        <label for="teaser">Short Description</label>
+        <% el = $("<input></input>").attr("type", "text").attr("name", "teaser"); el[0].setAttribute("value", this.ref.getAttr("teaser", "")); %>
+        <%= $("<div></div>").append(el).html() %>
+        <label for="discription">Long Description</label>
+        <%= $("<div></div>").append(
+                $("<textarea></textarea>").attr("name", "description").html(this.ref.getAttr("description", ""))
+            ).html()
+        %>
+        <input type="button" class="submit edit-save" value="Save" />
+        </form>
     </fieldset>
 </div>

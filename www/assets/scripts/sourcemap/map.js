@@ -397,6 +397,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
 Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     if(!(stop instanceof Sourcemap.Stop))
         throw new Error('Sourcemap.Stop required.');
+    this.eraseStop(scid, stop.instance_id);
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
@@ -422,6 +423,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         new_popup.sourcemap = this;
         new_popup.map = this.map;
         new_popup.feature = new_feature;
+        new_feature.popup = new_popup;
         new_popup.hide();
     }
     if(this.prepareStopFeature instanceof Function) {
@@ -439,7 +441,20 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     this.broadcast('map:stop_mapped', this, this.findSupplychain(scid), stop, new_feature);
 }
 
+Sourcemap.Map.prototype.eraseStop = function(scid, stid) {
+    var f = this.stopFeature(scid, stid);
+    if(f) {
+        this.getStopLayer(scid).removeFeatures([f]);
+    }
+    return this;
+}
+
 Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
+    if(scid && !stid && (scid instanceof Sourcemap.Stop)) {
+        stid = scid;
+        scid = stid.supplychain_id;
+        stid = stid.instance_id;
+    }
     var stl = this.getStopLayer(scid);
     var f = false;
     if(stl) {

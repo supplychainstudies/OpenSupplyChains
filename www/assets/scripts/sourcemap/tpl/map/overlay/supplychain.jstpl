@@ -1,11 +1,14 @@
 <div class="container_16">
-    <div id="map-summary" class="grid_3">
+    <div class="map-summary grid_3">
        <%= this.getAttr("name", "A Sourcemap") %>
     </div>
-    <div id="map-description" class="grid_10">
+    <div class="map-description grid_4">
         Created by <%= this.owner.name %> <%= Sourcemap.humanDate((new Date(this.created*1000))) %>.
     </div>
-    <div id="map-share" class="grid_3">
+    <div class="map-status grid_6">
+        <div class="msg good-news">Loaded.</div>
+    </div>
+    <div class="map-share grid_3">
         Share
     </div>
 </div>

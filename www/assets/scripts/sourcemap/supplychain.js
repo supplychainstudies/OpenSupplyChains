@@ -41,6 +41,12 @@ Sourcemap.Supplychain.prototype.stopIds = function() {
     return ids;
 }
 
+Sourcemap.Supplychain.prototype.localStopIds = function() {
+    var lids = [];
+    for(var i=0; i<this.stops.length; i++) lids.push(this.stops[i].local_stop_id);
+    return lids;
+}
+
 Sourcemap.Supplychain.prototype.findStop = function(target_id) {
     var found = false;
     for(var i=0; i<this.stops.length; i++) {
@@ -59,6 +65,7 @@ Sourcemap.Supplychain.prototype.addStop = function(stop) {
         }
         this.stops.push(stop);
         stop.supplychain_id = this.instance_id;
+        stop.local_stop_id=  (Math.max.apply(window, this.localStopIds()) || 0) + 1;
         this.broadcast('supplychain:stop_added', this, stop);
     } else throw new Error("Sourcemap.Stop expected.");
     return this;
@@ -214,9 +221,7 @@ Sourcemap.Stop.prototype.setAttr = function(k, v) {
 
 Sourcemap.Stop.prototype.getLabel = function() {
     var label = false;
-    var search_keys = ["title", "name", "label", "org.sourcemap.name", 
-        "org.sourcemap.placename", "org.sourcemap.name.place",
-        "placename", "address"
+    var search_keys = ["title", "name", "label"
     ];
     for(var ki=0; ki<search_keys.length; ki++) {
         var k = search_keys[ki];
@@ -237,6 +242,38 @@ Sourcemap.Stop.fromLonLat = function(ll, proj) {
     var wkt = new OpenLayers.Format.WKT();
     var stop = new Sourcemap.Stop(wkt.write(new OpenLayers.Feature.Vector(geom)));
     return stop;
+}
+
+Sourcemap.Stop.toLonLat = function(st, proj) {
+    var proj = proj || 'EPSG:900913';
+    var geom = (new OpenLayers.Format.WKT()).read(st.geometry).geometry;
+    geom = geom.transform(
+        new OpenLayers.Projection(proj),
+        new OpenLayers.Projection('EPSG:4326')
+    );
+    return {"lon": geom.x, "lat": geom.y};
+}
+
+Sourcemap.Stop.geocode = function(st, cb, failcb) {
+    var cb = cb || $.proxy(function(data) {
+        if(data && data.results) {
+            this.setAttr("address", data.results[0].placename);
+        }
+    }, st);
+    var url = 'services/geocode';
+    var ll = false;
+    var pl = false;
+    if(st instanceof Sourcemap.Stop) {
+        ll = Sourcemap.Stop.toLonLat(st);
+    } else if(st.lon != undefined && st.lat != undefined) {
+        ll = st;
+    } else if(typeof st == "string") {
+        ll = false;
+        pl = st;
+    }
+    $.ajax({"url": url, "type": "GET", "data": ll ? {"ll": ll.lat+','+ll.lon} : {"placename": pl}, 
+        "success": cb, "failure": cb, "dataType": "json"
+    });
 }
 
 Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {

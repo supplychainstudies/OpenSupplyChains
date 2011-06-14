@@ -28,7 +28,8 @@
         position:relative;
         font-size: .95em;
         overflow: hidden;
-        padding: 0;
+        padding: 1em;
+        .rounded(.5em);
         .popup-title {
             .serif-font;
             font-weight: bold;
@@ -38,14 +39,20 @@
             font-size:0.8em;
             margin: 1em 0;
             max-width: 16em;
+            padding-left: .25em;
+            margin: 0;
         }
         .popup-buttons {
             border-top:1px solid #aaa;
-            padding-top: 10px;
+            padding-top: .5em;
+            padding-bottom: .5em;
             > a {
                 margin-left: .5em;
                 margin-right: .5em;
                 display:block;
+                float: left;
+                clear: none;
+                width: auto;
                 color:#333;
                 text-align:center;
                 font-size:0.8em;
@@ -68,6 +75,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 }
 
 #detail-pane {
+    .rounded(.5em);
     z-index: 1012;
     margin: 0 auto;
     max-height: 80%; max-width: 80%; 
@@ -76,7 +84,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     background-color: #fff;
     position: absolute;
     padding: 1em 1%;
-    overflow:hidden;
+    overflow-x:hidden;
     text-align:justify;
     #user-loc-dialog {
         text-align: center;
@@ -336,9 +344,27 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     padding: .5em; 
     height: 1.5em;
     margin: 0;
-    #map-description {
+    .map-description {
         color: #ccc;
         text-align: center;
+    }
+    .map-status {
+        text-align: right;
+        .msg {
+            font-size: 1.4em;
+            padding: .2em;
+            font-weight: bold;
+        }
+        .good-news {
+            color: green;
+        }
+        .bad-news {
+            color: red;
+        }
+        font-family: monospace;
+    }
+    .map-share {
+        text-align: right;
     }
 }
 

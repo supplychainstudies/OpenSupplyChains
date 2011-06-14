@@ -1,25 +1,11 @@
 <div class="popup-wrapper">
-    <ul class="tabs">
-        <li><a href="#tab1"><%= _S.ttrunc(this.stop.getAttr("name", "Stop"), 16) %></a></li>
-        <li><a href="#tab2">test</a></li>
-        <li><a href="#tab3">test</a></li>
-    </ul>
-</div>
-
-<div class="tab_container">
-    <div id="tab1" class="tab_content">
         <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", "")), 24) %></h5>
-        <% if(this.stop.getAttr("description", false)) { %><p class="popup-description"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("description","")), 140, true) %></p><% } %>
-        <% if(this.morelink) {%><a class="popup-more-link" href="javascript: void(0);">More</a><% } %>
-    </div>
-    <div id="tab2" class="tab_content">
-        <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", "")), 24) %></h5>
-        <% if(this.stop.getAttr("description", false)) { %><p class="popup-description"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("description","")), 140, true) %></p><% } %>
-        <% if(this.morelink) {%><a class="popup-more-link" href="javascript: void(0);">More</a><% } %>
-    </div>
-    <div id="tab3" class="tab_content">
-        <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", "")), 24) %></h5>
-        <% if(this.stop.getAttr("description", false)) { %><p class="popup-description"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("description","")), 140, true) %></p><% } %>
-        <% if(this.morelink) {%><a class="popup-more-link" href="javascript: void(0);">More</a><% } %>
-    </div>
+        <% if(this.stop.getAttr("description", false)) { %>
+            <p class="popup-description">
+                <%= _S.ttrunc(_S.htesc(this.stop.getAttr("description","")), 140, true) %>
+            </p>
+        <% } %>
+        <% if(this.morelink) {%>
+            <a class="popup-more-link" href="javascript: void(0);">More</a>
+        <% } %>
 </div>

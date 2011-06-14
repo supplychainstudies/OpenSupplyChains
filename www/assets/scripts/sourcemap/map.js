@@ -413,6 +413,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     if(this.options.popups && this.options.stop_popups) {
         var puid = stop.instance_id+'-popup';
         var ll = new OpenLayers.LonLat(new_feature.geometry.x, new_feature.geometry.y);
+        console.log(ll);
         var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
         var sc = this.findSupplychain(scid);
         var cb = function() { 
@@ -421,8 +422,6 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         // Offset popup so that it touches the outside edge of the stop
         var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
         new_popup.feature = new_feature;
-        Sourcemap.Popup.prototype.OFFSET_HT = -(new_popup.feature.attributes.size);
-        new_popup.sourcemap = this;
         new_popup.hide();
     }
     if(this.prepareStopFeature instanceof Function) {

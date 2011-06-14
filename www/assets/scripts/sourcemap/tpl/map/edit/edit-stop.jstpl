@@ -1,0 +1,7 @@
+<h3>Stop <%= this.local_stop_id %></h3>
+<div class="form">
+    <fieldset><legend>Edit</legend>
+        <label for="title">Title</label>
+        <%= $("<div></div>").append($("<input />").attr("type", "text").attr("name", "title").attr("value", this.stop.getAttr("title", ""))).html() %>
+    </fieldset>
+</div>

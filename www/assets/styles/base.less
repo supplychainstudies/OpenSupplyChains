@@ -29,58 +29,33 @@
         font-size: .95em;
         overflow: hidden;
         padding: 0;
+        .popup-title {
+            .serif-font;
+            font-weight: bold;
+            padding-left: .2em;
+        }
         .popup-description {
             font-size:0.8em;
             margin: 1em 0;
             max-width: 16em;
         }
-        .popup-more-link {
-            display:block;
-            color:#333;
-            text-align:center;
-            width: 100%;
-            font-size:0.8em;
-            text-decoration:underline;
-            text-align:center;
+        .popup-buttons {
             border-top:1px solid #aaa;
             padding-top: 10px;
-            background:#fff;
-            &:hover {
-                color:#444;
-                text-decoration: underline;
-            }
-        }
-        ul.tabs {
-            .sansserif-font;
-            margin: 0;
-            padding: 0;
-            float: left;
-            list-style: none;
-            height: 32px; /*--Set height of tabs--*/
-            border-bottom: 1px solid #eee;
-            border-left: 1px solid #eee;
-            width: 100%;
-            li {
-                float: left;
-                margin: 0;
-                padding: 0;
-                height: 31px; /*--Subtract 1px from the height of the unordered list--*/
-                line-height: 31px; /*--Vertically aligns the text within the tab--*/
-                border: 1px solid #eee;
-                border-left: none;
-                margin-bottom: -1px; /*--Pull the list item down 1px--*/
-                overflow: hidden;
-                position: relative;
-                a {
-                    text-decoration: none;
-                    color: #000;
-                    display: block;
-                    font-size: .8em;
-                    padding: 0 20px;
-                    outline: none;
-                }
-                &:hover{    
-                    background: #eaeaea;
+            > a {
+                margin-left: .5em;
+                margin-right: .5em;
+                display:block;
+                color:#333;
+                text-align:center;
+                font-size:0.8em;
+                text-decoration:underline;
+                text-align:center;
+                background:#fff;
+                &:hover {
+                    color:#eeeeee;
+                    background-color: #444;
+                    text-decoration: underline;
                 }
             }
         }

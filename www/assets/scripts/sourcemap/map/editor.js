@@ -1,6 +1,8 @@
 Sourcemap.Map.Editor = function(map, o) {
     var o = o || {}
     this.map = map.map ? map.map : map;
+    if(map instanceof Sourcemap.Map.Base)
+        this.map_view = map;
     Sourcemap.Configurable.call(this);
     this.instance_id = Sourcemap.instance_id("sourcemap-editor");
 }
@@ -17,6 +19,20 @@ Sourcemap.Map.Editor.prototype.broadcast = function() {
 }
 
 Sourcemap.Map.Editor.prototype.init = function() {
+
+    // decorate prep_popup
+    Sourcemap.listen('popup-initialized', $.proxy(function(evt, p, st) {
+        // todo: make popup buttons part of the popup class?
+        $(p.contentDiv).find('.popup-wrapper .popup-buttons').append(
+            '<a class="popup-edit-link" href="javascript: void(0);">Edit</a>'
+        );
+        $(p.contentDiv).find('.popup-edit-link').click($.proxy(function(e) {
+            Sourcemap.template('map/edit/edit-stop', function(p, tx, th) {
+                this.editor.map_view.showDialog(th);
+            }, {"stop": st}, this);
+        }, {"stop": st, "editor": this}));
+    }, this));
+
     this.map.dockAdd('addstop', {
         "icon_url": "sites/default/assets/images/dock/add.png",
         "callbacks": {
@@ -48,7 +64,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 // get the new feature
                 var f = this.map.stopFeature(sc.instance_id, new_stop.instance_id)
                 // select the new feature
-                //this.map.controls.select.select(f);
+                this.map.controls.select.unselectAll();
+                this.map.controls.select.select(f);
             }, this)
         }
     });

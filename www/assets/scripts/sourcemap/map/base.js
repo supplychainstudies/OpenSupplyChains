@@ -58,8 +58,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             }
             tscope.morelink = hasmagic;
             Sourcemap.template('map/'+t.join('-'), $.proxy(function(p, tx, th) {
-                this.popup.setContentHTML(th.html());
-                /*$(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
+                this.popup.setContentHTML($('<div></div>').html(th).html());
+                $(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
                     if(this.stop) { 
                         this.base.showStopDetails(
                             this.stop.instance_id, 
@@ -73,9 +73,10 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                             this.base.magic_word_sequence_idx
                         );
                     }
-                }, this));*/
+                }, this));
                 //this.popup.updateSize();
                 this.popup.updatePosition();
+                this.base.map.broadcast('popup-initialized', this.popup, this.stop);
             }, tscope), tscope, null, this.options.tpl_base_path);
         }, this),
         // callback for Sourcemap.Map to decorate a stop feature
@@ -250,7 +251,7 @@ Sourcemap.Map.Base.prototype.initDialog = function() {
     });
 
     // Setup dimmer
-    if(!this.curtain) {
+    if(false && !this.curtain) {
         this.curtain = $('<div id="curtain" class="hidden"></div>');
         $(this.map.map.div).append(this.curtain);
         this.curtain.click($.proxy(function() {
@@ -278,7 +279,7 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup, no_controls) {
         var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
         $(this.dialog).fadeIn(fade, function() {}).data("state", 1);
         
-        this.tour.stop();
+        if(this.tour) this.tour.stop();
     }
 }
 

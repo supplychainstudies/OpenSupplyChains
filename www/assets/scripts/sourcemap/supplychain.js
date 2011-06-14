@@ -214,9 +214,9 @@ Sourcemap.Stop.prototype.setAttr = function(k, v) {
 
 Sourcemap.Stop.prototype.getLabel = function() {
     var label = false;
-    var search_keys = ["name", "label", "org.sourcemap.name", 
+    var search_keys = ["title", "name", "label", "org.sourcemap.name", 
         "org.sourcemap.placename", "org.sourcemap.name.place",
-        "address"
+        "placename", "address"
     ];
     for(var ki=0; ki<search_keys.length; ki++) {
         var k = search_keys[ki];

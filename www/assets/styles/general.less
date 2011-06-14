@@ -42,9 +42,6 @@ h1 {
     font-weight: bold;
 }
 
-h2.section{
-    border-bottom: 1px solid #dedede;
-}
 h2 {
     font-size: 1.3em;
 }
@@ -74,8 +71,9 @@ img a:hover{
     display: none;
 }
 
-#branding {
-    height: 3.5em;
+#masthead {
+    font-size: 95%;
+    height: 50px;
     > a { 
         text-decoration:none;
         color:transparent;
@@ -84,17 +82,31 @@ img a:hover{
         display: none;
     }
     img {border:none;}
-    #masthead {
+    #logo{
         h1{
             display:none;
         }
     }
-    #header-search{
+    button{
+        .rounded(0);
+        float:right;
+        color: #aaa;
+        margin-top: 5px;
+        text-transform: lowercase;
+    }
+    label{
+        display:block;
+        overflow:hidden;
+    }
+    #header{
+        margin-top: 20px;
+    }
+    #search{
         font-size:16px;
         border: solid 1px;
+        border-right: none;
         -webkit-appearance: none;
         width: 100%;
-        margin-top: 1.6em;
     }
     #livesearch{
         .sansserif-font;
@@ -103,6 +115,7 @@ img a:hover{
         background: #fff;
         z-index: 999;
         display:none;
+        width: 400px; 
         ul {
             list-style:none;
             margin: 0;
@@ -120,46 +133,49 @@ img a:hover{
                     border-top: 1px solid #333;
                 }
             }
-        .search-result {
-            a {
-                color: #333;
-                position:absolute; 
-                width:100%;
-                height:100%; 
-                top:0;
-                left: 0; 
-                z-index: 1;  
-                &:hover{
-                    text-decoration: none;
-                }
-            }
-            position: relative;
-            div {
-                width: 256px;
-                float: left;
-                &.search-thumb{
-                    padding-left: 10px;
-                    width: 120px;
-                    img {
-                        width: 100%;
+            .search-result {
+                a {
+                    color: #333;
+                    position:absolute; 
+                    width:100%;
+                    height:100%; 
+                    top:0;
+                    left: 0; 
+                    z-index: 1;  
+                    &:hover{
+                        text-decoration: none;
                     }
                 }
-                span {
-                    color: #888;
-                    font-style: italic;
-                    a {
+                position: relative;
+                div {
+                    width: 256px;
+                    float: left;
+                    &.search-thumb{
+                        padding-left: 10px;
+                        width: 120px;
+                        img {
+                            width: 100%;
+                        }
+                    }
+                    span {
                         color: #888;
+                        font-style: italic;
+                        a {
+                            color: #888;
+                        }
                     }
                 }
             }
-        }
         }
     }
     nav{
+        float:right;
         list-style:none;
         li{
             float:left;
-            margin: 1.35em 0 0 1em;
+            text-align: right;
+            margin: 2px 0 0 20px;
+            &.first{ margin: 2px 0 0 40px; }
             a {
                 .sansserif-font;
                 text-transform: lowercase;

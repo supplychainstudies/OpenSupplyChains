@@ -1,4 +1,5 @@
-<div class="footer dark-background">
+<div class="spacer"></div>
+<div class="footer gradient-background">
     <div class="container_16">
         <div class="grid_4">
             <h3>Carbon Catalog</h3>
@@ -37,9 +38,9 @@
             </ul>
         </div>
     </div>
-    <div class="spacer"></div>
+    <div class="clear"></div>
 </div>
-<div class="footer black-background">
+<div class="footer darker-gradient-background">
     <div class="container_16">
         <div class="grid_10">
             <h3>Copyright</h3>

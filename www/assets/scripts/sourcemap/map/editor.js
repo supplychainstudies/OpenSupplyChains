@@ -134,7 +134,48 @@ Sourcemap.Map.Editor.prototype.init = function() {
         stopl = this.map.getStopLayer(k);
         break;
     }
-    this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl));
+
+    var scid = k;
+
+    this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
+        "onStart": $.proxy(function() {
+            this.map.controls.select.unselectAll();
+        }, this),
+        "onComplete": $.proxy(function(ftr, px) {
+            ftr.popup.updatePosition();
+            this.editor.moveStop(ftr);
+        }, {"editor": this})
+    }));
+
+    this.map.controls.stopdrag.handlers.drag.stopDown = false;
+    this.map.controls.stopdrag.handlers.drag.stopUp = false;
+    this.map.controls.stopdrag.handlers.drag.stopClick = false;
+
+    this.map.controls.stopdrag.handlers.feature.stopDown = false;
+    this.map.controls.stopdrag.handlers.feature.stopUp = false;
+    this.map.controls.stopdrag.handlers.feature.stopClick = false;
+
     this.map.controls.stopdrag.activate();
 }
 
+Sourcemap.Map.Editor.prototype.moveStop = function(ftr) { //todo: rename this
+    var scid = ftr.attributes.supplychain_instance_id;
+    var stid = ftr.attributes.stop_instance_id;
+    var st = this.map.findSupplychain(scid).findStop(stid);
+    st.geometry = (new OpenLayers.Format.WKT()).write(ftr);
+    var ll = new OpenLayers.LonLat(ftr.geometry.x, ftr.geometry.y)
+    ftr.popup.lonlat = ll;
+    ftr.popup.updatePosition();
+    ll = ll.clone();
+    ll.transform(new OpenLayers.Projection('EPSG:900913'), new OpenLayers.Projection('EPSG:4326'));
+    this.map_view.updateStatus("Moved stop '"+st.getLabel()+'"..."');
+    Sourcemap.Stop.geocode(ll, $.proxy(function(data) {
+        if(data && data.results && data.results.length) {
+            this.editor.map_view.updateStatus("Updated address...");
+            this.stop.setAttr("address", data.results[0].placename);
+            Sourcemap.broadcast('supplychain-updated', 
+                this.editor.map.findSupplychain(ftr.supplychain_instance_id)
+            );
+        }
+    }, {"stop": st, "editor": this}));
+}

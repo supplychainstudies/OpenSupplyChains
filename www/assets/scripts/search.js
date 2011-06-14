@@ -63,7 +63,7 @@ jQuery.fn.liveSearch = function (conf) {
                 position:   'absolute', 
                 left:       inputDim.left + 'px', 
                 top:        inputDim.topPos + 'px',
-                width:      inputDim.totalWidth + 'px'
+                width:      (inputDim.totalWidth <= 400) ? '400px' : inputDim.totalwidth + 'px'
             });
         };
 
@@ -181,4 +181,4 @@ jQuery.fn.liveSearch = function (conf) {
 };
 
 // Load the search functionality 
-jQuery('#header-search').liveSearch({url: '/services/search/'});
+jQuery('#search').liveSearch({url: '/services/search/'});

@@ -1,21 +1,15 @@
-    <div id="branding" class="container_16">
+    <div id="masthead" class="container_16">
         <div class="grid_4">
             <a href="">        
-                <header id="masthead">
+                <header id="logo">
                     <img src="/assets/images/logo.png" alt="sourcemap" />
                 </header>
             </a>
         </div>
-        <div id="header-search-div" class="grid_7">
-            <form method="post" action="/search/">
-                <input id="header-search" type="search" results="0" placeholder="Search" />
-                <div id="livesearch"></div>
-            </form>
-        </div>
-        <nav id="header-nav">
-            <div class="grid-5">
+        <div id="header" class="grid_12">
+            <nav>
                 <ul>
-                    <li>
+                    <li class="first">
                         <a href="browse">Browse</a>            
                     </li>
                     <li>
@@ -23,14 +17,24 @@
                     </li>
                     <li>
                         <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
-                        <a href="/home"><?= HTML::chars($current_user->username) ?></a>&nbsp;|&nbsp;<a href="auth/logout">Log out</a></span>
+                            <a href="/home"><?= HTML::chars($current_user->username) ?></a>
+                        &nbsp;|&nbsp;<a href="auth/logout">Log out</a></span>
                         <?php else:  // Otherwise, this ?>
                         <a href="/register">Register</a> | <a href="auth">Log in</a>
                         <?php endif; ?>
                     </li>
                 </ul>
-            </div>
-        </nav>
-    </div> <!-- #branding .container -->
+            </nav>
+            <form method="post" action="/search/">
+                <button onclick="('masthead-search').submit(); return false;" type="button" id="search-button" dir="ltr" role="button">
+                    <span>Search</span>
+                </button>
+                <label>
+                    <input id="search" type="search" results="0" />
+                </label>
+            </form>
+            <div id="livesearch"></div>
+        </div> <!-- #header -->
+    </div> <!-- #branding -->
     <div class="clear"></div>
 

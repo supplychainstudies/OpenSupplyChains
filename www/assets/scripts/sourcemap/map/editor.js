@@ -20,17 +20,74 @@ Sourcemap.Map.Editor.prototype.broadcast = function() {
 
 Sourcemap.Map.Editor.prototype.init = function() {
 
+    // listen for supplychain updates and save
+    Sourcemap.listen('supplychain-updated', function(evt, sc) {
+        var succ = $.proxy(function() {
+            this.map_view.updateStatus("Saved...", "good-news");
+        }, this);
+        var fail = $.proxy(function() {
+            this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
+        }, this);
+        this.map_view.updateStatus("Saving...");
+        Sourcemap.saveSupplychain(sc, {"supplychain_id": sc.remote_id, "success": succ, "failure": fail});
+    }, this);
+
     // decorate prep_popup
-    Sourcemap.listen('popup-initialized', $.proxy(function(evt, p, st) {
+    Sourcemap.listen('popup-initialized', $.proxy(function(evt, p, ref) {
         // todo: make popup buttons part of the popup class?
         $(p.contentDiv).find('.popup-wrapper .popup-buttons').append(
             '<a class="popup-edit-link" href="javascript: void(0);">Edit</a>'
         );
         $(p.contentDiv).find('.popup-edit-link').click($.proxy(function(e) {
-            Sourcemap.template('map/edit/edit-stop', function(p, tx, th) {
-                this.editor.map_view.showDialog(th);
-            }, {"stop": st}, this);
-        }, {"stop": st, "editor": this}));
+            var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
+            Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
+                this.editor.map_view.showDialog(th, true);
+                $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
+                    // save updated attributes
+                    var f = $(e.target).parent();
+                    var vals = f.serializeArray();
+                    for(var k in vals) {
+                        var val = vals[k].value;
+                        k = vals[k].name;
+                        if(k === "address" && (val != this.ref.getAttr("address", false))) {
+                            this.ref.setAttr(k, val);
+                            // if address is set, move the stop.
+                            $(f).find('input,textarea,select').attr("disabled", true);
+                            Sourcemap.Stop.geocode(this.ref.getAttr("address"), $.proxy(function(res) {
+                                var pl = res && res.results ? res.results[0] : false;
+                                if(pl) {
+                                    this.stop.setAttr("address", pl.placename);
+                                    var new_geom = new OpenLayers.Geometry.Point(pl.lon, pl.lat);
+                                    new_geom = new_geom.transform(
+                                        new OpenLayers.Projection('EPSG:4326'),
+                                        new OpenLayers.Projection('EPSG:900913')
+                                    );
+                                    this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom))
+                                    this.editor.map.mapStop(this.stop, this.stop.supplychain_id);
+                                    this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
+                                    this.editor.map.stopFeature(this.stop).popup.panIntoView();
+                                    this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
+                                } else {
+                                    $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
+                                    this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
+                                }
+                                this.editor.map.controls.select.select(
+                                    this.editor.map.stopFeature(this.stop)
+                                );
+                                this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
+                            }, {"stop": this.ref, "edit_form": f, "editor": this.editor}));
+                        } else {
+                            this.ref.setAttr(k, val);
+                        }
+                    }
+                    if(this.ref instanceof Sourcemap.Stop) {
+                        this.editor.map.mapStop(this.ref, this.ref.supplychain_id);
+                        this.editor.map_view.hideDialog();
+                        this.editor.map_view.updateStatus("Stop updated...", "good-news");
+                    }
+                }, {"ref": this.ref, "editor": this.editor}));
+            }, {"ref": this.ref}, this);
+        }, {"ref": ref, "editor": this}));
     }, this));
 
     this.map.dockAdd('addstop', {
@@ -58,6 +115,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 }
                 // add a stop to the supplychain object
                 sc.addStop(new_stop);
+                Sourcemap.Stop.geocode(new_stop);
                 // redraw the supplychain
                 //this.map.mapSupplychain(sc.instance_id);
                 this.map.mapStop(new_stop, sc.instance_id);
@@ -69,5 +127,14 @@ Sourcemap.Map.Editor.prototype.init = function() {
             }, this)
         }
     });
+    
+    // set up drag control
+    var stopl = false;
+    for(var k in this.map.supplychains) {
+        stopl = this.map.getStopLayer(k);
+        break;
+    }
+    this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl));
+    this.map.controls.stopdrag.activate();
 }
 

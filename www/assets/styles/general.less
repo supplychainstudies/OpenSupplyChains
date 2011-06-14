@@ -300,12 +300,15 @@ img a:hover{
         font-size: 1.4em;
         border-bottom: 1px solid #ccc;
     }
-    select,input[type=text],input[type=password]{
+    select,input[type=text],input[type=password],textarea{
         height: @height;
         clear:both;
         float:left;
     }
-    input[type=submit]{
+    textarea {
+        height: 3em;
+    }
+    input[type=submit], input.submit{
         height: @height;
         clear:both;
         float:left;

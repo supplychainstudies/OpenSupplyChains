@@ -16,7 +16,7 @@
 div.anythingSlider .anythingControls {
     position: absolute;
     bottom: 25px;
-    right: 128px;
+    right: 145px;
     z-index: 100;
 }
 div.anythingSlider .thumbNav {
@@ -44,7 +44,6 @@ div.anythingSlider .thumbNav a {
 
 div.anythingSlider .thumbNav a.cur {
     opacity: 1;
-    background-color: #fff;
 }
 
 /******* SET DEFAULT DIMENSIONS HERE ********/
@@ -73,7 +72,7 @@ div.anythingSlider .anythingWindow {
 /* wrapper: 45px right & left padding for the arrows, 28px @ bottom for navigation */
 div.anythingSlider {
         position: relative;
-        padding: 5px 45px;
+        padding: 0 45px;
 }
 /* anythingSlider base UL */
 ul.anythingBase {

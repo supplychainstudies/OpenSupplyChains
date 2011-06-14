@@ -5,7 +5,20 @@
 /* PAGE STYLES 
  * -------------------------------------------------------------- */
 
-html { height:100%;}
+html,body { height:100%;}
+
+/* Sticks the footer to the bottom of the page */
+#wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -500px;
+}
+#footer, #push {
+    clear: both;
+    height: 500px;
+}
+
 body {
     .sansserif-font;
     font-size:1em;
@@ -13,22 +26,6 @@ body {
     padding-top:.5em;
     margin:0 auto;
     background: @background;
-    a:hover, a:active, a:visited, a, a:link {
-        /*color:@brand-color;*/
-    }
-    #branding, #content, #footer-content, #page-navigation, .splash-text {
-        padding-left:0;
-        padding-right:0;
-    }
-    #content {
-        article {
-            max-width:760px;
-        }
-        #sidebar {
-            max-width:220px;            
-        }
-        border-left:1px solid #ccc;
-    }
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -64,11 +61,13 @@ img a:hover{
     text-underline: none;
 }
 
+
 /* BRANDING & MASTHEAD 
  * -------------------------------------------------------------- */
 
-.overlay {
-    display: none;
+button::-moz-focus-inner {
+    border:0;
+    padding:2px 0 3px;
 }
 
 #masthead {
@@ -91,16 +90,15 @@ img a:hover{
         margin-top: 3px;
     }
     button{
-        .rounded(0);
         float:right;
         color: #aaa;
         border: 1px solid #000;
-        margin-left: 0;
+        margin: 2px 0 0 0;
         text-transform: lowercase;
-        -webkit-appearance: none;
         background-color: #fff;
         background-image: -moz-linear-gradient(top,white,#EFEFEF);
         background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
+
     }
     label{
         display:block;
@@ -594,11 +592,12 @@ img a:hover{
     height:100%;
     position:fixed;
     top:0; left:0;
-    .transparent;
     background:#ddd;
-    background:rgba(200,200,200,0.8);
+    background: -webkit-radial-gradient(rgba(127, 127, 127, 0.5), rgba(127, 127, 127, 0.5) 35%, rgba(0, 0, 0, 0.7));
+    background: -moz-radial-gradient(45px 45px 45deg, circle cover, rgba(127, 127, 127, 0.5), rgba(127, 127, 127, 0.5) 35%, rgba(0, 0, 0, 0.7));
     z-index:1000;
 }
+
 #simplemodal-container, .dialog {
     background:@background;
     margin:auto;

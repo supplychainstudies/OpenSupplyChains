@@ -3,16 +3,15 @@
 <?php if ($data): ?>
     <?php foreach($data->results as $i => $item): ?>
         <div class="map-item grid_4">
-        <a href="/map/view/<?php print $item->id; ?>">
-        <img class="small" src="/map/static/<?php print $item->id; ?>.s.png" alt="" />
-        </a>
-        <br />
-        <h3><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></h3>
-        <h4 class="author">By <?= isset($item->owner->name) ? $item->owner->name : "Unknown Owner" ?>
-        <br/>
-        Published <?php print date("F j, Y",$item->created);?></h4>
-        <br />
-        </a>
+            <a href="/map/view/<?php print $item->id; ?>">
+                <img class="small" src="/map/static/<?php print $item->id; ?>.s.png" alt="" />
+            </a>
+            <br />
+            <h3><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></h3>
+            <h4 class="author">By <?= isset($item->owner->name) ? $item->owner->name : "Unknown Owner" ?>
+            <br/>
+            Published <?php print date("F j, Y",$item->created);?></h4>
+            <br />
         </div>
     <?php endforeach; ?>
 <?php else: ?>

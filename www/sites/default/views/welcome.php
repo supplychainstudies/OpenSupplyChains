@@ -1,8 +1,7 @@
 <?php // Returns featured maps ?>
 <div class="clear"></div>
-    <div class="featured">
-        <?= View::factory('partial/thumbs/slider', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-    </div>
+<div class="featured">
+    <?= View::factory('partial/thumbs/slider', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
 </div>
 
 <div class="spacer"></div>
@@ -28,8 +27,10 @@
         <h2 class="section">Popular Today</h2>
     </div>
 </div>
-    <?= View::factory('partial/thumbs/featured', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-    
+<?= View::factory('partial/thumbs/featured', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+
+<div class="spacer"></div>
+
 <div class="container_16">
     <div class="grid_9">
         <h2 class="section">Recent</h2>
@@ -63,7 +64,7 @@
                         <div class="clear"></div>
                         <p>
                             <?= substr(HTML::chars($news_item->body), 0, 140) ?><br />
-                            <a class="readmore" href="http://blog.sourcemap.com">&raquo Read more</a>
+                            <a class="readmore" href="http://blog.sourcemap.com">&raquo; Read more</a>
                         </p>
                     </li>
                     <?php endforeach; ?>

@@ -15,7 +15,7 @@ if ($data):
                 <div class="description">
                     <h2><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></h2>
                     <p>
-                        <?= isset($item->description) ? $item->description : "This map's description seems to be missing.  Perhaps we should go add one!" ?></h2>
+                        <?= isset($item->description) ? $item->description : "This map's description seems to be missing.  Perhaps we should go add one!" ?>
                     </p>
                     <p class="author">
                         By <a href="user/<?php $item->owner->id; ?>"><?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a> 

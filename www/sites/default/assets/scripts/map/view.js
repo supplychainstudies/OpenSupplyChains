@@ -20,8 +20,5 @@ $(document).ready(function() {
         if(sc.editable){
             new Sourcemap.Map.Editor(Sourcemap.view_instance);
         }
-        control = new OpenLayers.Control.Button();
-        control.div = 'sourcemap-banner';
-        Sourcemap.view_instance.map.map.addControl(control);
     });
 });

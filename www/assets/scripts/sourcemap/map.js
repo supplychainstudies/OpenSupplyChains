@@ -413,14 +413,14 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     if(this.options.popups && this.options.stop_popups) {
         var puid = stop.instance_id+'-popup';
         var ll = new OpenLayers.LonLat(new_feature.geometry.x, new_feature.geometry.y);
-        console.log(ll);
         var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
         var sc = this.findSupplychain(scid);
         var cb = function() { 
             this.sourcemap.controls.select.unselectAll(); 
         }
-        // Offset popup so that it touches the outside edge of the stop
-        var new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
+        new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
+        new_popup.sourcemap = this;
+        new_popup.map = this.map;
         new_popup.feature = new_feature;
         new_popup.hide();
     }
@@ -431,8 +431,8 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     this.mapped_features[stop.instance_id] = new_feature;
     this.stop_features[scid][stop.instance_id] = {"stop": new_feature};
     if(new_popup) {
-        if(this.preparePopup instanceof Function) this.preparePopup.apply(this, [stop, new_feature, new_popup]);
         this.map.addPopup(new_popup);
+        if(this.preparePopup instanceof Function) this.preparePopup.apply(this, [stop, new_feature, new_popup]);
         this.stop_features[scid][stop.instance_id].popup = new_popup;
     }
     this.getStopLayer(scid).addFeatures([new_feature]);
@@ -730,8 +730,10 @@ Sourcemap.Popup.prototype.updateSize = function() {
 
 Sourcemap.Popup.prototype.moveTo = function(px) {
     if(px != null && this.div) {
-        $(this.div).css("left", px.x - ($(this.div).width() / 2));
-        $(this.div).css("top", px.y - ($(this.div).height()));
+        var xn = px.x - ($(this.div).width() / 2);
+        var yn = px.y - ($(this.div).height());
+        $(this.div).css("left", xn);
+        $(this.div).css("top", yn);
     }
 }
 

@@ -7,7 +7,7 @@
 
 html { height:100%;}
 body {
-    .serif-font;
+    .sansserif-font;
     font-size:1em;
     line-height:1.7em;
     padding-top:.5em;
@@ -37,9 +37,8 @@ h1,h2,h3,h4,h5,h6{
     font-weight: normal;
 }
 h1 {
-    font-size: 1.8em;
+    font-size: 40px;
     text-shadow: 2px 2px #DEDEDE;
-    font-weight: bold;
 }
 
 h2 {
@@ -87,12 +86,20 @@ img a:hover{
             display:none;
         }
     }
+    form{
+        margin-top: 3px;
+    }
     button{
         .rounded(0);
         float:right;
         color: #aaa;
-        margin-top: 5px;
+        border: 1px solid #000;
+        margin-left: 0;
         text-transform: lowercase;
+        -webkit-appearance: none;
+        background-color: #fff;
+        background-image: -moz-linear-gradient(top,white,#EFEFEF);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
     }
     label{
         display:block;
@@ -102,11 +109,12 @@ img a:hover{
         margin-top: 20px;
     }
     #search{
-        font-size:16px;
+        font-size:100%;
         border: solid 1px;
         border-right: none;
-        -webkit-appearance: none;
         width: 100%;
+        padding: 0;
+        -webkit-appearance: none;
     }
     #livesearch{
         .sansserif-font;
@@ -170,7 +178,7 @@ img a:hover{
     }
     nav{
         float:right;
-        list-style:none;
+        ul { list-style:none; }
         li{
             float:left;
             text-align: right;
@@ -179,7 +187,6 @@ img a:hover{
             a {
                 .sansserif-font;
                 text-transform: lowercase;
-                color: #333;
                 &:hover{
                     color: #555;
                     text-decoration: underline;
@@ -199,6 +206,11 @@ img a:hover{
 /* WELCOME PAGE STYLES 
  * -------------------------------------------------------------- */
 
+
+.gradient-background{
+    background-image: -moz-linear-gradient(top,#F4F4F4,#EFEFEF);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#EFEFEF),to(#F4F4F4));
+}
 
 .dark-background{
     background-color:#eaeaea;
@@ -220,7 +232,7 @@ img a:hover{
 
 .featured{
     height: 339px;
-    .dark-background;
+    .gradient-background;
     #slider{
         .map{
             img{
@@ -241,15 +253,16 @@ img a:hover{
                 }
                 p{
                     padding: 4px 0 4px 35px;
-                    &.author{
-                        color: #ccc;
-                        a{
-                            color: #ccc;
-                        }
-                    }
                 }
             }
         }
+    }
+}
+
+.author{
+    color: #aaa;
+    a{
+        color: #aaa;
     }
 }
 
@@ -259,7 +272,6 @@ img a:hover{
 }
 
 .map-item{
-    margin:0 auto 20px;
     text-align: center;
     img{
         .border;
@@ -273,23 +285,6 @@ img a:hover{
     }
 }
 
-.news{
-    ul{
-        list-style: none;
-        li{
-            font-size: .7em;
-            float:left;
-            padding: 0 0 20px;
-            img{
-                float: left;
-                padding: 10px 15px 10px 0;
-            }
-            p{
-                
-            }
-        }
-    }
-}
 
 /* FORM STYLES 
  * -------------------------------------------------------------- */
@@ -353,42 +348,6 @@ img a:hover{
         float:left;
         color:#fff;
     }
-}
-
-#content {
-    position:relative;
-    color:#111;
-    margin: 0 auto;
-    padding:0 5px 10px 5px;
-    article {
-        h2 {
-            margin-bottom:5px;            
-        }
-    }
-    aside {
-        padding:10px;
-    }
-    nav {
-        padding:10px;
-    }
-    #sidebar {
-        width:18%;
-        float:right;
-        -webkit-box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1) inset;
-        -moz-box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1) inset;
-         box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1) inset;
-        border-bottom-left-radius:8px;	      
-        -moz-border-radius-bottomleft:8px;
-        -webkit-border-bottom-left-radius:8px;
-        background:#f9f9f9;
-        background: -webkit-gradient(linear, left top, right top, from(#f9f9f9), to(@background)); 
-        background: -moz-linear-gradient(left,  #f9f9f9,  @background);
-        h3 {
-            font-size:1.4em;
-            margin-bottom:5px;
-        }
-    }
-    #secondary-navigation { clear:both; }
 }
 
 
@@ -671,12 +630,11 @@ img a:hover{
  * -------------------------------------------------------------- */
 
 .button {
-    background: #eee url("../images/button-overlay.png") repeat-x; 
-    display: inline-block; 
-    padding: 0 10px;
+    .sansserif-font;
+    padding: 2px 10px;
     color: #333;
     font-size: .8em;
-    font-weight: bold;
+    background: #fff;
     text-decoration: none;
     -moz-border-radius: 6px; 
     -webkit-border-radius: 6px;
@@ -690,15 +648,20 @@ img a:hover{
         text-decoration: none;
     }
 }
-.button:hover { background-color: #ddd; color: #333; }
+.button:hover { background-color: #eaeaea; color: #333; }
 
 .center {
     text-align: center;
 }
 
+.small{
+    font-size:75%;
+}
+
 .aside {
-    font-size: .7em;
-    padding: 0px 30px;
+    background: url("../images/stripe.png") transparent;
+    padding: 10px 40px;
+    margin: 0px 20px;
 }
 
 .error {
@@ -800,19 +763,21 @@ img a:hover{
     }
 }
 
-.news {
-    .news-item {
-        img {
-            float: left;
-        }
-        .title {
-            font-size: 2em;
-        }
-        p {
-            .serif-font;
-            font-size: .1.2em;
-            a {
-                .sansserif-font;
+.news{
+    ul{
+        list-style: none;
+        li{
+            float:left;
+            padding: 0 0 20px;
+            img{
+                float: left;
+                padding: 10px 15px 10px 0;
+            }
+            p{
+                font-size:80%;    
+                a.readmore{
+                    float:right;
+                }
             }
         }
     }

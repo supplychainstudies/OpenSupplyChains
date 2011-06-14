@@ -254,7 +254,7 @@ Sourcemap.Stop.toLonLat = function(st, proj) {
     return {"lon": geom.x, "lat": geom.y};
 }
 
-Sourcemap.Stop.geocode = function(st, cb, failcb) {
+Sourcemap.Stop.geocode = function(st, cb) {
     var cb = cb || $.proxy(function(data) {
         if(data && data.results) {
             this.setAttr("address", data.results[0].placename);

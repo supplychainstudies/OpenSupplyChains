@@ -1,7 +1,6 @@
 <?php // Returns featured maps ?>
 <div class="clear"></div>
-<div class="grids">
-    <div class="grid grid-16 featured">
+    <div class="featured">
         <?= View::factory('partial/thumbs/slider', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
 </div>
@@ -10,7 +9,7 @@
 
 <div class="container_16 center">
     <div class="grid_11">
-        <h1>Where things <span class="highlight">come from</span>.</h1>
+        <h1>See where things <span class="highlight">come from</span>.</h1>
         <p>Simply put, we believe that people have the right to know where things come from, what they're made of, and how they affect the environment.  Using freely available data, Sourcemap helps you understand these complex interactions at a glance.</p>  
     </div>
     <div class="grid_5">

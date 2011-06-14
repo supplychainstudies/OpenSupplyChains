@@ -31,22 +31,29 @@
     <?= View::factory('partial/thumbs/featured', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     
 <div class="container_16">
-    <div class="grid_3">
+    <div class="grid_9">
         <h2 class="section">Recent</h2>
+    </div>
+    <div class="grid_1">&nbsp;</div>
+    <div class="grid_6">
+        <h2>News From Headquarters</h2>
+    </div>
+</div>
+
+
+<div class="container_16">
+    <div class="grid_3">
         <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     <div class=" grid_3">
-        <h3>&nbsp;</h3>
         <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     <div class="grid_3">
-        <h3>&nbsp;</h3>
         <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     <div class="grid_1">&nbsp;</div>
     <div class="grid_6">
         <?php if($news): ?>
-            <h2>News From Headquarters</h2>
             <div class="news">
                 <ul>
                     <?php foreach($news as $i => $news_item): ?>

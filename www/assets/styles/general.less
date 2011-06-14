@@ -43,6 +43,7 @@ h1 {
 
 h2 {
     font-size: 1.3em;
+    border-bottom: 1px solid #eee;
 }
 
 a {
@@ -212,16 +213,18 @@ img a:hover{
     background-image: -webkit-gradient(linear,left top,left bottom,from(#EFEFEF),to(#F4F4F4));
 }
 
-.dark-background{
-    background-color:#eaeaea;
-}
-
-.black-background{
+.darker-gradient-background{
+    background-image: -moz-linear-gradient(top,#151515,#333333);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#333333),to(#151515));
     background-color:#333;
     color: #eaeaea;
     a{
         color: #eaeaea;
     }
+}
+
+.footer.darker-gradient-background h3{
+    border-bottom: 1px solid #454545;
 }
 
 .intro{
@@ -573,6 +576,10 @@ img a:hover{
     ul{
         list-style: none;
     }
+    h3{
+        font-size: 130%;
+        border-bottom: 1px solid #dfdfdf;
+    }
 }
 
 /* MODAL STRUCTURES 
@@ -664,27 +671,17 @@ img a:hover{
     margin: 0px 20px;
 }
 
-.error {
-    background:red;/* !important;*/
-    color:white;/* !important;*/
-    line-height: 1.6em;
-    text-indent: .5em;
-}
-
 .status-messages {
     font-size: 1.4em;
     list-style-type: none;
     width: 100%;
     margin: 0;
     padding: 0;
-}
-.status-messages {
     .status-message {
         color: #333;
         padding: .25em;
-        border: 0 0 1px 0 solid #333;
         &.error {
-            background-color: #ffc0c0;
+            background-color: #fbf7d5;
             border-color: #ff8080;
         }
         &.warning {
@@ -699,6 +696,10 @@ img a:hover{
             background-color: #9999ff;
             border-color: #5555ff;
         }
+    }
+    .status-wrap{
+        padding: 5px 10px;
+        border: 1px dashed #ddd;
     }
 }
 
@@ -715,7 +716,7 @@ img a:hover{
 
 .spacer{
     clear: both;
-    height: 20px;
+    height: 40px;
 }
 
 .highlighted{
@@ -769,12 +770,16 @@ img a:hover{
         li{
             float:left;
             padding: 0 0 20px;
+            h5{ 
+                color:#aaa;
+                font-style: italic;
+            }
             img{
                 float: left;
                 padding: 10px 15px 10px 0;
             }
             p{
-                font-size:80%;    
+                margin: 20px 0;
                 a.readmore{
                     float:right;
                 }

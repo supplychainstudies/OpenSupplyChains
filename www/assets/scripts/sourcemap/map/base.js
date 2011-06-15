@@ -219,7 +219,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     return this;
 }
 
-Sourcemap.Map.Base.prototype.initDialog = function() {
+Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
    
     // set up detail pane
     if(!this.dialog) {
@@ -235,9 +235,11 @@ Sourcemap.Map.Base.prototype.initDialog = function() {
     $(this.dialog_close).click($.proxy(function() { this.dialogClose(); }, this));
     this.dialog_content = $('<div id="detail-content" class="content"></div>');
     this.dialog.append(this.dialog_close)
-        .append(this.dialog_prev_el)
-        .append(this.dialog_content)
-        .append(this.dialog_next_el);
+    if(!no_controls) 
+        this.dialog.append(this.dialog_prev_el)
+    this.dialog.append(this.dialog_content);
+    if(!no_controls)
+        this.dialog.append(this.dialog_next_el);
     $(this.dialog).data("state", 1); // todo: check this?
 
     // close on click-out
@@ -276,7 +278,9 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup, no_controls) {
         $(this.curtain).removeClass("hidden").fadeIn();
         // update dialog content and position
         if(mkup && no_controls) {
-            $(this.dialog).html(mkup); // wipe controls
+            this.dialog.empty();
+            this.initDialog(no_controls);
+            $(this.dialog_content).html(mkup); // wipe controls
         } else if(mkup) {
             this.dialog.empty();
             this.initDialog();

@@ -57,6 +57,11 @@ Sourcemap.Map.prototype.defaults = {
             "labelYOffset": -4,
             "fontSize": "em",
             "fillColor": "${color}"
+        },
+        "connecting": {
+            "graphicName": "stareight",
+            "pointRadius": "${size}",
+            "fillcolor": "${color}"
         }
     }, 
     "hop_style": {
@@ -259,7 +264,13 @@ Sourcemap.Map.prototype.initControls = function() {
                     },
                     this
                 ),
-                "clickOut": true
+                "clickoutFeature": OpenLayers.Function.bind(
+                    function(feature) {
+                        this.controls.select.unselectAll();
+                        this.broadcast('map:feature_clickout', this, feature); 
+                    }, 
+                    this
+                )
             })
         );
         $(document).bind(['map:layer_added', 'map:layer_removed'], function(e, map, label, layer) {
@@ -462,6 +473,26 @@ Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
             var stlf = stl.features[i];
             if(stlf.attributes.stop_instance_id == stid) {
                 f = stlf;
+                break;
+            }
+        }
+    }
+    return f;
+}
+
+Sourcemap.Map.prototype.hopFeature = function(scid, hid) {
+    if(scid && !hid && (scid instanceof Sourcemap.Hop)) {
+        hid = scid;
+        scid = hid.supplychain_id;
+        hid = hid.instance_id;
+    }
+    var hl = this.getHopLayer(scid);
+    var f = false;
+    if(hl) {
+        for(var i=0; i<hl.features.length; i++) {
+            var hlf = hl.features[i];
+            if(hlf.attributes.hop_instance_id == hid) {
+                f = hlf;
                 break;
             }
         }

@@ -527,7 +527,7 @@ Sourcemap.Map.Base.prototype.dialogClose = function() {
     if($(this.dialog).data("state")) {
         this.hideDialog();
     }
-    this.tour.stop();//.wait();
+    if(this.tour) this.tour.stop();//.wait();
 }
 
 Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {

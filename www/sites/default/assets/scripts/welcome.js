@@ -4,7 +4,7 @@ $(function () {
         delay: 5000,
         easing: 'easeInOutExpo',
         hashtags: false,
-        width: '960px',
+        width: '940px',
         height: '356px',
         onInitialized : function(){      // Random styling of buttons 
             var minSize = 18;

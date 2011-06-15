@@ -143,6 +143,11 @@
             if($this->_validate_raw_supplychain($put)) {
                 $raw_sc = $put->supplychain;
                 $supplychain->save_raw_supplychain($raw_sc, $id);
+                Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
+                    'supplychain_id' => (int)$id,
+                    'sizes' => Sourcemap_Map_Static::$image_sizes,
+                    'thumbs' => Sourcemap_Map_Static::$image_thumbs
+                ));
             }
         } catch(Exception $e) {
             return $this->_bad_request('Could not save supplychain: '.$e->getMessage());

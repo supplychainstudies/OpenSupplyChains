@@ -124,7 +124,6 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                         imagecolorallocate($pimg, 0, 0, 255);
                     }
                     imagepng($pimg);
-                    //header('Content-Type: text/plain');
                     Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
                         'supplychain_id' => $supplychain->id,
                         'sizes' => Sourcemap_Map_Static::$image_sizes,

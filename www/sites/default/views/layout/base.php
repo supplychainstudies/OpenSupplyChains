@@ -20,13 +20,13 @@
 </head>
 <body class="main">
     <div id="wrapper">
-        <div class="overlay">
+        <!--div class="overlay">
             <div id="registration" class="dialog">
                 <div class="dialog-content">
-                    <?= View::factory('register', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+                    <?= true ? "" : View::factory('register', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
                 </div>
             </div>
-        </div>
+        </div-->
 
         <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         <div class="container_16">

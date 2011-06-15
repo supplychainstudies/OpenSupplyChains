@@ -166,6 +166,8 @@ Sourcemap.Supplychain.prototype.addHop = function(hop) {
         }
         this.hops.push(hop);
         hop.supplychain_id = this.instance_id;
+        hop.from_local_stop_id = this.findStop(hop.from_stop_id).local_stop_id;
+        hop.to_local_stop_id = this.findStop(hop.to_stop_id).local_stop_id;
         this.broadcast('supplychain:hop_added', this, hop);
     } else throw new Error("Sourcemap.Hop expected.");
     return this;
@@ -232,6 +234,29 @@ Sourcemap.Stop.prototype.getLabel = function() {
     return label;
 }
 
+Sourcemap.Stop.prototype.makeHopTo = function(to_stop) {
+    var fromll = Sourcemap.Stop.toLonLat(this);
+    var toll = Sourcemap.Stop.toLonLat(to_stop);
+    var rt = Sourcemap.great_circle_route(fromll, toll);
+    var pts = [];
+    for(var i=0; i<rt.length; i++) {
+        var pt = rt[i];
+        pt = new OpenLayers.Geometry.Point(pt.lon, pt.lat);
+        pts.push(pt);
+    }
+    var new_geom = new OpenLayers.Geometry.MultiLineString(
+        new OpenLayers.Geometry.LineString(pts)
+    );
+    new_geom = new_geom.transform(
+        new OpenLayers.Projection('EPSG:4326'),
+        new OpenLayers.Projection('EPSG:900913')
+    );
+    new_geom = new OpenLayers.Feature.Vector(new_geom);
+    new_geom = (new OpenLayers.Format.WKT()).write(new_geom);
+    var new_hop = new Sourcemap.Hop(new_geom, this.instance_id, to_stop.instance_id);
+    return new_hop;
+}
+
 Sourcemap.Stop.fromLonLat = function(ll, proj) {
     var proj = proj || 'EPSG:4326';
     var geom = new OpenLayers.Geometry.Point(ll.lon, ll.lat);
@@ -283,6 +308,13 @@ Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {
     this.to_stop_id = to_stop_id;
     this.geometry = geometry;
     this.attributes = attributes ? Sourcemap.deep_clone(attributes) : {};
+}
+
+Sourcemap.Hop.prototype.toJSON = function() {
+    var j = Sourcemap.deep_clone(this);
+    j.from_stop_id = this.from_local_stop_id;
+    j.to_stop_id = this.to_local_stop_id;
+    return j;
 }
 
 Sourcemap.Hop.prototype.getAttr = function(k, d) {

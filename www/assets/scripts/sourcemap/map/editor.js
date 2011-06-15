@@ -19,6 +19,20 @@ Sourcemap.Map.Editor.prototype.broadcast = function() {
 }
 
 Sourcemap.Map.Editor.prototype.init = function() {
+    
+    // add symbol for 'connecting'
+    if(!OpenLayers.Renderer.symbol.stareight)
+        OpenLayers.Renderer.symbol.stareight = [
+            0,9,
+                3,5, 9,8, 5,3,
+            9,0,
+                3,-5, 9,-8, 5,-3,
+            0,-9,
+                -3,-5, -9,-8, -5,-3,
+            -9,0,
+                -3,5, -9,8, -5,3,
+            0,9
+        ];
 
     // listen for supplychain updates and save
     Sourcemap.listen('supplychain-updated', function(evt, sc) {
@@ -32,12 +46,53 @@ Sourcemap.Map.Editor.prototype.init = function() {
         Sourcemap.saveSupplychain(sc, {"supplychain_id": sc.remote_id, "success": succ, "failure": fail});
     }, this);
 
+    // listen for select events, for connect-to, etc.
+    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        if(this.connect_from) {
+            // connect!
+            var fromstid = this.connect_from.attributes.stop_instance_id;
+            var tostid = ftr.attributes.stop_instance_id;
+            if(fromstid == tostid) return;
+            var sc = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+            var fromst = sc.findStop(fromstid);
+            var tost = sc.findStop(tostid);
+            var new_hop = fromst.makeHopTo(tost);
+            sc.addHop(new_hop);
+            this.map.mapHop(new_hop, sc.instance_id);
+            this.connect_from = false;
+            Sourcemap.broadcast('supplychain-updated', sc);
+            this.map.controls.select.unselectAll();
+            this.map.controls.select.select(this.map.hopFeature(new_hop));
+        } else {
+            // pass 
+            //alert('select');
+        }
+        this.connect_from = false;
+    }, this));
+
+    // listen for select clickout events, for connect-to, etc.
+    Sourcemap.listen('map:feature_clickout', $.proxy(function(evt, map, ftr) {
+        this.connect_from = false;
+    }, this));
+
     // decorate prep_popup
     Sourcemap.listen('popup-initialized', $.proxy(function(evt, p, ref) {
+        
         // todo: make popup buttons part of the popup class?
+
+        // add edit button
         $(p.contentDiv).find('.popup-wrapper .popup-buttons').append(
             '<a class="popup-edit-link" href="javascript: void(0);">Edit</a>'
         );
+
+        if(ref instanceof Sourcemap.Stop) {
+            // add connect button
+            $(p.contentDiv).find('.popup-wrapper .popup-buttons').append(
+                '<a class="popup-connect-link" href="javascript: void(0);">Connect</a>'
+            );
+        }
+
+        // bind event to edit link
         $(p.contentDiv).find('.popup-edit-link').click($.proxy(function(e) {
             var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
             Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
@@ -88,6 +143,14 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 }, {"ref": this.ref, "editor": this.editor}));
             }, {"ref": this.ref}, this);
         }, {"ref": ref, "editor": this}));
+
+        // bind click event to connect button
+        $(p.contentDiv).find('.popup-connect-link').click($.proxy(function(e) {
+            this.feature.renderIntent = "connecting";
+            this.editor.map.getStopLayer(this.feature.attributes.supplychain_instance_id).drawFeature(this.feature);
+            this.editor.connect_from = this.feature;
+        }, {"ref": ref, "editor": this, "feature": p.feature}));
+
     }, this));
 
     this.map.dockAdd('addstop', {
@@ -143,7 +206,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
         }, this),
         "onComplete": $.proxy(function(ftr, px) {
             ftr.popup.updatePosition();
-            this.editor.moveStop(ftr);
+            this.editor.moveStopToFeatureLoc(ftr);
         }, {"editor": this})
     }));
 
@@ -158,7 +221,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.activate();
 }
 
-Sourcemap.Map.Editor.prototype.moveStop = function(ftr) { //todo: rename this
+Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr) { //todo: rename this
     var scid = ftr.attributes.supplychain_instance_id;
     var stid = ftr.attributes.stop_instance_id;
     var st = this.map.findSupplychain(scid).findStop(stid);

@@ -4,21 +4,28 @@
                 <img src="map/static/<?= $result->id ?>.s.png" />
             </a>
         </div>
-        <div class="grid_11 details">
+        <div class="grid_7">
             <a href="map/view/<?= $result->id ?>">
-                <h4 class="title"><?= isset($result->attributes->title) ? HTML::chars($result->attributes->title) : "An Unnamed Sourcemap" ?></h4>
+                <h2 class="title"><?= isset($result->attributes->title) ? HTML::chars($result->attributes->title) : "An Unnamed Sourcemap" ?></h2>
             </a>
-            <p class="dates">Created <span class="date created"><?= date('r', $result->created) ?></span>
-                <?php if($result->modified > $result->created): ?>
-                    <br />Updated <span class="date modified"><?= date('r', $result->modified) ?></span>
-                <?php endif; ?>
-            </p>
+            
             <?php if(isset($result->attributes->teaser) && $result->attributes->teaser): ?>
-            <p class="teaser"><?= HTML::chars($result->attributes->teaser) ?></p>
+                <p class="teaser"><?= HTML::chars($result->attributes->teaser) ?></p>
             <?php elseif(isset($result->attributes->description) && $result->attributes->description): ?>
-            <p class="teaser"><?= HTML::chars($result->attributes->description) ?></p>
+                <p class="teaser"><?= HTML::chars($result->attributes->description) ?></p>
             <?php else: ?>
-            <p class="teaser">-- No description. --</p>
+                <p class="teaser">(No description yet)</p>
+            </p>
+            <?php endif; ?>
+            
+            <?php if(isset($result->owner->name) && $result->owner->name): ?>
+                <h4 class="author">
+                    By <?= HTML::chars($result->owner->name) ?>,
+                    <?= date('F j, Y', $result->created) ?>
+                    <?php if($result->modified > $result->created): ?>
+                        <br />Last updated <?= date('F j, Y', $result->modified) ?>
+                    <?php endif; ?>
+                </h4>
             <?php endif; ?>
         </div>
         <div class="clear"></div>

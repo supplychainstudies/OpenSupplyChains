@@ -333,17 +333,32 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     z-index:0;
 }
 
-.map-banner {
-    .sansserif-font;
-    background: #fff;
-    background: rgba(255,255,255,.5);
+.map-banner { 
     position:absolute;
-    top:0; left:0;
+    top:0; left:0; right:0;
     z-index:1000;
-    width: 100%;
-    padding: .5em; 
-    height: 1.5em;
-    margin: 0;
+    
+    .map-banner-content {
+        .sansserif-font;
+        background: #fff;
+        .box_shadow(2px,2px,2px,2px);
+        -webkit-border-bottom-left-radius:4px;
+        -moz-border-radius-bottomleft:4px;
+        -webkit-border-bottom-right-radius:4px;
+        -moz-border-radius-bottomright:4px;
+        background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.9)), to(rgba(255,255,255,.5)));
+        padding: .5em; 
+        height: 1.5em;
+        margin: 0 auto;
+        width:100%;
+        div {
+            float:left;
+            padding-right:.5em;
+        }
+        .right {
+            float:right;
+        }
+    }
     .map-description {
         color: #666;
         text-align: center;

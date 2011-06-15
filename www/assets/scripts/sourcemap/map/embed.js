@@ -330,7 +330,15 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
         }   */
         
     }, this));
+    window.onload = $.proxy(function () { 
+        var id = parseInt(window.location.hash.substring(1));
+        for(var k in this.map.supplychains) {
+           var scid = k; break;
+        }
+        var ftrid = 0;
 
+        if(id && scid) { this.showStopDetails("stop-"+id, scid, ftrid); }
+    }, this);
 }
 
 Sourcemap.Map.Embed.prototype.initTour = function() {
@@ -449,8 +457,8 @@ Sourcemap.Map.Embed.prototype.hideDialog = function() {
 
 Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
    // make sure the target magic word index is valid
+      
     var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-    
     // sync tour
     var tftrs = this.tour.features;
     for(var tfi=0; tfi< tftrs.length; tfi++) {

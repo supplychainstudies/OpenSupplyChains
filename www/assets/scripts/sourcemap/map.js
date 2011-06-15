@@ -37,6 +37,7 @@ Sourcemap.Map.prototype.defaults = {
             "strokeWidth": "${strokeWidth}",
             "strokeColor": "${strokeColor}",
             "fontColor": "#eee",
+            "cursor":"pointer",
             "fontSize": "1.5em",
             "fontFamily": "Georgia, serif",
             "fillOpacity": 0.7,
@@ -133,7 +134,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
-        "styleId": 13860,
+        "styleId": 4993,
         "wrapDateLine": this.options.animation_enabled
     }));
     
@@ -421,6 +422,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     stcolor.r -= 8; stcolor.g -= 8; stcolor.b -= 8;
     new_feature.attributes.strokeColor = stcolor.toString();
     new_feature.attributes.strokeWidth = 2;
+
     var new_popup = false;
     if(this.options.popups && this.options.stop_popups) {
         var puid = stop.instance_id+'-popup';
@@ -549,6 +551,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     new_feature.attributes.width = 2;
     new_feature.attributes.color = this.options.default_feature_color;
+    
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     // save references to features
     this.mapped_features[hop.local_id] = new_feature;

@@ -1,40 +1,29 @@
 <div class="spacer"></div>
 <div class="footer gradient-background">
     <div class="container_16">
-        <div class="grid_4">
-            <h3>Carbon Catalog</h3>
-            <ul>
-                <li><a href="/parts">Part Catalogue</a></li>               
-                <li><a href="/transport">Transport Catalogue</a></li> 
-                <li><a href="/power">Power Catalogue</a></li>                                  
-                <li><a href="/processes">Process Catalogue</a></li> 
-                <li><a href="/endoflife">End of Life Catalogue</a></li>     
-            </ul>
-        </div>
-        <div class="grid_4">
+        <div class="grid_5">
             <h3>Information</h3>
             <ul>
-                <li><a href="/api">API and Code</a></li> 
-                <li><a href="/info/help/">Help with Sourcemap</a></li> 
-                <li><a href="/info/references/">Data References</a></li> 
-                <li><a href="/info/faqs/">FAQs</a></li> 
-                <li><a href="/info/contact-us/">Get In Touch</a></li>    
+                <li><a href="info">About Sourcemap</a></li>                
+                <li><a href="info/help">Help and FAQ</a></li> 
+                <li><a href="info/api">API and Code</a></li> 
+
             </ul>
         </div>
-        <div class="grid_4">
-            <h3>News</h3>
+        <div class="grid_6">
+            <h3>News & Contact</h3>
             <ul>
-                <li><a href="/press-releases">Press Releases</a></li> 
-                <li><a href="/blog/">Blog</a></li> 
+                <li><a href="/info/contact">Get In Touch</a></li>                   
+                <li><a href="http://blog.sourcemap.com">Sourcemap Blog</a></li> 
+                <li><a href="http://blog.sourcemap.com/category/press-releases">Press Releases</a></li> 
             </ul>
         </div>
-        <div class="grid_4">
-            <h3>Privacy & Licensing</h3>
+        <div class="grid_5">
+            <h3>Privacy & Use</h3>
             <ul>
-                <li><a href="">About Sourcemap</a></li>
-                <li><a href="">DMCA</a></li>
-                <li><a href="">Privacy Policy</a></li>
-                <li><a href="">Terms of Service</a></li>
+                <li><a href="info/privacy">Privacy Policy</a></li>
+                <li><a href="info/terms">Terms of Service</a></li>
+                <li><a href="info/dmca">DMCA</a></li>                
             </ul>
         </div>
     </div>

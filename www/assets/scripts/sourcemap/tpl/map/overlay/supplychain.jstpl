@@ -1,15 +1,19 @@
 <div class="container_16">
-    <div class="map-summary grid_3">
-       <%= this.getAttr("name", "A Sourcemap") %>
-    </div>
-    <div class="map-description grid_4">
-        Created by <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a> <%= Sourcemap.humanDate((new Date(this.created*1000))) %>.
-    </div>
-    <div class="map-status grid_6">
-        <div class="msg good-news">Loaded.</div>
-    </div>
-    <div class="map-share grid_3">
-        Share
+    <div class="grid_16">
+        <div class="map-banner-content">
+            <div class="map-summary">
+               <%= this.getAttr("name", "A Sourcemap") %>
+            </div>
+            <div class="map-description">
+                Created by <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a> <%= Sourcemap.humanDate((new Date(this.created*1000))) %>.
+            </div>
+            <div class="map-status">
+                <div class="good-news">Loaded.</div>
+            </div>
+            <div class="map-share right">
+                Share
+            </div>
+        </div>
     </div>
 </div>
 

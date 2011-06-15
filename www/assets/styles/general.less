@@ -12,11 +12,11 @@ html,body { height:100%;}
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -500px;
+    margin: 0 auto -480px;
 }
 #footer, #push {
     clear: both;
-    height: 500px;
+    height: 480px;
 }
 
 body {
@@ -66,12 +66,12 @@ img a:hover{
  * -------------------------------------------------------------- */
 
 button::-moz-focus-inner {
-    border:0;
-    padding:2px 0 3px;
+    padding: 2px 0 1px;
 }
 
 #masthead {
-    font-size: 95%;
+    font-size:95%;
+    line-height: 12px;
     height: 72px;
     > a { 
         text-decoration:none;
@@ -86,26 +86,42 @@ button::-moz-focus-inner {
             display:none;
         }
     }
-    form{
-        margin-top: 3px;
-    }
     button{
         float:right;
         color: #aaa;
         border: 1px solid #000;
-        margin: 2px 0 0 0;
+        font-size:11px;
         text-transform: lowercase;
         background-color: #fff;
         background-image: -moz-linear-gradient(top,white,#EFEFEF);
         background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
-
+        margin-left: 0;
     }
     label{
         display:block;
         overflow:hidden;
     }
     #header{
-        margin-top: 20px;
+        margin-top: 24px;
+        ul.nav{
+            margin-top: 4px;
+            float:right;
+            list-style:none;
+            li{
+                float:left;
+                text-align: right;
+                margin: 2px 0 0 20px;
+                &.first{ margin: 2px 0 0 40px; }
+                a {
+                    .sansserif-font;
+                    text-transform: lowercase;
+                    &:hover{
+                        color: #555;
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
     }
     #search{
         font-size:100%;
@@ -123,6 +139,7 @@ button::-moz-focus-inner {
         z-index: 999;
         display:none;
         width: 400px; 
+        line-height: 26px;
         ul {
             list-style:none;
             margin: 0;
@@ -171,24 +188,6 @@ button::-moz-focus-inner {
                             color: #888;
                         }
                     }
-                }
-            }
-        }
-    }
-    nav{
-        float:right;
-        ul { list-style:none; }
-        li{
-            float:left;
-            text-align: right;
-            margin: 2px 0 0 20px;
-            &.first{ margin: 2px 0 0 40px; }
-            a {
-                .sansserif-font;
-                text-transform: lowercase;
-                &:hover{
-                    color: #555;
-                    text-decoration: underline;
                 }
             }
         }
@@ -283,6 +282,9 @@ button::-moz-focus-inner {
     }
     span{
         .serif-font;
+    }
+    h4{
+        margin-top: 0;
     }
 }
 
@@ -574,7 +576,7 @@ button::-moz-focus-inner {
  * -------------------------------------------------------------- */
 
 .footer {
-    padding: 20px 0;
+    padding: 10px 0 20px;
     ul{
         list-style: none;
     }
@@ -707,8 +709,8 @@ button::-moz-focus-inner {
 }
 
 .boxed {
-    padding:5px;
     .rounded(4px);
+    padding:5px;
     background:#f5f5f5;
     border:1px solid #eee;
 }
@@ -719,7 +721,7 @@ button::-moz-focus-inner {
 
 .spacer{
     clear: both;
-    height: 40px;
+    height: 30px;
 }
 
 .highlighted{

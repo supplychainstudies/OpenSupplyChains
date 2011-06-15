@@ -6,7 +6,7 @@
 
 <div class="spacer"></div>
 
-<div class="container_12 center">
+<div class="container_12">
     <div class="grid_8">
         <h1>See where things <span class="highlight">come from</span>.</h1>
         <p>We believe that people have the right to know where things come from, what they're made of, and how they affect the environment.  Using freely available data, Sourcemap helps you understand these complex interactions at a glance.</p>  

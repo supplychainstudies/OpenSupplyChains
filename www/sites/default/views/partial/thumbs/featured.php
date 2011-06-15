@@ -8,9 +8,8 @@
             </a>
             <br />
             <h3><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></h3>
-            <h4 class="author">By <?= isset($item->owner->name) ? $item->owner->name : "Unknown Owner" ?>
-            <br/>
-            Published <?php print date("F j, Y",$item->created);?></h4>
+            <h4 class="author">By <?= isset($item->owner->name) ? $item->owner->name : "Unknown Owner" ?>,
+            <?php print date("F j, Y",$item->created);?></h4>
             <br />
         </div>
     <?php endforeach; ?>

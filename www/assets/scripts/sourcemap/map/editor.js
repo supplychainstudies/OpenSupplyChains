@@ -174,7 +174,7 @@ Sourcemap.Map.Editor.prototype.moveStop = function(ftr) { //todo: rename this
             this.editor.map_view.updateStatus("Updated address...");
             this.stop.setAttr("address", data.results[0].placename);
             Sourcemap.broadcast('supplychain-updated', 
-                this.editor.map.findSupplychain(ftr.supplychain_instance_id)
+                this.editor.map.findSupplychain(st.supplychain_id)
             );
         }
     }, {"stop": st, "editor": this}));

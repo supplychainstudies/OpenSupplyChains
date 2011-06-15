@@ -505,6 +505,7 @@ Sourcemap.Map.prototype.hopFeature = function(scid, hid) {
 Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(!(hop instanceof Sourcemap.Hop))
         throw new Error('Sourcemap.Hop required.');
+    this.eraseHop(scid, hop.instance_id);
     if(this.options.hops_as_arcs || this.options.hops_as_bezier) {
         var sc = this.supplychains[scid];
         var wkt = new OpenLayers.Format.WKT();
@@ -567,6 +568,20 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     this.getHopLayer(scid).addFeatures([new_feature]);
     if(new_arrow)
         this.getHopLayer(scid).addFeatures([new_arrow]);
+}
+
+Sourcemap.Map.prototype.eraseHop = function(scid, hid) {
+    var rm = [];
+    var f = this.hopFeature(scid, hid);
+    if(f) {
+        rm.push(f);
+        if(f.arrow)
+            rm.push(f.arrow);
+    }
+    if(rm.length) {
+        this.getHopLayer(scid).removeFeatures(rm);
+    }
+    return this;
 }
 
 Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {

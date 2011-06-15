@@ -63,9 +63,11 @@ Sourcemap.Supplychain.prototype.addStop = function(stop) {
         if(this.stopIds().indexOf(stop.instance_id) >= 0) {
             throw new Error("Stop already exists in this supplychain.");
         }
-        this.stops.push(stop);
         stop.supplychain_id = this.instance_id;
-        stop.local_stop_id=  (Math.max.apply(window, this.localStopIds()) || 0) + 1;
+        lsids = this.localStopIds();
+        var last_id = lsids.length ? Math.max.apply(window, this.localStopIds()) : 0;
+        stop.local_stop_id = last_id + 1;
+        this.stops.push(stop);
         this.broadcast('supplychain:stop_added', this, stop);
     } else throw new Error("Sourcemap.Stop expected.");
     return this;
@@ -86,6 +88,8 @@ Sourcemap.Supplychain.prototype.removeStop = function(target_id) {
 }
 
 Sourcemap.Supplychain.prototype.stopHops = function(stop_id) {
+    if(stop_id instanceof Sourcemap.Stop)
+        stop_id = stop_id.instance_id;
     var stop_hops = {
         'in': [], 'out': []
     };

@@ -18,8 +18,8 @@ if ($data):
                         <?= isset($item->description) ? $item->description : "This map's description seems to be missing.  Perhaps we should go add one!" ?>
                     </p>
                     <p class="author">
-                        By <a href="user/<?php $item->owner->id; ?>"><?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a> 
-                        <br />
+                        By <a href="user/<?php $item->owner->id; ?>">
+                            <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
                         <?php print date("F j, Y",$item->created);?>
                         <br />
                     </p>

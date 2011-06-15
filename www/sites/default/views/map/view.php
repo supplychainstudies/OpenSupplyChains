@@ -1,13 +1,17 @@
 <div id="map">
     <div id="sourcemap-map-view" style="width: 100%; height: 100%; background-color: #ddd;"></div>
 </div>
-    <div class="clear"></div>
-
+    <div class="spacer"></div>
+        <div class="container_16">
+            <div class="grid_8">
+            <h2>Discussion</h2>
+            </div>
+        </div>
+    </div>
     <div class="container_16">
         <div class="grid_10"> 
             <div id="map-secondary-content">
                 <div id="discussion-section">
-                    <h3>Discussion</h3>
                     <?php if($can_comment): ?>
                     <div id="comment-form" class="form">
                         <fieldset><legend>Comment</legend>
@@ -33,7 +37,7 @@
                 </div><!-- #discussion-section -->
             </div><!-- #map-secondary-content -->
         </div><!-- .grid_10 -->
-        <div class="grid_6"> 
+        <div class="grid_6">
             <div id="qrcode-badge">
                 <img class="qrcode" src="<?= $qrcode_url ?>" />
                 <div class="qrcode-about">You can share this physically with a qrcode.</div>

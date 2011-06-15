@@ -174,6 +174,7 @@ Sourcemap.Map.prototype.initDock = function() {
         this.dock_element.append(this.dock_outerwrap.append(this.dock_content)));
     this.dockAdd('zoomin', {
         "ordinal": 2,
+        "title": 'Zoom In',
         "icon_url": "sites/default/assets/images/dock/zoomin.png",
         "callbacks": {
             "click": function() {
@@ -183,6 +184,7 @@ Sourcemap.Map.prototype.initDock = function() {
     });
     this.dockAdd('zoomout', {
         "ordinal": 1,
+        "title": 'Zoom Out',
         "icon_url": "sites/default/assets/images/dock/zoomout.png",
         "callbacks": {
             "click": function() {
@@ -195,10 +197,11 @@ Sourcemap.Map.prototype.initDock = function() {
 
 Sourcemap.Map.prototype.dockAdd = function(nm, o) {
     var icon_url = o.icon_url ? o.icon_url : null;
+    var title = o.title ? o.title : null;
     var callbacks = o.callbacks ? o.callbacks : {};
     this.dockRemove(nm);
     this.dock_controls[nm] = o;
-    var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'"><img src="'+icon_url+'" /></div>');
+    var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'"><img src="'+icon_url+'" alt="'+title+'" /></div>');
     $(this.dock_content).append(cel);
     if(callbacks.click) {
         $(cel).click($.proxy(callbacks.click, this));

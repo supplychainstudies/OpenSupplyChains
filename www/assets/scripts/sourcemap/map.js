@@ -104,19 +104,15 @@ Sourcemap.Map.prototype.initMap = function() {
     var controls = [
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),
             new OpenLayers.Control.ArgParser(),
-            new OpenLayers.Control.Attribution()
+            new OpenLayers.Control.Attribution(),
+            new OpenLayers.Control.MousePosition()
     ];
     //if(this.options.zoom_control) 
     //    controls.push(new OpenLayers.Control.ZoomPanel());
     var options = {
         "theme": "assets/scripts/openlayers/theme/sourcemap/style.css",
         "projection": new OpenLayers.Projection("EPSG:900913"),
-        "displayProjection": new OpenLayers.Projection("EPSG:4326"),
-        "units": "m",
-        "maxExtent": new OpenLayers.Bounds(
-            -20037508.43, -20037508.43,
-            20037508.43, 20037508.43
-        ),
+        //"displayProjection": new OpenLayers.Projection("EPSG:4326"),
         "controls": controls
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
@@ -135,7 +131,8 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 4993,
-        "wrapDateLine": this.options.animation_enabled
+        "minZoomLevel": 3,
+        "maxZoomLevel": 12
     }));
     
     this.map.addLayer( new OpenLayers.Layer.Google(
@@ -149,6 +146,8 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         this.map.setBaseLayer(
             this.map.getLayersByName(this.options.basetileset).pop()
         );
+        this.map.minZoomLevel = this.map.baseLayer.minZoomLevel;
+        this.map.maxZoomLevel = this.map.baseLayer.maxZoomLevel;
     }
     this.broadcast('map:base_layer_initialized', this);
     return this;
@@ -312,8 +311,10 @@ Sourcemap.Map.prototype.addStopLayer = function(scid) {
     var sc = this.findSupplychain(scid);
     var slayer = new OpenLayers.Layer.Vector(
         "Stops - "+sc.getLabel(), {
-            "sphericalMercator": true,
-            "styleMap": new OpenLayers.StyleMap(this.options.stop_style)
+            "styleMap": new OpenLayers.StyleMap(this.options.stop_style),
+            "displayOutsideMaxExtent": false,
+            "maxExtent": this.map.getMaxExtent(),
+            "wrapDateLine": false
         }
     );
     this.addLayer(([scid, 'stops']).join('-'), slayer);
@@ -404,8 +405,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
             this.mapHop(supplychain.hops[i], scid);
         }
     }
-    if(supplychain.stops.length)
-        this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
+    //if(supplychain.stops.length)
+    //    this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 
@@ -513,7 +514,6 @@ Sourcemap.Map.prototype.hopFeature = function(scid, hid) {
 }
 
 // todo: removeStop
-
 Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(!(hop instanceof Sourcemap.Hop))
         throw new Error('Sourcemap.Hop required.');
@@ -555,13 +555,14 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         new_popup.sourcemap = this;
         new_popup.hide();
     }
+
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.hop_instance_id = hop.instance_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     new_feature.attributes.width = 2;
     new_feature.attributes.color = this.options.default_feature_color;
-    
+
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     // save references to features
     this.mapped_features[hop.local_id] = new_feature;
@@ -604,10 +605,12 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     var psrc = this.map.projection;
     var pdst = new OpenLayers.Projection('EPSG:4326');
 
-    var verts = hop_geom.getVertices();
-    var from_pt = verts[0];
-    var to_pt = verts[verts.length-1];
-    
+    var fline = hop_geom.components[0];
+    var lline = hop_geom.components[hop_geom.components.length-1];
+
+    var from_pt = fline.components[0];
+    var to_pt = lline.components[lline.components.length-1];
+
     var from = from_pt.clone().transform(psrc, pdst);
     var to = to_pt.clone().transform(psrc, pdst);
 
@@ -656,9 +659,45 @@ Sourcemap.Map.prototype.makeGreatCircleRoute = function(from, to) {
     var to = to.transform(psrc, pdst);
     var rt = Sourcemap.great_circle_route({"x": from.x, "y": from.y}, {"x": to.x, "y": to.y}, 5);
     var rtpts = [];
-    for(var i=0; i<rt.length; i++) rtpts.push(new OpenLayers.Geometry.Point(rt[i].x, rt[i].y));
-    var rtgeo = new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(rtpts)])
-    rtgeo.transform(pdst, psrc);
+    var lns = [];
+    var buf = [];
+    var mapext = this.map.getMaxExtent().clone().transform(this.map.projection, new OpenLayers.Projection('EPSG:4326'));
+    var split_wayward_routes = true;
+    if(split_wayward_routes) {
+        var oobl = false;
+        var oobr = false;
+        for(var i=0; i<rt.length; i++) {
+            var flipped = false;
+            var newpt = new OpenLayers.Geometry.Point(rt[i].x, rt[i].y);
+            if(!mapext.containsBounds(newpt)) {
+                if(newpt.x > mapext.right) {
+                    newpt.x = mapext.left + (newpt.x - mapext.right);
+                    if(!oobl) flipped = true;
+                    oobl = true;
+                } else if(newpt.x < mapext.left){
+                    newpt.x = mapext.right - (mapext.left - newpt.x);
+                    if(!oobr) flipped = true;
+                    oobr = true;
+                }
+                if(flipped && buf.length) {
+                    lns.push(new OpenLayers.Geometry.LineString(buf));
+                    buf = [];
+                }
+            } 
+            buf.push(newpt);
+        }
+        if(buf.length) lns.push(new OpenLayers.Geometry.LineString(buf));
+    } else {
+        var rtpts = [];
+        for(var i=0; i<rt.length; i++) {
+            rtpts.push(new OpenLayers.Geometry.Point(rt[i].x, rt[i].y));
+        }
+        lns.push(new OpenLayers.Geometry.LineString(rtpts));
+    }
+
+    var rtgeo = new OpenLayers.Geometry.MultiLineString(lns);
+    rtgeo = rtgeo.clone().transform(pdst, psrc);
+
     return rtgeo;
 }
 

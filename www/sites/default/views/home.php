@@ -28,11 +28,13 @@
     <div class="grid_16">
         <?php if(isset($supplychains) && $supplychains): ?>
             <h2>Your maps</h2>
+            <?php $count = 0; ?>
                 <?php foreach($supplychains as $i => $sc): ?>
-                    <div class="container_16">
-                    <?= View::factory('partial/search/result', array('result' =>$sc)) ?>
-                    </div>
-                <?php endforeach; ?>
+                <div class="container_16 <?php if ($count % 2 == 0 ) { echo " alt"; } ?>">
+                    <?= View::factory('partial/search/result', array('result' => $sc)) ?>
+                </div>
+                <?php $count++; ?>
+            <?php endforeach; ?>
             <?php else: ?>
             <h2 class="bad-news">You haven't made any maps yet. <a href="create">Get started</a></h2>
         <?php endif; ?>

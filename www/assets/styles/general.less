@@ -12,11 +12,7 @@ html,body { height:100%;}
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -130px;
-}
-#footer, #push {
-    clear: both;
-    height: 130px;
+    margin: 0 auto;
 }
 
 body {
@@ -43,14 +39,9 @@ h2 {
 }
 
 a {
-    color: @link-color;
-    text-decoration: none;
+    text-decoration:none;
     &:hover{
-        color: @link-hover-color;
         text-decoration: underline;
-    }
-    &:visited{
-        color: @link-color;
     }
 }
 
@@ -205,8 +196,8 @@ button::-moz-focus-inner {
 
 
 .gradient-background{
-    background-image: -moz-linear-gradient(top,#F4F4F4,#EFEFEF);
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#EFEFEF),to(#F4F4F4));
+    background-image: -moz-linear-gradient(top,rgba(185,211,234,1),rgba(185,211,234,0.7));
+    background-image: -webkit-gradient(linear,left top,left bottom,from(rgba(185,211,234,1)),to(rgba(185,211,234,1)));
 }
 
 .darker-gradient-background{
@@ -219,9 +210,6 @@ button::-moz-focus-inner {
     }
 }
 
-.footer.darker-gradient-background h3{
-    border-bottom: 1px solid #454545;
-}
 
 .intro{
     p{
@@ -231,12 +219,17 @@ button::-moz-focus-inner {
 
 .featured{
     height: 339px;
-    .gradient-background;
+    background:rgba(185,211,234,1);
+    .author {
+        color: rgba(0,0,0,0.5);
+        a {
+            color: rgba(0,0,0,0.5);
+            text-decoration:underline;
+        }
+    }
     #slider{
         .map{
             img{
-                border-left: 3px solid #fff;
-                border-right: 3px solid #fff;
                 float:left;
                 width:620px;
                 max-height:340px;
@@ -259,9 +252,6 @@ button::-moz-focus-inner {
 
 .author{
     color: #aaa;
-    a{
-        color: #aaa;
-    }
 }
 
 .border{
@@ -560,13 +550,16 @@ button::-moz-focus-inner {
  * -------------------------------------------------------------- */
 
 .footer {
+    border-top:1px solid #ccc;
     padding: 10px 0 20px;
-    ul{
+    ul {
         list-style: none;
-    }
-    h3{
-        font-size: 130%;
-        border-bottom: 1px solid #dfdfdf;
+        li {
+            display:block;
+            float:left;
+            margin-right:1em;
+            font-size:0.7em;
+        }
     }
 }
 

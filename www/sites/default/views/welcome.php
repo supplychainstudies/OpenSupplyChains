@@ -14,7 +14,7 @@
     <div class="grid_4">
         <h1>&nbsp;</h1>
         <div class="aside">
-            <p class="button"><a href="/register">Make an Account</a></p>
+            <p class="button"><a href="/register">Register an Account</a></p>
             <p class="small">(Already have one? <a href="/login">Sign in.</a>)</p>
         </div>
     </div>
@@ -63,7 +63,7 @@
                         <h5 class="title"><?= HTML::chars($news_item->title) ?></h5>
                         <div class="clear"></div>
                         <p>
-                            <?= substr(HTML::chars($news_item->body), 0, 140) ?><br />
+                            <?= substr(HTML::chars($news_item->body), 0, 140) ?>&hellip;<br />
                             <a class="readmore" href="http://blog.sourcemap.com">&raquo; Read more</a>
                         </p>
                     </li>

@@ -28,7 +28,7 @@
                     <span>Search</span>
                 </button>
                 <label>
-                    <input id="search" type="search" results="0" />
+                    <input id="search" name="q" type="search" results="0" />
                 </label>
             </form>
             <div id="livesearch"></div>

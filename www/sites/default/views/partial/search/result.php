@@ -4,7 +4,7 @@
                 <img src="map/static/<?= $result->id ?>.s.png" />
             </a>
         </div>
-        <div class="grid_7">
+        <div class="grid_7 map-item">
             <a href="map/view/<?= $result->id ?>">
                 <h2 class="title"><?= isset($result->attributes->title) ? HTML::chars($result->attributes->title) : "An Unnamed Sourcemap" ?></h2>
             </a>

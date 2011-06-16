@@ -3,7 +3,7 @@
         <div class="container_16">
             <div class="grid_16">
                 <div class="spacer"></div>
-                <h2>Search Results for "<?php if(isset($search_result->parameters['q'])) : HTML::chars($search_result->parameters['q']); endif; ?>"</h2>
+                <h2>Search Results for "<?= isset($search_result->parameters['q']) ? HTML::chars($search_result->parameters['q']) : ''; ?>"</h2>
             </div>
         </div>
     </div>
@@ -14,11 +14,13 @@
         <!--div class="container_16 pager">
             <?= $pager->render() ?>
         </div-->
+        <?php $count = 0; ?>
         <?php foreach($search_result->results as $i => $result): ?>
-            <div class="container_16 map-item">
+            <div class="container_16 <?php if ($count % 2 == 0 ) { echo " alt"; } ?>">
                 <?= View::factory('partial/search/result', array('result' => $result)) ?>
             </div>
-        <?php endforeach; ?>
+            <?php $count++; ?>
+            <?php endforeach; ?>
         <div class="container_16 pager">
             <?= $pager->render() ?>
         </div>

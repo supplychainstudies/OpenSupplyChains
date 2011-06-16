@@ -1,7 +1,20 @@
+// Set up modal links
+
 /*$('a[href$="register"]').click(function(e){
     e.preventDefault();
     $.modal($('#registration'),{ opacity: 95 });
 });*/
+
+
+// Set up .messages div
+
+if ($('.status-message').length > 0) {
+    $('.status-messages').click(function(){
+        $(this).slideUp(600);
+    });
+    $('.status-messages').slideDown(600);
+}
+
 
 /*
  * SimpleModal 1.4.1 - jQuery Plugin

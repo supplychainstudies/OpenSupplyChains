@@ -616,6 +616,18 @@ button::-moz-focus-inner {
 /* ADDITIONAL GENERAL USE CLASSES 
  * -------------------------------------------------------------- */
 
+img{
+    medium{
+        height: 340px; width: 620px;
+    }
+    small{
+        height: 200px; width: 400px;
+    }
+    thumb{
+        height: 200px; width: 400px;
+    }
+}
+
 .center{
     text-align:center;
 }
@@ -653,6 +665,8 @@ button::-moz-focus-inner {
     width: 100%;
     margin: 0;
     padding: 0;
+    cursor: pointer;
+    display:none;
     .status-message {
         color: #333;
         padding: .25em;
@@ -674,6 +688,7 @@ button::-moz-focus-inner {
         }
     }
     .status-wrap{
+        background: url('../images/close.png') top right transparent no-repeat;
         padding: 5px 10px;
         border: 1px dashed #ddd;
     }

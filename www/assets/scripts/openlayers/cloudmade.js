@@ -10,7 +10,7 @@ OpenLayers.Layer.CloudMade = OpenLayers.Class(OpenLayers.Layer.TMS, {
             units: "m",
             projection: "EPSG:900913",
 			isBaseLayer: true,
-            restrictedMinZoom: 2,
+            restrictedMinZoom: 1,
             tilesize: 256,
             resolutions: [
                 156543.0339, 78271.51695, 39135.758475, 19567.8792375, 9783.93961875, 

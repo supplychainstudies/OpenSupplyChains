@@ -40,12 +40,9 @@ OpenLayers.Layer.CloudMade = OpenLayers.Class(OpenLayers.Layer.TMS, {
         var z = this.map.getZoom();
         var limit = Math.pow(2, z);
 
-        if (y < 0 || y >= limit)
-        {
-            return "http://cloudmade.com/js-api/images/empty-tile.png";
-        }
-        else
-        {
+        if (y < 0 || y >= limit) {
+            return "assets/images/empty-tile.png";
+        } else {
             x = ((x % limit) + limit) % limit;
 
             var url = this.url;

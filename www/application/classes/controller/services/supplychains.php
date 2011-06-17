@@ -148,7 +148,7 @@
                     'sizes' => Sourcemap_Map_Static::$image_sizes,
                     'thumbs' => Sourcemap_Map_Static::$image_thumbs
                 ));
-            }
+            } else  throw new Exception('Invalid supplychain data: '.$e);
         } catch(Exception $e) {
             return $this->_bad_request('Could not save supplychain: '.$e->getMessage());
         }

@@ -36,7 +36,7 @@ Sourcemap Database Installation from Scratch        #database
 
 5.  Sign into the database you made as the user you created.
 
-        psql --host localhost --user userfrom3above -p databasename
+        psql --host localhost --user userfrom3above -d databasename
 
 6.  Load the PostGIS functions:
 

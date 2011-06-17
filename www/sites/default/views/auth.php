@@ -1,4 +1,3 @@
-<div class="grid container_16">
 <?php if(!isset($current_user) || !$current_user): ?>
 <form name="auth-login" method="post" action="auth/login">
 <label for="username">username:</label><br />
@@ -14,4 +13,3 @@
 <?php else: ?>
 <h2>You&apos;re logged in as <?= $current_user->username ?>.</h2>
 <?php endif; ?>
-</div>

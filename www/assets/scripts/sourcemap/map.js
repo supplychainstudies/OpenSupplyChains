@@ -609,13 +609,33 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     var lline = hop_geom.components[hop_geom.components.length-1];
 
     var from_pt = fline.components[0];
-    var to_pt = lline.components[lline.components.length-1];
+    var to_pt = null;
+    var wrapped = false;
+    if(hop_geom.components.length === 2) {
+        // assume we've split the multilinestring's only element into
+        // two arcs, one on each side of the map. use the endpoint of he first
+        // segment as the location for the arrow.
+        wrap_pt = hop_geom.components[0].components[hop_geom.components[0].components.length-1];
+        to_pt = lline.components[lline.components.length-1];
+        wrapped = true;
+    } else {
+        to_pt = lline.components[lline.components.length-1];
+    }
+
 
     var from = from_pt.clone().transform(psrc, pdst);
     var to = to_pt.clone().transform(psrc, pdst);
+    var wrap = null;
+    if(wrapped) wrap = wrap_pt.clone().transform(psrc, pdst);
 
-    var mid_pt = Sourcemap.great_circle_midpoint(from, to);
-    var angle = Sourcemap.great_circle_bearing(mid_pt, to);
+    var mid_pt = null;
+    if(wrapped) {
+        mid_pt = Sourcemap.great_circle_midpoint(from, wrap);
+        angle = Sourcemap.great_circle_bearing(from, wrap);
+    } else {
+        mid_pt = Sourcemap.great_circle_midpoint(from, to);
+        angle = Sourcemap.great_circle_bearing(mid_pt, to);
+    }
 
     mid_pt = new OpenLayers.Geometry.Point(mid_pt.x, mid_pt.y);
     mid_pt = mid_pt.transform(pdst, psrc);

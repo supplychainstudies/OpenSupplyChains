@@ -252,6 +252,11 @@ Sourcemap.Map.prototype.initControls = function() {
                 "onSelect": OpenLayers.Function.bind(
                     function(feature) {
                         if(this.options.popups) {
+                            if(feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Point"
+                                && feature.attributes && feature.attributes.hop_instance_id) {
+                                feature.popup.lonlat = new OpenLayers.LonLat(feature.geometry.x, feature.geometry.y);
+                                feature.popup.updatePosition();
+                            }
                             this.showPopup(feature);
                         }
                         this.broadcast('map:feature_selected', this, feature); 
@@ -530,6 +535,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         var new_feature = (new OpenLayers.Format.WKT()).read(hop.geometry);
     }
     var new_arrow = false;
+    var new_arrow2 = false; // for wrapped arcs
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
             "color": this.options.default_feature_color, "size": 7, "supplychain_instance_id": scid,
@@ -537,6 +543,11 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
             "to_stop_id": hop.to_stop_id
             
         });
+        var tmp = new_arrow;
+        if(new_arrow instanceof Array) {
+            new_arrow = tmp[0];
+            new_arrow2 = tmp[1];
+        }
     }
     var new_popup = false;
     if(this.options.popups && this.options.hop_popups && new_arrow) {
@@ -568,7 +579,11 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     this.hop_features[scid][hop.from_stop_id][hop.to_stop_id] = {"hop": new_feature};
     if(new_arrow) {
         this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].arrow = new_arrow;
+        if(new_arrow2)
+            this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].arrow2 = new_arrow2;
         if(new_popup) {
+            new_arrow.popup = new_popup;
+            if(new_arrow2) new_arrow2.popup = new_popup;
             if(this.preparePopup instanceof Function) this.preparePopup.call(this, hop, new_feature, new_popup);
             this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].popup = new_popup;
             this.map.addPopup(new_popup);
@@ -581,6 +596,8 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     this.getHopLayer(scid).addFeatures([new_feature]);
     if(new_arrow)
         this.getHopLayer(scid).addFeatures([new_arrow]);
+    if(new_arrow2)
+        this.getHopLayer(scid).addFeatures([new_arrow2]);
 }
 
 Sourcemap.Map.prototype.eraseHop = function(scid, hid) {
@@ -590,6 +607,8 @@ Sourcemap.Map.prototype.eraseHop = function(scid, hid) {
         rm.push(f);
         if(f.arrow)
             rm.push(f.arrow);
+        if(f.arrow2)
+            rm.push(f.arrow2);
     }
     if(rm.length) {
         this.getHopLayer(scid).removeFeatures(rm);
@@ -615,6 +634,7 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
         // two arcs, one on each side of the map. use the endpoint of he first
         // segment as the location for the arrow.
         wrap_pt = hop_geom.components[0].components[hop_geom.components[0].components.length-1];
+        wrap_pt2 = hop_geom.components[hop_geom.components.length-1].components[0];
         to_pt = lline.components[lline.components.length-1];
         wrapped = true;
     } else {
@@ -625,11 +645,16 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     var from = from_pt.clone().transform(psrc, pdst);
     var to = to_pt.clone().transform(psrc, pdst);
     var wrap = null;
-    if(wrapped) wrap = wrap_pt.clone().transform(psrc, pdst);
+    var wrap2 = null;
+    if(wrapped) {
+        wrap = wrap_pt.clone().transform(psrc, pdst);
+        wrap2 = wrap_pt2.clone().transform(psrc, pdst);
+    }
 
     var mid_pt = null;
     if(wrapped) {
         mid_pt = Sourcemap.great_circle_midpoint(from, wrap);
+        mid_pt2 = Sourcemap.great_circle_midpoint(wrap2, to);
         angle = Sourcemap.great_circle_bearing(from, wrap);
     } else {
         mid_pt = Sourcemap.great_circle_midpoint(from, to);
@@ -643,7 +668,15 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     var o = o || {};
     for(var k in o) attrs[k] = o[k];
     var a = new OpenLayers.Feature.Vector(mid_pt, attrs);
-    return a;
+    var a2 = null;
+    if(wrapped) {
+        mid_pt2 = new OpenLayers.Geometry.Point(mid_pt2.x, mid_pt2.y);
+        mid_pt2 = mid_pt2.transform(pdst, psrc);
+        angle2 = Sourcemap.great_circle_bearing(wrap2, to);
+        attrs.angle = angle2;
+        var a2 = new OpenLayers.Feature.Vector(mid_pt2, attrs);
+    }
+    return a2 ? [a,a2] : a;
 }
 
 Sourcemap.Map.prototype.makeBezierCurve = function(from, to) {

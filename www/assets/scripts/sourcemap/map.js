@@ -443,8 +443,6 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         stop.attributes.size ? new_popup.OFFSET_HT = -(stop.attributes.size) : new_popup.OFFSET_HT = -10;
         $(new_popup.div).css({'margin-top': new_popup.OFFSET_HT });
        
-        Sourcemap.wut = new_popup;
-
         new_popup.map = this.map;
         new_popup.feature = new_feature;
         new_feature.popup = new_popup;
@@ -574,6 +572,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
             if(this.preparePopup instanceof Function) this.preparePopup.call(this, hop, new_feature, new_popup);
             this.hop_features[scid][hop.from_stop_id][hop.to_stop_id].popup = new_popup;
             this.map.addPopup(new_popup);
+            new_popup.hide();
         }
     }
     if(this.prepareHopFeature instanceof Function) {

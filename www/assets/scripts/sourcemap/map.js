@@ -222,10 +222,10 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
     var title = o.title ? o.title : null;
     var callbacks = o.callbacks ? o.callbacks : {};
     var image = o.icon_url ? '<img src="'+o.icon_url+'" alt="'+o.title+'" />' : "";
-    var content = o.content ? '<div class="content">'+o.content+'</div>' : ""
+    var content = o.content ? o.content : ""
     this.dockRemove(nm);
     this.dock_controls[nm] = o;
-    var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'">'+image+content+'</div>');
+    var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'"><div class="content">'+image+content+'</div></div>');
     $(this.dock_content).append(cel);
     if(callbacks.click) {
         $(cel).click($.proxy(callbacks.click, this));
@@ -469,8 +469,10 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
         new_popup.sourcemap = this;
 
+        console.log(stop);
         // Set offset so the popup touches the border of the stop
-        stop.attributes.size ? new_popup.OFFSET_HT = -(stop.attributes.size) : new_popup.OFFSET_HT = -10;
+        stop.attributes.size ? new_popup.OFFSET_HT = -(stop.attributes.size) : new_popup.OFFSET_HT = -11;
+        stop.attributes.strokeWidth ? new_popup.OFFSET_HT += -(stop.attributes.strokeWidth) : new_popup.OFFSET_HT += -2;
         $(new_popup.div).css({'margin-top': new_popup.OFFSET_HT });
        
         new_popup.map = this.map;

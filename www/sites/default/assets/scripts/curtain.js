@@ -1,5 +1,5 @@
 // Set up modal links
-
+/*
 $('a[href$="register"]').click(function(e){
     e.preventDefault();
     $.modal($('#registration'),{ opacity: 95 });
@@ -9,12 +9,12 @@ $('a[href$="auth"]').click(function(e){
     e.preventDefault();
     $.modal($('#auth'),{ opacity: 95 });
 });
-
+*/
 // Set up .messages div
 
 if ($('.status-message').length > 0) {
     $('.status-messages').click(function(){
-        $(this).slideUp(600);
+        $(this).slideUp(601);
     });
     $('.status-messages').slideDown(600);
 }
@@ -207,7 +207,7 @@ if ($('.status-message').length > 0) {
         closeHTML: '<a class="modalCloseImg" title="Close"></a>',
         closeClass: 'simplemodal-close',
         escClose: true,
-        overlayClose: false,
+        overlayClose: true,
         position: null,
         persist: false,
         modal: true,

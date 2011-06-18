@@ -13,9 +13,16 @@
     </div>
     <div class="grid_4">
         <div class="aside">
-            <p class="button"><a href="/register">Register</a></p><br/>
-            <p class="small">(Have an account? <a href="/login">Log in.</a>)</p>
+            <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
+                <p>Welcome back, <?= HTML::chars($current_user->username) ?>!</p>
+                <br/>
+                <a href="/home" class="small">Your dashboard</a>&nbsp;|&nbsp;<a href="auth/logout" class="small">Log out</a>
+            <?php else:  // Otherwise, this ?>
+                <p class="button"><a href="/register">Register</a></p><br/>
+                <p class="small">(Have an account? <a href="/auth">Log in.</a>)</p>
+            <?php endif; ?>
         </div>
+
     </div>
 </div>
 

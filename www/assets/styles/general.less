@@ -9,11 +9,22 @@ html,body { height:100%;}
 
 /* Sticks the footer to the bottom of the page */
 
+#footer, .push {
+    height: 50px;
+    clear:both;
+}
+#wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -50px;
+    font-size:1.2em;
+}
+
 body {
     .body-font;
     font-size:1em;
     line-height:1em;
-    padding-top:.5em;
     margin:0 auto;
     background: #ddd;
     background: -moz-linear-gradient(center bottom,#ebebeb 0%,#fff 40%) #ebebeb repeat-x;
@@ -40,18 +51,12 @@ button::-moz-focus-inner {
     padding: 2px 0;
 }
 
-#wrapper {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto;
-    font-size:1.2em;
-}
-
 /* BRANDING & MASTHEAD 
  * -------------------------------------------------------------- */
 
 #masthead {
+    padding-top: .5em;
+
     font-size:95%;
     line-height: 12px;
     height: 72px;
@@ -201,7 +206,7 @@ button::-moz-focus-inner {
                 }
                 .featured-description {
                     width: 314px;
-                    float:left;
+                    float:right;
                     .featured-title {
                         padding-left:35px;
                         font-size: 2em;
@@ -251,7 +256,7 @@ button::-moz-focus-inner {
         }
         .preview-title {
             .body-font;
-            line-height:1em;
+            line-height:1.5em;
             margin-bottom:0;
         }
         .preview-author {
@@ -683,8 +688,7 @@ button::-moz-focus-inner {
 
 .footer {
     border-top:1px solid #ccc;
-    padding: 10px 0 20px;
-    margin-top:1em;
+    padding: 10px 0 0 0;
     ul {
         list-style: none;
         li {
@@ -727,20 +731,18 @@ button::-moz-focus-inner {
         background:#eee;
         position:relative;
         padding:10px 20px;
-        .close {
-           position:absolute;
-           top:5px;
-           right:5px;
-           font-weight:bold;
-           cursor:pointer;
-        }
     }
     .dialog-content {
         padding:5px 20px;
     }
-    footer {
-        padding:5px 20px;
-        text-align:right;
+    .simplemodal-close{
+        display: block;
+        width: 20px;
+        height: 20px;
+        margin: 10px;
+        float: right;
+        background: url('../images/close.png') top right transparent no-repeat;
+        cursor:pointer;
     }
 }
 
@@ -768,6 +770,10 @@ img{
     thumb{
         height: 200px; width: 400px;
     }
+}
+
+.alignleft{
+    float:left;
 }
 
 .center{

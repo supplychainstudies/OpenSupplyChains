@@ -71,7 +71,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 // create!
                 $title = $p['title'];
                 $teaser = $p['teaser'];
-                $tags = Sourcemap_Tags::parse($p['tags']);
+                $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
                 $category = $p['category'];
                 $raw_sc = new stdClass();
                 if($category) $raw_sc->category = $category;

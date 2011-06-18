@@ -14,9 +14,8 @@
                 <div id="discussion-section">
                     <?php if($can_comment): ?>
                     <div id="comment-form" class="form">
-                        <fieldset><legend>Comment</legend>
                         <form method="post" action="map/comment/<?= $supplychain_id ?>">
-                            <textarea name="body" id="comment-area"></textarea>
+                            <textarea placeholder="Submit your comment." name="body" id="comment-area"></textarea>
                             <input id="comment-submit" type="submit" text="Comment"/>
                         </form>
                         </fieldset>

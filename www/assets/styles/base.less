@@ -252,10 +252,17 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 }
 .olControlAttribution { 
     bottom:0 !important; 
+    font-size:0.6em !important;
+    color:#999;
+    a {
+        text-decoration:underline;
+        color:#999;
+    }
+    
 }
 
 .sourcemap-dock {
-    @dock-height: 4.5em;
+    @dock-height: 3.25em;
     z-index: 1008;
     width: 100%;
     bottom: 0; left: 0;
@@ -272,8 +279,9 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
             float:left;
             position: relative;
             left: -50%;
-            div{
-                background: url("../../sites/default/assets/images/dock/button-background.png");
+            > div{
+                background:rgba(185,211,234,.6);
+                border:2px solid rgba(255,255,255,.6);
                 .background_size(100%,100%);
                 margin: .5em;
                 display: inline-block;
@@ -281,13 +289,26 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
                 pointer-events: all;
                 text-align: center;
                 opacity: 0.85;
+                .rounded(8px);
+                
                 &:hover {
-                    opacity: 1.0;
+                    background:rgba(255,255,255,.6);
+                    border:2px solid #fff;
                 }
                 img{
                     height: @dock-height - 2em;
-                    padding: .5em .5em 0;
+                    padding: .2em .5em .2em .5em;
                 }
+                .content {
+                    height: @dock-height - 2em;                    
+                    padding: .2em .5em .2em .5em;                    
+                }
+            }
+            .control.spacer {
+                width:6em;
+                border:none;
+                height: 16px;       
+                background:none;
             }
         }
     }
@@ -314,12 +335,12 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 #watermark {
     display:block;
     width: 110px;
-    height: 17px;
+    height: 34px;
     background: url("../images/embed-watermark.png") center center no-repeat;
     .background_size(100%, 100%);
     text-align:center;
     position:absolute;
-    bottom:0; right:0;
+    bottom:1em; left:0;
     z-index:0;
 }
 
@@ -342,7 +363,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     z-index:1000;
     
     .map-banner-content {
-        .header-font;
+        .body-font;
+        font-size:0.8em;
         background: #fff;
         .box_shadow(2px,2px,2px,2px);
         -webkit-border-bottom-left-radius:4px;
@@ -351,7 +373,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         -moz-border-radius-bottomright:4px;
         background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(185,211,234,1)), to(rgba(185,211,234,.6)));
         padding: .5em; 
-        height: 1.5em;
+        height: 1em;
         margin: 0 auto;
         width:100%;
         div {
@@ -362,16 +384,21 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
             float:right;
         }
     }
+    .map-summary {
+        font-weight:bold;
+    }
     .map-description {
-        color: #666;
+        color: #000;
         text-align: center;
+        a {
+            color:#000;
+            text-decoration:underline;
+        }
     }
     .map-status {
         text-align: right;
         .msg {
-            font-size: 1.4em;
-            padding: .2em;
-            font-weight: bold;
+
         }
         .good-news {
             color: green;
@@ -379,7 +406,6 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         .bad-news {
             color: red;
         }
-        font-family: monospace;
     }
     .map-share {
         text-align: right;

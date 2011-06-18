@@ -29,7 +29,7 @@ Sourcemap.Map.prototype.defaults = {
     "popup_height": 100, "animation_enabled":false,
     "draw_hops": true, "hops_as_arcs": true,
     "hops_as_bezier": false, "arrows_on_hops": true,
-    "default_feature_color": "#60cb59",
+    "default_feature_color": "#898989",
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -191,6 +191,30 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
+    this.dockAdd('spacer', {
+        "ordinal": 4,
+        "title": 'Spacer',
+    });
+    this.dockAdd('weightfilter', {
+        "ordinal": 5,
+        "title": 'Weight',
+        "content": "XX g",
+        "callbacks": {
+            "click": function() {
+
+            }
+        }
+    });
+    this.dockAdd('carbonfilter', {
+        "ordinal": 6,
+        "title": 'Carbon',
+        "content": "XX kg CO2e",
+        "callbacks": {
+            "click": function() {
+
+            }
+        }
+    });
     return this;
 }
 
@@ -198,9 +222,11 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
     var icon_url = o.icon_url ? o.icon_url : null;
     var title = o.title ? o.title : null;
     var callbacks = o.callbacks ? o.callbacks : {};
+    var image = o.icon_url ? '<img src="'+o.icon_url+'" alt="'+o.title+'" />' : "";
+    var content = o.content ? '<div class="content">'+o.content+'</div>' : ""
     this.dockRemove(nm);
     this.dock_controls[nm] = o;
-    var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'"><img src="'+icon_url+'" alt="'+title+'" /></div>');
+    var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'">'+image+content+'</div>');
     $(this.dock_content).append(cel);
     if(callbacks.click) {
         $(cel).click($.proxy(callbacks.click, this));

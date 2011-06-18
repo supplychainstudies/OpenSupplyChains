@@ -13,7 +13,8 @@
                 <li><a href="info/privacy">Privacy Policy</a></li>
                 <li><a href="info/terms">Terms of Service</a></li>
                 <li><a href="info/dmca">DMCA</a></li>    
-            </ul>            
+            </ul>   
+            <p>&copy; 2011 Sourcemap Inc.<p>         
     </div>
     <div class="clear"></div>
 </div>

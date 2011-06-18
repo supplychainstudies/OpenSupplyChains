@@ -1,5 +1,5 @@
 <div class="search-results">
-    <div class="gradient-background">
+    <div class="">
         <div class="container_16">
             <div class="grid_16">
                 <div class="spacer"></div>

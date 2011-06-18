@@ -1,5 +1,5 @@
 <?php // Display the three featured items ?>
-<ul id="slider">
+<ul id="featured-slider">
 <?php 
 $data = Sourcemap_Search::Find(array('l'=>3));
 if ($data):
@@ -7,22 +7,19 @@ if ($data):
     $i = 0;
     foreach($results as $item):
     ?>
-        <li>
-            <div class="map">
+        <li class="featured-item">
+            <div class="featured-content">
                 <a href="/map/view/<?php print $item->id; ?>">
-                    <img class="medium" src="/map/static/<?php print $item->id; ?>.m.png" alt="" />
+                    <img class="featured-preview-map large" src="/map/static/<?php print $item->id; ?>.m.png" alt="" />
                 </a>
-                <div class="description">
-                    <h2><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></h2>
-                    <p>
-                        <?= isset($item->description) ? $item->description : "This map's description seems to be missing.  Perhaps we should go add one!" ?>
-                    </p>
-                    <p class="author">
+                <div class="featured-description">
+                    <h2 class="featured-title"><a href="/map/view/<?php print $item->id; ?>"><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></a></h2>
+                    <? if(isset($item->teaser)) { ?><h3 class="featured-teaser"><?= $item->teaser; ?></h3><? } ?>
+                    <h4 class="featured-author">
                         By <a href="user/<?php $item->owner->id; ?>">
                             <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
                         <?php print date("F j, Y",$item->created);?>
-                        <br />
-                    </p>
+                    </h4>
                 </div>
             </div>
         </li>

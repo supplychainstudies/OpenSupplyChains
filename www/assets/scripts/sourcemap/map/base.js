@@ -130,7 +130,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     
     $(window).resize($.proxy(function () { 
         var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
-        $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
+        //$("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
         
         // Display, but hide this while we calculate
         $(this.detailpane).css({"left": "-100000px"});

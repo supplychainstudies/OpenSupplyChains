@@ -263,6 +263,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     height: @dock-height;
     overflow: hidden;
     text-align: center;
+    pointer-events: none;
     .sourcemap-dock-outerwrap {
         float: left;
         position:relative;
@@ -277,6 +278,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
                 margin: .5em;
                 display: inline-block;
                 cursor: pointer;
+                pointer-events: all;
                 text-align: center;
                 opacity: 0.85;
                 &:hover {

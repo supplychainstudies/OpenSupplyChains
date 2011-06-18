@@ -16,7 +16,6 @@
     ?> 
 </p>
 <p>
-    <span class="time"><?= date('H:ia', $event['timestamp']) ?> -</span>
     <span class="event"><?= View::factory('partial/user/event/'.$event['tag'], (array)$event['data']) ?></span>
 </p>
 </div>

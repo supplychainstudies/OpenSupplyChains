@@ -202,6 +202,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                         strtolower(trim($params['locate_user'])) === 'yes' ? true : false;
                     $params['tileset'] = strtolower(trim($params['tileset']));
                     
+                    /*
                     if($params['geoloc']) {
                         $params['iploc'] = false;
                         if(isset($_SERVER['REMOTE_ADDR'])) {
@@ -215,7 +216,7 @@ class Controller_Map extends Sourcemap_Controller_Layout {
                                 $params['downstream_nearby'] = $nearby;
                             }
                         }
-                    }
+                    }*/
                     $this->layout->embed_params = $params;
                 } else {
                     $this->request->status = 400;

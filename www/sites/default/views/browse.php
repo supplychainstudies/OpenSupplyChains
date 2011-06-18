@@ -19,12 +19,12 @@
     </div>
     
     <div class="grid_4">
-        <h2>New:</h2>
+        <h2>Starred:</h2>
         <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     
     <div class="grid_4">
-        <h2>New:</h2>
+        <h2>Discussed:</h2>
         <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
 </div><!-- .container -->

@@ -1,6 +1,6 @@
-<div class="grid container_16">
-    <h1>Privacy Policy</h1>
-    <h3>Sourcemap Privacy Policy ver1.0</h3> 
+<div id="document-content" class="container_16"><div class="grid_16">
+    <h1 id="document-title">Privacy Policy</h1>
+    <h2>Sourcemap Privacy Policy ver1.0</h2> 
     <p><h4>Introduction</h4>
     Sourcemap respects the privacy of its users. This policy sets out the limited manner in which Sourcemap will collect and use its users’ information to provide and improve its services.  </p> 
     <p><h4>(1)  Information Sourcemap Collects</h4>
@@ -21,4 +21,5 @@
     The Site may link to other websites. Sourcemap is not responsible for the privacy practices or content of such websites.  </p> 
     <p><h4>(8) Changes</h4>
     Sourcemap may occasionally change this privacy policy. Please check back regularly to review the current version. A user’s continued use of the Site following such changes will constitute a user’s assent to them.</p>
-</div>
+
+</div></div>

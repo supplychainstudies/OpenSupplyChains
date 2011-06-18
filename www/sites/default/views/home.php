@@ -1,25 +1,21 @@
 <div class="container_16">
-    <div class="grid_6">
-        <h2>Profile</h2>
-    </div>
-    <div class="grid_2">&nbsp;</div>
     <div class="grid_8">
-        <h2>Recent Activity</h2>
-    </div>
-</div>
-
-<div class="container_16">
-    <div class="grid_3">
-        <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
-    </div>
-    <div class="grid_5">
-        <h3><?= HTML::chars($user->username) ?></h3>
-        Last Login: <?= date('F j, Y', $user->last_login) ?>
+        <div id="user-profile">
+            <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
+            <img class="user-gravatar" src="<?= Gravatar::avatar($user->email, 128) ?>" />            
+            <ul class="user-details">
+                <li>Last Login: <?= date('F j, Y', $user->last_login) ?><li>
+            </ul>
+            <div class="clear"></div>
+        </div>
     </div>
     <div class="grid_8 events">
-        <?php if(isset($user_event_stream)): ?>
-        <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
-        <?php endif; ?>
+        <div id="user-stream">
+            <h2>Recent Activity</h2>
+            <?php if(isset($user_event_stream)): ?>
+            <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 <div class="clear"></div>
@@ -30,7 +26,7 @@
             <h2>Your maps</h2>
             <?php $count = 0; ?>
                 <?php foreach($supplychains as $i => $sc): ?>
-                <div class="container_16 <?php if ($count % 2 == 0 ) { echo " alt"; } ?>">
+                <div id="user-map-list" class="container_16 <?php if ($count % 2 == 0 ) { echo " alt"; } ?>">
                     <?= View::factory('partial/search/result', array('result' => $sc)) ?>
                 </div>
                 <?php $count++; ?>

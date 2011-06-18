@@ -469,7 +469,6 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
         new_popup.sourcemap = this;
 
-        console.log(stop);
         // Set offset so the popup touches the border of the stop
         stop.attributes.size ? new_popup.OFFSET_HT = -(stop.attributes.size) : new_popup.OFFSET_HT = -11;
         stop.attributes.strokeWidth ? new_popup.OFFSET_HT += -(stop.attributes.strokeWidth) : new_popup.OFFSET_HT += -2;

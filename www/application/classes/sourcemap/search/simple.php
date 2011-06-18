@@ -17,9 +17,13 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $cat_ids = array();
             foreach($rows as $i => $row) {
                 $cat_ids[] = $row['id'];
+                $children = Sourcemap_Taxonomy::load_children($row['id']);
+                foreach($children as $j => $child) {
+                    if(!in_array($child->id, $cat_ids)) $cat_ids[] = $child->id;
+                }
             }
             if($cat_ids) {
-                $clause_category = 'category in ('.join($cat_ids).')';
+                $clause_category = 'category in ('.join(',', $cat_ids).')';
                 $and_where[] = $clause_category;
             } else {
                 $clause_category = false;

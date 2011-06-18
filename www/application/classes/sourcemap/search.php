@@ -63,6 +63,8 @@ class Sourcemap_Search {
         $pts = array();
         for($i=0; $i<count($pkeys); $i++) {
             $pkey = $pkeys[$i];
+            if(empty($this->parameters[$pkey]))
+                continue;
             $pts[] = sprintf("%s:%s", $pkey, $this->parameters[$pkey]);
         }
         $cache_key = sprintf("%s-%s-%s", self::CACHE_PREFIX, $this->search_type, join(':', $pts));

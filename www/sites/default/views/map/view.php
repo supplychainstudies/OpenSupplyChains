@@ -31,7 +31,7 @@
                         <?php endforeach; ?>
                     </ul>
                     <?php else: ?>
-                    <h4 class="bad-news">Nobody's commented on this map yet. Be the first!</h4>
+                    <h4 class="bad-news">Nobody's commented on this map yet.</h4>
                     <?php endif; ?>
                 </div><!-- #discussion-section -->
             </div><!-- #map-secondary-content -->

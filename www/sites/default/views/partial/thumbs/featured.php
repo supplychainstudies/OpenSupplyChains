@@ -1,5 +1,4 @@
 <div id="popular-maps" class="container_12">
-<?php $data = Sourcemap_Search::Find(array('l'=>3)); ?>
 <?php if ($data): ?>
     <?php foreach($data->results as $i => $item): ?>
         <div class="preview-map-item medium grid_4">

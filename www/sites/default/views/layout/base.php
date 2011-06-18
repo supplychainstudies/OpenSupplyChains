@@ -22,12 +22,7 @@
 <body class="main">
     <div id="wrapper">
         <div class="overlay">
-            <div id="registration" class="dialog">
-                <div class="dialog-content">
-                    <?= View::factory('register', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-                </div>
-            </div>
-            <div id="auth" class="dialog">
+        <div id="auth" class="dialog">
                 <div class="dialog-content">
                     <?= View::factory('auth', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
                 </div>

@@ -1,7 +1,7 @@
 <?php // Returns featured maps ?>
 <div class="clear"></div>
 <div id="featured-maps">
-    <?= View::factory('partial/thumbs/slider', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <?= View::factory('partial/thumbs/slider', array('data' => $featured)) ?>
 </div>
 
 <div class="spacer"></div>
@@ -33,7 +33,7 @@
         <h2 class="section">Popular</h2>
     </div>
 </div>
-<?= View::factory('partial/thumbs/featured', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+<?= View::factory('partial/thumbs/featured', array('data' => $featured)) ?>
 
 <div class="spacer"></div><div class="spacer"></div>
 
@@ -50,13 +50,13 @@
 
 <div id="recent-maps" class="container_16">
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <?= View::factory('partial/thumbs/new', array('recent' => $recent, 'l' => 3, 'o' => 0)) ?>
     </div>
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <?= View::factory('partial/thumbs/new', array('recent' => $recent, 'l' => 3, 'o' => 3)) ?>
     </div>
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <?= View::factory('partial/thumbs/new', array('recent' => $recent, 'l' => 3, 'o' => 6)) ?>
     </div>
     
     <div class="grid_1">&nbsp;</div>

@@ -1,15 +1,3 @@
-// Set up modal links
-/*
-$('a[href$="register"]').click(function(e){
-    e.preventDefault();
-    $.modal($('#registration'),{ opacity: 95 });
-});
-
-$('a[href$="auth"]').click(function(e){
-    e.preventDefault();
-    $.modal($('#auth'),{ opacity: 95 });
-});
-*/
 // Set up .messages div
 
 if ($('.status-message').length > 0) {

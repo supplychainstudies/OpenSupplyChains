@@ -32,6 +32,16 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
         return $this->url.$this->action.'/';
     }
 
+    public function fetch() {
+        $response = parent::fetch();
+        if($response) {
+            $response = (object)$response;
+            $response->parameters['l'] = $this->limit;
+            $response->parameters['o'] = $this->offset;
+        }
+        return $response;
+    }
+
     public function get_cache_key() {
         $ckey = parent::get_cache_key();
         $ckey .= '-'.$this->action;

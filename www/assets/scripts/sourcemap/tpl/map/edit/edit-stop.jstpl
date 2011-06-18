@@ -1,5 +1,6 @@
 <div class="form">
     <fieldset><legend>Edit</legend>
+        <div class="load-catalog-button">&raquo; Catalog</div>
         <form name="edit-ref">
         <label for="address">Move to:</label>
         <% var el = $("<input />").attr("type", "text").attr("name", "address"); el[0].setAttribute("value", this.ref.getAttr("address", "")); %>

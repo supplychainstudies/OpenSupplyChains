@@ -299,15 +299,22 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
                     height: @dock-height - 2em;
                 }
                 .content {
-                    height: @dock-height - 2em;                    
+                    height: @dock-height - 2em;     
+                    line-height: @dock-height - 2em;
                 }
             }
             .control{
                 padding: .2em .5em .2em .5em;
                 vertical-align:top;
             }
-            .control.spacer {
-                width:6em;
+            .control.firstSpacer {
+                width:0.1em;
+                border:none;
+                height: 16px;       
+                background:none;
+            }
+            .control.secondSpacer {
+                width:5em;
                 border:none;
                 height: 16px;       
                 background:none;
@@ -366,7 +373,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     
     .map-banner-content {
         .body-font;
-        font-size:0.8em;
+        font-size:0.9em;
         background: #fff;
         .box_shadow(2px,2px,2px,2px);
         -webkit-border-bottom-left-radius:4px;
@@ -405,7 +412,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 
         }
         .good-news {
-            color: green;
+
         }
         .bad-news {
             color: red;

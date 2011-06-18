@@ -190,12 +190,16 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
-    this.dockAdd('spacer', {
-        "ordinal": 4,
+    this.dockAdd('firstSpacer', {
+        "ordinal": 3,
+        "title": 'Spacer',
+    });
+    this.dockAdd('secondSpacer', {
+        "ordinal": 5,
         "title": 'Spacer',
     });
     this.dockAdd('weightfilter', {
-        "ordinal": 5,
+        "ordinal": 6,
         "title": 'Weight',
         "content": "XX g",
         "callbacks": {
@@ -205,7 +209,7 @@ Sourcemap.Map.prototype.initDock = function() {
         }
     });
     this.dockAdd('carbonfilter', {
-        "ordinal": 6,
+        "ordinal": 7,
         "title": 'Carbon',
         "content": "XX kg CO2e",
         "callbacks": {

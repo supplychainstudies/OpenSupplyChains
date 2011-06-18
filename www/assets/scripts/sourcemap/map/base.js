@@ -32,7 +32,7 @@ Sourcemap.Map.Base.prototype.init = function() {
     this.initEvents();
     // todo: put this somewhere else.
     var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
-    $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
+    //$("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
 }
 
 Sourcemap.Map.Base.prototype.initMap = function() {

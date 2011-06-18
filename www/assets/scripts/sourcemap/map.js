@@ -105,7 +105,6 @@ Sourcemap.Map.prototype.initMap = function() {
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),
             new OpenLayers.Control.ArgParser(),
             new OpenLayers.Control.Attribution(),
-            new OpenLayers.Control.MousePosition()
     ];
     //if(this.options.zoom_control) 
     //    controls.push(new OpenLayers.Control.ZoomPanel());

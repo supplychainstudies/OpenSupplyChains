@@ -6,14 +6,23 @@ if ($data):
     $i = 0;
     foreach($results as $item):
         ?>
-        <div class="map-item grid-3">
+        <div class="preview-map-item grid-3">
+            <div class="preview-badge">
             <a href="/map/view/<?php print $item->id; ?>">
-            <img class="thumb" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
+                <img class="preview-map small" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
             </a>
-            <h4>
+            </div>
+            <h4 class="preview-title">
                 <a href="/map/view/<?php print $item->id; ?>">
                 <?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?>
                 </a>
+            </h4>
+            <h4>
+                <div class="preview-author">
+                    By <a href="user/<?php $item->owner->id; ?>">
+                        <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
+                    <?php print date("F j, Y",$item->created);?>
+                </div>
             </h4>
         </div>
     <?php $i++;

@@ -7,7 +7,7 @@
 </div><!-- .container -->
 
 <div class="clear"></div>
-<div class="container_16">
+<div id="browse-small" class="container_16">
     <div class="grid_4">
         <h2>Interesting:</h2>
         <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
@@ -19,5 +19,12 @@
     </div>
     
     <div class="grid_4">
+        <h2>New:</h2>
+        <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    </div>
+    
+    <div class="grid_4">
+        <h2>New:</h2>
+        <?= View::factory('partial/thumbs/new', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
 </div><!-- .container -->

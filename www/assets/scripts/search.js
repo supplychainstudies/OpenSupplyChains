@@ -127,27 +127,28 @@ jQuery.fn.liveSearch = function (conf) {
                             if (json.results.length && q.length) {
                                 
                                 // Build output
-                                var html = "<ul>";
+                                var html = "<ul id=\"live-search-results\">";
                                 for (var i = 0; i < json.results.length; i++) { 
 
                                     // todo:  turn this into a JSTPL template
                                     html += "<li class=\"search-result\">";
-                                    html += "<a class=\"map-link\" href=\"/map/view/"+ json.results[i].id + "\">";
+                                    html += "<a class=\"search-link\" href=\"/map/view/"+ json.results[i].id + "\">";
                                     html += "</a>";
-                                    html += "<div>";
+                                    html += "<div class=\"search-details\">";
+                                    html += "<span class=\"search-title\">";
                                     html += json.results[i].attributes.title || "An Unnamed Sourcemap";
-                                    html += "<br />";
-                                    html += "<span class=\"info\">";
+                                    html += "</span>";
+                                    html += "<span class=\"search-author\">";
                                     html += "By ";
                                     html += json.results[i].owner.name;
                                     html += "</span> ";
-                                    html += "<span class=\"date\" href=\"\">";
+                                    html += "<span class=\"search-date\" href=\"\">";
                                     var myDate = new Date(json.results[i].created);
                                     html += myDate.toUTCString();
                                     html += "</span>";
                                     html += "</div>";
-                                    html += "<div class=\"search-thumb\"\>";
-                                    html += "<img src=\"/map/static/";
+                                    html += "<div class=\"search-preview\"\>";
+                                    html += "<img class=\"search-preview-map\" src=\"/map/static/";
                                     html += json.results[i].id;
                                     html += ".t.png\" alt=\"\" />";
                                     html += "</div>";

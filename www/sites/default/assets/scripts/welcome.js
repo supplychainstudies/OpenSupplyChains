@@ -1,5 +1,5 @@
 $(function () {
-    $('#slider').anythingSlider({
+    $('#featured-slider').anythingSlider({
         buildArrows: false,
         delay: 5000,
         easing: 'easeInOutExpo',
@@ -14,7 +14,7 @@ $(function () {
                 return (Math.round(Math.random())-0.5); 
             }
 
-            var classes = ['orange', 'yellow', 'brown'];
+            var classes = ['white', 'white', 'white'];
             classes.sort( randOrd );
             $(".anythingControls li a").each(function(i){
                 var size = Math.floor(Math.random() * (maxSize - minSize + 1) + minSize);

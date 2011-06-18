@@ -11,6 +11,8 @@
 .yellow{ background-color: #FFCC00; border-color:#FFCC00; }
 .brown{ background-color: #B07E09; border-color:#B07E09; }
 .green{ background-color: #60CB59; border-color:#60CB59; }
+.white{ background-color: #fff; border-color:#fff; }
+.transparent{ background: transparent; border-color:#fff; }
 
 /* Navigation Links */
 div.anythingSlider .anythingControls {

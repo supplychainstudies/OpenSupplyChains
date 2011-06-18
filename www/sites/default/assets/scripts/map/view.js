@@ -20,5 +20,9 @@ $(document).ready(function() {
         if(sc.editable){
             new Sourcemap.Map.Editor(Sourcemap.view_instance);
         }
+        // move to the middle
+        Sourcemap.view_instance.map.map.zoomToExtent(
+            Sourcemap.view_instance.map.getDataExtent(), true
+        );
     });
 });

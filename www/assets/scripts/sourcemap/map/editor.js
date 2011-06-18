@@ -110,6 +110,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.dockAdd('addstop', {
         "icon_url": "sites/default/assets/images/dock/add.png",
         "title": 'Add a Stop',
+        "ordinal": 4,
         "callbacks": {
             "click": $.proxy(function() {
                 // make a suitable geometry

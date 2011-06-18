@@ -59,6 +59,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             tscope.morelink = hasmagic;
             Sourcemap.template('map/'+t.join('-'), $.proxy(function(p, tx, th) {
                 this.popup.setContentHTML($('<div></div>').html(th).html());
+
+                // more link event
                 $(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
                     if(this.stop) { 
                         this.base.showStopDetails(
@@ -74,6 +76,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                         );
                     }
                 }, this));
+
                 //this.popup.updateSize();
                 this.popup.updatePosition();
                 this.base.map.broadcast('popup-initialized', this.popup, this.stop);
@@ -105,6 +108,9 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     //this.map.setBaseLayer(this.options.tileset);
 
     $(this.map.map.div).css("position", "relative");
+
+
+
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -121,41 +127,37 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             $(this.map.map.div).append(this.watermark);
         }
     }, this));
-
-
-    // Resize code to be used in the future
-    //$(window).resize($.proxy(this.resizeElements, this));
     
-    this.resizeElements = function () { 
+    $(window).resize($.proxy(function () { 
         var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
         $("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
-
+        
         // Display, but hide this while we calculate
         $(this.detailpane).css({"left": "-100000px"});
         $(this.detailpane).css({"top": "-100000px"});
-
+        
         var hidden_height = ($(this.dialog).css("display") == "none");
         if(hidden_height) { $(this.dialog).css({"display":"block"}); }
-
+        
         // Calculate the minimum needed width
         $(this.dialog).width(1).height(1);
         var max_width = 0;
-        $('#detail-content > *').each(function(){
+        $('#detail-content > *').each(function(){ 
             var this_width = $(this).width();
             if (this_width > max_width) { max_width = this_width;}
-        });
+        }); 
         $(this.dialog).width((max_width/.8));
 
         // Calculate the ideal height
-        var total_height = 0;
+        var total_height = 0;        
         $('#detail-content > *').each(function(){
             if(this.tagName == "IFRAME") {
                 $(this).width($('#detail-content').width()).height($(this).width() * 0.8);
-            } else if(this.tagName == "OBJECT") {
-                $(this).width($('#detail-content').width()).height($(this).width() * 0.8);
-                $(this).children("embed").width($('#detail-content').width()).height($(this).width() * 0.8);
+            } else if(this.tagName == "OBJECT") { 
+                $(this).width($('#detail-content').width()).height($(this).width() * 0.8);         
+                $(this).children("base").width($('#detail-content').width()).height($(this).width() * 0.8);                                       
             }
-           total_height +=  $(this).outerHeight(true);
+           total_height +=  $(this).outerHeight(true);      
         });
         $(this.dialog).height((total_height));
         $(this.dialog).find('#detail-nav').css({"height": total_height}).show();
@@ -165,18 +167,14 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         var dt  = Math.floor(($(this.map.map.div).innerHeight()-(h2*2)) / 2);
         var w2 = ($(this.dialog).outerWidth() / 2);
         var dl = Math.floor(($(this.map.map.div).innerWidth() - (w2*2)) / 2);
-
+        
         // Undisplay and set correct position
-        if(hidden_height) { $(this.dialog).css({"display":"none"}); }
+        if(hidden_height) { $(this.dialog).css({"display":"none"}); }                
         $(this.dialog).css({"left": dl+"px"});
         $(this.dialog).css({"top": dt+"px"});
 
-        if($(this.embed_dialog).css("display") == "block") {
-            var shrink = $(window).height() 
-                         - $(this.embed_dialog).outerHeight();
-            $(this.map.map.div).css({"height":shrink});
-        }
-    }   
+    }, this));
+
 }
 
 Sourcemap.Map.Base.prototype.initTour = function() {

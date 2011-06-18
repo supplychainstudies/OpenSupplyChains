@@ -94,55 +94,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
         // bind event to edit link
         $(p.contentDiv).find('.popup-edit-link').click($.proxy(function(e) {
-            var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
-            Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
-                this.editor.map_view.showDialog(th, true);
-                $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
-                    // save updated attributes
-                    var f = $(e.target).parent();
-                    var vals = f.serializeArray();
-                    var reftype = this.ref instanceof Sourcemap.Stop ? 'stop' : 'hop';
-                    for(var k in vals) {
-                        var val = vals[k].value;
-                        k = vals[k].name;
-                        if(reftype == 'stop' && k === "address" && (val != this.ref.getAttr("address", false))) {
-                            this.ref.setAttr(k, val);
-                            // if address is set, move the stop.
-                            $(f).find('input,textarea,select').attr("disabled", true);
-                            Sourcemap.Stop.geocode(this.ref.getAttr("address"), $.proxy(function(res) {
-                                var pl = res && res.results ? res.results[0] : false;
-                                if(pl) {
-                                    this.stop.setAttr("address", pl.placename);
-                                    var new_geom = new OpenLayers.Geometry.Point(pl.lon, pl.lat);
-                                    new_geom = new_geom.transform(
-                                        new OpenLayers.Projection('EPSG:4326'),
-                                        new OpenLayers.Projection('EPSG:900913')
-                                    );
-                                    this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom))
-                                    this.editor.map.mapStop(this.stop, this.stop.supplychain_id);
-                                    this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
-                                    this.editor.map.stopFeature(this.stop).popup.panIntoView();
-                                    this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
-                                } else {
-                                    $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
-                                    this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
-                                }
-                                this.editor.map.controls.select.select(
-                                    this.editor.map.stopFeature(this.stop)
-                                );
-                                this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
-                            }, {"stop": this.ref, "edit_form": f, "editor": this.editor}));
-                        } else {
-                            this.ref.setAttr(k, val);
-                        }
-                    }
-                    if(this.ref instanceof Sourcemap.Stop) {
-                        this.editor.map.mapStop(this.ref, this.ref.supplychain_id);
-                        this.editor.map_view.hideDialog();
-                        this.editor.map_view.updateStatus("Stop updated...", "good-news");
-                    }
-                }, {"ref": this.ref, "editor": this.editor}));
-            }, {"ref": this.ref}, this);
+            this.editor.showEdit(ref);
         }, {"ref": ref, "editor": this}));
 
         // bind click event to connect button
@@ -280,4 +232,141 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
         h.geometry = tmph.geometry;
     }
     this.map.mapSupplychain(sc.instance_id);
+}
+
+Sourcemap.Map.Editor.prototype.showEdit = function(ref, o) {
+    var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
+    Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
+        this.editor.map_view.showDialog(th, true);
+
+        // load catalog button
+        $(this.editor.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
+            this.q = '';
+            this.params = {"name": ''};
+            this.editor.showCatalog(this);
+        }, this));
+
+        $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
+            // save updated attributes
+            var f = $(e.target).parent();
+            var vals = f.serializeArray();
+            var reftype = this.ref instanceof Sourcemap.Stop ? 'stop' : 'hop';
+            for(var k in vals) {
+                var val = vals[k].value;
+                k = vals[k].name;
+                if(reftype == 'stop' && k === "address" && (val != this.ref.getAttr("address", false))) {
+                    this.ref.setAttr(k, val);
+                    // if address is set, move the stop.
+                    $(f).find('input,textarea,select').attr("disabled", true);
+                    Sourcemap.Stop.geocode(this.ref.getAttr("address"), $.proxy(function(res) {
+                        var pl = res && res.results ? res.results[0] : false;
+                        if(pl) {
+                            this.stop.setAttr("address", pl.placename);
+                            var new_geom = new OpenLayers.Geometry.Point(pl.lon, pl.lat);
+                            new_geom = new_geom.transform(
+                                new OpenLayers.Projection('EPSG:4326'),
+                                new OpenLayers.Projection('EPSG:900913')
+                            );
+                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom))
+                            this.editor.map.mapStop(this.stop, this.stop.supplychain_id);
+                            this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
+                            this.editor.map.stopFeature(this.stop).popup.panIntoView();
+                            this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
+                        } else {
+                            $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
+                            this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
+                        }
+                        this.editor.map.controls.select.select(
+                            this.editor.map.stopFeature(this.stop)
+                        );
+                        this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
+                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor}));
+                } else {
+                    this.ref.setAttr(k, val);
+                }
+            }
+            if(this.ref instanceof Sourcemap.Stop) {
+                this.editor.map.mapStop(this.ref, this.ref.supplychain_id);
+                this.editor.map_view.hideDialog();
+                this.editor.map_view.updateStatus("Stop updated...", "good-news");
+            }
+        }, {"ref": this.ref, "editor": this.editor}));
+    }, {"ref": ref, "editor": this}, {"ref": ref, "editor": this});
+}
+
+Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
+    var o = o || {};
+    o.q = o.q ? o.q : '';
+    o.catalog = o.catalog ? o.catalog : "osi";
+    var tscope = {"editor": this, "o": o, "ref": o.ref};
+    Sourcemap.template('map/edit/catalog', function(p, txt, th) {
+        this.editor.map_view.showDialog(th, true);
+        $.ajax({"url": "services/catalogs/"+this.o.catalog, "data": this.o.params || {}, 
+            "success": $.proxy(function(json) {
+                var cat_html = $('<ul class="catalog-items"></ul>');
+                for(var i=0; i<json.results.length; i++) {
+                    var new_li = $('<li class="catalog-item"></li>').text(json.results[i].name);
+                    $(new_li).click($.proxy(function(evt) {
+                        this.editor.applyCatalogItem(this.catalog, this.item, this.ref); 
+                    }, {"item": json.results[i], "editor": this.editor, "ref": this.ref, "catalog": this.o.catalog}));
+                    cat_html.append(new_li);
+                }
+                this.o.params = json.parameters;
+                $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
+
+                // pager prev
+                if(o.params.o > 0) {
+                    var prev_link = $('<span class="catalog-pager-prev">&laquo; prev</span>').click($.proxy(function() {
+                        var o = {};
+                        o.editor = this.editor;
+                        o.ref = this.ref;
+                        o.params = Sourcemap.deep_clone(this.o.params);
+                        o.params.o = (parseInt(o.params.o) || 0);
+                        if(o.params.o > o.params.l) o.params.o -= o.params.l;
+                        o.params.l = o.params.l;
+                        this.editor.showCatalog(o);
+                    }, this));
+                }
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(prev_link);
+
+                // pager next
+                var next_link = $('<span class="catalog-pager-next">next &raquo;</span>').click($.proxy(function() {
+                    var o = {};
+                    o.editor = this.editor;
+                    o.ref = this.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.o = (parseInt(o.params.o) || 0) + o.params.l;
+                    o.params.l = o.params.l;
+                    this.editor.showCatalog(o);
+                }, this));
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
+
+            }, this), "failure": $.proxy(function() {
+                this.editor.map_view.showDialog('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
+            }, this)
+        });
+    }, tscope, tscope);
+}
+
+Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
+    var catalog_map = {
+        "osi": {
+            "name": ["title", "name"],
+            "co2e": true
+        }
+    }
+    for(var k in item) {
+        if(catalog_map[cat] && catalog_map[cat][k]) {
+            if(catalog_map[cat][k] instanceof Array) {
+                var map_to = catalog_map[cat][k];
+                for(var i=0; i<map_to.length; i++) {
+                    ref.attributes[map_to[i]] = item[k];
+                }
+            } else if(catalog_map[cat][k] instanceof Function) {
+                var map_with = catalog_map[cat][k];
+                map_with(ref);
+            } else if(catalog_map[cat][k]) ref.attributes[catalog_map[cat][k]] = item[k];
+        }
+    }
+    this.showEdit(ref);
 }

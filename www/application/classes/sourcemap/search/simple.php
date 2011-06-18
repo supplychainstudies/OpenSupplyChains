@@ -4,21 +4,62 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         parent::fetch();
         if(!isset($this->parameters['q']))
             $this->parameters['q'] = '';
-        $sql = 'select distinct sc.id as supplychain_id from stop_attribute sa '.
+
+        $and_where = array();
+        // category filter
+        $clause_category = false;
+        if(isset($this->parameters['c'])) {
+            $cat = $this->parameters['c'];
+            $csql = 'select id from category where name ilike \'%\'||:catq||\'%\'';
+            $query = DB::query(Database::SELECT, $csql);
+            $query->param(':catq', $cat);
+            $rows = $query->execute();
+            $cat_ids = array();
+            foreach($rows as $i => $row) {
+                $cat_ids[] = $row['id'];
+            }
+            if($cat_ids) {
+                $clause_category = 'category in ('.join($cat_ids).')';
+                $and_where[] = $clause_category;
+            } else {
+                $clause_category = false;
+            }
+        }
+
+        // featured filter
+        if(isset($this->parameters['featured']) && strtolower($this->parameters['featured']) == 'yes') {
+            $clause_featured = 'flags & '.Sourcemap::FEATURED.' > 0';
+            $and_where[] = $clause_featured;
+        }
+
+        // recent filter
+        if(isset($this->parameters['recent']) && strtolower($this->parameters['recent']) == 'yes') {
+            $recent_featured = 'created > '.(time()-(2*7*24*60*60));
+            $and_where[] = $recent_featured;
+        }
+
+        $selectsql = 'select distinct sc.id as supplychain_id';
+        $fromsql = 'from stop_attribute sa '.
             'left join supplychain sc on (sa.supplychain_id=sc.id) '.
-            'where lower(sa.value) like \'%\'||:query||\'%\' '.
-            'and other_perms & :readflag > 0 limit :limit offset :offset';
-        $query = DB::query(Database::SELECT, $sql);
+            'right join supplychain_attribute sca on (sca.supplychain_id=sc.id)';
+        $clause_keyword = '(lower(sa.value) like \'%\'||:query||\'%\' '.
+            'or lower(sca.value) like \'%\'||:query||\'%\')';
+        $clause_public = 'other_perms & :readflag > 0';
+        $limit_offset = 'limit :limit offset :offset';
+
+        $sql = sprintf("%s where %s and %s", $fromsql, $clause_keyword, $clause_public);
+
+        // add filter where clauses
+        if($and_where) $sql .= ' and '.join(' and ', $and_where);
+
+        $query = DB::query(Database::SELECT, $selectsql.' '.$sql.' '.$limit_offset);
         $query->param(':query', $this->parameters['q'])
             ->param(':readflag', Sourcemap::READ)
             ->param(':limit', $this->limit)
             ->param(':offset', $this->offset);
         $rows = $query->execute();
 
-        $ctsql = 'select count(distinct sc.id) as hits from stop_attribute sa '.
-            'left join supplychain sc on (sa.supplychain_id=sc.id) '.
-            'where lower(sa.value) like \'%\'||:query||\'%\' '.
-            'and other_perms & :readflag > 0';
+        $ctsql = 'select count(distinct sc.id) as hits '.$sql;
         $ctquery = DB::query(Database::SELECT, $ctsql);
         $ctquery->param(':query', $this->parameters['q'])
             ->param(':readflag', Sourcemap::READ);

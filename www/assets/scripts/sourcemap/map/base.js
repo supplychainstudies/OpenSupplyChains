@@ -217,7 +217,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     }
     Sourcemap.template('map/overlay/supplychain', function(p, tx, th) {
         $(this.banner_div).html(th);
-        this.updateStatus("Loaded...", "good-news");
+        //this.updateStatus("Loaded...", "good-news");
     }, sc, this, this.options.tpl_base_path);
     return this;
 }
@@ -271,7 +271,7 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
     var cls = cls || false;
     var newmsg = $('<div></div>').addClass("msg").text(msg);
     if(cls) newmsg.addClass(cls);
-    $(this.banner_div).find('.map-status').empty().append(newmsg);
+    $(this.banner_div).find('.map-status').text('').empty().append(newmsg);
     $(this.banner_div).find('.map-status .msg').fadeTo(5000, 0);
     return this;
 }

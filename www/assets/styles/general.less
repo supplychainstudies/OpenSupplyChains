@@ -26,9 +26,9 @@ body {
     font-size:1em;
     line-height:1em;
     margin:0 auto;
-    /*background: #ddd;
+    background: #fff;
     background: -moz-linear-gradient(center bottom,#ebebeb 0%,#fff 40%) #ebebeb repeat-x;
-    background: -webkit-gradient(linear,left bottom,left top,color-stop(0,#ebebeb),color-stop(0.4,#fff)) #ebebeb repeat-x;*/
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0,#ebebeb),color-stop(0.4,#fff)) #ebebeb repeat-x;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -129,9 +129,12 @@ button::-moz-focus-inner {
                     cursor: pointer;
                 }
                 &.more {
+                    .body-font;
+                    font-size:0.8em;
                     clear: both;
                     text-transform: lowercase;
                     border-top: 1px solid #333;
+                    text-align:center;
                 }
             }
             .search-result {
@@ -374,9 +377,10 @@ button::-moz-focus-inner {
         font-size:0.8em;
     }
 }
-#user-map-list {
+#user-map-list, #search-results {
     font-size:0.8em;
     .user-map-preview {
+        
     }
     .user-map-title {
         .body-font;
@@ -387,7 +391,7 @@ button::-moz-focus-inner {
     .user-map-teaser {
         .body-font;
     }
-    .user-map-time {
+    .user-map-details {
         .body-font;
         font-size:0.8em;
         color:#888;
@@ -685,6 +689,7 @@ button::-moz-focus-inner {
  * -------------------------------------------------------------- */
 
 .footer {
+    margin-top:30px;
     border-top:1px solid #ccc;
     padding: 10px 0 0 0;
     ul {

@@ -125,13 +125,16 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     }
     #detail-content {
         overflow:hidden;                       
-        width:79%;
         padding:0; margin:0;
         float:left;
         iframe, object {
             display:block;
             margin: 0;
             background:#444;
+        }
+        h1 {
+            font-size:1.5em;
+            border-bottom:1px solid #ccc;
         }
         h2{
             font-size: 1.5em;
@@ -530,15 +533,31 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 }
 
 /* editor stuff */
-
+.catalog-pager {
+    text-align:center;
+    font-size:0.8em;
+    color:#888;
+    border-bottom
+    .catalog-pager-prev, .catalog-pager-prev {
+        padding:0.5em;
+        cursor:pointer;
+    }
+}
+.catalog-content {
+    
+}
 .catalog-items {
-    font-size: .1.2em;
 }
 
 .catalog-item {
+    font-size:0.6em;
     cursor: pointer;
-    padding: .2em;
-    width: 100%;
-    margin-bottom: .2em;
-    border-bottom: 1px solid red;
+    padding: .4em;
+    width: 6.5em;
+    height:6em;
+    float:left;
+    margin: .2em;
+    color:#eee;
+    border: 1px solid #000;
+    background: #333;
 }

@@ -1,4 +1,4 @@
-<div class="search-results">
+<div id="search-results">
     <div class="">
         <div class="container_16">
             <div class="grid_16">

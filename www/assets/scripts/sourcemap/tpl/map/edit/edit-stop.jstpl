@@ -3,19 +3,32 @@
         <div class="load-catalog-button">&raquo; Catalog</div>
         <form name="edit-ref">
         <label for="address">Move to:</label>
-        <% var el = $("<input />").attr("type", "text").attr("name", "address"); el[0].setAttribute("value", this.ref.getAttr("address", "")); %>
+        <% var el = $("<input />").attr("type", "text").attr("name", "address"); el[0].setAttribute("value",this.attr["address"] || ""); %>
         <%= $("<div></div>").append(el).html() %>
         <label for="title">Title</label>
-        <% var el = $("<input />").attr("type", "text").attr("name", "title"); el[0].setAttribute("value", this.ref.getAttr("title", "")); %>
+        <% var el = $("<input />").attr("type", "text").attr("name", "title"); el[0].setAttribute("value",this.attr["title"] || ""); %>
         <%= $("<div></div>").append(el).html() %>
         <label for="teaser">Short Description</label>
-        <% el = $("<input></input>").attr("type", "text").attr("name", "teaser"); el[0].setAttribute("value", this.ref.getAttr("teaser", "")); %>
+        <% el = $("<input></input>").attr("type", "text").attr("name", "teaser"); el[0].setAttribute("value",this.attr["teaser"] || ""); %>
         <%= $("<div></div>").append(el).html() %>
         <label for="discription">Long Description</label>
         <%= $("<div></div>").append(
-                $("<textarea></textarea>").attr("name", "description").html(this.ref.getAttr("description", ""))
+                $("<textarea></textarea>").attr("name", "description").html(this.attr["description"] || "")
             ).html()
         %>
+
+        <label for="co2e">Weight in Kg</label>
+        <% el = $("<input></input>").attr("type", "text").attr("name", "weight"); el[0].setAttribute("value",this.attr["weight"] || ""); %>
+        <%= $("<div></div>").append(el).html() %>
+
+        <label for="co2e">CO2e</label>
+        <% el = $("<input></input>").attr("type", "text").attr("name", "co2e"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
+        <%= $("<div></div>").append(el).html() %>
+
+        <label for="co2e">Unit</label>
+        <% el = $("<input></input>").attr("type", "text").attr("name", "unit"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
+        <%= $("<div></div>").append(el).html() %>
+
         <input type="button" class="submit edit-save" value="Save" />
         </form>
     </fieldset>

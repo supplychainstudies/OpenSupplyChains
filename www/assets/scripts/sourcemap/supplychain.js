@@ -190,6 +190,28 @@ Sourcemap.Supplychain.prototype.removeHop = function(hop_id) {
     return removed;
 }
 
+Sourcemap.Supplychain.prototype.stopAttrRange = function(attr_nm) {
+    var min = null;
+    var max = null;
+    var total = 0;
+    for(var i=0; i<this.stops.length; i++) {
+        var stop = this.stops[i];
+        if(stop.attributes[attr_nm] === undefined)
+            continue;
+        var val = parseFloat(stop.attributes[attr_nm]);
+        if(isNaN(val))
+            continue;
+        if(min === null) min = val;
+        if(max === null) max = val;
+        min = Math.min(val, min);
+        max = Math.max(val, max);
+        total += val;
+    }
+    return {
+        "min": min, "max": max, "total": total
+    };
+}
+
 Sourcemap.Stop = function(geometry, attributes) {
     this.instance_id = Sourcemap.instance_id("stop");
     this.supplychain_id = null;

@@ -21,8 +21,12 @@ Sourcemap.Map.Base.prototype.defaults = {
     "tour_order_strategy": "upstream", "tileswitcher": false,
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000",
     "tileset": "cloudmade", // terrain, cloudmade, etc. (check map.js)
-    "tour": false
+    "tour": false, "min_stop_size": 8, "max_stop_size": 48, "error_color": '#ff0000',
+    "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
+    "visualization_mode": null, "visualizations": ["co2e","energy","weight"],
+    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000"}
 }
+
 Sourcemap.Map.Base.prototype.init = function() {
     this.magic_word_sequence = this.options.magic_word_sequence;
     this.magic_word_cur_idx = this.options.magic_word_cur_idx;
@@ -109,8 +113,30 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 
     $(this.map.map.div).css("position", "relative");
 
+    // add filter controls to dock
+    this.map.dockAdd('weight', {
+        "ordinal": 6,
+        "title": 'Weight',
+        "content": "XX g",
+        "toggle": true,
+        "callbacks": {
+            "click": $.proxy(function() {
+                this.toggleVisualization("weight");
+            }, this)
+        }
+    });
 
-
+    this.map.dockAdd('co2e', {
+        "ordinal": 7,
+        "title": 'Carbon',
+        "content": "XX kg CO2e",
+        "toggle": true,
+        "callbacks": {
+            "click": $.proxy(function() {
+                this.toggleVisualization("co2e");
+            }, this)
+        }
+    });
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -126,8 +152,9 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             this.watermark = $('<div id="watermark"></div>');
             $(this.map.map.div).append(this.watermark);
         }
+        // todo: do calculations here
     }, this));
-    
+
     $(window).resize($.proxy(function () { 
         var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
         //$("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
@@ -607,6 +634,110 @@ Sourcemap.Map.Base.prototype.mapUserLoc = function() {
         this.tour.start();
     }
     return this;
+}
+
+Sourcemap.Map.Base.prototype.decorateFeatures = function(dec_fn, features) {
+    for(var i=0; i<features.length; i++) {
+        if(dec_fn instanceof Function) {
+            dec_fn(features[i], this);
+        } else {
+            for(var k in dec_fn) {
+                if(features[i].attributes[k]) {
+                    var decv = dec_fn[k];
+                    if(decv instanceof Function) {
+                        decv(features[i]);
+                    } else {
+                        features[i].attributes[k] = decv;
+                    }
+                }
+            }
+        }
+    }
+    return this;
+}
+
+Sourcemap.Map.Base.prototype.decorateStopFeatures = function(dec_fn) {
+    var st_ftrs = this.map.getStopFeatures();
+    return this.decorateFeatures(dec_fn, st_ftrs);
+}
+
+Sourcemap.Map.Base.prototype.decorateHopFeatures = function(dec_fn) {
+    var h_ftrs = this.map.getHopFeatures();
+    return this.decorateFeatures(dec_fn, h_ftrs);
+}
+
+Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smin, smax, active_color) {
+    var active_color = active_color || this.options.attr_missing_color;
+    var smin = smin == undefined ? this.options.min_stop_size : parseInt(smin);
+    if(!smin) smin = this.options.min_stop_size;
+    var smax = smax == undefined ? this.options.max_stop_size : parseInt(smax);
+    if(!smax) smax = this.options.max_stop_size;
+    var dec_fn = $.proxy(function(stf, mb) {    
+        if(stf.attributes[this.attr_name] !== undefined) {
+            var val = stf.attributes[attr_nm];
+            val = parseFloat(val);
+            if(!isNaN(val)) {
+                // scale
+                val = Math.max(val, this.vmin);
+                val = Math.min(val, this.vmax);
+                var voff = val - this.vmin;
+                var vrange = this.vmax - this.vmin;
+                var sval = this.smax;
+                if(vrange)
+                    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+                stf.attributes.size = sval;
+                stf.attributes.color = active_color;
+                return;
+            }
+        }
+        stf.attributes.size = smin;
+        stf.attributes.color = mb.options.attr_missing_color;
+    }, {"vmin": vmin, "vmax": vmax, "smin": smin, "smax": smax, "attr_name": attr_nm});
+    return this.decorateStopFeatures(dec_fn);
+}
+
+Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
+    switch(viz_nm) {
+        //case "energy":
+        //    break;
+        case "co2e":
+        case "weight":
+            if(this.visualization_mode === viz_nm) {
+                this.toggleVisualization();
+                break;
+            } else {
+                this.toggleVisualization();
+            }
+            this.visualization_mode = viz_nm;
+            var range = null;
+            for(var k in this.map.supplychains) {
+                var sc = this.map.supplychains[k];
+                if(range === null) range = sc.stopAttrRange(viz_nm);
+                else {
+                    var tmprange = sc.stopAttrRange();
+                    if(tmprange.min !== null)
+                        range.min = Math.min(range.min, tmprange.min);
+                    if(tmprange.max !== null)
+                        range.max = Math.max(range.max, tmprange.max);
+                    if(tmprange.total !== null) {
+                        range.total += tmprange.total;
+                    }
+                }
+            }
+            this.sizeStopsOnAttr(viz_nm, range.min, range.max, null, null, this.options.visualization_colors[viz_nm]);
+            this.map.dockToggleActive(viz_nm);
+            this.map.redraw();
+            break;
+        default:
+            this.visualization_mode = null;
+            for(var i=0; i<this.options.visualizations.length; i++) {
+                var viz = this.options.visualizations[i];
+                this.map.dockToggleInactive(viz);
+            }
+            for(var k in this.map.supplychains)
+                this.map.mapSupplychain(k);
+            break;
+    }
 }
 
 // jQuery fxn to center an detailed element

@@ -44,6 +44,14 @@ Sourcemap.Map.Editor.prototype.init = function() {
         }, this);
         this.map_view.updateStatus("Saving...");
         Sourcemap.saveSupplychain(sc, {"supplychain_id": sc.remote_id, "success": succ, "failure": fail});
+
+        // maintain visualization
+        var viz = this.map_view.visualization;
+        if(viz) {
+            this.map_view.visualization = null;
+            this.map_view.toggleVisualization(viz);
+        }
+
     }, this);
 
     // listen for select events, for connect-to, etc.
@@ -65,7 +73,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
             this.map.controls.select.select(this.map.hopFeature(new_hop));
         } else {
             // pass 
-            //alert('select');
         }
         this.connect_from = false;
     }, this));
@@ -138,6 +145,11 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 // redraw the supplychain
                 //this.map.mapSupplychain(sc.instance_id);
                 this.map.mapStop(new_stop, sc.instance_id);
+                var viz = this.map_view.visualization;
+                if(viz) {
+                    this.map_view.visualization = null;
+                    this.map_view.toggleVisualization(viz);
+                }
                 // get the new feature
                 var f = this.map.stopFeature(sc.instance_id, new_stop.instance_id)
                 // select the new feature
@@ -235,8 +247,14 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
     this.map.mapSupplychain(sc.instance_id);
 }
 
-Sourcemap.Map.Editor.prototype.showEdit = function(ref, o) {
+Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
     var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
+
+    var attr = attr ? Sourcemap.deep_clone(attr) : {};
+    for(var k in ref.attributes) {
+        if(attr[k] == undefined) attr[k] = ref.getAttr(k);
+    }
+
     Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
         this.editor.map_view.showDialog(th, true);
 
@@ -290,9 +308,14 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, o) {
                 this.editor.map.mapStop(this.ref, this.ref.supplychain_id);
                 this.editor.map_view.hideDialog();
                 this.editor.map_view.updateStatus("Stop updated...", "good-news");
+            } else {
+                this.editor.map.mapHop(this.ref, this.ref.supplychain_id);
+                this.editor.map_view.hideDialog();
+                this.editor.map_view.updateStatus("Hop updated...", "good-news");
             }
-        }, {"ref": this.ref, "editor": this.editor}));
-    }, {"ref": ref, "editor": this}, {"ref": ref, "editor": this});
+            this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.ref.supplychain_id]);
+        }, {"ref": this.ref, "editor": this.editor, "attr": attr}));
+    }, {"ref": ref, "editor": this, "attr": attr}, {"ref": ref, "editor": this, "attr": attr});
 }
 
 Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
@@ -308,7 +331,7 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
                 for(var i=0; i<json.results.length; i++) {
                     var new_li = $('<li class="catalog-item"></li>').text(json.results[i].name);
                     $(new_li).click($.proxy(function(evt) {
-                        this.editor.applyCatalogItem(this.catalog, this.item, this.ref); 
+                        this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
                     }, {"item": json.results[i], "editor": this.editor, "ref": this.ref, "catalog": this.o.catalog}));
                     cat_html.append(new_li);
                 }
@@ -356,18 +379,19 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
             "co2e": true
         }
     }
+    var attr = {};
     for(var k in item) {
         if(catalog_map[cat] && catalog_map[cat][k]) {
             if(catalog_map[cat][k] instanceof Array) {
                 var map_to = catalog_map[cat][k];
                 for(var i=0; i<map_to.length; i++) {
-                    ref.attributes[map_to[i]] = item[k];
+                    attr[map_to[i]] = item[k];
                 }
             } else if(catalog_map[cat][k] instanceof Function) {
                 var map_with = catalog_map[cat][k];
-                map_with(ref);
-            } else if(catalog_map[cat][k]) ref.attributes[catalog_map[cat][k]] = item[k];
+                map_with(ref, attr);
+            } else if(catalog_map[cat][k]) attr[k] = item[k];
         }
     }
-    this.showEdit(ref);
+    this.showEdit(ref, attr);
 }

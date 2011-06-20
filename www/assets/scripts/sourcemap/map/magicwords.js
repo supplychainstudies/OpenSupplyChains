@@ -2,6 +2,7 @@ Sourcemap.MagicWords = {};
 Sourcemap.MagicWords.sequence = ["description", "youtube:link", "vimeo:link", "flickr:setid"];
 
 // callbacks for magic attributes
+
 Sourcemap.MagicWords.popup_content = {
     "youtube": {
         "link": function(lnk) {

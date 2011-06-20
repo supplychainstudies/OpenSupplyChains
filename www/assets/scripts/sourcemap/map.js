@@ -198,26 +198,6 @@ Sourcemap.Map.prototype.initDock = function() {
         "ordinal": 5,
         "title": 'Spacer',
     });
-    this.dockAdd('weightfilter', {
-        "ordinal": 6,
-        "title": 'Weight',
-        "content": "XX g",
-        "callbacks": {
-            "click": function() {
-
-            }
-        }
-    });
-    this.dockAdd('carbonfilter', {
-        "ordinal": 7,
-        "title": 'Carbon',
-        "content": "XX kg CO2e",
-        "callbacks": {
-            "click": function() {
-
-            }
-        }
-    });
     return this;
 }
 
@@ -234,7 +214,36 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
     if(callbacks.click) {
         $(cel).click($.proxy(callbacks.click, this));
     }
+    if(o.toggle) {
+        $(cel).addClass("toggle");
+        // todo: callback arg here...
+    }
     return this.dockPack();
+}
+
+Sourcemap.Map.prototype.dockToggle = function(nm) { 
+    var cel = $(this.dock_content).find(".control."+nm);
+    if(cel) {
+        if($(cel).hasClass("active")) $(cel).removeClass("active");
+        else $(cel).addClass("active");
+    }
+    return this;
+}
+
+Sourcemap.Map.prototype.dockToggleActive = function(nm) {
+    var cel = $(this.dock_content).find(".control."+nm);
+    if(cel) {
+        $(cel).addClass("active");
+    }
+    return this;
+}
+
+Sourcemap.Map.prototype.dockToggleInactive = function(nm) {
+    var cel = $(this.dock_content).find(".control."+nm);
+    if(cel) {
+        $(cel).removeClass("active");
+    }
+    return this;
 }
 
 Sourcemap.Map.prototype.dockControlEl = function(nm) {
@@ -449,6 +458,8 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         throw new Error('Sourcemap.Stop required.');
     this.eraseStop(scid, stop.instance_id);
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
+    // copy attributes for starters.
+    new_feature.attributes = Sourcemap.deep_clone(stop.attributes);
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
@@ -595,6 +606,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         new_popup.hide();
     }
 
+    new_feature.attributes = Sourcemap.deep_clone(hop.attributes);
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.hop_instance_id = hop.instance_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
@@ -851,6 +863,42 @@ Sourcemap.Map.prototype.findFeaturesForHop = function(scid, from_stid, to_stid) 
         }
     }
     return ftrs;
+}
+
+Sourcemap.Map.prototype.getStopFeatures = function(scid) {
+    var features = [];
+    if(scid) {
+        var stl = this.getStopLayer(scid);
+        features = features.concat(stl.features);
+    } else {
+        for(var k in this.supplychains) {
+            features = features.concat(this.getStopLayer(k).features);
+        }
+    }
+    return features;
+}
+
+Sourcemap.Map.prototype.getHopFeatures = function(scid) {
+    var features = [];
+    if(scid) {
+        var hl = this.getHopLayer(scid);
+        features = features.concat(hl.features);
+    } else {
+        for(var k in this.supplychains) {
+            features = features.concat(this.getHopLayer(k).features);
+        }
+    }
+    return features;
+}
+
+Sourcemap.Map.prototype.redraw = function() {
+    var ftrs = this.getStopFeatures();
+    ftrs = ftrs.concat(this.getHopFeatures());
+    for(var i=0; i<ftrs.length; i++)  {
+        if(ftrs[i].layer)
+            ftrs[i].layer.drawFeature(ftrs[i]);
+    }
+    return this;
 }
 
 Sourcemap.Map.prototype.showPopup = function(feature) {

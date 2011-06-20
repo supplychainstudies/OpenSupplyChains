@@ -301,6 +301,21 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
             .control{
                 padding: .2em .5em .2em .5em;
                 vertical-align:top;
+                &.toggle {
+                    &.active {
+                        background-color: #333;
+                        color: #eee;
+                        &.co2e {
+                            background-color: #ffa500;
+                            color: #333;
+                        }
+                        &.weight {
+                            background-color: #804000;
+                            color: #eee;
+                        }
+                        
+                    }
+                }
             }
             .control.firstSpacer {
                 width:0.1em;

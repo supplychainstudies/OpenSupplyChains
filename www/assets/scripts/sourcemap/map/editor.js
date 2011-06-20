@@ -46,9 +46,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
         Sourcemap.saveSupplychain(sc, {"supplychain_id": sc.remote_id, "success": succ, "failure": fail});
 
         // maintain visualization
-        var viz = this.map_view.visualization;
+        var viz = this.map_view.visualization_mode;
         if(viz) {
-            this.map_view.visualization = null;
+            this.map_view.visualization_mode = null;
             this.map_view.toggleVisualization(viz);
         }
 
@@ -145,11 +145,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 // redraw the supplychain
                 //this.map.mapSupplychain(sc.instance_id);
                 this.map.mapStop(new_stop, sc.instance_id);
-                var viz = this.map_view.visualization;
-                if(viz) {
-                    this.map_view.visualization = null;
-                    this.map_view.toggleVisualization(viz);
-                }
                 // get the new feature
                 var f = this.map.stopFeature(sc.instance_id, new_stop.instance_id)
                 // select the new feature

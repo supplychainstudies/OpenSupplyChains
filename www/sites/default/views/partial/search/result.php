@@ -18,7 +18,9 @@
             <?php endif; ?>
             
             <?php if(isset($result->owner->name) && $result->owner->name): ?>
-                <h4 class="user-map-time">
+                <h4 class="user-map-details">
+                    Created by <?= HTML::chars($result->owner->name) ?>,
+                    
                     <?php if($result->modified > $result->created): ?>
                         Last updated <?= date('F j, Y', $result->modified) ?> | 
                     <?php endif; ?>

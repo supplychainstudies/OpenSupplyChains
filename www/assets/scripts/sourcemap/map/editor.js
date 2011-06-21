@@ -372,10 +372,25 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
                     o.ref = this.ref;
                     o.params = Sourcemap.deep_clone(this.o.params);
                     o.params.o = (parseInt(o.params.o) || 0) + o.params.l;
-                    o.params.l = o.params.l;
                     this.editor.showCatalog(o);
                 }, this));
                 $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
+
+                // search bar
+                $(this.editor.map_view.dialog).find('#catalog-search-field').val(o.params.q).removeAttr("disabled").focus();
+                $(this.editor.map_view.dialog).find('#catalog-search-field').keyup($.proxy(function(evt) {
+                    if($(evt.target).val().length < 3) return;
+                    if((evt.ctrlKey || evt.altKey) || !(evt.keyCode >= 65 && evt.keyCode <= 90)) return;
+                    $(this.editor.map_view.dialog).find('#catalog-search-field').attr("disabled", true);
+                    var q = $(evt.target).val();
+                    var o = {};
+                    o.editor = this.editor;
+                    o.ref = this.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.o = 0;
+                    o.params.q = q;
+                    this.editor.showCatalog(o);
+                }, this));
 
             }, this), "failure": $.proxy(function() {
                 this.editor.map_view.showDialog('<h3 class="bad-news">The catalog is currently unavailable.</h3>');

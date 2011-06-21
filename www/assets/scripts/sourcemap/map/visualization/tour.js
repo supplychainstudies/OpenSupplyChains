@@ -39,6 +39,7 @@ Sourcemap.MapTour.prototype.initControls = function() {
     //this.control_play = $('<div class="sourcemap-tour-play stopped"></div>');
     this.map.dockAdd('tour-play', {
         "icon_url": "sites/default/assets/images/dock/tour-play.png",
+        "ordinal":4,
         "callbacks": {
             "click": function(evt) {
                 this.start();

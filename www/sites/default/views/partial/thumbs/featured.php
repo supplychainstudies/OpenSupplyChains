@@ -1,6 +1,10 @@
 <div id="popular-maps" class="container_12">
-<?php if ($data): ?>
-    <?php foreach($data->results as $i => $item): ?>
+
+<?php $data=Sourcemap_Search::Find(array('l'=>3));
+if ($data):
+    $results = $data->results;
+    $i = 0;
+    foreach($results as $item):?>
         <div class="preview-map-item medium grid_4">
             <div class="preview-badge">
             <a href="/map/view/<?php print $item->id; ?>"><img class="preview-map small" src="/map/static/<?php print $item->id; ?>.s.png" alt="" /></a>

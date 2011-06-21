@@ -967,9 +967,69 @@ Sourcemap.Popup.prototype.setSize = function(content_sz) {
     $(this.div).css("height", (this.size.h + this.ANCHOR_HT) + "px");
 }
 
+
 Sourcemap.Popup.prototype.updateSize = function() {
-    OpenLayers.Popup.prototype.updateSize.apply(this, arguments);
+
+    // This is same as openlayers updateSize except that we override 
+    // the width with a fixed value 
+
+    var preparedHTML = "<div class='" + this.contentDisplayClass+ "'>" +
+        this.contentDiv.innerHTML +
+        "</div>";
+
+    var containerElement = (this.map) ? this.map.layerContainerDiv
+                                      : document.body;
+    var realSize = OpenLayers.Util.getRenderedDimensions(
+        preparedHTML, null, {
+            displayClass: this.displayClass,
+            containerElement: containerElement
+        }
+    );
+
+
+    var safeSize = this.getSafeContentSize(realSize);
+
+    var newSize = null;
+    if (safeSize.equals(realSize)) {
+        
+        // Overrides size with static width 
+        realSize.w = '250';
+        newSize = realSize;
+
+    } else {
+        var fixedSize = new OpenLayers.Size();
+        fixedSize.w = (safeSize.w < realSize.w) ? safeSize.w : null;
+        fixedSize.h = (safeSize.h < realSize.h) ? safeSize.h : null;
+
+        if (fixedSize.w && fixedSize.h) {
+            newSize = safeSize;
+        } else {
+            var clippedSize = OpenLayers.Util.getRenderedDimensions(
+                preparedHTML, fixedSize, {
+                    displayClass: this.contentDisplayClass,
+                    containerElement: containerElement
+                }
+            );
+
+            var currentOverflow = OpenLayers.Element.getStyle(
+                this.contentDiv, "overflow"
+            );
+
+            if ( (currentOverflow != "hidden") &&
+                 (clippedSize.equals(safeSize)) ) {
+                var scrollBar = OpenLayers.Util.getScrollbarWidth();
+                if (fixedSize.w) {
+                    clippedSize.h += scrollBar;
+                } else {
+                    clippedSize.w += scrollBar;
+                }
+            }
+            newSize = this.getSafeContentSize(clippedSize);
+        }
+    }
+    this.setSize(newSize);
 }
+
 
 Sourcemap.Popup.prototype.moveTo = function(px) {
     if(px != null && this.div) {

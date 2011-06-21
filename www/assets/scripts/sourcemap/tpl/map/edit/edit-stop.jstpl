@@ -43,9 +43,13 @@
         </div>
 
         <label for="water">Water</label>
-        <div class="sourcemap-form-button-div"> 
-            <% el = $("<input></input>").attr("type", "text").attr("name", "water").addClass("buttons"); el[0].setAttribute("value",this.attr["water"] || ""); %>
+        <div class="sourcemap-form-textbox"> 
+            <% el = $("<input></input>").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.attr["water"] || ""); %>
             <%= $("<div></div>").append(el).html() %>
+        </div>
+        
+        <div class="sourcemap-form-button-div"> 
+            <input type="submit" name="edit-save" class="edit-save buttons" value="Save" />
         </div>
         
         </form>

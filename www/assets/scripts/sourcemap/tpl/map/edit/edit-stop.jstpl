@@ -25,8 +25,12 @@
         <% el = $("<input></input>").attr("type", "text").attr("name", "co2e"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
         <%= $("<div></div>").append(el).html() %>
 
-        <label for="co2e">Unit</label>
+        <label for="unit">Unit</label>
         <% el = $("<input></input>").attr("type", "text").attr("name", "unit"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
+        <%= $("<div></div>").append(el).html() %>
+
+        <label for="water">Water</label>
+        <% el = $("<input></input>").attr("type", "text").attr("name", "water"); el[0].setAttribute("value",this.attr["water"] || ""); %>
         <%= $("<div></div>").append(el).html() %>
 
         <input type="button" class="submit edit-save" value="Save" />

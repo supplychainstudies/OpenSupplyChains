@@ -697,6 +697,7 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
+    this.map.controls.select.unselectAll();
     switch(viz_nm) {
         //case "energy":
         //    break;

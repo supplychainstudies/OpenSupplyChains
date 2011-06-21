@@ -388,7 +388,10 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
     var catalog_map = {
         "osi": {
             "name": ["title", "name"],
-            "co2e": true
+            "co2e": true,
+            "waste": true,
+            "water": true,
+            "energy": true
         }
     }
     var attr = {};

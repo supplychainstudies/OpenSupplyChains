@@ -387,9 +387,9 @@ Sourcemap.hexc2rgb = function(hexc) {
 Sourcemap.rgb2hexc = function(rgb) {
     if(!rgb.length || rgb.length < 3)
         throw new Error('Invalid rgb.');
-    var r = rgb[0];
-    var g = rgb[1];
-    var b = rgb[2];
+    var r = Math.min(256, Math.max(0, rgb[0]));
+    var g = Math.min(256, Math.max(0, rgb[1]));
+    var b = Math.min(256, Math.max(0, rgb[2]));
     var hexc = 0;
     hexc = (new Number(r)) << (8*2);
     hexc |= (new Number(g)) << 8;
@@ -589,5 +589,7 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
     var scaled_value = parseFloat((base.value * Math.pow(10, -new_unit.mult)).toPrecision(2));
     var scaled_unit = new_unit;
     var scaled = {"unit": scaled_unit.label, "value": scaled_value};
+    if(Sourcemap.Units.si_equiv[scaled.unit] !== undefined) 
+        scaled.unit = Sourcemap.Units.si_equiv[scaled.unit].abbrev;
     return scaled;
 }

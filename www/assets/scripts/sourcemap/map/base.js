@@ -159,7 +159,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         if(metric === "water") unit = "L";
         var scaled = Sourcemap.Units.scale_unit_value(value, unit, 2);
         this.map.dockControlEl(metric).find('.value').text(scaled.value);
-        this.map.dockControlEl(metric).find('.unit').text(scaled.unit.label);
+        this.map.dockControlEl(metric).find('.unit').text(scaled.unit);
     }, this));
 
 }
@@ -716,6 +716,10 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
                     sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
                 stf.attributes.size = sval;
                 stf.attributes.color = active_color;
+                stcolor = new Sourcemap.Color();
+                stcolor = stcolor.fromHex(stf.attributes.color);
+                stcolor.r -= 8; stcolor.g -= 8; stcolor.b -= 8;
+                stf.attributes.strokeColor = stcolor+"";
                 return;
             }
         }

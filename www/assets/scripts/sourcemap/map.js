@@ -77,8 +77,9 @@ Sourcemap.Map.prototype.defaults = {
             "rotation": "${angle}"
         },
         "select": {
-            "strokeColor": "#050",
-            "fillColor": "#050"
+            "strokeColor": "#ffffff",
+            "fillColor": "#ffffff",
+            "fillOpacity": 1.0
         }
     }, "prep_stop": null, "prep_hop": null,
     "prep_popup": null

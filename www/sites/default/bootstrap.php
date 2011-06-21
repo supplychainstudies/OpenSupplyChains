@@ -25,12 +25,6 @@ Route::set('admin/dashboard', 'admin', array())
         'action' => 'index'
 ));
 
-Route::set('create', 'create', array())
-    ->defaults(array(
-        'controller' => 'map',
-        'action' => 'create'
-));
-
 Route::set('admin/collection', 'admin/<controller>', array())
     ->defaults(array(
         'directory' => 'admin',

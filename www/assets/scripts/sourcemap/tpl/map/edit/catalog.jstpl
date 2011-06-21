@@ -1,4 +1,11 @@
 <h1>Materials Catalog</h1>
-<div class="catalog-pager">
-</div>
+<form id="catalog-search">
+    <label>
+        <input id="catalog-search-field" name="q" type="search" results="0" />
+    </label>
+    <button id="catalog-search-button">
+        <span>Search</span>
+    </button>
+</form>
+<div class="catalog-pager"></div>
 <div class="catalog-content">...</div>

@@ -324,12 +324,29 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
             "success": $.proxy(function(json) {
                 var cat_html = $('<ul class="catalog-items"></ul>');
                 for(var i=0; i<json.results.length; i++) {
-                    var new_li = $('<li class="catalog-item"></li>').text(json.results[i].name);
+                    // Todo: Template this
+                    var cat_content = '<div class="cat-item-name">'+json.results[i].name+'</div>';
+                    cat_content += '<div class="cat-item-category">'+json.results[i].category+'</div>';
+                    
+                    cat_content += '<div class="cat-item-footprints">'                    
+                    cat_content += 
+                        json.results[i].co2e ? '<div class="cat-item-co2e"><span class="footprint-label">co2e</span>'+json.results[i].co2e+'</div>' : '';
+                    cat_content += 
+                        json.results[i].energy ? '<div class="cat-item-energy"><span class="footprint-label">energy</span>'+json.results[i].energy+'</div>' : '';
+                    cat_content += 
+                        json.results[i].waste ? '<div class="cat-item-waste"><span class="footprint-label">waste</span>'+json.results[i].waste+'</div>' : '';
+                    cat_content += 
+                        json.results[i].water ? '<div class="cat-item-water"><span class="footprint-label">water</span>'+json.results[i].water+'</div>' : '';
+                    cat_content += '<div class="clear"></div></div>';                    
+                    
+                    var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
+                    
                     $(new_li).click($.proxy(function(evt) {
                         this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
                     }, {"item": json.results[i], "editor": this.editor, "ref": this.ref, "catalog": this.o.catalog}));
                     cat_html.append(new_li);
                 }
+                this.o.catalog = json.results;
                 this.o.params = json.parameters;
                 $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
 

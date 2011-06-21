@@ -533,12 +533,20 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 }
 
 /* editor stuff */
+#catalog-search {
+    #catalog-search-field {
+        width:10em;
+    }
+    #catalog-search-button {
+        
+    }
+}
 .catalog-pager {
     text-align:center;
     font-size:0.8em;
     color:#888;
     margin-bottom:0.5em;
-    .catalog-pager-prev, .catalog-pager-prev {
+    .catalog-pager-prev, .catalog-pager-next {
         padding:0.5em;
         cursor:pointer;
     }
@@ -553,11 +561,53 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     font-size:0.6em;
     cursor: pointer;
     padding: .4em;
-    width: 6.5em;
-    height:6em;
+    width: 30em;
+    height:7em;
     float:left;
-    margin: .2em;
-    color:#eee;
-    border: 1px solid #000;
-    background: #333;
+    margin: .5em;
+    list-style:none;
+    display:block;
+    position:relative;
+    border:1px dotted #888;
+    &:hover {
+        border:1px dotted #000;
+    }
+    .cat-item-name {
+        font-size:1.2em;
+        height:1.2em;
+        font-weight:bold;
+        overflow:hidden;
+    }
+    .cat-item-category {
+        
+    }
+    .cat-item-footprints { 
+        position:absolute;
+        bottom:0;
+        right:0;
+        width:100%;
+        font-size:0.8em;
+        color:#888;
+        display:block;
+        background: #eee;
+        .footprint-label {
+            display:block;
+        }
+        .cat-item-co2e {
+            float:left; padding:0.5em;
+            text-align:center;
+        }
+        .cat-item-energy {
+            float:left; padding:0.5em;
+            text-align:center;
+        }
+        .cat-item-waste {
+            float:left; padding:0.5em;
+            text-align:center;
+        }
+        .cat-item-water {
+            float:left; padding:0.5em;
+            text-align:center;
+        }
+    }
 }

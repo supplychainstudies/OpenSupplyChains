@@ -42,17 +42,12 @@
             <%= $("<div></div>").append(el).html() %>
         </div>
 
-<<<<<<< .mine
-        <div class="sourcemap-form-button-div"> 
-            <input type="button" class="submit edit-save buttons" value="Save" />
-        </div>
-=======
         <label for="water">Water</label>
-        <% el = $("<input></input>").attr("type", "text").attr("name", "water"); el[0].setAttribute("value",this.attr["water"] || ""); %>
-        <%= $("<div></div>").append(el).html() %>
-
-        <input type="button" class="submit edit-save" value="Save" />
->>>>>>> .r839
+        <div class="sourcemap-form-button-div"> 
+            <% el = $("<input></input>").attr("type", "text").attr("name", "water").addClass("buttons"); el[0].setAttribute("value",this.attr["water"] || ""); %>
+            <%= $("<div></div>").append(el).html() %>
+        </div>
+        
         </form>
     </fieldset>
     <div class="load-catalog-button">&raquo; Catalog</div>

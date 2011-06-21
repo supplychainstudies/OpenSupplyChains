@@ -1,16 +1,30 @@
 <?php if(!isset($current_user) || !$current_user): ?>
-<h2>Log in</h2>
-<form name="auth-login" method="post" action="auth/login">
-<label for="username">Username:</label><br />
-<input type="text" name="username" class="input text" /><br />
-<label for="password">Password:</label><br />
-<input type="password" name="password" class="input text password" /><br />
-<a href="auth/forgot_password">Forgot your password?</a><br />
-<?php if (isset($_GET['next'])): ?>
-<input type="hidden" name="next" value="<?= $_GET['next']; ?>" /> 
-<?php endif; ?>
-<input type="submit" value="Sign in" />
-</form>
+<div class="container_16">
+<div class="grid_9">
+<div class="sourcemap-form">
+  <fieldset> 
+    <legend>Log in</legend> 
+    <form name="auth-login" class="form" method="post" action="auth/login">
+        <label for="username">Username</label> 
+        <div class="sourcemap-form-textbox"> 
+            <input name="username" type="text" class="username" id="username" value="username" /> 
+        </div> 
+        <label for="password">Password</label> 
+        <div class="sourcemap-form-textbox"> 
+            <input name="password" type="password" class="password" id="password" value="password" /> 
+        </div> 
+        <?php if (isset($_GET['next'])): ?>
+            <input type="hidden" name="next" value="<?= $_GET['next']; ?>" /> 
+        <?php endif; ?>
+        <div class="sourcemap-form-button-div"> 
+            <input name="Submit" type="submit" value="Submit" class="buttons" /> 
+        </div> 
+    </form>
+    </fieldset>
+</div>
+</div>
+</div>
+
 <?php else: ?>
 <h2>You&apos;re logged in as <?= $current_user->username ?>.</h2>
 <?php endif; ?>

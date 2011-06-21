@@ -58,6 +58,54 @@ class Controller_Map extends Sourcemap_Controller_Layout {
         }
     }
 
+    public function action_create(){
+        if(!Auth::instance()->get_user()) {
+            Message::instance()->set('You must be logged in to create maps.');
+            $this->request->redirect('auth');
+        }
+
+        $supplychain_id = '4';
+
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
+        $supplychain = ORM::factory('supplychain', $supplychain_id);
+        if($supplychain->loaded()) {
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+            $owner_id = (int)$supplychain->user_id;
+            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
+                $this->layout->supplychain_id = $supplychain_id;
+                $this->template->supplychain_id = $supplychain_id;
+                $this->layout->scripts = array('map-view');
+                $this->layout->styles = array(
+                    'sites/default/assets/styles/reset.css', 
+                    'assets/styles/base.less',
+                    'assets/styles/general.less'
+                );
+                // comments
+                $c = $supplychain->comments->find_all();
+                $comment_data = array();
+                foreach($c as $i => $comment) {
+                    $arr = $comment->as_array();
+                    $arr['username'] = $comment->user->username;
+                    $arr['avatar'] = Gravatar::avatar($comment->user->email);
+                    $comment_data[] = (object)$arr;
+                }
+                $this->template->comments = $comment_data;
+                $this->template->can_comment = (bool)$current_user_id;
+                // qrcode url
+                $qrcode_query = URL::query(array('q' => URL::site('map/view/'.$supplychain->id, true), 'sz' => 8));
+                $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;
+            } else {
+                Message::instance()->set('That map is private.');
+                $this->request->redirect('browse');
+            }
+        } else {
+            Message::instance()->set('That map could not be found.');
+            $this->request->redirect('browse');
+        }
+    }
+    
     public function action_static($supplychain_id, $sz=null) {
         if(!is_numeric($supplychain_id)) {
             $supplychain_id = $this->_match_alias($supplychain_id);

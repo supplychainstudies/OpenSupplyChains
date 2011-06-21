@@ -38,7 +38,6 @@
                 </header>
             </div>
         </div>
-        <div class="spacer"></div>
         <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
         <div class="push"></div>
     </div><!-- #wrapper -->

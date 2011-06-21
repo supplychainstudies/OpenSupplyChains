@@ -81,7 +81,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                     }
                 }, this));
 
-                //this.popup.updateSize();
+                this.popup.updateSize();
                 this.popup.updatePosition();
                 this.base.map.broadcast('popup-initialized', this.popup, this.stop);
             }, tscope), tscope, null, this.options.tpl_base_path);
@@ -185,7 +185,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     $(window).resize($.proxy(function () { 
-        var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
+        /*var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
         //$("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
         
         // Display, but hide this while we calculate
@@ -228,6 +228,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         if(hidden_height) { $(this.dialog).css({"display":"none"}); }                
         $(this.dialog).css({"left": dl+"px"});
         $(this.dialog).css({"top": dt+"px"});
+        */
 
     }, this));
 
@@ -293,12 +294,12 @@ Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
     $(this.dialog_next_el).click($.proxy(function() { this.dialogNext(); }, this));
     $(this.dialog_close).click($.proxy(function() { this.dialogClose(); }, this));
     this.dialog_content = $('<div id="detail-content" class="content"></div>');
-    this.dialog.append(this.dialog_close)
     if(!no_controls) 
         this.dialog.append(this.dialog_prev_el)
     this.dialog.append(this.dialog_content);
     if(!no_controls)
         this.dialog.append(this.dialog_next_el);
+    this.dialog.append(this.dialog_close)
     $(this.dialog).data("state", 1); // todo: check this?
 
     // close on click-out

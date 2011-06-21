@@ -517,3 +517,77 @@ Sourcemap.great_circle_route = function(pt1, pt2, ttl) {
     return rt;
 }
 
+Sourcemap.Units = {};
+
+Sourcemap.Units.si_prefixes = {
+    "y": {"label": "yocto", "mult":-24}, "z": {"label": "zepto", "mult": -21},
+    "a": {"label": "atto", "mult": -18}, "f": {"label": "femto", "mult": -15},
+    "p": {"label": "pico", "mult": -12}, "n": {"label": "nano", "mult": -9},
+    "u": {"label": "micro", "mult": -6}, "m": {"label": "milli", "mult": -3},
+    "c": {"label": "centi", "mult": -2}, "d": {"label": "deci", "mult": -1},
+    "da": {"label": "deca", "mult": 1},  "h": {"label": "hecto", "mult": 2},
+    "k": {"label": "kilo", "mult": 3}, "M": {"label": "mega", "mult": 6},
+    "G": {"label": "giga", "mult": 9}, "T": {"label": "tera", "mult": 12},
+    "P": {"label": "peta", "mult": 15}, "E": {"label": "exa", "mult": 18},
+    "Z": {"label": "zetta", "mult": 21}, "Y": {"label": "yotta", "mult": 24}
+}
+
+Sourcemap.Units.si_equiv = {
+    "g": {"abbrev": "g", "singular": "gram", "plural": "grams"},
+    "Mg": {"abbrev": "t", "singular": "tonne", "plural": "tonnes"}
+}
+
+Sourcemap.Units.to_base_unit = function(value, unit) {
+    var value = parseFloat(value);
+    var unit = new String(unit);
+    var prefix = null;
+    var max_prefix_len = 2;
+    var prefix_len = max_prefix_len;
+    while(prefix === null && prefix_len > 0) {
+        if(unit.length > prefix_len) {
+            if(Sourcemap.Units.si_prefixes[unit.substr(0, prefix_len)] !== undefined) {
+                prefix = unit.substr(0, prefix_len);
+                break;
+            }
+        }
+        prefix_len--;
+    }
+    var from_power_of_ten = prefix ? Sourcemap.Units.si_prefixes[prefix].mult : 0;
+    var base_unit = prefix !== null ? unit.substr(prefix_len) : unit+"";
+    var base_value = value * Math.pow(10, from_power_of_ten);
+    var base = {"unit": base_unit, "value": base_value};
+    return base;
+}
+
+Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
+    var precision = isNaN(parseInt(precision)) ? 2 : parseInt(precision);
+    var base = Sourcemap.Units.to_base_unit(value, unit);
+    var pot = base.value === 0 ? 0 : Math.floor((Math.log(base.value)/Math.log(10))+.000000000001);
+    var new_unit = null;
+    if(base.unit == unit || pot === 0) {
+        new_unit = {"label": unit, "mult": 0};
+    } else {
+        new_unit = false;
+        while(new_unit === false) {
+            for(var p in Sourcemap.Units.si_prefixes) {
+                var u = Sourcemap.Units.si_prefixes[p];
+                if(u.mult === pot) {
+                    new_unit = p;
+                    break;
+                }
+            }
+            if(new_unit !== false) break;
+            pot--;
+            if(pot <= -24) {
+                new_unit = p; 
+                break;
+            }
+        }
+        new_unit += base.unit;
+        new_unit = {"label": new_unit, "mult": pot};
+    }
+    var scaled_value = parseFloat((base.value * Math.pow(10, -new_unit.mult)).toPrecision(2));
+    var scaled_unit = new_unit;
+    var scaled = {"unit": scaled_unit.label, "value": scaled_value};
+    return scaled;
+}

@@ -23,8 +23,8 @@ Sourcemap.Map.Base.prototype.defaults = {
     "tileset": "cloudmade", // terrain, cloudmade, etc. (check map.js)
     "tour": false, "min_stop_size": 8, "max_stop_size": 48, "error_color": '#ff0000',
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
-    "visualization_mode": null, "visualizations": ["co2e","energy","weight"],
-    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000"}
+    "visualization_mode": null, "visualizations": ["co2e","weight","water"],
+    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"}
 }
 
 Sourcemap.Map.Base.prototype.init = function() {
@@ -117,7 +117,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     this.map.dockAdd('weight', {
         "ordinal": 6,
         "title": 'Weight',
-        "content": "XX g",
+        "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span>",
         "toggle": true,
         "callbacks": {
             "click": $.proxy(function() {
@@ -129,7 +129,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     this.map.dockAdd('co2e', {
         "ordinal": 7,
         "title": 'Carbon',
-        "content": "XX kg CO2e",
+        "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
         "toggle": true,
         "callbacks": {
             "click": $.proxy(function() {
@@ -137,6 +137,31 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             }, this)
         }
     });
+
+    this.map.dockAdd('water', {
+        "ordinal": 7,
+        "title": 'Water',
+        "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
+        "toggle": true,
+        "callbacks": {
+            "click": $.proxy(function() {
+                this.toggleVisualization("water");
+            }, this)
+        }
+    });
+
+    Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
+        if(value === undefined || value === null) {
+            var range = this.calcMetricRange(metric);
+            value = range.total;
+        }
+        var unit = "kg";
+        if(metric === "water") unit = "L";
+        var scaled = Sourcemap.Units.scale_unit_value(value, unit, 2);
+        this.map.dockControlEl(metric).find('.value').text(scaled.value);
+        this.map.dockControlEl(metric).find('.unit').text(scaled.unit.label);
+    }, this));
+
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -153,6 +178,10 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             $(this.map.map.div).append(this.watermark);
         }
         // todo: do calculations here
+        for(var vi=0; vi<this.options.visualizations.length; vi++) {
+            var v = this.options.visualizations[vi];
+            Sourcemap.broadcast('map-base-calc-update', v);
+        }
     }, this));
 
     $(window).resize($.proxy(function () { 
@@ -701,6 +730,7 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
     switch(viz_nm) {
         //case "energy":
         //    break;
+        case "water":
         case "co2e":
         case "weight":
             if(this.visualization_mode === viz_nm) {
@@ -715,7 +745,7 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
                 var sc = this.map.supplychains[k];
                 if(range === null) range = sc.stopAttrRange(viz_nm);
                 else {
-                    var tmprange = sc.stopAttrRange();
+                    var tmprange = sc.stopAttrRange(viz_nm);
                     if(tmprange.min !== null)
                         range.min = Math.min(range.min, tmprange.min);
                     if(tmprange.max !== null)
@@ -739,6 +769,25 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
                 this.map.mapSupplychain(k);
             break;
     }
+}
+
+Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
+    var range = null;
+    for(var k in this.map.supplychains) {
+        var sc = this.map.supplychains[k];
+        if(range === null) range = sc.stopAttrRange(metric);
+        else {
+            var tmprange = sc.stopAttrRange(metric);
+            if(tmprange.min !== null)
+                range.min = Math.min(range.min, tmprange.min);
+            if(tmprange.max !== null)
+                range.max = Math.max(range.max, tmprange.max);
+            if(tmprange.total !== null) {
+                range.total += tmprange.total;
+            }
+        }
+    }
+    return range;
 }
 
 // jQuery fxn to center an detailed element

@@ -43,9 +43,8 @@
         }
         .popup-buttons {
             border-top:1px solid #aaa;
-            padding-top: .5em;
-            padding-bottom: .5em;
             > a {
+                margin-top: .85em;
                 margin-left: .5em;
                 margin-right: .5em;
                 display:block;
@@ -76,13 +75,13 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 #detail-pane {
     .rounded(.5em);
     z-index: 1012;
-    margin: 0 auto;
-    max-height: 80%; max-width: 80%; 
-    min-height: 50%; min-width: 50%;
+    position: absolute;
+    top: 50%; left: 50%;
+    height: 440px; width: 550px;
+    margin-top: -200px; margin-left: -250px; 
     display:none;
     background-color: #fff;
-    position: absolute;
-    padding: 1em 1%;
+    padding: .65em;
     overflow-x:hidden;
     text-align:justify;
     #user-loc-dialog {
@@ -115,7 +114,9 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         .background_size(1.2em, .75em);
         height: .75em;
         width: 1.2em;
-        float: right;
+        position: absolute;
+        top: 6px;
+        right: 10px;
         a {
             display: block;
             width: 100%;
@@ -145,8 +146,6 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
             color:#aaa;
             margin-bottom: 15px;
         }
-        .description{
-        }
         .youtube-player, .vimeo-player {
             background: url("../images/embed-video-icon.png") center center no-repeat #444;
         }
@@ -161,6 +160,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         }
     }
     #detail-nav {
+        display:none;
         height: 90%;
         width: 8%;
         padding:0 1%;
@@ -395,7 +395,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         width:100%;
         div {
             float:left;
-            padding-right:.5em;
+            padding-right:3em;
         }
         .right {
             float:right;

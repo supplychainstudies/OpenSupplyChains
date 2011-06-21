@@ -1,5 +1,5 @@
 <h1>Materials Catalog</h1>
-<form id="catalog-search">
+<form id="catalog-search" class="sourcemap-form">
     <label>
         <input id="catalog-search-field" name="q" type="search" results="0" />
     </label>

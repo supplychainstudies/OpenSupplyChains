@@ -100,3 +100,7 @@ Sourcemap.template = function(tpath, ucallback, context, scope, tpl_base_path) {
         ucallback(tpl, txt, thtml);
     }, tpl_base_path);
 }
+
+Sourcemap.tpl = function(tpath, tscope, callback) {
+    return Sourcemap.template(tpath, callback, tscope);
+}

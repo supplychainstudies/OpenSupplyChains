@@ -54,6 +54,7 @@
         
         </form>
     </fieldset>
+    <hr />
     <div class="load-catalog-button">&raquo; Catalog</div>
     <div class="spacer"></div>
 </div>

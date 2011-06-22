@@ -5,6 +5,21 @@ if(!class_exists('Kohana')) die('stop. drop. shut \'em down. whoa. that\'s how r
  * defaults for the URI.
  */
 
+Route::set('view', '<controller>/<id>', array(
+    'controller' => '(view|embed|comment|create)'
+))->defaults(array(
+        'action' => 'index'
+    )
+);
+
+Route::set('toplevel static maps', 'static/<id>.<sz>.png', array(
+    'id' => '[a-z0-9]+', 'sz' => '(t|s|m|l|o|th-m)'
+))->defaults(array(
+    'controller' => 'map',
+    'action' => 'static',
+    'sz' => 'th-m'
+));
+
 Route::set('tools/import/action', 'tools/import/<controller>(/<action>)')
     ->defaults(array(
         'directory' => 'tools/import',

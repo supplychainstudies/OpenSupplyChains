@@ -414,6 +414,8 @@ button::-moz-focus-inner {
 /* FORM STYLES 
  * -------------------------------------------------------------- */
 
+@form-height: 1em;
+
 .sourcemap-form{
    fieldset {
     border:1px dashed #CCC;
@@ -424,7 +426,7 @@ button::-moz-focus-inner {
         font-size: 90%;
         letter-spacing: -1px;
         font-weight: bold;
-        line-height: 1.1;
+        line-height: @form-height;
         color:#fff;
         background: #666;
         border: 1px solid #333;
@@ -439,14 +441,12 @@ button::-moz-focus-inner {
     }
     label {
         width:140px;
-        height:32px;
-        margin-top:3px;
-        margin-right:2px;
-        padding-top:11px;
-        padding-left:6px;
+        height:@form-height;
+        margin: 3px 2px 0 0;
+        padding: 11px 0 0 6px;
         float:left;
         display: block;
-        font-size: 100%;
+        font-size: 85%;
         letter-spacing: -1px;
         font-weight: normal;
         line-height: 1.1;
@@ -462,7 +462,7 @@ button::-moz-focus-inner {
     .sourcemap-form-textbox {
         width:330px;
         float:right;
-        height:35px;
+        height:@form-height;
         margin-top:3px;
         padding-top:5px;
         padding-bottom:3px;
@@ -477,7 +477,7 @@ button::-moz-focus-inner {
         background-repeat: no-repeat;
         background-position:left;
         width:300px;
-        font:normal 18px Arial;
+        font-size: 85%;
         color: #999999;
         padding:3px 5px 3px 19px;
     }
@@ -517,7 +517,7 @@ button::-moz-focus-inner {
         width:287px;
         float:right;
         text-align:right;
-        height:35px;
+        height:@form-height;
         margin-top:3px;
         padding:5px 32px 3px;
     }
@@ -531,21 +531,6 @@ button::-moz-focus-inner {
         text-transform:uppercase;
         font-weight:bold;
     } 
-    
-    .status {
-        width:2em;
-        float: left;
-        background: url('../images/form-active.png') center transparent no-repeat;
-    }
-    .status.invalid {
-        background: url('../images/form-inactive.png') center transparent no-repeat;
-    }
-    .error {
-        float:left;
-    }
-    .inactive {
-        background: #eee;
-    }
 }
 
 

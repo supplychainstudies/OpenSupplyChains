@@ -6,6 +6,7 @@ class Sourcemap_Form_Field {
     const TEXT = 'text';
     const PASSWORD = 'password';
     const SUBMIT = 'submit';
+    const TEXTAREA = 'textarea';
 
     protected $_name = 'field';
 
@@ -14,6 +15,7 @@ class Sourcemap_Form_Field {
     protected $_type = 'text';
     protected $_value = null;
     protected $_weight = 0;
+    protected $_template = 'form/field';
 
     protected $_errors = array();
 
@@ -27,8 +29,11 @@ class Sourcemap_Form_Field {
     public function __toString() {
         $s = '';
         if(Sourcemap_Form::$use_templates) {
-            // todo:
-            throw new Exception('Template-based forms not implemented.');
+            try {
+                $s = (string)View::factory($this->_template, array('field' => $this));
+            } catch(Exception $e) {
+                $s = $e->getMessage();
+            }
         } else {
             if($this->_label)
                 $s = $this->_makeLabel();

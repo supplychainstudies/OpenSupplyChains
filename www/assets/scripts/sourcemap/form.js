@@ -264,7 +264,7 @@ Sourcemap.Form.prototype.rm_error_el = function(field) {
 }
 
 $(document).ready(function() {
-    $('div.form').each(function() {
+    $('div.sourcemap-form').each(function() {
         (new Sourcemap.Form(this));
     });
 });

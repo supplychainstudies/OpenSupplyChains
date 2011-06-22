@@ -4,6 +4,7 @@ class Sourcemap_Form_Field_Select extends Sourcemap_Form_Field {
     protected $_options = array();
 
     protected $_selected = null;
+    protected $_type = Sourcemap_Form_Field::SELECT;
 
     protected function _makeInput() {
         return Form::select($this->name(), 

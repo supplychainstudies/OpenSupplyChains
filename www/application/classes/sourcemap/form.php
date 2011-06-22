@@ -3,7 +3,7 @@
 
 class Sourcemap_Form {
     
-    public static $use_templates = false;
+    public static $use_templates = true;
 
     const ENCTYPE_FORM = 'application/x-www-form-urlencoded';
     const ENCTYPE_MULT = 'multipart/form-data';
@@ -21,7 +21,11 @@ class Sourcemap_Form {
 
     public function __toString() {
         if(self::$use_templates) {
-            throw new Exception('Template-based forms not implemented.');
+            try {
+                $s = (string)View::factory('form', array('form' => $this));
+            } catch(Exception $e) {
+                $s = $e->getMessage();
+            }
         } else {
             $s = Form::open($this->action(), array(
                 'enctype' => $this->enctype(),
@@ -113,6 +117,10 @@ class Sourcemap_Form {
     public function set_field($f, $fo) {
         $this->_fields[$f] = $fo;
         return $this;
+    }
+
+    public function get_fields() {
+        return $this->_fields;
     }
 
     public function field($f, $t=null, $l=null, $wt=null) { // name, type, default value, weight

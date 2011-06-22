@@ -1,7 +1,8 @@
 <div class="container_16">
 <div class="grid_9">
 <div class="sourcemap-form"> 
-    <fieldset> 
+    <?= $create_form ?>
+    <!--fieldset> 
         <legend>Create a New Sourcemap</legend> 
         <form action="/create" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded"> 
             <label for="title">Title</label>
@@ -25,7 +26,7 @@
                 <input type="submit" name="create" value="Create" class="buttons" /> 
             </div> 
         </form>    
-    </fieldset> 
+    </fieldset--> 
 </div> 
 </div> 
 </div> 

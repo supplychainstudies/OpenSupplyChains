@@ -7,6 +7,15 @@ class Sourcemap_Taxonomy {
     public $parent = null;
     public $children = null;
 
+    public static function slugify($nm) {
+        return preg_replace('/[^a-z_-]+/', '-', strtolower($nm));
+    }
+
+    public static function arr($k=null, $vs=true) {
+        $cats = ORM::factory('category')->find_all();
+        return $cats->as_array($k, $vs);
+    }
+
     public static function arr2tree($arr) {
         // assumed to be sorted by left asc
         $minlt = 0;

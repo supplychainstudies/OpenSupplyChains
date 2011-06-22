@@ -68,19 +68,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $ctquery->param(':query', $this->parameters['q'])
             ->param(':readflag', Sourcemap::READ);
 
-        $results = array();
-        foreach($rows as $i => $row) {
-            $row = (object)$row;
-            $sc = ORM::factory('supplychain', $row->supplychain_id);
-            $sca = (object)$sc->as_array();
-            $sca->attributes = (object)$sc->attributes->find_all()->as_array("key", "value");
-            $sca->owner = (object)$sc->owner->find()->as_array();
-            $sca->owner->name = $sca->owner->username;
-            unset($sca->owner->password);
-            unset($sca->owner->flags);
-            unset($sca->owner->email); # !!!
-            $results[] = $sca;
-        }
+        $results = self::prep_rows($rows);
         if($results) {
             $ctres = $ctquery->execute();
             if($ctres) {
@@ -94,5 +82,28 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $this->results->offset = $this->offset;
         $this->results->hits_ret = count($results);
         return $this->results;
+    }
+
+    public static function prep_rows($rows) {
+        $prepped = array();
+        foreach($rows as $i => $row) {
+            $prepped_row = self::prep_row($row);
+            if($prepped_row)
+                $prepped[] = $prepped_row;
+        }
+        return $prepped;
+    }
+
+    public static function prep_row($row) {
+        $row = (object)$row;
+        $sc = ORM::factory('supplychain', $row->supplychain_id);
+        $sca = (object)$sc->as_array();
+        $sca->attributes = (object)$sc->attributes->find_all()->as_array("key", "value");
+        $sca->owner = (object)$sc->owner->find()->as_array();
+        $sca->owner->name = $sca->owner->username;
+        unset($sca->owner->password);
+        unset($sca->owner->flags);
+        unset($sca->owner->email); # !!!
+        return $sca;
     }
 }

@@ -20,6 +20,11 @@ Route::set('toplevel static maps', 'static/<id>.<sz>.png', array(
     'sz' => 'th-m'
 ));
 
+Route::set('category browse', 'browse(/<category>)')
+->defaults(array(
+    'controller' => 'browse'
+));
+
 Route::set('tools/import/action', 'tools/import/<controller>(/<action>)')
     ->defaults(array(
         'directory' => 'tools/import',

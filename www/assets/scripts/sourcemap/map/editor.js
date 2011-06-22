@@ -313,6 +313,90 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
     }, {"ref": ref, "editor": this, "attr": attr}, {"ref": ref, "editor": this, "attr": attr});
 }
 
+Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
+    if(!this.catalog_search_xhr) this.catalog_search_xhr = {};
+    if(this.catalog_search_xhr[o.catalog]) this.catalog_search_xhr[o.catalog].abort();
+    this.catalog_search_xhr[o.catalog] = $.ajax({"url": "services/catalogs/"+o.catalog, "data": o.params || {}, 
+        "success": $.proxy(function(json) {
+            var cat_html = $('<ul class="catalog-items"></ul>');
+            for(var i=0; i<json.results.length; i++) {
+                // Todo: Template this
+                var cat_content = '<div class="cat-item-name">'+json.results[i].name+'</div>';
+                cat_content += '<div class="cat-item-category">'+json.results[i].category+'</div>';
+                
+                cat_content += '<div class="cat-item-footprints">'                    
+                cat_content += 
+                    json.results[i].co2e ? '<div class="cat-item-co2e"><span class="footprint-label">co2e</span>'+json.results[i].co2e+'</div>' : '';
+                cat_content += 
+                    json.results[i].energy ? '<div class="cat-item-energy"><span class="footprint-label">energy</span>'+json.results[i].energy+'</div>' : '';
+                cat_content += 
+                    json.results[i].waste ? '<div class="cat-item-waste"><span class="footprint-label">waste</span>'+json.results[i].waste+'</div>' : '';
+                cat_content += 
+                    json.results[i].water ? '<div class="cat-item-water"><span class="footprint-label">water</span>'+json.results[i].water+'</div>' : '';
+                cat_content += '<div class="clear"></div></div>';                    
+                
+                var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
+                
+                $(new_li).click($.proxy(function(evt) {
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
+                cat_html.append(new_li);
+            }
+            o.results = json.results;
+            o.params = json.parameters;
+            $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
+
+            $(this.editor.map_view.dialog).find('.catalog-pager').empty();
+            // pager prev
+            if(o.params.o > 0) {
+                var prev_link = $('<span class="catalog-pager-prev">&laquo; prev</span>').click($.proxy(function() {
+                    var o = {};
+                    o.editor = this;
+                    o.ref = this.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.o = (parseInt(o.params.o) || 0);
+                    if(o.params.o >= o.params.l) o.params.o -= o.params.l;
+                    o.params.l = o.params.l;
+                    o.catalog = this.o.catalog;
+                    this.editor.updateCatalogListing(o);
+                }, {"o": o, "editor": this}));
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(prev_link);
+            }
+
+            // pager next
+            if(o.results.length == o.params.l) {
+                var next_link = $('<span class="catalog-pager-next">next &raquo;</span>').click($.proxy(function() {
+                    var o = {};
+                    o.editor = this.editor;
+                    o.ref = this.o.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.o = (parseInt(o.params.o) || 0) + o.params.l;
+                    o.catalog = this.o.catalog;
+                    this.editor.updateCatalogListing(o);
+                }, {"o": o, "editor": this.editor}));
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
+            }
+
+            // search bar
+            $(this.editor.map_view.dialog).find('#catalog-search-field').keyup($.proxy(function(evt) {
+                if($(evt.target).val().length < 3) return;
+                var q = $(evt.target).val();
+                var o = {};
+                o.editor = this.editor;
+                o.ref = this.o.ref;
+                o.params = Sourcemap.deep_clone(this.o.params);
+                o.params.o = 0;
+                o.params.q = q;
+                o.catalog = this.o.catalog;
+                this.editor.updateCatalogListing(o);
+            }, {"o": o, "editor": this.editor}));
+        }, {"editor": this, "o": o}), "failure": $.proxy(function() {
+            this.map_view.showDialog('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
+        }, this)
+    });
+}
+
+
 Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     var o = o || {};
     o.q = o.q ? o.q : '';
@@ -320,82 +404,7 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     var tscope = {"editor": this, "o": o, "ref": o.ref};
     Sourcemap.template('map/edit/catalog', function(p, txt, th) {
         this.editor.map_view.showDialog(th, true);
-        $.ajax({"url": "services/catalogs/"+this.o.catalog, "data": this.o.params || {}, 
-            "success": $.proxy(function(json) {
-                var cat_html = $('<ul class="catalog-items"></ul>');
-                for(var i=0; i<json.results.length; i++) {
-                    // Todo: Template this
-                    var cat_content = '<div class="cat-item-name">'+json.results[i].name+'</div>';
-                    cat_content += '<div class="cat-item-category">'+json.results[i].category+'</div>';
-                    
-                    cat_content += '<div class="cat-item-footprints">'                    
-                    cat_content += 
-                        json.results[i].co2e ? '<div class="cat-item-co2e"><span class="footprint-label">co2e</span>'+json.results[i].co2e+'</div>' : '';
-                    cat_content += 
-                        json.results[i].energy ? '<div class="cat-item-energy"><span class="footprint-label">energy</span>'+json.results[i].energy+'</div>' : '';
-                    cat_content += 
-                        json.results[i].waste ? '<div class="cat-item-waste"><span class="footprint-label">waste</span>'+json.results[i].waste+'</div>' : '';
-                    cat_content += 
-                        json.results[i].water ? '<div class="cat-item-water"><span class="footprint-label">water</span>'+json.results[i].water+'</div>' : '';
-                    cat_content += '<div class="clear"></div></div>';                    
-                    
-                    var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
-                    
-                    $(new_li).click($.proxy(function(evt) {
-                        this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
-                    }, {"item": json.results[i], "editor": this.editor, "ref": this.ref, "catalog": this.o.catalog}));
-                    cat_html.append(new_li);
-                }
-                this.o.catalog = json.results;
-                this.o.params = json.parameters;
-                $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
-
-                // pager prev
-                if(o.params.o > 0) {
-                    var prev_link = $('<span class="catalog-pager-prev">&laquo; prev</span>').click($.proxy(function() {
-                        var o = {};
-                        o.editor = this.editor;
-                        o.ref = this.ref;
-                        o.params = Sourcemap.deep_clone(this.o.params);
-                        o.params.o = (parseInt(o.params.o) || 0);
-                        if(o.params.o > o.params.l) o.params.o -= o.params.l;
-                        o.params.l = o.params.l;
-                        this.editor.showCatalog(o);
-                    }, this));
-                }
-                $(this.editor.map_view.dialog).find('.catalog-pager').append(prev_link);
-
-                // pager next
-                var next_link = $('<span class="catalog-pager-next">next &raquo;</span>').click($.proxy(function() {
-                    var o = {};
-                    o.editor = this.editor;
-                    o.ref = this.ref;
-                    o.params = Sourcemap.deep_clone(this.o.params);
-                    o.params.o = (parseInt(o.params.o) || 0) + o.params.l;
-                    this.editor.showCatalog(o);
-                }, this));
-                $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
-
-                // search bar
-                $(this.editor.map_view.dialog).find('#catalog-search-field').val(o.params.q).removeAttr("disabled").focus();
-                $(this.editor.map_view.dialog).find('#catalog-search-field').keyup($.proxy(function(evt) {
-                    if($(evt.target).val().length < 3) return;
-                    if((evt.ctrlKey || evt.altKey) || !(evt.keyCode >= 65 && evt.keyCode <= 90)) return;
-                    $(this.editor.map_view.dialog).find('#catalog-search-field').attr("disabled", true);
-                    var q = $(evt.target).val();
-                    var o = {};
-                    o.editor = this.editor;
-                    o.ref = this.ref;
-                    o.params = Sourcemap.deep_clone(this.o.params);
-                    o.params.o = 0;
-                    o.params.q = q;
-                    this.editor.showCatalog(o);
-                }, this));
-
-            }, this), "failure": $.proxy(function() {
-                this.editor.map_view.showDialog('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
-            }, this)
-        });
+        this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }
 

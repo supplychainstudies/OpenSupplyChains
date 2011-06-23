@@ -43,7 +43,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         }
         
         // most favorited
-        $this->template->favorited = Sourcemap_Search_Simple::most_featured($category ? $category->id : null);
+        $this->template->favorited = Sourcemap_Search_Simple::most_favorited($category ? $category->id : null);
 
         // most discussed
         $this->template->discussed = Sourcemap_Search_Simple::most_discussed($category ? $category->id : null);

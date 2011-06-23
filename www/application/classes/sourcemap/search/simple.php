@@ -81,6 +81,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $this->results->limit = $this->limit;
         $this->results->offset = $this->offset;
         $this->results->hits_ret = count($results);
+        $this->results->parameters = $this->parameters;
         return $this->results;
     }
 

@@ -24,14 +24,12 @@
     <div class="grid_16">
         <?php if(isset($supplychains) && $supplychains): ?>
             <h2>Your maps</h2>
-            <?php $count = 0; ?>
-                <?php foreach($supplychains as $i => $sc): ?>
-                <div id="user-map-list" class="container_16 <?php if ($count % 2 == 0 ) { echo " alt"; } ?>">
-                    <?= View::factory('partial/search/result', array('result' => $sc)) ?>
+            <?php foreach($supplychains as $i => $sc): ?>
+                <div id="user-map-list" class="container_16<?= $i % 2 ? " alt" : ''; ?>">
+                    <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>
                 </div>
-                <?php $count++; ?>
             <?php endforeach; ?>
-            <?php else: ?>
+        <?php else: ?>
             <h2 class="bad-news">You haven't made any maps yet. <a href="create">Get started</a></h2>
         <?php endif; ?>
     </div>

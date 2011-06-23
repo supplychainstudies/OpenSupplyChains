@@ -136,6 +136,7 @@ class Model_Supplychain extends ORM {
                 'id' => $owner->id, 'name' => $owner->username,
                 'avatar' => Gravatar::avatar($owner->email)
             );
+            $sc->user_id = $owner->id;
             $sc->taxonomy = 
                 ($cat && $cat->loaded()) ? Sourcemap_Taxonomy::load_ancestors($cat->id) : null;
         } else throw new Exception('Supplychain not found.');

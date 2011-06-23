@@ -14,6 +14,7 @@ class Sourcemap_Form {
     protected $_enctype = null;
 
     protected $_fields = array();
+    protected $_css_class = '';
 
     public function __construct() {
         $this->enctype(self::ENCTYPE_FORM);
@@ -29,7 +30,8 @@ class Sourcemap_Form {
         } else {
             $s = Form::open($this->action(), array(
                 'enctype' => $this->enctype(),
-                'method' => $this->method()
+                'method' => $this->method(),
+                'class' => $this->css_class()
             ));
             $s .= "\n";
             foreach($this->_fields as $nm => $f) {
@@ -138,6 +140,34 @@ class Sourcemap_Form {
         return $this;
     }
 
+    public function has_class($cls) {
+        return is_array($this->_css_class) && in_array($cls, $this->_css_class);
+    }
+
+    public function add_class($cls) {
+        if(!is_array($this->_css_class))
+            $this->_css_class = array();
+        if(!$this->has_class($cls))
+            $this->_css_class[] = $cls;
+        return $this;
+    }
+
+    public function css_class() {
+        if(!is_array($this->_css_class))
+            return null;
+        return join(' ', $this->_css_class);
+    }
+
+    public function remove_class($cls) {
+        if($this->has_class($cls)) {
+            $k = array_search($cls, $this->_css_class, true);
+            if($k !== false) {
+                array_splice($this->_css_class, $k, 1); 
+            }
+        }
+        return $this;
+    }
+
     public function input($f, $l=null, $wt=null) {
         return $this->field($f, Sourcemap_Form_Field::INPUT, $l, $wt);
     }
@@ -152,5 +182,9 @@ class Sourcemap_Form {
 
     public function submit($f, $v=null, $wt=null) {
        return $this->field($f, Sourcemap_Form_Field::SUBMIT, $v, $wt);
+    }
+
+    public function textarea($f, $v=null, $wt=null) {
+       return $this->field($f, Sourcemap_Form_Field::TEXTAREA, $v, $wt);
     }
 }

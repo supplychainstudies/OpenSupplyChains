@@ -6,7 +6,7 @@ if(!class_exists('Kohana')) die('stop. drop. shut \'em down. whoa. that\'s how r
  */
 
 Route::set('view', '<controller>/<id>', array(
-    'controller' => '(view|embed|comment|create)'
+    'controller' => '(view|embed|comment|create|edit|delete)'
 ))->defaults(array(
         'action' => 'index'
     )

@@ -1,5 +1,5 @@
 <div id="popular-maps" class="container_12">
-<?php if($supplychains): ?>
+<?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item):?>
         <div class="preview-map-item medium grid_4">
             <div class="preview-badge">

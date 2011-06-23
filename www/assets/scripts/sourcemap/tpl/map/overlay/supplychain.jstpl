@@ -10,7 +10,7 @@
             <div class="map-status">
             </div>
             <div class="map-share right">
-                Share
+                <a class="banner-share-link" href="javascript: void(0);">Share</a>
             </div>
         </div>
     </div>

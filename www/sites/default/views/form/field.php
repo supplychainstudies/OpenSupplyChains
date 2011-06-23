@@ -21,6 +21,6 @@
 <?php else: ?>
     <?= Form::label($field->name(), $field->label()) ?>
     <div class="sourcemap-form-textbox">
-        <?= Form::input($field->name(), $field->value(), array('type' => $field->field_type(), 'class' => $field->css_class())) ?>
+        <?= Form::input($field->name(), $field->value(), array('type' => $field->field_type(), 'class' => $field->css_class() . " textbox")) ?>
     </div>
 <?php endif; ?>

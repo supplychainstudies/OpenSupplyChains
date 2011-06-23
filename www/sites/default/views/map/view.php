@@ -41,22 +41,6 @@
             <div class="qrcode-about">You can share this physically with a qrcode.</div>
             <div class="clear"></div>
         </div>
-        <!--h3>Similar Supplychains</h3>
-        <ul id="similar-supplychains">
-            <li><a href="">Ikea Product Map</a></li>
-            <li><a href="">Ikea Product Map with details.</a></li>
-            <li><a href="">Ikea Product Map</a></li>
-            <li><a href="">Ikea Product Map with details.</a></li>
-            <li><a href="">Ikea Product Map with details.</a></li>
-        </ul>
-        <h3>Related Geographies</h3>
-        <ul id="related-geographies">
-            <li><a href="">Ikea Product Map</a></li>
-            <li><a href="">Ikea Product Map with details.</a></li>
-            <li><a href="">Ikea Product Map</a></li>
-            <li><a href="">Ikea Product Map with details.</a></li>
-            <li><a href="">Ikea Product Map with details.</a></li>
-        </ul-->
     </div><!-- .grid_6 -->
 </div><!-- .container -->
 <div class="clear"></div>

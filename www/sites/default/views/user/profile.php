@@ -11,7 +11,7 @@
         <h2>Public Maps</h2>
         <?php foreach($supplychains as $scid => $sc): ?>
             <div class="map-preview">
-               <?= View::factory('partial/home/map', array('supplychain' => (object)$sc)) ?> 
+               <?= View::factory('partial/search/result', array('result' => (object)$sc)) ?> 
            </div>
         <?php endforeach; ?>
         <?php else: ?>

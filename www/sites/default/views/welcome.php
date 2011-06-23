@@ -50,13 +50,13 @@
 
 <div id="recent-maps" class="container_16">
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/new', array('recent' => $recent, 'l' => 3, 'o' => 0)) ?>
+        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
     </div>
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/new', array('recent' => $recent, 'l' => 3, 'o' => 3)) ?>
+        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
     </div>
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/new', array('recent' => $recent, 'l' => 3, 'o' => 6)) ?>
+        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
     </div>
     
     <div class="grid_1">&nbsp;</div>

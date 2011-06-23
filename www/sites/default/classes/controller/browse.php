@@ -43,30 +43,10 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         }
         
         // most favorited
-        $favorited_sql = 'select f.supplychain_id, count(f.id) as favorited from user_favorite f '.
-            'left join supplychain sc on (f.supplychain_id=sc.id) '.
-            ($category ? 'where sc.category = :category_id and ' : 'where ').
-            'sc.other_perms & :read_flag > 0 '.
-            'group by supplychain_id order by favorited desc, f.supplychain_id desc '.
-            'limit 3';
-        $favorited_q = DB::query(Database::SELECT, $favorited_sql);
-        $favorited_q->param(':read_flag', Sourcemap::READ);
-        if($category) $favorited_q->param(':category_id', $category->id);
-        $favorited = $favorited_q->execute();
-        $this->template->favorited = Sourcemap_Search_Simple::prep_rows($favorited);
+        $this->template->favorited = Sourcemap_Search_Simple::most_featured($category ? $category->id : null);
 
         // most discussed
-        $discussed_sql = 'select dc.supplychain_id, count(dc.id) as discussed from supplychain_comment dc '.
-            'left join supplychain sc on (dc.supplychain_id=sc.id) '.
-            ($category ? 'where sc.category = :category_id and ' : 'where ').
-            'sc.other_perms & :read_flag > 0 '.
-            'group by supplychain_id order by discussed desc, dc.supplychain_id desc '.
-            'limit 3';
-        $discussed_q = DB::query(Database::SELECT, $discussed_sql);
-        $discussed_q->param(':read_flag', Sourcemap::READ);
-        if($category) $discussed_q->param(':category_id', $category->id);
-        $discussed = $discussed_q->execute();
-        $this->template->discussed = Sourcemap_Search_Simple::prep_rows($discussed);
+        $this->template->discussed = Sourcemap_Search_Simple::most_discussed($category ? $category->id : null);
 
 
         $this->template->primary = Sourcemap_Search::find($params);

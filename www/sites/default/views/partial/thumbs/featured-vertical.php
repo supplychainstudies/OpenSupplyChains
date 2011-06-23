@@ -1,4 +1,4 @@
-<?php if($supplychains): ?>
+<?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item): ?>
         <div class="preview-map-item grid-3">
             <div class="preview-badge">

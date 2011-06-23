@@ -465,6 +465,26 @@ button::-moz-focus-inner {
         float:right;
         margin-top:3px;
         padding-left:5px;
+        .textbox {
+            background-image: url(../images/16t.png);
+            background-color:#FFFFFF;
+            background-repeat: no-repeat;
+            background-position: 0 5px;
+            width:300px;
+            float: left;
+            font-size: 80%;
+            color: #999999;
+            padding:3px 5px 3px 19px;
+        }
+        .status {
+            width: 20px;
+            height: 20px;
+            float:left;
+            display:block;
+            &.invalid{
+                background: red;
+            }
+        }
     }
     .sourcemap-form-select {
         float: right;
@@ -476,16 +496,7 @@ button::-moz-focus-inner {
     input{
         border: 1px solid #ccc;
     }
-    .textbox {
-        background-image: url(../images/16t.png);
-        background-color:#FFFFFF;
-        background-repeat: no-repeat;
-        background-position: 0 5px;
-        width:315px;
-        font-size: 80%;
-        color: #999999;
-        padding:3px 5px 3px 19px;
-    }
+    
     .textbox:focus, .textbox:hover {
         background-color:#fffde6;
     }

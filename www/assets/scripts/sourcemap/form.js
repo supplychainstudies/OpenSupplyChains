@@ -18,6 +18,10 @@ Sourcemap.Form.Validators = {
         var p = /^[A-Za-z0-9_-]+$/
         return p.test(v);
     },
+    "long": function(v, f, r, a) {
+        var p = /[A-Za-z0-9_-]{7,}+$/
+        return p.test(v);
+    },
     "confirm": function(v, f, r, a) {
         var m = f.replace('_confirm', '');
         return this.field_el(m).val() == v;
@@ -32,6 +36,7 @@ Sourcemap.Form.ValidatorClassMap = {
     "required": "not_empty",
     "email": "email",
     "alphadash": "alphadash",
+    "long": "long",
     "confirm": "confirm",
     "tags": "tags"
 }
@@ -40,6 +45,7 @@ Sourcemap.Form.ValidatorEMsgs = {
     "required": "Required.",
     "email": "Must be a valid email address.",
     "alphadash": "May contain only letters, numbers, underscores, and dashes.",
+    "long": "Must be eight characters or longer.",
     "confirm": 'Doesn\'t match.',
     "tags": 'List tags separated by spaces.'
 }
@@ -247,6 +253,7 @@ Sourcemap.Form.prototype.field_error = function(field) {
 
 Sourcemap.Form.prototype.add_error_el = function(field) {
     var f = this.field_el(field);
+    console.log(f);
     if(f && !this.field_error(field)) {
         var html = '<div class="error"></div>';
         if(this.field_status(field))

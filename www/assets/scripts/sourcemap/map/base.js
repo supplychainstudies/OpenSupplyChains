@@ -80,6 +80,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                         );
                     }
                 }, this));
+                
 
                 this.popup.updateSize();
                 this.popup.updatePosition();
@@ -272,12 +273,16 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             break;
         }
     }
-    Sourcemap.template('map/overlay/supplychain', function(p, tx, th) {
-        $(this.banner_div).html(th);
-        //this.updateStatus("Loaded...", "good-news");
-    }, sc, this, this.options.tpl_base_path);
+    console.log(Sourcemap.tpl('map/overlay/supplychain')); 
     return this;
 }
+        
+        // share link event
+        $('.banner-share-link').click($.proxy(function() { 
+            Sourcemap.tpl('map/overlay/share', function(p, tx, th) {
+                this.base.showDialog(th);
+            }, this);
+        }, this));
 
 Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
    
@@ -802,4 +807,3 @@ jQuery.fn.detail_center = function () {
     this.css("left", ($(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
     return this;
 }
-

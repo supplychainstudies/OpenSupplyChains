@@ -23,7 +23,7 @@ class Sourcemap_User_Event_Updatedsc extends Sourcemap_User_Event {
 
     public static function load($data) {
         if($user_id = $data['user_id']) {
-            $data['username'] = ORM::factory('user', $data['user_id'])->find()->username;
+            $data['username'] = ORM::factory('user', $data['user_id'])->username;
         }
         return $data;
     }

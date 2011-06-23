@@ -27,6 +27,11 @@
                     Created <?= date('F j, Y', $result->created) ?>.
                 </h4>
             <?php endif; ?>
+
+            <?php if($result->other_perms & Sourcemap::READ): ?>
+            <?php else: ?>
+                <h4 class="user-map-details bad-news">(private)</h4>
+            <?php endif; ?>
         </div>
         <div class="clear"></div>
 <?php endif; ?>

@@ -8,9 +8,9 @@ class Controller_Search extends Sourcemap_Controller_Layout {
             'sourcemap-core'
         );
 
-        $q = isset($_POST['q']) ? $_POST['q'] : '';
+        $q = isset($_GET['q']) ? $_GET['q'] : '';
 
-        $r = Sourcemap_Search::find($_POST, 'simple');
+        $r = Sourcemap_Search::find($_GET);
 
         $this->template->search_result = $r;
 

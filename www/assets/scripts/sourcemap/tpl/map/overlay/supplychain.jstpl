@@ -2,13 +2,12 @@
     <div class="grid_16">
         <div class="map-banner-content">
             <div class="map-summary">
-               <%= this.getAttr("name", "A Sourcemap") %>
+               <%= this.getAttr("title", this.getAttr("name", "A Sourcemap")) %>
             </div>
             <div class="map-description">
                 Created by <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a> <%= Sourcemap.humanDate((new Date(this.created*1000))) %>.
             </div>
             <div class="map-status">
-                <div class="good-news">Loaded.</div>
             </div>
             <div class="map-share right">
                 Share

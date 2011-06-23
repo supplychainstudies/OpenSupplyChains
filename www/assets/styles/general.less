@@ -528,7 +528,18 @@ button::-moz-focus-inner {
         text-decoration: none;
         text-transform:uppercase;
         font-weight:bold;
-    } 
+    }
+
+    // Optional vertical style for wide/complex forms
+    
+    &.vertical {
+        .sourcemap-form-textbox{
+            width:100%;
+            .textbox{
+                width: 100%;
+            }
+        }
+    }
 }
 
 

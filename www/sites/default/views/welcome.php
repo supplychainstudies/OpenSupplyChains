@@ -33,7 +33,7 @@
         <h2 class="section">Popular</h2>
     </div>
 </div>
-<?= View::factory('partial/thumbs/featured', array('data' => $featured)) ?>
+<?= View::factory('partial/thumbs/featured', array('supplychains' => $popular)) ?>
 
 <div class="spacer"></div><div class="spacer"></div>
 

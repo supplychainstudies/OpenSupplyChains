@@ -117,7 +117,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             'limit 3';
         $favorited_q = DB::query(Database::SELECT, $favorited_sql);
         $favorited_q->param(':read_flag', Sourcemap::READ);
-        if($category) $favorited_q->param(':category_id', $category->id);
+        if($category) $favorited_q->param(':category_id', $category);
         $favorited = $favorited_q->execute();
         return self::prep_rows($favorited);
     }
@@ -131,7 +131,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             'limit 3';
         $discussed_q = DB::query(Database::SELECT, $discussed_sql);
         $discussed_q->param(':read_flag', Sourcemap::READ);
-        if($category) $discussed_q->param(':category_id', $category->id);
+        if($category) $discussed_q->param(':category_id', $category);
         $discussed = $discussed_q->execute();
         return self::prep_rows($discussed);
     }

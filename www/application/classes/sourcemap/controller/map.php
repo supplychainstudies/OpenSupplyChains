@@ -173,6 +173,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     }
                     imagepng($pimg);
                     Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
+                        'baseurl' => Kohana_URL::site('/', true),
                         'environment' => Sourcemap::$env,
                         'supplychain_id' => $supplychain->id,
                         'sizes' => Sourcemap_Map_Static::$image_sizes,

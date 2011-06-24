@@ -273,7 +273,6 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             break;
         }
     }
-    console.log(Sourcemap.tpl('map/overlay/supplychain')); 
     return this;
 }
         

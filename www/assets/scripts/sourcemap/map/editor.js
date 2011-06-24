@@ -42,6 +42,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
         }, this);
+        this.map.mapSupplychain(sc.instance_id);
         this.map_view.updateStatus("Saving...");
         Sourcemap.saveSupplychain(sc, {"supplychain_id": sc.remote_id, "success": succ, "failure": fail});
 
@@ -168,8 +169,10 @@ Sourcemap.Map.Editor.prototype.init = function() {
             this.map.controls.select.unselectAll();
         }, this),
         "onDrag": $.proxy(function(ftr, px) {
-            this.editor.moveStopToFeatureLoc(ftr, false, false);
-        }, {"editor": this}),
+            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
+                this.moveStopToFeatureLoc(ftr, false, false);
+            else this.map.controls.stopdrag.cancel();
+        }, this),
         "onComplete": $.proxy(function(ftr, px) {
             ftr.popup.updatePosition();
             if(ftr.attributes.stop_instance_id) {

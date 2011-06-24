@@ -12,8 +12,7 @@ class Controller_Home extends Sourcemap_Controller_Layout {
             $this->request->redirect('');
         }
 
-        if($user->profile->loaded()) $p = $user->profile;
-        else $p = false;
+        $p = false;
 
         $user_arr = $user->as_array();
         unset($user_arr['password']);

@@ -22,12 +22,14 @@
             </li>
         </ul>
         <form method="post" action="/search/">
-            <button onclick="('masthead-search').submit(); return false;" id="search-button">
-                <span>Search</span>
-            </button>
-            <label>
-                <input id="search" name="q" type="search" results="0" />
-            </label>
+            <fieldset>
+                <button onclick="('masthead-search').submit(); return false;" id="search-button">
+                    <span>Search</span>
+                </button>
+                <label>
+                    <input id="search" name="q" type="search" results="0" />
+                </label>
+            </fieldset>
         </form>
         <div id="livesearch"></div>
     </div> <!-- #header -->

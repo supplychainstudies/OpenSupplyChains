@@ -439,6 +439,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     var supplychain = this.findSupplychain(scid);
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Supplychain not found/Sourcemap.Supplychain required.');
+    this.controls.select.unselectAll();
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     for(var i=0; i<supplychain.stops.length; i++) {

@@ -32,7 +32,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         $post = Validate::factory($_POST);
         $post->rule('username', 'not_empty')
             ->rule('username', 'max_length', array(318))
-            ->rule('username', 'min_length', array(4))
+            ->rule('username', 'min_length', array(3))
             ->rule('password', 'not_empty')
             ->rule('password', 'max_length', array(16))
             ->rule('password', 'min_length', array(6))

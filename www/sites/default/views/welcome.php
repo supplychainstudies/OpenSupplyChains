@@ -61,16 +61,16 @@
     
     <div class="grid_1">&nbsp;</div>
     <div class="grid_6">
-        <?php if($news): ?>
+        <?php if(isset($news) && $news && isset($news->posts)): ?>
             <div class="news">
                 <ul>
-                    <?php foreach($news as $i => $news_item): ?>
+                    <?php foreach($news->posts as $i => $news_item): ?>
                     <li class="news-item">
-                        <h5 class="title"><a href="http://blog.sourcemap.com"><?= HTML::chars($news_item->title) ?></a></h5>
+                        <h5 class="title"><a href="http://blog.sourcemap.com"><?= HTML::chars($news_item->title_plain) ?></a></h5>
                         <div class="clear"></div>
                         <p>
-                            <?= substr(HTML::chars($news_item->body), 0, 130) ?>&hellip; 
-                            <a class="readmore" href="http://blog.sourcemap.com">More &raquo;</a>
+                            <?= substr(HTML::chars($news_item->excerpt), 0, 130) ?>&hellip; 
+                            <a class="readmore" href="<?= $news_item->url ?>">More &raquo;</a>
                         </p>
                     </li>
                     <?php endforeach; ?>

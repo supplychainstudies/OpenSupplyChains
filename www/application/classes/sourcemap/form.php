@@ -187,4 +187,8 @@ class Sourcemap_Form {
     public function textarea($f, $v=null, $wt=null) {
        return $this->field($f, Sourcemap_Form_Field::TEXTAREA, $v, $wt);
     }
+
+    public function checkbox($f, $v=null, $wt=null) {
+       return $this->field($f, Sourcemap_Form_Field::CHECKBOX, $v, $wt);
+    }
 }

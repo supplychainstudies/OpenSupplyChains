@@ -30,6 +30,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
 
         // most favorited
         $this->template->favorited = Sourcemap_Search_Simple::most_favorited();
+        $this->template->popular = Sourcemap_Search_Simple::most_favorited();
 
         // most discussed
         $this->template->discussed = Sourcemap_Search_Simple::most_discussed();

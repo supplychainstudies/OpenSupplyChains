@@ -273,15 +273,19 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             break;
         }
     }
+    var cb = function(p, tx, th) {
+        $(this.banner_div).html(th);
+        // share link event
+        $(this.banner_div).find('.banner-share-link').click($.proxy(function() { 
+            this.showShare();
+        }, this));
+    }
+
+    Sourcemap.tpl('map/overlay/supplychain', sc, $.proxy(cb, this));
+
     return this;
 }
         
-        // share link event
-        $('.banner-share-link').click($.proxy(function() { 
-            Sourcemap.tpl('map/overlay/share', function(p, tx, th) {
-                this.base.showDialog(th);
-            }, this);
-        }, this));
 
 Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
    
@@ -797,6 +801,10 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
         }
     }
     return range;
+}
+
+Sourcemap.Map.Base.prototype.showShare = function() {
+    alert('todo: this');
 }
 
 // jQuery fxn to center an detailed element

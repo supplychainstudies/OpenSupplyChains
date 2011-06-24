@@ -402,11 +402,13 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         width:100%;
         div {
             float:left;
-            padding-right:3em;
+            padding-right:1.5em;
+            &.right {
+                padding-right:0;
+                float:right;
+            }
         }
-        .right {
-            float:right;
-        }
+
     }
     .map-summary {
         font-weight:bold;

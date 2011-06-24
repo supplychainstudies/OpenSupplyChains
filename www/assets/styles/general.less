@@ -40,6 +40,18 @@ h1 { font-size: 2.5em; }
 h2 { font-size: 1.3em; border-bottom: 1px solid #ccc;}
 a { text-decoration:none;}
 
+p{ 
+    font-size: .8em; 
+    line-height: 1.4em;
+}
+
+ul{
+    list-style: square;
+    margin-left: 1em;
+    font-size: .8em; 
+    line-height: 1.4em;
+}
+
 img a:hover{
     border: 0;
     vertical-align: middle;
@@ -48,6 +60,18 @@ img a:hover{
 
 button::-moz-focus-inner {
     padding: 2px 0;
+}
+
+a{
+    @link-color: #2d78af;
+    color: @link-color;
+    text-decoration: none;
+    &:visited{
+        color: @link-color;
+    }
+    &:hover{
+        text-decoration: underline;
+    }
 }
 
 /* BRANDING & MASTHEAD 
@@ -92,10 +116,6 @@ button::-moz-focus-inner {
                 &.first{ margin: 2px 0 0 40px; }
                 a {
                     text-transform: lowercase;
-                    &:hover{
-                        color: #555;
-                        text-decoration: underline;
-                    }
                 }
             }
         }
@@ -188,7 +208,7 @@ button::-moz-focus-inner {
 }
 
 
-/* WELCOME PAGE STYLES 
+/* PAGE STYLES 
  * -------------------------------------------------------------- */
 
 #featured-maps {
@@ -315,8 +335,10 @@ button::-moz-focus-inner {
     }
 }
 
-#browse-featured {
-    
+.preview-map-section{
+    a:visited{
+        color: #44295a;
+    }
 }
 
 #browse-list {
@@ -419,7 +441,7 @@ button::-moz-focus-inner {
 
 .sourcemap-form{
    fieldset {
-    border:1px dashed #CCC;
+    border: 1px dashed #ccc;
     padding:10px;
     margin-bottom:20px;
     }

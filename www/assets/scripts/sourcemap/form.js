@@ -55,10 +55,13 @@ Sourcemap.Form.prototype.init = function() {
     for(var fn in fs) {
         var fel = $(fs[fn]);
         $(fel).focus(function(e){
-            console.log(this);
             if (this.defaultValue == this.value)
-                this.value;
-        }
+                this.value = "";
+        });
+        $(fel).blur(function(e){
+            if (this.value === "")
+                this.value = this.defaultValue;
+        });
         $(fel).change($.proxy(function() {
             this.update();
         }, this));

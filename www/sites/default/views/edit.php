@@ -1,6 +1,6 @@
 <div class="container_16">
 <h1>Edit Sourcemap #<?= $supplychain->id ?></h1>
-<div class="grid_7">
+<div class="grid_9">
 <div class="sourcemap-form"> 
     <?= $form ?>
 </div>

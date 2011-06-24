@@ -225,18 +225,18 @@ Sourcemap.Form.prototype.rm_hilite_el = function(field) {
 }
 
 Sourcemap.Form.prototype.field_status = function(field) {
-    var f = this.field_el(field)
+    var f = this.field_el(field).parent();
 
     var s = null;
-    if(f && f.next().is('div.status'))
-        s = f.next();
+    if(f && f.prev().is('div.status'))
+        s = f.prev();
     return s;
 }
 
 Sourcemap.Form.prototype.add_status_el = function(field) {
-    var f = this.field_el(field);
+    var f = this.field_el(field).parent();
     if(f && !this.field_status(field)) {
-        f.after('<div class="status invalid"></div>');
+        f.before('<div class="status invalid"></div>');
     }
     return this;
 }

@@ -37,10 +37,13 @@
     <form name="change-role" method="post" action="admin/users/<?= $user->id?>/add_role">
     <select name="addrole">
     <?php foreach ($all_roles as $role): ?>
+        <?php $has_role = false; ?>
         <?php foreach($roles as $roler): ?>
-             <?php if($roler['name'] == $role->name) continue; ?>
+             <?php if($roler['name'] == $role->name) { $has_role = true; break; } ?>
+        <?php endforeach; ?>
+        <?php if(!$has_role): ?>
              <option value="<?= HTML::chars($role->name); ?>"><?= HTML::chars($role->name) ?></option>
-       <?php endforeach; ?>
+         <?php endif; ?>
     <?php endforeach; ?>
     </select>
     <input type="submit" value="add role"/></form>

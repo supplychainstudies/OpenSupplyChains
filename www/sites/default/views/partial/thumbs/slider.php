@@ -16,7 +16,7 @@ if ($data):
                     <h2 class="featured-title"><a href="/map/view/<?php print $item->id; ?>"><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></a></h2>
                     <? if(isset($item->teaser)) { ?><h3 class="featured-teaser"><?= $item->teaser; ?></h3><? } ?>
                     <h4 class="featured-author">
-                        By <a href="user/<?php $item->owner->id; ?>">
+                        By <a href="user/<?php $item->owner->name; ?>">
                             <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
                         <?php print date("F j, Y",$item->created);?>
                     </h4>

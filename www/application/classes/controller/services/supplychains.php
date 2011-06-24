@@ -144,6 +144,7 @@
                 $raw_sc = $put->supplychain;
                 $supplychain->save_raw_supplychain($raw_sc, $id);
                 Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
+                    'environment' => Sourcemap::$env,
                     'supplychain_id' => (int)$id,
                     'sizes' => Sourcemap_Map_Static::$image_sizes,
                     'thumbs' => Sourcemap_Map_Static::$image_thumbs

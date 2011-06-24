@@ -149,7 +149,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 } else {
                     // make blank image and enqueue job to generate
                     $maptic_url = Kohana::config('sourcemap.maptic_baseurl').
-                        sprintf('static-map-sc%06d-%s.png', $supplychain_id, $sz);
+                        sprintf('%s-static-map-sc%06d-%s.png', Sourcemap::$env, $supplychain_id, $sz);
                     $fetched = @file_get_contents($maptic_url);
                     if($fetched) {
                         print $fetched;
@@ -173,6 +173,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     }
                     imagepng($pimg);
                     Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
+                        'environment' => Sourcemap::$env,
                         'supplychain_id' => $supplychain->id,
                         'sizes' => Sourcemap_Map_Static::$image_sizes,
                         'thumbs' => Sourcemap_Map_Static::$image_thumbs

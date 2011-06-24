@@ -7,6 +7,7 @@ class Sourcemap_Form_Field {
     const PASSWORD = 'password';
     const SUBMIT = 'submit';
     const TEXTAREA = 'textarea';
+    const CHECKBOX = 'checkbox';
 
     protected $_name = 'field';
 
@@ -65,6 +66,9 @@ class Sourcemap_Form_Field {
     public static function factory($t=null) {
         $instance = false;
         switch($t) {
+            case self::CHECKBOX:
+                $cls = 'Sourcemap_Form_Field_Checkbox';
+                break;
             case self::SELECT:
                 $cls = 'Sourcemap_Form_Field_Select';
                 break;

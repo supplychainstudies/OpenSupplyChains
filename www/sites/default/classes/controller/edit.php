@@ -22,6 +22,8 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     ->input('tags', 'Tags')
                     ->textarea('description', 'Long Description')
                     ->select('category', 'Category')
+                    // todo: checkbox for publish
+                    ->checkbox('public', 'Publish?')
                     ->submit('update', 'Update');
 
                 $form->field('category')->option(0, 'None');
@@ -40,6 +42,9 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     ->add_class('tags');
                 if(isset($supplychain->attributes->tags))
                     $form->field('tags')->value($supplychain->attributes->tags);
+
+                if($supplychain->other_perms & Sourcemap::READ)
+                    $form->field('public')->value(true);
 
                 // fetch the taxonomy tree and use first level
                 $taxonomy = Sourcemap_Taxonomy::load_tree();
@@ -68,13 +73,18 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         $category = $post['category'];
                         if($category) $supplychain->category = $category;
                         else $category = null;
+                        $public = isset($_POST['public']) ? Sourcemap::READ : 0;
                         $supplychain->attributes->title = $title;
                         $supplychain->attributes->teaser = $teaser;
                         $supplychain->attributes->tags = $tags;
+                        if($public)
+                            $supplychain->other_perms |= $public;
+                        else
+                            $supplychain->other_perms &= ~Sourcemap::READ;
                         try {
                             ORM::factory('supplychain')->save_raw_supplychain($supplychain, $supplychain->id);
                             Message::instance()->set('Map updated.', Message::SUCCESS);
-                            return $this->request->redirect('home');
+                            return $this->request->redirect('edit/'.$supplychain->id);
                         } catch(Exception $e) {
                             $this->request->status = 500;
                             Message::instance()->set('Couldn\t update your supplychain. Please contact support.');

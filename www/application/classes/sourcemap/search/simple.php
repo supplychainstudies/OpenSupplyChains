@@ -100,7 +100,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $sc = ORM::factory('supplychain', $row->supplychain_id);
         $sca = (object)$sc->as_array();
         $sca->attributes = (object)$sc->attributes->find_all()->as_array("key", "value");
-        $sca->owner = (object)$sc->owner->find()->as_array();
+        $sca->owner = (object)$sc->owner->as_array();
         $sca->owner->name = $sca->owner->username;
         unset($sca->owner->password);
         unset($sca->owner->flags);

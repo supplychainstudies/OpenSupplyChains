@@ -1,7 +1,7 @@
 <?php
 class Blognews {
 
-    const BASEURL = 'http://sourcemap.tumblr.com/api/read/';
+    const BASEURL = 'http://blog.sourcemap.com/api/get_recent_posts/';
 
     public static function cache_key($num) {
         return sprintf('blog-news-num-%02d', $num);
@@ -15,16 +15,8 @@ class Blognews {
             return $cached;
 
         try {
-            $news = file_get_contents(self::BASEURL.'?num='.$num.'&type=text&filter=text');
-            $xml = new SimpleXMLElement($news);
-            $news = array();
-            foreach($xml->posts->post as $i => $p) {
-                $news[] = (object)array(
-                    'avatar' => Gravatar::avatar('leo@sourcemap.com'),
-                    'title' => (string)$p->{"regular-title"},
-                    'body' => (string)$p->{"regular-body"}
-                );
-            }
+            $news = file_get_contents(self::BASEURL);
+            $news = json_decode($news);
         } catch(Exception $e) {
             $news = false;
         }

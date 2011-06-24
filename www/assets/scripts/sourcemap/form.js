@@ -261,7 +261,6 @@ Sourcemap.Form.prototype.field_error = function(field) {
 
 Sourcemap.Form.prototype.add_error_el = function(field) {
     var f = this.field_el(field);
-    console.log(f);
     if(f && !this.field_error(field)) {
         var html = '<div class="error"></div>';
         if(this.field_status(field))

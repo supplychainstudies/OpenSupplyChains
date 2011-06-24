@@ -54,6 +54,11 @@ Sourcemap.Form.prototype.init = function() {
     var fs = this.fields();
     for(var fn in fs) {
         var fel = $(fs[fn]);
+        $(fel).focus(function(e){
+            console.log(this);
+            if (this.defaultValue == this.value)
+                this.value;
+        }
         $(fel).change($.proxy(function() {
             this.update();
         }, this));

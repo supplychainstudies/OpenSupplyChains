@@ -263,10 +263,7 @@ Sourcemap.Form.prototype.add_error_el = function(field) {
     var f = this.field_el(field);
     if(f && !this.field_error(field)) {
         var html = '<div class="error"></div>';
-        if(this.field_status(field))
-            this.field_status(field).after(html);
-        else
-            $(f).after(html);
+        $(f).after(html);
     }
     return this;
 }

@@ -50,9 +50,9 @@ jQuery.fn.liveSearch = function (conf) {
         var repositionLiveSearch = function () {
             var tmpOffset   = input.offset();
             var inputDim    = {
-                left:       tmpOffset.left, 
-                top:        tmpOffset.top -1 , 
-                width:      input.outerWidth() - 2, 
+                left:       tmpOffset.left - 1, 
+                top:        tmpOffset.top + 1, 
+                width:      input.outerWidth(), 
                 height:     input.outerHeight()
             };
 

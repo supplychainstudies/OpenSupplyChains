@@ -47,7 +47,6 @@
     </div>
 </div>
 
-
 <div id="recent-maps" class="container_16">
     <div class="preview-map-section grid_3">
         <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
@@ -58,7 +57,6 @@
     <div class="preview-map-section grid_3">
         <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
     </div>
-    
     <div class="grid_1">&nbsp;</div>
     <div class="grid_6">
         <?php if(isset($news) && $news && isset($news->posts)): ?>
@@ -78,6 +76,7 @@
             </div>
         <?php endif; ?>
     </div>
+
 </div><!-- .container_16 -->
 
 <div class="clear">&nbsp;</div>

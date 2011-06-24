@@ -1,16 +1,19 @@
 <?php if($taxonomy): ?>
-<div class="container_16">
-    Categories: 
-    <?php $tstack = array($taxonomy); ?>
-    <?php while($t = array_shift($tstack)): ?>
-        <?php for($i=0; $i<count($t->children); $i++) array_unshift($tstack, $t->children[$i]); ?>
-        <?php if($t === $taxonomy) continue; ?>
-        <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"><?= HTML::chars($t->data->title) ?></a>
-        <?php if(count($tstack)): ?>&nbsp;<?php endif; ?>
-    <?php endwhile; ?>
+<div id="category-list" class="container_16">
+    <div class="grid_16">
+        Categories: 
+        <?php $tstack = array($taxonomy); ?>
+        <?php while($t = array_shift($tstack)): ?>
+            <?php for($i=0; $i<count($t->children); $i++) array_unshift($tstack, $t->children[$i]); ?>
+            <?php if($t === $taxonomy) continue; ?>
+            <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"><?= HTML::chars($t->data->title) ?></a>
+            <?php if(count($tstack)): ?>&nbsp;<?php endif; ?>
+        <?php endwhile; ?>
+    </div>
 </div>
 <?php endif; ?>
 <div class="clear"></div>
+
 <div id="browse-featured" class="container_16">
     <div class="grid_16">
         <?php if($category): ?>

@@ -14,4 +14,9 @@ class Cache_Smemcache extends Kohana_Cache_Smemcache {
         $id = $this->prefix_key($id);
         return parent::set($id, $data, $lifetime);
     }
+
+    public function delete($id, $timeout=0) {
+        $id = $this->prefix_key($id);
+        return parent::delete($id, $timeout);
+    }
 }

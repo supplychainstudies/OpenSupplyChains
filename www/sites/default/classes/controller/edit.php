@@ -22,7 +22,6 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     ->input('tags', 'Tags')
                     ->textarea('description', 'Long Description')
                     ->select('category', 'Category')
-                    // todo: checkbox for publish
                     ->checkbox('public', 'Publish?')
                     ->submit('update', 'Update');
 

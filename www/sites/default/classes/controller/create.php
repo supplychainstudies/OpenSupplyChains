@@ -31,6 +31,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             ->input('teaser', 'Short Description')
             ->input('tags', 'Tags')
             ->select('category', 'Category')
+            ->checkbox('public', 'Public')
             ->submit('create', 'Create');
 
         $f->field('title')
@@ -73,6 +74,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 $teaser = $p['teaser'];
                 $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
                 $category = $p['category'];
+                $public = isset($_POST['public']) ? Sourcemap::READ : 0;
                 $raw_sc = new stdClass();
                 if($category) $raw_sc->category = $category;
                 $raw_sc->attributes = new stdClass();
@@ -82,6 +84,11 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 $raw_sc->stops = array();
                 $raw_sc->hops = array();
                 $raw_sc->user_id = Auth::instance()->get_user()->id;
+                $raw_sc->other_perms = 0;
+                if($public)
+                    $raw_sc->other_perms |= $public;
+                else
+                    $raw_sc->other_perms &= ~Sourcemap::READ;
                 try {
                     $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
                     return $this->request->redirect('map/view/'.$new_scid);
@@ -97,6 +104,3 @@ class Controller_Create extends Sourcemap_Controller_Layout {
 
     }
 }
-  
-
-

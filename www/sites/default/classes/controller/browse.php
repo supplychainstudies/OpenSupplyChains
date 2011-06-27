@@ -52,6 +52,12 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $dparams['comments'] = 'yes';
         $this->template->discussed = Sourcemap_Search_Simple::find($dparams);
 
+        // most interesting
+        $iparams = $params;
+        $iparams['comments'] = 'yes';
+        $iparams['favorited'] = 'yes';
+        $this->template->interesting = Sourcemap_Search_Simple::find($dparams);
+
 
         $this->template->primary = Sourcemap_Search::find($params);
 

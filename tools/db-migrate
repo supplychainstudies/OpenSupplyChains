@@ -76,9 +76,13 @@ DATESTR=`date "+%Y%m%d.%H%M%S"`
 DBOUTPUT="db-migrate.${1}.${DATESTR}.${mdir}.out"
 DUMPOUTPUT="${1}.${DATESTR}.${mdir}.dump"
 
-echo -e "\t- Backing up current schema and data..."
-pg_dump | bzip2 -cz > "${DUMPOUTPUT}.bz2"
-echo -e "\t\t- done."
+if [ "${SOURCEMAP_ENV}" = "development" ]; then
+    echo -e "\t- Skipping backup..."
+else
+    echo -e "\t- Backing up current schema and data..."
+    pg_dump | bzip2 -cz > "${DUMPOUTPUT}.bz2"
+    echo -e "\t\t- done."
+fi
 
 for sfile in ${SCHEMAFILES[@]}
 do

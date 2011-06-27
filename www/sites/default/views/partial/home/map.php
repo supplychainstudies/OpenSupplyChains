@@ -33,7 +33,7 @@
                 <h4 class="user-map-details bad-news">(private)</h4>
             <?php endif; ?>
         </div>
-        <div class="grid_4">
+        <div class="grid_4 map-controls">
             <a href="edit/<?= $supplychain->id ?>">Edit</a> | <a href="delete/<?= $supplychain->id ?>">Delete</a>
         </div>
         <div class="clear"></div>

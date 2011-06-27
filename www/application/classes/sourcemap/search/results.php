@@ -22,7 +22,7 @@ class Sourcemap_Search_Results implements Iterator {
     }
 
     public function current() {
-        return $this->results[$this->position];
+        return $this->results[$this->_position];
     }
 
     public function key() {

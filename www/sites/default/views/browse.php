@@ -29,7 +29,7 @@
 <div id="browse-list" class="container_16">
     <div class="grid_4">
         <h2>Interesting:</h2>
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent->results)) ?>
+        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $interesting->results)) ?>
     </div>
     
     <div class="grid_4">

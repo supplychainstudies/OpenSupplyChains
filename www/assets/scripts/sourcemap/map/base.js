@@ -804,7 +804,16 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
 }
 
 Sourcemap.Map.Base.prototype.showShare = function() {
-    alert('todo: this');
+    for(var k in this.map.supplychains) {
+        var sc = this.map.supplychains[k]; break;
+    }
+    //console.log(sc);
+    var cb = function(p, tx, th) {
+        console.log(this);
+        $(this.dialog_content).empty();
+        this.showDialog(th);
+    }
+    Sourcemap.tpl('map/share', sc, $.proxy(cb, this));
 }
 
 // jQuery fxn to center an detailed element

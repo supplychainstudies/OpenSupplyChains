@@ -182,6 +182,7 @@ class Model_Supplychain extends ORM {
             $new_sc->save();
             $scid = $new_sc->id;
         } else {
+            $sc->user_id = ORM::factory('supplychain', $scid)->user_id;
             $sql = sprintf('delete from supplychain_attribute where supplychain_id = %d', $scid);
             $this->_db->query(Database::DELETE, $sql, true);
             $sql = sprintf('delete from stop where supplychain_id = %d', $scid);
@@ -281,6 +282,7 @@ class Model_Supplychain extends ORM {
             Sourcemap_User_Event::factory($evt, $sc->user_id, $scid)->trigger();
         } catch(Exception $e) {
             // pass
+            die($e);
         }
         Cache::instance()->delete('supplychain-'.$scid);
         if(Sourcemap_Search_Index::should_index($scid)) {

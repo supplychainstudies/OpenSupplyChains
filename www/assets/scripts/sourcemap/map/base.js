@@ -807,9 +807,7 @@ Sourcemap.Map.Base.prototype.showShare = function() {
     for(var k in this.map.supplychains) {
         var sc = this.map.supplychains[k]; break;
     }
-    //console.log(sc);
     var cb = function(p, tx, th) {
-        console.log(this);
         $(this.dialog_content).empty();
         this.showDialog(th);
     }

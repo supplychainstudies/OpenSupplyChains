@@ -41,13 +41,12 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         if($post->check()) {
             $post = (object)$post->as_array();
             if(Auth::instance()->login($post->username, $post->password)) {
-                Message::instance()->set('Welcome, '.$post->username.'.', Message::SUCCESS);
             } else {
-                Message::instance()->set('Invalid username/password combo.', Message::ERROR);
+                Message::instance()->set('Invalid username or password.', Message::ERROR);
                 $this->request->redirect('auth');
             }
         } else {
-            Message::instance()->set('Invalid username/password combo.', Message::ERROR);
+            Message::instance()->set('Invalid username or password.', Message::ERROR);
             $this->request->redirect('auth');
         }
         if (!empty($post->next)) {
@@ -61,7 +60,6 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         $auth = Auth::instance();
         if($auth->logged_in()) {
             $auth->logout(true);
-            Message::instance()->set('Come back soon.', Message::INFO);
         }
         $this->request->redirect('');
     }

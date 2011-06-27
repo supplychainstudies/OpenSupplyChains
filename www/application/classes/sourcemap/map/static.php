@@ -26,6 +26,8 @@ class Sourcemap_Map_Static {
     public $tile_urls;
     public $bbox;
 
+    public static $ckeyfmt = "static-map-%010d-%s-png";
+
     public static $image_sizes = array(
         'l' => array(1000, 600),
         'm' => array(730, 400),
@@ -38,6 +40,10 @@ class Sourcemap_Map_Static {
     public static $image_thumbs = array(
         'm' => array(400, 200, 560, 305)
     );
+
+    public static function cache_key($scid, $sz) {
+        return sprintf(self::$ckeyfmt, $scid, $sz);
+    }
 
     public static function make_all($scid, $sizes, $thumbs) {
         $raw_sc = ORM::factory('supplychain')->kitchen_sink($scid);

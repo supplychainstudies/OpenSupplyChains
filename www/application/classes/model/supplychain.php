@@ -283,6 +283,11 @@ class Model_Supplychain extends ORM {
             // pass
         }
         Cache::instance()->delete('supplychain-'.$scid);
+        $szs = Sourcemap_Map_Static::$image_sizes;
+        foreach($szs as $snm => $sz) {
+            $ckey = Sourcemap_Map_Static::cache_key($scid, $snm);
+            Cache::instance()->delete($ckey);
+        }
         return $scid;
     }
 

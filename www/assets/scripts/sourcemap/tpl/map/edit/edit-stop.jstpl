@@ -1,60 +1,89 @@
-<div class="sourcemap-form">
-    <fieldset><legend>Edit</legend>
-        <form name="edit-ref">
-        <label for="address">Move to:</label>
-        <div class="sourcemap-form-textbox">
-            <% var el = $("<input />").attr("type", "text").attr("name", "address").addClass("textbox"); el[0].setAttribute("value",this.attr["address"] || ""); %>
-            <%= $("<div></div>").append(el).html() %>
-        </div>
-        <label for="title">Title</label>
-        <div class="sourcemap-form-textbox">
-            <% var el = $("<input />").attr("type", "text").attr("name", "title").addClass("textbox"); el[0].setAttribute("value",this.attr["title"] || ""); %>
-            <%= $("<div></div>").append(el).html() %>
-        </div>
-        <label for="teaser">Short Description</label>
-        <div class="sourcemap-form-textbox">
-            <% el = $("<input></input>").attr("type", "text").attr("name", "teaser").addClass("textbox"); el[0].setAttribute("value",this.attr["teaser"] || ""); %>
-            <%= $("<div></div>").append(el).html() %>
-        </div>
-        <label for="discription">Long Description</label>
-        <div class="sourcemap-form-textbox">
-            <%= $("<div></div>").append(
-                    $("<textarea></textarea>").attr("name", "description").addClass("textbox").html(this.attr["description"] || "")
-                ).html()
-            %>
-        </div>
+<form name="edit-ref">
 
-        <label for="co2e">Weight in Kg</label>
-        <div class="sourcemap-form-textbox">
-            <% el = $("<input></input>").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.attr["weight"] || ""); %>
-            <%= $("<div></div>").append(el).html() %>
+<div id="editor-tabs">
+	<ul>
+		<li><a href="#edit-description">Description</a></li>
+		<li><a href="#edit-footprint">Footprint</a></li>
+		<li><a href="#edit-photos">Photos</a></li>
+		<li><a href="#edit-video">Photos</a></li>		
+	</ul>
+    <div class="clear"></div>
+    <div class="load-catalog-button">Populate from Footprinted</div>
+    
+        <div id="edit-description" class="sourcemap-form">        
+            <fieldset>
+                <legend>Description</legend>
+                <label for="address">Move to:</label>
+                <div class="sourcemap-form-textbox">
+                    <% var el = $("<input />").attr("type", "text").attr("name", "address").addClass("textbox"); el[0].setAttribute("value",this.attr["address"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
+                <label for="title">Title</label>
+                <div class="sourcemap-form-textbox">
+                    <% var el = $("<input />").attr("type", "text").attr("name", "title").addClass("textbox"); el[0].setAttribute("value",this.attr["title"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
+                <label for="teaser">Short Description</label>
+                <div class="sourcemap-form-textbox">
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "teaser").addClass("textbox"); el[0].setAttribute("value",this.attr["teaser"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
+                <label for="discription">Long Description</label>
+                <div class="sourcemap-form-textbox">
+                    <%= $("<div></div>").append(
+                            $("<textarea></textarea>").attr("name", "description").addClass("textbox").html(this.attr["description"] || "")
+                        ).html()
+                    %>
+                </div>
+            </fieldset>
         </div>
+        <div id="edit-footprint" class="sourcemap-form">
+            <fieldset>
+                <legend>Footprint</legend>
+        
+                <label for="co2e">Weight in Kg</label>
+                <div class="sourcemap-form-textbox">
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.attr["weight"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
 
-        <label for="co2e">CO2e</label>
-        <div class="sourcemap-form-textbox">
-            <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
-            <%= $("<div></div>").append(el).html() %>
-        </div>
+                <label for="co2e">CO2e</label>
+                <div class="sourcemap-form-textbox">
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
 
-        <label for="unit">Unit</label>
-        <div class="sourcemap-form-textbox">
-            <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
-            <%= $("<div></div>").append(el).html() %>
-        </div>
+                <label for="unit">Unit</label>
+                <div class="sourcemap-form-textbox">
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
 
-        <label for="water">Water</label>
-        <div class="sourcemap-form-textbox"> 
-            <% el = $("<input></input>").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.attr["water"] || ""); %>
-            <%= $("<div></div>").append(el).html() %>
+                <label for="water">Water</label>
+                <div class="sourcemap-form-textbox"> 
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.attr["water"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
+            </fieldset>                
         </div>
         
-        <div class="sourcemap-form-button-div"> 
-            <input type="button" name="edit-save" class="edit-save buttons" value="Save" />
+        <div id="edit-photos" class="sourcemap-form">
+            <fieldset>
+                <legend>Photos</legend>
+            </fieldset>
         </div>
-        
-        </form>
-    </fieldset>
-    <hr />
-    <div class="load-catalog-button">&raquo; Catalog</div>
-    <div class="spacer"></div>
+        <div id="edit-video" class="sourcemap-form">
+            <fieldset>
+                <legend>Video</legend>
+            </fieldset>
+        </div>
+
 </div>
+<div class="sourcemap-form">
+    <div class="sourcemap-form-button-div"> 
+        <input type="button" name="edit-save" class="edit-save buttons" value="Save" />
+    </div>
+</div>
+<div class="spacer"></div>
+
+</form>

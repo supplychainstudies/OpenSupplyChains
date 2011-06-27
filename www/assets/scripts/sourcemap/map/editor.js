@@ -191,6 +191,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.handlers.feature.stopClick = false;
 
     this.map.controls.stopdrag.activate();
+    
 }
 
 Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, trigger_events) {
@@ -255,7 +256,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
 
     Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
         this.editor.map_view.showDialog(th, true);
-
+        $("#editor-tabs").tabs();
         // load catalog button
         $(this.editor.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
             this.q = '';

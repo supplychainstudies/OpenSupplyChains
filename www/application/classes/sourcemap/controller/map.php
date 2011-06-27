@@ -141,7 +141,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 header('Content-Type: image/png');
                 $ckeyfmt = "static-map-%010d-%s-png";
-                $cache_key = sprintf($ckeyfmt, $supplychain_id, $sz);
+                //$cache_key = sprintf($ckeyfmt, $supplychain_id, $sz);
+                $cache_key = Sourcemap_Map_Static::cache_key($supplychain_id, $sz);
                 $exists = Cache::instance()->get($cache_key);
                 if($exists) {
                     header('X-Cache-Hit: true');
@@ -153,7 +154,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     $fetched = @file_get_contents($maptic_url);
                     if($fetched) {
                         print $fetched;
-                        Cache::instance()->set($cache_key, $fetched, 3600);
+                        Cache::instance()->set($cache_key, $fetched, 300);
                         exit;
                     } elseif($pimg = imagecreatefrompng(self::placeholder_image())) {
                         // pass

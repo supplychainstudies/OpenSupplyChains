@@ -5,7 +5,8 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         if(!isset($this->parameters['q']))
             $this->parameters['q'] = '';
 
-        $and_where = array();
+        $search = ORM::factory('supplychain_search');
+
         // category filter
         $clause_category = false;
         if(isset($this->parameters['c'])) {
@@ -23,60 +24,44 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
                 }
             }
             if($cat_ids) {
-                $clause_category = 'category in ('.join(',', $cat_ids).')';
-                $and_where[] = $clause_category;
+                $search->and_where('category', 'in', $cat_ids);
             } else {
-                $clause_category = false;
+                // pass 
             }
         }
 
         // featured filter
         if(isset($this->parameters['featured']) && strtolower($this->parameters['featured']) == 'yes') {
-            $clause_featured = 'flags & '.Sourcemap::FEATURED.' > 0';
-            $and_where[] = $clause_featured;
+            $search->and_where(DB::expr('featured'), 'and', DB::expr('TRUE'));
         }
 
         // recent filter
         if(isset($this->parameters['recent']) && strtolower($this->parameters['recent']) == 'yes') {
-            $recent_featured = 'created > '.(time()-(2*7*24*60*60));
-            $and_where[] = $recent_featured;
+            $search->order_by('created', 'desc');
         }
 
-        $selectsql = 'select distinct sc.id as supplychain_id';
-        $fromsql = 'from stop_attribute sa '.
-            'left join supplychain sc on (sa.supplychain_id=sc.id) '.
-            'right join supplychain_attribute sca on (sca.supplychain_id=sc.id)';
-        $clause_keyword = '(lower(sa.value) like \'%\'||:query||\'%\' '.
-            'or lower(sca.value) like \'%\'||:query||\'%\')';
-        $clause_public = 'other_perms & :readflag > 0';
-        $limit_offset = 'limit :limit offset :offset';
+        // most commented
+        if(isset($this->parameters['comments']) && strtolower($this->parameters['comments']) == 'yes') {
+            $search->order_by('comments', 'desc');
+        }
+        
+        if(isset($this->parameters['q']) && $this->parameters['q']) {
+            $search->and_where(
+                DB::expr('to_tsvector(body)'), '@@', 
+                DB::expr('to_tsquery('.
+                    Database::instance()->quote($this->parameters['q']).
+                ')')
+            );
+        }
 
-        $sql = sprintf("%s where %s and %s", $fromsql, $clause_keyword, $clause_public);
+        $search->limit($this->limit);
+        $search->offset($this->offset);
 
-        // add filter where clauses
-        if($and_where) $sql .= ' and '.join(' and ', $and_where);
+        $results = self::prep_rows($search->find_all());
 
-        $query = DB::query(Database::SELECT, $selectsql.' '.$sql.' '.$limit_offset);
-        $query->param(':query', $this->parameters['q'])
-            ->param(':readflag', Sourcemap::READ)
-            ->param(':limit', $this->limit)
-            ->param(':offset', $this->offset);
-        $rows = $query->execute();
+        $ct = $search->count_all();
 
-        $ctsql = 'select count(distinct sc.id) as hits '.$sql;
-        $ctquery = DB::query(Database::SELECT, $ctsql);
-        $ctquery->param(':query', $this->parameters['q'])
-            ->param(':readflag', Sourcemap::READ);
-
-        $results = self::prep_rows($rows);
-        if($results) {
-            $ctres = $ctquery->execute();
-            if($ctres) {
-                $ctres = $ctres->as_array();
-                $ctres = $ctres[0];
-                $this->results->hits_tot = $ctres['hits'];
-            } else $this->results->hits_tot = 0;
-        } else $this->results->hits_tot = 0;
+        $this->results->hits_tot = $ct;
         $this->results->results = $results;
         $this->results->limit = $this->limit;
         $this->results->offset = $this->offset;
@@ -106,33 +91,5 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         unset($sca->owner->flags);
         unset($sca->owner->email); # !!!
         return $sca;
-    }
-
-    public static function most_favorited($category=null) {
-        $favorited_sql = 'select f.supplychain_id, count(f.id) as favorited from user_favorite f '.
-            'left join supplychain sc on (f.supplychain_id=sc.id) '.
-            ($category ? 'where sc.category = :category_id and ' : 'where ').
-            'sc.other_perms & :read_flag > 0 '.
-            'group by supplychain_id order by favorited desc, f.supplychain_id desc '.
-            'limit 3';
-        $favorited_q = DB::query(Database::SELECT, $favorited_sql);
-        $favorited_q->param(':read_flag', Sourcemap::READ);
-        if($category) $favorited_q->param(':category_id', $category);
-        $favorited = $favorited_q->execute();
-        return self::prep_rows($favorited);
-    }
-
-    public static function most_discussed($category=null) {
-        $discussed_sql = 'select dc.supplychain_id, count(dc.id) as discussed from supplychain_comment dc '.
-            'left join supplychain sc on (dc.supplychain_id=sc.id) '.
-            ($category ? 'where sc.category = :category_id and ' : 'where ').
-            'sc.other_perms & :read_flag > 0 '.
-            'group by supplychain_id order by discussed desc, dc.supplychain_id desc '.
-            'limit 3';
-        $discussed_q = DB::query(Database::SELECT, $discussed_sql);
-        $discussed_q->param(':read_flag', Sourcemap::READ);
-        if($category) $discussed_q->param(':category_id', $category);
-        $discussed = $discussed_q->execute();
-        return self::prep_rows($discussed);
     }
 }

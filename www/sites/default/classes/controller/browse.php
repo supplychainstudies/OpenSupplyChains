@@ -43,10 +43,14 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         }
         
         // most favorited
-        $this->template->favorited = Sourcemap_Search_Simple::most_favorited($category ? $category->id : null);
+        $fparams = $params;
+        $fparams['favorited'] = 'yes';
+        $this->template->favorited = Sourcemap_Search_Simple::find($fparams);
 
         // most discussed
-        $this->template->discussed = Sourcemap_Search_Simple::most_discussed($category ? $category->id : null);
+        $dparams = $params;
+        $dparams['comments'] = 'yes';
+        $this->template->discussed = Sourcemap_Search_Simple::find($dparams);
 
 
         $this->template->primary = Sourcemap_Search::find($params);

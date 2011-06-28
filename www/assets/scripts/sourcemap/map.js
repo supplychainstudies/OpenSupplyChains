@@ -290,6 +290,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 "geometryTypes": ["OpenLayers.Geometry.Point", "OpenLayers.Geometry.MultiLineString"],
                 "onSelect": OpenLayers.Function.bind(
                     function(feature) {
+                        this.last_selected = feature.attributes;
                         if(this.options.popups) {
                             if(feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Point"
                                 && feature.attributes && feature.attributes.hop_instance_id) {
@@ -439,7 +440,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     var supplychain = this.findSupplychain(scid);
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Supplychain not found/Sourcemap.Supplychain required.');
-    this.controls.select.unselectAll();
+    var reselect = true;
+    this.hidePopups();
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     for(var i=0; i<supplychain.stops.length; i++) {
@@ -453,6 +455,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     //if(supplychain.stops.length)
     //    this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
     this.broadcast('map:supplychain_mapped', this, supplychain);
+    if(reselect) this.reselect();
 }
 
 Sourcemap.Map.prototype.mapStop = function(stop, scid) {
@@ -912,6 +915,7 @@ Sourcemap.Map.prototype.showPopup = function(feature) {
     }
     if(ftrs && ftrs.popup)
         ftrs.popup.show();
+    return this;
 }
 
 Sourcemap.Map.prototype.hidePopup = function(feature) {
@@ -923,7 +927,40 @@ Sourcemap.Map.prototype.hidePopup = function(feature) {
     }
     if(ftrs && ftrs.popup)
         ftrs.popup.hide();
+    return this;
+}
 
+Sourcemap.Map.prototype.hidePopups = function() {
+    for(var scid in this.supplychains) {
+        var stfs = this.getStopFeatures();
+        for(var fi=0; fi<stfs.length; fi++) {
+            if(stfs[fi].popup) stfs[fi].popup.hide();
+        }
+        var hfs = this.getHopFeatures();
+        for(var fi=0; fi<hfs.length; fi++) {
+            if(hfs[fi].popup) hfs[fi].popup.hide();
+        }
+    }
+    return this;
+}
+
+Sourcemap.Map.prototype.reselect = function() {
+    if(this.controls.select && this.last_selected) {
+        var scid = this.last_selected.supplychain_instance_id;
+        var stid = false;
+        var hid = false;
+        var f = null;
+        if(this.last_selected.stop_instance_id) {
+            stid = this.last_selected.stop_instance_id;
+            f = this.stopFeature(scid, stid);
+        } else {
+            hid = this.last_selected.hop_instance_id;
+            f = this.hopFeature(scid, hid);
+        }
+        if(f && f.popup) {
+            this.controls.select.select(f);
+        }
+    }
 }
 
 Sourcemap.Popup = function(id, ll, csz, chtm, clsbx, clscb) {

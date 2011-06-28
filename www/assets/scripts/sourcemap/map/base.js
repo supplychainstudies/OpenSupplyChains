@@ -185,6 +185,10 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         }
     }, this));
 
+    Sourcemap.listen('map:feature_selected', $.proxy(function(map, featured) {
+        this.hideDialog();
+    }, this)); 
+
     $(window).resize($.proxy(function () { 
         /*var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
         //$("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
@@ -342,6 +346,7 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
 }
 
 Sourcemap.Map.Base.prototype.showDialog = function(mkup, no_controls) {
+    this.map.hidePopups();
     if(this.dialog) {
         $(this.curtain).removeClass("hidden").fadeIn();
         // update dialog content and position
@@ -354,8 +359,6 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup, no_controls) {
             this.initDialog();
             $(this.dialog_content).html(mkup);
         }
-        
-        this.map.controls.select.unselectAll();
         
         $(window).resize();
         
@@ -394,6 +397,9 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
     // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
     var stop = sc.findStop(stid);
+
+    var f = this.map.stopFeature(scid, stid);
+    if(f & f.popup) f.popup.hide();
 
     // get magic word...make sure it's valid
     var magic_word = this.magic_word_sequence[seq_idx];
@@ -594,6 +600,7 @@ Sourcemap.Map.Base.prototype.dialogPrev = function() {
 Sourcemap.Map.Base.prototype.dialogClose = function() {
     if($(this.dialog).data("state")) {
         this.hideDialog();
+        this.map.reselect();
     }
     if(this.tour) this.tour.stop();//.wait();
 }
@@ -739,7 +746,6 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
-    this.map.controls.select.unselectAll();
     switch(viz_nm) {
         //case "energy":
         //    break;

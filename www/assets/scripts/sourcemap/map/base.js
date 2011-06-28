@@ -320,6 +320,8 @@ Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
             if($(this.dialog).data("state")) {
                 this.hideDialog();
                 this.map.reselect();
+            } else {
+                this.map.controls.select.unselectAll();
             }
             if(this.tour) this.tour.stop();//.wait();
         },

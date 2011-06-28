@@ -253,7 +253,6 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
     for(var k in ref.attributes) {
         if(attr[k] == undefined) attr[k] = ref.getAttr(k);
     }
-
     Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
         this.editor.map_view.showDialog(th, true);
         $("#editor-tabs").tabs();
@@ -268,6 +267,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
             var f = $(e.target).parents('form');
             var vals = f.serializeArray();
             var reftype = this.ref instanceof Sourcemap.Stop ? 'stop' : 'hop';
+            var geocoding = false;
             for(var k in vals) {
                 var val = vals[k].value;
                 k = vals[k].name;
@@ -275,6 +275,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                     this.ref.setAttr(k, val);
                     // if address is set, move the stop.
                     $(f).find('input,textarea,select').attr("disabled", true);
+                    geocoding = true;
                     Sourcemap.Stop.geocode(this.ref.getAttr("address"), $.proxy(function(res) {
                         var pl = res && res.results ? res.results[0] : false;
                         if(pl) {
@@ -293,25 +294,14 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                             $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
                             this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
                         }
-                        this.editor.map.controls.select.select(
-                            this.editor.map.stopFeature(this.stop)
-                        );
                         this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
                     }, {"stop": this.ref, "edit_form": f, "editor": this.editor}));
                 } else {
                     this.ref.setAttr(k, val);
                 }
             }
-            if(this.ref instanceof Sourcemap.Stop) {
-                this.editor.map.mapStop(this.ref, this.ref.supplychain_id);
-                this.editor.map_view.hideDialog();
-                this.editor.map_view.updateStatus("Stop updated...", "good-news");
-            } else {
-                this.editor.map.mapHop(this.ref, this.ref.supplychain_id);
-                this.editor.map_view.hideDialog();
-                this.editor.map_view.updateStatus("Hop updated...", "good-news");
-            }
-            this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.ref.supplychain_id]);
+            if(!geocoding)
+                this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.ref.supplychain_id]);
         }, {"ref": this.ref, "editor": this.editor, "attr": attr}));
     }, {"ref": ref, "editor": this, "attr": attr}, {"ref": ref, "editor": this, "attr": attr});
 }

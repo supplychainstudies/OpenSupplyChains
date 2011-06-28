@@ -266,7 +266,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
 
         $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
             // save updated attributes
-            var f = $(e.target).parent().parent();
+            var f = $(e.target).parents('form');
             var vals = f.serializeArray();
             var reftype = this.ref instanceof Sourcemap.Stop ? 'stop' : 'hop';
             for(var k in vals) {

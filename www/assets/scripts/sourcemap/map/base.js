@@ -305,11 +305,8 @@ Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
     $(this.dialog_next_el).click($.proxy(function() { this.dialogNext(); }, this));
     $(this.dialog_close).click($.proxy(function() { this.dialogClose(); }, this));
     this.dialog_content = $('<div id="detail-content" class="content"></div>');
-    if(!no_controls) 
-        this.dialog.append(this.dialog_prev_el)
+
     this.dialog.append(this.dialog_content);
-    if(!no_controls)
-        this.dialog.append(this.dialog_next_el);
     this.dialog.append(this.dialog_close)
     $(this.dialog).data("state", 1); // todo: check this?
 

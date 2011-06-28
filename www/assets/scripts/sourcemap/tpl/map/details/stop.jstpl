@@ -25,7 +25,7 @@
 </div>
 <% } %>
 
-<!-- div class="content-nav">
+<div class="content-nav">
 <% for(var i=0; i<Sourcemap.MagicWords.sequence.length; i++) { %>
     <% if(this.stop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
         <div id="content-item-<%= i %>" class="content-item <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %><%= (this.magic_word === Sourcemap.MagicWords.sequence[i] ? " selected" : "") %>">
@@ -34,4 +34,4 @@
     <% } %>
 <% } %>
 <div class="clear"></div>
-</div -->
+</div>

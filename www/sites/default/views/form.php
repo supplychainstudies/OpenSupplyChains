@@ -1,4 +1,4 @@
-<div class="sourcemap-form"> 
+<div class="sourcemap-form vertical"> 
     <fieldset>
     <?= Form::open($form->action(), array(
         'enctype' => $form->enctype(),

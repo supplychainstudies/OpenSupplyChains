@@ -451,9 +451,11 @@ a{
 
 @form-height: 1em;
 @hover-color: #FBF7D5;
+@form-width: 18em;
 
 .sourcemap-form{
-   fieldset {
+    
+    fieldset {
     border: 1px dotted #ccc;
     padding:10px;
     margin-bottom:20px;
@@ -494,7 +496,7 @@ a{
         background-color:#fff;
     }
     .sourcemap-form-textbox {
-        width:342px;
+        width:@form-width;
         float:right;
         margin-top:3px;
         padding-left:5px;
@@ -503,12 +505,18 @@ a{
             background-color:#FFFFFF;
             background-repeat: no-repeat;
             background-position: 0 5px;
-            width:279px;
-            float: left;
+            width:@form-width + 3;
             font-size: 80%;
             color: #999999;
             padding:3px 5px 3px 19px;
+            &.edited{
+                color: #333;
+            }
         }
+    }
+    .sourcemap-form-checkbox{
+            float:left;
+            padding: 12px 0 5px;
     }
     .status {
         width: 25px;
@@ -526,7 +534,7 @@ a{
         float: right;
         padding: 10px 0;
         select{
-            width: 346px;
+            width:@form-width;
         }
     }
     input{
@@ -545,10 +553,13 @@ a{
         background-repeat: no-repeat;
         background-position:left;
         background-color:#FFFFFF;
-        width:285px;
+        width:@form-width;
         font:normal 18px Arial;
         color: #999999;
         padding:3px 5px 3px 19px;
+        &.edited{
+            color: #333;
+        }
     }
        
     .password {
@@ -556,20 +567,23 @@ a{
         background-repeat: no-repeat;
         background-position:left;
         background-color:#FFFFFF;
-        width:285px;
+        width:@form-width;
         font:normal 18px Arial;
         color: #999999;
         padding:3px 5px 3px 19px;
+        &.edited{
+            color: #333;
+        }
     }
 
-    .sourcemap-form-button-div {
-        width:287px;
+    .sourcemap-form-button {
+        width:@form-width;
         float:right;
         text-align:right;
         height:@form-height;
-        margin-top:3px;
         padding:5px 0 3px;
         clear: both;
+        margin-bottom: 10px;
     }
     .buttons {
         background: #eee;
@@ -581,15 +595,25 @@ a{
         text-transform:uppercase;
         font-weight:bold;
     }
+    
 
     // Optional vertical style for wide/complex forms
-    
+
     &.vertical {
+        label{
+            width: auto;
+        }
         .sourcemap-form-textbox{
             width:100%;
             .textbox{
-                width: 100%;
+                width: 94%;
+                padding: 3px 0 5px 20px;
             }
+        }
+        .sourcemap-form-select{
+            width:100%;
+        }
+        .sourcemap-form-button {
         }
     }
 }

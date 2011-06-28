@@ -1,3 +1,4 @@
+/*
 Sourcemap.Form = function(form_el) {
     this._form_el = $(form_el);
     this._rules = [];
@@ -50,6 +51,7 @@ Sourcemap.Form.ValidatorEMsgs = {
     "tags": 'List tags separated by spaces.'
 }
 
+
 Sourcemap.Form.prototype.init = function() {
     var fs = this.fields();
     for(var fn in fs) {
@@ -80,6 +82,7 @@ Sourcemap.Form.prototype.init = function() {
     }
     var fso = this.fields(); var fs = []; for(var fn in fso) fs.push(fso[fn]);
     this.update();
+    
     $(this.el()).find('div.error').hide();
 }
 
@@ -105,8 +108,8 @@ Sourcemap.Form.prototype.update = function() {
             this.field_status(fn).addClass('invalid');
             if(this.field_error(fn) && this.field_error(fn).hasClass('preserve'))
                 continue;
-            this.add_error_el(fn);
-            this.field_error(fn).text(emsg);
+            //this.add_error_el(fn);
+            //this.field_error(fn).text(emsg);
         }
     }
     $(this.el()).find('div.error').show();
@@ -274,8 +277,63 @@ Sourcemap.Form.prototype.rm_error_el = function(field) {
     return this;
 }
 
+
+$.fn.listenForChange = function(options) {
+    settings = $.extend({
+        interval: 200 // in microseconds
+    }, options);
+
+    var jquery_object = this;
+    var current_focus = null;
+
+    jquery_object.filter(":input").add(":input", jquery_object).focus( function() {
+        current_focus = this;
+    }).blur( function() {
+        current_focus = null;
+    });
+
+    setInterval(function() {
+        // allow
+        jquery_object.filter(":input").add(":input", jquery_object).each(function() {
+            // set data cache on element to input value if not yet set
+            if ($(this).data('change_listener') == undefined) {
+                $(this).data('change_listener', $(this).val());
+                return;
+            }
+            // return if the value matches the cache
+            if ($(this).data('change_listener') == $(this).val()) {
+                return;
+            }
+            // ignore if element is in focus (since change event will fire on blur)
+            if (this == current_focus) {
+                return;
+            }
+            // if we make it here, manually fire the change event and set the new value
+            $(this).trigger('change');
+            $(this).data('change_listener', $(this).val());
+        });
+    }, settings.interval);
+    return this;
+};
+*/
+
 $(document).ready(function() {
-    $('div.sourcemap-form').each(function() {
+/*    $('div.sourcemap-form').each(function() {
         (new Sourcemap.Form(this));
     });
+*/
+    $('.sourcemap-form input').each( function(){
+        $(this).focus(function(e){
+            if (this.defaultValue == this.value)
+                this.value = "";
+        });
+        $(this).blur(function(e){
+            if (this.value === "")
+                this.value = this.defaultValue;
+        });
+        $(this).keydown(function(e){
+            $(this).addClass('edited');
+        });
+    });
+
 });

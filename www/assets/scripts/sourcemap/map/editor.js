@@ -263,7 +263,6 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
             this.params = {"name": ''};
             this.editor.showCatalog(this);
         }, this));
-
         $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
             // save updated attributes
             var f = $(e.target).parents('form');
@@ -350,6 +349,9 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             o.params = json.parameters;
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
 
+            $("#catalog-close").click($.proxy(function(e) {
+                this.editor.showEdit(this.ref);                            
+            }, {"ref": o.ref, "editor": this.editor}));
             $(this.editor.map_view.dialog).find('.catalog-pager').empty();
             // pager prev
             if(o.params.o > 0) {

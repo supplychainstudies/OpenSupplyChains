@@ -584,19 +584,52 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
    color: #555; 
    
 }
+#catalog-close {
+    color: #2d78af;
+    cursor:pointer;
+    display:inline;
+}
 #catalog-search {
-    #catalog-search-field {
-        width:10em;
-    }
-    #catalog-search-button {
-        
-    }
+    fieldset{ 
+         vertical-align: middle; 
+         margin-top: 3px;
+         border: 1px solid #000;
+         height: 18px;
+         font: normal 12px arial,helvetica,sans-serif;
+         overflow:hidden;
+         #catalog-search-button{
+             float:right;
+             color: #aaa;
+             border:0;
+             border-left: 1px solid #000;
+             text-transform: lowercase;
+             background-color: #fff;
+             background-image: -moz-linear-gradient(top,white,#EFEFEF);
+             background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
+             margin: 0;
+             vertical-align:middle;
+             height: 18px;
+         }
+         label{
+             display:block;
+             overflow:hidden;
+         }
+         input#catalog-search-field{
+             border: 0;
+             width: 100%;
+             outline:none;
+             -webkit-appearance: none;
+         }
+     }
 }
 .catalog-pager {
     text-align:center;
     font-size:0.8em;
-    color:#888;
-    margin-bottom:0.5em;
+    color:#2d78af;
+    margin:0.5em 0;
+    padding:0.2em 0;
+    border-top:1px solid #ccc;
+    border-bottom:1px solid #ccc;
     .catalog-pager-prev, .catalog-pager-next {
         padding:0.5em;
         cursor:pointer;
@@ -606,16 +639,17 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     
 }
 .catalog-items {
+    margin:0;
 }
 
 .catalog-item {
     font-size:0.6em;
     cursor: pointer;
     padding: .4em;
-    width: 30em;
-    height:7em;
+    width: 57.2em;
+    height:8em;
     float:left;
-    margin: .5em;
+    margin: .5em 0;
     list-style:none;
     display:block;
     position:relative;
@@ -625,7 +659,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     }
     .cat-item-name {
         font-size:1.2em;
-        height:1.2em;
+        height:1.8em;
         font-weight:bold;
         overflow:hidden;
     }
@@ -640,7 +674,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         font-size:0.8em;
         color:#888;
         display:block;
-        background: #eee;
+        border-top:1px solid #ccc;
+        line-height:1.2em;
         .footprint-label {
             display:block;
         }

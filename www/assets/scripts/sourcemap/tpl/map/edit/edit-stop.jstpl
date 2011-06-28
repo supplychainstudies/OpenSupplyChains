@@ -1,26 +1,29 @@
 <form name="edit-ref">
 
+<h2 class="edit-window-title">
+<% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %> - <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
+</h2>
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>
 		<li><a href="#edit-footprint">Footprint</a></li>
 		<li><a href="#edit-photos">Photos</a></li>
-		<li><a href="#edit-video">Photos</a></li>		
+		<li><a href="#edit-video">Video</a></li>		
 	</ul>
+    <div class="load-catalog-button">Import from Footprinted.org</div>
     <div class="clear"></div>
-    <div class="load-catalog-button">Populate from Footprinted</div>
     
         <div id="edit-description" class="sourcemap-form">        
             <fieldset>
                 <legend>Description</legend>
-                <label for="address">Move to:</label>
-                <div class="sourcemap-form-textbox">
-                    <% var el = $("<input />").attr("type", "text").attr("name", "address").addClass("textbox"); el[0].setAttribute("value",this.attr["address"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
                 <label for="title">Title</label>
                 <div class="sourcemap-form-textbox">
                     <% var el = $("<input />").attr("type", "text").attr("name", "title").addClass("textbox"); el[0].setAttribute("value",this.attr["title"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
+                <label for="address">Move to:</label>
+                <div class="sourcemap-form-textbox">
+                    <% var el = $("<input />").attr("type", "text").attr("name", "address").addClass("textbox"); el[0].setAttribute("value",this.attr["address"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
                 <label for="teaser">Short Description</label>

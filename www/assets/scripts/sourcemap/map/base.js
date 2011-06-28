@@ -290,7 +290,6 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     return this;
 }
         
-
 Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
    
     // set up detail pane
@@ -318,10 +317,10 @@ Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
     this.map.map.events.on({
         "click": function(e) {
             if($(this.dialog).data("state")) {
-                this.hideDialog();
-                this.map.reselect();
+                this.dialogClose();
             } else {
-                this.map.controls.select.unselectAll();
+                // rube goldberg called and said don't uncomment this.
+                //this.map.controls.select.unselectAll();
             }
             if(this.tour) this.tour.stop();//.wait();
         },

@@ -319,6 +319,7 @@ Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
         "click": function(e) {
             if($(this.dialog).data("state")) {
                 this.hideDialog();
+                this.map.reselect();
             }
             if(this.tour) this.tour.stop();//.wait();
         },

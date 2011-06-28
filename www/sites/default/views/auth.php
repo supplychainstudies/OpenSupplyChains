@@ -28,7 +28,7 @@
         <?php if (isset($_GET['next'])): ?>
             <input type="hidden" name="next" value="<?= $_GET['next']; ?>" /> 
         <?php endif; ?>
-        <div class="sourcemap-form-button-div"> 
+        <div class="sourcemap-form-button"> 
             <input name="Submit" type="submit" value="Submit" class="buttons" /> 
         </div> 
     </form>

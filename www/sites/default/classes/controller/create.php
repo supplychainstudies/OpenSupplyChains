@@ -97,6 +97,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 }
             } else {
                 Message::instance()->set('Correct the errors below.');
+                $this->template->errors = $post->errors();
                 $f->errors($p->errors('forms/create'));
             }
         }

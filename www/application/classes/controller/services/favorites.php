@@ -16,8 +16,9 @@ class Controller_Services_Favorites extends Sourcemap_Controller_Service {
             return $this->_forbidden('You\'re not logged in.');
         } 
         $posted = $this->request->posted_data;
-        if(is_int($posted)) $posted = array($posted);
-        elseif(is_array($posted)) $posted = $posted;
+        
+        if(is_int(intval($posted->supplychain_id))) $posted = array($posted->supplychain_id);
+        elseif(is_array($posted->supplychain_id)) $posted = $posted->supplychain_id;
         else {
             return $this->_bad_request('Supplychain id or array of ids expected.');
         }

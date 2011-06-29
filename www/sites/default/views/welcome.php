@@ -49,13 +49,13 @@
 
 <div id="recent-maps" class="container_16">
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
+        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent1)) ?>
     </div>
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
+        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent2)) ?>
     </div>
     <div class="preview-map-section grid_3">
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
+        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent3)) ?>
     </div>
     <div class="grid_1">&nbsp;</div>
     <div class="grid_6">

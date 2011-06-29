@@ -5,15 +5,18 @@ class Controller_Tools_Import_Csv extends Sourcemap_Controller_Layout {
     public $template = 'tools/import/csv';
 
     public function action_index() {
-        if(!Auth::instance()->get_user()) 
-            return $this->_forbidden('You must be logged in to use the import tool.');
+        if(!Auth::instance()->get_user())  {
+            Message::instance()->set('You must be logged in to use the importer.');
+            $this->request->redirect('/auth?next=/tools/import/csv');
+        }
         $current_user = Auth::instance()->get_user();
         $import_role = ORM::factory('role')->where('name', '=', 'import')->find();
         $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
         if($current_user->has('roles', $import_role) || $current_user->has('roles', $admin_role)) {
             // pass
         } else {
-            return $this->_forbidden('You don\'t have access to that part of the site.');
+            Message::instance()->set('You don\'t have access to the Google Docs importer.');
+            $this->request->redirect('/home');
         }
         $this->layout->scripts = array(
             'sourcemap-core'

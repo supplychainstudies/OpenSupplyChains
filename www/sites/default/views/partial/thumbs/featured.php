@@ -16,9 +16,8 @@
                     <?php endif; ?>
                 </a></h3>
             <h4 class="preview-author">By <a href="user/<?php $item->owner->id; ?>"><?= (isset($item->owner->name)) ? HTML::chars($item->owner->name) : "Unknown Owner"?></a>,
-            <?= print date("F j, Y", $item->created) ?></h4>
+            <?= date("F j, Y", $item->created) ?></h4>
             <?php if(isset($item->teaser)): ?><p class="preview-teaser"><?= HTML::chars($item->teaser) ?></p><?php endif; ?>
-            
         </div>
     <?php endforeach; ?>
 <?php else: ?>

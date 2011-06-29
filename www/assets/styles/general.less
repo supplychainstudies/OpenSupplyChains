@@ -265,6 +265,7 @@ a{
     }
 }
 
+
 #site-description {
     #site-tagline { margin-top:0; }
     #site-blurb {
@@ -350,7 +351,29 @@ a{
 
 #category-list {
     margin-bottom:2em;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: .5em;
+    height:.75em;
+    background-image: -moz-linear-gradient(top,white,#EFEFEF);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
+    a{
+        padding-left: 10px;
+        border-left: 1px solid #ccc;
+        &.last{
+            padding-right: 10px;
+            border-right: 1px solid #ccc;
+        }
+    }
+    #category-list-content{
+        float:left;
+        padding: 0 10px;
+    }
 }
+
+
+
+
 #browse-list {
     margin-top:2em;
     
@@ -454,7 +477,6 @@ a{
 @form-width: 18em;
 
 .sourcemap-form{
-    
     fieldset {
     border: 1px dotted #ccc;
     padding:10px;
@@ -595,7 +617,6 @@ a{
         text-transform:uppercase;
         font-weight:bold;
     }
-    
 
     // Optional vertical style for wide/complex forms
 

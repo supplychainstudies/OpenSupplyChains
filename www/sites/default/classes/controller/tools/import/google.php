@@ -8,7 +8,7 @@
  */
 class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
 
-    public $layout = 'layout';
+    public $layout = 'base';
     public $template = 'tools/import/google';
 
     public function before() {

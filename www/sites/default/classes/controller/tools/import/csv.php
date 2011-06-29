@@ -1,12 +1,20 @@
 <?php
 class Controller_Tools_Import_Csv extends Sourcemap_Controller_Layout {
     
-    public $layout = 'layout';
+    public $layout = 'base';
     public $template = 'tools/import/csv';
 
     public function action_index() {
         if(!Auth::instance()->get_user()) 
             return $this->_forbidden('You must be logged in to use the import tool.');
+        $current_user = Auth::instance()->get_user();
+        $import_role = ORM::factory('role')->where('name', '=', 'import')->find();
+        $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
+        if($current_user->has('roles', $import_role) || $current_user->has('roles', $admin_role)) {
+            // pass
+        } else {
+            return $this->_forbidden('You don\'t have access to that part of the site.');
+        }
         $this->layout->scripts = array(
             'sourcemap-core'
         );

@@ -1,6 +1,18 @@
 <div class="popup-wrapper">
-    <h4 class="popup-title"><%= _S.ttrunc(this.hop.getAttr("name", "Transit"), 16) %></h4>
-    <h5 class="popup-placename"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("placename", "")), 24) %></h5>
-    <% if(this.hop.getAttr("description", false)) { %><p class="popup-description"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("description","")), 64, true) %></p><% } %>
-    <% if(this.morelink) {%><a class="popup-more-link" href="javascript: void(0);">More</a><% } %>
+        <h5 class="popup-title"><%= _S.ttrunc(_S.htesc(this.hop.getLabel() || this.hop.getAttr("title", false) || "Untitled Hop"), 24) %></h5>
+        <% if(this.hop.getAttr("teaser", this.hop.getAttr("description", false))) { %>
+            <p class="popup-description">
+                <%= _S.ttrunc(_S.htesc(this.hop.getAttr("teaser", this.hop.getAttr("description",""))), 140, true) %>
+            </p>
+        <% } %>
+        <div class="popup-buttons">
+            <% if(this.morelink) {%>
+                <a class="popup-more-link" href="javascript: void(0);">More</a>
+            <% } %>
+        </div>
+        <div class="popup-icons">
+            <% if(this.hop.getAttr("description", false)) { %>[Text]<% } %>
+            <% if(this.hop.getAttr("youtube:link", this.hop.getAttr("vimeo:link", false))) { %>[Video]<% } %>
+            <% if(this.hop.getAttr("flickr:setid", false)) { %>[I]<% } %>
+        </div>
 </div>

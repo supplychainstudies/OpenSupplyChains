@@ -283,6 +283,17 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find('.banner-share-link').click($.proxy(function() { 
             this.showShare();
         }, this));
+        $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
+            this.favorite();
+        }, this));
+         $.ajax({"url": 'services/favorites', "type": "GET",
+                "success": $.proxy(function(resp) {
+                   for(var k in resp) {
+                       if(resp[k].id == sc.remote_id) {
+                           $(".banner-favorite-link").addClass("marked");
+                       }
+                   }                   
+                }, this)});        
     }
 
     Sourcemap.tpl('map/overlay/supplychain', sc, $.proxy(cb, this));
@@ -819,6 +830,31 @@ Sourcemap.Map.Base.prototype.showShare = function() {
     Sourcemap.tpl('map/share', sc, $.proxy(cb, this));
 }
 
+Sourcemap.Map.Base.prototype.favorite = function() {
+    for(var k in this.map.supplychains) {
+        var sc = this.map.supplychains[k]; break;
+    }
+// check for delete
+     if($(".banner-favorite-link").hasClass("marked")) {
+         $.ajax({"url": 'services/favorites/'+sc.remote_id, "type": "DELETE",
+                "success": $.proxy(function(resp) {
+                    if(resp) {
+                        $(".banner-favorite-link").removeClass("marked");
+                    } 
+                }, this)
+            });
+     } else {
+         $.ajax({"url": 'services/favorites', "type": "POST",
+                "success": $.proxy(function(resp) {
+                    if(resp) {
+                        $(".banner-favorite-link").addClass("marked");
+                    } else { }
+                }, this),
+                "error": function(resp) {
+                }, "data": {"supplychain_id":parseInt(sc.remote_id)}
+            });
+    }
+}
 // jQuery fxn to center an detailed element
 jQuery.fn.detail_center = function () {
     this.css("position","absolute");

@@ -347,3 +347,27 @@ Sourcemap.Hop.prototype.getAttr = function(k, d) {
     if(this.attributes[k] !== undefined) return this.attributes[k];
     else return d;
 }
+
+Sourcemap.Hop.prototype.setAttr = function(k, v) {
+    if(((typeof k) === "object") && !v) {
+        for(var ok in k) {
+            this.setAttr(ok, k[ok]);
+        }
+    } else if(((typeof v) === "undefined") && ((typeof this.attributes[k]) !== "undefined")) {
+        delete this.attributes[v];
+    } else this.attributes[k] = v;
+    return this;
+}
+
+Sourcemap.Hop.prototype.getLabel = function() {
+    var label = false;
+    var search_keys = ["title", "name", "label"
+    ];
+    for(var ki=0; ki<search_keys.length; ki++) {
+        var k = search_keys[ki];
+        if(this.getAttr(k, false)) {
+            label = this.getAttr(k, false);
+        }   
+    }
+    return label;
+}

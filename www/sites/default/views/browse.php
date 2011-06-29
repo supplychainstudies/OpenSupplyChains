@@ -1,14 +1,17 @@
 <?php if($taxonomy): ?>
-<div id="category-list" class="container_16">
-    <div class="grid_16">
-        Categories: 
-        <?php $tstack = array($taxonomy); ?>
-        <?php while($t = array_shift($tstack)): ?>
-            <?php for($i=0; $i<count($t->children); $i++) array_unshift($tstack, $t->children[$i]); ?>
-            <?php if($t === $taxonomy) continue; ?>
-            <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"><?= HTML::chars($t->data->title) ?></a>
-            <?php if(count($tstack)): ?>&nbsp;<?php endif; ?>
-        <?php endwhile; ?>
+<div id="category-list">
+    <div class="container_16">
+            <div id="category-list-content">
+                <a href="browse/">Everything &nbsp;</a>
+                <?php $tstack = array($taxonomy); ?>
+                <?php while($t = array_shift($tstack)): ?>
+                    <?php for($i=0; $i<count($t->children); $i++) array_unshift($tstack, $t->children[$i]); ?>
+                    <?php if($t === $taxonomy) continue; ?>
+                    <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"<?php if(!count($tstack)): ?> class="last"<?php endif;?>><?= HTML::chars($t->data->title) ?></a>
+                    <?php if(count($tstack)): ?>&nbsp;<?php endif; ?>
+                <?php endwhile; ?>
+                <div class="clear"></div>
+        </div>
     </div>
 </div>
 <?php endif; ?>

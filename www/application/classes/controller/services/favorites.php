@@ -5,18 +5,8 @@ class Controller_Services_Favorites extends Sourcemap_Controller_Service {
     const EXISTS = 'exists';
     const FORBIDDEN = 'forbidden';
 
-    public function action_get($fave_id=null) {
-        if($fave_id) {
-            return $this->_not_found('No.');
-            // I can't think of a good reason to expose this.
-            /*if(($fave = ORM::factory('user_favorite', $fave_id)) && $fave->loaded()) {
-                $this->response = $fave->as_array();
-            } else return $this->_not_found();*/
-        } elseif(isset($_GET['user_id']) && $_GET['user_id']) {
-            if(($user = ORM::factory('user', $_GET['user_id'])) && $user->loaded()) {
-                $this->response = $user->favorites->find_all()->as_array(null, true);
-            } else return $this->_bad_request('Bad user id.');
-        } elseif($user = Auth::instance()->get_user()) {
+    public function action_get() {
+        if($user = Auth::instance()->get_user()) {
             $this->response = $user->favorites->find_all()->as_array(null, true);
         } else return $this->_bad_request();
     }

@@ -28,4 +28,7 @@
     <div class="sourcemap-form-textbox">
         <?= Form::input($field->name(), $field->value(), array('type' => $field->field_type(), 'class' => $field->css_class() . " textbox")) ?>
     </div>
+    <div class="sourcemap-form-error">
+        <?= $field->errors(); ?>
+    </div>
 <?php endif; ?>

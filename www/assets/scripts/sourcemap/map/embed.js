@@ -385,7 +385,7 @@ Sourcemap.Map.Embed.prototype.initDialog = function() {
    
     // set up detail pane
     if(!this.dialog) {
-        this.dialog = $('<div id="detail-pane"></div>');
+        this.dialog = $('<div id="dialog"></div>');
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
     // todo: bind events, not inline javascript

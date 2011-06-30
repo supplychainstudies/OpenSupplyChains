@@ -7,27 +7,12 @@
 
 html,body { height:100%;}
 
-/* Sticks the footer to the bottom of the page */
-
-#footer, .push {
-    height: 50px;
-    clear:both;
-}
-#wrapper {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -50px;
-    font-size:1.2em;
-}
-
 body {
     .body-font;
     font-size:1em;
     line-height:1em;
     margin:0 auto;
     background: #fff;
-    /* no gradient here. please. */
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -58,11 +43,7 @@ img a:hover{
     text-underline: none;
 }
 
-button::-moz-focus-inner {
-}
-
 a{
-    @link-color: #2d78af;
     color: @link-color;
     text-decoration: none;
     &:visited{
@@ -71,6 +52,21 @@ a{
     &:hover{
         text-decoration: underline;
     }
+}
+
+/* ----
+*/
+/* Sticks the footer to the bottom of the page */
+#footer, .push {
+    height: 50px;
+    clear:both;
+}
+#wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -50px;
+    font-size:1.2em;
 }
 
 /* BRANDING & MASTHEAD 
@@ -223,7 +219,7 @@ a{
     
     height: 339px;
     border-top:2px solid #ccc;
-    background:rgba(185,211,234,1);
+    background:#fff;
     
     #featured-slider {
         .featured-item {
@@ -674,28 +670,16 @@ a{
 
 
 /* SUPPLYCHAIN 
+@todo MARKED FOR DELETION
+
 -------------------------------------------------------------- */
 
-#supplychain-title {
+/*#supplychain-title {
     color:#000;
     font-size:1.4em;
 }
 #supplychain-description {}
-#qrcode-badge {
-    padding:0 5px 0 0;
-    margin:5px 0;
-    .qrcode {
-        float:left;
-        width:70px; height:70px;
-    }
-    .qrcode-about {
-        float:left;
-        width:220px;
-        padding:10px;
-        margin-left:10px;
-        border-left:1px solid #ccc;
-    }
-}
+
 .user-avatar {
     .rounded(4px);
     float:left;
@@ -704,7 +688,7 @@ a{
     width:32px;
 }
 #creation-meta {}
-
+*/
 
 
 /* SECONDARY MAP CONTENT 
@@ -783,7 +767,7 @@ a{
 
 /* DASHBOARD STYLES 
  * -------------------------------------------------------------- */
-
+/*
 #dashboard-profile {
     height:100px;
     background:@background;
@@ -875,7 +859,7 @@ a{
         }
     }
 }
-
+*/
 /* FOOTER STYLES 
  * -------------------------------------------------------------- */
 
@@ -940,16 +924,6 @@ a{
     }
 }
 
-#top-notice {
-    display:none;
-    width:100%;
-    .box_shadow(0,4px,4px);
-    height:500px;
-    margin:-5px -1% 20px -1%;
-    padding:20px 1%;
-    color:#fff;
-    font-size:2em;
-}
 
 /* ADDITIONAL GENERAL USE CLASSES 
  * -------------------------------------------------------------- */

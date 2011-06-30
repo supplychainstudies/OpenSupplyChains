@@ -16,7 +16,7 @@
 }
 
 /* Detail Pane */
-#detail-pane.fullscreen {
+#dialog.fullscreen {
     width:100% !important; height:100% !important;
     max-width:100% !important; max-height:100% !important;                
 }
@@ -82,12 +82,15 @@
     }
 }
 
-html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
-    background: #fff;
-    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
-}
+/* 
+@todo MARKED FOR DELETION
 
-#detail-pane {
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--
+    background: #fff;
+    border-bottom: 1px solid #fff; 
+}
+*/
+#dialog {
     .rounded(.5em);
     z-index: 1012;
     position: absolute;
@@ -706,7 +709,21 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     }
 }
 
-
+#qrcode-badge {
+    padding:0 5px 0 0;
+    margin:5px 0;
+    .qrcode {
+        float:left;
+        width:70px; height:70px;
+    }
+    .qrcode-about {
+        float:left;
+        width:220px;
+        padding:10px;
+        margin-left:10px;
+        border-left:1px solid #ccc;
+    }
+}
 
 .ui-tabs { position: relative; padding: .2em; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 .ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; }

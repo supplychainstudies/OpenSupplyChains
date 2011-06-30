@@ -7,13 +7,14 @@
             </p>
         <% } %>
         <div class="popup-buttons">
-            <% if(this.morelink) {%>
-                <a class="popup-more-link" href="javascript: void(0);">More</a>
-            <% } %>
         </div>
         <div class="popup-icons">
-            <% if(this.stop.getAttr("description", false)) { %>[Text]<% } %>
-            <% if(this.stop.getAttr("youtube:link", this.stop.getAttr("vimeo:link", false))) { %>[Video]<% } %>
-            <% if(this.stop.getAttr("flickr:setid", false)) { %>[Image]<% } %>
+            <% for(var i=0; i<Sourcemap.MagicWords.sequence.length; i++) { %>
+                <% if(this.stop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
+                    <a href="javascript: void(0);" id="content-item-<%= i %>" class="popup-more-link <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %>">
+                         <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %>
+                    </a>
+                <% } %>
+            <% } %>
         </div>
 </div>

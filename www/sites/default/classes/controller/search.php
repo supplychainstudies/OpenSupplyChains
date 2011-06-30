@@ -8,8 +8,15 @@ class Controller_Search extends Sourcemap_Controller_Layout {
             'sourcemap-core'
         );
 
-        $q = isset($_GET['q']) ? $_GET['q'] : '';
+        $q = "NOAP";
 
+        if (isset($_GET['q'])){
+            $q = $_GET['q'];
+        }
+        elseif (isset($_POST['q'])){
+            $q = $_POST['q'];
+        }
+        
         $r = Sourcemap_Search::find($_GET);
 
         $this->template->search_result = $r;

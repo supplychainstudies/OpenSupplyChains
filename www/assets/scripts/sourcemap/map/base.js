@@ -64,24 +64,26 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             Sourcemap.template('map/'+t.join('-'), $.proxy(function(p, tx, th) {
                 this.popup.setContentHTML($('<div></div>').html(th).html());
 
-                // more link event
-                $(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
-                    if(this.stop) { 
+                // Text and Media link events
+                $(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function(evt) {
+                   
+                    var clicked_idx = parseInt(evt.target.id.split('-').pop());
+                    var idx = -1;
+                    
+                    for(var i=0; i<this.base.magic_word_sequence.length; i++) {
+                        if(clicked_idx === i) {
+                            idx = i;
+                            break;
+                        }
+                    }
+                    if(idx >= 0) {
                         this.base.showStopDetails(
-                            this.stop.instance_id, 
-                            this.feature.attributes.supplychain_instance_id, 
-                            this.base.magic_word_sequence_idx
-                        );
-                    } else if(this.hop) {
-                        this.base.showHopDetails(
-                            this.hop.instance_id, 
-                            this.feature.attributes.supplychain_instance_id, 
-                            this.base.magic_word_sequence_idx
+                            this.stop.instance_id, this.stop.supplychain_id, idx
                         );
                     }
+                    
                 }, this));
-                
-
+               
                 this.popup.updateSize();
                 this.popup.updatePosition();
                 this.base.map.broadcast('popup-initialized', this.popup, this.stop);
@@ -391,7 +393,7 @@ Sourcemap.Map.Base.prototype.hideDialog = function() {
 Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
    // make sure the target magic word index is valid
     var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-    
+   
     // sync tour
     if(this.tour) {
         var tftrs = this.tour.features;
@@ -430,6 +432,8 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
+
+            // Sets up content-nav behavior
             $(this.base.dialog_content).find('.content-item a').click($.proxy(function(evt) {
                 var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
                 var idx = -1;
@@ -445,11 +449,13 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
                     );
                 }
             }, this));
+                
         }, 
         {"stop": stop, "supplychain": sc, "magic_word": magic_word, 'base': this},
         {"base": this, "magic_word": magic_word, "stop": stop, "supplychain": sc},
         this.options.tpl_base_path
     );
+    
 }
 
 Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {

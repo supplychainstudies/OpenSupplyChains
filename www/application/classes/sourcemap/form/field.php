@@ -18,7 +18,10 @@ class Sourcemap_Form_Field {
     protected $_weight = 0;
     protected $_template = 'form/field';
 
+    protected $_form = null;
+
     protected $_errors = array();
+    protected $_rules = array();
 
     protected $_css_class = false;
 
@@ -51,6 +54,17 @@ class Sourcemap_Form_Field {
         }
         return $s;
     }
+
+    public function form($f=false) {
+        if($f && $f instanceof Sourcemap_Form) {
+            $this->_form = $f;
+        }
+        return $this->_form;
+    }
+
+    /*protected function rule($r, $args) {
+        $this->form()->rule($this->_name, $r, $args);
+    }*/
     
     protected function _makeLabel() {
         return Form::label($this->_name, $this->label().':');
@@ -61,6 +75,28 @@ class Sourcemap_Form_Field {
             'class' => $this->css_class(),
             'type' => $this->_type
         ));
+    }
+
+    public static function from_array($nm, $arr) {
+        $ftype = isset($arr['type']) ? $arr['type'] : null;
+        $new_field = Sourcemap_Form_Field::factory($ftype);
+        $new_field->name($nm);
+        if(isset($arr['label'])) $new_field->label($arr['label']);
+        switch($new_field->field_type()) {
+            case self::SELECT:
+                if(isset($arr['options']) && is_array($arr['options'])) {
+                    foreach($arr['options'] as $i => $opt) {
+                        call_user_func_array(array($new_field, 'option'), $opt);
+                    }
+                }
+                break;
+            default:
+                if(isset($arr['default'])) {
+                    $new_field->value($arr['default']);
+                }
+                break;
+        }
+        return $new_field;
     }
 
     public static function factory($t=null) {
@@ -164,5 +200,18 @@ class Sourcemap_Form_Field {
             $this->_errors = $es;
             return $this;
         } else return $this->_errors;
+    }
+
+    public function rules($arr=null) {
+        if($arr !== null && is_array($arr)) {
+            $this->_rules = $arr;
+            return $this;
+        }
+        return $this->_rules;
+    }
+
+    public function rule($r, $args=array()) {
+        if(!$this->_rules) $this->_rules = array();
+        $this->_rules[] = array($r, $args);
     }
 }

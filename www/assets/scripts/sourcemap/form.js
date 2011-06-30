@@ -1,4 +1,3 @@
-/*
 Sourcemap.Form = function(form_el) {
     this._form_el = $(form_el);
     this._rules = [];
@@ -8,49 +7,6 @@ Sourcemap.Form = function(form_el) {
 
     this.init();
 }
-
-Sourcemap.Form.Validators = {
-    "not_empty": function(v, f, r, a) { return (typeof v) === "string" && v.length; },
-    "email": function(v, f, r, a) {
-        var p = /^[A-Za-z0-9._%\+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
-        return p.test(v);
-    },
-    "alphadash": function(v, f, r, a) {
-        var p = /^[A-Za-z0-9_-]+$/
-        return p.test(v);
-    },
-    "long": function(v, f, r, a) {
-        var p = /[A-Za-z0-9_-]{7,}+$/
-        return p.test(v);
-    },
-    "confirm": function(v, f, r, a) {
-        var m = f.replace('_confirm', '');
-        return this.field_el(m).val() == v;
-    },
-    "tags": function(v, f, r, a) {
-        var p = /^(\s+)?(\w+(\s+)?)*$/; 
-        return v.length ? p.test(v) : true;
-    }
-}
-
-Sourcemap.Form.ValidatorClassMap = {
-    "required": "not_empty",
-    "email": "email",
-    "alphadash": "alphadash",
-    "long": "long",
-    "confirm": "confirm",
-    "tags": "tags"
-}
-
-Sourcemap.Form.ValidatorEMsgs = {
-    "required": "Required.",
-    "email": "Must be a valid email address.",
-    "alphadash": "May contain only letters, numbers, underscores, and dashes.",
-    "long": "Must be eight characters or longer.",
-    "confirm": 'Doesn\'t match.',
-    "tags": 'List tags separated by spaces.'
-}
-
 
 Sourcemap.Form.prototype.init = function() {
     var fs = this.fields();
@@ -69,24 +25,31 @@ Sourcemap.Form.prototype.init = function() {
         }, this));
         if(fel.hasClass('required'))
             this.add_hilite_el(fn);
-        for(var vmk in Sourcemap.Form.ValidatorClassMap) {
-            if(fel.hasClass(vmk)) {
-                this.rule(fn, 
-                    Sourcemap.Form.ValidatorClassMap[vmk], [], 
-                    Sourcemap.Form.ValidatorEMsgs[vmk]
-                );
-            }
-        }
-        if(fel.hasClass('required') || this.field_rules(fn).length)
+        if(fel.hasClass('required'))
             this.add_status_el(fn);
     }
     var fso = this.fields(); var fs = []; for(var fn in fso) fs.push(fso[fn]);
     this.update();
     
     $(this.el()).find('div.error').hide();
+    $(this._form_el).find('input, select').change($.proxy(this.check, this));
 }
 
-Sourcemap.Form.prototype.update = function() {
+Sourcemap.Form.prototype.check = function() {
+    var form_id = $(this._form_el).find('input[name=_form_id]').val();
+    var p = 'services/validate/'+form_id;
+    $.ajax({ "type": "post",
+        "url": p, "data": $(this._form_el).serializeArray(),
+        "dataType": "json", "success": $.proxy(function(data) {
+            console.log(data);
+            this.update(data);
+        }, this)
+    });
+    return this;
+}
+
+Sourcemap.Form.prototype.update = function(validation) {
+    if(validation !== true) this._errors = validation;
     for(var fn in this.fields()) {
         this.rm_error_el(fn);
         //this.field_el(fn).removeClass('error');
@@ -96,20 +59,24 @@ Sourcemap.Form.prototype.update = function() {
             continue;
         this.rm_error_el(fn);
     }
-    if(this.check()) {
+    if(validation === true) {
         this.el().find('input[type="submit"]').removeAttr('disabled');
     } else {
         this.el().find('input[type="submit"]').attr('disabled', 'disabled');
-        var es = this.errors();
-        for(var roi=0; roi<es.length; roi++) {
-            var ro = es[roi];
-            var fn = ro.f;
-            var emsg = ro.emsg ? ro.emsg : 'Invalid.';
-            this.field_status(fn).addClass('invalid');
-            if(this.field_error(fn) && this.field_error(fn).hasClass('preserve'))
-                continue;
-            //this.add_error_el(fn);
-            //this.field_error(fn).text(emsg);
+        var eks = this.errors();
+        for(var f in eks) {
+            var es = eks[f];
+            for(var roi=0; roi<es.length; roi++) {
+                var ro = es[roi];
+                var fn = f;
+                var emsg = ro;
+                //this.field_status(fn).addClass('invalid');
+                //if(this.field_error(fn) && this.field_error(fn).hasClass('preserve'))
+                //    continue;
+                if(!this.field_error(fn))
+                    this.add_error_el(fn);
+                this.field_error(fn).text(emsg);
+            }
         }
     }
     $(this.el()).find('div.error').show();
@@ -149,27 +116,6 @@ Sourcemap.Form.prototype.field_rules = function(field) {
         if(ro.f == field) ros.push(ro);
     }
     return ros;
-}
-
-Sourcemap.Form.prototype.check = function() {
-    this._errors = [];
-    if(this._rules) {
-        for(var i=0; i<this._rules.length; i++) {
-            var ro = this._rules[i];
-            var f = $(this._form_el).find('[name="'+ro.f+'"]');
-            if(f.length) f = f[0];
-            else {
-                this._errors.push(ro);
-                continue;
-            }
-            if(this.check_rule(ro, $(f).val())) {
-                // pass
-            } else {
-                this._errors.push(ro);
-            }
-        }
-    }
-    return !this._errors.length;
 }
 
 Sourcemap.Form.prototype.check_rule = function(rdat, val) {
@@ -253,10 +199,10 @@ Sourcemap.Form.prototype.rm_status_el = function(field) {
 Sourcemap.Form.prototype.field_error = function(field) {
     var f = this.field_el(field);
     if(f) {
-        if(f.next().is('div.error')) {
+        if(f.next().is('div.sourcemap-form-error')) {
             return f.next();
-        } else if(f.next().next().is('div.error')) {
-            return f.next().next();
+        } else if(f.parent().next().is('div.sourcemap-form-error')) {
+            return f.parent(t).next();
         }
     }
     return null;
@@ -265,7 +211,7 @@ Sourcemap.Form.prototype.field_error = function(field) {
 Sourcemap.Form.prototype.add_error_el = function(field) {
     var f = this.field_el(field);
     if(f && !this.field_error(field)) {
-        var html = '<div class="error"></div>';
+        var html = '<div class="sourcemap-form-error"></div>';
         $(f).after(html);
     }
     return this;
@@ -277,8 +223,7 @@ Sourcemap.Form.prototype.rm_error_el = function(field) {
     return this;
 }
 
-
-$.fn.listenForChange = function(options) {
+/*$.fn.listenForChange = function(options) {
     settings = $.extend({
         interval: 200 // in microseconds
     }, options);
@@ -318,10 +263,10 @@ $.fn.listenForChange = function(options) {
 */
 
 $(document).ready(function() {
-/*    $('div.sourcemap-form').each(function() {
+    $('div.sourcemap-form').each(function() {
         (new Sourcemap.Form(this));
     });
-*/
+
     $('.sourcemap-form input').each( function(){
         $(this).focus(function(e){
             if (this.defaultValue == this.value)

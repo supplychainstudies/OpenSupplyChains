@@ -38,10 +38,15 @@ Sourcemap.Form.prototype.init = function() {
 Sourcemap.Form.prototype.check = function() {
     var form_id = $(this._form_el).find('input[name=_form_id]').val();
     var p = 'services/validate/'+form_id;
+    var data = $(this._form_el).find('input, select').serializeArray();
+    var serial = {};
+    for(var i=0; i<data.length; i++) {
+        var j = data[i];
+        serial[j.name] = j.value;
+    }
     $.ajax({ "type": "post",
-        "url": p, "data": $(this._form_el).serializeArray(),
+        "url": p, "data": serial,
         "dataType": "json", "success": $.proxy(function(data) {
-            console.log(data);
             this.update(data);
         }, this)
     });

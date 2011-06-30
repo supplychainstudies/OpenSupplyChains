@@ -45,6 +45,11 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $search->order_by('comments', 'desc');
         }
         
+        // most favorited
+        if(isset($this->parameters['favorited']) && strtolower($this->parameters['favorited']) == 'yes') {
+            $search->order_by('favorited', 'desc');
+        }
+        
         if(isset($this->parameters['q']) && $this->parameters['q']) {
             $search->and_where(
                 DB::expr('to_tsvector(body)'), '@@', 

@@ -32,6 +32,9 @@ class Controller_Services_Favorites extends Sourcemap_Controller_Service {
                 if(!$user->has('favorites', $sc)) {
                     if($user->add('favorites', $sc, array('timestamp' => time()))) {
                         $added[] = $sc->id;
+                        if(Sourcemap_Search_Index::should_index($sc->id)) {
+                            Sourcemap_Search_Index::update($sc->id);
+                        }
                         continue;
                     } else $msg = self::FAIL;
                 } else $msg = self::EXISTS;
@@ -49,6 +52,9 @@ class Controller_Services_Favorites extends Sourcemap_Controller_Service {
         $sc = ORM::factory('supplychain', $scid);
         if($sc->loaded()) {
             $user->remove('favorites', $sc);
+            if(Sourcemap_Search_Index::should_index($scid)) {
+                Sourcemap_Search_Index::update($scid);
+            }
         } else return $this->_bad_request('Invalid supplychain id.');
         $this->response = true;
     }

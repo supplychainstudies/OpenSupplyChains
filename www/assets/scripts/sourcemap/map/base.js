@@ -170,7 +170,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
         if(!this.map || this.map !== map) return;
-        if(this.options.banner) this.initBanner();
+        if(this.options.banner && !($(".map-banner").length)) this.initBanner();
         if(this.options.tour) {
             this.initTour();
         } else {
@@ -305,9 +305,9 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         
 Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
    
-    // set up detail pane
+    // set up dialog
     if(!this.dialog) {
-        this.dialog = $('<div id="detail-pane"></div>');
+        this.dialog = $('<div id="dialog"></div>');
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
     // todo: bind events, not inline javascript

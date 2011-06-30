@@ -30,40 +30,23 @@ Sourcemap.MapTour.prototype.init = function() {
 }
 
 Sourcemap.MapTour.prototype.initControls = function() {
-    //this.controls_div_id = this.instance_id+'-controls';
-    //this.controls = $('<div id="'+this.controls_div_id+'" class="sourcemap-tour-control-panel olControlPanel"></div>');
-    //this.innerWrap = $('<div class="tourControlsInnerWrap"></div>'); //Needed for centering
-    //this.outerWrap= $('<div class="tourControlsOuterWrap"></div>'); 
-    //this.control_prev = $('<div class="sourcemap-tour-prev"></div>');
-    //this.control_next = $('<div class="sourcemap-tour-next"></div>');
-    //this.control_play = $('<div class="sourcemap-tour-play stopped"></div>');
-    this.map.dockAdd('tour-play', {
+    this.map.dockAdd('tour_play', {
         "icon_url": "sites/default/assets/images/dock/tour-play.png",
         "ordinal":4,
+        "stopped": true,
         "callbacks": {
-            "click": function(evt) {
-                this.start();
-            }
+            "click": $.proxy(function() {
+                if (this.map.dock_controls.tour_play.stopped){
+                    this.map.dock_controls.tour_play.stopped = false;
+                    this.start();
+                }
+                else{
+                    this.map.dock_controls.tour_play.stopped = true;
+                    this.stop();
+                }
+            }, this)
         }
     });
-    $(this.map.map.div).append(this.controls);
-    $(this.innerWrap).append(this.control_prev).append(this.control_play)
-        .append(this.control_next);
-    $(this.outerWrap).append(this.innerWrap);
-    $(this.controls).append(this.outerWrap);
-    this.control_prev.click($.proxy(function() {
-        this.prev();
-    }, this));
-    this.control_next.click($.proxy(function() {
-        this.next();
-    }, this));
-    this.control_play.click($.proxy(function() {
-        if(this.timeout) {
-            this.stop();
-        } else {
-            this.start();
-        }
-    }, this));
 }
 
 Sourcemap.MapTour.prototype.initEvents = function() {
@@ -121,7 +104,7 @@ Sourcemap.MapTour.prototype.getFeatures = function(order) {
 
 Sourcemap.MapTour.prototype.wait = function() {
     this.clearTimeout();
-    $(this.control_play).removeClass("stopped");
+    //$(this.control_play).removeClass("stopped");
     this.stopped = false;
     if(this.wait_interval) {
         this.timeout = setTimeout($.proxy(this.start, this), this.wait_interval*1000);
@@ -136,7 +119,7 @@ Sourcemap.MapTour.prototype.start = function() {
     if(this.timeout) this.clearTimeout(this.timeout);
     this.stopped = false;
     Sourcemap.broadcast('map_tour:start', this);
-    this.control_play.removeClass("stopped");
+    $(this.map.dock_controls.tour_play).removeClass("stopped");
     for(var i=0; i<this.features.length; i++)
         this.map.controls.select.unselect(this.features[i]);
     this.next();
@@ -146,7 +129,7 @@ Sourcemap.MapTour.prototype.start = function() {
 Sourcemap.MapTour.prototype.stop = function() {
     if(this.timeout) this.clearTimeout(this.timeout);
     this.stopped = true;
-    this.control_play.addClass("stopped");
+    $(this.map.dock_controls.tour_play).addClass("stopped");
     return this;
 }
 

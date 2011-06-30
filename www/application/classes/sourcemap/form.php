@@ -15,6 +15,7 @@ class Sourcemap_Form {
 
     protected $_validate = null;
     protected $_messages_file = null;
+    protected $_config_file = null;
 
     protected $_fields = array();
     protected $_css_class = '';
@@ -71,6 +72,14 @@ class Sourcemap_Form {
         return $this->_accessor('_messages_file', $msgs);
     }
 
+
+    public function config_file($p=null) {
+        if(!$this->field('_form_id'))
+            $this->field('_form_id', Sourcemap_Form_Field::HIDDEN);
+        $this->field('_form_id')->value($p);
+        return $this->_accessor('_config_file', $p);
+    }
+
     public static function from_array($arr) {
         // todo: wildcards
         $f = new Sourcemap_Form();
@@ -101,11 +110,11 @@ class Sourcemap_Form {
         foreach($ptok as $pt) 
             if(!preg_match('/^[A-Za-z0-9]+/', $pt))
                 return false;
-        $p = join('/', $ptok).'.php';
+        $p = join('/', $ptok);
         $arr = false;
         foreach($inclp as $ip) {
-            if(file_exists($ip.$p)) {
-                $arr = @include($ip.$p);
+            if(file_exists($ip.$p.'.php')) {
+                $arr = @include($ip.$p.'.php');
                 if(!$arr) 
                     throw new Exception('Could not load form config: '.$ip.$p);
                 break;
@@ -113,6 +122,7 @@ class Sourcemap_Form {
         }
         if($arr) {
             $form = self::from_array($arr);
+            $form->config_file($p);
         } else {
             $form = false;
         }
@@ -128,6 +138,7 @@ class Sourcemap_Form {
         if($arr instanceof Validate) {
             $this->_validate = $arr;
         } else {
+            $arr = $arr ? $arr : array();
             $this->_validate = Validate::factory($arr);
             $rules = $this->rules();
             foreach($rules as $fnm => $frules) {
@@ -143,7 +154,7 @@ class Sourcemap_Form {
         $vo = $this->_validate;
         $this->errors(array());
         $this->values($vo->as_array());
-        if($vo->check()) {
+        if($vo->check(true)) {
             return true;
         } else {
             $this->errors($vo->errors($this->messages_file()));
@@ -171,14 +182,17 @@ class Sourcemap_Form {
     }
 
     public function values($vs=null) {
+        $exclude = array('_form_id');
         if($vs === null) {
             $vs = array();
             foreach($this->_fields as $nm => $f) {
+                if(in_array($nm, $exclude)) continue;
                 $vs[$nm] = $f->value();
             }
             return $vs;
         } else {
             foreach($this->_fields as $nm => $f) {
+                if(in_array($nm, $exclude)) continue;
                 if(isset($vs[$nm])) {
                     $f->value($vs[$nm]);
                 } else {

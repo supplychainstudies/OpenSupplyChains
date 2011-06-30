@@ -8,6 +8,7 @@ class Sourcemap_Form_Field {
     const SUBMIT = 'submit';
     const TEXTAREA = 'textarea';
     const CHECKBOX = 'checkbox';
+    const HIDDEN = 'hidden';
 
     protected $_name = 'field';
 
@@ -89,7 +90,6 @@ class Sourcemap_Form_Field {
                         call_user_func_array(array($new_field, 'option'), $opt);
                     }
                 }
-                break;
             default:
                 if(isset($arr['default'])) {
                     $new_field->value($arr['default']);
@@ -113,6 +113,9 @@ class Sourcemap_Form_Field {
                 break;
             case self::SUBMIT:
                 $cls = 'Sourcemap_Form_Field_Submit';
+                break;
+            case self::HIDDEN:
+                $cls = 'Sourcemap_Form_Field_Hidden';
                 break;
             case self::TEXT:
             case self::INPUT:

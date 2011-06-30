@@ -13,6 +13,9 @@ class Sourcemap_Form {
     protected $_action = '';
     protected $_enctype = null;
 
+    protected $_validate = null;
+    protected $_messages_file = null;
+
     protected $_fields = array();
     protected $_css_class = '';
 
@@ -63,31 +66,127 @@ class Sourcemap_Form {
     public function enctype($ct=null) {
         return $this->_accessor('_enctype', $ct);
     }
+
+    public function messages_file($msgs=null) {
+        return $this->_accessor('_messages_file', $msgs);
+    }
+
+    public static function from_array($arr) {
+        // todo: wildcards
+        $f = new Sourcemap_Form();
+        if(isset($arr['messages_file']) && $arr['messages_file'])
+            $f->messages_file($arr['messages_file']);
+        if(isset($arr['fields']) && is_array($arr['fields'])) {
+            foreach($arr['fields'] as $fnm => $fdef) {
+                $new_field = Sourcemap_Form_Field::from_array($fnm, $fdef);
+                call_user_func_array(array($f, 'set_field'), array($fnm, $new_field));
+            }
+        }
+        if(isset($arr['rules']) && is_array($arr['rules'])) {
+            foreach($arr['rules'] as $fnm => $rdefs) {
+                $field = $f->field($fnm);
+                foreach($rdefs as $ri => $rdef) {
+                    call_user_func_array(array($field, 'rule'), $rdef);
+                }
+            }
+        }
+        return $f;
+    }
+
+    public static function load($p) {
+        $inclp = array();
+        $inclp[] = SOURCEMAP_SITES_PATH.Sourcemap::site().'/forms/';
+        $inclp[] = APPPATH.'forms/';
+        $ptok = preg_split('/\//', $p, -1, PREG_SPLIT_NO_EMPTY);
+        foreach($ptok as $pt) 
+            if(!preg_match('/^[A-Za-z0-9]+/', $pt))
+                return false;
+        $p = join('/', $ptok).'.php';
+        $arr = false;
+        foreach($inclp as $ip) {
+            if(file_exists($ip.$p)) {
+                $arr = @include($ip.$p);
+                if(!$arr) 
+                    throw new Exception('Could not load form config: '.$ip.$p);
+                break;
+            }
+        }
+        if($arr) {
+            $form = self::from_array($arr);
+        } else {
+            $form = false;
+        }
+        return $form;
+    }
  
-    public static function factory($init_from=null) {
+    public static function factory($load_from=null) {
         $instance = new Sourcemap_Form();
         return $instance;
     }
 
-    public function validate($vo) {
+    public function validate($arr=array()) {
+        if($arr instanceof Validate) {
+            $this->_validate = $arr;
+        } else {
+            $this->_validate = Validate::factory($arr);
+            $rules = $this->rules();
+            foreach($rules as $fnm => $frules) {
+                foreach($frules as $frule) {
+                    $frargs = array();
+                    if(count($frule) == 2) list($fr, $frargs) = $frule;
+                    elseif(count($frule) == 1) $fr = $frule[0];
+                    else continue;
+                    $this->_validate->rule($fnm, $fr, $frargs);
+                }
+            }
+        }
+        $vo = $this->_validate;
         $this->errors(array());
+        $this->values($vo->as_array());
         if($vo->check()) {
             return true;
         } else {
-            $this->errors($vo->errors());
+            $this->errors($vo->errors($this->messages_file()));
             return false;
         }
     }
 
-    public function values($vs) {
-        foreach($this->_fields as $nm => $f) {
-            if(isset($vs[$nm])) {
-                $f->value($vs[$nm]);
-            } else {
-                $f->value(null, true);
+    public function rules($rules=null) {
+        if($rules === null) {
+            $rules = array();
+            foreach($this->_fields as $nm => $f) {
+                $rules[$nm] = $f->rules();
             }
+            return $rules;
+        } else {
+            foreach($this->_fields as $nm => $f) {
+                if(isset($rules[$nm])) {
+                    $f->rules($rules[$nm]);
+                } else {
+                    $f->rules(array());
+                }
+            }
+            return $this;
         }
-        return $this;
+    }
+
+    public function values($vs=null) {
+        if($vs === null) {
+            $vs = array();
+            foreach($this->_fields as $nm => $f) {
+                $vs[$nm] = $f->value();
+            }
+            return $vs;
+        } else {
+            foreach($this->_fields as $nm => $f) {
+                if(isset($vs[$nm])) {
+                    $f->value($vs[$nm]);
+                } else {
+                    $f->value(null, true);
+                }
+            }
+            return $this;
+        }
     }
 
     public function errors($es=null) {
@@ -97,6 +196,7 @@ class Sourcemap_Form {
                 $e = $f->errors();
                 if($e) {
                     $es[$k] = array();
+                    $e = is_array($e) ? $e : array($e);
                     foreach($e as $ei => $ee) $es[$k][] = $ee;
                 }
             }
@@ -117,6 +217,7 @@ class Sourcemap_Form {
     }
 
     public function set_field($f, $fo) {
+        $fo->form($this);
         $this->_fields[$f] = $fo;
         return $this;
     }
@@ -129,6 +230,7 @@ class Sourcemap_Form {
         if($t || $l || $wt) {
             $nm = $f;
             $f = Sourcemap_Form_Field::factory($t);
+            $f->form($this);
             $this->_fields[$nm] = $f;
             $f->name($nm);
             $f->label($l);

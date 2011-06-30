@@ -3,6 +3,7 @@
         <div class="container_16">
             <div class="grid_16">
                 <div class="spacer"></div>
+                <?= print_r($search_result) ?>
                 <h2>Search Results for "<?= isset($search_result->parameters['q']) ? HTML::chars($search_result->parameters['q']) : ''; ?>"</h2>
             </div>
         </div>

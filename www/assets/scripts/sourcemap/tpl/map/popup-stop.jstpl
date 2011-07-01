@@ -7,6 +7,9 @@
             </p>
         <% } %>
         <div class="popup-buttons">
+            <% if(this.morelink) {%>
+                <a id="content-item-0" class="popup-more-link <%= _S.htesc(Sourcemap.MagicWords.sequence[0].replace(/\W+/, "-")) %>"  href="javascript: void(0);">More</a>
+            <% } %>
         </div>
         <div class="popup-icons">
             <% for(var i=0; i<Sourcemap.MagicWords.sequence.length; i++) { %>

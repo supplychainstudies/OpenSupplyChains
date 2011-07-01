@@ -69,7 +69,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                    
                     var clicked_idx = parseInt(evt.target.id.split('-').pop());
                     var idx = -1;
-                    
+                    console.log(clicked_idx);
                     for(var i=0; i<this.base.magic_word_sequence.length; i++) {
                         if(clicked_idx === i) {
                             idx = i;

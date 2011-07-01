@@ -147,7 +147,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     }
     #detail-content {
         overflow:hidden;                       
-        padding:0; margin:0;
+        padding:0 0 20px 0; margin:0;
         float:left;
         iframe, object {
             display:block;
@@ -203,40 +203,26 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 
     .content-nav {
         clear:both;
-        margin: 20px auto;
-        width:100%; height:52px;
+        margin:0;
+        position:absolute;
+        bottom:20px; left:30px;
         .content-item {
-            width: 48px;
-            height: 48px;
-            margin: 0 0 0 10px;
+            margin: 0 10px 0 0;
             float: left;
             a {
+                font-size:0.8em;
                 text-decoration:none;
-                font-size:0;
-                height:100%; width:100%;
                 display:block;
             }
-            &:hover { background-color: #eaeaea; }
-            &:first-child { margin-left:0 !important; }
-        }
-        .description {
-            background: url("../../sites/default/assets/images/embed-text-icon.png") center center no-repeat;
-            .background_size(100%, 100%);
-        }
-        .youtube-link, .vimeo-link {
-            background: url("../../sites/default/assets/images/embed-video-icon.png") center center no-repeat;
-            .background_size(100%, 100%);
-        }
-        .flickr-setid {
-            background: url("../../sites/default/assets/images/embed-image-icon.png") center center no-repeat;
-            .background_size(100%, 100%);
+            &.selected a { text-decoration:underline; }
+            &:hover { text-decoration:underline; }
         }
     }
     .content {
         margin: 0 .5em;
         overflow:hidden;
         width: 100%; 
-        position:relative;
+        /* @todo delete position:relative;*/
         > .description {
         }
         > .block {

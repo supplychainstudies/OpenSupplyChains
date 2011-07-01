@@ -38,6 +38,7 @@ Sourcemap.MapTour.prototype.initControls = function() {
             "click": $.proxy(function() {
                 if (this.map.dock_controls.tour_play.stopped){
                     this.map.dock_controls.tour_play.stopped = false;
+                    console.log(this);
                     this.start();
                 }
                 else{

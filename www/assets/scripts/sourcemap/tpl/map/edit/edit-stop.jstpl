@@ -1,8 +1,10 @@
 <form name="edit-ref">
 
 <h2 class="edit-window-title">
-<% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %> - <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
-</h2>
+    <% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %></h2>
+<h3 class="edit-window-address">
+    <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
+</h3>
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>
@@ -15,7 +17,6 @@
     
         <div id="edit-description" class="sourcemap-form">        
             <fieldset>
-                <legend>Description</legend>
                 <label for="title">Title</label>
                 <div class="sourcemap-form-textbox">
                     <% var el = $("<input />").attr("type", "text").attr("name", "title").addClass("textbox"); el[0].setAttribute("value",this.attr["title"] || ""); %>
@@ -42,7 +43,6 @@
         </div>
         <div id="edit-footprint" class="sourcemap-form">
             <fieldset>
-                <legend>Footprint</legend>
         
                 <label for="co2e">Weight in Kg</label>
                 <div class="sourcemap-form-textbox">
@@ -72,12 +72,10 @@
         
         <div id="edit-photos" class="sourcemap-form">
             <fieldset>
-                <legend>Photos</legend>
             </fieldset>
         </div>
         <div id="edit-video" class="sourcemap-form">
             <fieldset>
-                <legend>Video</legend>
             </fieldset>
         </div>
 

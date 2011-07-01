@@ -14,6 +14,8 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
     public $_cache = true;
     public $_cache_ttl = 72000;
 
+    protected $_api_key = 'iftmf02b';
+
     public function __construct($params=null) {
         $action = self::DEFAULT_ACTION;
         if(is_array($params)) {
@@ -35,6 +37,7 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
     }
 
     public function fetch() {
+        $this->parameters['key'] = $this->_api_key;
         $response = parent::fetch();
         if($response) {
             $response = (object)$response;

@@ -10,6 +10,7 @@ Sourcemap.Form = function(form_el) {
 
 Sourcemap.Form.prototype.init = function() {
     var fs = this.fields();
+    if(!fs._form_id) return false;
     for(var fn in fs) {
         var fel = $(fs[fn]);
         $(fel).focus(function(e){

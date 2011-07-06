@@ -15,81 +15,8 @@
     }
 }
 
-/* Detail Pane */
-#dialog.fullscreen {
-    width:100% !important; height:100% !important;
-    max-width:100% !important; max-height:100% !important;                
-}
 
-.olPopup {
-    font-size: 85%;
-    .olPopupContent {
-        background: #fff !important;
-        position:relative;
-        overflow: hidden;
-        padding: 13px;
-        .rounded(.5em);
-        .popup-title {
-            .header-font;
-            font-weight: bold;
-            padding-left: .2em;
-        }
-        .popup-address {
-            padding-left: .2em;
-        }
-        .popup-description {
-            font-size:0.8em;
-            margin: 1em 0;
-            max-width: 16em;
-            padding-left: .25em;
-            margin: 0;
-        }
-        .popup-icons {
-            float:right;
-            margin-top: .85em;
-            margin-left: .5em;
-            margin-right: .5em;
-            display:block;
-            width: auto;
-            color:#333;
-            font-size:0.8em;
-            background:#fff;
-        }
-        .popup-buttons {
-            border-top:1px solid #aaa;
-            margin-top:15px;            
-            > a {
-                margin-top: .85em;
-                margin-left: .5em;
-                margin-right: .5em;
-                display:block;
-                float: left;
-                clear: none;
-                width: auto;
-                color:#333;
-                text-align:center;
-                font-size:0.8em;
-                text-decoration:underline;
-                text-align:center;
-                background:#fff;
-                &:hover {
-                    color:#eeeeee;
-                    background-color: #444;
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
-}
-
-/* 
-@todo MARKED FOR DELETION
-
-html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--
-    background: #fff;
-    border-bottom: 1px solid #fff; 
-}
-*/
+/* Dialog */
 #dialog {
     .rounded(.5em);
     z-index: 1012;
@@ -222,7 +149,6 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         margin: 0 .5em;
         overflow:hidden;
         width: 100%; 
-        /* @todo delete position:relative;*/
         > .description {
         }
         > .block {
@@ -247,6 +173,69 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         }
     }
 }
+
+/* Popups and Openlayers */
+.olPopup {
+    font-size: 85%;
+    .olPopupContent {
+        background: #fff !important;
+        position:relative;
+        overflow: hidden;
+        padding: 13px;
+        .rounded(.5em);
+        .popup-title {
+            .header-font;
+            font-weight: bold;
+            padding-left: .2em;
+        }
+        .popup-address {
+            padding-left: .2em;
+        }
+        .popup-description {
+            font-size:0.8em;
+            margin: 1em 0;
+            max-width: 16em;
+            padding-left: .25em;
+            margin: 0;
+        }
+        .popup-icons {
+            float:right;
+            margin-top: .85em;
+            margin-left: .5em;
+            margin-right: .5em;
+            display:block;
+            width: auto;
+            color:#333;
+            font-size:0.8em;
+            background:#fff;
+        }
+        .popup-buttons {
+            border-top:1px solid #aaa;
+            margin-top:15px;            
+            > a {
+                margin-top: .85em;
+                margin-left: .5em;
+                margin-right: .5em;
+                display:block;
+                float: left;
+                clear: none;
+                width: auto;
+                color:#333;
+                text-align:center;
+                font-size:0.8em;
+                text-decoration:underline;
+                text-align:center;
+                background:#fff;
+                &:hover {
+                    color:#eeeeee;
+                    background-color: #444;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
 .olLayerGooglePoweredBy, .olLayerGoogleCopyright, .olControlAttribution {
     z-index:1001 !important;
     bottom: 0;
@@ -259,10 +248,10 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     a {
         text-decoration:underline;
         color:#999;
-    }
-    
+    }  
 }
 
+/* Map Dock */
 .sourcemap-dock {
     @dock-height: 3.25em;
     z-index: 1008;
@@ -327,30 +316,23 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
                         
                     }
                 }
-            }
-            .control.firstSpacer {
-                width:0.1em;
-                border:none;
-                height: 16px;       
-                background:none;
-            }
-            .control.secondSpacer {
-                width:5em;
-                border:none;
-                height: 16px;       
-                background:none;
+                &.firstSpacer {
+                    width:0.1em;
+                    border:none;
+                    height: 16px;       
+                    background:none;
+                }
+                &.secondSpacer {
+                    width:5em;
+                    border:none;
+                    height: 16px;       
+                    background:none;
+                }
             }
         }
     }
 
-    .sourcemap-tour-play {
-        height: 30px; width: 30px;
-        background: url("../images/embed-tour-stop-small.png") center center no-repeat;
-        cursor:pointer;
-        &.stopped {
-            background-image: url("../images/embed-tour-play-small.png");
-        }
-    }
+
 
 }
 
@@ -448,7 +430,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 #share-dialog {
     .preview-map {
         width:100%;
-        height:301px;
+        height:281px;
     }
     .embed-link {
         padding:2px 5px;
@@ -461,6 +443,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
         font-size:0.8em;
     }
 }
+
+
 #map-dialog {
     display:none;
     height:2em;

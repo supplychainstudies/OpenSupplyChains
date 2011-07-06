@@ -36,7 +36,23 @@ Sourcemap.Form.prototype.init = function() {
     $(this._form_el).find('input, select').change($.proxy(this.check, this));
 }
 
+Sourcemap.Form.prototype.toggleThrobber = function() {
+    //add "working" class to every field
+    var fs = this.fields()
+    for(var fn in fs) {
+        var fel = $(fs[fn]);
+        if (!($(fel).hasClass('working')))
+            $(fel).addClass('working');
+        else
+            $(fel).removeClass('working');
+    }
+}
+
 Sourcemap.Form.prototype.check = function() {
+
+    //todo: more intelligent queueing
+    this.toggleThrobber();
+
     var form_id = $(this._form_el).find('input[name=_form_id]').val();
     var p = 'services/validate/'+form_id;
     var data = $(this._form_el).find('input, select').serializeArray();
@@ -49,6 +65,7 @@ Sourcemap.Form.prototype.check = function() {
         "url": p, "data": serial,
         "dataType": "json", "success": $.proxy(function(data) {
             this.update(data);
+            this.toggleThrobber();
         }, this)
     });
     return this;
@@ -92,8 +109,8 @@ Sourcemap.Form.prototype.fields = function() {
     var f = this.el();
     var fields = {};
     var field_els = f.find(
-        'input[type="text"],input[type="password"],'+
-        'input[type="radio"],input[type="checkbox"],select,textarea'
+        'input[type="hidden"],input[type="text"],input[type="password"],'+
+        'input[type="radio"],input[type="checkbox"],select,textarea,'
     );
     for(var i=0; i<field_els.length; i++) {
         if($(field_els[i]).attr('name'))
@@ -189,7 +206,6 @@ Sourcemap.Form.prototype.field_status = function(field) {
 
 Sourcemap.Form.prototype.add_status_el = function(field) {
     var f = this.field_el(field);
-    console.log(f);
     if(f && !this.field_status(field)) {
         f.after('<div class="status invalid"></div>');
     }
@@ -205,10 +221,10 @@ Sourcemap.Form.prototype.rm_status_el = function(field) {
 Sourcemap.Form.prototype.field_error = function(field) {
     var f = this.field_el(field);
     if(f) {
-        if(f.next().is('div.sourcemap-form-error')) {
-            return f.next();
-        } else if(f.parent().next().is('div.sourcemap-form-error')) {
-            return f.parent(t).next();
+        if(f.prev().is('div.sourcemap-form-error')) {
+            return f.prev();
+        } else if(f.parent().prev().is('div.sourcemap-form-error')) {
+            return f.parent().prev();
         }
     }
     return null;
@@ -218,7 +234,7 @@ Sourcemap.Form.prototype.add_error_el = function(field) {
     var f = this.field_el(field);
     if(f && !this.field_error(field)) {
         var html = '<div class="sourcemap-form-error"></div>';
-        $(f).after(html);
+        $(f).parent().before(html);
     }
     return this;
 }

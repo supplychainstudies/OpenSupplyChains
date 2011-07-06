@@ -1,21 +1,26 @@
 <div class="container_16">
-    <div class="grid_8">
-        <img src="<?= $user->avatar ?>" />
-        <h1><?= HTML::chars($user->username) ?></h1>
-        <dl>
-            <dt>Last Login:</dt><dd><?= date('F j, Y', $user->last_login) ?></dd>
-        </dl>
+    <div class="grid_16">
+        <div id="user-profile">
+            <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
+            <img class="user-gravatar" src="<?= $user->avatar ?>" />            
+            <ul class="user-details">
+                <li>Last Login: <?= date('F j, Y', $user->last_login) ?><li>
+            </ul>
+            <div class="clear"></div>
+        </div>
     </div>
-    <div class="grid_8">
-        <?php if($supplychains): ?>
-        <h2>Public Maps</h2>
-        <?php foreach($supplychains as $scid => $sc): ?>
-            <div class="map-preview">
-               <?= View::factory('partial/search/result', array('result' => (object)$sc)) ?> 
-           </div>
-        <?php endforeach; ?>
+</div>
+<div class="clear"></div>
+
+<div class="container_16 search-results">
+        <?php if(isset($supplychains) && $supplychains): ?>
+            <h2><?= HTML::chars($user->username) ?>'s maps</h2>
+            <?php foreach($supplychains as $i => $sc): ?>
+                <div id="user-map-list" class="<?= $i % 2 ? " alt" : ''; ?>">
+                    <?= View::factory('partial/user/map', array('supplychain' => $sc)) ?>
+                </div>
+            <?php endforeach; ?>
         <?php else: ?>
-        <h2 class="bad-news">This user hasn't published any maps.</h2>
+
         <?php endif; ?>
-    </div>
 </div>

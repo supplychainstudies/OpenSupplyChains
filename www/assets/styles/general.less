@@ -472,7 +472,21 @@ a{
 @hover-color: #FBF7D5;
 @form-width: 18em;
 
+.sourcemap-form-styles{
+    // Mix-in for all styles universal to form boxes
+    background-color:#FFFFFF;
+    background-repeat: no-repeat;
+    background-position: 0 5px;
+    border: 1px solid #ccc;
+    width:@form-width + 3;
+    font-size: 80%;
+    color: #999999;
+    padding:3px 5px 3px 19px;
+
+}
+
 .sourcemap-form{
+    
     fieldset {
     border: 1px dotted #ccc;
     padding:10px;
@@ -484,14 +498,7 @@ a{
         line-height: @form-height;
         color: #333;
         padding: 0px 13px;
-        font-family: "PT sans narrow";
-    }
-    h1 {
-        font-size: 135%;
-        letter-spacing: -1px;
-        font-weight: normal;
-        line-height: 1.1;
-        color:#333;
+        .header-font;
     }
     label {
         width:140px;
@@ -506,126 +513,62 @@ a{
         color:#666;
         clear: both;
     }
-    .form {
-        margin:0;
-        padding:0;
-    }
-    .holder {
-        background-color:#fff;
-    }
-    .sourcemap-form-textbox {
+    div{
         width:@form-width;
         float:right;
         margin-top:3px;
         padding-left:5px;
-        .textbox {
-            background-image: url(../images/16t.png);
-            background-color:#FFFFFF;
-            background-repeat: no-repeat;
-            background-position: 0 5px;
-            width:@form-width + 3;
-            font-size: 80%;
-            color: #999999;
-            padding:3px 5px 3px 19px;
-            &.edited{
-                color: #333;
+        input{
+            .sourcemap-form-styles;
+            &.edited{ color: #333; }
+            &.working{ background-image: url(../images/throbber.gif); }
+            &.textbox { background-image: url(../images/16t.png); }
+            &.username { background-image: url(../images/16m.png); }
+            &.password { background-image: url(../images/16s.png); }
+            &.buttons {
+                background: #EEEEEE;
+                font-size:12px; 
+                font-weight:bold;
+                color: #555; 
+                padding: 6px 14px;
+                border-width: 1px solid #333;
+                text-decoration: none;
+                text-transform:uppercase;
+                &:hover{
+                    background: #eee;
+                }
             }
-            &.working{
-                background-image: url(../images/throbber.gif);
+            &:focus, &:hover{
+                background-color:@hover-color;
             }
+
         }
-    }
-    .sourcemap-form-checkbox{
+        textarea{
+            .sourcemap-form-styles;
+            background-image: url(../images/16t.png);
+            height:@form-height * 6;
+        }
+        &.sourcemap-form-checkbox{
             float:left;
             padding: 12px 0 5px;
-    }
-    .status {
-        width: 25px;
-        height: 24px;
-        float:right;
-        display:block;
-        margin-top:2px;
-        border: 1px solid #ccc;
-        background: url('../images/form-active.png') center center no-repeat;
-        &.invalid{
-            background: none; 
+        }
+        &.sourcemap-form-select {
+            float: right;
+            padding: 10px 0;
+            select{
+                width:@form-width;
+            }
+        }
+        &.sourcemap-form-error{
+            float:left;
+            font-size: 70%;
+            color: #999;
+            margin: 15px 0 0 15px;
         }
     }
-    .sourcemap-form-select {
-        float: right;
-        padding: 10px 0;
-        select{
-            width:@form-width;
-        }
-    }
-    input{
-        border: 1px solid #ccc;
-    }
-    
-    .textbox:focus, .textbox:hover,
-    .username:focus, .username:hover,
-    .password:focus, .password:hover,
-    {
-        background-color:@hover-color;
-    }
-
-    .username {
-        background-image: url(../images/16m.png);
-        background-repeat: no-repeat;
-        background-position:left;
-        background-color:#FFFFFF;
-        width:@form-width;
-        font:normal 18px Arial;
-        color: #999999;
-        padding:3px 5px 3px 19px;
-        &.edited{
-            color: #333;
-        }
-    }
-       
-    .password {
-        background-image: url(../images/16s.png);
-        background-repeat: no-repeat;
-        background-position:left;
-        background-color:#FFFFFF;
-        width:@form-width;
-        font:normal 18px Arial;
-        color: #999999;
-        padding:3px 5px 3px 19px;
-        &.edited{
-            color: #333;
-        }
-    }
-
-    .sourcemap-form-button {
-        width:@form-width;
-        float:right;
-        text-align:right;
-        height:@form-height;
-        padding:5px 0 3px;
-        clear: both;
-        margin-bottom: 10px;
-    }
-    .buttons {
-        background: #eee;
-        font-size:12px; 
-        color: #555; 
-        padding: 6px 14px;
-        border-width: 1px solid #333;
-        text-decoration: none;
-        text-transform:uppercase;
-        font-weight:bold;
-    }
-    .sourcemap-form-error{
-        float:left;
-        font-size: 70%;
-        color: #999;
-        margin: 15px 0 0 15px;
-    }
-
-    // Optional vertical style for wide/complex forms
 
     &.vertical {
+        // Optional vertical style for wide/complex forms
         label{
             width: auto;
         }
@@ -638,8 +581,6 @@ a{
         }
         .sourcemap-form-select{
             width:100%;
-        }
-        .sourcemap-form-button {
         }
     }
 }
@@ -711,7 +652,6 @@ a{
             }
         }
     }
-
     #comment-form {
         textarea {
             width:100%;

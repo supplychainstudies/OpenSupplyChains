@@ -482,11 +482,9 @@ a{
     font-size: 80%;
     color: #999999;
     padding:3px 5px 3px 19px;
-
 }
 
 .sourcemap-form{
-    
     fieldset {
     border: 1px dotted #ccc;
     padding:10px;
@@ -515,25 +513,25 @@ a{
     }
     div{
         width:@form-width;
-        float:right;
         margin-top:3px;
         padding-left:5px;
         input{
             .sourcemap-form-styles;
             &.edited{ color: #333; }
-            &.working{ background-image: url(../images/throbber.gif); }
-            &.textbox { background-image: url(../images/16t.png); }
+            &.textbox { background-image: url(../images/16t.png); &.working{ background-image: url(../images/throbber.gif); }}
             &.username { background-image: url(../images/16m.png); }
             &.password { background-image: url(../images/16s.png); }
             &.buttons {
                 background: #EEEEEE;
                 font-size:12px; 
                 font-weight:bold;
+                width: @form-width - 5;
                 color: #555; 
                 padding: 6px 14px;
                 border-width: 1px solid #333;
                 text-decoration: none;
                 text-transform:uppercase;
+                cursor: pointer;
                 &:hover{
                     background: #eee;
                 }
@@ -541,7 +539,10 @@ a{
             &:focus, &:hover{
                 background-color:@hover-color;
             }
-
+        }
+        input[disabled]{
+            color:#999;
+            cursor: auto;
         }
         textarea{
             .sourcemap-form-styles;
@@ -558,6 +559,10 @@ a{
             select{
                 width:@form-width;
             }
+        }
+        &.sourcemap-form-button {
+            float: right;
+            width: auto;
         }
         &.sourcemap-form-error{
             float:left;
@@ -632,7 +637,6 @@ a{
         padding:10px 0 0 0;
         margin:10px 0 0 0;
         border-top:1px solid #eee;
-
         .comment {
             .comment-meta {
                 .rounded(4px);

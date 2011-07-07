@@ -62,6 +62,5 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 Message::instance()->set('Correct the errors below.');
             }
         }
-
     }
 }

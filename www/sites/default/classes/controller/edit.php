@@ -1,4 +1,13 @@
 <?php
+/**
+ * Description Edit map properties page
+ * @package    Sourcemap
+ * @author     Alex Ose 
+ * @copyright  (c) Sourcemap
+ * @license    http://blog.sourcemap.org/terms-of-service
+ */
+
+
 class Controller_Edit extends Sourcemap_Controller_Map {
     public $template = 'edit';
 
@@ -14,19 +23,11 @@ class Controller_Edit extends Sourcemap_Controller_Map {
             if($current_user_id && $supplychain->user_can($current_user_id, Sourcemap::WRITE)) {
                 $supplychain = $supplychain->kitchen_sink($supplychain->id);
 
-                // create the form object and add fields
-                $form = Sourcemap_Form::factory('update')
-                    ->method('post')->action('edit/'.$supplychain_id)
-                    ->input('title', 'Title')
-                    ->input('teaser', 'Short Description')
-                    ->input('tags', 'Tags')
-                    ->textarea('description', 'Long Description')
-                    ->select('category', 'Category')
-                    ->checkbox('public', 'Publish?')
-                    ->submit('update', 'Update');
+                // Load form template
+                $form = Sourcemap_Form::load('/edit');
+                $form->action('edit')->method('post');
 
-                $form->field('category')->option(0, 'None');
-
+                // Populate fields
                 $form->field('title')
                     ->add_class('required');
                 if(isset($supplychain->attributes->title))
@@ -41,9 +42,6 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     ->add_class('tags');
                 if(isset($supplychain->attributes->tags))
                     $form->field('tags')->value($supplychain->attributes->tags);
-
-                if($supplychain->other_perms & Sourcemap::READ)
-                    $form->field('public')->value(true);
 
                 // fetch the taxonomy tree and use first level
                 $taxonomy = Sourcemap_Taxonomy::load_tree();

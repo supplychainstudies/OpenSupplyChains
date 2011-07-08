@@ -617,7 +617,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     new_feature.attributes.width = 2;
-    new_feature.attributes.color = this.options.default_feature_color;
+    new_feature.attributes.color = hop.getAttr("color", this.options.default_feature_color);
 
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     // save references to features
@@ -756,7 +756,7 @@ Sourcemap.Map.prototype.makeGreatCircleRoute = function(from, to) {
     var pdst = new OpenLayers.Projection('EPSG:4326');
     var from = from.transform(psrc, pdst);
     var to = to.transform(psrc, pdst);
-    var rt = Sourcemap.great_circle_route({"x": from.x, "y": from.y}, {"x": to.x, "y": to.y}, 6);
+    var rt = Sourcemap.great_circle_route({"x": from.x, "y": from.y}, {"x": to.x, "y": to.y}, 7);
     var rtpts = [];
     var lns = [];
     var buf = [];

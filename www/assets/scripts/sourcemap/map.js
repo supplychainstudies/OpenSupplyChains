@@ -584,7 +584,8 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     var new_arrow2 = false; // for wrapped arcs
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
-            "color": this.options.default_feature_color, "size": 7, "supplychain_instance_id": scid,
+            "color": hop.getAttr("color", this.options.default_feature_color),
+            "size": 7, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id
             

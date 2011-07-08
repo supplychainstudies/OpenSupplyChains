@@ -20,6 +20,6 @@ for db in "${databases[@]}";
 do
     dump=`echo -e "${db}" | grep "sourcemap" | awk '{print $1}'`
     if [ "${dump}" ]; then
-        pg_dump "${dump}" > "${outputdir}/${db}-${suffix}.dump.sql"
+        pg_dump "${dump}" | bzip2 > "${outputdir}/${db}-${suffix}.dump.sql.bz2"
     fi
 done;

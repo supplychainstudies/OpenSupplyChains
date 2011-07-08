@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ ! -n "${1}" ]; then
+    echo -e "\t- ** FATAL: No outdir parameter given.\n"
+    exit 1
+fi
+
+if [ ! -d "${1}" ]; then
+    echo -e "\t- ** FATAL: Output directory doesn't exist.\n"
+    exit 1
+fi
+
+outputdir="${1}"
+
+databases=(`psql -lAt | cut -d'|' -f1 -`)
+
+suffix=`date +%Y%m%d-%H%M%S`
+
+for db in "${databases[@]}"; 
+do
+    dump=`echo -e "${db}" | grep "sourcemap" | awk '{print $1}'`
+    if [ "${dump}" ]; then
+        pg_dump "${dump}" > "${outputdir}/${db}-${suffix}.dump.sql"
+    fi
+done;

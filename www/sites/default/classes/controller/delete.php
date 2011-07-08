@@ -39,7 +39,7 @@ class Controller_Delete extends Sourcemap_Controller_Map {
                             return $this->request->redirect('home');
                         } catch(Exception $e) {
                             $this->request->status = 500;
-                            Message::instance()->set('Couldn\t delete your supplychain. Please contact support.');
+                            Message::instance()->set('Couldn\'t delete your supplychain. Please contact support.');
                         }
                     } else {
                         Message::instance()->set('You don\'t seem sure.');

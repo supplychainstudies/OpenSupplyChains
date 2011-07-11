@@ -681,7 +681,7 @@ Sourcemap.Map.Base.prototype.mapUserLoc = function() {
     ))));
     var scid = null;
     for(scid in this.map.supplychains) break;
-    this.map.mapStop(user_stop, scid);
+    this.getStopLayer(scid).addFeatures(this.map.mapStop(user_stop, scid));
     if(this.tour) {
         this.tour.stop();
         var ftr = this.map.findFeaturesForStop(scid, user_stop.instance_id).stop;

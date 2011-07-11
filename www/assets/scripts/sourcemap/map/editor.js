@@ -145,9 +145,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 Sourcemap.Stop.geocode(new_stop);
                 // redraw the supplychain
                 //this.map.mapSupplychain(sc.instance_id);
-                this.map.mapStop(new_stop, sc.instance_id);
+                var f = this.map.mapStop(new_stop, sc.instance_id);
+                this.map.getStopLayer(sc.instance_id).addFeatures(f);
                 // get the new feature
-                var f = this.map.stopFeature(sc.instance_id, new_stop.instance_id)
                 // select the new feature
                 this.map.controls.select.unselectAll();
                 this.map.controls.select.select(f);
@@ -286,7 +286,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                                 new OpenLayers.Projection('EPSG:900913')
                             );
                             this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom))
-                            this.editor.map.mapStop(this.stop, this.stop.supplychain_id);
+                            this.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
                             this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
                             this.editor.map.stopFeature(this.stop).popup.panIntoView();
                             this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");

@@ -29,7 +29,7 @@ Sourcemap.Map.prototype.defaults = {
     "popup_height": 100, "animation_enabled":false,
     "draw_hops": true, "hops_as_arcs": true,
     "hops_as_bezier": false, "arrows_on_hops": true,
-    "default_feature_color": "#595959",
+    "default_feature_color": "#595959", "clustering":false,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -49,6 +49,13 @@ Sourcemap.Map.prototype.defaults = {
         "select": {
             "fillColor": "#ffffff",
             "fillOpacity": 1.0
+        },
+        "cluster": {
+            "size": 20,
+            "color": "#888888",
+            "strokeWidth": 2,
+            "strokeColor": "#333333",
+            "label": "",
         },
         "hascontent": {
             "strokeWidth": 1,
@@ -95,6 +102,7 @@ Sourcemap.Map.prototype.init = function() {
     this.mapped_features = {};
     this.stop_features = {}; // dicts of stop ftrs keyed by parent supplychain
     this.hop_features = {}; // dicts of hop ftrs keyed by parent supplychain
+    this.cluster_features = {}; // dicts of hop ftrs keyed by parent supplychain    
     this.prepareStopFeature = this.options.prep_stop ? this.options.prep_stop : false;
     this.prepareHopFeature = this.options.prep_hop ? this.options.prep_hop : false;
     this.preparePopup = this.options.prep_popup ? this.options.prep_popup : false;
@@ -290,6 +298,9 @@ Sourcemap.Map.prototype.initControls = function() {
                 "geometryTypes": ["OpenLayers.Geometry.Point", "OpenLayers.Geometry.MultiLineString"],
                 "onSelect": OpenLayers.Function.bind(
                     function(feature) {
+                        if(feature.cluster) {
+
+                        }
                         this.last_selected = feature.attributes;
                         if(this.options.popups) {
                             if(feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Point"
@@ -354,14 +365,16 @@ Sourcemap.Map.prototype.addLayer = function(label, layer) {
 
 Sourcemap.Map.prototype.addStopLayer = function(scid) {
     var sc = this.findSupplychain(scid);
+    var strategies = this.options.clustering ? [new Sourcemap.Cluster({distance: 20, threshold: 2})] : [];
     var slayer = new OpenLayers.Layer.Vector(
         "Stops - "+sc.getLabel(), {
             "styleMap": new OpenLayers.StyleMap(this.options.stop_style),
             "displayOutsideMaxExtent": false,
             "maxExtent": this.map.getMaxExtent(),
-            "wrapDateLine": false
+            "wrapDateLine": false,
+            "strategies": strategies
         }
-    );
+    );    
     this.addLayer(([scid, 'stops']).join('-'), slayer);
     return this;
 }
@@ -444,9 +457,12 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     this.hidePopups();
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
+    var featureList = [];
     for(var i=0; i<supplychain.stops.length; i++) {
-        this.mapStop(supplychain.stops[i], scid);
+        featureList.push(this.mapStop(supplychain.stops[i], scid));
     }
+    this.getStopLayer(scid).addFeatures(featureList);
+    this.getStopLayer(scid);
     if(this.options.draw_hops) {
         for(var i=0; i<supplychain.hops.length; i++) {
             this.mapHop(supplychain.hops[i], scid);
@@ -510,8 +526,8 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         if(this.preparePopup instanceof Function) this.preparePopup.apply(this, [stop, new_feature, new_popup]);
         this.stop_features[scid][stop.instance_id].popup = new_popup;
     }
-    this.getStopLayer(scid).addFeatures([new_feature]);
     this.broadcast('map:stop_mapped', this, this.findSupplychain(scid), stop, new_feature);
+    return new_feature;
 }
 
 Sourcemap.Map.prototype.eraseStop = function(scid, stid) {
@@ -827,8 +843,10 @@ Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     this.addHopLayer(scid).addStopLayer(scid);
     this.stop_features[scid] = {};
     this.hop_features[scid] = {};
+    this.cluster_features[scid] = {};   
     this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);
+    
     return this;
 }
 
@@ -871,6 +889,18 @@ Sourcemap.Map.prototype.findFeaturesForHop = function(scid, from_stid, to_stid) 
     return ftrs;
 }
 
+Sourcemap.Map.prototype.findFeaturesForCluster = function(scid, stid) {
+    var ftrs = false;
+
+    if(this.cluster_features[scid]) {
+        var sc_st_ftrs = this.cluster_features[scid];
+        if(sc_st_ftrs[stid]) {
+            ftrs = sc_st_ftrs[stid];
+        }
+    }
+    return ftrs;
+}
+
 Sourcemap.Map.prototype.getStopFeatures = function(scid) {
     var features = [];
     if(scid) {
@@ -908,6 +938,10 @@ Sourcemap.Map.prototype.redraw = function() {
 }
 
 Sourcemap.Map.prototype.showPopup = function(feature) {
+    if(feature.cluster) {
+        feature.popup.show();        
+        return this;
+    }
     var attrs = feature.attributes;
     if(attrs.supplychain_instance_id && attrs.stop_instance_id) {
         ftrs = this.findFeaturesForStop(attrs.supplychain_instance_id, attrs.stop_instance_id);
@@ -925,6 +959,9 @@ Sourcemap.Map.prototype.hidePopup = function(feature) {
         ftrs = this.findFeaturesForStop(attrs.supplychain_instance_id, attrs.stop_instance_id);
     } else if(attrs.supplychain_instance_id && attrs.hop_instance_id) {
         ftrs = this.findFeaturesForHop(attrs.supplychain_instance_id, attrs.from_stop_id, attrs.to_stop_id);
+    } else if(feature.cluster && attrs.cluster_instance_id) {
+
+         ftrs = this.findFeaturesForCluster(attrs.supplychain_instance_id, attrs.cluster_instance_id);
     }
     if(ftrs && ftrs.popup)
         ftrs.popup.hide();
@@ -963,6 +1000,71 @@ Sourcemap.Map.prototype.reselect = function() {
         }
     }
 }
+
+Sourcemap.Cluster = function(distance, threshold) {
+    OpenLayers.Strategy.Cluster.prototype.initialize.apply(this, arguments);
+    this.initialize.apply(this, arguments);    
+}
+Sourcemap.Cluster.prototype = new OpenLayers.Strategy.Cluster();
+
+Sourcemap.Cluster.prototype.createCluster = function(feature) {
+    var map = feature.popup.map;
+    var scid = feature.attributes.supplychain_instance_id;
+    var sourcemap = feature.popup.sourcemap;
+    
+    var center = feature.geometry.getBounds().getCenterLonLat();
+    var cid = "cluster-"+feature.attributes.stop_instance_id;
+    var cluster = new OpenLayers.Feature.Vector(
+        new OpenLayers.Geometry.Point(center.lon, center.lat), {
+            "count": 1, 
+            "supplychain_instance_id":scid,
+            "cluster_instance_id":cid
+        }
+    );
+
+    for (k in Sourcemap.Map.prototype.defaults.stop_style.cluster) { 
+        cluster.attributes[k] = Sourcemap.Map.prototype.defaults.stop_style.cluster[k];         
+    }
+ 
+    var puid = cid+'-popup';
+    var ll = new OpenLayers.LonLat(cluster.geometry.x, cluster.geometry.y);
+    var sz = new OpenLayers.Size(sourcemap.options.popup_width, sourcemap.options.popup_height);
+    var sc = sourcemap.findSupplychain(scid);
+    var cb = function() { 
+        sourcemap.controls.select.unselectAll(); 
+    }
+    new_popup = new Sourcemap.Popup(puid, ll, sz, "Cluster", true, cb);
+    new_popup.sourcemap = sourcemap;
+
+    // Set offset so the popup touches the border of the stop
+    cluster.attributes.size ? new_popup.OFFSET_HT = -(cluster.attributes.size) : new_popup.OFFSET_HT = -11;
+    cluster.attributes.strokeWidth ? new_popup.OFFSET_HT += -(cluster.attributes.strokeWidth) : new_popup.OFFSET_HT += -2;
+    $(new_popup.div).css({'margin-top': new_popup.OFFSET_HT });
+   
+    new_popup.map = map;
+    new_popup.feature = cluster;
+    cluster.popup = new_popup;
+    new_popup.hide();
+    
+    sourcemap.mapped_features[cid] = cluster;
+    sourcemap.cluster_features[scid][cid] = {"cluster": cluster};
+    if(new_popup) {
+        map.addPopup(new_popup);
+        // prepare popup wquivalent
+        sourcemap.cluster_features[scid][cid].popup = new_popup;        
+    }
+    cluster.cluster = [feature];
+    
+    return cluster;
+}
+Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
+    cluster.cluster.push(feature);
+    cluster.attributes.count += 1;
+}
+Sourcemap.Cluster.prototype.cluster = function(event) {
+    OpenLayers.Strategy.Cluster.prototype.cluster.apply(this, arguments);    
+}
+
 
 Sourcemap.Popup = function(id, ll, csz, chtm, clsbx, clscb) {
     OpenLayers.Popup.prototype.initialize.apply(this, arguments);

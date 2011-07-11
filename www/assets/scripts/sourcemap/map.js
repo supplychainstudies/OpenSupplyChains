@@ -1190,7 +1190,9 @@ Sourcemap.Popup.prototype.hide = function() {
 
 Sourcemap.Popup.prototype.show = function() {
     //OpenLayers.Popup.prototype.show.apply(this, arguments);
-    $(this.div).fadeIn(this.fade_in, $.proxy(function() {
+    /*$(this.div).fadeIn(this.fade_in, $.proxy(function() {
         $(this.div).find('*').fadeIn(this.fade_in);
-    }, this));
+    }, this));*/
+    $(this.div).find('*').show();
+    $(this.div).show();
 }

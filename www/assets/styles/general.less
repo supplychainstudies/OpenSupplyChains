@@ -484,11 +484,37 @@ a{
     padding:3px 5px 3px 19px;
 }
 
+
+.sourcemap-form-size(@width: 400px){
+    // Function for establishing pixel size
+    width: @width;
+    div{
+        width: @width - 60;
+        input{
+            width: @width - 60;
+        }
+    }
+}
+
+.grid_3 .sourcemap-form{ .sourcemap-form-size(160px); }
+.grid_4 .sourcemap-form{ .sourcemap-form-size(220px); }
+.grid_5 .sourcemap-form{ .sourcemap-form-size(280px); }
+.grid_6 .sourcemap-form{ .sourcemap-form-size(340px); }
+.grid_7 .sourcemap-form{ .sourcemap-form-size(400px); }
+.grid_8 .sourcemap-form{ .sourcemap-form-size(460px); }
+.grid_9 .sourcemap-form{ .sourcemap-form-size(520px); }
+.grid_10 .sourcemap-form{ .sourcemap-form-size(580px); }
+.grid_11 .sourcemap-form{ .sourcemap-form-size(640px); }
+.grid_12 .sourcemap-form{ .sourcemap-form-size(700px); }
+.grid_13 .sourcemap-form{ .sourcemap-form-size(760px); }
+.grid_14 .sourcemap-form{ .sourcemap-form-size(820px); }
+.grid_15 .sourcemap-form{ .sourcemap-form-size(880px); }
+.grid_16 .sourcemap-form{ .sourcemap-form-size(940px); }
+
 .sourcemap-form{
     fieldset {
     border: 1px dotted #ccc;
-    padding:10px;
-    margin-bottom:20px;
+    padding:10px 10px 25px 10px;
     }
     legend {
         font-size: 130%;
@@ -499,7 +525,6 @@ a{
         .header-font;
     }
     label {
-        width:140px;
         margin: 3px 2px 0 0;
         padding: 11px 0 0 6px;
         float:left;
@@ -510,7 +535,32 @@ a{
         line-height: 1.1;
         color:#666;
         clear: both;
+        &.operator{
+            margin-top: 1.8em;
+            padding: 11px 5px 5px 0;
+            clear:none;
+            width:10px;
+        }
     }
+   
+
+    div.halfwidth{
+        width:10em;
+        padding-left: 0;
+        float:left;
+        div{
+            width:auto;
+            input{
+                width:10em;
+            } 
+        }
+    }
+
+    div.result{
+        padding-top:34px;
+        color: #999;
+    }
+    
     div{
         width:@form-width;
         margin-top:3px;
@@ -560,11 +610,16 @@ a{
                 width:@form-width;
             }
         }
+        &.sourcemap-form-button-div{
+            width: auto;
+            text-align: right;
+        }
         &.sourcemap-form-button {
             float: right;
             width: auto;
         }
         &.sourcemap-form-error{
+            width: auto;
             float:left;
             font-size: 70%;
             color: #999;
@@ -572,8 +627,12 @@ a{
         }
     }
 
+/*
     &.vertical {
         // Optional vertical style for wide/complex forms
+        div{
+            width: 100%;
+        }
         label{
             width: auto;
         }
@@ -588,6 +647,7 @@ a{
             width:100%;
         }
     }
+    */
 }
 
 .sourcemap-form-compact {
@@ -614,6 +674,22 @@ a{
         padding-top:8px;
         float:left;
         color:#fff;
+    }
+}
+
+.impact-icon{
+    border-left: 1px dotted #999;
+    border-bottom: 1px dotted #999;
+    padding: 10px 0;
+    width: 60px;
+    float:left;
+    text-align:center;
+    color: #999;
+    #impact-co2{}
+    #impact-h2o{}
+    #impact-so2{}
+    &.last{
+        border-right: 1px dotted #999;
     }
 }
 

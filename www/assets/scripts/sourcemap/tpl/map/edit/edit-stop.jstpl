@@ -99,17 +99,18 @@
         
         <div id="edit-media" class="sourcemap-form">
             <fieldset>
-            <label for="flickr-setid">Flickr Setid</label>
-            <div class="sourcemap-form-textbox"> 
-                <% el = $("<input></input>").attr("type", "text").attr("name", "flickr-setid").addClass("textbox"); el[0].setAttribute("value",this.attr["flickr:setid"] || ""); %>
-                <%= $("<div></div>").append(el).html() %>
-            </div>
-            <label for="youtube-url">Youtube Url</label>
-            
-            <div class="sourcemap-form-textbox"> 
-                <% el = $("<input></input>").attr("type", "text").attr("name", "youtube-url").addClass("textbox"); el[0].setAttribute("value",this.attr["youtube:url"] || ""); %>
-                <%= $("<div></div>").append(el).html() %>
-            </div>
+
+                <label for="flickr-setid">Flickr Setid</label>
+                <div class="sourcemap-form-textbox"> 
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "flickr-setid").addClass("textbox"); el[0].setAttribute("value",this.attr["flickr-setid"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
+                <label for="youtube-url">Youtube Url</label>
+                
+                <div class="sourcemap-form-textbox"> 
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "youtube-url").addClass("textbox"); el[0].setAttribute("value",this.attr["youtube-url"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
 
             </fieldset>
         </div>

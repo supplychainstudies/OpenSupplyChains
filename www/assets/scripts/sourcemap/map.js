@@ -29,7 +29,7 @@ Sourcemap.Map.prototype.defaults = {
     "popup_height": 100, "animation_enabled":false,
     "draw_hops": true, "hops_as_arcs": true,
     "hops_as_bezier": false, "arrows_on_hops": true,
-    "default_feature_color": "#595959", "clustering":false,
+    "default_feature_color": "#595959", "clustering":true,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -185,7 +185,9 @@ Sourcemap.Map.prototype.initDock = function() {
         "icon_url": "sites/default/assets/images/dock/zoomin.png",
         "callbacks": {
             "click": function() {
+                this.controls.select.unselectAll(); 
                 this.map.zoomIn();
+                this.reselect();
             }
         }
     });
@@ -195,7 +197,9 @@ Sourcemap.Map.prototype.initDock = function() {
         "icon_url": "sites/default/assets/images/dock/zoomout.png",
         "callbacks": {
             "click": function() {
+                this.controls.select.unselectAll();
                 this.map.zoomOut();
+                this.reselect();
             }
         }
     });
@@ -318,6 +322,11 @@ Sourcemap.Map.prototype.initControls = function() {
                     function(feature) {
                         if(this.options.popups) {
                             this.hidePopup(feature);
+                            if(feature.cluster) {
+                                for(var f in feature.cluster) {
+                                    this.hidePopup(feature.cluster[f]);
+                                }
+                            }
                         }
                         this.broadcast('map:feature_unselected', this, feature); 
                     },
@@ -978,6 +987,14 @@ Sourcemap.Map.prototype.hidePopups = function() {
         for(var fi=0; fi<hfs.length; fi++) {
             if(hfs[fi].popup) hfs[fi].popup.hide();
         }
+        var cfs = this.cluster_features;
+        for(var fi=0; fi<cfs.length; fi++) {
+            if(cfs[fi].popup) cfs[fi].popup.hide();
+            
+            for(var ci=0; ci<cfs.cluster.length; ci++) {
+                if(cfs[fi].cluster[ci].popup) cfs[fi].cluster[ci].popup.hide();
+            }
+        }
     }
     return this;
 }
@@ -1033,7 +1050,8 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var cb = function() { 
         sourcemap.controls.select.unselectAll(); 
     }
-    new_popup = new Sourcemap.Popup(puid, ll, sz, "Cluster", true, cb);
+    
+    new_popup = new Sourcemap.Popup(puid, ll, sz, "", true, cb);
     new_popup.sourcemap = sourcemap;
 
     // Set offset so the popup touches the border of the stop
@@ -1054,13 +1072,43 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
         sourcemap.cluster_features[scid][cid].popup = new_popup;        
     }
     cluster.cluster = [feature];
+    this.prepClusterPopup(cluster, feature);
     
     return cluster;
 }
 Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
     cluster.cluster.push(feature);
     cluster.attributes.count += 1;
+    this.prepClusterPopup(cluster, feature);
 }
+Sourcemap.Cluster.prototype.prepClusterPopup = function(cluster, feature) {
+    var cluster_id = cluster.attributes.cluster_instance_id;
+    var chtml = $("<div id='"+cluster_id+"' class='cluster'></div>");
+    
+    for(var i in cluster.cluster) {
+        var linkcontent = cluster.cluster[i].attributes.title ?
+            cluster.cluster[i].attributes.title+" " : "";
+        linkcontent += cluster.cluster[i].attributes.address ? 
+            "("+cluster.cluster[i].attributes.address+")" : "";
+        var stop_id = cluster.cluster[i].attributes.stop_instance_id;
+        var new_citem = $("<div id='target--"+stop_id+"' class='cluster-item'><a>"+linkcontent+"</a></div>");
+        chtml.append(new_citem);        
+    }
+    chtml.prepend($("<h2>Cluster</h2>"));
+    
+    cluster.popup.setContentHTML(chtml.html());
+    $(cluster.popup.contentDiv).children(".cluster-item").click($.proxy(function(evt) {
+        var sid = $(evt.currentTarget).attr("id").split("--").pop();
+        var scid = null;
+        for(scid in this.supplychains) break;
+
+        var sftr = this.stop_features[scid][sid];
+        this.hidePopups();
+        this.showPopup(sftr.stop);
+        this.last_selected = sftr;
+    },feature.popup.sourcemap));
+}
+
 Sourcemap.Cluster.prototype.cluster = function(event) {
     OpenLayers.Strategy.Cluster.prototype.cluster.apply(this, arguments);    
 }

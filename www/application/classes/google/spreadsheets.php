@@ -20,12 +20,15 @@ class Google_Spreadsheets {
 
     public static function parse_worksheet_cells($atom) {
         $xml = simplexml_load_string($atom);
-        $rows = (int)$xml->{'gs$rowCount'};
-        $cols = (int)$xml->{'gs$colCount'};
+        $xml->registerXPathNamespace('gs', 'http://schemas.google.com/spreadsheets/2006');
+        $rows = $xml->xpath('//gs:rowCount');
+        $rows = (int)$rows[0];
+        $cols = $xml->xpath('//gs:colCount');
+        $cols = (int)$cols[0];
         $cells = array();
         for($i=0; $i<$rows; $i++) {
-            $cells[$i] = array();
-            for($j=0; $j<$cols; $j++) $cells[$i][$j] = null;
+            $cells[] = array_fill(0, $cols, null);
+            //for($j=0; $j<$cols; $j++) $cells[$i][$j] = null;
         }
         foreach($xml->entry as $cell) {
             $gs = $cell->children('gs', true);

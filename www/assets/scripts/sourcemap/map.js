@@ -29,7 +29,7 @@ Sourcemap.Map.prototype.defaults = {
     "popup_height": 100, "animation_enabled":false,
     "draw_hops": true, "hops_as_arcs": true,
     "hops_as_bezier": false, "arrows_on_hops": true,
-    "default_feature_color": "#595959", "clustering":true,
+    "default_feature_color": "#595959", "clustering": false,
     "stop_style": {
         "default": {
             "pointRadius": "${size}",

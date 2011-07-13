@@ -29,9 +29,14 @@ class Sourcemap_Import_Csv {
 
         $csv = Sourcemap_Csv::parse($csv);
         $data = array();
-        if($headers) $headers = array_shift($csv);
-        for($i=0; $i<count($headers); $i++) 
-            $headers[$i] = strtolower($headers[$i]);
+        $raw_headers = array();
+        if($headers) {
+            $raw_headers = array_shift($csv);
+            $headers = array();
+        }
+        for($i=0; $i<count($raw_headers); $i++) 
+            if(strlen(trim($raw_headers[$i])))
+                $headers[] = strtolower($raw_headers[$i]);
         foreach($csv as $ri => $row) {
             if($headers && is_array($headers)) {
                 $record = array();
@@ -98,8 +103,8 @@ class Sourcemap_Import_Csv {
                 } elseif($k == $addresscol) {
                     if($results = Sourcemap_Geocoder::geocode($v)) {
                         $result = $results[0];
-                        $lat = $result->lat;
-                        $lon = $result->lng;
+                        $lat = (float)$result->lat;
+                        $lon = (float)$result->lng;
                         if(!isset($record['placename']))
                             $new_stop['attributes']['placename'] = $result->placename;
                     } else {

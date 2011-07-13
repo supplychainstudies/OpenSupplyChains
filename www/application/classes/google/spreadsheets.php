@@ -37,7 +37,16 @@ class Google_Spreadsheets {
             $j = $gs['col'] - 1;
             $cells[$i][$j] = preg_replace('/\s+/', ' ', (string)$cell->content);
         }
-        return $cells;
+        $rows = array();
+        foreach($cells as $rowno => $row) {
+            $row_not_empty = false;
+            foreach($row as $cellno => $cell) {
+                $cell = trim($cell);
+                $row_not_empty = $row_not_empty || !empty($cell);
+            }
+            if($row_not_empty) $rows[] = $row;
+        }
+        return $rows;
     }
 
     public static function get_sheet_worksheets($oauth_acc_token, $key) {

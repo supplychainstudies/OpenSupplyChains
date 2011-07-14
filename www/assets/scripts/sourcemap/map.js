@@ -185,9 +185,7 @@ Sourcemap.Map.prototype.initDock = function() {
         "icon_url": "sites/default/assets/images/dock/zoomin.png",
         "callbacks": {
             "click": function() {
-                this.controls.select.unselectAll(); 
                 this.map.zoomIn();
-                this.reselect();
             }
         }
     });
@@ -197,9 +195,7 @@ Sourcemap.Map.prototype.initDock = function() {
         "icon_url": "sites/default/assets/images/dock/zoomout.png",
         "callbacks": {
             "click": function() {
-                this.controls.select.unselectAll();
                 this.map.zoomOut();
-                this.reselect();
             }
         }
     });
@@ -351,6 +347,17 @@ Sourcemap.Map.prototype.initControls = function() {
     $(document).one('map:layer_added', function(e, map, label, layer) {
         if(!map.controls.select)
             map.initControls();
+    });
+    
+    this.map.events.register("zoomend", this, function() { 
+        if(this.controls && this.controls["select"]) {
+             if(this.last_selected && this.last_selected.cluster_instance_id) {
+ this.hidePopup(this.cluster_features[this.last_selected.supplychain_instance_id][this.last_selected.cluster_instance_id].cluster);
+            }
+            this.controls["select"].unselectAll();
+            this.reselect();
+            
+        } 
     });
     this.broadcast('map:controls_initialized', this, ['select']);
     return this;
@@ -509,7 +516,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         var sz = new OpenLayers.Size(this.options.popup_width, this.options.popup_height);
         var sc = this.findSupplychain(scid);
         var cb = function() { 
-            this.sourcemap.controls.select.unselectAll(); 
+            try { this.sourcemap.controls.select.unselectAll(); } catch(err) {}
         }
         new_popup = new Sourcemap.Popup(puid, ll, sz, stop.getLabel(), true, cb);
         new_popup.sourcemap = this;
@@ -970,7 +977,7 @@ Sourcemap.Map.prototype.hidePopup = function(feature) {
         ftrs = this.findFeaturesForHop(attrs.supplychain_instance_id, attrs.from_stop_id, attrs.to_stop_id);
     } else if(feature.cluster && attrs.cluster_instance_id) {
 
-         ftrs = this.findFeaturesForCluster(attrs.supplychain_instance_id, attrs.cluster_instance_id);
+         ftrs = this.findFeaturesForCluster(attrs.supplychain_instance_id, attrs.cluster_instance_id).cluster;
     }
     if(ftrs && ftrs.popup)
         ftrs.popup.hide();
@@ -1110,6 +1117,7 @@ Sourcemap.Cluster.prototype.prepClusterPopup = function(cluster, feature) {
 }
 
 Sourcemap.Cluster.prototype.cluster = function(event) {
+    $("[id^='cluster-stop-']").remove();
     OpenLayers.Strategy.Cluster.prototype.cluster.apply(this, arguments);    
 }
 

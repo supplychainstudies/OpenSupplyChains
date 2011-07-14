@@ -285,8 +285,9 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                                 new OpenLayers.Projection('EPSG:4326'),
                                 new OpenLayers.Projection('EPSG:900913')
                             );
-                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom))
-                            this.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
+                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+                            var scid = this.stop.supplychain_id;
+                            this.editor.map_view.map.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
                             this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
                             this.editor.map.stopFeature(this.stop).popup.panIntoView();
                             this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
@@ -295,7 +296,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                             this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
                         }
                         this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
-                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor}));
+                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor, "attr": this.attr}));
                 } else {
                     this.ref.setAttr(k, val);
                 }

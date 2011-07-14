@@ -1,7 +1,7 @@
 <form name="edit-ref">
 
 <h2 class="edit-window-title">
-    <% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %></h2>
+    <% if(this.attr["name"]) { %><%= this.attr["name"] %><% } %></h2>
 <h3 class="edit-window-address">
     <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
 </h3>
@@ -16,9 +16,9 @@
     
         <div id="edit-description" class="sourcemap-form">        
             <fieldset>
-                <label for="title">Title</label>
+                <label for="name">Title</label>
                 <div class="sourcemap-form-textbox">
-                    <% var el = $("<input />").attr("type", "text").attr("name", "title").addClass("textbox"); el[0].setAttribute("value",this.attr["title"] || ""); %>
+                    <% var el = $("<input />").attr("type", "text").attr("name", "name").addClass("textbox"); el[0].setAttribute("value",this.attr["name"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
                 <label for="address">Move to:</label>

@@ -564,8 +564,8 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
     var base = Sourcemap.Units.to_base_unit(value, unit);
     var pot = base.value === 0 ? 0 : Math.floor((Math.log(base.value)/Math.log(10))+.000000000001);
     var new_unit = null;
-    if(base.unit == unit && pot === 0) {
-        new_unit = {"label": unit, "mult": 0};
+    if(value == 0 || pot === 0) {
+        new_unit = {"label": base.unit, "mult": 0};
     } else {
         new_unit = false;
         while(new_unit === false) {

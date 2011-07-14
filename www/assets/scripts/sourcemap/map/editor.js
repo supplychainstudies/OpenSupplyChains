@@ -167,9 +167,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function() {
             this.map.controls.select.unselectAll();
+            this.map.last_selected = null;
         }, this),
-        "onDrag": $.proxy(function(ftr, px) {
-            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
+        "onDrag": $.proxy(function(ftr, px) {            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
                 this.moveStopToFeatureLoc(ftr, false, false);
             else this.map.controls.stopdrag.cancel();
         }, this),

@@ -141,14 +141,19 @@ class Sourcemap_Import_Csv {
 
         $csv = Sourcemap_Csv::parse($csv);
 
-        if($headers) $headers = array_shift($csv);
-        for($i=0; $i<count($headers); $i++) 
-            $headers[$i] = strtolower($headers[$i]);
-        foreach($headers as $i => $h) {
-            if(is_null($fromcol) && preg_match('/^from(_?stop)?$/i', $h)) {
-                $fromcol = $h;
-            } elseif(is_null($tocol) && preg_match('/^to(_?stop)?$/i', $h)) {
-                $tocol = $h;
+        $raw_headers = array();
+        if($headers) {
+            $raw_headers = array_shift($csv);
+            $headers = array();
+            for($i=0; $i<count($raw_headers); $i++)
+                if(strlen(trim($raw_headers[$i])))
+                    $headers[] = strtolower($raw_headers[$i]);
+            foreach($headers as $i => $h) {
+                if(is_null($fromcol) && preg_match('/^from(_?stop)?$/i', $h)) {
+                    $fromcol = $h;
+                } elseif(is_null($tocol) && preg_match('/^to(_?stop)?$/i', $h)) {
+                    $tocol = $h;
+                }
             }
         }
 

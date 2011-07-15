@@ -8,9 +8,12 @@ Sourcemap.MagicWords.popup_content = {
         "link": function(lnk) {
             if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
                 return '<p class="error">Invalid YouTube link.</p>';
-            var mkup = '<iframe class="youtube-player" type="text/html"'+
-                'src="http://www.youtube.com/embed/'+(lnk.match(/((\?v=)|(v\/))(.+)$/))[4]+'?autoplay=1"'+ 
-                'frameborder="0" allowfullscreen></iframe>';
+            var m = lnk.match(/((\?v=)|(v\/))([^\/\&]+)/);
+            if(m) {
+                var mkup = '<iframe width="500" height="360" class="youtube-player" type="text/html"'+
+                    'src="http://www.youtube.com/embed/'+m[4]+'?autoplay=1"'+ 
+                    'frameborder="0" allowfullscreen></iframe>';
+            } else mkup = '';
             return mkup;
         }
     },

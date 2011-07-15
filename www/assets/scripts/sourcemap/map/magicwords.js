@@ -31,10 +31,10 @@ Sourcemap.MagicWords.popup_content = {
             var url = "http://www.flickr.com/services/rest/?jsoncallback=?";
             $.getJSON(url, {
                 "method": "flickr.photosets.getPhotos", "format": "json",
-                "api_key": this.magic.flickr.api_key, "photoset_id": setid
+                "api_key": Sourcemap.MagicWords.popup_content.flickr.api_key, "photoset_id": setid
             }, $.proxy(function(data) {
                 if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
-                    var mkup = '<object> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
+                    var mkup = '<object width="500" height="360"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
                         data.photoset.owner+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
                         data.photoset.owner+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
                         '<param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=71649"></param> '+

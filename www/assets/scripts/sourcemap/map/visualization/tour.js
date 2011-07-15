@@ -15,7 +15,9 @@ Sourcemap.MapTour.prototype.defaults = {
     "auto_init": true, "interval": 2.5, // seconds
     "wait_interval": 5, // seconds
     "tour_hops": false, "tour_stops": true,
-    "pan_easing": true
+    "pan_easing": true,
+    "play_icon_url": "sites/default/assets/images/dock/tour-play.png",
+    "stop_icon_url": "sites/default/assets/images/dock/pause.png"
 };
 
 Sourcemap.MapTour.prototype.init = function() {
@@ -31,14 +33,13 @@ Sourcemap.MapTour.prototype.init = function() {
 
 Sourcemap.MapTour.prototype.initControls = function() {
     this.map.dockAdd('tour_play', {
-        "icon_url": "sites/default/assets/images/dock/tour-play.png",
+        "icon_url": this.options.play_icon_url,
         "ordinal":4,
         "stopped": true,
         "callbacks": {
             "click": $.proxy(function() {
                 if (this.map.dock_controls.tour_play.stopped){
                     this.map.dock_controls.tour_play.stopped = false;
-                    console.log(this);
                     this.start();
                 }
                 else{
@@ -121,6 +122,7 @@ Sourcemap.MapTour.prototype.start = function() {
     this.stopped = false;
     Sourcemap.broadcast('map_tour:start', this);
     $(this.map.dock_controls.tour_play).removeClass("stopped");
+    this.map.dockControlIcon("tour_play", this.options.stop_icon_url); 
     for(var i=0; i<this.features.length; i++)
         this.map.controls.select.unselect(this.features[i]);
     this.next();
@@ -131,6 +133,7 @@ Sourcemap.MapTour.prototype.stop = function() {
     if(this.timeout) this.clearTimeout(this.timeout);
     this.stopped = true;
     $(this.map.dock_controls.tour_play).addClass("stopped");
+    this.map.dockControlIcon("tour_play", this.options.play_icon_url); 
     return this;
 }
 

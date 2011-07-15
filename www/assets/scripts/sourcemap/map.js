@@ -259,6 +259,18 @@ Sourcemap.Map.prototype.dockControlEl = function(nm) {
     return $(this.dock_content).find('.control.'+nm.replace(/\s+/, '-'));
 }
 
+Sourcemap.Map.prototype.dockControlIcon = function(nm, new_url) {
+    var el = this.dockControlEl(nm);
+    var icon = false;
+    if(el) {
+        icon = $(el).find('img');
+        icon = icon.length ? icon[0] : false;
+        if(icon && new_url)
+            $(icon).attr("src", new_url);
+    }
+    return icon;
+}
+
 Sourcemap.Map.prototype.dockPack = function() {
     var controls = [];
     for(var c in this.dock_controls) {
@@ -1117,8 +1129,11 @@ Sourcemap.Cluster.prototype.prepClusterPopup = function(cluster, feature) {
 }
 
 Sourcemap.Cluster.prototype.cluster = function(event) {
-    $("[id^='cluster-stop-']").remove();
-    OpenLayers.Strategy.Cluster.prototype.cluster.apply(this, arguments);    
+    //$("[id^='cluster-stop-']").remove();
+    var st = (new Date()).getTime();
+    OpenLayers.Strategy.Cluster.prototype.cluster.apply(this, arguments);
+    var en = (new Date()).getTime();
+    console.log(en-st);
 }
 
 

@@ -284,17 +284,24 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find('.banner-share-link').click($.proxy(function() { 
             this.showShare();
         }, this));
-        $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
-            this.favorite();
-        }, this));
-         $.ajax({"url": 'services/favorites', "type": "GET",
-                "success": $.proxy(function(resp) {
-                   for(var k in resp) {
-                       if(resp[k].id == sc.remote_id) {
-                           $(".banner-favorite-link").addClass("marked");
-                       }
-                   }                   
-                }, this)});        
+        $.ajax({"url": 'services/favorites', "type": "GET", 
+            "success": $.proxy(function(resp) {
+                for(var k in resp) {
+                    if(resp[k].id == sc.remote_id) {
+                        $(".banner-favorite-link").addClass("marked");
+                        break;
+                    }
+                }
+                // enable favorite link
+                $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
+                    this.favorite();
+                }, this));
+            }, this), 
+            "error": $.proxy(function() {
+                $(this.banner_div).find('.banner-favorite-link').text('Log In')
+                    .attr('href', '/auth/login').attr('target', '_blank');
+            }, this)
+        });    
     }
 
     Sourcemap.tpl('map/overlay/supplychain', sc, $.proxy(cb, this));

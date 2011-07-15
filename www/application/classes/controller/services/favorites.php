@@ -8,7 +8,7 @@ class Controller_Services_Favorites extends Sourcemap_Controller_Service {
     public function action_get() {
         if($user = Auth::instance()->get_user()) {
             $this->response = $user->favorites->find_all()->as_array(null, true);
-        } else return $this->_bad_request();
+        } else return $this->_forbidden('You\'re not logged in.');
     }
 
     public function action_post() {

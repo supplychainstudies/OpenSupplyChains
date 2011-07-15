@@ -12,11 +12,13 @@
             <% } %>
         </div>
         <div class="popup-icons">
-            <% for(var i=0; i<Sourcemap.MagicWords.sequence.length; i++) { %>
-                <% if(this.stop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
-                    <a href="javascript: void(0);" id="content-item-<%= i %>" class="popup-more-link <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %>">
-                         <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %>
-                    </a>
+            <% if(this.morelink) { %>
+                <% for(var i=0; i<Sourcemap.MagicWords.sequence.length; i++) { %>
+                    <% if(this.stop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
+                        <a href="javascript: void(0);" id="content-item-<%= i %>" class="popup-more-link <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %>">
+                             <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %>
+                        </a>
+                    <% } %>
                 <% } %>
             <% } %>
         </div>

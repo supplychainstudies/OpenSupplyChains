@@ -28,7 +28,7 @@ Sourcemap.Map.Base.prototype.defaults = {
 }
 
 Sourcemap.Map.Base.prototype.init = function() {
-    this.magic_word_sequence = this.options.magic_word_sequence;
+    this.magic_word_sequence = this.options.magic_word_sequence || Sourcemap.MagicWords.sequence;
     this.magic_word_cur_idx = this.options.magic_word_cur_idx;
     this.magic = this.options.magic || Sourcemap.MagicWords.popup_content;
     this.initMap();
@@ -57,8 +57,9 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             var hasmagic = false;
             for(var ski=0; ski<this.magic_word_sequence.length; ski++) {
                 var sk = this.magic_word_sequence[ski];
-                if(ref.getAttr(sk, false))
+                if(ref.getAttr(sk, false)) {
                     hasmagic = true;
+                }
             }
             tscope.morelink = hasmagic;
             Sourcemap.template('map/'+t.join('-'), $.proxy(function(p, tx, th) {

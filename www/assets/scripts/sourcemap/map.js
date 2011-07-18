@@ -496,8 +496,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
             this.mapHop(supplychain.hops[i], scid);
         }
     }
-    //if(supplychain.stops.length)
-    //    this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
+    if(supplychain.stops.length)
+        this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
     this.broadcast('map:supplychain_mapped', this, supplychain);
     if(reselect) this.reselect();
 }

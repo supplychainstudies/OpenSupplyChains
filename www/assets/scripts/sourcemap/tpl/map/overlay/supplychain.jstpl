@@ -5,7 +5,8 @@
                <%= this.getAttr("title", this.getAttr("name", "A Sourcemap")) %>
             </div>
             <div class="map-description">
-                <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&nbsp;-&nbsp;<%= (new Date(this.created*1000))+"" %>.
+                <% var d = new Date(this.created*1000); %>
+                <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&nbsp;-&nbsp;<%= d.toDateString() %>.
             </div>
             <div class="map-status">
             </div>

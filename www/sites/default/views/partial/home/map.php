@@ -34,7 +34,8 @@
             <?php endif; ?>
         </div>
         <div class="grid_4 map-controls">
-            <a href="edit/<?= $supplychain->id ?>">Edit</a> | <a href="delete/<?= $supplychain->id ?>">Delete</a>
+            <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
+            <a href="edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>"><?= $public ? "Unpublish" : "Publish" ?></a> | <a href="edit/<?= $supplychain->id ?>">Edit</a> | <a href="delete/<?= $supplychain->id ?>">Delete</a>
         </div>
         <div class="clear"></div>
 <?php endif; ?>

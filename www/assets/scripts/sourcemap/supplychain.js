@@ -10,6 +10,8 @@ Sourcemap.Supplychain = function() {
     this.broadcast('supplychain:instantiated', this);
 }
 
+Sourcemap.Supplychain.TEASER_LEN = 80;
+
 Sourcemap.Supplychain.prototype.getAttr = function(k, d) {
     if(arguments.length == 1) {
         return this.attributes[k];

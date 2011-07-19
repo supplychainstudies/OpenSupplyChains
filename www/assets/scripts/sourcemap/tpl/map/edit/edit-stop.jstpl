@@ -26,12 +26,7 @@
                     <% var el = $("<input />").attr("type", "text").attr("name", "address").addClass("textbox"); el[0].setAttribute("value",this.attr["address"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
-                <label for="teaser">Short Description</label>
-                <div class="sourcemap-form-textbox">
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "teaser").addClass("textbox"); el[0].setAttribute("value",this.attr["teaser"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-                <label for="discription">Long Description</label>
+                <label for="description">Description</label>
                 <div class="sourcemap-form-textbox">
                     <%= $("<div></div>").append(
                             $("<textarea></textarea>").attr("name", "description").addClass("textbox").html(this.attr["description"] || "")

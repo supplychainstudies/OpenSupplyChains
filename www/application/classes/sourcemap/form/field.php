@@ -94,6 +94,12 @@ class Sourcemap_Form_Field {
                 if(isset($arr['default'])) {
                     $new_field->value($arr['default']);
                 }
+                if(isset($arr['css_class'])) {
+                    if(is_array($arr['css_class'])) {
+                        foreach($arr['css_class'] as $i => $css_cls)
+                            $new_field->add_class($css_cls);
+                    }
+                }
                 break;
         }
         return $new_field;
@@ -116,6 +122,9 @@ class Sourcemap_Form_Field {
                 break;
             case self::HIDDEN:
                 $cls = 'Sourcemap_Form_Field_Hidden';
+                break;
+            case self::TEXTAREA:
+                $cls = 'Sourcemap_Form_Field_Textarea';
                 break;
             case self::TEXT:
             case self::INPUT:

@@ -30,6 +30,7 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
         $this->parameters['offset'] = $this->offset;
         if(isset($this->parameters['q']))
             $this->parameters['name'] = $this->parameters['q'];
+        $this->headers['Referer'] = Url::site('', true);
     }
 
     public function get_url() {

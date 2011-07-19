@@ -294,7 +294,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
                     }
                 }
                 // enable favorite link
-                $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
+                $(this.banner_div).find('.banner-favorite-link').text('Favorite').click($.proxy(function() { 
                     this.favorite();
                 }, this));
             }, this), 

@@ -167,9 +167,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function() {
             this.map.controls.select.unselectAll();
-            this.map.last_selected = null;
         }, this),
-        "onDrag": $.proxy(function(ftr, px) {            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
+        "onDrag": $.proxy(function(ftr, px) {
+            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
                 this.moveStopToFeatureLoc(ftr, false, false);
             else this.map.controls.stopdrag.cancel();
         }, this),
@@ -262,6 +262,19 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
             this.params = {"name": ''};
             this.editor.showCatalog(this);
         }, this));
+        // load impact calculator
+        $("#edit-footprint input").keyup($.proxy(function(e){
+            // update calculation
+            var quantity = $('#edit-footprint').find('input[name="quantity"]').val();
+            var unit = $('#edit-footprint').find('input[name="unit"]').val();
+            var factor = $('#edit-footprint').find('input[name="factor"]').val();
+          
+            if (quantity && unit && factor){
+                var output = quantity * factor;
+                $('#edit-footprint').find('.result').text(output + " " + unit + " CO2e");
+            }
+
+        }, this));
         $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
             // save updated attributes
             var f = $(e.target).parents('form');
@@ -285,9 +298,8 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                                 new OpenLayers.Projection('EPSG:4326'),
                                 new OpenLayers.Projection('EPSG:900913')
                             );
-                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
-                            var scid = this.stop.supplychain_id;
-                            this.editor.map_view.map.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
+                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom))
+                            this.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
                             this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
                             this.editor.map.stopFeature(this.stop).popup.panIntoView();
                             this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
@@ -296,7 +308,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                             this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
                         }
                         this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
-                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor, "attr": this.attr}));
+                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor}));
                 } else {
                     this.ref.setAttr(k, val);
                 }

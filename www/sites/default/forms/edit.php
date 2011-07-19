@@ -19,13 +19,12 @@ return array(
             'type' => 'text',
             'label' => 'Title'
         ),
-        'teaser' => array(
-            'type' => 'text',
-            'label' => 'Short Description'
-        ),
         'description' => array(
-            'type' => 'text',
-            'label' => 'Long Description'
+            'type' => 'textarea',
+            'label' => 'Description',
+            'css_class' => array(
+                'preview'
+            )
         ),
         'tags' => array(
             'type' => 'text',
@@ -50,10 +49,6 @@ return array(
     'rules' => array(
         'title' => array(
             array('not_empty')
-        ),
-        'teaser' => array(
-            array('not_empty'),
-            array('min_length', array(8))
         ),
         'category' => array(
             array('in_array', array($valid_cats))

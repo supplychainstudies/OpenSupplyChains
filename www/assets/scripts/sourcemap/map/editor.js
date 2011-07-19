@@ -255,6 +255,14 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
     }
     Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
         this.editor.map_view.showDialog(th, true);
+        $(this.editor.map_view.dialog).find('textarea[name="description"]').keyup(function() {
+            if(!$(this).next().is('div.description-preview-label')) {
+                $(this).after('<div class="description-preview-label">Preview of the Teaser for Your Map:</div>');
+                $(this).next().after('<div class="description-preview"></div>');
+            }
+            // preview truncated teaser
+            $(this).next().next().text($(this).val().substr(0, 80));
+        });
         $("#editor-tabs").tabs();
         // load catalog button
         $(this.editor.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {

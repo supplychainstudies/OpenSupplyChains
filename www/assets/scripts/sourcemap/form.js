@@ -289,7 +289,7 @@ $(document).ready(function() {
         (new Sourcemap.Form(this));
     });
 
-    $('.sourcemap-form input').each( function(){
+    $('.sourcemap-form input, .sourcemap-form textarea, .sourcemap-form select').each( function(){
         $(this).focus(function(e){
             if (this.defaultValue == this.value)
                 this.value = "";
@@ -301,6 +301,15 @@ $(document).ready(function() {
         $(this).keydown(function(e){
             $(this).addClass('edited');
         });
+    });
+
+    // description preview...
+    $('.sourcemap-form textarea[name="description"].preview').keyup(function() {
+        if(!$(this).next().is('div.description-preview-label')) {
+            $(this).after('<div class="description-preview-label">Preview of the Teaser for Your Map:</div>');
+            $(this).next().after('<div class="description-preview"></div>');
+        }
+        $(this).next().next().text($(this).val().substr(0, 80));
     });
 
 });

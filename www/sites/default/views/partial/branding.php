@@ -1,13 +1,13 @@
 <div id="masthead" class="container_16">
-    <div class="grid_4">
-        <h1 id="site-title">Sourcemap</h1>
-        <a href="">        
-            <img src="/assets/images/logo.png" alt="sourcemap" />
-        </a>
-    </div>
-    <div id="header" class="grid_12">
-        <ul class="nav">
-            <li class="first">
+    <div id="header" class="grid_16">
+        <div id="logo">
+            <a name="home" href="">        
+                <h1 id="site-title">Sourcemap</h1>
+                <img src="/assets/images/logo.png" alt="sourcemap" />
+            </a>
+        </div>
+        <ul id="navigation">
+            <li>
                 <a href="browse">Browse</a>            
             </li>
             <li>
@@ -23,15 +23,12 @@
         </ul>
         <form method="post" action="/search/">
             <fieldset>
-                <button onclick="('masthead-search').submit(); return false;" id="search-button">
-                    <span>Search</span>
-                </button>
-                <label>
-                    <input id="search" name="q" type="search" results="0" />
-                </label>
+                <div id="search">
+                    <input name="q" placeholder="Search" results="0" />
+                </div>
             </fieldset>
         </form>
-        <div id="livesearch"></div>
-    </div> <!-- #header -->
+        <div id="search-results"></div>
+    </div>
 </div> <!-- #masthead -->
 

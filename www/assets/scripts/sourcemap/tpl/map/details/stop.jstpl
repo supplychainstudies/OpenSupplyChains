@@ -21,6 +21,7 @@
 <% if(this.magic_word === "vimeo:link" && this.stop.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.popup_content.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>
 <% if(this.magic_word === "flickr:setid" && this.stop.getAttr("flickr:setid", false)) {  %>
 <div id="flickr-photoset-<%= this.stop.getAttr("flickr:setid") %>">
+<%= console.log(Sourcemap.MagicWords.popup_content) %>
 <%= Sourcemap.MagicWords.popup_content.flickr.setid.call(this.embed, this.stop.getAttr("flickr:setid")) %>
 </div>
 <% } %>

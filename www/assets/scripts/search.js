@@ -12,7 +12,7 @@
 jQuery.fn.liveSearch = function (conf) {
     var config = jQuery.extend({
         url:            '/services/search/', 
-        id:             'livesearch', 
+        id:             'search-results', 
         duration:       400, 
         typeDelay:      200,
         loadingClass:   'loading', 

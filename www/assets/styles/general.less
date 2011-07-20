@@ -12,7 +12,7 @@ body {
     font-size:1em;
     line-height:1em;
     margin:0 auto;
-    background: #fff;
+    background: #fff url(../images/background.png) repeat-x;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -66,72 +66,47 @@ a{
     height: auto !important;
     height: 100%;
     margin: 0 auto -50px;
-    font-size:1.2em;
 }
 
 /* BRANDING & MASTHEAD 
  * -------------------------------------------------------------- */
 
 #masthead {
-    padding-top: .5em;
-
-    font-size:95%;
-    line-height: 12px;
-    height: 72px;
-
-    #site-title {
-        display:none;
+    margin-top: 58px;
+    height: 100px;
+    #logo{
+        float:left;
+        h1{display:none;}
     }
-    #header{
-        margin-top: 24px;
-        ul.nav{
-            font-size:0.8em;
-            float:right;
-            list-style:none;
-            margin-top: 1px;
-            li{
-                float:left;
-                text-align: right;
-                margin: 2px 0 0 1em;
-                &.first{ margin: 2px 0 0 40px; }
-                a {
-                    text-transform: lowercase;
-                }
-            }
+    #navigation{
+        float:right;
+        list-style:none;
+        margin-top: 16px;
+        li{
+            font-size: 20px;
+            font-weight: bold;
+            float:left;
+            text-align: right;
+            margin: 0 15px;
+            a {text-decoration: underline;}
         }
     }
-    fieldset{ 
-        vertical-align: middle; 
-        margin-top: 3px;
-        border: 1px solid #000;
-        height: 18px;
-        font: normal 12px arial,helvetica,sans-serif;
-        overflow:hidden;
-        button{
-            float:right;
-            color: #aaa;
-            border:0;
-            border-left: 1px solid #000;
-            text-transform: lowercase;
-            background-color: #fff;
-            background-image: -moz-linear-gradient(top,white,#EFEFEF);
-            background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
-            margin: 0;
-            vertical-align:middle;
-            height: 18px;
-        }
-        label{
-            display:block;
-            overflow:hidden;
-        }
-        input#search{
+    #search{
+        background: url(../images/shadow.png) top repeat-x; 
+        border: 1px solid #c9c9c9;
+        float:right;
+        margin-top: 10px;
+        .rounded;
+        input{
+            width: 264px;
+            padding: 10px 10px 10px 36px;
             border: 0;
-            width: 100%;
-            outline:none;
+            outline: none;
+            background: url(../images/search.png) 12px center no-repeat; 
             -webkit-appearance: none;
         }
     }
-    #livesearch{
+    #search-results{
         .header-font;
         border: 1px solid #333;
         background: #fff;

@@ -11,7 +11,7 @@
             <div class="map-status">
             </div>
             <div class="map-share right">
-                <a class="banner-favorite-link" href="javascript:void(0);"></a> | <a class="banner-share-link" href="javascript: void(0);">Share</a>
+                <a class="banner-favorite-link" href="javascript:void(0);">Favorite</a> | <a class="banner-share-link" href="javascript: void(0);">Share</a>
             </div>
         </div>
     </div>

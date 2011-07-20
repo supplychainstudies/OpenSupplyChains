@@ -6,8 +6,8 @@
 
 <div class="spacer"></div>
 
-<div class="container_12">
-    <div id="site-description" class="grid_8">
+<div class="container_16">
+    <div id="site-description" class="grid_12">
         <h1 id="site-tagline">Where things come from.</h1>
         <p id="site-blurb">We believe that people have the right to know where things come from, what they're made of, and how they affect the environment. Using freely available data, Sourcemap helps you understand these complex interactions at a glance.</p>  
     </div>

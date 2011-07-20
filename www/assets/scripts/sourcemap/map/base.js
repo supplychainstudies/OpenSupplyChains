@@ -28,7 +28,7 @@ Sourcemap.Map.Base.prototype.defaults = {
 }
 
 Sourcemap.Map.Base.prototype.init = function() {
-    this.magic_word_sequence = this.options.magic_word_sequence || Sourcemap.MagicWords.sequence;
+    this.magic_word_sequence = this.options.magic_word_sequence;
     this.magic_word_cur_idx = this.options.magic_word_cur_idx;
     this.magic = this.options.magic || Sourcemap.MagicWords.popup_content;
     this.initMap();
@@ -57,9 +57,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             var hasmagic = false;
             for(var ski=0; ski<this.magic_word_sequence.length; ski++) {
                 var sk = this.magic_word_sequence[ski];
-                if(ref.getAttr(sk, false)) {
+                if(ref.getAttr(sk, false))
                     hasmagic = true;
-                }
             }
             tscope.morelink = hasmagic;
             Sourcemap.template('map/'+t.join('-'), $.proxy(function(p, tx, th) {
@@ -70,6 +69,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                    
                     var clicked_idx = parseInt(evt.target.id.split('-').pop());
                     var idx = -1;
+                    console.log(clicked_idx);
                     for(var i=0; i<this.base.magic_word_sequence.length; i++) {
                         if(clicked_idx === i) {
                             idx = i;
@@ -285,24 +285,17 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find('.banner-share-link').click($.proxy(function() { 
             this.showShare();
         }, this));
-        $.ajax({"url": 'services/favorites', "type": "GET", 
-            "success": $.proxy(function(resp) {
-                for(var k in resp) {
-                    if(resp[k].id == sc.remote_id) {
-                        $(".banner-favorite-link").addClass("marked");
-                        break;
-                    }
-                }
-                // enable favorite link
-                $(this.banner_div).find('.banner-favorite-link').text('Favorite').click($.proxy(function() { 
-                    this.favorite();
-                }, this));
-            }, this), 
-            "error": $.proxy(function() {
-                $(this.banner_div).find('.banner-favorite-link').text('Log In')
-                    .attr('href', '/auth/login').attr('target', '_blank');
-            }, this)
-        });    
+        $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
+            this.favorite();
+        }, this));
+         $.ajax({"url": 'services/favorites', "type": "GET",
+                "success": $.proxy(function(resp) {
+                   for(var k in resp) {
+                       if(resp[k].id == sc.remote_id) {
+                           $(".banner-favorite-link").addClass("marked");
+                       }
+                   }                   
+                }, this)});        
     }
 
     Sourcemap.tpl('map/overlay/supplychain', sc, $.proxy(cb, this));

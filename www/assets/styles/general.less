@@ -21,9 +21,18 @@ h1,h2,h3,h4,h5,h6{
     font-weight: normal;
     line-height:1.4em;
 }
-h1 { font-size: 2.5em; }
-h2 { font-size: 1.3em; border-bottom: 1px solid #ccc;}
-a { text-decoration:none;}
+
+h1 { 
+    font-size: 2.5em; 
+}
+
+h2 { 
+    font-size: 1.3em; 
+}
+
+a { 
+    text-decoration:none;
+}
 
 p{ 
     font-size: .8em; 
@@ -33,8 +42,6 @@ p{
 ul{
     list-style: square;
     margin-left: 1em;
-    font-size: .8em; 
-    line-height: 1.4em;
 }
 
 img a:hover{
@@ -54,8 +61,6 @@ a{
     }
 }
 
-/* ----
-*/
 /* Sticks the footer to the bottom of the page */
 #footer, .push {
     height: 50px;
@@ -78,24 +83,34 @@ a{
         float:left;
         h1{display:none;}
     }
+    #navigation,#search{
+        margin-top: 10px;
+    }
     #navigation{
         float:right;
         list-style:none;
-        margin-top: 16px;
         li{
             font-size: 20px;
             font-weight: bold;
             float:left;
-            text-align: right;
-            margin: 0 15px;
-            a {text-decoration: underline;}
+            text-align: center;
+            margin: 12px 15px;
+            a {
+                text-decoration: underline;
+                &.existing-login{
+                    font-size: 50%;
+                }
+            }
+            &.register{
+                margin: 0 15px;
+                a { text-decoration: none; }
+            }
         }
     }
     #search{
         background: url(../images/shadow.png) top repeat-x; 
         border: 1px solid #c9c9c9;
         float:right;
-        margin-top: 10px;
         .rounded;
         input{
             width: 264px;
@@ -106,8 +121,8 @@ a{
             -webkit-appearance: none;
         }
     }
+
     #search-results{
-        .header-font;
         border: 1px solid #333;
         background: #fff;
         z-index: 999;
@@ -199,14 +214,18 @@ a{
     #featured-slider {
         .featured-item {
             .featured-content {
+                position: relative;
                 .featured-preview-map {
                     float:left;
-                    width:620px;
-                    max-height:340px;
+                    width:710px;
+                    max-height:320px;
                 }
                 .featured-description {
-                    width: 314px;
-                    float:right;
+                    height: 280px; width: 410px;
+                    top: 20px; right: 0;
+                    position:absolute;
+                    background: #3088b9;
+                    color: #fff;
                     .featured-title {
                         padding-left:35px;
                         font-size: 2em;
@@ -236,88 +255,37 @@ a{
     }
 }
 
-
-#site-description {
-    #site-tagline { margin-top:0; }
-    #site-blurb {
-        font-size:0.8em;    
-        line-height:1.4em;
+.preview-map-item{
+    float:left;
+    .preview-map {
+        padding: 4px;
+        background: #fff;
+        border: 1px solid #d9d9d9;
+        .rounded(3px);
+        &:hover {
+            border-color:#bbb;   
+        }
     }
-}
-
-#popular-maps {
-    .preview-map-item {
-        .preview-badge {
-            .preview-map {
-                border: 1px solid #7e7e7e;
-                &:hover {
-                 border-color:#000;   
-                }
-            }
-        }
-        .preview-title {
-            .body-font;
-            line-height:1.5em;
-            margin-bottom:0;
-        }
-        .preview-author {
-            .body-font;
-            margin-top: 0;
-            font-size:0.8em;
+    .preview-title {
+        .body-font;
+        line-height:1em;
+        margin-bottom:0;
+    }
+    .preview-author {
+        .body-font;
+        margin-top: 0;
+        font-size:0.6em;
+        color:#888;
+        a {
             color:#888;
-            a {
-                color:#888;
-                text-decoration:underline;
-            }
-        }
-        .preview-teaser {
-            .body-font;
-            margin-top: 0;
-            font-size:0.8em;
-        }       
-    }
-}
-#recent-maps {
-    .preview-map-section {
-        margin-bottom:1.5em;
-        .preview-map-item {
-            font-size:0.8em;
-            .preview-badge {
-                .preview-map {
-                    border: 1px solid #7e7e7e;
-                    &:hover {
-                     border-color:#000;   
-                    }
-                }
-            }
-            .preview-title {
-                .body-font;
-                line-height:1em;
-                margin-bottom:0;
-            }
-            .preview-author {
-                .body-font;
-                margin-top: 0;
-                font-size:0.6em;
-                color:#888;
-                a {
-                    color:#888;
-                    text-decoration:underline;
-                }
-            }
-            .preview-teaser {
-                .body-font;
-                margin-top: 0;
-                font-size:0.8em;
-            }       
+            text-decoration:underline;
         }
     }
-}
-
-.preview-map-section{
-    a:visited{
-        color: #44295a;
-    }
+    .preview-teaser {
+        .body-font;
+        margin-top: 0;
+        font-size:0.8em;
+    }       
 }
 
 #category-list {
@@ -924,20 +892,17 @@ img{
 }
 
 .button {
-    .body-font;
     padding: .5em 1em;
-    color: #333;
-    font-size: .8em;
-    background: #fff;
-    text-decoration: none;
     border: 1px solid #666; 
+    .gradient(#246587,#50a3ce);
     .rounded(4px);
-    position: relative;
-    cursor: pointer;
-    a:hover{
+    .box_shadow();
+    a{
+        color:#f7f7f7;
         text-decoration: none;
     }
 }
+
 .button:hover { background-color: #eaeaea; color: #333; }
 
 .small{
@@ -946,16 +911,9 @@ img{
 
 .aside {
     text-align: center;
-    background-color: #D9D9D9;
-    background-image: -moz-linear-gradient(center bottom,#D9D9D9 0%,#F0F0F0 40%);
-    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#D9D9D9),color-stop(0.4,#F0F0F0));
-
-    padding: 1em 2em;
     .rounded(8px);
     .box_shadow(0, 1px, 2px);       
-    margin: 2em 1em 0 1em;
 }
-
 
 .status-messages {
     font-size: 1.4em;
@@ -998,10 +956,6 @@ img{
     border:1px solid #eee;
 }
 
-.clear{
-    clear:both;
-}
-
 .spacer{
     clear: both;
     height: 1em;
@@ -1026,6 +980,7 @@ img{
 }
 
 .news{
+    background: url("../images/news_background.jpg") top center no-repeat;
     h5 {
         .body-font;
         font-size:0.8em;

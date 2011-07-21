@@ -1,9 +1,10 @@
-<div id="popular-maps" class="container_16">
+<div id="popular-maps">
 <?php if(isset($supplychains) && $supplychains): ?>
+    <?php $c = 0; ?>
     <?php foreach($supplychains as $i => $item):?>
-        <div class="preview-map-item medium grid_4">
+        <div class="preview-map-item medium">
             <div class="preview-badge">
-            <a href="view/<?php print $item->id; ?>"><img class="preview-map small" src="static/<?= $item->id ?>.s.png" alt="" /></a>
+            <a href="view/<?php print $item->id; ?>"><img class="preview-map small" src="static/<?= $item->id ?>.m.png" alt="" /></a>
             </div>
             <h3 class="preview-title">
                 <a href="view/<?= $item->id; ?>">
@@ -19,9 +20,11 @@
             <?= date("F j, Y", $item->created) ?></h4>
             <?php if(isset($item->teaser)): ?><p class="preview-teaser"><?= HTML::chars($item->teaser) ?></p><?php endif; ?>
         </div>
+        <?php //limit to the first two ?>
+        <?php if (++$c == 2) break; ?>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="preview-map-item medium grid_4">
+    <div class="preview-map-item medium">
         --
     </div>
 <?php endif; ?>

@@ -29,9 +29,9 @@ class Sourcemap_Map_Static {
     public static $ckeyfmt = "static-map-%010d-%s-png";
 
     public static $image_sizes = array(
-        'l' => array(1000, 600),
-        'm' => array(730, 400),
-        's' => array(293, 165),
+        'l' => array(710, 320),
+        'm' => array(220, 128),
+        's' => array(160, 98),
         't' => array(160, 105)
     );
 

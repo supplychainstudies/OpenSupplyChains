@@ -117,18 +117,6 @@ div.olControlMousePosition {
     float:left;font-size:1.2em;
 }
 
-.olPopupContent {
-    padding:5px;
-    overflow: auto;
-}    
-
-.olPopupCloseBox{
-    background: url("img/close.gif") no-repeat;
-    cursor: pointer;
-    top: .3em;
-    right: .3em;
-}
-
 .olControlNavToolbar { 
     width:0px;
     height:0px;
@@ -226,11 +214,6 @@ div.olControlMousePosition {
     top: 42px;
     left: 0px;
     background-position: 0px 32px;
-}
-
-.olFramedCloudPopupContent {
-    padding: 5px;
-    overflow: auto;
 }
 
 .olControlNoSelect {

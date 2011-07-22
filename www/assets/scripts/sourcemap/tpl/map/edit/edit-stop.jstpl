@@ -1,10 +1,17 @@
 <form name="edit-ref">
 
+<ul id="edit-actions">
+    <li class="connect-button">Connect</li>
+    <li class="delete-button">Delete</li>
+</ul>
+
 <h2 class="edit-window-title">
     <% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %></h2>
 <h3 class="edit-window-address">
     <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
 </h3>
+
+
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>

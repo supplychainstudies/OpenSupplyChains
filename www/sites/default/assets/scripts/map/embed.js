@@ -7,7 +7,6 @@ $(document).ready(function() {
         var embed = Sourcemap.embed_instance;
         embed.user_loc = Sourcemap.embed_params.iploc ? Sourcemap.embed_params.iploc[0] : false;
         if(embed.options.locate_user) {
-            if(embed.tour) embed.tour.stop();
             embed.showLocationDialog();
         }
     });

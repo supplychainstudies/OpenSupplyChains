@@ -3,8 +3,7 @@ return array(
     'packages' => array(
         'organicvalley-embed' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap/supplychain/graph.js',
-                'assets/scripts/sourcemap/map/visualization/tour.js',
+                'assets/scripts/sourcemap/supplychain/graph.js'
             ),
             'requires' => array(
                 'sourcemap-template', 'sourcemap-map'

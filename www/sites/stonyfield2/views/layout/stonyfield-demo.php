@@ -177,7 +177,6 @@ $(document).ready(function() {
             }
         }
         Sourcemap.template('stop_details', function(p, txt, thtml) {
-            Sourcemap.map_tour.stop();
             $(Sourcemap.map_dialog).html(thtml).dialog("open");
         }, Sourcemap.map_instance.supplychains[scid].findStop(st));
     }
@@ -201,24 +200,15 @@ $(document).ready(function() {
         // back off a little
         map.map.zoomOut();
 
-        // set up tour
-        Sourcemap.map_tour = new Sourcemap.MapTour(map, {"features": features, "interval": 4, "wait_interval": 0});
 
         // set up details dialog
         var d_el = $('<div id="dialog"></div>');
         $(document.body).append(d_el);
         $(d_el).dialog({"width": 600, "height": 600, "zIndex": 3000, "close": function(evt, ui) {
                 $(Sourcemap.map_dialog).html('');
-                Sourcemap.map_tour.wait();
                 }}).dialog("close");
         Sourcemap.map_dialog = d_el;
 
-        // pause tour on click anywhere on map
-        $(Sourcemap.map_instance.map.div).mouseup(function() {
-            for(var i=0; i<Sourcemap.map_tour.features; i++)
-                Sourcemap.map_instance.controls.select.unselect(Sourcemap.map_tour.features[i]);
-            Sourcemap.map_tour.stop();
-        });
     });
 });
 */

@@ -6,12 +6,39 @@
 
 <div class="spacer"></div>
 
-<div class="container_16">
-    <div id="site-description" class="grid_9">
+<div class="container">
+    <div id="sidebar">
+        <div class="container">
+            <h2>Popular Sourcemaps</h2>
+        </div>
+        <hr />
+        <div class="container">
+            <div class="preview-map-section">
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent1)) ?>
+            </div>
+        </div>
+             
+        <div class="spacer clear"></div>
+
+        <div class="container">
+            <h2>Recent Sourcemaps</h2>
+        </div>
+        <hr />
+        <div class="container">
+            <div class="preview-map-section">
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent1)) ?>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div id="body-content">
         <h1 id="site-tagline">Where things come from.</h1>
         <p id="site-blurb">We believe that people have the right to know where things come from, what they're made of, and how they affect the environment. Using freely available data, Sourcemap helps you understand these complex interactions at a glance.</p>  
-        
-        <h2 class="section">Featured Sourcemap</h2>
+
+        <div class="spacer"></div>
+
+        <h2 class="section-title highlighted">Featured Sourcemaps</h2>
         <hr />
         <?= View::factory('partial/thumbs/featured', array('supplychains' => $popular)) ?>
         
@@ -29,38 +56,9 @@
                         </p>
                     </li>
                     <?php endforeach; ?>
-                    <div class="clear"></div>
                 </ul>
             </div>
         <?php endif; ?>
-    </div>
-    <div class="grid_1"></div>
-    <div class="aside grid_6">
-        <h2>Popular Sourcemaps</h2>
-        <div class="preview-map-section">
-            <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent1)) ?>
-        </div>
-        <div class="preview-map-section">
-            <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent2)) ?>
-        </div>
-        <div class="preview-map-section">
-            <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent3)) ?>
-        </div>
-
-        <!--
-            <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
-                <p>Welcome back, <?= HTML::chars($current_user->username) ?>!</p>
-                <br/>
-                <a href="/home" class="small">Your dashboard</a>&nbsp;|&nbsp;<a href="auth/logout" class="small">Log out</a>
-            <?php else:  // Otherwise, this ?>
-                <div class="button"><a href="/register">Register</a></div>
-                <br/>
-                <p class="small">(Have an account? <a href="/auth">Log in.</a>)</p>
-            <?php endif; ?>
-        </div>
-        -->
-
-        <div class="clear" />
     </div>
 </div>
 

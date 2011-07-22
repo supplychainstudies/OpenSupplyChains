@@ -24,9 +24,5 @@
         <?php if (++$c == 2) break; ?>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="preview-map-item medium">
-        --
-    </div>
 <?php endif; ?>
 </div>
-<div class="clear"></div>

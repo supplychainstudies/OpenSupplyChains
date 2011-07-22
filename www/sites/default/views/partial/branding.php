@@ -1,5 +1,5 @@
-<div id="masthead" class="container_16">
-    <div id="header" class="grid_16">
+<div id="masthead" class="container">
+    <div id="header">
         <div id="logo">
             <a name="home" href="">        
                 <h1 id="site-title">Sourcemap</h1>

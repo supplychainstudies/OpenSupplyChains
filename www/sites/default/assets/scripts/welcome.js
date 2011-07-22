@@ -4,8 +4,8 @@ $(function () {
         delay: 5000,
         easing: 'easeInOutExpo',
         hashTags: false,
-        width: '940px',
-        height: '356px',
+        width: '1040px',
+        height: '322px',
         onInitialized : function(){      // Random styling of buttons 
             var minSize = 18;
             var maxSize = 27;
@@ -14,21 +14,14 @@ $(function () {
                 return (Math.round(Math.random())-0.5); 
             }
 
-            var classes = ['white', 'white', 'white'];
-            classes.sort( randOrd );
-            $(".anythingControls li a").each(function(i){
-                var size = Math.floor(Math.random() * (maxSize - minSize + 1) + minSize);
-                var opacity = Math.random() * .3 + .7;
-                $(this).addClass(classes[i]).css({
-                    'height': size,
-                    'width': size,
-                    'border-radius': (size + 2) / 2,
-                    '-moz-border-radius': (size + 2) / 2,
-                    '-webkit-border-radius': (size + 2) / 2,
-                    'padding': 0,
-                    'text-indent': '-999em',
-               });
-            })
+            // Code that adds a floating description box
+            $('.anythingWindow').append('<div id="featured-slider-description"><h1>Yeah</h1></div>');
+            $('#featured-slider-description').empty();
+            $('#featured-description-0').contents().clone().appendTo($('#featured-slider-description'));
         },
+        onSlideComplete : function(slider) {
+            $('#featured-slider-description').empty();
+            $('#featured-description-' + (slider.currentPage - 1)).contents().clone().appendTo($('#featured-slider-description'));
+        }
     });
 });

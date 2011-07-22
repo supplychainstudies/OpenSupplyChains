@@ -223,7 +223,18 @@ Sourcemap.MapTour.prototype.getCurrentStop = function() {
     }
     return st;
 }
+Sourcemap.MapTour.prototype.getDefaultStrategy = function(sc, map) {
 
+    var features = [];
+
+    var g = new Sourcemap.Supplychain.Graph(sc);
+    var order = g.depthFirstOrder(true); // upstream
+    order = order.concat(g.islands());
+    for(var i=0; i<order.length; i++)
+        features.push(map.mapped_features[order[i]]);
+        
+    return features
+}
 Sourcemap.MapTour.prototype.getCurrentHop = function() {
     var h = false;
     var f = this.getCurrentFeature();

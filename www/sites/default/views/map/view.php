@@ -1,5 +1,7 @@
-<div id="map">
-    <div id="sourcemap-map-view" style="width: 100%; height: 100%; background-color: #ddd;"></div>
+<div class="container_16">
+    <div id="map">
+        <div id="sourcemap-map-view"></div>
+    </div>
 </div>
 <div class="spacer"></div>
 <div class="container_16">

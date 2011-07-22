@@ -115,47 +115,6 @@ Sourcemap.Map.Embed.prototype.init = function() {
 Sourcemap.Map.Embed.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id, {
         "tileswitcher": this.options.tileswitcher,
-        "prep_popup": $.proxy(function(ref, ftr, pop) {
-            var t = ['popup'];
-            var tscope = {"popup": pop, "feature": ftr, 'embed': this};
-            if(ref instanceof Sourcemap.Stop) {
-                t.push('stop');
-                tscope.stop = ref;
-            } else if(ref instanceof Sourcemap.Hop) {
-                t.push('hop');
-                tscope.hop = ref;
-            }
-
-            // determine if this stop has relevant content
-            var hasmagic = false;
-            for(var ski=0; ski<this.magic_word_sequence.length; ski++) {
-                var sk = this.magic_word_sequence[ski];
-                if(ref.getAttr(sk, false))
-                    hasmagic = true;
-            }
-            tscope.morelink = hasmagic;
-            Sourcemap.template('embed/'+t.join('-'), $.proxy(function(p, tx, th) {
-                $(this.popup.contentDiv).html(th);
-                $(this.popup.contentDiv).find('.popup-more-link').click($.proxy(function() {
-                    if(this.stop) { 
-                        this.embed.showStopDetails(
-                            this.stop.instance_id, 
-                            this.feature.attributes.supplychain_instance_id, 
-                            this.embed.magic_word_sequence_idx
-                        );
-                    } else if(this.hop) {
-                        this.embed.showHopDetails(
-                            this.hop.instance_id, 
-                            this.feature.attributes.supplychain_instance_id, 
-                            this.embed.magic_word_sequence_idx
-                        );
-                    }
-                }, this));
-                //this.popup.contentDiv.appendChild(this.popup.getCloseBox());
-                this.popup.updateSize();
-                this.popup.updatePosition();
-            }, tscope), tscope, null, this.options.tpl_base_path);
-        }, this),
         // callback for Sourcemap.Map to decorate a stop feature
         "prep_stop": $.proxy(function(stop, ftr) {
             // todo: magic words for size (other than "size")?
@@ -249,34 +208,11 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
     Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
         if(!this.map || this.map !== map) return;
         if(this.options.banner) this.initBanner();
-        if(this.options.tour) {
-            this.initTour();
-        } else {
-            this.tour = false;
-        }
         if(this.options.watermark) {
             this.watermark = $('<div id="watermark"></div>');
             $(this.map.map.div).append(this.watermark);
         }
     }, this));
-    // embed activity fades 
-    $("html").mouseenter(function() {
-        if($(".sourcemap-tour-control-panel").length >=1) {        
-            $(".sourcemap-tour-control-panel")
-                .fadeIn("fast");
-        }
-    });
-    $("html").mousemove(function() {
-        if($(".sourcemap-tour-control-panel").length>=1) {
-            $(".sourcemap-tour-control-panel")
-            .fadeIn("fast");
-            $("html").unbind("mousemove");
-        }
-    });
-    $("html").mouseleave(function() {
-        $(".sourcemap-tour-control-panel")
-            .fadeOut("fast");
-    });
     
     $(window).resize($.proxy(function () { 
         var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
@@ -341,29 +277,6 @@ Sourcemap.Map.Embed.prototype.initEvents = function() {
     }, this);
 }
 
-Sourcemap.Map.Embed.prototype.initTour = function() {
-    var strategy = this.options.tour_order_strategy;
-    var features = false;
-    switch(strategy) {
-        default:
-            features = [];
-            for(var k in this.map.supplychains) {
-                var sc = this.map.supplychains[k];
-                var g = new Sourcemap.Supplychain.Graph(this.map.supplychains[k]);
-                var order = g.depthFirstOrder(true); // upstream
-                order = order.concat(g.islands());
-                for(var i=0; i<order.length; i++)
-                    features.push(this.map.mapped_features[order[i]]);
-            }
-            break;
-    }
-    this.tour = new Sourcemap.MapTour(this.map, {
-        "features": features, "wait_interval": this.options.tour_start_delay,
-        "interval": this.options.tour_interval
-    });
-    return this;
-}
-
 Sourcemap.Map.Embed.prototype.initBanner = function(sc) {
     this.banner_div = $('<div id="embed-banner"></div>');
     $(this.map.map.div).append(this.banner_div);
@@ -408,7 +321,6 @@ Sourcemap.Map.Embed.prototype.initDialog = function() {
             if($(this.dialog).data("state")) {
                 this.hideDialog();
             }
-            this.tour.stop();//.wait();
         },
         "scope": this 
     });
@@ -440,9 +352,7 @@ Sourcemap.Map.Embed.prototype.showDialog = function(mkup, no_controls) {
         $(window).resize();
         
         var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
-        $(this.dialog).fadeIn(fade, function() {}).data("state", 1);
-        
-        this.tour.stop();
+        $(this.dialog).fadeIn(fade, function() {}).data("state", 1);        
     }
 }
 
@@ -459,15 +369,6 @@ Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
    // make sure the target magic word index is valid
       
     var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-    // sync tour
-    var tftrs = this.tour.features;
-    for(var tfi=0; tfi< tftrs.length; tfi++) {
-        var tfattrs = tftrs[tfi].attributes;
-        if(tfattrs.stop_instance_id && tfattrs.stop_instance_id == stid) {
-            this.tour.ftr_index = tfi;
-            break;
-        }
-    }
 
     // load stop details template and show in embed detail pane
     var sc = this.map.supplychains[scid];
@@ -517,16 +418,6 @@ Sourcemap.Map.Embed.prototype.showStopDetails = function(stid, scid, seq_idx) {
 Sourcemap.Map.Embed.prototype.showHopDetails = function(hid, scid) {
    // make sure the target magic word index is valid
     var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-    
-    // sync tour
-    var tftrs = this.tour.features;
-    for(var tfi=0; tfi< tftrs.length; tfi++) {
-        var tfattrs = tftrs[tfi].attributes;
-        if(tfattrs.hop_instance_id && tfattrs.hop_instance_id == hid) {
-            this.tour.ftr_index = tfi;
-            break;
-        }
-    }
 
     // load hop details template and show in embed detail pane
     var sc = this.map.supplychains[scid];
@@ -573,106 +464,10 @@ Sourcemap.Map.Embed.prototype.showHopDetails = function(hid, scid) {
     );
 }
 
-Sourcemap.Map.Embed.prototype.dialogNext = function() {
-    if($(this.dialog).data("state") === -1) return;
-    var nxt_seq_idx = this.magic_word_sequence_cur_idx >= 0 && this.magic_word_sequence_cur_idx < this.magic_word_sequence.length - 1 ?
-        this.magic_word_sequence_cur_idx + 1 : -1;
-    if(nxt_seq_idx < 0) {
-        this.tour.next();
-        nxt_seq_idx = 0;
-    }
-    this.magic_word_sequence_cur_idx = nxt_seq_idx;
-    var cftr = this.tour.getCurrentFeature();
-    if(!cftr) {
-        if(this.tour.features.length) {
-            cftr = this.tour.features[0];
-            this.tour.ftr_index = 0;
-        } else {
-            return;
-        }
-    }
-    var scid = cftr.attributes.supplychain_instance_id;
-    var stop, hop;
-    if(stop = this.tour.getCurrentStop()) {
-        var magic_word = false;
-         while(!magic_word && nxt_seq_idx < this.magic_word_sequence.length) {
-            magic_word = this.magic_word_sequence[nxt_seq_idx];
-            if(magic_word && stop.getAttr(magic_word, false) == false) {
-                magic_word = false;
-            }
-            if(!magic_word) nxt_seq_idx++;
-        };
-        if(!magic_word) {
-            this.magic_word_sequence_cur_idx = -1;
-            return this.dialogNext();
-        }
-        this.magic_word_sequence_cur_idx = nxt_seq_idx;
-        this.showStopDetails(stop.instance_id, scid, this.magic_word_sequence_cur_idx); 
-    } else if(hop = this.tour.getCurrentHop()) {
-        var magic_word = false;
-         while(!magic_word && nxt_seq_idx < this.magic_word_sequence.length) {
-            magic_word = this.magic_word_sequence[nxt_seq_idx];
-            if(magic_word && stop.getAttr(magic_word, false) == false) {
-                magic_word = false;
-            }
-            if(!magic_word) nxt_seq_idx++;
-        };
-        if(!magic_word) {
-            this.magic_word_sequence_cur_idx = -1;
-            return this.dialogNext();
-        }
-        this.magic_word_sequence_cur_idx = nxt_seq_idx;
-        this.showHopDetails(hop.instance_id, scid, this.magic_word_sequence_cur_idx);
-    } else {
-        throw new Error('Unexpected feature...not a stop or a hop.');
-    }
-}
-
-Sourcemap.Map.Embed.prototype.dialogPrev = function() {
-    if($(this.dialog).data("state") === -1) return;
-    var prv_seq_idx = this.magic_word_sequence_cur_idx >= 0 ? this.magic_word_sequence_cur_idx - 1 : 0;
-    if(prv_seq_idx < 0) {
-        this.tour.prev();
-        prv_seq_idx = this.magic_word_sequence.length;
-    }
-    this.magic_word_sequence_cur_idx = prv_seq_idx;
-    var cftr = this.tour.getCurrentFeature();
-    if(!cftr) {
-        if(this.tour.features.length) {
-            cftr = this.tour.features[this.tour.features.length-1];
-            this.tour.ftr_index = this.tour.features.length-1;
-        } else {
-            return;
-        }
-    }
-    var scid = cftr.attributes.supplychain_instance_id;
-    var stop, hop;
-    if(stop = this.tour.getCurrentStop()) {
-        var magic_word = false;
-         while(!magic_word && prv_seq_idx >= 0) {
-            magic_word = this.magic_word_sequence[prv_seq_idx];
-            if(magic_word && stop.getAttr(magic_word, false) == false)
-                magic_word = false;
-            if(!magic_word) prv_seq_idx--;
-        };
-        if(!magic_word) {
-            this.magic_word_sequence_cur_idx = 0;
-            return this.dialogPrev();
-        }
-        this.magic_word_sequence_cur_idx = prv_seq_idx;
-        this.showStopDetails(stop.instance_id, scid, this.magic_word_sequence_cur_idx); 
-    } else if(hop = this.tour.getCurrentHop()) {
-        this.showHopDetails(hop.instance_id, scid, this.magic_word_sequence_cur_idx);
-    } else {
-        throw new Error('Unexpected feature...not a stop or a hop.');
-    }
-}
-
 Sourcemap.Map.Embed.prototype.dialogClose = function() {
     if($(this.dialog).data("state")) {
         this.hideDialog();
     }
-    this.tour.stop();//.wait();
 }
 
 Sourcemap.Map.Embed.prototype.showLocationDialog = function(msg) {
@@ -736,17 +531,6 @@ Sourcemap.Map.Embed.prototype.mapUserLoc = function() {
     var scid = null;
     for(scid in this.map.supplychains) break;
     this.map.mapStop(user_stop, scid);
-    if(this.tour) {
-        this.tour.stop();
-        var ftr = this.map.findFeaturesForStop(scid, user_stop.instance_id).stop;
-        var g = new Sourcemap.Supplychain.Graph(this.map.supplychains[scid]);
-        var order = g.fromClosestLeafOrder(user_stop);
-        if(!order.length) order = g.islands();
-        this.tour.features = this.tour.getFeatures(order);
-        this.tour.features.splice(0, 0, ftr);
-        this.map.map.zoomIn();
-        this.map.supplychains[scid].stops.push(user_stop);
-        this.tour.start();
-    }
+  
     return this;
 }

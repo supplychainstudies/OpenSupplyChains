@@ -38,6 +38,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
     Sourcemap.listen('supplychain-updated', function(evt, sc) {
         var succ = $.proxy(function() {
             this.map_view.updateStatus("Saved...", "good-news");
+            this.map_view.hideDialog();
+            
         }, this);
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
@@ -56,7 +58,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     }, this);
 
     // listen for select events, for connect-to, etc.
-    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+    Sourcemap.listen('map:feature_clickoutselected', $.proxy(function(evt, map, ftr) {
         if(this.connect_from) {
             // connect!
             var fromstid = this.connect_from.attributes.stop_instance_id;
@@ -71,7 +73,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             this.connect_from = false;
             Sourcemap.broadcast('supplychain-updated', sc);
             this.map.controls.select.unselectAll();
-            this.map.controls.select.select(this.map.hopFeature(new_hop));
+            //this.map.controls.select.select(this.map.hopFeature(new_hop));
         } else {
             // pass 
         }
@@ -83,36 +85,15 @@ Sourcemap.Map.Editor.prototype.init = function() {
         this.connect_from = false;
     }, this));
 
-    // decorate prep_popup
-    Sourcemap.listen('popup-initialized', $.proxy(function(evt, p, ref) {
-        
-        // todo: make popup buttons part of the popup class?
+    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        // @todo HOP
+        if(ftr.attributes.stop_instance_id) {
+            var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
 
-        // add edit button
-        $(p.contentDiv).find('.popup-wrapper .popup-buttons').append(
-            '<a class="popup-edit-link" href="javascript: void(0);">Edit</a>'
-        );
+            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
 
-        if(ref instanceof Sourcemap.Stop) {
-            // add connect button
-            $(p.contentDiv).find('.popup-wrapper .popup-buttons').append(
-                '<a class="popup-connect-link" href="javascript: void(0);">Connect</a>'
-            );
+            this.showEdit(ftr);
         }
-
-        // bind event to edit link
-        $(p.contentDiv).find('.popup-edit-link').click($.proxy(function(e) {
-            this.editor.showEdit(ref);
-        }, {"ref": ref, "editor": this}));
-
-        // bind click event to connect button
-        $(p.contentDiv).find('.popup-connect-link').click($.proxy(function(e) {
-            this.feature.popup.hide();
-            this.feature.renderIntent = "connecting";
-            this.editor.map.getStopLayer(this.feature.attributes.supplychain_instance_id).drawFeature(this.feature);
-            this.editor.connect_from = this.feature;
-        }, {"ref": ref, "editor": this, "feature": p.feature}));
-
     }, this));
 
     this.map.dockAdd('addstop', {
@@ -127,9 +108,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                         new OpenLayers.Geometry.Point(this.map.map.center.lon, this.map.map.center.lat)
                     )
                 );
-                attributes = {
-                    "title": "New Stop"
-                };
+                attributes = {};
                 // make a new stop
                 var new_stop = new Sourcemap.Stop(
                     geometry, attributes
@@ -143,14 +122,13 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 // add a stop to the supplychain object
                 sc.addStop(new_stop);
                 Sourcemap.Stop.geocode(new_stop);
+                
                 // redraw the supplychain
-                //this.map.mapSupplychain(sc.instance_id);
-                var f = this.map.mapStop(new_stop, sc.instance_id);
-                this.map.getStopLayer(sc.instance_id).addFeatures(f);
-                // get the new feature
-                // select the new feature
-                this.map.controls.select.unselectAll();
-                this.map.controls.select.select(f);
+                this.map.mapSupplychain(sc.instance_id);                
+                this.map.controls["select"].unselectAll(); 
+
+ this.map.controls["select"].select(this.map.stop_features[sc.instance_id][new_stop.instance_id].stop);
+
             }, this)
         }
     });
@@ -167,14 +145,13 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function() {
             this.map.controls.select.unselectAll();
+            this.map.last_selected = null;
         }, this),
-        "onDrag": $.proxy(function(ftr, px) {
-            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
+        "onDrag": $.proxy(function(ftr, px) {            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
                 this.moveStopToFeatureLoc(ftr, false, false);
             else this.map.controls.stopdrag.cancel();
         }, this),
         "onComplete": $.proxy(function(ftr, px) {
-            ftr.popup.updatePosition();
             if(ftr.attributes.stop_instance_id) {
                 this.editor.moveStopToFeatureLoc(ftr, true, true);
                 this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
@@ -200,8 +177,6 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
     var st = this.map.findSupplychain(scid).findStop(stid);
     st.geometry = (new OpenLayers.Format.WKT()).write(ftr);
     var ll = new OpenLayers.LonLat(ftr.geometry.x, ftr.geometry.y)
-    ftr.popup.lonlat = ll;
-    ftr.popup.updatePosition();
     ll = ll.clone();
     ll.transform(new OpenLayers.Projection('EPSG:900913'), new OpenLayers.Projection('EPSG:4326'));
     if(geocode) {
@@ -246,7 +221,8 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
     this.map.mapSupplychain(sc.instance_id);
 }
 
-Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
+Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
+    var ref = ftr.attributes.ref;
     var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
 
     var attr = attr ? Sourcemap.deep_clone(attr) : {};
@@ -255,14 +231,6 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
     }
     Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
         this.editor.map_view.showDialog(th, true);
-        $(this.editor.map_view.dialog).find('textarea[name="description"]').keyup(function() {
-            if(!$(this).next().is('div.description-preview-label')) {
-                $(this).after('<div class="description-preview-label">Preview of the Teaser for Your Map:</div>');
-                $(this).next().after('<div class="description-preview"></div>');
-            }
-            // preview truncated teaser
-            $(this).next().next().text($(this).val().substr(0, 80));
-        });
         $("#editor-tabs").tabs();
         // load catalog button
         $(this.editor.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
@@ -270,19 +238,25 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
             this.params = {"name": ''};
             this.editor.showCatalog(this);
         }, this));
-        // load impact calculator
-        $("#edit-footprint input").keyup($.proxy(function(e){
-            // update calculation
-            var quantity = $('#edit-footprint').find('input[name="quantity"]').val();
-            var unit = $('#edit-footprint').find('input[name="unit"]').val();
-            var factor = $('#edit-footprint').find('input[name="factor"]').val();
-          
-            if (quantity && unit && factor){
-                var output = quantity * factor;
-                $('#edit-footprint').find('.result').text(output + " " + unit + " CO2e");
-            }
+        
+    // bind click event to connect button
+    $(this.editor.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
 
-        }, this));
+        this.editor.map_view.hideDialog();
+        this.feature.renderIntent = "connecting";
+        this.editor.map.getStopLayer(this.feature.attributes.supplychain_instance_id).drawFeature(this.feature);
+        this.editor.connect_from = this.feature;
+    }, {"ref": ref, "editor": this.editor, "feature": ftr}));
+    
+    // delete button
+    $(this.editor.map_view.dialog).find('.delete-button').click($.proxy(function(e) {
+        var supplychain = this.editor.map.findSupplychain(ref.supplychain_id);
+        if(reftype == "stop") {
+            alert("deleting");
+            //supplychain.removeStop(ref.instance_id);
+            this.editor.map_view.hideDialog();
+        }
+    }, {"ref": ref, "editor": this.editor, "feature": ftr}));    
         $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
             // save updated attributes
             var f = $(e.target).parents('form');
@@ -306,17 +280,19 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ref, attr) {
                                 new OpenLayers.Projection('EPSG:4326'),
                                 new OpenLayers.Projection('EPSG:900913')
                             );
-                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom))
-                            this.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
+                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+                            var scid = this.stop.supplychain_id;
+                            this.editor.map_view.map.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
                             this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
-                            this.editor.map.stopFeature(this.stop).popup.panIntoView();
                             this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
                         } else {
                             $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
                             this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
                         }
+                        this.ref.setAttr(k, val);
+                        
                         this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
-                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor}));
+                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor, "attr": this.attr}));
                 } else {
                     this.ref.setAttr(k, val);
                 }

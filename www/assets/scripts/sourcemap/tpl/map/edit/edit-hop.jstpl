@@ -1,29 +1,24 @@
 <form name="edit-ref">
 
 <h2 class="edit-window-title">
-<% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %> - <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
-</h2>
+    <% if(this.attr["name"]) { %><%= this.attr["name"] %><% } %></h2>
+<h3 class="edit-window-address">
+    <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
+</h3>
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>
 		<li><a href="#edit-footprint">Footprint</a></li>
-		<li><a href="#edit-photos">Photos</a></li>
-		<li><a href="#edit-video">Video</a></li>		
+		<li><a href="#edit-media">Media</a></li>
 	</ul>
     <div class="load-catalog-button">Import from Footprinted.org</div>
     <div class="clear"></div>
     
         <div id="edit-description" class="sourcemap-form">        
             <fieldset>
-                <legend>Description</legend>
-                <label for="title">Title</label>
+                <label for="name">Title</label>
                 <div class="sourcemap-form-textbox">
-                    <% var el = $("<input />").attr("type", "text").attr("name", "title").addClass("textbox"); el[0].setAttribute("value",this.attr["title"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-                <label for="address">Move to:</label>
-                <div class="sourcemap-form-textbox">
-                    <% var el = $("<input />").attr("type", "text").attr("name", "address").addClass("textbox"); el[0].setAttribute("value",this.attr["address"] || ""); %>
+                    <% var el = $("<input />").attr("type", "text").attr("name", "name").addClass("textbox"); el[0].setAttribute("value",this.attr["name"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
                 <label for="teaser">Short Description</label>
@@ -40,48 +35,83 @@
                 </div>
             </fieldset>
         </div>
-        <div id="edit-footprint" class="sourcemap-form">
-            <fieldset>
-                <legend>Footprint</legend>
+        <div id="edit-footprint">
+            <div class="sourcemap-form">
+                <fieldset>
+                    
+                    <label class="operator">&nbsp;</label>
+           
+                    <div class="halfwidth">
+                        <label for="co2e">Quantity</label>
+                        <div class="sourcemap-form-textbox">
+                            <% el = $("<input></input>").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.attr["weight"] || ""); %>
+                            <%= $("<div></div>").append(el).html() %>
+                        </div>
+                    </div>
+
+                    <label class="operator">x</label>
+
+                    <div class="halfwidth">
+                        <label for="co2e">Unit</label>
+                        <div class="sourcemap-form-textbox">
+                            <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
+                            <%= $("<div></div>").append(el).html() %>
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+
+                    <label class="operator">x</label>
+                    
+                    <div class="halfwidth">
+                        <label for="unit">Impact Factor</label>
+                        <div class="sourcemap-form-textbox">
+                            <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
+                            <%= $("<div></div>").append(el).html() %>
+                        </div>
+                    </div>
+
+                    <label class="operator">=</label>
+                   
+                    <div class="halfwidth">
+                        <div class="result">0 kg C02e</div>
+                    </div>
+
+                    <!--
+                    <label for="water">Water</label>
+                    <div class="sourcemap-form-textbox"> 
+                        <% el = $("<input></input>").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.attr["water"] || ""); %>
+                        <%= $("<div></div>").append(el).html() %>
+                    </div>
+                    -->
+                </fieldset>
+            </div>
+
+            <div id="impact-co2" class="impact-icon">CO2</div>
+            <div id="impact-h2o" class="impact-icon">H2O</div>
+            <div id="impact-so2" class="impact-icon last">SO2</div>
+        </div>
         
-                <label for="co2e">Weight in Kg</label>
-                <div class="sourcemap-form-textbox">
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.attr["weight"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
+        <div id="edit-media" class="sourcemap-form">
+            <fieldset>
 
-                <label for="co2e">CO2e</label>
-                <div class="sourcemap-form-textbox">
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-
-                <label for="unit">Unit</label>
-                <div class="sourcemap-form-textbox">
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-
-                <label for="water">Water</label>
+                <label for="flickr:setid">Flickr Setid</label>
                 <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.attr["water"] || ""); %>
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "flickr:setid").addClass("textbox"); el[0].setAttribute("value",this.attr["flickr:setid"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
-            </fieldset>                
-        </div>
-        
-        <div id="edit-photos" class="sourcemap-form">
-            <fieldset>
-                <legend>Photos</legend>
-            </fieldset>
-        </div>
-        <div id="edit-video" class="sourcemap-form">
-            <fieldset>
-                <legend>Video</legend>
+                <label for="youtube:url">Youtube Url</label>
+                
+                <div class="sourcemap-form-textbox"> 
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "youtube:link").addClass("textbox"); el[0].setAttribute("value",this.attr["youtube:link"] || ""); %>
+                    <%= $("<div></div>").append(el).html() %>
+                </div>
+
             </fieldset>
         </div>
 
 </div>
+<div class="clear"></div>
 <div class="sourcemap-form">
     <div class="sourcemap-form-button-div"> 
         <input type="button" name="edit-save" class="edit-save buttons" value="Save" />

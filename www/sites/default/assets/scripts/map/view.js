@@ -6,7 +6,6 @@ $(document).ready(function() {
         var view = Sourcemap.view_instance;
         view.user_loc = Sourcemap.view_params.iploc ? Sourcemap.view_params.iploc[0] : false;
         if(view.options.locate_user) {
-            if(view.tour) view.tour.stop();
             view.showLocationDialog();
         }
     });

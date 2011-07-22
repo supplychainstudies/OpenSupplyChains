@@ -1,16 +1,16 @@
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item): ?>
-        <div class="preview-map-item grid-3">
+        <div class="preview-map-item">
             <div class="preview-badge">
             <a href="view/<?php print $item->id; ?>">
-                <img class="preview-map small" src="static/<?php print $item->id; ?>.t.png" alt="" />
+                <img class="preview-map small" src="static/<?php print $item->id; ?>.s.png" alt="" />
             </a>
             </div>
-            <h4 class="preview-title">
+            <h3 class="preview-title">
                 <a href="view/<?php print $item->id; ?>">
                 <?= isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap" ?>
                 </a>
-            </h4>
+            </h3>
             <h4>
                 <div class="preview-author">
                     By <a href="user/<?php $item->owner->id; ?>">

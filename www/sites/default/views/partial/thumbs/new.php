@@ -6,13 +6,13 @@ if ($data):
     $i = 0;
     foreach($results as $item):
         ?>
-        <div class="preview-map-item grid-3">
+        <div class="preview-map-item">
             <div class="preview-badge">
             <a href="/map/view/<?php print $item->id; ?>">
                 <img class="preview-map small" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
             </a>
             </div>
-            <h4 class="preview-title">
+            <h3 class="preview-title">
                 <a href="/map/view/<?php print $item->id; ?>">
                 <?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?>
                 </a>

@@ -1,5 +1,5 @@
-<h2 id="detail-title"><%= _S.htesc(this.stop.getAttr("title", "Stop")) %></h2>
-<% if(this.stop.attributes.placename != undefined) { %><h3 id="detail-placename"><span class="placename"><%= this.stop.attributes.placename %></span></h3><% } %>
+<h2 id="detail-title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 20, true) %>
+<% if(this.stop.attributes.placename != undefined) { %><span class="placename"><%= _S.ttrunc(_S.htesc(this.stop.attributes.placename), 30, true) %></span><% } %></h2>
 
 <% if(this.magic_word === "description") { %>
     <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>

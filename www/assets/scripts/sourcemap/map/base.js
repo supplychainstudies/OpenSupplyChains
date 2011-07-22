@@ -281,17 +281,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
     $(this.dialog).data("state", -1); // loading
     //"default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
     
-    // Set Colors
-    $(this.dialog).attr("class","");
-    if(stop.attributes.color == "#35a297") {
-      $(this.dialog).addClass("cyan");
-    }
-    else if(stop.attributes.color == "#b01560") {
-      $(this.dialog).addClass("magenta");
-    }
-    else if(stop.attributes.color == "#e2a919") {
-      $(this.dialog).addClass("yellow");
-    }
     // load template and render
     // todo: make this intelligible
     Sourcemap.template('map/details/stop', function(p, tx, th) {

@@ -19,7 +19,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         );
 
         $this->layout->styles = $this->default_styles;
-        $this->layout->styles[] = 'sites/default/assets/styles/slider.css';
+        $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
         
         $this->layout->page_title = 'Welcome to Sourcemap.';
         $recent1 = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 3));

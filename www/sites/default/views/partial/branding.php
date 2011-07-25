@@ -13,10 +13,14 @@
             <li>
                 <a href="create">Create</a>
             </li>
+            <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
+            <li>
+                <a href="/home">Dashboard</a>
+                <br />
+                <a class="existing-login" href="auth/logout">Log out</a>
+            </li>
+            <?php else:  // Otherwise, this ?>
             <li class="register">
-                <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
-                    <a href="/home">Dashboard</a>&nbsp;|&nbsp;<a href="auth/logout">Log out</a></span>
-                <?php else:  // Otherwise, this ?>
                 <div class="button">
                     <a href="/register">Register</a> 
                 </div>

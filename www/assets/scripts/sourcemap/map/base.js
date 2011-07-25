@@ -69,10 +69,10 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 
     // add filter controls to dock
     this.map.dockAdd('weight', {
-        "ordinal": 6,
         "title": 'Weight',
         "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span>",
         "toggle": true,
+        "panel": 'filter',
         "callbacks": {
             "click": $.proxy(function() {
                 this.toggleVisualization("weight");
@@ -81,10 +81,10 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     });
 
     this.map.dockAdd('co2e', {
-        "ordinal": 7,
         "title": 'Carbon',
         "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
         "toggle": true,
+        "panel": 'filter',
         "callbacks": {
             "click": $.proxy(function() {
                 this.toggleVisualization("co2e");
@@ -93,10 +93,10 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     });
 
     this.map.dockAdd('water', {
-        "ordinal": 7,
         "title": 'Water',
         "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
         "toggle": true,
+        "panel": 'filter',
         "callbacks": {
             "click": $.proxy(function() {
                 this.toggleVisualization("water");
@@ -121,7 +121,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
         if(!this.map || this.map !== map) return;
-        if(this.options.banner && !($(".map-banner").length)) this.initBanner();
+        if(this.options.banner && !($("#banner").length)) this.initBanner();
         if(this.options.watermark) {
             this.watermark = $('<div id="watermark"></div>');
             $(this.map.map.div).append(this.watermark);
@@ -150,10 +150,10 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
-    this.banner_div = $(this.map.map.div).find('.map-banner').length ? 
-        $(this.map.map.div).find('.map-banner') : false;
+    this.banner_div = $(this.map.map.div).find('#banner').length ? 
+        $(this.map.map.div).find('#banner') : false;
     if(!this.banner_div) {
-        this.banner_div = $('<div class="map-banner"></div>');
+        this.banner_div = $('<div id="banner"></div>');
         $(this.map.map.div).append(this.banner_div);
     }
     if(!sc) {

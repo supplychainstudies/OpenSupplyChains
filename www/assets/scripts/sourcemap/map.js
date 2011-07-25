@@ -182,13 +182,13 @@ Sourcemap.Map.prototype.initDock = function() {
     // Needed for centering
     this.dock_outerwrap = $('<div class="sourcemap-dock-outerwrap"></div>');
     this.dock_content = $('<div class="sourcemap-dock-content"></div>');
-    this.dock_element = $('<div class="sourcemap-dock"></div>');
+    this.dock_element = $('<div id="sourcemap-dock"></div>');
     $(this.map.div).css("position", "relative").append(
         this.dock_element.append(this.dock_outerwrap.append(this.dock_content)));
     this.dockAdd('zoomin', {
-        "ordinal": 2,
         "title": 'Zoom In',
         "icon_url": "sites/default/assets/images/dock/zoomin.png",
+        "panel": 'zoom',
         "callbacks": {
             "click": function() {
                 this.controls.select.unselectAll(); 
@@ -198,9 +198,9 @@ Sourcemap.Map.prototype.initDock = function() {
         }
     });
     this.dockAdd('zoomout', {
-        "ordinal": 1,
         "title": 'Zoom Out',
         "icon_url": "sites/default/assets/images/dock/zoomout.png",
+        "panel": 'zoom',
         "callbacks": {
             "click": function() {
                 this.controls.select.unselectAll();
@@ -208,14 +208,6 @@ Sourcemap.Map.prototype.initDock = function() {
                 this.reselect();
             }
         }
-    });
-    this.dockAdd('firstSpacer', {
-        "ordinal": 3,
-        "title": 'Spacer',
-    });
-    this.dockAdd('secondSpacer', {
-        "ordinal": 5,
-        "title": 'Spacer',
     });
     return this;
 }
@@ -229,7 +221,21 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
     this.dockRemove(nm);
     this.dock_controls[nm] = o;
     var cel = $('<div class="control '+nm.replace(/\s+/, '-')+'"><div class="content">'+image+content+'</div></div>');
-    $(this.dock_content).append(cel);
+    if(o.panel){
+        // check to see if panel exists already.  if not, create it
+        if ($('#sourcemap-dock').find("." + o.panel).length){
+            $('#sourcemap-dock').find("." + o.panel).append(cel); 
+            console.log('panel exists')
+        }
+        else{
+            var panel = $('<div class="panel ' + o.panel + '"></div>');
+            panel.append(cel); 
+            $(this.dock_content).append(panel);
+            console.log('panel created');
+        }
+    }
+    else{
+    }
     if(callbacks.click) {
         $(cel).click($.proxy(callbacks.click, this));
     }
@@ -237,7 +243,6 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
         $(cel).addClass("toggle");
         // todo: callback arg here...
     }
-    return this.dockPack();
 }
 
 Sourcemap.Map.prototype.dockToggle = function(nm) { 
@@ -269,25 +274,9 @@ Sourcemap.Map.prototype.dockControlEl = function(nm) {
     return $(this.dock_content).find('.control.'+nm.replace(/\s+/, '-'));
 }
 
-Sourcemap.Map.prototype.dockPack = function() {
-    var controls = [];
-    for(var c in this.dock_controls) {
-        var ctrl = this.dock_controls[c];
-        var o = ctrl.ordinal ? ctrl.ordinal : 9999;
-        controls.push([c,o]);
-    }
-    controls.sort(function(a,b) { return a[1] > b[1] ? 1 : (a[1] < b[1] ? -1 : 0); });
-    var order = [];
-    for(var i=0; i<controls.length; i++) {
-        this.dock_content.append(this.dockControlEl(controls[i][0]));
-    }
-    return this;
-}
-
 Sourcemap.Map.prototype.dockRemove = function(nm) {
     if(this.dock_controls[nm]) delete this.dock_controls[nm];
     if(this.dockControlEl(nm)) this.dockControlEl(nm).remove();
-    return this.dockPack();
 }
 
 Sourcemap.Map.prototype.initControls = function() {

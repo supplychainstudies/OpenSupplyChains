@@ -100,6 +100,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
         "icon_url": "sites/default/assets/images/dock/add.png",
         "title": 'Add a Stop',
         "ordinal": 4,
+        "panel": "edit",
         "callbacks": {
             "click": $.proxy(function() {
                 // make a suitable geometry
@@ -388,7 +389,6 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
         }, this)
     });
 }
-
 
 Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     var o = o || {};

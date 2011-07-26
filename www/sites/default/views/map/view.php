@@ -1,7 +1,8 @@
-<div id="map-container">
+<div id="map-container">    
     <div id="map">
         <div id="sourcemap-map-view"></div>
     </div>
+    
 </div>
 <div class="spacer"></div>
 <div class="container">

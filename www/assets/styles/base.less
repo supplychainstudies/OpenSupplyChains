@@ -11,11 +11,24 @@
     border: 1px solid #d4d4d4;
     .rounded(12px);
     .box_shadow(3px, 1px, 10px);
+    .map-status {
+        position:absolute;
+        top:70px;
+        right:20px;
+        height:40px;
+        width:400px;
+        text-align:right;
+        font-size:1em;
+        color:rgba(0,0,0,0.4);
+        pointer-events:none;
+    }
 }
 
 #map {
     overflow:hidden;
     #sourcemap-map-view {
+        position:relative;
+        
         border:4px solid #fff;
         height:560px;
         .rounded(8px);
@@ -42,6 +55,7 @@
     overflow-x:hidden;
     border: 1px solid #3a86af;
     background: rgba(50,140,187,1) url("../images/detail-background.png") top repeat-x;
+
     .rounded(5px);
     #detail-close{
         background: url("../images/close.png") right center no-repeat;
@@ -69,7 +83,6 @@
                 padding: 20px;
                 .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
                 text-align:center;
-                &.nopadding{ padding: 0; } 
             }
         }
         a{
@@ -95,15 +108,15 @@
                 background:url("../images/dot.png") 0 10px no-repeat;
                 padding-left:28px;
             }
-            span.placename {
-                font-size:16px;
-                font-weight: normal;
-                color: #add1e4;
-                margin-left:20px;
-                padding-left: 15px;
-                text-shadow: rgba(0,0,0,0.03);
-                background:url("../images/marker.png") 0 0 no-repeat;
-            }
+        }
+        .placename {
+            font-size:16px;
+            font-weight: normal;
+            color: #add1e4;
+            margin-left:20px;
+            padding-left: 15px;
+            text-shadow: rgba(0,0,0,0.03);
+            background:url("../images/marker.png") 0 0 no-repeat;
         }
         h3{
             font-size: 0.8em;
@@ -179,6 +192,25 @@
             padding:0.5em;
             cursor:pointer;
             text-decoration: underline;
+        }
+    }
+    #edit-actions {
+        padding:10px;
+        margin:0;
+        position:absolute;
+        top:0; right:50px;
+        list-style:none;
+        li {
+            cursor:pointer;
+            margin-left:10px;
+            float:right;
+            font-size:12px;
+        }
+        .connect-button {
+
+        }
+        .delete-button {
+
         }
     }
 
@@ -298,6 +330,7 @@
     .rounded(8px);
     .gradient(rgba(0,0,0,0.09),rgba(0,0,0,0.02));
     height: 40px;
+    font-size:0.9em;
     text-shadow: 0 1px 1px #ccc;
     #banner-content {
         div {
@@ -376,64 +409,65 @@
  * -------------------------------------------------------------- */
 // These should probably be in a separate .less file.
 
-
-#detail-content{
-    #edit-actions {
-        ul {
-            margin:0;
-            list-style:none;
-            li {
-                float:left;
-                cursor:pointer;
-                font-size:16px;
-                font-weight: normal;
-                padding: 10px;
-                color: #add1e4;
-                text-shadow: rgba(0,0,0,0.03);
-            }
-            .connect-button {
-
-            }
-            .delete-button {
-
-            }
+#stop-editor {
+    h2 input, h3 input {
+        font-family:inherit;
+        font-weight:inherit;
+        font-size:inherit;
+        color:inherit;
+        border:none;
+        border-bottom:2px solid #2779a4;
+        padding-bottom:4px;
+        background:transparent;
+        outline:none;
+    }
+    #detail-title {
+        margin-left:10px;
+    }
+    #edit-title {
+        width:280px;
+    }
+    h3.placename {
+        padding-left:12px !important;
+        
+        #edit-placename {
+            width:330px;
+            margin-left:6px;
         }
     }
-    #edit-footer {
-        position: absolute;
-        bottom:0
-        left: 0; right: 0;
+    #edit-description, #edit-footprint, #edit-media, #edit-catalog {
+        background: #2779a4;
+        .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
+        height:240px;
+        overflow:auto;
     }
-    .sourcemap-form{
-        fieldset{
-            border:none;
-            label{
-                color: #fff;
-                padding-top: 7px;
-            }
-            div{
-                width: auto;
-                input, textarea{
-                    margin-top: 5px;
-                    float:right;
-                }
-            }
+    #edit-description {
+        textarea {
+            height:160px;
+            width:100%;
         }
+    }
+    fieldset {
+        border:none;
+        .sourcemap-form-textbox {
+            width:354px;
+        }
+    
+        label {
+            font-size:1.2em;
+            color:#fff;
+            padding:0 0 0.5em 0;
+        }
+    }
+    .sourcemap-form div {
+        padding:0;
+    }
+    .edit-save {
+        margin-top:5px;
+        margin-right:10px;
     }
 }
 
-.load-catalog-button {
-   background:#eee;
-   border:1px solid #ccc;
-   font-size:0.6em;
-   width:200px;
-   float:right;
-   text-align:center;
-   margin:0.5em 0;
-   padding:0.5em;
-   color: #555; 
-   
-}
 #catalog-close {
     color: #ccc;
     cursor:pointer;
@@ -530,10 +564,13 @@
     }
 }
 
-.ui-tabs { position: relative; padding: .2em; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
-.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; }
+.ui-tabs {      
+    position: relative; padding: 0; zoom: 1; 
+} 
+    
+.ui-tabs .ui-tabs-nav { margin: 0; padding: 0; margin-left:10px; }
 .ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
-.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em .5em 0; text-decoration: none; }
+.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em .5em 0; text-decoration: none; font-size:0.8em; text-shadow: rgba(0,0,0,0.03); }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */

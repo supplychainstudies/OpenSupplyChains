@@ -155,6 +155,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     if(!this.banner_div) {
         this.banner_div = $('<div id="banner"></div>');
         $(this.map.map.div).append(this.banner_div);
+        $(this.map.map.div).append('<div class="map-status"></div>');
     }
     if(!sc) {
         // todo: this is bad, but it's worst case
@@ -206,14 +207,6 @@ Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
     this.dialog.append(this.dialog_close)
     $(this.dialog).data("state", 1); // todo: check this?
 
-    // Setup dimmer
-    if(false && !this.curtain) {
-        this.curtain = $('<div id="curtain" class="hidden"></div>');
-        $(this.map.map.div).append(this.curtain);
-        this.curtain.click($.proxy(function() {
-            this.hideDialog();
-        }, this));
-    }
 }
 
 Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
@@ -221,8 +214,8 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
     var cls = cls || false;
     var newmsg = $('<div></div>').addClass("msg").text(msg);
     if(cls) newmsg.addClass(cls);
-    $(this.banner_div).find('.map-status').text('').empty().append(newmsg);
-    $(this.banner_div).find('.map-status .msg').fadeTo(5000, 0);
+    $('.map-status').text('').empty().append(newmsg);
+    $('.map-status .msg').fadeTo(5000, 0);
     return this;
 }
 

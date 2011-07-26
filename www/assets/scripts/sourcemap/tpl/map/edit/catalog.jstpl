@@ -1,12 +1,8 @@
-<h1><div id="catalog-close">Edit &raquo;</div> Footprinted.org Catalog</h1>
+<h2><div id="catalog-close">Edit &raquo;</div> Material Catalog</h2>
 <form id="catalog-search">
     <fieldset>
-        <button id="catalog-search-button">
-            <span>Search</span>
-        </button>
-        <label>
+       
             <input id="catalog-search-field" name="q" type="search" results="0" />
-        </label>
     </fieldset>
 
 </form>

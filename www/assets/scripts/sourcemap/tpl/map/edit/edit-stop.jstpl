@@ -1,26 +1,32 @@
-<form name="edit-ref">
 
-<ul id="edit-actions">
-    <li class="connect-button">Connect</li>
-    <li class="delete-button">Delete</li>
-</ul>
+<div>
+    <h2 class="edit-window-title">
+        <% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %>
+        <span class="placename">
+        <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
+    </h2>
+</div>
 
-<h2 class="edit-window-title">
-    <% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %></h2>
-<h3 class="edit-window-address">
-    <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
-</h3>
-
-
-<div id="editor-tabs">
-	<ul>
-		<li><a href="#edit-description">Description</a></li>
-		<li><a href="#edit-footprint">Footprint</a></li>
-		<li><a href="#edit-media">Media</a></li>
-	</ul>
+<div id="edit-actions">
+    <ul>
+        <li class="connect-button">Connect</li>
+        <li class="delete-button">Delete</li>
+    </ul>
     <div class="load-catalog-button">Import from Footprinted.org</div>
-    <div class="clear"></div>
-    
+</div>
+
+<div class="clear"></div>
+
+<div class="inset nopadding">
+    <form name="edit-ref">
+    <div id="editor-tabs">
+        <ul>
+            <li><a href="#edit-description">Description</a></li>
+            <li><a href="#edit-footprint">Footprint</a></li>
+            <li><a href="#edit-media">Media</a></li>
+        </ul>
+        <div class="clear"></div>
+        
         <div id="edit-description" class="sourcemap-form">        
             <fieldset>
                 <label for="title">Title</label>
@@ -115,8 +121,9 @@
                 </div>
 
             </fieldset>
+        </form>
         </div>
-
+    </div>
 </div>
 <div class="clear"></div>
 <div class="sourcemap-form">
@@ -126,4 +133,7 @@
 </div>
 <div class="spacer"></div>
 
-</form>
+<div class="edit-footer"></div>
+
+
+</div>

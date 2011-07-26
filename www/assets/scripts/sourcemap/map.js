@@ -226,13 +226,11 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
         // check to see if panel exists already.  if not, create it
         if ($('#sourcemap-dock').find("." + o.panel).length){
             $('#sourcemap-dock').find("." + o.panel).append(cel); 
-            console.log('panel exists')
         }
         else{
             var panel = $('<div class="panel ' + o.panel + '"></div>');
             panel.append(cel); 
             $(this.dock_content).append(panel);
-            console.log('panel created');
         }
     }
     else{

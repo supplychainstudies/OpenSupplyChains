@@ -1,6 +1,6 @@
 <div class="popup-wrapper">
-        <h5 class="popup-title"><%= _S.ttrunc(_S.htesc(this.stop.getLabel() || this.stop.getAttr("placename", false) || "Untitled Stop"), 24) %></h5>
-        <h4 class="popup-address"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("address", false) || "" ), 40) %></h4>
+        <h2 class="popup-title"><%= _S.ttrunc(_S.htesc(this.stop.getLabel() || this.stop.getAttr("placename", false) || "Untitled Stop"), 24) %></h2>
+        <h3 class="popup-address"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("address", false) || "" ), 40) %></h3>
         <% if(this.stop.getAttr("teaser", this.stop.getAttr("description", false))) { %>
             <p class="popup-description">
                 <%= _S.ttrunc(_S.htesc(this.stop.getAttr("teaser", this.stop.getAttr("description",""))), 140, true) %>

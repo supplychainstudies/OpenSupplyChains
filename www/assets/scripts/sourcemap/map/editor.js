@@ -310,20 +310,20 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
     this.catalog_search_xhr[o.catalog] = $.ajax({"url": "services/catalogs/"+o.catalog, "data": o.params || {}, 
         "success": $.proxy(function(json) {
             var cat_html = $('<ul class="catalog-items"></ul>');
+            var alt = "";
             for(var i=0; i<json.results.length; i++) {
                 // Todo: Template this
                 var cat_content = '<div class="cat-item-name">'+json.results[i].name+'</div>';
-                cat_content += '<div class="cat-item-category">'+json.results[i].category+'</div>';
                 
                 cat_content += '<div class="cat-item-footprints">'                    
                 cat_content += 
-                    json.results[i].co2e ? '<div class="cat-item-co2e"><span class="footprint-label">co2e</span>'+json.results[i].co2e+'</div>' : '';
+                    json.results[i].co2e ? '<div class="cat-item-co2e">' +json.results[i].co2e+'</div>' : '';
                 cat_content += 
-                    json.results[i].energy ? '<div class="cat-item-energy"><span class="footprint-label">energy</span>'+json.results[i].energy+'</div>' : '';
+                    json.results[i].energy ? '<div class="cat-item-energy">' +json.results[i].energy+'</div>' : '';
                 cat_content += 
-                    json.results[i].waste ? '<div class="cat-item-waste"><span class="footprint-label">waste</span>'+json.results[i].waste+'</div>' : '';
+                    json.results[i].waste ? '<div class="cat-item-waste">' +json.results[i].waste+'</div>' : '';
                 cat_content += 
-                    json.results[i].water ? '<div class="cat-item-water"><span class="footprint-label">water</span>'+json.results[i].water+'</div>' : '';
+                    json.results[i].water ? '<div class="cat-item-water">' +json.results[i].water+'</div>' : '';
                 cat_content += '<div class="clear"></div></div>';                    
                 
                 var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   

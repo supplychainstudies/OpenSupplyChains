@@ -460,6 +460,9 @@ Sourcemap.Map.Base.prototype.decorateFeatures = function(dec_fn, features) {
         if(dec_fn instanceof Function) {
             dec_fn(features[i], this);
         } else {
+            if(features[i].cluster) {
+                console.log(feature);
+            }
             for(var k in dec_fn) {
                 if(features[i].attributes[k]) {
                     var decv = dec_fn[k];
@@ -492,7 +495,25 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
     var smax = smax == undefined ? this.options.max_stop_size : parseInt(smax);
     if(!smax) smax = this.options.max_stop_size;
     var dec_fn = $.proxy(function(stf, mb) {    
-        if(stf.attributes[this.attr_name] !== undefined) {
+        if(stf.cluster) {
+            var val = 0;
+            for(var c in stf.cluster) {
+                val += parseFloat(stf.cluster[c].attributes[attr_nm]);
+            }
+            if(!isNaN(val)) {
+                // scale
+                val = Math.max(val, this.vmin);
+                val = Math.min(val, this.vmax);
+                var voff = val - this.vmin;
+                var vrange = this.vmax - this.vmin;
+                var sval = this.smax;
+                if(vrange)
+                    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+                stf.attributes.size = sval;
+                return;
+            }
+        }
+        else if(stf.attributes[this.attr_name] !== undefined) {
             var val = stf.attributes[attr_nm];
             val = parseFloat(val);
             if(!isNaN(val)) {
@@ -550,6 +571,7 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
                 }
             }
             this.sizeStopsOnAttr(viz_nm, range.min, range.max, null, null, this.options.visualization_colors[viz_nm]);
+            
             this.map.dockToggleActive(viz_nm);
             this.map.redraw();
             break;

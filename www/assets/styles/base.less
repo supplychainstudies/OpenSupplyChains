@@ -88,10 +88,12 @@
             font-size: 22px;
             color: #fff;
             margin-top:0;
-            padding-left:28px;
-            padding-top: 5px;
-            background:url("../images/dot.png") 0 10px no-repeat;
+            padding: 5px 5px 0 10px;
             text-shadow: rgba(0,0,0,0.3) -1px 0, rgba(0,0,0,0.1) 0 -1px, rgba(255,255,255,0.3) 0 1px, rgba(0,0,0,0.1) -1px -2px;
+            &#detail-title {
+                background:url("../images/dot.png") 0 10px no-repeat;
+                padding-left:28px;
+            }
             span.placename {
                 font-size:16px;
                 font-weight: normal;
@@ -405,115 +407,81 @@
    
 }
 #catalog-close {
-    color: #2d78af;
+    color: #ccc;
     cursor:pointer;
     display:inline;
 }
 #catalog-search {
-    fieldset{ 
-         vertical-align: middle; 
-         margin-top: 3px;
-         border: 1px solid #000;
-         height: 18px;
-         font: normal 12px arial,helvetica,sans-serif;
-         overflow:hidden;
-         #catalog-search-button{
-             float:right;
-             color: #aaa;
-             border:0;
-             border-left: 1px solid #000;
-             text-transform: lowercase;
-             background-color: #fff;
-             background-image: -moz-linear-gradient(top,white,#EFEFEF);
-             background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
-             margin: 0;
-             vertical-align:middle;
-             height: 18px;
-         }
-         label{
-             display:block;
-             overflow:hidden;
-         }
+    fieldset{  
+        margin:10px;
+        background: url(../images/shadow.png) top repeat-x; 
+        border: 1px solid #c9c9c9;
+         .rounded;
+
          input#catalog-search-field{
-             border: 0;
-             width: 100%;
-             outline:none;
-             -webkit-appearance: none;
+              width: 100%;
+              padding: 10px 0 10px 36px;
+              border: 0;
+              outline: none;
+              background: url(../images/search.png) 12px center no-repeat; 
+              -webkit-appearance: none;
          }
      }
 }
 .catalog-pager {
     text-align:center;
     font-size:0.8em;
-    color:#2d78af;
-    margin:0.5em 0;
-    padding:0.2em 0;
-    border-top:1px solid #ccc;
-    border-bottom:1px solid #ccc;
+    color:#fff;
+    margin:0.25em 0;
+    padding:0 0 0.5em 0 !important;
     .catalog-pager-prev, .catalog-pager-next {
         padding:0.5em;
         cursor:pointer;
     }
 }
 .catalog-content {
-    
+    padding:0 !important;
+    height:260px;
+    background: #2779a4;
+    .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
+    overflow:auto;
 }
 .catalog-items {
     margin:0;
 }
 
 .catalog-item {
-    font-size:0.6em;
+    font-size:0.8em;
     cursor: pointer;
-    padding: .4em;
-    width: 57.2em;
-    height:8em;
-    float:left;
-    margin: .5em 0;
+    padding: 0.8em;
+    color:#fff;
     list-style:none;
     display:block;
-    position:relative;
-    border:1px dotted #888;
+    border-bottom:2px solid #2779a4;
     &:hover {
-        border:1px dotted #000;
+        background:rgba(255,255,255,0.6);
+        color:#000;
     }
     .cat-item-name {
         font-size:1.2em;
-        height:1.8em;
         font-weight:bold;
-        overflow:hidden;
-    }
-    .cat-item-category {
-        
     }
     .cat-item-footprints { 
-        position:absolute;
-        bottom:0;
-        right:0;
-        width:100%;
-        font-size:0.8em;
-        color:#888;
-        display:block;
-        border-top:1px solid #ccc;
-        line-height:1.2em;
-        .footprint-label {
-            display:block;
-        }
         .cat-item-co2e {
-            float:left; padding:0.5em;
-            text-align:center;
+            float:left; padding:10px 10px 0 30px; min-height:20px;
+            background: url(../images/dialog-icon-co2.png) 0 5px no-repeat;
         }
         .cat-item-energy {
-            float:left; padding:0.5em;
-            text-align:center;
+            float:left; padding:10px 10px 0 30px; min-height:20px;
+            background: url(../images/dialog-icon-mass.png) 0 5px no-repeat;
         }
         .cat-item-waste {
-            float:left; padding:0.5em;
-            text-align:center;
+            float:left; padding:10px 10px 0 30px; min-height:20px;
+            background: url(../images/dialog-icon-mass.png) 0 5px no-repeat;            
         }
         .cat-item-water {
-            float:left; padding:0.5em;
-            text-align:center;
+            float:left; padding:10px 10px 0 30px; min-height:20px;
+            background: url(../images/dialog-icon-h2o.png) 0 5px no-repeat;
         }
     }
 }

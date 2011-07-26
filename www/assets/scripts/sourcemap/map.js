@@ -109,6 +109,7 @@ Sourcemap.Map.prototype.init = function() {
     this.mapped_features = {};
     this.stop_features = {}; // dicts of stop ftrs keyed by parent supplychain
     this.hop_features = {}; // dicts of hop ftrs keyed by parent supplychain
+    this.cluster_features = {}; // dicts of cluster ftrs keyed by parent supplychain    
     this.cluster = null;
     this.prepareStopFeature = this.options.prep_stop ? this.options.prep_stop : false;
     this.prepareHopFeature = this.options.prep_hop ? this.options.prep_hop : false;
@@ -351,7 +352,7 @@ Sourcemap.Map.prototype.addLayer = function(label, layer) {
 
 Sourcemap.Map.prototype.addStopLayer = function(scid) {
     var sc = this.findSupplychain(scid);
-    this.cluster = new Sourcemap.Cluster({distance: 35, threshold: 2});
+    this.cluster = new Sourcemap.Cluster({distance: 35, threshold: 2, map: this});
     var strategies = this.options.clustering ? [this.cluster] : [];
     var slayer = new OpenLayers.Layer.Vector(
         "Stops - "+sc.getLabel(), {
@@ -791,6 +792,7 @@ Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     this.addHopLayer(scid).addStopLayer(scid);
     this.stop_features[scid] = {};
     this.hop_features[scid] = {};
+    this.cluster_features[scid] = {};    
     this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);
     
@@ -890,7 +892,8 @@ Sourcemap.Map.prototype.reselect = function() {
     }
 }
 
-Sourcemap.Cluster = function(distance, threshold) {
+Sourcemap.Cluster = function(distance, threshold, map) {
+    this.map = map;
     OpenLayers.Strategy.Cluster.prototype.initialize.apply(this, arguments);
     this.initialize.apply(this, arguments);    
 }
@@ -908,7 +911,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
             "swidth":14,
             "scolor":feature.attributes.color,
             "fcolor":feature.attributes.color,
-            "label": feature.attributes.title+" (and -x- more)",
+            "label": feature.attributes.title+" ...",
             "yoffset":-45, 
             "supplychain_instance_id":scid,
             "cluster_instance_id":cid
@@ -917,6 +920,8 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     cluster.renderIntent = "cluster";
 
     cluster.cluster = [feature];    
+    this.map.cluster_features[scid][cluster.cluster_instance_id] = {"cluster": cluster};
+    
     return cluster;
 }
 Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {

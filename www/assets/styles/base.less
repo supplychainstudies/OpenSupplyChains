@@ -69,6 +69,7 @@
                 padding: 20px;
                 .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
                 text-align:center;
+                &.nopadding{ padding: 0; } 
             }
         }
         a{
@@ -178,25 +179,6 @@
             padding:0.5em;
             cursor:pointer;
             text-decoration: underline;
-        }
-    }
-    #edit-actions {
-        padding:10px;
-        margin:0;
-        position:absolute;
-        top:0; right:50px;
-        list-style:none;
-        li {
-            cursor:pointer;
-            margin-left:10px;
-            float:right;
-            font-size:12px;
-        }
-        .connect-button {
-
-        }
-        .delete-button {
-
         }
     }
 
@@ -393,6 +375,52 @@
 /* EDITOR 
  * -------------------------------------------------------------- */
 // These should probably be in a separate .less file.
+
+
+#detail-content{
+    #edit-actions {
+        ul {
+            margin:0;
+            list-style:none;
+            li {
+                float:left;
+                cursor:pointer;
+                font-size:16px;
+                font-weight: normal;
+                padding: 10px;
+                color: #add1e4;
+                text-shadow: rgba(0,0,0,0.03);
+            }
+            .connect-button {
+
+            }
+            .delete-button {
+
+            }
+        }
+    }
+    #edit-footer {
+        position: absolute;
+        bottom:0
+        left: 0; right: 0;
+    }
+    .sourcemap-form{
+        fieldset{
+            border:none;
+            label{
+                color: #fff;
+                padding-top: 7px;
+            }
+            div{
+                width: auto;
+                input, textarea{
+                    margin-top: 5px;
+                    float:right;
+                }
+            }
+        }
+    }
+}
 
 .load-catalog-button {
    background:#eee;

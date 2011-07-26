@@ -37,9 +37,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // listen for supplychain updates and save
     Sourcemap.listen('supplychain-updated', function(evt, sc) {
         var succ = $.proxy(function() {
-            this.map_view.updateStatus("Saved...", "good-news");
-            this.map_view.hideDialog();
-            
+            this.map_view.hideDialog();            
+            this.map_view.updateStatus("Saved...", "good-news");            
         }, this);
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
@@ -58,7 +57,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     }, this);
 
     // listen for select events, for connect-to, etc.
-    Sourcemap.listen('map:feature_clickoutselected', $.proxy(function(evt, map, ftr) {
+    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(this.connect_from) {
             // connect!
             var fromstid = this.connect_from.attributes.stop_instance_id;
@@ -225,7 +224,6 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
 Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
     var ref = ftr.attributes.ref;
     var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
-
     var attr = attr ? Sourcemap.deep_clone(attr) : {};
     for(var k in ref.attributes) {
         if(attr[k] == undefined) attr[k] = ref.getAttr(k);
@@ -259,6 +257,8 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
         }
     }, {"ref": ref, "editor": this.editor, "feature": ftr}));    
         $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
+            // Edit should be disabled at this point
+            
             // save updated attributes
             var f = $(e.target).parents('form');
             var vals = f.serializeArray();
@@ -290,15 +290,17 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                             $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
                             this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
                         }
-                        this.ref.setAttr(k, val);
-                        
+          
+                        if(this.ref) {
+                            this.ref.setAttr(k, val);
+                        }
                         this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
                     }, {"stop": this.ref, "edit_form": f, "editor": this.editor, "attr": this.attr}));
                 } else {
                     this.ref.setAttr(k, val);
                 }
             }
-            if(!geocoding)
+            if(!geocoding)            
                 this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.ref.supplychain_id]);
         }, {"ref": this.ref, "editor": this.editor, "attr": attr}));
     }, {"ref": ref, "editor": this, "attr": attr}, {"ref": ref, "editor": this, "attr": attr});
@@ -338,7 +340,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
 
             $("#catalog-close").click($.proxy(function(e) {
-                this.editor.showEdit(this.ref);                            
+                this.editor.showEdit(this.ref, this.ref.attributes);                            
             }, {"ref": o.ref, "editor": this.editor}));
             $(this.editor.map_view.dialog).find('.catalog-pager').empty();
             // pager prev

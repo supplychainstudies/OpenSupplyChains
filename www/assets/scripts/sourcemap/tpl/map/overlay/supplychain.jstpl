@@ -17,6 +17,6 @@
             <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&nbsp;-&nbsp;<%= d.toDateString() %>.
         </div>
         <div class="clear"></div>
-    </div>
+    </div>    
 </div>
 

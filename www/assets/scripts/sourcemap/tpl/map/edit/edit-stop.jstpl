@@ -1,44 +1,26 @@
+<form id="stop-editor" name="edit-ref">
+<div id="stop-editor">
+<ul id="edit-actions">
+    <li class="connect-button">Connect</li>
+    <li class="delete-button">Delete</li>
+</ul>
 
-<div>
-    <h2 class="edit-window-title">
-        <% if(this.attr["title"]) { %><%= this.attr["title"] %><% } %>
-        <span class="placename">
-        <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
-    </h2>
-</div>
+<h2 id="detail-title"><input id="edit-title" name="title" type="text" value="<%= this.attr["title"] %>" /></h2>
+<h3 class="placename"><input id="edit-placename" name="address" type="text" value="<%= this.attr["address"] %>" /></h3>
 
-<div id="edit-actions">
-    <ul>
-        <li class="connect-button">Connect</li>
-        <li class="delete-button">Delete</li>
-    </ul>
-    <div class="load-catalog-button">Import from Footprinted.org</div>
-</div>
 
-<div class="clear"></div>
-
-<div class="inset nopadding">
-    <form name="edit-ref">
-    <div id="editor-tabs">
-        <ul>
-            <li><a href="#edit-description">Description</a></li>
-            <li><a href="#edit-footprint">Footprint</a></li>
-            <li><a href="#edit-media">Media</a></li>
-        </ul>
-        <div class="clear"></div>
-        
+<div id="editor-tabs">
+	<ul>
+		<li><a href="#edit-description">Description</a></li>
+		<li><a href="#edit-footprint">Footprint</a></li>
+		<li><a href="#edit-media">Media</a></li>
+		<li><a class="load-catalog-button">Material Catalog</a></li>
+		
+	</ul>
+    <div class="clear"></div>
+    
         <div id="edit-description" class="sourcemap-form">        
             <fieldset>
-                <label for="title">Title</label>
-                <div class="sourcemap-form-textbox">
-                    <% var el = $("<input />").attr("type", "text").attr("name", "title").addClass("textbox"); el[0].setAttribute("value",this.attr["title"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-                <label for="address">Move to:</label>
-                <div class="sourcemap-form-textbox">
-                    <% var el = $("<input />").attr("type", "text").attr("name", "address").addClass("textbox"); el[0].setAttribute("value",this.attr["address"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
                 <label for="description">Description</label>
                 <div class="sourcemap-form-textbox">
                     <%= $("<div></div>").append(
@@ -121,9 +103,8 @@
                 </div>
 
             </fieldset>
-        </form>
         </div>
-    </div>
+
 </div>
 <div class="clear"></div>
 <div class="sourcemap-form">
@@ -133,7 +114,5 @@
 </div>
 <div class="spacer"></div>
 
-<div class="edit-footer"></div>
-
-
 </div>
+</form>

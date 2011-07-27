@@ -170,6 +170,22 @@
 
         }
     }
+    .content-buttons {
+        position:absolute;
+        bottom: 0;
+        left: 32px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #236385;
+        text-shadow: 0 1px 1px #4f9cc5;
+        div{
+            float:left;
+            padding: 15px 10px;
+            &.weight{padding-left: 40px; background: url(../images/dialog-icon-mass.png) 10px 12px no-repeat;}
+            &.co2e{padding-left: 40px; background: url(../images/dialog-icon-co2.png) 10px 12px no-repeat;}
+            &.water{padding-left: 40px; background: url(../images/dialog-icon-h2o.png) 10px 12px no-repeat;}
+        }
+    }
     .content {
         margin: 0 .5em;
         overflow:hidden;

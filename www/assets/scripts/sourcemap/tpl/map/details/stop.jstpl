@@ -37,4 +37,7 @@
 <% } %>
 
 <div class="content-buttons">
+    <div class="weight">0 g</div>
+    <div class="co2e">0 g CO2e</div>
+    <div class="water">0 L H2O</div>
 </div>

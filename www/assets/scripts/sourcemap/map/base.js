@@ -16,7 +16,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "auto_init": true,
     "map_element_id": 'sourcemap-map-view',
     "banner": true, "watermark": true, "magic_word_sequence": [
-        "description", "youtube:link", "vimeo:link", "flickr:setid"
+        "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
     "tour_order_strategy": "upstream", "tileswitcher": false,
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000",
@@ -281,8 +281,8 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
             this.base.showDialog(th);
 
             // Sets up content-nav behavior
-            $(this.base.dialog_content).find('.content-item a').click($.proxy(function(evt) {
-                var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
+            $(this.base.dialog_content).find('.content-item').click($.proxy(function(evt) {
+                var clicked_idx = parseInt(evt.target.id.split('-').pop());
                 var idx = -1;
                 for(var i=0; i<this.base.magic_word_sequence.length; i++) {
                     if(clicked_idx === i) {

@@ -79,6 +79,7 @@
         > div{
             padding: 0 20px;
             &.inset{
+                position:relative;
                 background: #2779a4;
                 padding: 20px;
                 .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
@@ -150,18 +151,20 @@
     }
 
     .content-nav {
-        clear:both;
-        margin:0;
+        margin:0 auto;
         position:absolute;
-        bottom:20px; left:30px;
+        bottom:6px; left:0; right:0;
+        text-align:center;
+        text-align:center;
+        height:12px;
         .content-item {
-            margin: 0 10px 0 0;
-            float: left;
-            a {
-                font-size:0.8em;
-                text-decoration:none;
-                display:block;
-            }
+            text-decoration:none;
+            width:8px;
+            height:8px;
+            background:#fff;
+            .rounded(4px);
+            display: inline-block;
+            
             &.selected a { text-decoration:underline; }
             &:hover { text-decoration:underline; }
 
@@ -172,6 +175,10 @@
         overflow:hidden;
         width: 100%; 
         > .description {
+            padding-top:1em;
+            font-size:1em;
+            line-height:1em;
+            height:60px;
         }
         > .block {
             overflow: hidden;

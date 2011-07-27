@@ -3,13 +3,10 @@
 <% if(this.stop.attributes.placename != undefined) { %><span class="placename"><%= _S.ttrunc(_S.htesc(this.stop.attributes.placename), 30, true) %></span><% } %></h2>
 </div>
 
-<% if(this.magic_word === "description") { %>
     <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
         <div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div>
     <% } %>
-    <% if(this.stop.getAttr("block:greenfact", false)) { %>
-        <div class="block greenfact"><%= _S.htesc(this.stop.getAttr("block:greenfact")) %></div>
-    <% } %>
+  
     <% if(this.stop.getAttr("url:moreinfo", false)) { %>
         <div class="url moreinfo"> 
             <%= $("<a></a>").attr("href", this.stop.getAttr("url:moreinfo"))
@@ -17,31 +14,27 @@
                 .wrap("<div></div>").parent().html() %>
         </div>
     <% } %>
-<% } %>
+    <% if(this.magic_word === "youtube:link" || this.magic_word === "vimeo:link" || this.magic_word === "flickr:setid") { %>
+    <div class="inset">
+    <% if(this.magic_word === "youtube:link" && this.stop.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.popup_content.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
+    <% if(this.magic_word === "vimeo:link" && this.stop.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.popup_content.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>
+    <% if(this.magic_word === "flickr:setid" && this.stop.getAttr("flickr:setid", false)) {  %>
+    <div id="flickr-photoset-<%= this.stop.getAttr("flickr:setid") %>">
+    <%= Sourcemap.MagicWords.popup_content.flickr.setid.call(this.embed, this.stop.getAttr("flickr:setid")) %>
+    </div>
+    <% } %>
 
-<% if(this.magic_word && this.magic_word !== "description"){ %>
-<div class="inset">
-<% } %>
-<% if(this.magic_word === "youtube:link" && this.stop.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.popup_content.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
-<% if(this.magic_word === "vimeo:link" && this.stop.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.popup_content.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>
-<% if(this.magic_word === "flickr:setid" && this.stop.getAttr("flickr:setid", false)) {  %>
-<div id="flickr-photoset-<%= this.stop.getAttr("flickr:setid") %>">
-<%= Sourcemap.MagicWords.popup_content.flickr.setid.call(this.embed, this.stop.getAttr("flickr:setid")) %>
-</div>
-<% } %>
-<% if(this.magic_word && this.magic_word !== "description"){ %>
-</div>
-<% } %>
 
 <div class="content-nav">
-<% for(var i=0; i<Sourcemap.MagicWords.sequence.length; i++) { %>
+<% for(var i=0; i< Sourcemap.MagicWords.sequence.length-2; i++) { %>
     <% if(this.stop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
-        <div id="content-item-<%= i %>" class="content-item <%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %><%= (this.magic_word === Sourcemap.MagicWords.sequence[i] ? " selected" : "") %>">
-            <a href="javascript: void(0);"><%= _S.htesc(Sourcemap.MagicWords.sequence[i].replace(/\W+/, "-")) %></a>
-        </div>  
+        <a id="content-item-<%= i %>" class="content-item" href="javascript: void(0);">&nbsp;</a>  
     <% } %>
 <% } %>
 <div class="clear"></div>
 </div>
+</div>
+<% } %>
+
 <div class="content-buttons">
 </div>

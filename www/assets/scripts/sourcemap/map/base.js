@@ -35,6 +35,10 @@ Sourcemap.Map.Base.prototype.init = function() {
     this.initDialog();
     this.initEvents();
     // todo: put this somewhere else.
+    if(this.options.watermark) {
+        this.watermark = $('<div id="watermark"></div>');
+        $(this.map.map.div).append(this.watermark);
+    }
     var ratio = Math.min(document.body.clientHeight,document.body.clientWidth) / 500 * 100;
     //$("body").css("font-size", Math.max(60, Math.min(100,Math.floor(ratio)))+"%");
 }
@@ -122,10 +126,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
-        if(this.options.watermark) {
-            this.watermark = $('<div id="watermark"></div>');
-            $(this.map.map.div).append(this.watermark);
-        }
         // todo: do calculations here
         for(var vi=0; vi<this.options.visualizations.length; vi++) {
             var v = this.options.visualizations[vi];

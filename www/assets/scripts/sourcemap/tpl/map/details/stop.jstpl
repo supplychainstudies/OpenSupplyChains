@@ -19,7 +19,9 @@
     <% } %>
 <% } %>
 
+<% if(this.magic_word && this.magic_word !== "description"){ %>
 <div class="inset">
+<% } %>
 <% if(this.magic_word === "youtube:link" && this.stop.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.popup_content.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
 <% if(this.magic_word === "vimeo:link" && this.stop.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.popup_content.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>
 <% if(this.magic_word === "flickr:setid" && this.stop.getAttr("flickr:setid", false)) {  %>
@@ -27,7 +29,9 @@
 <%= Sourcemap.MagicWords.popup_content.flickr.setid.call(this.embed, this.stop.getAttr("flickr:setid")) %>
 </div>
 <% } %>
+<% if(this.magic_word && this.magic_word !== "description"){ %>
 </div>
+<% } %>
 
 <div class="content-nav">
 <% for(var i=0; i<Sourcemap.MagicWords.sequence.length; i++) { %>

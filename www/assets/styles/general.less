@@ -427,21 +427,6 @@ a{
     }
 }
 
-.grid_3 .sourcemap-form{ .sourcemap-form-size(160px); }
-.grid_4 .sourcemap-form{ .sourcemap-form-size(220px); }
-.grid_5 .sourcemap-form{ .sourcemap-form-size(280px); }
-.grid_6 .sourcemap-form{ .sourcemap-form-size(340px); }
-.grid_7 .sourcemap-form{ .sourcemap-form-size(400px); }
-.grid_8 .sourcemap-form{ .sourcemap-form-size(460px); }
-.grid_9 .sourcemap-form{ .sourcemap-form-size(520px); }
-.grid_10 .sourcemap-form{ .sourcemap-form-size(580px); }
-.grid_11 .sourcemap-form{ .sourcemap-form-size(640px); }
-.grid_12 .sourcemap-form{ .sourcemap-form-size(700px); }
-.grid_13 .sourcemap-form{ .sourcemap-form-size(760px); }
-.grid_14 .sourcemap-form{ .sourcemap-form-size(820px); }
-.grid_15 .sourcemap-form{ .sourcemap-form-size(880px); }
-.grid_16 .sourcemap-form{ .sourcemap-form-size(940px); }
-
 .sourcemap-form{
     fieldset {
     border: 1px dotted #ccc;
@@ -602,15 +587,60 @@ a{
     }
 }
 
-/* SECONDARY MAP CONTENT 
+/* MAP VIEW 
  * -------------------------------------------------------------- */
 
-#map-secondary-content {}
+#qrcode-badge {
+    padding:0 5px 0 0;
+    margin:5px 0;
+    .qrcode {
+        border: 1px solid #d9d9d9;
+        float:left;
+        width:140px; height:140px;
+    }
+    .qrcode-about {
+        float:left;
+        width:200px;
+        padding:10px;
+        margin-left:10px;
+    }
+}
+
+#sidebar.map-view{
+    .links{
+        margin-bottom: 20px;
+        p{ font-size: 12px;}
+        div{
+            background: url(../images/shadow.png) top repeat-x; 
+            border: 1px solid #bfbfbf;
+            .rounded(3px);
+            input{
+                font-size: 15px;
+                width: 330px;
+                border: 0;
+                padding: 8px 20px;
+                font-style: italic;    
+            }
+        }
+    }
+    .social{
+        margin-bottom: 6px;
+        .social-icon{
+            width: 95px;
+            float:left;
+            margin-left: 20px;
+        }
+    }
+}
+
+
+/* DISCUSSION SECTION 
+ * -------------------------------------------------------------- */
 
 #discussion-section {
-    float:left; 
-    width:80%;
-    padding:20px 1% 10px 0;
+    width:535px;
+    padding: 20px;
+    background: url("../images/news_background.jpg") top left no-repeat;
     h3 {
         font-size:1.2em;
     }

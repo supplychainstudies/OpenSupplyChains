@@ -336,16 +336,20 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
     
 }
 Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
+
+    
    // make sure the target magic word index is valid
     var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-
-    // load hop details template and show in base detail pane
+   
+    // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
-    var hop = sc.findHop(hid);
+    var stop = sc.findStop(stid);
 
+    var f = this.map.stopFeature(scid, stid);
+    
     // get magic word...make sure it's valid
     var magic_word = this.magic_word_sequence[seq_idx];
-    while(((hop.getAttr(magic_word, false) === false) || (!hop.getAttr(magic_word).length || hop.getAttr(magic_word).length == 1)) 
+    while(((stop.getAttr(magic_word, false) === false) || (!stop.getAttr(magic_word).length || stop.getAttr(magic_word).length == 1)) 
         && seq_idx < this.magic_word_sequence.length-1) {
         magic_word = this.magic_word_sequence[++seq_idx];
     }
@@ -353,15 +357,18 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     // sync cur seq idx
     this.magic_word_sequence_cur_idx = seq_idx;
 
-    if(hop.getAttr(magic_word, false) === false) magic_word = false;
+    if(stop.getAttr(magic_word, false) === false) magic_word = false;
 
     $(this.dialog).data("state", -1); // loading
-
+    //"default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
+    
     // load template and render
     // todo: make this intelligible
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
+
+            // Sets up content-nav behavior
             $(this.base.dialog_content).find('.content-item a').click($.proxy(function(evt) {
                 var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
                 var idx = -1;
@@ -372,16 +379,18 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
                     }
                 }
                 if(idx >= 0) {
-                    this.base.showHopDetails(
-                        this.hop.instance_id, this.supplychain.instance_id, idx
+                    this.base.showStopDetails(
+                        this.stop.instance_id, this.supplychain.instance_id, idx
                     );
                 }
             }, this));
+                
         }, 
-        {"hop": hop, "supplychain": sc, "magic_word": magic_word, 'base': this},
-        {"base": this, "magic_word": magic_word, "hop": hop, "supplychain": sc},
+        {"stop": stop, "supplychain": sc, "magic_word": magic_word, 'base': this},
+        {"base": this, "magic_word": magic_word, "stop": stop, "supplychain": sc},
         this.options.tpl_base_path
     );
+
 }
 
 Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {

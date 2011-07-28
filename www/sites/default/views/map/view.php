@@ -8,7 +8,7 @@
 <div class="container">
     <div id="sidebar" class="map-view">
         <div class="container">
-            <h2>Share this Sourcemap</h2>
+            <a id="share-info"><h2>Share this Sourcemap</h2></a>
         </div>
         <hr />
         <div id="qrcode-badge" class="container">
@@ -49,12 +49,18 @@
         <?php if($can_comment): ?>
         <div id="comment-form" class="form">
             <form method="post" action="map/comment/<?= $supplychain_id ?>">
-                <textarea placeholder="Submit your comment." name="body" id="comment-area"></textarea>
-                <input id="comment-submit" type="submit" text="Comment"/>
+            <div>
+                <textarea placeholder="Type your comment..." name="body" id="comment-area"></textarea>
+            </div>
+            <div>
+                <input class="button" id="comment-submit" type="submit" text="Comment"/>
+            </div>
             </form>
             </fieldset>
         </div>
-        
+       
+        <?php else: ?>
+        <p><a href="/auth">Log in</a> or <a href="/register">register</a> to add to the discussion</p> 
         <?php endif; ?>
         <?php if($comments): ?>
         <ul id="comments">

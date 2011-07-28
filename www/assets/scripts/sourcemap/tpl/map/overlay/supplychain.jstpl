@@ -1,13 +1,13 @@
 <div class="container">
     <div id="banner-content">
         <div id="banner-summary">
-           <%= this.getAttr("title", this.getAttr("name", "A Sourcemap")) %>
+           <%= this.getAttr("title", this.getAttr("name", "Untitled Sourcemap")) %>
         </div>
         <div id="banner-description">
             Amazing description goes here... <a href="#">more</a>
         </div>
         <div id="banner-share">
-            <a class="banner-share-link" href="javascript: void(0);">Share</a>
+            <a class="banner-share-link" href="javascript:void(0);">Share</a>
         </div>
         <div id="banner-favorite">
             <a class="banner-favorite-link" href="javascript:void(0);">Favorite</a> 

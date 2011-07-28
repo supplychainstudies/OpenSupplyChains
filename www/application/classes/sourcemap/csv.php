@@ -94,7 +94,7 @@ class Sourcemap_Csv {
                     break;
             }
         }
-        if($b) $vs[] = $b;
+        if(strlen($b)) $vs[] = $b;
         return $vs;
     }
 

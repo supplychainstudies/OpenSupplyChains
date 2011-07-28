@@ -525,7 +525,7 @@ Sourcemap.Units.si_prefixes = {
     "p": {"label": "pico", "mult": -12}, "n": {"label": "nano", "mult": -9},
     "u": {"label": "micro", "mult": -6}, "m": {"label": "milli", "mult": -3},
     "c": {"label": "centi", "mult": -2}, "d": {"label": "deci", "mult": -1},
-    "da": {"label": "deca", "mult": 1},  "h": {"label": "hecto", "mult": 2},
+    "D": {"label": "deca", "mult": 1},  "h": {"label": "hecto", "mult": 2},
     "k": {"label": "kilo", "mult": 3}, "M": {"label": "mega", "mult": 6},
     "G": {"label": "giga", "mult": 9}, "T": {"label": "tera", "mult": 12},
     "P": {"label": "peta", "mult": 15}, "E": {"label": "exa", "mult": 18},

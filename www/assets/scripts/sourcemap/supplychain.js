@@ -311,6 +311,7 @@ Sourcemap.Stop.geocode = function(st, cb) {
     var cb = cb || $.proxy(function(data) {
         if(data && data.results) {
             this.setAttr("address", data.results[0].placename);
+           // this.map.broadcast('map:feature_selected', this.map, this.map.stopFeature(sc.instance_id, new_stop.instance_id));
         }
     }, st);
     var url = 'services/geocode';

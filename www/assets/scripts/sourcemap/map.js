@@ -34,16 +34,17 @@ Sourcemap.Map.prototype.defaults = {
             "fillColor": "${color}",
             "strokeWidth": "${swidth}",
             "strokeColor": "${scolor}",
-            "strokeOpacity": 0.5,
+            "strokeOpacity": 1,
             "fontColor": "${fcolor}",
+            "fontWeight": "bold",           
             "cursor":"pointer",
-            "fontSize": "0.8em",
+            "fontSize": "${fsize}",
             "fontFamily": "Helvetica, sans-serif",
-            "fillOpacity": 1,
+            "fillOpacity": 0.8,
             "label": "${label}",
-            "labelAlign": "cb",
+            "labelAlign": "cm",
             "labelXOffset": 0,
-            "labelYOffset": -35, // fixme: this is bad
+            "labelYOffset": "${yoffset}", // fixme: this is bad
         },
         "select": {
             "fillColor": "#ffffff",
@@ -53,15 +54,16 @@ Sourcemap.Map.prototype.defaults = {
             "pointRadius": "${size}",
             "fillColor": "${color}",
             "strokeColor": "${scolor}",
-            "strokeOpacity": 0.5,
+            "strokeOpacity": 1,
             "strokeWidth": "${swidth}",
             "fontColor": "${fcolor}",
+            "fontWeight": "bold",           
             "cursor":"pointer",
-            "fontSize": "0.8em",
+            "fontSize": "${fsize}",
             "fontFamily": "Helvetica, sans-serif",
-            "fillOpacity": 1,
+            "fillOpacity": 0.8,
             "label": "${label}",
-            "labelAlign": "cb",
+            "labelAlign": "cm",
             "labelXOffset": 0,
             "labelYOffset": "${yoffset}" // fixme: this is bad
         },
@@ -70,8 +72,8 @@ Sourcemap.Map.prototype.defaults = {
             "strokeColor": "${scolor}",
             "labelAlign": "cm",
             "labelXOffset": 0,
-            "labelYOffset": -35,
-            "fontSize": "em",
+            "labelYOffset": "${yoffset}",
+            "fontSize": "${fsize}",
             "fillColor": "${color}"
         },
         "connecting": {
@@ -87,12 +89,12 @@ Sourcemap.Map.prototype.defaults = {
             "fillColor": "${color}",
             "strokeWidth": "${width}",
             "strokeColor": "${color}",
-            "fillOpacity": 0.6,
+            "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
             "rotation": "${angle}"
         },
         "select": {
-            "strokeColor": "${scolor}",
+            "strokeColor": "${color}",
             "fillColor": "#ffffff",
             "fillOpacity": 1.0
         }
@@ -192,7 +194,9 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                this.controls.select.unselectAll(); 
+                if(this.last_selected && this.last_selected.cluster_instance_id) {
+                    this.controls.select.unselectAll();
+                }
                 this.map.zoomIn();
                 this.reselect();
             }
@@ -204,7 +208,9 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                this.controls.select.unselectAll();
+                if(this.last_selected && this.last_selected.cluster_instance_id) {
+                    this.controls.select.unselectAll();
+                }
                 this.map.zoomOut();
                 this.reselect();
             }
@@ -350,7 +356,7 @@ Sourcemap.Map.prototype.addLayer = function(label, layer) {
 
 Sourcemap.Map.prototype.addStopLayer = function(scid) {
     var sc = this.findSupplychain(scid);
-    this.cluster = new Sourcemap.Cluster({distance: 35, threshold: 2, map: this});
+    this.cluster = new Sourcemap.Cluster({distance: 32, threshold: 2, map: this});
     var strategies = this.options.clustering ? [this.cluster] : [];
     var slayer = new OpenLayers.Layer.Vector(
         "Stops - "+sc.getLabel(), {
@@ -465,17 +471,24 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     this.eraseStop(scid, stop.instance_id);
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
     // copy attributes for starters.
+    var fsize = 12;
+    
     new_feature.attributes = Sourcemap.deep_clone(stop.attributes);
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
     new_feature.attributes.size = Math.max(stop.getAttr("size", false), 14);
+    new_feature.attributes.fsize = fsize + "px";
+    new_feature.attributes.yoffset = -1*(Math.max(stop.getAttr("size", false), 14)+fsize);
+    
     var rand_color = this.options.default_feature_colors[Math.floor(Math.random()*3)];
     new_feature.attributes.color = stop.getAttr("color", false) || rand_color;
         stop.attributes.color = stop.getAttr("color", false) || rand_color;
     new_feature.attributes.fcolor = stop.getAttr("color", false) || rand_color;
     stop.attributes.title = new_feature.attributes.title = stop.getAttr("title", false) || "" + stop.instance_id.split("-")[1];
-    new_feature.attributes.label = stop.getAttr("title", false) || "";
+    var slabel = stop.getAttr("title", false) || "";
+    slabel = slabel.length > 24 ? slabel.substring(0,24)+"..." : slabel;
+    new_feature.attributes.label = slabel;
     stop.attributes.description = new_feature.attributes.description = stop.getAttr("description", false) || "";
     new_feature.attributes.ref = stop;
     stcolor = new Sourcemap.Color();    
@@ -487,8 +500,8 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
         stcolor = stcolor.fromHex(rand_color);
         new_feature.attributes.scolor = stcolor.toString();
     }
-    new_feature.attributes.swidth = 14;
-
+    new_feature.attributes.swidth = 2;
+    
     // save references to features
     this.mapped_features[stop.instance_id] = new_feature;
     this.stop_features[scid][stop.instance_id] = {"stop": new_feature};
@@ -570,7 +583,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
             "color": hop.getAttr("color", rand_color),
-            "size": 10, "supplychain_instance_id": scid,
+            "size": 6, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id
             
@@ -587,8 +600,8 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.hop_instance_id = hop.instance_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
-    new_feature.attributes.width = 3;
-    new_feature.attributes.opacity = 0.6;
+    new_feature.attributes.width = 2;
+    new_feature.attributes.opacity = 0.8;
     new_feature.attributes.color = hop.getAttr("color", false) || rand_color;
     new_feature.attributes.ref = hop;
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
@@ -901,20 +914,27 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var scid = feature.attributes.supplychain_instance_id;
     var center = feature.geometry.getBounds().getCenterLonLat();
     var cid = "cluster-"+feature.attributes.stop_instance_id;
+    var csize = feature.attributes.size*2;
+    var slabel = feature.attributes.title;
+    var fsize = 12;
+    slabel = slabel.length > 24 ? slabel.substring(0,24)+"..." : slabel="";
     var cluster = new OpenLayers.Feature.Vector(
         new OpenLayers.Geometry.Point(center.lon, center.lat), {
             "count": 1, 
-            "size":feature.attributes.size*2,
+            "size":csize,
+            "fsize":fsize+"px",
             "color":feature.attributes.color,
-            "swidth":14,
+            "swidth":2,
             "scolor":feature.attributes.color,
             "fcolor":feature.attributes.color,
-            "label": feature.attributes.title+" ...",
-            "yoffset":-45, 
+            "baselabel": feature.attributes.title,
+            "label": slabel,
+            "yoffset":-1*(csize+fsize),          
             "supplychain_instance_id":scid,
             "cluster_instance_id":cid
         }
     );
+
     cluster.renderIntent = "cluster";
 
     cluster.cluster = [feature];    
@@ -925,6 +945,9 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
 Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
     cluster.cluster.push(feature);
     cluster.attributes.count += 1;
-    //cluster.attributes.size = cluster.attributes.swidth + (2.25 * cluster.attributes.count);
-    //cluster.attributes.yoffset = (-21 * (cluster.attributes.size/cluster.attributes.swidth)) - cluster.attributes.swidth/2;
+    console.log(cluster);
+    var slabel = cluster.attributes.baselabel;
+    slabel = slabel.length > 24 ? slabel.substring(0,24) : slabel;
+    slabel += " & "+cluster.attributes.count+" more..."
+    cluster.attributes.label = slabel;
 }

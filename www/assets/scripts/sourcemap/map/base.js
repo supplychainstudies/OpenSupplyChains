@@ -21,7 +21,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "tour_order_strategy": "upstream", "tileswitcher": false,
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000",
     "tileset": "cloudmade", // terrain, cloudmade, etc. (check map.js)
-    "tour": false, "min_stop_size": 8, "max_stop_size": 48, "error_color": '#ff0000',
+    "tour": false, "min_stop_size": 1, "max_stop_size": 48, "error_color": '#ff0000',
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water"],
     "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"}
@@ -145,6 +145,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         }
     }, this)); 
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
+        this.last_selected = null;
         this.hideDialog();
     }, this));
 }
@@ -220,20 +221,16 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
 }
 
 Sourcemap.Map.Base.prototype.showDialog = function(mkup, no_controls) {
-    if(this.dialog) {
-        $(this.curtain).removeClass("hidden").fadeIn();
+    if(this.dialog && !($(this.dialog).hasClass("editor-dialog"))) {
         // update dialog content and position
         if(mkup && no_controls) {
             this.dialog.empty();
             this.initDialog(no_controls);
             $(this.dialog_content).html(mkup); // wipe controls
         } else if(mkup) {
-            this.dialog.empty();
             this.initDialog();
             $(this.dialog_content).html(mkup);
         }
-
-        $(window).resize();
         
         var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
         $(this.dialog).fadeIn(fade, function() {}).data("state", 1);
@@ -306,6 +303,8 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
 }
 
 Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
+            $(this.dialog).removeClass("editor-dialog");        
+    
             $(this.dialog_content).empty();
             var cluster_id = cluster.attributes.cluster_instance_id;
             var chtml = $("<div id='"+cluster_id+"' class='cluster'></div>");
@@ -463,7 +462,6 @@ Sourcemap.Map.Base.prototype.decorateFeatures = function(dec_fn, features) {
             dec_fn(features[i], this);
         } else {
             if(features[i].cluster) {
-                console.log(feature);
             }
             for(var k in dec_fn) {
                 if(features[i].attributes[k]) {
@@ -512,6 +510,15 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
                 if(vrange)
                     sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
                 stf.attributes.size = sval;
+                var fsize = 18;
+                stf.attributes.fsize = fsize+"px";                
+                stf.attributes.yoffset = -1*(sval+fsize);
+                
+                var unit = "kg";
+                if(attr_nm === "water") { unit = "L"; }                
+                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
+                if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
+                stf.attributes.label = scaled.value + " " + scaled.unit;
                 return;
             }
         }
@@ -528,22 +535,32 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
                 if(vrange)
                     sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
                 stf.attributes.size = sval;
-                /*
-                stf.attributes.color = active_color;
-                stcolor = new Sourcemap.Color();
-                stcolor = stcolor.fromHex(stf.attributes.color);
-                stcolor.r -= 8; stcolor.g -= 8; stcolor.b -= 8;
-                stf.attributes.strokeColor = stcolor+"";*/
+                var fsize = 18;
+                stf.attributes.fsize = fsize+"px";                
+                stf.attributes.yoffset = -1*(sval+fsize);                
+                
+                var unit = "kg";
+                if(attr_nm === "water") { unit = "L"; }                
+                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
+                if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
+                stf.attributes.label = scaled.value + " " + scaled.unit;
                 return;
             }
         }
         stf.attributes.size = smin;
+        stf.attributes.yoffset = 0;            
+        stf.attributes.label = "";
+        
         stf.attributes.color = mb.options.attr_missing_color;
     }, {"vmin": vmin, "vmax": vmax, "smin": smin, "smax": smax, "attr_name": attr_nm});
     return this.decorateStopFeatures(dec_fn);
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
+    this.map.last_selected = null;
+    this.map.controls.select.unselectAll();
+    
+    this.map.controls["select"].unselectAll();        
     switch(viz_nm) {
         //case "energy":
         //    break;

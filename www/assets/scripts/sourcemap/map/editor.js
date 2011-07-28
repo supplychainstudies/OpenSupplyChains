@@ -37,7 +37,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // listen for supplychain updates and save
     Sourcemap.listen('supplychain-updated', function(evt, sc) {
         var succ = $.proxy(function() {
-            this.map_view.hideDialog();            
             this.map_view.updateStatus("Saved...", "good-news");            
         }, this);
         var fail = $.proxy(function() {
@@ -90,7 +89,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
             var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
 
             var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-
             this.showEdit(ftr);
         }
     }, this));
@@ -102,6 +100,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
         "panel": "edit",
         "callbacks": {
             "click": $.proxy(function() {
+                this.map.last_selected = null;
+                this.map.controls.select.unselectAll();
+                
                 // make a suitable geometry
                 var geometry = (new OpenLayers.Format.WKT()).write(
                     new OpenLayers.Feature.Vector(
@@ -121,14 +122,24 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 }
                 // add a stop to the supplychain object
                 sc.addStop(new_stop);
-                Sourcemap.Stop.geocode(new_stop);
-                
-                // redraw the supplychain
                 this.map.mapSupplychain(sc.instance_id);                
-                this.map.controls["select"].unselectAll(); 
-
- this.map.controls["select"].select(this.map.stop_features[sc.instance_id][new_stop.instance_id].stop);
-
+                
+                var cb = $.proxy(function(data) {
+                    if(data && data.results) {
+                        this.stop.setAttr("address", data.results[0].placename);
+                        
+                        this.stop.attributes.stop_instance_id = this.stop.instance_id;
+                        this.stop.attributes.supplychain_instance_id = this.stop.supplychain_id;
+                        this.map.last_selected = new_stop.attributes;
+                        this.map.controls.select.select(this.map.stopFeature(sc.instance_id, this.stop.instance_id));
+                        
+     
+                    }
+                }, {"stop":new_stop, "map":this.map, "sc":sc});
+                                
+                Sourcemap.Stop.geocode(new_stop, cb);
+                
+   
             }, this)
         }
     });
@@ -229,7 +240,9 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
         if(attr[k] == undefined) attr[k] = ref.getAttr(k);
     }
     Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
+        $(this.editor.map_view.dialog).removeClass("editor-dialog");        
         this.editor.map_view.showDialog(th, true);
+        $(this.editor.map_view.dialog).addClass("editor-dialog");
         $("#editor-tabs").tabs();
         // load catalog button
         $(this.editor.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
@@ -258,6 +271,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
     }, {"ref": ref, "editor": this.editor, "feature": ftr}));    
         $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
             // Edit should be disabled at this point
+            this.editor.map_view.hideDialog();            
             
             // save updated attributes
             var f = $(e.target).parents('form');

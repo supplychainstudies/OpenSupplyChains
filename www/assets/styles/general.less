@@ -639,6 +639,7 @@ a{
 
 #discussion-section {
     width:535px;
+    min-height: 200px;
     padding: 20px;
     background: url("../images/news_background.jpg") top left no-repeat;
     h3 {
@@ -672,9 +673,20 @@ a{
         }
     }
     #comment-form {
-        textarea {
-            width:100%;
-            &:focus { outline: none; }        
+        div{
+            background: url(../images/shadow.png) top repeat-x; 
+            width: 459px;
+            border: 1px solid #bfbfbf;
+            .rounded(3px);
+            textarea{
+                font-size: 15px;
+                width: 413px;
+                height: 120px;
+                border: 0;
+                padding: 8px 20px;
+                font-style: italic;    
+                &:focus { outline: none; }
+            }
         }
     }
     #comment-submit {
@@ -911,6 +923,7 @@ img{
 .button {
     padding: .5em 1em;
     border: 1px solid #666; 
+    color:#f7f7f7;
     .gradient(#246587,#50a3ce);
     .rounded(4px);
     .box_shadow();

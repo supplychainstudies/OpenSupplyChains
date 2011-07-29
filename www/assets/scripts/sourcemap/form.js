@@ -289,7 +289,7 @@ $(document).ready(function() {
         (new Sourcemap.Form(this));
     });
 
-    $('.sourcemap-form input, .sourcemap-form textarea, .sourcemap-form select').each( function(){
+    $('.sourcemap-form input[type=text], .sourcemap-form textarea, .sourcemap-form select').each( function(){
         $(this).focus(function(e){
             if (this.defaultValue == this.value)
                 this.value = "";

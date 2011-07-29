@@ -1,32 +1,27 @@
-<form name="edit-ref">
+<form id="hop-editor" name="edit-ref">
+<div id="hop-editor">
+<ul id="edit-actions">
+    <li class="connect-button">Connect</li>
+    <li class="delete-button">Delete</li>
+</ul>
 
-<h2 class="edit-window-title">
-    <% if(this.attr["name"]) { %><%= this.attr["name"] %><% } %></h2>
-<h3 class="edit-window-address">
-    <% if(this.attr["address"]) { %><%= this.attr["address"] %><% } %>
-</h3>
+<h2 id="detail-title"><input id="edit-title" name="title" type="text" value="<%= this.attr["title"] %>" /></h2>
+<h3 class="placename"><input id="edit-placename" name="address" type="text" value="<%= this.attr["address"] %>" /></h3>
+
+
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>
 		<li><a href="#edit-footprint">Footprint</a></li>
 		<li><a href="#edit-media">Media</a></li>
+		<li><a class="load-catalog-button">Material Catalog</a></li>
+		
 	</ul>
-    <div class="load-catalog-button">Import from Footprinted.org</div>
     <div class="clear"></div>
     
         <div id="edit-description" class="sourcemap-form">        
             <fieldset>
-                <label for="name">Title</label>
-                <div class="sourcemap-form-textbox">
-                    <% var el = $("<input />").attr("type", "text").attr("name", "name").addClass("textbox"); el[0].setAttribute("value",this.attr["name"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-                <label for="teaser">Short Description</label>
-                <div class="sourcemap-form-textbox">
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "teaser").addClass("textbox"); el[0].setAttribute("value",this.attr["teaser"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-                <label for="discription">Long Description</label>
+                <label for="description">Description</label>
                 <div class="sourcemap-form-textbox">
                     <%= $("<div></div>").append(
                             $("<textarea></textarea>").attr("name", "description").addClass("textbox").html(this.attr["description"] || "")
@@ -44,7 +39,7 @@
                     <div class="halfwidth">
                         <label for="co2e">Quantity</label>
                         <div class="sourcemap-form-textbox">
-                            <% el = $("<input></input>").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.attr["weight"] || ""); %>
+                            <% el = $("<input></input>").attr("type", "text").attr("name", "quantity").addClass("textbox"); el[0].setAttribute("value",this.attr["quantity"] || ""); %>
                             <%= $("<div></div>").append(el).html() %>
                         </div>
                     </div>
@@ -54,7 +49,7 @@
                     <div class="halfwidth">
                         <label for="co2e">Unit</label>
                         <div class="sourcemap-form-textbox">
-                            <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
+                            <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
                             <%= $("<div></div>").append(el).html() %>
                         </div>
                     </div>
@@ -66,7 +61,7 @@
                     <div class="halfwidth">
                         <label for="unit">Impact Factor</label>
                         <div class="sourcemap-form-textbox">
-                            <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
+                            <% el = $("<input></input>").attr("type", "text").attr("name", "factor").addClass("textbox"); el[0].setAttribute("value",this.attr["factor"] || ""); %>
                             <%= $("<div></div>").append(el).html() %>
                         </div>
                     </div>
@@ -74,7 +69,7 @@
                     <label class="operator">=</label>
                    
                     <div class="halfwidth">
-                        <div class="result">0 kg C02e</div>
+                        <div id="impact-result" class="result">0 kg C02e</div>
                     </div>
 
                     <!--
@@ -86,24 +81,20 @@
                     -->
                 </fieldset>
             </div>
-
-            <div id="impact-co2" class="impact-icon">CO2</div>
-            <div id="impact-h2o" class="impact-icon">H2O</div>
-            <div id="impact-so2" class="impact-icon last">SO2</div>
         </div>
         
         <div id="edit-media" class="sourcemap-form">
             <fieldset>
 
-                <label for="flickr:setid">Flickr Setid</label>
+                <label for="flickr-setid">Flickr Setid</label>
                 <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "flickr:setid").addClass("textbox"); el[0].setAttribute("value",this.attr["flickr:setid"] || ""); %>
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "flickr-setid").addClass("textbox"); el[0].setAttribute("value",this.attr["flickr-setid"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
-                <label for="youtube:url">Youtube Url</label>
+                <label for="youtube-url">Youtube Url</label>
                 
                 <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "youtube:link").addClass("textbox"); el[0].setAttribute("value",this.attr["youtube:link"] || ""); %>
+                    <% el = $("<input></input>").attr("type", "text").attr("name", "youtube-url").addClass("textbox"); el[0].setAttribute("value",this.attr["youtube-url"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
 
@@ -119,4 +110,5 @@
 </div>
 <div class="spacer"></div>
 
+</div>
 </form>

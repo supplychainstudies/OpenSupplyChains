@@ -518,6 +518,7 @@ Sourcemap.Map.prototype.eraseStop = function(scid, stid) {
     return this;
 }
 
+
 Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
     if(scid && !stid && (scid instanceof Sourcemap.Stop)) {
         stid = scid;
@@ -945,7 +946,6 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
 Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
     cluster.cluster.push(feature);
     cluster.attributes.count += 1;
-    console.log(cluster);
     var slabel = cluster.attributes.baselabel;
     slabel = slabel.length > 24 ? slabel.substring(0,24) : slabel;
     slabel += " & "+cluster.attributes.count+" more..."

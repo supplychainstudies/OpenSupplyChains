@@ -84,10 +84,13 @@ Sourcemap.Map.Editor.prototype.init = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        // @todo HOP
+        if(ftr.attributes.hop_instance_id) {
+            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
+            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+            this.showEdit(ftr);
+        }
         if(ftr.attributes.stop_instance_id) {
             var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
-
             var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
             this.showEdit(ftr);
         }

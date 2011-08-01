@@ -138,7 +138,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
         }
-        else if(ftr.attributes.stop_instance_id) {
+        else if(ftr.attributes.stop_instance_id && !(map.editor)) {
             this.showStopDetails(
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id, 0
             );
@@ -173,7 +173,9 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     }
     var cb = function(p, tx, th) {
         $(this.banner_div).html(th);
-        // share link event
+        $(this.banner_div).find('.banner-share-link').click(function(){
+            $.scrollTo('#share-info', 600);
+        });
         $(this.banner_div).find('.banner-share-link').click(function(){
             $.scrollTo('#share-info', 600);
         });
@@ -190,29 +192,20 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
                 }, this)});        
     }
 
-    Sourcemap.tpl('map/overlay/supplychain', sc, $.proxy(cb, this));
+    Sourcemap.tpl('map/banner', sc, $.proxy(cb, this));
 
     return this;
 }
         
-Sourcemap.Map.Base.prototype.initDialog = function(no_controls) {
-   
+Sourcemap.Map.Base.prototype.initDialog = function() {   
     // set up dialog
     if(!this.dialog) {
         this.dialog = $('<div id="dialog"></div>');
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
-    // todo: bind events, not inline javascript
-    this.dialog_prev_el = $('<div id="detail-nav" class="prev"><a href="javascript: void(0);"></a></div>');
-    this.dialog_next_el = $('<div id="detail-nav" class="next"><a href="javascript: void(0);"></a></div>');
-    this.dialog_close = $('<div id="detail-close" class="close"><a href="javascript: void(0);"></a></div>'); 
-    $(this.dialog_close).click($.proxy(function() { this.hideDialog(); }, this));
-    this.dialog_content = $('<div id="detail-content" class="content"></div>');
 
+    this.dialog_content = $('<div id="dialog-content"></div>');
     this.dialog.append(this.dialog_content);
-    this.dialog.append(this.dialog_close)
-    $(this.dialog).data("state", 1); // todo: check this?
-
 }
 
 Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
@@ -225,20 +218,14 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
     return this;
 }
 
-Sourcemap.Map.Base.prototype.showDialog = function(mkup, no_controls) {
-    if(this.dialog && !($(this.dialog).hasClass("editor-dialog"))) {
-        // update dialog content and position
-        if(mkup && no_controls) {
-            this.dialog.empty();
-            this.initDialog(no_controls);
-            $(this.dialog_content).html(mkup); // wipe controls
-        } else if(mkup) {
-            this.initDialog();
-            $(this.dialog_content).html(mkup);
-        }
+Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
+    if(this.dialog) {
+        this.initDialog();
+        $(this.dialog_content).html(mkup);
+        $(this.dialog_content).find(".close").click($.proxy(function() { this.hideDialog(); }, this));
         
         var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
-        $(this.dialog).fadeIn(fade, function() {}).data("state", 1);
+        $(this.dialog).fadeIn(fade, function() {});
     }
 }
 
@@ -251,14 +238,13 @@ Sourcemap.Map.Base.prototype.hideDialog = function() {
 }
 
 Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
-    
    // make sure the target magic word index is valid
     var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
    
     // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
     var stop = sc.findStop(stid);
-
+    console.log(stop);
     var f = this.map.stopFeature(scid, stid);
     
     // get magic word...make sure it's valid
@@ -273,7 +259,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
 
     if(stop.getAttr(magic_word, false) === false) magic_word = false;
 
-    $(this.dialog).data("state", -1); // loading
     //"default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
     
     // load template and render
@@ -283,7 +268,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
             this.base.showDialog(th);
 
             // Sets up content-nav behavior
-            $(this.base.dialog_content).find('.content-item').click($.proxy(function(evt) {
+            $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var clicked_idx = parseInt(evt.target.id.split('-').pop());
                 var idx = -1;
                 for(var i=0; i<this.base.magic_word_sequence.length; i++) {
@@ -307,24 +292,24 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
     
 }
 
-Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
-            $(this.dialog).removeClass("editor-dialog");        
-    
+Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {    
             $(this.dialog_content).empty();
             var cluster_id = cluster.attributes.cluster_instance_id;
             var chtml = $("<div id='"+cluster_id+"' class='cluster'></div>");
 
             for(var i in cluster.cluster) {
-                var linkcontent = cluster.cluster[i].attributes.title ?
-                    cluster.cluster[i].attributes.title+" " : "";
-                linkcontent += cluster.cluster[i].attributes.address ? 
-                    "("+cluster.cluster[i].attributes.address+")" : "";
+                var title = cluster.cluster[i].attributes.title ?
+                    cluster.cluster[i].attributes.title.substring(0,36) : "";
+                title += title.length == 36 ? "..." : "";
+                var address = cluster.cluster[i].attributes.address ? 
+                    cluster.cluster[i].attributes.address.substring(0,46) : "";
+                address += address.length == 46 ? "..." : "";
+                
                 var stop_id = cluster.cluster[i].attributes.stop_instance_id;
 
-                var new_citem = $("<div id='target-"+stop_id+"' class='cluster-item'><a>"+linkcontent+"</a></div>");
+                var new_citem = $("<div id='target-"+stop_id+"' class='cluster-item'><a><h2>"+title+"</h2><h3 class='placename'>"+address+"</h3></a></div>");
                 chtml.append(new_citem);        
             }
-            chtml.prepend($("<h2>Cluster</h2>"));            
             this.showDialog(chtml);
             $(this.dialog).attr("class","grey");
             $(this.dialog).find(".cluster-item").click($.proxy(function(evt) {
@@ -363,7 +348,6 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 
     if(hop.getAttr(magic_word, false) === false) magic_word = false;
 
-    $(this.dialog).data("state", -1); // loading
     //"default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
     
     // load template and render
@@ -373,7 +357,7 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
             this.base.showDialog(th);
 
             // Sets up content-nav behavior
-            $(this.base.dialog_content).find('.content-item').click($.proxy(function(evt) {
+            $(this.base.dialog_content).find('.navigation-item a').click($.proxy(function(evt) {
                 var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
                 var idx = -1;
                 for(var i=0; i<this.base.magic_word_sequence.length; i++) {
@@ -399,7 +383,6 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 
 Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {
     var msg = msg ? msg : false;
-    $(this.dialog).data("state", -1);
     Sourcemap.template("map/location", function(p, txt, th) {
         this.showDialog(th, true);
         $(this.dialog).find('#update-user-loc').click($.proxy(function(evt) {
@@ -429,7 +412,6 @@ Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {
 }
 
 Sourcemap.Map.Base.prototype.showLocationConfirm = function() {
-    $(this.dialog).data("state", -1);
     Sourcemap.template('map/location/confirm', function(p, tx, th) {
         this.showDialog(th, true);
         $(this.dialog).find('#user-loc-accept').click($.proxy(function(evt) {
@@ -516,9 +498,10 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
                     sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
                 stf.attributes.size = sval;
                 var fsize = 18;
-                stf.attributes.fsize = fsize+"px";                
+                stf.attributes.fsize = fsize+"px";   
+                stf.attributes.fcolor = stf.attributes.color;             
                 stf.attributes.yoffset = -1*(sval+fsize);
-                
+
                 var unit = "kg";
                 if(attr_nm === "water") { unit = "L"; }                
                 var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
@@ -541,7 +524,8 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
                     sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
                 stf.attributes.size = sval;
                 var fsize = 18;
-                stf.attributes.fsize = fsize+"px";                
+                stf.attributes.fsize = fsize+"px";     
+                stf.attributes.fcolor = stf.attributes.color;                        
                 stf.attributes.yoffset = -1*(sval+fsize);                
                 
                 var unit = "kg";
@@ -630,6 +614,8 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
     return range;
 }
 
+/*
+@todo marked for deletion
 Sourcemap.Map.Base.prototype.showShare = function() {
     for(var k in this.map.supplychains) {
         var sc = this.map.supplychains[k]; break;
@@ -640,6 +626,7 @@ Sourcemap.Map.Base.prototype.showShare = function() {
     }
     Sourcemap.tpl('map/share', sc, $.proxy(cb, this));
 }
+*/
 
 Sourcemap.Map.Base.prototype.favorite = function() {
     for(var k in this.map.supplychains) {

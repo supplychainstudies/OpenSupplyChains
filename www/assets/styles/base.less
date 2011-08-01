@@ -30,7 +30,7 @@
         position:relative;
         
         border:4px solid #fff;
-        height:560px;
+        height:660px;
         .rounded(8px);
         overflow:hidden;
     }
@@ -46,88 +46,55 @@
 
 #dialog {
     position: absolute;
-    top: 75px; right: 21px;
-    height: 400px; width: 400px;
+    top: 100px; right: 21px;
+    max-height: 450px; width: 400px; /* Could set a height here for non-stretchy dialog */
     display:none;
     z-index: 1012;
-    color:#fff;
-    padding: 5px 0;
-    overflow-x:hidden;
-    border: 1px solid #3a86af;
-    background: rgba(50,140,187,1) url("../images/detail-background.png") top repeat-x;
+    padding: 5px 0 0 0;
+    border: 1px solid rgb(162,162,162);
+    background: rgba(255,255,255,0.85);
+    .box_shadow(3px, 1px, 10px);
 
     .rounded(5px);
-    #detail-close{
-        background: url("../images/close.png") right center no-repeat;
-        height: 27px; width: 27px;
-        position: absolute;
-        top: 8px;
-        right: 10px;
-        a {
-            display: block;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-    }
-    #detail-content {
+    #dialog-content {
         overflow:hidden;                       
-        padding: 0; margin: 0;
-        float:left;
-        color: #16445d;
-        text-shadow: rgba(79,156,197,0.1);
-        > div{
-            padding: 0 20px;
-            &.inset{
-                position:relative;
-                background: #2779a4;
-                padding: 20px;
-                .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
-                text-align:center;
-            }
-        }
-        a{
-            color: #16445d;
-        }
-        iframe, object {
-            display:block;
-            margin: 0;
-            background:#444;
-            width: 360px;
-            height: 224px;
-        }
-        h1 {
-            border-bottom:1px solid #ccc;
-        }
-        h2{
+        padding: 0 10px; margin: 0;
+        color: #888888;
+ 
+        h2.title {
             font-size: 22px;
-            color: #fff;
+            color: #454545;
             margin-top:0;
             padding: 5px 5px 0 10px;
-            text-shadow: rgba(0,0,0,0.3) -1px 0, rgba(0,0,0,0.1) 0 -1px, rgba(255,255,255,0.3) 0 1px, rgba(0,0,0,0.1) -1px -2px;
-            &#detail-title {
-                background:url("../images/dot.png") 0 10px no-repeat;
-                padding-left:28px;
-            }
+            background:url("../images/dot.png") 0 10px no-repeat;
+            padding-left:28px;
             &#detail-hop-title {
                 background:url("../images/chevron.png") 0 10px no-repeat;
                 padding-left:28px;
             }
         }
-        .placename {
-            font-size:16px;
-            font-weight: normal;
-            color: #add1e4;
-            margin-left:20px;
-            padding-left: 15px;
-            text-shadow: rgba(0,0,0,0.03);
-            background:url("../images/marker.png") 0 0 no-repeat;
-        }
-        h3{
-            font-size: 0.8em;
+        h3.placename {
             font-style: italic;
-            color:#aaa;
-            margin-bottom: 15px;
+            font-size:14px;
+            font-weight: normal;
+            color: #888888;            
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        div.description {
+            font-size:15px;
+            line-height:1.2em;
+            max-height:100px;
+            overflow:auto;
+        }
+        a.url {
+            display:block;
+            text-align:center;
+            padding:10px;
+            cursor:pointer;
+            text-decoration: underline;
+            color: #2882B1;
+            
         }
         .youtube-player, .vimeo-player {
             background: url("../images/embed-video-icon.png") center center no-repeat #444;
@@ -141,97 +108,117 @@
                 margin: .5em;
             }
         }            
-        .cluster {
-            .cluster-item a {
-                color:#ffffff;
-                padding-left:28px;
-                background:url("../images/dot.png") center left no-repeat;
-                min-height:28px;
-                margin-bottom:6px;
-                display:block;
-                cursor:pointer;
-            }
-        }
-    }
 
-    .content-nav {
-        margin:0 auto;
-        position:absolute;
-        bottom:6px; left:0; right:0;
-        text-align:center;
-        text-align:center;
-        height:12px;
-        .content-item {
-            text-decoration:none;
-            width:8px;
-            height:8px;
-            background:#fff;
-            .rounded(4px);
-            display: inline-block;
-            
-            &.selected a { text-decoration:underline; }
-            &:hover { text-decoration:underline; }
-
-        }
-    }
-    .content-buttons {
-        position:absolute;
-        bottom: 0;
-        left: 32px;
-        font-size: 14px;
-        font-weight: bold;
-        color: #236385;
-        text-shadow: 0 1px 1px #4f9cc5;
-        div{
-            float:left;
-            padding: 15px 10px;
-            &.weight{padding-left: 40px; background: url(../images/dialog-icon-mass.png) 10px 12px no-repeat;}
-            &.co2e{padding-left: 40px; background: url(../images/dialog-icon-co2.png) 10px 12px no-repeat;}
-            &.water{padding-left: 40px; background: url(../images/dialog-icon-h2o.png) 10px 12px no-repeat;}
-        }
-    }
-    .content {
-        margin: 0 .5em;
-        overflow:hidden;
-        width: 100%; 
-        > .description {
-            padding-top:1em;
-            font-size:1em;
-            line-height:1em;
-            height:60px;
-        }
-        > .block {
-            overflow: hidden;
-            margin-top: 1em;
-        }          
-        > .url {
-            margin-top: 1em;
-        }
-        .block.greenfact {
-            font-size:0.8em;
-            &:before {
-                content: "Sustainability Fact: ";
-            }
-        }
-        .url.moreinfo a {
+        iframe, object {
             display:block;
-            text-align:center;
-            padding:0.5em;
-            cursor:pointer;
-            text-decoration: underline;
+            margin: 0;
+            background:#444;
+            width: 360px;
+            height: 224px;
         }
-    }
+        ul#dialog-footprint {            
+            height:45px;
+            padding:0; margin:0 -10px 0 -10px;
+            font-size: 14px;
+            font-weight: bold;
+            overflow:auto;
+            text-align:center;
+            color: @link-color;
+            list-style:none;
+            border-top: 1px solid rgb(206,206,206);
+            border-bottom: 1px solid rgb(206,206,206);
+            li {
+                float:left;
+                display:block;
+                padding: 15px 10px;
+                &.weight{padding-left: 40px; background: url(../images/dock-icon-mass.png) 10px 12px no-repeat;}
+                &.co2e{padding-left: 40px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
+                &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
+            }
+        }   
+        #dialog-media {
+            position:relative;
+            width:360px;
+            min-height:220px;
+            background: rgb(200,200,200);
+            padding: 20px 20px 30px 20px;
+            margin-left:-10px;
+            .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
+            text-align:center;
+            border-bottom-left-radius:4px;	      
+            -moz-border-radius-bottomleft:4px;
+            -webkit-border-bottom-left-radius:4px;
+            border-bottom-right-radius:4px;	      
+            -moz-border-radius-bottomright:4px;
+            -webkit-border-bottom-right-radius:4px;
+
+            #dialog-media-navigation {
+                margin:0 auto;
+                position:absolute;
+                top:0; left:0; right:0;
+                text-align:center;
+                text-align:center;
+                height:12px;
+                a.navigation-item {
+                    text-decoration:none;
+                    width:8px;
+                    height:8px;
+                    background:rgba(255,255,255,0.4);
+                    .rounded(4px);
+                    display: inline-block;
+                }
+            }
+        }     
+        .close{
+            background: url("../images/close-grey.png") right center no-repeat;
+            height: 27px; width: 27px;
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+            }
+        }
+        .cluster {
+            .cluster-item {
+                border-bottom:1px solid #eee;
+                a {   
+                    padding-left:28px;                
+                    background:url("../images/dot.png") center left no-repeat;
+                    min-height:28px;
+                    margin-bottom:6px;
+                    display:block;
+                    cursor:pointer;
+                    h2 {
+                        font-size:1em;   
+                    }
+                    &:hover {
+                        background:url("../images/dot-dark.png") center left no-repeat;
+                        color:#000;
+                        text-decoration:none;
+                    }
+                }
+            }
+        }
+}
+
     #edit-actions {
-        padding:10px;
-        margin:0;
-        position:absolute;
-        top:0; right:50px;
+        padding:0; margin:15px 20px;
         list-style:none;
         li {
-            cursor:pointer;
+            padding:5px 20px;
             margin-left:10px;
             float:right;
+            cursor:pointer;
             font-size:12px;
+            border:1px solid #bbb;
+            .box_shadow_inset(2px,2px,2px,rgba(0,0,0,.1));
+            &.left {
+                float:left;
+            }
         }
         .connect-button {
 
@@ -239,29 +226,13 @@
         .delete-button {
 
         }
+        .edit-save {
+            
+        }
     }
 
 }
 
-
-/* OPENLAYERS STYLES
- * -------------------------------------------------------------- */
-
-
-.olLayerGooglePoweredBy, .olLayerGoogleCopyright, .olControlAttribution {
-    z-index:1001 !important;
-    bottom: 0;
-    float:left;
-}
-.olControlAttribution { 
-    bottom:0 !important; 
-    font-size:0.6em !important;
-    color:#999;
-    a {
-        text-decoration:underline;
-        color:#999;
-    }  
-}
 
 /* DOCK 
  * -------------------------------------------------------------- */
@@ -315,7 +286,8 @@
                     &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
                     &.toggle {
                         &.active {
-                            background-color: #333;
+                            color: #333;
+                            background-color:rgba(200,200,200,0.85);
                         }
                     }
                     &:last-child{
@@ -351,40 +323,44 @@
 
 #banner { 
     position:absolute;
-    top:20px; left:20px; right:20px;
-    z-index:1000;
-    .body-font;
-    .rounded(8px);
-    .gradient(rgba(0,0,0,0.09),rgba(0,0,0,0.02));
-    height: 40px;
-    font-size:0.9em;
-    text-shadow: 0 1px 1px #ccc;
+    height: 38px; top:20px; left:20px; right:20px;    
+    font-size:0.8em;
+    .body-font; .gradient();
+    
     #banner-content {
-        div {
-            float:left;
-            padding: 12px 15px;
-            border-right: 1px solid rgba(140,140,140,0.25);
-        }
+        width:960px;
+        margin: 0 auto;
+        
         #banner-summary {
             font-weight:bold;
             font-size: 22px;
             text-shadow: 0 1px 1px #ddd;
+            padding:10px 30px 10px 0;
         }
-        #banner-owner, 
-        #banner-favorite,
-        #banner-share{
-            float: right;
-            padding-left: 38px;
+        #banner-description {
+            padding: 10px;
+            width:280px;
+            overflow:hidden;
         }
-        #banner-favorite{
+        #banner-favorite {
+            padding:10px 10px 10px 35px;            
             background: url(../images/icon-favorite.png) 6px center no-repeat;
         }
-        #banner-owner{
+        #banner-owner {
+            padding:10px 40px;
             background: url(../images/icon-owner.png) 6px center no-repeat;
         }
-        #banner-share{
-            border: none;
+        #banner-share {
+            padding:10px 10px 10px 35px;
             background: url(../images/icon-share.png) 6px center no-repeat;
+            border: none;           
+        }
+        #banner-owner, #banner-favorite, #banner-share {
+            float: right;
+        }
+         div {
+            border-right: 1px solid rgba(140,140,140,0.25);
+            float:left;
         }
     }
     a{
@@ -392,50 +368,15 @@
         text-shadow: 0 1px 1px #ddd;
     }
 }
-#share-dialog {
-    .preview-map {
-        width:100%;
-        height:281px;
-    }
-    .embed-link {
-        padding:2px 5px;
-        display:block;
-    }
-    .embed-code {
-        padding:5px;
-        width:536px;
-        border:2px solid #ccc;
-        font-size:0.8em;
-    }
-}
 
-#metrics {   
-    float:right;
-    width:220px;
-    color:#fff;
-    font-weight:bold;
-    margin:0;
-    li {
-        text-align:right;
-        margin:0 5px;
-        padding:0 5px;
-        font-size:14px;
-        border-left:1px solid #fff;    
-        display:block; float:right;
-        .metric-unit {
-            font-size:0.8em;
-        }
-        &:last-child {
-            border:none; padding:0; margin:0;
-        }
-    }
-}
 
 
 /* EDITOR 
  * -------------------------------------------------------------- */
 // These should probably be in a separate .less file.
 
+.editor-dialog {}
+    
 #stop-editor {
     h2 input, h3 input {
         font-family:inherit;
@@ -443,56 +384,76 @@
         font-size:inherit;
         color:inherit;
         border:none;
-        border-bottom:2px solid #2779a4;
-        padding-bottom:4px;
+        border-bottom:1px dashed #888888;
+        padding-bottom:8px;
         background:transparent;
         outline:none;
     }
-    #detail-title {
-        margin-left:10px;
-    }
-    #edit-title {
-        width:280px;
-    }
+    h2.title {
+         margin-left:10px;
+         input {
+             width:310px;
+         }
+     }
     h3.placename {
-        padding-left:12px !important;
-        
-        #edit-placename {
+        padding-left:12px !important;        
+        input {
             width:330px;
             margin-left:6px;
         }
     }
     #edit-description, #edit-footprint, #edit-media, #edit-catalog {
-        background: #2779a4;
+        height:200px;
+        background: rgb(200,200,200);
+        padding: 20px 20px 20px 20px;
         .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
-        height:240px;
         overflow:auto;
     }
     #edit-description {
         textarea {
-            height:160px;
-            width:100%;
+            height:180px;
+            width:98%;
+            border: 1% solid rgb(162,162,162);            
         }
     }
     fieldset {
-        border:none;
-        .sourcemap-form-textbox {
-            width:354px;
-        }
-    
+        border:none;    
         label {
-            font-size:1.2em;
-            color:#fff;
-            padding:0 0 0.5em 0;
+
         }
     }
-    .sourcemap-form div {
-        padding:0;
+    .ui-tabs {      
+        position: relative; padding: 0; zoom: 1; 
+    } 
+    .ui-tabs .ui-tabs-nav { 
+        border-top: 1px solid rgb(206,206,206);
+        border-bottom: 1px solid rgb(206,206,206);
+        margin: 0; padding: 0; margin-top:40px;
     }
-    .edit-save {
-        margin-top:5px;
-        margin-right:10px;
+    .ui-tabs .ui-tabs-nav li { 
+        list-style: none; float: left; position: relative; 
+        top: 1px; margin: 0; border-bottom: 0 !important; 
+        padding: 0; white-space: nowrap; 
     }
+    .ui-tabs .ui-tabs-nav li a { 
+        float: left; padding: 0 1.2em; margin: 0.5em 0; 
+        text-decoration: none; font-size:0.8em; 
+        border-left: 1px solid rgb(206,206,206); display:block; 
+    }
+    .ui-tabs .ui-tabs-nav li:first-child a {
+        border:none;
+    }
+    .ui-tabs .ui-tabs-nav li.ui-tabs-selected { 
+        margin-bottom: 0; padding-bottom: 1px; 
+    }
+    .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { 
+
+    }
+    .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } 
+    .ui-tabs .ui-tabs-panel { 
+        display: block; border-width: 0; padding: 0; background: none; }
+    .ui-tabs .ui-tabs-hide { display: none !important; }
+    .ui-state-active { text-decoration:underline; }
 }
 
 #catalog-close {
@@ -575,16 +536,20 @@
     }
 }
 
-.ui-tabs {      
-    position: relative; padding: 0; zoom: 1; 
-} 
-    
-.ui-tabs .ui-tabs-nav { margin: 0; padding: 0; margin-left:10px; }
-.ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
-.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em .5em 0; text-decoration: none; font-size:0.8em; text-shadow: rgba(0,0,0,0.03); }
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; }
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
-.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
-.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 0; background: none; }
-.ui-tabs .ui-tabs-hide { display: none !important; }
-.ui-state-active { text-decoration:underline; }
+
+/* OPENLAYERS STYLES
+ * -------------------------------------------------------------- */
+.olLayerGooglePoweredBy, .olLayerGoogleCopyright, .olControlAttribution {
+    z-index:1001 !important;
+    bottom: 0;
+    float:left;
+}
+.olControlAttribution { 
+    bottom:0 !important; 
+    font-size:0.6em !important;
+    color:#999;
+    a {
+        text-decoration:underline;
+        color:#999;
+    }  
+}

@@ -29,14 +29,13 @@
             </li>
         </ul>
         <form method="post" action="/search/">
-            <fieldset>
-                <div id="search">
-                    <input name="q" placeholder="Search" results="0" />
-                </div>
-            </fieldset>
+            <div id="search">
+                <input name="q" placeholder="Search" results="0" />
+            </div>
         </form>
         <div id="search-results"></div>
     </div>
+    <div class="clear"></div>
+    
 </div> <!-- #masthead -->
-<div class="clear"></div>
 

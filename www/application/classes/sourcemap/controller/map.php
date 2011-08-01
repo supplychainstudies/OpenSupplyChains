@@ -50,7 +50,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 foreach($c as $i => $comment) {
                     $arr = $comment->as_array();
                     $arr['username'] = $comment->user->username;
-                    $arr['avatar'] = Gravatar::avatar($comment->user->email);
+                    $arr['avatar'] = Gravatar::avatar($comment->user->email, 32);
                     $comment_data[] = (object)$arr;
                 }
                 $this->template->comments = $comment_data;

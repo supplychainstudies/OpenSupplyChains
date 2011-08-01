@@ -1,10 +1,10 @@
 <h2><div id="catalog-close">Edit &raquo;</div> Material Catalog</h2>
 <form id="catalog-search">
-    <fieldset>
-       
+    <fieldset>       
             <input id="catalog-search-field" name="q" type="search" results="0" />
     </fieldset>
 
 </form>
 <div class="catalog-pager"></div>
 <div class="catalog-content">...</div>
+<div class="close"></div>

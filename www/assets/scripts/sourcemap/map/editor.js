@@ -5,6 +5,7 @@ Sourcemap.Map.Editor = function(map, o) {
         this.map_view = map;
     Sourcemap.Configurable.call(this);
     this.instance_id = Sourcemap.instance_id("sourcemap-editor");
+    this.map.editor = this;
 }
 
 Sourcemap.Map.Editor.prototype = new Sourcemap.Configurable();
@@ -243,9 +244,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
         if(attr[k] == undefined) attr[k] = ref.getAttr(k);
     }
     Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
-        $(this.editor.map_view.dialog).removeClass("editor-dialog");        
-        this.editor.map_view.showDialog(th, true);
-        $(this.editor.map_view.dialog).addClass("editor-dialog");
+        this.editor.map_view.showDialog(th);
         $("#editor-tabs").tabs();
         // load catalog button
         $(this.editor.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
@@ -253,7 +252,9 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
             this.params = {"name": ''};
             this.editor.showCatalog(this);
         }, this));
-        
+    
+    $(this.editor.map_view.dialog).find(".close").click($.proxy(function() { this.editor.map.hideDialog(); }, this));
+    
     // bind click event to connect button
     $(this.editor.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
 
@@ -273,6 +274,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
         }
     }, {"ref": ref, "editor": this.editor, "feature": ftr}));    
         $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
+            console.log("edit save clicked");
             // Edit should be disabled at this point
             this.editor.map_view.hideDialog();            
             
@@ -357,7 +359,10 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
 
             $("#catalog-close").click($.proxy(function(e) {
-                this.editor.showEdit(this.ref, this.ref.attributes);                            
+                // todo currently broken
+                // todo return to hop
+                var ftr = this.editor.map.findFeaturesForStop(this.ref.supplychain_id,this.ref.instance_id);
+                this.editor.showEdit(ftr, this.ref.attributes);                            
             }, {"ref": o.ref, "editor": this.editor}));
             $(this.editor.map_view.dialog).find('.catalog-pager').empty();
             // pager prev
@@ -414,8 +419,8 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     o.q = o.q ? o.q : '';
     o.catalog = o.catalog ? o.catalog : "osi";
     var tscope = {"editor": this, "o": o, "ref": o.ref};
-    Sourcemap.template('map/edit/catalog', function(p, txt, th) {
-        this.editor.map_view.showDialog(th, true);
+    Sourcemap.template('map/edit/catalog', function(p, txt, th) {        
+        this.editor.map_view.showDialog(th);
         this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }
@@ -444,5 +449,7 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
             } else if(catalog_map[cat][k]) attr[k] = item[k];
         }
     }
-    this.showEdit(ref, attr);
+    var ftr = this.map.stop_features[ref.supplychain_id][ref.instance_id];
+    // todo currently broken    
+    this.showEdit(ftr);
 }

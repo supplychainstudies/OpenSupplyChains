@@ -48,7 +48,7 @@
                     
                     <label for="unit">Impact Factor</label>
                     <div class="sourcemap-form-textbox">
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.getAttr("co2e", 0)); %>
+                        <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e", 0)); %>
                         <%= $("<div></div>").append(el).html() %>
                     </div>
                

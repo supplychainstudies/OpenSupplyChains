@@ -16,7 +16,7 @@
     </div>
     <div id="banner-owner">
         <% var d = new Date(this.created*1000); %>
-        <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&mdash;<%= _S.ttrunc(d.toDateString(),10) %>.
+        <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&mdash;<%= _S.ttrunc(d.toDateString(),16) %>.
     </div>
     <div class="clear"></div>
 </div>    

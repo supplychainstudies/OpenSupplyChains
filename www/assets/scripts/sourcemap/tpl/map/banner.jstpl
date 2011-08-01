@@ -1,0 +1,21 @@
+<div id="banner-content">
+    <div id="banner-summary">
+       <%= this.getAttr("title", this.getAttr("name", "Untitled Sourcemap")) %>
+    </div>
+    <div id="banner-description">
+        <%= _S.ttrunc(this.getAttr("title", this.getAttr("description", "...")), 10) %>
+         <a class="banner-share-link" href="javascript:void(0);">more</a>
+    </div>
+    <div id="banner-share">
+        <a class="banner-share-link" href="javascript:void(0);">Share</a>
+    </div>
+    <div id="banner-favorite">
+        <a class="banner-favorite-link" href="javascript:void(0);">Favorite</a> 
+    </div>
+    <div id="banner-owner">
+        <% var d = new Date(this.created*1000); %>
+        <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&nbsp;-&nbsp;<%= d.toDateString() %>.
+    </div>
+    <div class="clear"></div>
+</div>    
+

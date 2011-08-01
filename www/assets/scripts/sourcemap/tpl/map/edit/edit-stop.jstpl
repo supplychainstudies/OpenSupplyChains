@@ -1,12 +1,7 @@
-<form id="stop-editor" name="edit-ref">
 <div id="stop-editor">
-<ul id="edit-actions">
-    <li class="connect-button">Connect</li>
-    <li class="delete-button">Delete</li>
-</ul>
-
-<h2 id="detail-title"><input id="edit-title" name="title" type="text" value="<%= this.attr["title"] %>" /></h2>
-<h3 class="placename"><input id="edit-placename" name="address" type="text" value="<%= this.attr["address"] %>" /></h3>
+<form>
+<h2 class="title"><input name="title" type="text" value="<%= this.attr["title"] %>" /></h2>
+<h3 class="placename"><input name="address" type="text" value="<%= this.attr["address"] %>" /></h3>
 
 
 <div id="editor-tabs">
@@ -15,20 +10,15 @@
 		<li><a href="#edit-footprint">Footprint</a></li>
 		<li><a href="#edit-media">Media</a></li>
 		<li><a class="load-catalog-button">Material Catalog</a></li>
-		
+		<div class="clear"></div>
 	</ul>
     <div class="clear"></div>
     
         <div id="edit-description" class="sourcemap-form">        
-            <fieldset>
-                <label for="description">Description</label>
-                <div class="sourcemap-form-textbox">
-                    <%= $("<div></div>").append(
-                            $("<textarea></textarea>").attr("name", "description").addClass("textbox").html(this.attr["description"] || "")
-                        ).html()
-                    %>
-                </div>
-            </fieldset>
+            <%= $("<div></div>").append(
+                    $("<textarea></textarea>").attr("name", "description").addClass("textbox").html(this.attr["description"] || "")
+                ).html()
+            %>
         </div>
         <div id="edit-footprint">
             <div class="sourcemap-form">
@@ -101,18 +91,20 @@
                     <% el = $("<input></input>").attr("type", "text").attr("name", "youtube-url").addClass("textbox"); el[0].setAttribute("value",this.attr["youtube-url"] || ""); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>
-
+                http://img.youtube.com/vi/<insert-youtube-video-id-here>/0.jpg
+                
             </fieldset>
         </div>
 
 </div>
 <div class="clear"></div>
-<div class="sourcemap-form">
-    <div class="sourcemap-form-button-div"> 
-        <input type="button" name="edit-save" class="edit-save buttons" value="Save" />
-    </div>
-</div>
-<div class="spacer"></div>
+<ul id="edit-actions">
+    <li class="edit-save">Save</li>
+    <li class="connect-button">Connect</li>
+    <li class="delete-button left">Delete</li>
+    <div class="clear"></div>    
+</ul>
 
-</div>
+<div class="close"><a href="javascript: void(0);"></a></div>
 </form>
+</div>

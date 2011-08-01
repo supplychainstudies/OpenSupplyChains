@@ -1,11 +1,6 @@
-<div class="comment-meta" id="comment-<?= $comment->id ?>">
+<li class="comment" id="comment-<?= $comment->id ?>">
 <img class="user-avatar" src="<?= $comment->avatar ?>" />
-<p class="comment-meta-text">
-Added by <a class="user-link" href="user/<?= $comment->username ?>"><?= $comment->username ?></a> on <?= date('F d, Y', $comment->timestamp) ?> @ <?= date('H:i a', $comment->timestamp) ?>.
-</p>
-<div class="clear"></div>                        
-</div>
-<div class="comment-body">
+Posted on <a class="user-link" href="user/<?= $comment->username ?>"><?= $comment->username ?></a> on <?= date('F d, Y', $comment->timestamp) ?> @ <?= date('H:i a', $comment->timestamp) ?>.
 <p><?= HTML::chars($comment->body) ?></p>
-</div>
+</li>
 

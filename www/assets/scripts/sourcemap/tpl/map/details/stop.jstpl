@@ -1,43 +1,50 @@
-<div>
-<h2 id="detail-title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 20, true) %>
-<% if(this.stop.attributes.placename != undefined) { %><span class="placename"><%= _S.ttrunc(_S.htesc(this.stop.attributes.placename), 30, true) %></span><% } %></h2>
-</div>
+<h2 class="title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 30, true) %></h2>
+<% if(this.stop.attributes.address != undefined) { %>
+        <h3 class="placename"><%= _S.ttrunc(_S.htesc(this.stop.attributes.address), 50, true) %></h3>
+<% } %>
 
-    <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
-        <div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div>
-    <% } %>
-  
-    <% if(this.stop.getAttr("url:moreinfo", false)) { %>
-        <div class="url moreinfo"> 
-            <%= $("<a></a>").attr("href", this.stop.getAttr("url:moreinfo"))
-                .text(this.stop.getAttr("urltitle:moreinfo", "Learn More")).attr("target", "blank")
-                .wrap("<div></div>").parent().html() %>
-        </div>
-    <% } %>
-    <% if(this.magic_word === "youtube:link" || this.magic_word === "vimeo:link" || this.magic_word === "flickr:setid") { %>
-    <div class="inset">
-    <% if(this.magic_word === "youtube:link" && this.stop.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.popup_content.youtube.link(this.stop.getAttr("youtube:link")) %><% } %>
-    <% if(this.magic_word === "vimeo:link" && this.stop.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.popup_content.vimeo.link(this.stop.getAttr("vimeo:link")) %><% } %>
-    <% if(this.magic_word === "flickr:setid" && this.stop.getAttr("flickr:setid", false)) {  %>
-    <div id="flickr-photoset-<%= this.stop.getAttr("flickr:setid") %>">
-    <%= Sourcemap.MagicWords.popup_content.flickr.setid.call(this.embed, this.stop.getAttr("flickr:setid")) %>
+<% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
+    <div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div>
+<% } %>
+
+<% if(this.stop.getAttr("url:moreinfo", false)) { %>
+    <%= $("<a class='url'>></a>").attr("href", this.stop.getAttr("url:moreinfo"))
+        .text(this.stop.getAttr("urltitle:moreinfo", "Learn More")).attr("target", "blank")
+        .wrap("<div></div>").parent().html() %>
+<% } %>
+
+<% if(this.stop.getAttr("weight", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("water", false)) { %>
+<ul id="dialog-footprint">
+    <li class="weight"><%= this.stop.getAttr("weight", "-") %> g</li>
+    <li class="co2e"><%= this.stop.getAttr("co2e", "-") %> g CO2e</li>
+    <li class="water"><%= this.stop.getAttr("water", "-") %> L H2O</li>
+</ul>
+<% } %>
+
+<% if(this.magic_word === "youtube:link" || this.magic_word === "vimeo:link" || this.magic_word === "flickr:setid") { %>
+<div id="dialog-media">
+        <% if(this.magic_word === "youtube:link" && this.stop.getAttr("youtube:link", false)) { %>
+            <%= Sourcemap.MagicWords.popup_content.youtube.link(this.stop.getAttr("youtube:link")) %>
+        <% } %>
+        <% if(this.magic_word === "vimeo:link" && this.stop.getAttr("vimeo:link", false)) { %>
+            <%= Sourcemap.MagicWords.popup_content.vimeo.link(this.stop.getAttr("vimeo:link")) %>
+        <% } %>
+        <% if(this.magic_word === "flickr:setid" && this.stop.getAttr("flickr:setid", false)) {  %>
+            <div id="flickr-photoset-<%= this.stop.getAttr("flickr:setid") %>">
+                <%= Sourcemap.MagicWords.popup_content.flickr.setid.call(this.embed, this.stop.getAttr("flickr:setid")) %>
+            </div>
+        <% } %>
+
+
+    <div id="dialog-media-navigation">
+        <% for(var i=0; i< Sourcemap.MagicWords.sequence.length-2; i++) { %>
+            <% if(this.stop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
+                <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  
+            <% } %>
+        <% } %>
+        <div class="clear"></div>
     </div>
-    <% } %>
-
-
-<div class="content-nav">
-<% for(var i=0; i< Sourcemap.MagicWords.sequence.length-2; i++) { %>
-    <% if(this.stop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
-        <a id="content-item-<%= i %>" class="content-item" href="javascript: void(0);">&nbsp;</a>  
-    <% } %>
-<% } %>
-<div class="clear"></div>
-</div>
 </div>
 <% } %>
 
-<div class="content-buttons">
-    <div class="weight">0 g</div>
-    <div class="co2e">0 g CO2e</div>
-    <div class="water">0 L H2O</div>
-</div>
+<div class="close"><a href="javascript: void(0);"></a></div>

@@ -5,7 +5,7 @@
     
 </div>
 <div class="spacer"></div>
-<div class="container">
+<div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
         <div class="container">
             <a id="share-info"><h2>Share this Sourcemap</h2></a>
@@ -48,13 +48,12 @@
         <h2>Discussion</h2>
         <?php if($can_comment): ?>
         <div id="comment-form" class="form">
+            <fieldset>
             <form method="post" action="map/comment/<?= $supplychain_id ?>">
-            <div>
                 <textarea placeholder="Type your comment..." name="body" id="comment-area"></textarea>
-            </div>
-            <div>
+ 
                 <input class="button" id="comment-submit" type="submit" text="Comment"/>
-            </div>
+                <div class="clear"></div>
             </form>
             </fieldset>
         </div>
@@ -65,9 +64,7 @@
         <?php if($comments): ?>
         <ul id="comments">
             <?php foreach($comments as $i => $comment): ?>
-                <li class="comment">
                 <?= View::factory('partial/comment', array('comment' => $comment)) ?>
-                </li>
             <?php endforeach; ?>
         </ul>
         <?php else: ?>

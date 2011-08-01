@@ -1,0 +1,28 @@
+<% if(this.item.attributes.kind) { %>
+<div class="<%= this.item.attributes.kind %>">
+
+    <h2 id="detail-title"><%= _S.htesc(this.item.getAttr("title", "an unnamed "+this.item.attributes.kind)) %></h2>
+    <% if(this.item.attributes.placename != undefined) { %><h3 class="placename"><%= _S.htesc(this.item.attributes.placename) %></h3><% } %>
+    <% if(this.item.getAttr("description", false) && this.item.getAttr("description").length > 1) { %>
+        <div class="description"><%= _S.htesc(this.item.getAttr("description")) %></div>
+    <% } %>
+
+    <% if(this.item.getAttr("url:moreinfo", false)) { %>
+        <div class="url moreinfo"> 
+            <%= $("<a></a>").attr("href", this.item.getAttr("url:moreinfo"))
+                .text(this.item.getAttr("urltitle:moreinfo", "Learn More")).attr("target", "blank")
+                .wrap("<div></div>").parent().html() %>
+        </div>
+    <% } %>
+    <% if(this.item.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.full_content.youtube.link(this.item.getAttr("youtube:link")) %>
+    <% } %>
+    <% if(this.item.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.full_content.vimeo.link(this.item.getAttr("vimeo:link")) %>
+    <% } %>
+    <% if(this.item.getAttr("flickr:setid", false)) {  %>
+        <div id="flickr-photoset-<%= this.item.getAttr("flickr:setid") %>">
+        <%= Sourcemap.MagicWords.full_content.flickr.setid.call(this.embed, this.item.getAttr("flickr:setid")) %>
+        </div>
+    <% } %>
+
+</div>
+<% } %>

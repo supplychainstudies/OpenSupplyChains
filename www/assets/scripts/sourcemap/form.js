@@ -303,13 +303,15 @@ $(document).ready(function() {
         });
     });
 
-    // description preview...
-    $('.sourcemap-form textarea[name="description"].preview').keyup(function() {
-        if(!$(this).next().is('div.description-preview-label')) {
-            $(this).after('<div class="description-preview-label">Preview of the Teaser for Your Map:</div>');
-            $(this).next().after('<div class="description-preview"></div>');
+    $('.sourcemap-form textarea').keyup(function() {
+        var maxlength = $(this).attr('maxlength');
+        if(maxlength != -1) {
+            var val = $(this).val();
+
+            if (val.length > maxlength) {
+              $(this).val(val.slice(0, maxlength));
+            }
         }
-        $(this).next().next().text($(this).val().substr(0, 80));
     });
 
 });

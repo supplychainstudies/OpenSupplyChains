@@ -32,7 +32,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 // pass supplychain metadeta to template 
                 $this->template->supplychain_id = $supplychain_id;
                 $this->template->supplychain_date = date('F j, Y', $sc->created );
-                $this->template->supplychain_name = isset($sc->attributes->name) ? $sc->attributes->name : "";
+                $this->template->supplychain_name = isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "");
                 $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
                 $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";

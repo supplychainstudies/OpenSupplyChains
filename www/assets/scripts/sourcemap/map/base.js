@@ -134,6 +134,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        console.log("...base->[map:feature_selected]")
         //this.hideDialog();
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
@@ -143,7 +144,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id, 0
             );
         }
-        else if (ftr.attributes.hop_instance_id) {
+        else if (ftr.attributes.hop_instance_id && !(map.editor)) {
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id, 0
             );
@@ -173,8 +174,8 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     }
     var cb = function(p, tx, th) {
         $(this.banner_div).html(th);
-        $(this.banner_div).find('.banner-share-link').click(function(){
-            $.scrollTo('#share-info', 600);
+        $(this.banner_div).find('.banner-description-link').click(function(){
+            $.scrollTo('#map-secondary', 600);
         });
         $(this.banner_div).find('.banner-share-link').click(function(){
             $.scrollTo('#share-info', 600);
@@ -219,6 +220,7 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
 }
 
 Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
+    console.log("...Show Dialog");
     if(this.dialog) {
         this.initDialog();
         $(this.dialog_content).html(mkup);
@@ -230,6 +232,7 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 }
 
 Sourcemap.Map.Base.prototype.hideDialog = function() {
+    console.log("...Hide Dialog");
     if(this.dialog) {
         this.dialog_content.empty();
         $(this.dialog).hide();

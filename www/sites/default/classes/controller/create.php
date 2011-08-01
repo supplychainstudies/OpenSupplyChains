@@ -33,7 +33,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 // create!
                 $p = $f->values();
                 $title = $p['title'];
-                $teaser = substr($p['description'], 0, 80);
+                $description = substr($p['description'], 0, 80);
                 $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
                 $category = $p['category'];
                 $public = isset($_POST['public']) ? Sourcemap::READ : 0;
@@ -41,7 +41,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 if($category) $raw_sc->category = $category;
                 $raw_sc->attributes = new stdClass();
                 $raw_sc->attributes->title = $title;
-                $raw_sc->attributes->teaser = $teaser;
+                $raw_sc->attributes->description = $description;
                 $raw_sc->attributes->tags = $tags;
                 $raw_sc->stops = array();
                 $raw_sc->hops = array();

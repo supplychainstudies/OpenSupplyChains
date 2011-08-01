@@ -37,15 +37,18 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     // listen for supplychain updates and save
     Sourcemap.listen('supplychain-updated', function(evt, sc) {
+        console.log("...Editor->[supplychain-updated]");
         var succ = $.proxy(function() {
             this.map_view.updateStatus("Saved...", "good-news");            
         }, this);
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
         }, this);
-        this.map.mapSupplychain(sc.instance_id);
+        this.map.mapSupplychain(sc.instance_id, true);
         this.map_view.updateStatus("Saving...");
+        console.log("... ...preparing to save");
         Sourcemap.saveSupplychain(sc, {"supplychain_id": sc.remote_id, "success": succ, "failure": fail});
+        console.log("... ...save call passed");
 
         // maintain visualization
         var viz = this.map_view.visualization_mode;
@@ -58,6 +61,17 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     // listen for select events, for connect-to, etc.
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        console.log("connect feature selection");
+  
+    }, this));
+
+    // listen for select clickout events, for connect-to, etc.
+    Sourcemap.listen('map:feature_clickout', $.proxy(function(evt, map, ftr) {
+        this.connect_from = false;
+    }, this));
+
+    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        console.log("...editor->[map:feature_selected]")
         if(this.connect_from) {
             // connect!
             var fromstid = this.connect_from.attributes.stop_instance_id;
@@ -72,25 +86,17 @@ Sourcemap.Map.Editor.prototype.init = function() {
             this.connect_from = false;
             Sourcemap.broadcast('supplychain-updated', sc);
             this.map.controls.select.unselectAll();
-            //this.map.controls.select.select(this.map.hopFeature(new_hop));
-        } else {
-            // pass 
-        }
-        this.connect_from = false;
-    }, this));
-
-    // listen for select clickout events, for connect-to, etc.
-    Sourcemap.listen('map:feature_clickout', $.proxy(function(evt, map, ftr) {
-        this.connect_from = false;
-    }, this));
-
-    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        if(ftr.attributes.hop_instance_id) {
+            // @todo review if the selection of the hop is ideal
+            this.map.controls.select.select(this.map.hopFeature(new_hop));
+            console.log("connect operation finished");
+            this.connect_from = false;             
+        } 
+        else if(ftr.attributes.hop_instance_id) {
             var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
             var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
             this.showEdit(ftr);
         }
-        if(ftr.attributes.stop_instance_id) {
+        else if(ftr.attributes.stop_instance_id) {
             var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
             var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
             this.showEdit(ftr);
@@ -239,6 +245,10 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
 }
 
 Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
+    console.log("...Show Edit");
+    console.log(ftr);
+    console.log(ftr.attributes);
+    console.log(ftr.attributes.ref);
     var ref = ftr.attributes.ref;
      
     var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
@@ -256,7 +266,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
             this.editor.showCatalog(this);
         }, this));
     
-    $(this.editor.map_view.dialog).find(".close").click($.proxy(function() { this.editor.map.hideDialog(); }, this));
+    $(this.editor.map_view.dialog).find(".close").click($.proxy(function() { this.editor.map_view.hideDialog(); }, this));
     
     // bind click event to connect button
     $(this.editor.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
@@ -303,10 +313,11 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                                 new OpenLayers.Projection('EPSG:4326'),
                                 new OpenLayers.Projection('EPSG:900913')
                             );
+                            console.log(this.editor.map);
                             this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
                             var scid = this.stop.supplychain_id;
-                            this.editor.map_view.map.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
-                            this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
+                            //this.editor.map.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
+                           // @todo should be standard zoom/center this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
                             this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
                         } else {
                             $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
@@ -316,14 +327,17 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                         if(this.ref) {
                             this.ref.setAttr(k, val);
                         }
+                        console.log("broadcasting supplychain-updated");
                         this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
                     }, {"stop": this.ref, "edit_form": f, "editor": this.editor, "attr": this.attr}));
                 } else {
                     this.ref.setAttr(k, val);
                 }
             }
-            if(!geocoding)            
+            if(!geocoding) {
+                console.log("broadcasting supplychain-updated and NOT geocoding");            
                 this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.ref.supplychain_id]);
+            }
         }, {"ref": this.ref, "editor": this.editor, "attr": attr}));
     }, {"ref": ref, "editor": this, "attr": attr}, {"ref": ref, "editor": this, "attr": attr});
 }
@@ -362,9 +376,9 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
 
             $("#catalog-close").click($.proxy(function(e) {
-                // todo currently broken
-                // todo return to hop
+                // @todo return to hop
                 var ftr = this.editor.map.findFeaturesForStop(this.ref.supplychain_id,this.ref.instance_id);
+                ftr.attributes = {}; ftr.attributes.ref = this.ref;
                 this.editor.showEdit(ftr, this.ref.attributes);                            
             }, {"ref": o.ref, "editor": this.editor}));
             $(this.editor.map_view.dialog).find('.catalog-pager').empty();
@@ -429,6 +443,7 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
 }
 
 Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
+    // @todo add the unit
     var catalog_map = {
         "osi": {
             "name": ["title", "name"],
@@ -453,6 +468,8 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
         }
     }
     var ftr = this.map.stop_features[ref.supplychain_id][ref.instance_id];
-    // todo currently broken    
-    this.showEdit(ftr);
+    ftr.attributes = {}; ftr.attributes.ref = ref;
+    console.log("attributes");
+    console.log(attr);
+    this.showEdit(ftr, attr);
 }

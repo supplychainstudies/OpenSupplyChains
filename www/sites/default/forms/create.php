@@ -24,6 +24,9 @@ return array(
             'label' => 'Description',
             'css_class' => array(
                 'preview'
+            ),
+            'attributes' => array(
+                'maxlength' => 80
             )
         ),
         'tags' => array(

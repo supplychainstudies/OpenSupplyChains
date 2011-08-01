@@ -528,7 +528,10 @@ Sourcemap.Units.si_prefixes = {
 
 Sourcemap.Units.si_equiv = {
     "g": {"abbrev": "g", "singular": "gram", "plural": "grams"},
-    "Mg": {"abbrev": "t", "singular": "tonne", "plural": "tonnes"}
+    "Mg": {"abbrev": "t", "singular": "tonne", "plural": "tonnes"},
+    "Gg": {"abbrev": "kt", "singular": "kilotonne", "plural": "kilotonnes"},
+    "Tg": {"abbrev": "Mt", "singular": "megatonne", "plural": "megatonnes"},
+    "Pg": {"abbrev": "Gt", "singular": "gigatonne", "plural": "gigatonne"}
 }
 
 Sourcemap.Units.to_base_unit = function(value, unit) {
@@ -571,17 +574,21 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
                 }
             }
             if(new_unit !== false) break;
-            if(pot % 3) pot--;
-            else pot = pot - 3;
             if(pot <= -24) {
                 new_unit = p; 
                 break;
+            } else if(pot >= 24) {
+                new_unit = p;
+                break;
             }
+            if((pot % 3) === 2) pot++;
+            else if(pot % 3) pot--;
+            else pot = pot - 3;
         }
         new_unit += base.unit;
         new_unit = {"label": new_unit, "mult": pot};
     }
-    var scaled_value = Math.round(base.value * Math.pow(10, -new_unit.mult));
+    var scaled_value = (base.value * Math.pow(10, -new_unit.mult)).toFixed(1);
     var scaled_unit = new_unit;
     var scaled = {"unit": scaled_unit.label, "value": scaled_value};
     if(Sourcemap.Units.si_equiv[scaled.unit] !== undefined) 

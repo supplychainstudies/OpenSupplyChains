@@ -13,11 +13,11 @@
         .wrap("<div></div>").parent().html() %>
 <% } %>
 
-<% if(this.stop.getAttr("weight", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("water", false)) { %>
+<% if(this.stop.getAttr("qty", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("water", false)) { %>
 <ul id="dialog-footprint">
-    <li class="weight"><%= this.stop.getAttr("weight", "-") %> g</li>
-    <li class="co2e"><%= this.stop.getAttr("co2e", "-") %> g CO2e</li>
-    <li class="water"><%= this.stop.getAttr("water", "-") %> L H2O</li>
+    <li class="weight"><%= this.stop.getAttr("qty", "-") %> <%= this.stop.getAttr("unit", "ea") %></li>
+    <li class="co2e"><%= this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0) %> kg CO2e</li>
+    <li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li>
 </ul>
 <% } %>
 

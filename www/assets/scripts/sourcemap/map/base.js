@@ -24,13 +24,26 @@ Sourcemap.Map.Base.prototype.defaults = {
     "tour": false, "min_stop_size": 1, "max_stop_size": 48, "error_color": '#ff0000',
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water"],
-    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"}
+    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"},
+    "viz_attr_map": {
+        "weight": function(st) {
+            var val = 0;
+            if(st.getAttr("qty", false)) {
+                if(st.getAttr("unit", false) === "kg") {
+                    val = parseInt(st.getAttr("qty", 0));
+                }
+            }
+            return val;
+        },
+        "water": "water", "co2e": "co2e"
+    }
 }
 
 Sourcemap.Map.Base.prototype.init = function() {
     this.magic_word_sequence = this.options.magic_word_sequence;
     this.magic_word_cur_idx = this.options.magic_word_cur_idx;
     this.magic = this.options.magic || Sourcemap.MagicWords.popup_content;
+    this.viz_attr_map = this.options.viz_attr_map;
     this.initMap();
     this.initDialog();
     this.initEvents();
@@ -129,7 +142,23 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         // todo: do calculations here
         for(var vi=0; vi<this.options.visualizations.length; vi++) {
             var v = this.options.visualizations[vi];
-            Sourcemap.broadcast('map-base-calc-update', v);
+            var range = null;
+            var attr_nm = this.viz_attr_map[v];
+            for(var k in this.map.supplychains) {
+                var sc = this.map.supplychains[k];
+                if(range === null) range = sc.stopAttrRange(attr_nm);
+                else {
+                    var tmprange = sc.stopAttrRange(viz_nm);
+                    if(tmprange.min !== null)
+                        range.min = Math.min(range.min, tmprange.min);
+                    if(tmprange.max !== null)
+                        range.max = Math.max(range.max, tmprange.max);
+                    if(tmprange.total !== null) {
+                        range.total += tmprange.total;
+                    }
+                }
+            }
+            Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
     }, this));
 
@@ -480,11 +509,13 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
     if(!smin) smin = this.options.min_stop_size;
     var smax = smax == undefined ? this.options.max_stop_size : parseInt(smax);
     if(!smax) smax = this.options.max_stop_size;
-    var dec_fn = $.proxy(function(stf, mb) {    
+    var dec_fn = $.proxy(function(stf, mb) {
+        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
         if(stf.cluster) {
             var val = 0;
             for(var c in stf.cluster) {
-                val += parseFloat(stf.cluster[c].attributes[attr_nm]);
+                if(attr_nm instanceof Function) val += attr_nm(stf.cluster[c].attributes.ref);
+                else val += parseFloat(stf.cluster[c].attributes[attr_nm]);
             }
             if(!isNaN(val)) {
                 // scale
@@ -508,9 +539,9 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
                 stf.attributes.label = scaled.value + " " + scaled.unit;
                 return;
             }
-        }
-        else if(stf.attributes[this.attr_name] !== undefined) {
-            var val = stf.attributes[attr_nm];
+        } else if(attr_nm && ((attr_nm instanceof Function) || (stf.attributes[attr_nm] !== undefined))) {
+            if(attr_nm instanceof Function) val = attr_nm(stf.attributes.ref);
+            else val = stf.attributes[attr_nm];
             val = parseFloat(val);
             if(!isNaN(val)) {
                 // scale
@@ -534,13 +565,13 @@ Sourcemap.Map.Base.prototype.sizeStopsOnAttr = function(attr_nm, vmin, vmax, smi
                 stf.attributes.label = scaled.value + " " + scaled.unit;
                 return;
             }
-        }
+        } 
         stf.attributes.size = smin;
         stf.attributes.yoffset = 0;            
         stf.attributes.label = "";
         
         stf.attributes.color = mb.options.attr_missing_color;
-    }, {"vmin": vmin, "vmax": vmax, "smin": smin, "smax": smax, "attr_name": attr_nm});
+    }, {"vmin": vmin, "vmax": vmax, "smin": smin, "smax": smax, "attr_nm": attr_nm, "basemap": this});
     return this.decorateStopFeatures(dec_fn);
 }
 
@@ -562,10 +593,12 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
                 this.toggleVisualization();
             }
             this.visualization_mode = viz_nm;
+            
+            attr_nm = this.viz_attr_map[viz_nm];
             var range = null;
             for(var k in this.map.supplychains) {
                 var sc = this.map.supplychains[k];
-                if(range === null) range = sc.stopAttrRange(viz_nm);
+                if(range === null) range = sc.stopAttrRange(attr_nm);
                 else {
                     var tmprange = sc.stopAttrRange(viz_nm);
                     if(tmprange.min !== null)

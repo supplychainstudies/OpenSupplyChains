@@ -437,10 +437,10 @@ Sourcemap.dms2decdeg = function(d, m, s) {
 Sourcemap.haversine = function(pt1, pt2) {
     // Calculate great circle distance between points on a spheriod.
     var R = Sourcemap.R;
-    var lat1 = pt1.y;
-    var lon1 = pt1.x;
-    var lat2 = pt2.y;
-    var lon2 = pt2.x;
+    var lat1 = pt1.lon;
+    var lon1 = pt1.lat;
+    var lat2 = pt2.lon;
+    var lon2 = pt2.lat;
     lat1 = Sourcemap.radians(lat1);
     lon1 = Sourcemap.radians(lon1);
     lat2 = Sourcemap.radians(lat2);

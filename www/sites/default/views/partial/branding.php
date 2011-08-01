@@ -29,8 +29,8 @@
             </li>
         </ul>
         <form method="post" action="/search/">
-            <div id="search">
-                <input name="q" placeholder="Search" results="0" />
+            <div id="search-div">
+                <input id="search" name="q" placeholder="Search" results="0" />
             </div>
         </form>
         <div id="search-results"></div>

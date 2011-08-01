@@ -51,12 +51,18 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         }
         
         if(isset($this->parameters['q']) && $this->parameters['q']) {
-            $search->and_where(
-                DB::expr('to_tsvector(body)'), '@@', 
-                DB::expr('to_tsquery('.
-                    Database::instance()->quote($this->parameters['q']).
-                ')')
-            );
+            $qts = preg_split('/\s+/', $this->parameters['q'], null, PREG_SPLIT_NO_EMPTY);
+            $q = array();
+            foreach($qts as $i => $qt) 
+                $q[] = $qt;
+            if($q) {
+                $search->and_where(
+                    DB::expr('to_tsvector(body)'), '@@', 
+                    DB::expr('plainto_tsquery('.
+                        Database::instance()->quote(join(' AND ', $q)).
+                    ')')
+                );
+            }
         }
 
         $search->limit($this->limit);

@@ -198,9 +198,14 @@ Sourcemap.Supplychain.prototype.stopAttrRange = function(attr_nm) {
     var total = 0;
     for(var i=0; i<this.stops.length; i++) {
         var stop = this.stops[i];
-        if(stop.attributes[attr_nm] === undefined)
+        var val = null;
+        if(attr_nm instanceof Function) {
+            val = attr_nm(stop);
+        } else if(stop.attributes[attr_nm] === undefined) {
             continue;
-        var val = parseFloat(stop.attributes[attr_nm]);
+        } else {
+            val = parseFloat(stop.attributes[attr_nm]);
+        }
         if(isNaN(val))
             continue;
         if(min === null) min = val;

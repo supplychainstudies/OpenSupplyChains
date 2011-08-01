@@ -7,11 +7,10 @@ class Sourcemap_Form_Field_Select extends Sourcemap_Form_Field {
     protected $_type = Sourcemap_Form_Field::SELECT;
 
     protected function _makeInput() {
+        $attr = $this->_html_attr;
+        $attr['class'] = $this->css_class();
         return Form::select($this->name(), 
-            $this->options(), $this->selected(),
-            array(
-                'class' => $this->css_class()
-            )
+            $this->options(), $this->selected(), $attr
         );
     }
 

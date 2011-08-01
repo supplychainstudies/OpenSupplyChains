@@ -25,6 +25,7 @@ class Sourcemap_Form_Field {
     protected $_rules = array();
 
     protected $_css_class = false;
+    protected $_html_attr = array();
 
     public function __construct($name=null, $value=null) {
         $this->_name = $name;
@@ -72,10 +73,10 @@ class Sourcemap_Form_Field {
     }
 
     protected function _makeInput() {
-        return Form::input($this->_name, $this->_value, array(
-            'class' => $this->css_class(),
-            'type' => $this->_type
-        ));
+        $attr = $this->_html_attr;
+        $attr['class'] = $this->css_class();
+        $attr['type'] = $this->_type;
+        return Form::input($this->_name, $this->_value, $attr);
     }
 
     public static function from_array($nm, $arr) {
@@ -196,6 +197,19 @@ class Sourcemap_Form_Field {
             if($k !== false) {
                 array_splice($this->_css_class, $k, 1); 
             }
+        }
+        return $this;
+    }
+
+    public function html_attr($k) {
+        $args = func_get_args();
+        $k = strtolower($k);
+        if(count($args) === 2) {
+            list($kk, $v) = $args;
+            if($v === null) unset($this->_html_attr[$k]);
+            else $this->_html_attr[$k] = $v;
+        } else {
+            return isset($this->_html_attr[$k]) ? $this->_html_attr[$k] : null;
         }
         return $this;
     }

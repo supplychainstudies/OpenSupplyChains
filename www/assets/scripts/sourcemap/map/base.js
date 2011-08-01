@@ -35,7 +35,19 @@ Sourcemap.Map.Base.prototype.defaults = {
             }
             return val;
         },
-        "water": "water", "co2e": "co2e"
+        "water": function(st) {
+            var val = 0;
+            var qty = parseInt(st.getAttr("qty", 0));
+            var fac = parseInt(st.getAttr("water", 0));
+            if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
+            return val;
+        }, "co2e": function(st) {
+            var val = 0;
+            var qty = parseInt(st.getAttr("qty", 0));
+            var fac = parseInt(st.getAttr("co2e", 0));
+            if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
+            return val;
+        }
     }
 }
 

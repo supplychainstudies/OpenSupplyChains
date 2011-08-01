@@ -88,6 +88,9 @@ class Sourcemap_Form {
         if(isset($arr['fields']) && is_array($arr['fields'])) {
             foreach($arr['fields'] as $fnm => $fdef) {
                 $new_field = Sourcemap_Form_Field::from_array($fnm, $fdef);
+                if(isset($fdef['attributes']) && is_array($fdef['attributes'])) {
+                    foreach($fdef['attributes'] as $k => $v) $new_field->html_attr($k, $v);
+                }
                 call_user_func_array(array($f, 'set_field'), array($fnm, $new_field));
             }
         }

@@ -240,6 +240,7 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
 
 Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
     var ref = ftr.attributes.ref;
+     
     var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
     var attr = attr ? Sourcemap.deep_clone(attr) : {};
     for(var k in ref.attributes) {

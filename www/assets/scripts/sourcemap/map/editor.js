@@ -158,11 +158,13 @@ Sourcemap.Map.Editor.prototype.init = function() {
     var scid = k;
 
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
-        "onStart": $.proxy(function() {
+        "onStart": $.proxy(function(ftr, px) {
             this.map.controls.select.unselectAll();
             this.map.last_selected = null;
+            if(ftr.cluster) this.map.controls.stopdrag.cancel();
         }, this),
-        "onDrag": $.proxy(function(ftr, px) {            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
+        "onDrag": $.proxy(function(ftr, px) {
+            if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
                 this.moveStopToFeatureLoc(ftr, false, false);
             else this.map.controls.stopdrag.cancel();
         }, this),

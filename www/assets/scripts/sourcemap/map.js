@@ -441,11 +441,11 @@ Sourcemap.Map.prototype.getControl = function(label) {
     return this.controls[label];
 }
 
-Sourcemap.Map.prototype.mapSupplychain = function(scid) {
+Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
     var supplychain = this.findSupplychain(scid);
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Supplychain not found/Sourcemap.Supplychain required.');
-    var reselect = true;
+    reselect = prevent_reselect ? false : true;
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     var featureList = [];

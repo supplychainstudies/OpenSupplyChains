@@ -57,6 +57,9 @@ return array(
         ),
         'category' => array(
             array('in_array', array($valid_cats))
+        ),
+        'description' => array(
+            array('in_array', array($valid_cats))
         )
     ),
     'filters' => array()

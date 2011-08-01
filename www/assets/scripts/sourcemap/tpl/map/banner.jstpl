@@ -1,10 +1,12 @@
 <div id="banner-content">
     <div id="banner-summary">
-       <%= this.getAttr("title", this.getAttr("name", "Untitled Sourcemap")) %>
+       <%= _S.ttrunc(this.getAttr("title", this.getAttr("name", "Untitled Sourcemap")), 20) %>
     </div>
     <div id="banner-description">
-        <%= _S.ttrunc(this.getAttr("title", this.getAttr("description", "...")), 10) %>
-         <a class="banner-share-link" href="javascript:void(0);">more</a>
+        <%= _S.ttrunc(this.getAttr("description", "..."), 35) %>
+        <% if((this.getAttr("description", "")).length > 35) { %>
+            <a class="banner-description-link" href="javascript:void(0);">more</a>
+        <% } %>
     </div>
     <div id="banner-share">
         <a class="banner-share-link" href="javascript:void(0);">Share</a>
@@ -14,7 +16,7 @@
     </div>
     <div id="banner-owner">
         <% var d = new Date(this.created*1000); %>
-        <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&nbsp;-&nbsp;<%= d.toDateString() %>.
+        <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&mdash;<%= _S.ttrunc(d.toDateString(),10) %>.
     </div>
     <div class="clear"></div>
 </div>    

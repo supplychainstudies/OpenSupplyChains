@@ -22,6 +22,9 @@ return array(
         'description' => array(
             'type' => 'textarea',
             'label' => 'Description',
+            'attributes' => array(
+                "maxlength" => 80
+            )
             'css_class' => array(
                 'preview'
             )
@@ -52,6 +55,9 @@ return array(
         ),
         'category' => array(
             array('in_array', array($valid_cats))
+        ),
+        'description' => array(
+            array('length[0,80]');
         )
     ),
     'filters' => array()

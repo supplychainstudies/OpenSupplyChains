@@ -201,7 +201,7 @@ class Sourcemap_Form_Field {
         return $this;
     }
 
-    public function html_attr($k) {
+    public function html_attr($k=null) {
         $args = func_get_args();
         $k = strtolower($k);
         if(count($args) === 2) {
@@ -212,6 +212,10 @@ class Sourcemap_Form_Field {
             return isset($this->_html_attr[$k]) ? $this->_html_attr[$k] : null;
         }
         return $this;
+    }
+
+    public function html_attrs() {
+        return $this->_html_attr;
     }
 
     public function error($e) {

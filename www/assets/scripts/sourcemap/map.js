@@ -581,6 +581,11 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     var new_arrow = false;
     var new_arrow2 = false; // for wrapped arcs
     var rand_color = this.options.default_feature_colors[Math.floor(Math.random()*3)]
+
+    hop.attributes.distance = Sourcemap.haversine(
+        Sourcemap.Stop.toLonLat(sc.findStop(hop.from_stop_id)), 
+        Sourcemap.Stop.toLonLat(sc.findStop(hop.to_stop_id))
+    );
     hop.attributes.color = hop.getAttr("color", false) || rand_color
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {

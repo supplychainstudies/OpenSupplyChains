@@ -134,7 +134,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        console.log("...base->[map:feature_selected]")
         //this.hideDialog();
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
@@ -220,7 +219,6 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
 }
 
 Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
-    console.log("...Show Dialog");
     if(this.dialog) {
         this.initDialog();
         $(this.dialog_content).html(mkup);
@@ -232,7 +230,6 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 }
 
 Sourcemap.Map.Base.prototype.hideDialog = function() {
-    console.log("...Hide Dialog");
     if(this.dialog) {
         this.dialog_content.empty();
         $(this.dialog).hide();
@@ -247,7 +244,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
     // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
     var stop = sc.findStop(stid);
-    console.log(stop);
     var f = this.map.stopFeature(scid, stid);
     
     // get magic word...make sure it's valid

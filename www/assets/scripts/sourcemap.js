@@ -318,18 +318,12 @@ Sourcemap.htesc = function(str) {
 }
 
 Sourcemap.ttrunc = function(str, lim, dots) {
-    var dots = dots || false;
-    var toks = str.split(/\s+/).reverse();
-    trunc = '';
-    while(toks.length && (trunc.length + toks[toks.length-1].length) < lim) {
-        if(trunc.length) trunc += ' ';
-        trunc += toks.pop();
+    var suffix = '...';
+    var tstr = str.substr(0, lim);
+    if(str.length > tstr.length) {
+        tstr = tstr.substr(0, tstr.length - 3) + '...';
     }
-    if(!trunc.length) trunc = str.substr(0, lim);
-    if(dots && str.length > trunc.length && trunc.length > 3) {
-        trunc = trunc.substr(0, trunc.length-3) + '...';
-    }
-    return trunc;
+    return tstr;
 }
 
 Sourcemap.tlinkify = function(str) {
@@ -524,8 +518,8 @@ Sourcemap.Units.si_prefixes = {
     "a": {"label": "atto", "mult": -18}, "f": {"label": "femto", "mult": -15},
     "p": {"label": "pico", "mult": -12}, "n": {"label": "nano", "mult": -9},
     "u": {"label": "micro", "mult": -6}, "m": {"label": "milli", "mult": -3},
-    "c": {"label": "centi", "mult": -2}, "d": {"label": "deci", "mult": -1},
-    "D": {"label": "deca", "mult": 1},  "h": {"label": "hecto", "mult": 2},
+    //"c": {"label": "centi", "mult": -2}, "d": {"label": "deci", "mult": -1},
+    //"D": {"label": "deca", "mult": 1},  "h": {"label": "hecto", "mult": 2},
     "k": {"label": "kilo", "mult": 3}, "M": {"label": "mega", "mult": 6},
     "G": {"label": "giga", "mult": 9}, "T": {"label": "tera", "mult": 12},
     "P": {"label": "peta", "mult": 15}, "E": {"label": "exa", "mult": 18},
@@ -577,7 +571,8 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
                 }
             }
             if(new_unit !== false) break;
-            pot--;
+            if(pot % 3) pot--;
+            else pot = pot - 3;
             if(pot <= -24) {
                 new_unit = p; 
                 break;

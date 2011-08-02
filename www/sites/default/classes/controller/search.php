@@ -18,6 +18,7 @@ class Controller_Search extends Sourcemap_Controller_Layout {
             $q = $_POST['q'];
         }
 
+
         $r = Sourcemap_Search::simple($q);
 
         $this->template->search_result = $r;

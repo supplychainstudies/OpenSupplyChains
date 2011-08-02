@@ -37,6 +37,8 @@
 </div>
 </div>
 
+<div class="container">
 <?php else: ?>
 <h2>You&apos;re logged in as <?= $current_user->username ?>.</h2>
 <?php endif; ?>
+</div>

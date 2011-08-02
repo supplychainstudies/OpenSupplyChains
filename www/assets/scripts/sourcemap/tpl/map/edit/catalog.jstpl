@@ -1,7 +1,7 @@
 <h2><div id="catalog-close">Edit &raquo;</div> Material Catalog</h2>
 <form id="catalog-search">
     <fieldset>       
-            <input id="catalog-search-field" name="q" type="search" results="0" />
+            <input id="catalog-search-field" name="q" results="0" />
     </fieldset>
 
 </form>

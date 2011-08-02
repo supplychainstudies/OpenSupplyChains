@@ -123,4 +123,8 @@ class Sourcemap {
         }
         return false;
     }
+
+    public static function fmt_date($t) {
+        return date('%M %j, %Y', $t);
+    }
 }

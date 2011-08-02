@@ -22,7 +22,6 @@
         </div>
         <div id="edit-footprint">
             <div class="sourcemap-form nopadding">
-                <%= console.log(this) %>
                 <fieldset>
                     
                     <label for="co2e">Quantity</label>

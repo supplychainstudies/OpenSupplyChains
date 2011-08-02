@@ -15,9 +15,9 @@
 
 <% if(this.stop.getAttr("qty", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("water", false)) { %>
 <ul id="dialog-footprint">
-    <li class="weight"><%= this.stop.getAttr("qty", "-") %> <%= this.stop.getAttr("unit", "ea") %></li>
-    <li class="co2e"><%= this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0) %> kg CO2e</li>
-    <li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li>
+    <% if(this.stop.getAttr("qty", false)) { %><li class="weight"><%= this.stop.getAttr("qty", "-") %> <%= this.stop.getAttr("unit", "ea") %></li><% } %>
+    <% if(this.stop.getAttr("co2e", false)) { %><li class="co2e"><%= this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0) %> kg CO2e</li> <% } %>
+    <% if(this.stop.getAttr("water", false)) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li> <% } %>
 </ul>
 <% } %>
 

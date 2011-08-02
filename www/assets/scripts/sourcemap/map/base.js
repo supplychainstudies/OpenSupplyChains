@@ -244,8 +244,7 @@ Sourcemap.Map.Base.prototype.initDialog = function() {
         this.dialog = $('<div id="dialog"></div>');
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
-    this.dialog_pointer = $('<div id="dialog-pointer"><div id="dialog-pointer-inner"></div></div>')
-    this.dialog.append(this.dialog_pointer);
+
     this.dialog_content = $('<div id="dialog-content"></div>');
     this.dialog.append(this.dialog_content);
 }

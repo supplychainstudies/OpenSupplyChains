@@ -12,9 +12,54 @@ body#embedded-supplychain {
     #sourcemap-map-embed {        
         position:absolute;
         bottom:0; left:0;
-        width: 100%; height: 100%; 
+        width: 640px; height: 480px; 
         background: url("../images/ajax-loader.gif") center center no-repeat #ddd;
         margin: 0; padding: 0;
     }
     
+}
+#banner {
+    zoom: .8; -moz-transform: scale(.8);    
+    
+    #banner-content {
+        width:740px;
+        #banner-owner {
+            display:none;
+        }
+        #banner-summary {
+            width:240px;
+            overflow:hidden;
+        }
+    }
+}
+#dialog {
+    top:65px;
+    width:360px;
+    #dialog-content {
+        h2.title {
+            font-size: 14px;
+            background:url("../images/embed-dot.png") 0 10px no-repeat;
+            padding-left:18px;
+        }
+        h3.placename {
+            font-size:10px;
+        }
+        div.description {
+            font-size:10px;
+        }
+        .url {
+            font-size:9px;
+        }
+        #dialog-media {
+            padding:0;
+        }
+        #dialog-footprint {
+            zoom: .8; -moz-transform: scale(.8);    
+            overflow:hidden !important;
+        }
+    }
+    
+}
+#sourcemap-dock {
+    zoom: .8; -moz-transform: scale(.8);    
 }

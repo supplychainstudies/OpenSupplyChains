@@ -34,11 +34,9 @@
         .rounded(8px);
         overflow:hidden;
     }
-    > div > div {
-        .rounded(8px);
-          overflow:hidden;
-        z-index:0 !important;
-    }
+}
+.olMap > div {
+    z-index:0 !important;
 }
 
 /* DETAIL PANE 
@@ -56,18 +54,6 @@
     .box_shadow(3px, 1px, 10px);
 
     .rounded(5px);
-    
-    #dialog-pointer{
-        position:absolute;
-        top: 0;
-        left: -20px;
-        border-color: transparent rgba(255, 255, 255, 0.85);
-        border-style: solid;
-        border-width: 20px 20px 20px 0px;
-        height: 0px;
-        width: 0px;    
-    }
-    
     #dialog-content {
         overflow:hidden;                       
         padding: 0 10px; margin: 0;
@@ -195,6 +181,8 @@
             }
         }
         .cluster {
+            max-height:445px;
+            overflow:auto;
             .cluster-item {
                 border-bottom:1px solid #eee;
                 a {   
@@ -335,10 +323,10 @@
 
 #banner { 
     position:absolute;
-    height: 38px; top:20px; left:20px; right:20px;    
+    height: 36px; top:20px; left:20px; right:20px;    
     font-size:0.8em;
     .body-font; .gradient();
-    
+    .rounded(8px);
     #banner-content {
         width:960px;
         margin: 0 auto;
@@ -347,35 +335,39 @@
             font-weight:bold;
             font-size: 22px;
             text-shadow: 0 1px 1px #ddd;
-            padding:10px 30px 10px 0;
+            padding:10px 10px 10px 0;
             overflow:hidden;
-            width:195px;
+            width:225px;
+            border-right: 1px solid rgba(140,140,140,0.25);
+            
         }
         #banner-description {
             padding: 10px;
-            width:270px;
+            min-width:250px;
             overflow:hidden;
         }
         #banner-favorite {
             padding:10px 10px 10px 35px;            
             background: url(../images/icon-favorite.png) 6px center no-repeat;
+            border-left: 1px solid rgba(140,140,140,0.25);
+            
         }
         #banner-owner {
-            padding:10px 40px;
+            padding:10px 20px 10px 35px;
             background: url(../images/icon-owner.png) 6px center no-repeat;
             width:185px;
+            border-left: 1px solid rgba(140,140,140,0.25);            
             overflow:hidden;
         }
         #banner-share {
             padding:10px 10px 10px 35px;
             background: url(../images/icon-share.png) 6px center no-repeat;
-            border: none;           
+            border-left: 1px solid rgba(140,140,140,0.25);            
         }
         #banner-owner, #banner-favorite, #banner-share {
             float: right;
         }
          div {
-            border-right: 1px solid rgba(140,140,140,0.25);
             float:left;
         }
     }
@@ -421,7 +413,7 @@
     #edit-description, #edit-footprint, #edit-media, #edit-catalog {
         height:200px;
         background: rgb(200,200,200);
-        padding: 10px 20px; 
+        padding: 20px 20px 20px 20px;
         .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
         overflow:auto;
     }
@@ -434,9 +426,7 @@
     }
     fieldset {
         border:none;    
-        label {
-
-        }
+        label { }
     }
     .ui-tabs {      
         position: relative; padding: 0; zoom: 1; 
@@ -472,86 +462,88 @@
     .ui-state-active { text-decoration:underline; }
 }
 
-#catalog-close {
-    color: #ccc;
-    cursor:pointer;
-    display:inline;
-}
-#catalog-search {
-    fieldset{  
-        margin:10px;
-        background: url(../images/shadow.png) top repeat-x; 
-        border: 1px solid #c9c9c9;
-         .rounded;
-
-         input#catalog-search-field{
-              width: 100%;
-              padding: 10px 0 10px 36px;
-              border: 0;
-              outline: none;
-              background: url(../images/search.png) 12px center no-repeat; 
-              -webkit-appearance: none;
-         }
-     }
-}
-.catalog-pager {
-    text-align:center;
-    font-size:0.8em;
-    color:#fff;
-    margin:0.25em 0;
-    padding:0 0 0.5em 0 !important;
-    .catalog-pager-prev, .catalog-pager-next {
-        padding:0.5em;
+#catalog {
+    .catalog-content {
+        padding:0 !important;
+        margin:0 -10px;
+        height:260px;
+        background: rgb(200,200,200);
+        .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
+        overflow:auto;
+    
+        ul.catalog-items {
+            margin:0;
+            li.catalog-item {
+                font-size:0.8em;
+                cursor: pointer;
+                padding: 0.8em;
+                color:#777;
+                list-style:none;
+                display:block;
+                border-bottom:2px solid #bbb;
+                &:hover {
+                    background:rgba(255,255,255,0.6);
+                    color:#000;
+                }
+                .cat-item-name {
+                    font-size:1.2em;
+                    font-weight:bold;
+                }
+                .cat-item-footprints { 
+                    .cat-item-co2e {
+                        float:left; padding:10px 10px 0 30px; min-height:20px;
+                        background: url(../images/dock-icon-co2.png) 0 5px no-repeat;
+                    }
+                    .cat-item-energy {
+                        float:left; padding:10px 10px 0 30px; min-height:20px;
+                        background: url(../images/dock-icon-mass.png) 0 5px no-repeat;
+                    }
+                    .cat-item-waste {
+                        float:left; padding:10px 10px 0 30px; min-height:20px;
+                        background: url(../images/dock-icon-mass.png) 0 5px no-repeat;            
+                    }
+                    .cat-item-water {
+                        float:left; padding:10px 10px 0 30px; min-height:20px;
+                        background: url(../images/dock-icon-h2o.png) 0 5px no-repeat;
+                    }
+                }
+            }
+        }
+        
+    }
+    #catalog-close {
+        color: #ccc;
         cursor:pointer;
+        display:inline;
     }
-}
-.catalog-content {
-    padding:0 !important;
-    height:260px;
-    margin-bottom: 20px;
-    .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
-    overflow:auto;
-}
-.catalog-items {
-    margin:0;
-}
+    #catalog-search {
+        fieldset{  
+            margin:0;
+            background: url(../images/shadow.png) top repeat-x; 
+            border: 1px solid #c9c9c9;
+             .rounded;
 
-.catalog-item {
-    font-size:0.8em;
-    cursor: pointer;
-    padding: 0.8em;
-    color:#333;
-    list-style:none;
-    display:block;
-    border-bottom:2px solid #eee;
-    &:hover {
-        background:rgba(255,255,255,0.6);
-        color:#000;
+             input#catalog-search-field{
+                  width: 100%;
+                  padding: 10px 0 10px 36px;
+                  border: 0;
+                  outline: none;
+                  background: url(../images/search.png) 12px center no-repeat; 
+                  -webkit-appearance: none;
+             }
+         }
     }
-    .cat-item-name {
-        font-size:1.2em;
-        font-weight:bold;
-    }
-    .cat-item-footprints { 
-        .cat-item-co2e {
-            float:left; padding:10px 10px 0 30px; min-height:20px;
-            background: url(../images/dock-icon-co2.png) 0 5px no-repeat;
+    .catalog-pager {
+        text-align:center;
+        font-size:0.8em;
+        margin:0.25em 0;
+        padding:0 0 0.5em 0 !important;
+        .catalog-pager-prev, .catalog-pager-next {
+            padding:0.5em;
+            cursor:pointer;
         }
-        .cat-item-energy {
-            float:left; padding:10px 10px 0 30px; min-height:20px;
-            background: url(../images/dock-icon-mass.png) 0 5px no-repeat;
-        }
-        .cat-item-waste {
-            float:left; padding:10px 10px 0 30px; min-height:20px;
-            background: url(../images/dock-icon-mass.png) 0 5px no-repeat;            
-        }
-        .cat-item-water {
-            float:left; padding:10px 10px 0 30px; min-height:20px;
-            background: url(../images/dock-icon-h2o.png) 0 5px no-repeat;
-        }
-    }
+    }    
 }
-
 
 /* OPENLAYERS STYLES
  * -------------------------------------------------------------- */

@@ -27,7 +27,7 @@
             </div>
             <p>Embed this Sourcemap</p>
             <div>
-                <input value="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>" readonly="readonly"></input>
+                <input value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
             </div>
         </div>
         <hr />

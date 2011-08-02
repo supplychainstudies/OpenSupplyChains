@@ -379,3 +379,20 @@ Sourcemap.Hop.prototype.getLabel = function() {
     }
     return label;
 }
+
+Sourcemap.Hop.prototype.gc_distance = function() {
+    var proj = proj || 'EPSG:900913';
+    var geom = (new OpenLayers.Format.WKT()).read(this.geometry).geometry;
+    var from_geom = geom.components[0].components[0].transform(
+        new OpenLayers.Projection(proj),
+        new OpenLayers.Projection('EPSG:4326')
+    );
+    var to_geom = geom.components[0].components[1].transform(
+        new OpenLayers.Projection(proj),
+        new OpenLayers.Projection('EPSG:4326')
+    );
+    console.log(from_geom);
+    console.log(to_geom);
+    var gc_distance = Sourcemap.haversine(from_geom, to_geom);
+    return gc_distance;    
+}

@@ -23,7 +23,8 @@
         <div id="edit-footprint">
             <div class="sourcemap-form">
                 <fieldset>
-           
+                    <% /* @todo move this as an argument to the template */ %>
+                    <%= Sourcemap.haversine(Sourcemap.Stop.toLonLat(this.editor.map.findSupplychain(this.ref.supplychain_id).findStop(this.ref.from_stop_id)),Sourcemap.Stop.toLonLat(this.editor.map.findSupplychain(this.ref.supplychain_id).findStop(this.ref.to_stop_id))) %>
                     <label for="co2e">Quantity</label>
                     <div class="sourcemap-form-textbox">
                         <% el = $("<input></input>").attr("type", "text").attr("name", "quantity").addClass("textbox"); el[0].setAttribute("value",this.attr["quantity"] || ""); %>

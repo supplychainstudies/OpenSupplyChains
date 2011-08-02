@@ -348,9 +348,11 @@
         }
         #banner-favorite {
             padding:10px 10px 10px 35px;            
-            background: url(../images/icon-favorite.png) 6px center no-repeat;
+            background: url(../images/icon-favorite.png) 6px -22px no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);
-            
+            &.marked {
+                background: url(../images/icon-favorite.png) 6px 8px no-repeat;
+            }
         }
         #banner-owner {
             padding:10px 20px 10px 35px;

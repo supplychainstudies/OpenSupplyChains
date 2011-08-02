@@ -596,3 +596,28 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
     return scaled;
 }
 
+// Date fxns
+Sourcemap.Date = {};
+
+Sourcemap.Date.months = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+];
+
+Sourcemap.Date.get_month_name = function(num) { // 1-12
+    return this.months[num];
+}
+
+Sourcemap.Date.get_month_abbr = function(num) {
+    return this.get_month_name(num).substr(0,3);
+}
+
+Sourcemap.Date.format = function(dt) {
+    var s = this.get_month_abbr(dt.getMonth());
+    s += " "+dt.getDate()+", "+dt.getFullYear();
+    return s;
+}
+
+Sourcemap.fmt_date = function(dt) {
+    return Sourcemap.Date.format(dt);
+}

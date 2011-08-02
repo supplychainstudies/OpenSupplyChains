@@ -4,10 +4,10 @@ return array(
     'title' => array(
         'not_empty' => 'A title is required.'
     ),
-    'teaser' => array(
+    'description' => array(
         'not_empty' => 'Please enter a short description.',
         'min_length' => 'Please give a little more information about this map.',
-        'max_length' => 'The short description should be 140 characters or less.'
+        'max_length' => 'The description should be 80 characters or less.'
     ),
     'tags' => array(
         'regex' => 'Enter a list of tags separated by spaces.'

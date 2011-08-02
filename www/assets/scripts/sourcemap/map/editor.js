@@ -447,7 +447,7 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
             } else if(catalog_map[cat][k]) attr[k] = item[k];
         }
     }
-    console.log(ref);
+    for(var k in attr) ref.attributes[k] = attr[k];
     var ftr = this.map.stop_features[ref.supplychain_id][ref.instance_id];
     ftr.attributes = {}; ftr.attributes.ref = ref;
     this.showEdit(ftr, attr);

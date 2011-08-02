@@ -24,7 +24,7 @@ return array(
             'label' => 'Description',
             'attributes' => array(
                 "maxlength" => 80
-            )
+            ),
             'css_class' => array(
                 'preview'
             )
@@ -43,9 +43,9 @@ return array(
             'type' => 'checkbox',
             'label' => 'Publish?'
         ),
-        'create' => array(
+        'save' => array(
             'type' => 'submit',
-            'label' => 'Create'
+            'label' => 'Save'
         )
     ),
     'messages_file' => 'forms/create',
@@ -57,7 +57,7 @@ return array(
             array('in_array', array($valid_cats))
         ),
         'description' => array(
-            array('length[0,80]');
+            array('max_length', array(80))
         )
     ),
     'filters' => array()

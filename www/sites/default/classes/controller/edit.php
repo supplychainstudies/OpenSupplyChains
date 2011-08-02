@@ -25,7 +25,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
 
                 // Load form template
                 $form = Sourcemap_Form::load('/edit');
-                $form->action('edit')->method('post');
+                $form->action('edit/'.$supplychain->id)->method('post');
 
                 // Populate fields
                 $form->field('title')
@@ -50,24 +50,16 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 $form->field('category')->value($supplychain->category);
 
                 if(strtolower(Request::$method) === 'post') {
-                    $post = Validate::factory($_POST);
-                    $post->rule('title', 'not_empty')
-                        ->rule('teaser', 'not_empty')
-                        ->rule('teaser', 'min_length', array(8))
-                        ->rule('teaser', 'max_length', array(140))
-                        ->rule('tags', 'regex', array('/^(\s+)?(\w+(\s+)?)*$/'))
-                        ->filter('category', 'intval')
-                        ->rule('category', 'in_array', array($valid_cats));
-                    if($post->check()) {
-                        $title = $post['title'];
-                        $teaser = $post['teaser'];
-                        $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($post['tags']));
-                        $category = $post['category'];
+                    if($form->validate($_POST)) {
+                        $title = $form->get_field('title')->value();
+                        $description = $form->get_field('description')->value();
+                        $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($form->get_field('tags')->value()));
+                        $category = $form->get_field('category')->value();
                         if($category) $supplychain->category = $category;
                         else $category = null;
                         $public = isset($_POST['public']) ? Sourcemap::READ : 0;
                         $supplychain->attributes->title = $title;
-                        $supplychain->attributes->teaser = $teaser;
+                        $supplychain->attributes->description = $description;
                         $supplychain->attributes->tags = $tags;
                         if($public)
                             $supplychain->other_perms |= $public;

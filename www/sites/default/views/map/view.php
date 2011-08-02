@@ -23,7 +23,7 @@
         <div class="container links">
             <p>Link to this Sourcemap</p>
             <div>
-                <input value="<?= URL::site(NULL, TRUE) ?>view/<?= $supplychain_id ?>" readonly="readonly"></input>
+                <input value="<?= URL::site(NULL, TRUE) ?>view/<?= $supplychain_id ?>" readonly="readonly" onclick="select()"></input>
             </div>
             <p>Embed this Sourcemap</p>
             <div>

@@ -17,6 +17,8 @@
             <?= $pager->render() ?>
         </div>
     <?php else: ?>
-        <h3 class="bad-news">No results.</h3>
+        <div class="container">
+            <h3 class="bad-news">No results.  Please try broadening your search terms.</h3>
+        </div>
     <?php endif; ?>
 </div>

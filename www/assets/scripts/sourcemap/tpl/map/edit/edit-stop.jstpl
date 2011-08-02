@@ -21,27 +21,21 @@
             %>
         </div>
         <div id="edit-footprint">
-            <div class="sourcemap-form">
+            <div class="sourcemap-form nopadding">
+                <%= console.log(this) %>
                 <fieldset>
                     
-                    <label class="operator">&nbsp;</label>
-           
-                    <div class="halfwidth">
-                        <label for="co2e">Quantity</label>
-                        <div class="sourcemap-form-textbox">
-                            <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 0)); %>
-                            <%= $("<div></div>").append(el).html() %>
-                        </div>
+                    <label for="co2e">Quantity</label>
+                    <div class="sourcemap-form-textbox">
+                        <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 1)); %>
+                        <%= $("<div></div>").append(el).html() %>
                     </div>
 
-                    <label class="operator">x</label>
 
-                    <div class="halfwidth">
-                        <label for="co2e">Unit</label>
-                        <div class="sourcemap-form-textbox">
-                            <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("unit", "kg")); %>
-                            <%= $("<div></div>").append(el).html() %>
-                        </div>
+                    <label for="co2e">Unit</label>
+                    <div class="sourcemap-form-textbox">
+                        <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("unit", "kg")); %>
+                        <%= $("<div></div>").append(el).html() %>
                     </div>
 
                     <div class="clear"></div>

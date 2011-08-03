@@ -72,9 +72,9 @@
 </div>
 <div class="clear"></div>
 <ul id="edit-actions">
-    <li class="edit-save">Save</li>
-    <li class="connect-button">Connect</li>
-    <li class="delete-button left">Delete</li>
+    <li class="edit-save"><a href="javascript:void(0)">Save</a></li>
+    <li class="connect-button"><a href="javascript:void(0)">Connect</a></li>
+    <li class="delete-button left"><a href="javascript:void(0)">Delete</a></li>
     <div class="clear"></div>    
 </ul>
 

@@ -1,7 +1,7 @@
-<div id="stop-editor">
+<div id="hop-editor">
 <form>
-<h2 class="title"><input name="title" type="text" value="<%= this.attr["title"] %>"/></h2>
-<h3 class="placename"><input name="address" type="text" value="<%= this.attr["address"] %>" /></h3>
+<h2 class="title hop"><input name="title" type="text" value="<%= this.ref.getAttr("title", "Untitled Hop") %>"/></h2>
+<h3 class="placename"><input name="address" type="text" value="<%= this.ref.getAttr("address", "Unknown Address") %>" /></h3>
 
 
 <div id="editor-tabs">
@@ -23,10 +23,10 @@
         <div id="edit-footprint">
             <div class="sourcemap-form">
                 <fieldset>
-                    <%= this.ref.gc_distance() %>
-                    <label for="co2e">Quantity</label>
+                    <label for="distance">Distance</label>
                     <div class="sourcemap-form-textbox">
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "quantity").addClass("textbox"); el[0].setAttribute("value",this.attr["quantity"] || ""); %>
+                        <% el = $("<input></input>").attr("type", "text").attr("name", "distance").addClass("textbox"); 
+                            el[0].setAttribute("value", this.ref.gc_distance() || ""); %>
                         <%= $("<div></div>").append(el).html() %>
                     </div>
 
@@ -72,8 +72,8 @@
 </div>
 <div class="clear"></div>
 <ul id="edit-actions">
-    <li class="edit-save">Save</li>
-    <li class="delete-button left">Delete</li>
+    <li class="edit-save"><a href="javascript:void(0)">Save</a></li>
+    <li class="delete-button let"><a href="javascript:void(0)">Delete</a></li>
     <div class="clear"></div>    
 </ul>
 

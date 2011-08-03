@@ -263,8 +263,6 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
             }
         }, this));  
     
-    $(this.editor.map_view.dialog).find(".close").click($.proxy(function() { this.editor.map_view.hideDialog(); }, this));
-    
     // bind click event to connect button
     $(this.editor.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
 
@@ -283,7 +281,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
             this.editor.map_view.hideDialog();
         }
     }, {"ref": ref, "editor": this.editor, "feature": ftr}));    
-        $(this.editor.map_view.dialog).find('.edit-save').click($.proxy(function(e) {
+        $(this.editor.map_view.dialog).find('.close').click($.proxy(function(e) {
             // Edit should be disabled at this point
             this.editor.map_view.hideDialog();            
             

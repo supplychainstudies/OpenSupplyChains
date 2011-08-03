@@ -190,7 +190,6 @@ Sourcemap.Map.prototype.initDock = function() {
         this.dock_element.append(this.dock_outerwrap.append(this.dock_content)));
     this.dockAdd('zoomin', {
         "title": 'Zoom In',
-        "icon_url": "sites/default/assets/images/dock/zoomin.png",
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
@@ -204,7 +203,6 @@ Sourcemap.Map.prototype.initDock = function() {
     });
     this.dockAdd('zoomout', {
         "title": 'Zoom Out',
-        "icon_url": "sites/default/assets/images/dock/zoomout.png",
         "panel": 'zoom',
         "callbacks": {
             "click": function() {

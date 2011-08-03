@@ -24,7 +24,7 @@ Sourcemap.Map.prototype.defaults = {
     "ol_layer_switcher": false, "tileswitcher": false,
     "google_tiles": false, "basetileset": "cloudmade",
     "cloudmade_tiles": true, "animation_enabled":false,
-    "draw_hops": true, "hops_as_arcs": true,
+    "draw_hops": true, "hops_as_arcs": true, "stop_size": 14,
     "hops_as_bezier": false, "arrows_on_hops": true,
     "default_feature_color": "#35a297", "clustering": true,
     "default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
@@ -354,7 +354,7 @@ Sourcemap.Map.prototype.addLayer = function(label, layer) {
 
 Sourcemap.Map.prototype.addStopLayer = function(scid) {
     var sc = this.findSupplychain(scid);
-    this.cluster = new Sourcemap.Cluster({distance: 32, threshold: 2, map: this});
+    this.cluster = new Sourcemap.Cluster({distance: this.options.stop_size, threshold: 2, map: this});
     var strategies = this.options.clustering ? [this.cluster] : [];
     var slayer = new OpenLayers.Layer.Vector(
         "Stops - "+sc.getLabel(), {
@@ -476,9 +476,9 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
-    new_feature.attributes.size = Math.max(stop.getAttr("size", false), 14);
+    new_feature.attributes.size = Math.max(stop.getAttr("size", false), this.options.stop_size);
     new_feature.attributes.fsize = fsize + "px";
-    new_feature.attributes.yoffset = -1*(Math.max(stop.getAttr("size", false), 14)+fsize);
+    new_feature.attributes.yoffset = -1*(Math.max(stop.getAttr("size", false), this.options.stop_size)+fsize);
   
     var rand_color = this.options.default_feature_colors[Math.floor(Math.random()*3)];
     new_feature.attributes.color = stop.getAttr("color", false) || rand_color;
@@ -917,7 +917,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var scid = feature.attributes.supplychain_instance_id;
     var center = feature.geometry.getBounds().getCenterLonLat();
     var cid = "cluster-"+feature.attributes.stop_instance_id;
-    var csize = feature.attributes.size*1.2;
+    var csize = this.map.options.stop_size;
     var slabel = feature.attributes.title;
     var fsize = 16;
     slabel = 1;

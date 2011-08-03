@@ -65,7 +65,7 @@ Sourcemap.Supplychain.Graph.prototype.roots = function() {
         var edge = edges[i];
         if((idx = sources.indexOf(edge.from)) < 0)
             sources.push(edge.from);
-        if(!(idx = sinks.indexOf(edge.to)))
+        if((idx = sinks.indexOf(edge.to)) < 0)
             sinks.push(edge.to);
     }
     var roots = [];
@@ -158,3 +158,140 @@ Sourcemap.Supplychain.Graph.prototype.fromClosestLeafOrder = function(from_stop)
     }
     return order;
 }
+
+Sourcemap.Supplychain.Graph.prototype.sources = function(sink) {
+    var sink = sink || false;
+    var sources = [];
+    for(var ei in this.edges) {
+        var e = this.edges[ei];
+        if(sink) {
+            if(e.to == sink)
+                if(sources.indexOf(e.from) < 0)
+                    sources.push(e.from);
+        } else {
+            if(sources.indexOf(e.from) < 0)
+                sources.push(e.from);
+        }
+    }
+    return sources;
+}
+
+Sourcemap.Supplychain.Graph.prototype.sinks = function(source) {
+    var source = source || false;
+    var sinks = [];
+    for(var ei in this.edges) {
+        var e = this.edges[ei];
+        if(source) {
+            if(e.to == sink)
+                if(sinks.indexOf(e.from) < 0)
+                    sinks.push(e.from);
+        } else {
+            if(sinks.indexOf(e.from) < 0)
+                sinks.push(e.from);
+        }
+    }
+    return sinks;
+
+}
+
+Sourcemap.Supplychain.Graph2 = function(sc, o) {
+    if(!(sc instanceof Sourcemap.Supplychain))
+        throw new Error("Graph2 requires instance of supplychain.");
+    this.supplychain = sc;
+    Sourcemap.Configurable.call(this, o);
+}
+
+Sourcemap.Supplychain.Graph2.prototype.defaults = {
+    "auto_init": true
+};
+
+Sourcemap.Supplychain.Graph2.prototype.init = function() {
+    this.nodes = {};
+    this.nids = [];
+    this.edges = [];
+    this.roots = [];
+    this.leaves = [];
+    for(var i=0; i<this.supplychain.stops.length; i++) {
+        var st = this.supplychain.stops[i];
+        var n = new Sourcemap.Supplychain.Graph2.Node(st);
+        this.nodes[st.instance_id] = n;
+        this.nids.push(st.instance_id);
+    }
+    for(var i=0; i<this.supplychain.hops.length; i++) {
+        var h = this.supplychain.hops[i];
+        var e = new Sourcemap.Supplychain.Graph2.Edge(h);
+        var f = this.nodes[e.hop.from_stop_id];
+        var t = this.nodes[e.hop.to_stop_id];
+        e.from = f;
+        e.to = t;
+        f.outbound[e.hop.to_stop_id] = t;
+        f.sinks.push(e.hop.to_stop_id);
+        t.inbound[e.hop.from_stop_id] = f;
+        t.sources.push(e.hop.to_stop_id);
+        this.edges.push(e);
+    }
+    for(var i=0; i<this.nids.length; i++) {
+        var nid = this.nids[i];
+        var n = this.nodes[nid];
+        if(n.sinks.length && !n.sources.length) this.roots.push(nid);
+        if(n.sources.length && !n.sinks.length) this.leaves.push(nid);
+    }
+    this.paths = this.get_paths();
+}
+
+Sourcemap.Supplychain.Graph2.prototype.get_paths = function() {
+    var s = [];
+    for(var i=0; i<this.roots.length; i++)
+        s.push([this.roots[i]]);
+    var c = null;
+    var p = [];
+    while(s.length) {
+        c = s.pop();
+        var t = c[c.length-1];
+        var n = this.nodes[t];
+        if(n.sinks.length) {
+            for(var i=0; i<n.sinks.length; i++) {
+                if(c.indexOf(n.sinks[i]) > 0)
+                    continue;
+                var j = c.slice(0);
+                j.push(n.sinks[i]);
+                s.push(j);
+            }
+        } else {
+            p.push(c.slice(0));
+        }
+    }
+    return p;
+}
+
+Sourcemap.Supplychain.Graph2.Node = function(st, o) {
+    if(!(st instanceof Sourcemap.Stop))
+        throw new Error("Graph2 node requires instance of stop.");
+    this.stop = st;
+    Sourcemap.Configurable.call(this, o);
+}
+
+
+Sourcemap.Supplychain.Graph2.Node.prototype.defaults = {
+    "auto_init": true
+};
+
+Sourcemap.Supplychain.Graph2.Node.prototype.init = function() {
+    this.inbound = {};
+    this.outbound = {};
+    this.sources = [];
+    this.sinks = [];
+}
+
+Sourcemap.Supplychain.Graph2.Edge = function(h, o) {
+    if(!(h instanceof Sourcemap.Hop))
+        throw new Error("Graph2 edge requires instance of hop.");
+    this.hop = h;
+    Sourcemap.Configurable.call(this, o);
+}
+
+Sourcemap.Supplychain.Graph2.Edge.prototype.defaults = {
+    "auto_init": true
+};
+
+Sourcemap.Supplychain.Graph2.Edge.prototype.init = function() {}

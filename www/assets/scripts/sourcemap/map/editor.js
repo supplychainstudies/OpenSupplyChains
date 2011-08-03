@@ -229,7 +229,6 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
         var tmph = fromst.makeHopTo(tost);
         h.geometry = tmph.geometry;
     }
-    this.map.mapSupplychain(sc.instance_id);
 }
 
 Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {

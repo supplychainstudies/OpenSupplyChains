@@ -443,19 +443,63 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
     var supplychain = this.findSupplychain(scid);
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Supplychain not found/Sourcemap.Supplychain required.');
+
+    // build graph and assign (max) tiers to stops.
+    var g = new Sourcemap.Supplychain.Graph2(supplychain);
+    var stids = g.nids.slice(0);
+    var tiers = {};
+    for(var i=0; i<stids.length; i++) {
+        tiers[stids[i]] = 0;
+    }
+    var max_plen = 0;
+    for(var i=0; i<g.paths.length; i++) {
+        var p = g.paths[i];
+        max_plen = p.length > max_plen ? p.length : max_plen;
+        for(var j=0; j<p.length; j++) {
+            if(j > tiers[p[j]]) tiers[p[j]] = j;
+        }
+    }
+    // build palette
+    var dfc = this.options.default_feature_colors.slice(0);
+    for(var i=0; i<dfc.length; i++) {
+        dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
+    }
+    var palette = Sourcemap.Color.graduate(dfc, max_plen);
+    
     reselect = prevent_reselect ? false : true;
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     var featureList = [];
     
     for(var i=0; i<supplychain.stops.length; i++) {
-        featureList.push(this.mapStop(supplychain.stops[i], scid));
+        var st = supplychain.stops[i];
+        var new_ftr = this.mapStop(st, scid);
+        var scolor = palette[tiers[st.instance_id]].toString();
+        new_ftr.attributes.tier = tiers[st.instance_id];
+        new_ftr.attributes.color = scolor;
+        new_ftr.attributes.scolor = scolor;
+        new_ftr.attributes.fcolor = scolor;
+        featureList.push(new_ftr);
     }
     this.getStopLayer(scid).addFeatures(featureList);
     this.getStopLayer(scid);
     if(this.options.draw_hops) {
         for(var i=0; i<supplychain.hops.length; i++) {
-            this.mapHop(supplychain.hops[i], scid);
+            var h = supplychain.hops[i];
+            var fc = palette[tiers[h.from_stop_id]];
+            var tc = palette[tiers[h.to_stop_id]];
+            var hc = fc.midpoint(tc).toString();
+            var new_ftr = this.mapHop(supplychain.hops[i], scid);
+            new_ftr.hop.attributes.color = hc;
+            this.getHopLayer(scid).addFeatures([new_ftr.hop]);
+            if(new_ftr.arrow) {
+                new_ftr.arrow.attributes.color = hc;
+                this.getHopLayer(scid).addFeatures([new_ftr.arrow]);
+            }
+            if(new_ftr.arrow2) {
+                new_ftr.arrow2.attributes.color = hc;
+                this.getHopLayer(scid).addFeatures([new_ftr.arrow2]);
+            }
         }
     }
     //if(supplychain.stops.length)
@@ -618,13 +662,15 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(this.prepareHopFeature instanceof Function) {
         this.prepareHopFeature.call(this, hop, new_feature, new_arrow);
     }
-    this.getHopLayer(scid).addFeatures([new_feature]);
-    if(new_arrow)
-        this.getHopLayer(scid).addFeatures([new_arrow]);
-    if(new_arrow2)
-        this.getHopLayer(scid).addFeatures([new_arrow2]);
-        
-        return {"hop":new_feature, "arrow": new_arrow || new_arrow2}
+       
+    var r = {"hop":new_feature};
+    if(new_arrow) {
+        r.arrow = new_arrow;
+        if(new_arrow2) {
+            r.arrow2 = new_arrow2;
+        }
+    }
+    return r;
 }
 
 Sourcemap.Map.prototype.eraseHop = function(scid, hid) {

@@ -2,13 +2,13 @@
 
 return array(
     'packages' => array(
-    'sourcemap-core' => array(
-        'scripts' => array(
-            'assets/scripts/sourcemap/form.js',
-            'sites/default/assets/scripts/curtain.js',
+        'sourcemap-core' => array(
+            'scripts' => array(
+                'assets/scripts/sourcemap/form.js',
+                'sites/default/assets/scripts/curtain.js',
             )
         ),
-    'sourcemap-edit' => array(
+        'sourcemap-edit' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/graph.js',
                 'assets/scripts/sourcemap/supplychain/editor/tabbed.js',
@@ -41,7 +41,7 @@ return array(
                 'less', 'sourcemap-map'
             )
         ),
-        'blog-view' => array(
+        /*'blog-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/blog.js',
                 'assets/scripts/sourcemap/map/blog.js'
@@ -49,7 +49,7 @@ return array(
             'requires' => array(
                 'sourcemap-map'
             )
-        ),
+        ),*/
         'sourcemap-social' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/social.js'

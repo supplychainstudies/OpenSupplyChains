@@ -411,6 +411,46 @@ Sourcemap.Color.prototype.toString = function() {
     return Sourcemap.rgb2hexc([this.r, this.g, this.b]);
 }
 
+Sourcemap.Color.prototype.clone = function() {
+    var rgb = Sourcemap.hexc2rgb(this.toString());
+    return new Sourcemap.Color(rgb[0],rgb[1],rgb[2]);
+}
+
+Sourcemap.Color.prototype.midpoint = function(to_color) {
+    var dr = to_color.r - this.r;
+    var mr = this.r + (Math.round(dr/2))
+    var dg = to_color.g - this.g;
+    var mg = this.g + (Math.round(dg/2))
+    var db = to_color.b - this.b;
+    var mb = this.b + (Math.round(db/2))
+    return new Sourcemap.Color(mr, mg, mb);
+}
+
+Sourcemap.Color.graduate = function(colors, ticks) {
+    var g = [];
+    ticks = isNaN(parseInt(ticks)) ? colors.length : parseInt(ticks);
+    while(colors.length < ticks) {
+        for(var i=0; i<colors.length; i++) {
+            var c = colors[i];
+            g.push(c);
+            var nxt = (i+1) == colors.length ? colors[0] : colors[i+1];
+            // midpoint or next
+            if((g.length+1) < ticks) g.push(c.midpoint(nxt));
+            else g.push(nxt);
+            // exit condition
+            if(g.length < ticks) continue;
+            else break;
+        }
+        colors = g.slice(0);
+        if(g.length < ticks) {
+            g = [];
+        } else {
+            break;
+        }
+    }
+    return colors;
+}
+
 Sourcemap.R = 6371 //km
 
 Sourcemap.radians = function(deg) {

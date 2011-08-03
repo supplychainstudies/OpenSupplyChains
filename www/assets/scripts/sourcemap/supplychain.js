@@ -219,6 +219,42 @@ Sourcemap.Supplychain.prototype.stopAttrRange = function(attr_nm) {
     };
 }
 
+Sourcemap.Supplychain.prototype.hopAttrRange = function(attr_nm) {
+    var min = null;
+    var max = null;
+    var total = 0;
+    for(var i=0; i<this.hops.length; i++) {
+        var hop = this.hops[i];
+        var val = null;
+        if(attr_nm instanceof Function) {
+            val = attr_nm(hop);
+        } else if(hop.attributes[attr_nm] === undefined) {
+            continue;
+        } else {
+            val = parseFloat(hop.attributes[attr_nm]);
+        }
+        if(isNaN(val))
+            continue;
+        if(min === null) min = val;
+        if(max === null) max = val;
+        min = Math.min(val, min);
+        max = Math.max(val, max);
+        total += val;
+    }
+    return {
+        "min": min, "max": max, "total": total
+    };
+}
+
+Sourcemap.Supplychain.prototype.attrRange = function(attr_nm) {
+    var sr = this.stopAttrRange(attr_nm);
+    var hr = this.hopAttrRange(attr_nm);
+    var min = Math.min(sr.min, hr.min);
+    var max = Math.max(sr.max, hr.max);
+    var tot = sr.total + hr.total;
+    return {"stops": sr, "hops": hr, "min": min, "max": max, "total": tot};
+}
+
 Sourcemap.Stop = function(geometry, attributes) {
     this.instance_id = Sourcemap.instance_id("stop");
     this.supplychain_id = null;

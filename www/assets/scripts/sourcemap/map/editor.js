@@ -249,6 +249,19 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
             this.params = {"name": ''};
             this.editor.showCatalog(this);
         }, this));
+
+        // load impact calculator 
+        $("#edit-footprint input").keyup($.proxy(function(e){ 
+            // update calculation 
+            var quantity = $('#edit-footprint').find('input[name="qty"]').val(); 
+            var unit = $('#edit-footprint').find('input[name="unit"]').val(); 
+            var factor = $('#edit-footprint').find('input[name="co2e"]').val(); 
+
+            if (quantity && unit && factor){ 
+            var output = quantity * factor; 
+            $('#edit-footprint').find('.result').text(output + " " + unit + " CO2e"); 
+            }
+        }, this));  
     
     $(this.editor.map_view.dialog).find(".close").click($.proxy(function() { this.editor.map_view.hideDialog(); }, this));
     

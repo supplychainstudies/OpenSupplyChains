@@ -7,7 +7,7 @@
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>
-		<li><a href="#edit-footprint">Footprint</a></li>
+		<li><a href="#edit-stop-footprint">Footprint</a></li>
 		<li><a href="#edit-media">Media</a></li>
 		<li><a class="load-catalog-button">Material Catalog</a></li>
 		<div class="clear"></div>
@@ -20,7 +20,7 @@
                 ).html()
             %>
         </div>
-        <div id="edit-footprint">
+        <div id="edit-stop-footprint">
             <div class="sourcemap-form nopadding">
                 <fieldset>                    
                     <label for="co2e">Quantity</label>

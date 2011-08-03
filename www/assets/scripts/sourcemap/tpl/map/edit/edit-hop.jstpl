@@ -7,9 +7,8 @@
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>
-		<li><a href="#edit-footprint">Footprint</a></li>
+		<li><a href="#edit-hop-footprint">Footprint</a></li>
 		<li><a href="#edit-media">Media</a></li>
-		<li><a class="load-catalog-button">Material Catalog</a></li>
 		<div class="clear"></div>
 	</ul>
     <div class="clear"></div>
@@ -20,7 +19,7 @@
                 ).html()
             %>
         </div>
-        <div id="edit-footprint">
+        <div id="edit-hop-footprint">
             <div class="sourcemap-form">
                 <fieldset>
                     <label for="distance">Distance</label>

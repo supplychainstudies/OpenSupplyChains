@@ -250,18 +250,39 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
             this.editor.showCatalog(this);
         }, this));
 
-        // load impact calculator 
-        $("#edit-footprint input").keyup($.proxy(function(e){ 
-            // update calculation 
-            var quantity = $('#edit-footprint').find('input[name="qty"]').val(); 
-            var unit = $('#edit-footprint').find('input[name="unit"]').val(); 
-            var factor = $('#edit-footprint').find('input[name="co2e"]').val(); 
+        if (reftype === "stop"){
+            // load impact calculator for stops
+            $("#edit-stop-footprint input").keyup($.proxy(function(e){ 
+                // update calculation
+                editor = $('#edit-stop-footprint');
+                var quantity = editor.find('input[name="qty"]').val(); 
+                var unit     = editor.find('input[name="unit"]').val(); 
+                var factor   = editor.find('input[name="co2e"]').val(); 
 
-            if (quantity && unit && factor){ 
-            var output = quantity * factor; 
-            $('#edit-footprint').find('.result').text(output + " " + unit + " CO2e"); 
-            }
-        }, this));  
+                if (quantity && unit && factor){ 
+                var output = quantity * factor; 
+                editor.find('.result').text(output + " " + unit + " CO2e"); 
+                }
+            }, this));  
+        }
+        else{
+            // load impact calculator for hops
+            $("#edit-hop-footprint input").keyup($.proxy(function(e){ 
+                // update calculation
+                editor = $('#edit-hop-footprint');
+                var distance = editor.find('input[name="distance"]').val(); 
+                var unit     = editor.find('input[name="unit"]').val(); 
+                var factor   = editor.find('input[name="factor"]').val(); 
+
+                console.log('heyy');
+
+                if (distance && unit && factor){ 
+                var output = distance * factor; 
+                editor.find('.result').text(output + " " + unit + " CO2e"); 
+                }
+            }, this));  
+        }
+
     
     // bind click event to connect button
     $(this.editor.map_view.dialog).find('.connect-button').click($.proxy(function(e) {

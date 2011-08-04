@@ -728,6 +728,7 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
         mid_pt = Sourcemap.great_circle_midpoint(from, wrap);
         mid_pt2 = Sourcemap.great_circle_midpoint(wrap2, to);
         angle = Sourcemap.great_circle_bearing(from, wrap);
+        angle2 = Sourcemap.great_circle_bearing(mid_pt2, to);
     } else {
         mid_pt = Sourcemap.great_circle_midpoint(from, to);
         angle = Sourcemap.great_circle_bearing(mid_pt, to);
@@ -744,7 +745,6 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     if(wrapped) {
         mid_pt2 = new OpenLayers.Geometry.Point(mid_pt2.x, mid_pt2.y);
         mid_pt2 = mid_pt2.transform(pdst, psrc);
-        angle2 = Sourcemap.great_circle_bearing(wrap2, to);
         attrs.angle = angle2;
         var a2 = new OpenLayers.Feature.Vector(mid_pt2, attrs);
     }

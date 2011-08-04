@@ -255,12 +255,14 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 // update calculation
                 editor = $('#edit-stop-footprint');
                 var quantity = editor.find('input[name="qty"]').val(); 
-                var unit     = editor.find('input[name="unit"]').val(); 
+                //var unit     = editor.find('input[name="unit"]').val(); 
+                var unit     = 'kg';
                 var factor   = editor.find('input[name="co2e"]').val(); 
 
-                if (quantity && unit && factor){ 
-                var output = quantity * factor; 
-                editor.find('.result').text(output + " " + unit + " CO2e"); 
+                if (quantity && factor){ 
+                    var output = quantity * factor; 
+                    var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+                    editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
                 }
             }, this)); 
             
@@ -273,12 +275,13 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 // update calculation
                 editor = $('#edit-hop-footprint');
                 var distance = editor.find('input[name="distance"]').val(); 
-                var unit     = editor.find('input[name="unit"]').val(); 
                 var factor   = editor.find('input[name="factor"]').val(); 
+                var unit     = 'kg';
 
-                if (distance && unit && factor){ 
-                var output = distance * factor; 
-                editor.find('.result').text(output + " " + unit + " CO2e"); 
+                if (distance && factor){ 
+                    var output = distance * factor;
+                    var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+                    editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
                 }
             }, this)); 
             $("#edit-hop-footprint input").trigger('keyup');

@@ -55,7 +55,6 @@ Sourcemap.Map.Base.prototype.defaults = {
                 qty = parseFloat(st.gc_distance());
             }
             var fac = parseInt(st.getAttr("co2e", 0));
-            if(fac > 0) console.log(st);
             if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
             return val;
         }

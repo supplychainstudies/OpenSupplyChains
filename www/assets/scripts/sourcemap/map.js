@@ -502,8 +502,18 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
             }
         }
     }
-    //if(supplychain.stops.length)
-    //    this.map.zoomToExtent(this.getStopLayer(scid).getDataExtent());
+    if(supplychain.stops.length) {
+        var ext = new OpenLayers.Bounds();
+        for(var i=0; i<this.map.layers.length; i++) {
+            var l = this.map.layers[i];
+            if(!l.isBaseLayer) {
+                ext.extend(l.getDataExtent());
+            }
+        }
+        this.map.zoomToExtent(ext);
+    } else {
+        this.map.zoomToExtent(this.map.getMaxExtent());
+    }
     this.broadcast('map:supplychain_mapped', this, supplychain);
     if(reselect) this.reselect();
 }

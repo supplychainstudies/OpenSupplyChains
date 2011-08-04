@@ -262,7 +262,10 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 var output = quantity * factor; 
                 editor.find('.result').text(output + " " + unit + " CO2e"); 
                 }
-            }, this));  
+            }, this)); 
+            
+            // trigger event on load
+            $("#edit-stop-footprint input").trigger('keyup');
         }
         else{
             // load impact calculator for hops
@@ -273,13 +276,15 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 var unit     = editor.find('input[name="unit"]').val(); 
                 var factor   = editor.find('input[name="factor"]').val(); 
 
-                console.log('heyy');
-
                 if (distance && unit && factor){ 
                 var output = distance * factor; 
                 editor.find('.result').text(output + " " + unit + " CO2e"); 
                 }
-            }, this));  
+            }, this)); 
+            $("#edit-hop-footprint input").trigger('keyup');
+            
+            // trigger event on load
+            $("#edit-stop-footprint input").trigger('keyup');
         }
 
     

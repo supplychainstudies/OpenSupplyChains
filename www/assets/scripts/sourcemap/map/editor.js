@@ -180,6 +180,22 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     this.map.controls.stopdrag.activate();
     
+    // load transport catalog
+    this.transport_catalog = false;
+    this.loadTransportCatalog();
+    
+}
+
+Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
+    var o = {
+        "url": "services/catalogs/osi", "type": "get",
+        "data": {"category": "transportation"},
+        "success": $.proxy(function(data) { 
+            this.transport_catalog = data.results; 
+        }, this)
+    };
+    $.ajax(o);
+    return this;
 }
 
 Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, trigger_events) {

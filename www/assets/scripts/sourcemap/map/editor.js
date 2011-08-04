@@ -259,7 +259,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 var unit     = 'kg';
                 var factor   = editor.find('input[name="co2e"]').val(); 
 
-                if (quantity && factor){ 
+                if (!isNaN(quantity && factor)){ 
                     var output = quantity * factor; 
                     var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
                     editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
@@ -278,7 +278,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 var factor   = editor.find('input[name="co2e"]').val(); 
                 var unit     = 'kg';
 
-                if (distance && factor){ 
+                if (!isNaN(distance && factor)){ 
                     var output = distance * factor;
                     var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
                     editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 

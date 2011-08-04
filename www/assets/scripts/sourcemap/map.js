@@ -999,7 +999,26 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     return cluster;
 }
 Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
+    
+    // add
     cluster.cluster.push(feature);
+    
+    // calulate avg color
+    var c = new Sourcemap.Color();
+    for(var i=0; i<cluster.cluster.length; i++) {
+        var f = cluster.cluster[i];
+        var fc = false;
+        if(f.attributes.color) {
+            fc = Sourcemap.Color()).fromHex(f.attributes.color);
+        } else continue;
+        c.r += fc.r; c.g = fc.g; c.b = fc.b;
+    }
+
+    c.r /= cluster.cluster.length;
+    c.g /= cluster.cluster.length;
+    c.b /= cluster.cluster.length;
+    cluster.attributes.color = c.toString();
+
     cluster.attributes.count += 1;
     slabel = cluster.attributes.count;
 

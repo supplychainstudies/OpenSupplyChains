@@ -184,9 +184,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.activate();
     
     // load transport catalog
-    this.transport_catalog = false;
-    this.loadTransportCatalog();
     
+    this.loadTransportCatalog();
 }
 
 Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
@@ -194,11 +193,30 @@ Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
         "url": "services/catalogs/osi", "type": "get",
         "data": {"category": "transportation"},
         "success": $.proxy(function(data) { 
-            this.transport_catalog = data.results; 
+            this.transport_catalog = data.results;
+            
+            // build select element for editor pane
+            this.transport_catalog_el = document.createElement('select');
+            $(this.transport_catalog_el).addClass('transport-catalog');
+            for (k in data.results){
+                option = "<option>" + data.results[k].name + "</option>";
+                $(this.transport_catalog_el).append(
+                    $(option).attr("value",data.results[k].co2e)
+                );
+            }
         }, this)
     };
     $.ajax(o);
     return this;
+}
+
+Sourcemap.Map.Editor.prototype.buildTransportCatalogSelect = function(catalog){
+    var select = '<input type="select"></input>';
+    console.log(catalog);
+    for(var k in catalog) {
+    }
+
+    return select;
 }
 
 Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, trigger_events) {
@@ -299,6 +317,13 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 var distance = editor.find('input[name="distance"]').val(); 
                 var factor   = editor.find('input[name="co2e"]').val(); 
                 var unit     = 'kg';
+                
+                // drop in the transporation select box
+                $('#edit-hop-footprint #transportation-select').append(
+                    $(this.editor.transport_catalog_el).change(function(){
+                        $('#edit-hop-footprint input[name="co2e"]')
+                            .val($(this + ':selected').val());
+                    }));
 
                 if (!isNaN(distance && factor)){ 
                     var output = distance * factor;

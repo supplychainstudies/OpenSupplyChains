@@ -379,6 +379,7 @@ Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {
     this.to_stop_id = to_stop_id;
     this.geometry = geometry;
     this.attributes = attributes ? Sourcemap.deep_clone(attributes) : {};
+   
     if (!this.attributes.distance) {
         this.attributes.distance = this.gc_distance();
     }

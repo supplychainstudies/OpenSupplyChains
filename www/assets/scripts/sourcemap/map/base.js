@@ -42,7 +42,7 @@ Sourcemap.Map.Base.prototype.defaults = {
             var val = 0;
             var qty = parseInt(st.getAttr("qty", 0));
             if(st instanceof Sourcemap.Hop) {
-                qty = parseFloat(st.gc_distance());
+                qty = parseFloat(st.attributes.distance);
             }
             var fac = parseInt(st.getAttr("water", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
@@ -50,9 +50,10 @@ Sourcemap.Map.Base.prototype.defaults = {
         }, 
         "co2e": function(st) {
             var val = 0;
+
             var qty = parseInt(st.getAttr("qty", 0));
             if(st instanceof Sourcemap.Hop) {
-                qty = parseFloat(st.gc_distance());
+                qty = parseFloat(st.attributes.distance);
             }
             var fac = parseInt(st.getAttr("co2e", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;

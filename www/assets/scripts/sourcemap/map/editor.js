@@ -235,6 +235,7 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
         var fromst = sc.findStop(h.from_stop_id);
         var tost = st;
         var tmph = fromst.makeHopTo(tost);
+        h.attributes.distance = h.gc_distance();
         h.geometry = tmph.geometry;
     }
     // outbound hops
@@ -243,8 +244,10 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
         var fromst = st;
         var tost = sc.findStop(h.to_stop_id);
         var tmph = fromst.makeHopTo(tost);
+        h.attributes.distance = h.gc_distance();
         h.geometry = tmph.geometry;
     }
+    // both
 }
 
 Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {

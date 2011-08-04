@@ -202,8 +202,10 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         }
     }, this)); 
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
-        this.last_selected = null;
-        this.hideDialog();
+        if(!map.editor) {
+            this.last_selected = null;
+            this.hideDialog();
+        }
     }, this));
 }
 
@@ -274,7 +276,9 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
     if(this.dialog) {
         this.initDialog();
         $(this.dialog_content).html(mkup);
-        $(this.dialog_content).find(".close").click($.proxy(function() { this.hideDialog(); }, this));
+        if(!this.map.editor) {
+            $(this.dialog_content).find(".close").click($.proxy(function() { this.hideDialog(); }, this));
+        }
         
         var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
         $(this.dialog).fadeIn(fade, function() {});

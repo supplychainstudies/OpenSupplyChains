@@ -36,14 +36,17 @@ Sourcemap.Map.Editor.prototype.init = function() {
         ];
 
     // listen for supplychain updates and save
-    Sourcemap.listen('supplychain-updated', function(evt, sc) {
+    Sourcemap.listen('supplychain-updated', function(evt, sc, no_remap) {
         var succ = $.proxy(function() {
             this.map_view.updateStatus("Saved...", "good-news");            
         }, this);
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
         }, this);
-        this.map.mapSupplychain(sc.instance_id, true);
+        // redraw ?
+        if(true || no_remap) {
+            this.map.mapSupplychain(sc.instance_id, true);
+        }
         this.map_view.updateStatus("Saving...");
         Sourcemap.saveSupplychain(sc, {"supplychain_id": sc.remote_id, "success": succ, "failure": fail});
 
@@ -212,13 +215,13 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
             if(data && data.results && data.results.length) {
                 this.editor.map_view.updateStatus("Updated address...");
                 this.stop.setAttr("address", data.results[0].placename);
-                if(this.trigger_events) {
-                    Sourcemap.broadcast('supplychain-updated', 
-                        this.editor.map.findSupplychain(st.supplychain_id)
-                    );
-                }
             }
         }, {"stop": st, "editor": this, "trigger_events": trigger_events}));
+    } 
+    if(trigger_events) {
+        Sourcemap.broadcast('supplychain-updated', 
+            this.map.findSupplychain(st.supplychain_id)
+        );
     }
 }
 

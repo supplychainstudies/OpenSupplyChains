@@ -36,6 +36,9 @@
                         <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || ""); %>
                         <%= $("<div></div>").append(el).html() %>
                     </div>
+    
+                    <div id="transportation-select" class="sourcemap-form-select">
+                    </div>
 
                     <div id="impact-result" class="result">0 kg C02e</div>
 

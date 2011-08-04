@@ -592,6 +592,7 @@ Sourcemap.Units.to_base_unit = function(value, unit) {
 }
 
 Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
+    if(isNaN(value)) return 0;
     var precision = isNaN(parseInt(precision)) ? 2 : parseInt(precision);
     var base = Sourcemap.Units.to_base_unit(value, unit);
     var pot = base.value === 0 ? 0 : Math.floor((Math.log(base.value)/Math.log(10))+.000000000001);

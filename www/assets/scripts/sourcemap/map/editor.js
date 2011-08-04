@@ -275,7 +275,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
                 // update calculation
                 editor = $('#edit-hop-footprint');
                 var distance = editor.find('input[name="distance"]').val(); 
-                var factor   = editor.find('input[name="factor"]').val(); 
+                var factor   = editor.find('input[name="co2e"]').val(); 
                 var unit     = 'kg';
 
                 if (distance && factor){ 

@@ -31,6 +31,7 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
         if(isset($this->parameters['q']))
             $this->parameters['name'] = $this->parameters['q'];
         $this->headers['Referer'] = Url::site('', true);
+        $this->parameters['key'] = $this->_api_key;
     }
 
     public function get_url() {
@@ -38,7 +39,6 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
     }
 
     public function fetch() {
-        $this->parameters['key'] = $this->_api_key;
         $response = parent::fetch();
         if($response) {
             $response = (object)$response;

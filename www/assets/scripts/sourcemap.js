@@ -427,26 +427,20 @@ Sourcemap.Color.prototype.midpoint = function(to_color) {
 }
 
 Sourcemap.Color.graduate = function(colors, ticks) {
-    var g = [];
     ticks = isNaN(parseInt(ticks)) ? colors.length : parseInt(ticks);
+    var g = [];
     while(colors.length < ticks) {
+        var g = [];
+        var d = Math.min(ticks - colors.length, colors.length-1);
         for(var i=0; i<colors.length; i++) {
             var c = colors[i];
             g.push(c);
-            var nxt = (i+1) == colors.length ? colors[0] : colors[i+1];
-            // midpoint or next
-            if((g.length+1) < ticks) g.push(c.midpoint(nxt));
-            else g.push(nxt);
-            // exit condition
-            if(g.length < ticks) continue;
-            else break;
+            if(d) {
+                g.push(c.midpoint(colors[i+1]));
+                d--;
+            }
         }
         colors = g.slice(0);
-        if(g.length < ticks) {
-            g = [];
-        } else {
-            break;
-        }
     }
     return colors;
 }

@@ -631,7 +631,6 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
             "size": 6, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id, "ref": hop 
-            
         });
         var tmp = new_arrow;
         if(new_arrow instanceof Array) {

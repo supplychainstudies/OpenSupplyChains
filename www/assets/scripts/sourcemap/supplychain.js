@@ -322,6 +322,7 @@ Sourcemap.Stop.prototype.makeHopTo = function(to_stop) {
     );
     new_geom = new OpenLayers.Feature.Vector(new_geom);
     new_geom = (new OpenLayers.Format.WKT()).write(new_geom);
+
     var new_hop = new Sourcemap.Hop(new_geom, this.instance_id, to_stop.instance_id);
     return new_hop;
 }
@@ -378,6 +379,9 @@ Sourcemap.Hop = function(geometry, from_stop_id, to_stop_id, attributes) {
     this.to_stop_id = to_stop_id;
     this.geometry = geometry;
     this.attributes = attributes ? Sourcemap.deep_clone(attributes) : {};
+    if (!this.attributes.distance) {
+        this.attributes.distance = this.gc_distance();
+    }
 }
 
 Sourcemap.Hop.prototype.toJSON = function() {
@@ -417,6 +421,7 @@ Sourcemap.Hop.prototype.getLabel = function() {
 }
 
 Sourcemap.Hop.prototype.gc_distance = function() {
+    
     var proj = proj || 'EPSG:900913';
     var geom = (new OpenLayers.Format.WKT()).read(this.geometry).geometry;
     var from_geom = geom.components[0].components[0].transform(
@@ -427,8 +432,7 @@ Sourcemap.Hop.prototype.gc_distance = function() {
         new OpenLayers.Projection(proj),
         new OpenLayers.Projection('EPSG:4326')
     );
-    console.log(from_geom);
-    console.log(to_geom);
     var gc_distance = Sourcemap.haversine(from_geom, to_geom);
-    return gc_distance;    
+    return gc_distance;
+
 }

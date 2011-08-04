@@ -423,12 +423,13 @@ Sourcemap.Hop.prototype.getLabel = function() {
 Sourcemap.Hop.prototype.gc_distance = function() {
     
     var proj = proj || 'EPSG:900913';
+    if(!this.geometry) return 0.0;
     var geom = (new OpenLayers.Format.WKT()).read(this.geometry).geometry;
-    var from_geom = geom.components[0].components[0].transform(
+    var from_geom = geom.components[0].components[0].clone().transform(
         new OpenLayers.Projection(proj),
         new OpenLayers.Projection('EPSG:4326')
     );
-    var to_geom = geom.components[0].components[1].transform(
+    var to_geom = geom.components[0].components[1].clone().transform(
         new OpenLayers.Projection(proj),
         new OpenLayers.Projection('EPSG:4326')
     );

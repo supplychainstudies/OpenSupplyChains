@@ -1008,7 +1008,7 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
         var f = cluster.cluster[i];
         var fc = false;
         if(f.attributes.color) {
-            fc = Sourcemap.Color()).fromHex(f.attributes.color);
+            fc = (new Sourcemap.Color()).fromHex(f.attributes.color);
         } else continue;
         c.r += fc.r; c.g = fc.g; c.b = fc.b;
     }

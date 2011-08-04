@@ -29,12 +29,6 @@
                         <%= $("<div></div>").append(el).html() %>
                     </div>
 
-                    <label for="co2e">Unit</label>
-                    <div class="sourcemap-form-textbox">
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || ""); %>
-                        <%= $("<div></div>").append(el).html() %>
-                    </div>
-
                     <div class="clear"></div>
 
                     <label for="unit">Impact Factor</label>

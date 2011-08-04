@@ -78,6 +78,7 @@ abstract class Sourcemap_Catalog {
     public static function get($catalog, $parameters=null) {
         $cat = self::factory($catalog, $parameters);
         if(!$cat) return false;
+        error_log($cat->get_cache_key());
         if($cat->_cache && ($cached = Cache::instance()->get($cat->get_cache_key()))) {
             $got = $cached;
             if($got && is_array($got)) $got['cache_hit'] = true;

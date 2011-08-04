@@ -59,4 +59,8 @@ and
 <dd>Sourcemap Analytics.</dd>
 <dt><a href="admin/featured">Featured Supplychains</a></dt>
 <dd>Choose which maps are "featured".</dd>
+<dt><a href="tools/import/csv">CSV Import</a></dt>
+<dd>Import data from comma-delimited.</dd>
+<dt><a href="tools/import/google">Google Spreadsheet Import</a></dt>
+<dd>Import data from Google Spreadsheets.</dd>
 </dl>

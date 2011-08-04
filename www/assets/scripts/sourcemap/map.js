@@ -474,7 +474,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
     for(var i=0; i<supplychain.stops.length; i++) {
         var st = supplychain.stops[i];
         var new_ftr = this.mapStop(st, scid);
-        var scolor = palette[tiers[st.instance_id]].toString();
+        var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
         new_ftr.attributes.tier = tiers[st.instance_id];
         new_ftr.attributes.color = scolor;
         new_ftr.attributes.scolor = scolor;
@@ -488,8 +488,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
             var h = supplychain.hops[i];
             var fc = palette[tiers[h.from_stop_id]];
             var tc = palette[tiers[h.to_stop_id]];
-            var hc = fc.midpoint(tc).toString();
             var new_ftr = this.mapHop(supplychain.hops[i], scid);
+            var hc = h.getAttr("color", fc.midpoint(tc).toString());
             new_ftr.hop.attributes.color = hc;
             this.getHopLayer(scid).addFeatures([new_ftr.hop]);
             if(new_ftr.arrow) {
@@ -524,13 +524,13 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.fsize = fsize + "px";
     new_feature.attributes.yoffset = -1*(Math.max(stop.getAttr("size", false), this.options.stop_size)+fsize);
   
-    var rand_color = this.options.default_feature_colors[Math.floor(Math.random()*3)];
-    new_feature.attributes.color = stop.getAttr("color", false) || rand_color;
-        stop.attributes.color = stop.getAttr("color", false) || rand_color;
-    new_feature.attributes.fcolor = stop.getAttr("color", false) || rand_color;
+    var rand_color = this.options.default_feature_colors[0];
+    new_feature.attributes.color = stop.getAttr("color", rand_color);
+    new_feature.attributes.fcolor = stop.getAttr("color", rand_color);
     stop.attributes.title = new_feature.attributes.title = stop.getAttr("title", false) || "" + stop.instance_id.split("-")[1];
     var slabel = stop.getAttr("title", false) || "";
-    slabel = slabel.length > 24 ? slabel.substring(0,24)+"..." : slabel;
+    //slabel = slabel.length > 24 ? slabel.substring(0,24)+"..." : slabel;
+    slabel = Sourcemap.ttrunc(slabel, 24);
     new_feature.attributes.label = slabel;
     stop.attributes.description = new_feature.attributes.description = stop.getAttr("description", false) || "";
     new_feature.attributes.ref = stop;
@@ -622,9 +622,8 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     }
     var new_arrow = false;
     var new_arrow2 = false; // for wrapped arcs
-    var rand_color = this.options.default_feature_colors[Math.floor(Math.random()*3)]
+    var rand_color = this.options.default_feature_colors[0]
 
-    hop.attributes.color = hop.getAttr("color", false) || rand_color
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
             "color": hop.getAttr("color", rand_color),

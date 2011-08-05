@@ -44,7 +44,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
         }, this);
         // redraw ?
-        if(true || no_remap) {
+        if(!no_remap) {
             this.map.mapSupplychain(sc.instance_id, true);
         }
         this.map_view.updateStatus("Saving...");
@@ -360,12 +360,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr) {
     
     // delete button
     $(this.map_view.dialog).find('.delete-button').click($.proxy(function(e) {
-        var supplychain = this.editor.map.findSupplychain(ref.supplychain_id);
-        if(reftype == "stop") {
-            alert("deleting");
-            //supplychain.removeStop(ref.instance_id);
-            this.editor.map_view.hideDialog();
+        var supplychain = this.editor.map.findSupplychain(this.ref.supplychain_id);
+        if(this.ref instanceof Sourcemap.Stop) {
+            supplychain.removeStop(this.ref);
+        } else if(this.ref instanceof Sourcemap.Hop) {
+            supplychain.removeHop(this.ref);
         }
+        this.editor.map_view.hideDialog(true);
+        Sourcemap.broadcast('supplychain-updated', supplychain);
     }, s));
 
     var cb = function(e) {

@@ -13,7 +13,9 @@
                 <ul class="user-details">
                     <li>Last Login <span><?= date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
-                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+            <div>
                 <div class="upload-photo button">Upload photo</div>
             </div>
         </div>
@@ -36,7 +38,7 @@
 
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>
-        <h2>Your maps</h2>
+        <h2>Your Sourcemaps</h2>
         <?php foreach($supplychains as $i => $sc): ?>
             <div id="user-map-list" class="<?= $i % 2 ? " alt" : ''; ?>">
                 <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>

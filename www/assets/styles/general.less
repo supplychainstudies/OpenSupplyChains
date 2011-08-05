@@ -555,6 +555,7 @@ a{
 
 /* DASHBOARD STYLES 
  * -------------------------------------------------------------- */
+
 .dashboard-title{
     margin-bottom: 30px;
 }
@@ -569,9 +570,56 @@ a{
         width: 470px;
         margin-right: 30px;
         float: left;
-        div {
+        > div {
             margin: 0 20px;
         }
+        .user-name{
+            margin-top: 10px;
+            text-transform: capitalize;
+            text-transform:capitalize;
+            color: #595959;
+        }
+        #user-profile {
+            float:left;
+            padding: 10px;
+            background: #fefefe;
+            width: 420px;
+            border: 1px solid #d4d4d4;
+            .rounded(12px);
+            .box_shadow_inset(0, 3px, 10px, #eee);    
+            .anythingWindow{
+                .rounded(12px);
+            }
+            .user-gravatar {
+                float:left;
+                margin: 0;
+                padding: 4px;
+                .box_shadow(0, 1px, 5px);
+                .rounded(4px);
+            }
+            .user-details {
+                float:left;
+                margin: 0;
+                padding: 20px;
+                list-style:none;
+                font-size: 14px;
+                color: #949494;
+                span{
+                    color:#22688d;
+                    font-size: 17px;
+                }
+            }
+        }
+        .upload-photo.button{
+            float: left;
+            width: 106px;
+            font-size: 14px;
+            text-align:center;
+            border: 1px solid #d4d4d4;
+            color: #328cbb;
+            margin: 10px;
+            .gradient();
+        }        
     }
     .dashboard-top-right{
         float: right;
@@ -594,77 +642,56 @@ a{
     }
 }
 
-.user-name{
-    margin-top: 10px;
-    text-transform: capitalize;
-    text-transform:capitalize;
-    color: #595959;
-}
+/* SEARCH STYLES
+ * -------------------------------------------------------------- */
 
-#user-profile {
-    float:left;
-    padding: 10px;
-    background: #fefefe;
-    width: 420px;
-    border: 1px solid #d4d4d4;
-    .rounded(12px);
-    .box_shadow_inset(0, 3px, 10px, #eee);    
-    .anythingWindow{
-        .rounded(12px);
-    }
-    .user-gravatar {
-        float:left;
-        margin: 0;
-        padding: 4px;
-        .box_shadow(0, 1px, 5px);
-        .rounded(4px);
-    }
-    .user-details {
-        float:left;
-        margin: 0;
-        padding: 20px;
-        list-style:none;
-        font-size: 14px;
-        color: #949494;
-        span{
-            color:#22688d;
-            font-size: 17px;
-        }
-    }
-    .upload-photo{
-        width: 106px;
-        font-size: 14px;
-        text-align:center;
-        border: 1px solid #d4d4d4;
-        color: #328cbb;
-        margin:15px 0 0 0;
-        .gradient();
-    }        
-}
+
 #user-map-list, #search-results {
     font-size:0.8em;
     margin: 20px 0;
     padding: 20px 0;
     border-top: 1px solid #d4d4d4;
-    .user-map-preview {
+    .map-item{
+        float: left;
+        padding: 4px;
+        border: 1px solid #d7d7d7;
+        margin-right: 40px;
+        .rounded(4px);
     }
-    .user-map-title {
-        .body-font;
-        border:none;
-        margin-top:0.5em;
-        margin-bottom:0;
-    }
-    .user-map-teaser {
-        .body-font;
+    .map-description{
+        float: left;
+        width: 535px;
+        color: #909090;
+        font-size: 15px;
+        font-weight: normal;
+        .map-title{
+            float:left;
+            color: #595959;
+        }
+        .map-details{
+            float:left;
+            margin: 10px 0 0 20px;
+            font-weight: normal;
+            font-style: italic;
+            font-size: 13px;
+        }
+        .map-teaser {
+            clear: left;
+        }
     }
     .user-map-details {
-        .body-font;
-        font-size:0.8em;
-        color:#888;
     }
     .map-controls {
-        margin-top:0.5em;
+        float: right;
         text-align:right;
+        div{
+            float:left;
+            a{
+                padding: 10px 12px;
+                border: 1px solid #d7d7d7;
+                .rounded(4px)
+            }
+        }
     }
 }
 

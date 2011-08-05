@@ -1,6 +1,6 @@
 <?php // Display the three most recent maps
 
-$data=Sourcemap_Search::Find(array('l'=>3));
+$data=Sourcemap_Search::Find(array('l'=>4));
 if ($data):
     $results = $data->results;
     $i = 0;

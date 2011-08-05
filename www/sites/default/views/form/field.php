@@ -12,12 +12,10 @@
     <?php endif; ?>
 <?php elseif($field->field_type() === Sourcemap_Form_Field::SELECT): ?>
     <?= Form::label($field->name(), $field->label()) ?>
-    <div class="sourcemap-form-select">
             <?= Form::select($field->name(), 
                 $field->options(), $field->selected(), $attr
             );
             ?>
-    </div>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>
         <div class="sourcemap-form-error">
@@ -25,16 +23,26 @@
         </div>
     <?php endif; ?>
 <?php elseif($field->field_type() === Sourcemap_Form_Field::SUBMIT): ?>
-    <div class="sourcemap-form-button">
-        <?php $attr['class'] = $field->css_class()." buttons"; ?>
-        <?= Form::submit($field->name(), $field->value(), $attr) ?>
-    </div>
+    <div class="clear"></div>
+    <?php $attr['class'] = $field->css_class()."button"; ?>
+    <?= Form::submit($field->name(), $field->value(), $attr) ?>
 <?php elseif($field->field_type() === Sourcemap_Form_Field::CHECKBOX): ?>
     <?= Form::label($field->name(), $field->label()) ?>
-    <div class="sourcemap-form-checkbox">
+    <?php $attr['type'] = $field->field_type(); ?>
+    <?php $attr['class'] = $field->css_class()."textbox"; ?>
+    <?= Form::checkbox($field->name(), null, $field->value(), $attr) ?>
+    <?php $errors = $field->errors(); ?>
+    <?php if (!empty($errors)) : ?>
+        <div class="sourcemap-form-error">
+        <?= $errors ?> 
+        </div>
+    <?php endif; ?>
+<?php elseif($field->field_type() === Sourcemap_Form_Field::TEXT): ?>
+    <?= Form::label($field->name(), $field->label()) ?>
+    <div class="sourcemap-form-textbox">
         <?php $attr['type'] = $field->field_type(); ?>
-        <?php $attr['class'] = $field->css_class()." textbox"; ?>
-        <?= Form::checkbox($field->name(), null, $field->value(), $attr) ?>
+        <?php $attr['class'] = $field->css_class()."textbox"; ?>
+        <?= Form::input($field->name(), $field->value(), $attr ) ?>
     </div>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>
@@ -44,11 +52,9 @@
     <?php endif; ?>
 <?php else: ?>
     <?= Form::label($field->name(), $field->label()) ?>
-    <div class="sourcemap-form-textbox">
-        <?php $attr['type'] = $field->field_type(); ?>
-        <?php $attr['class'] = $field->css_class()." textbox"; ?>
-        <?= Form::input($field->name(), $field->value(), $attr ) ?>
-    </div>
+    <?php $attr['type'] = $field->field_type(); ?>
+    <?php $attr['class'] = $field->css_class()." textbox"; ?>
+    <?= Form::input($field->name(), $field->value(), $attr ) ?>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>
         <div class="sourcemap-form-error">

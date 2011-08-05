@@ -1,7 +1,7 @@
 <?php if(!isset($current_user) || !$current_user): ?>
 
-<div class="container_16">
-    <div class="grid_10">
+<div class="container">
+    <div class="register-copy">
         <h1>Register with Sourcemap</h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet ultrices neque.</p>
         <p>In pulvinar ipsum quis orci ornare non lobortis turpis tincidunt. Integer at ligula erat, in hendrerit risus. Vivamus mattis</p>
@@ -11,7 +11,7 @@
             <li>Already have an account? <a href="/auth">Sign in here</a>.</li>
         </ul>
     </div>
-    <div class="grid_6">
+    <div class="register-box">
         <h1>&nbsp;</h1>
         <?php // Create form using the Sourcemap_Form class
         $f = Sourcemap_Form::factory('register')

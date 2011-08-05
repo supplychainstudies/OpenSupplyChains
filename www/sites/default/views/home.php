@@ -1,26 +1,43 @@
 <div class="container">
-    <div id="user-profile">
-        <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
-        <img class="user-gravatar" src="<?= Gravatar::avatar($user->email, 128) ?>" />            
-        <ul class="user-details">
-            <li>Last Login: <?= date('F j, Y', $user->last_login) ?><li>
-        </ul>
-        <div class="clear"></div>
-    </div>
-    <div class="events">
-        <div id="user-stream">
-            <h2>Recent Activity</h2>
-            <?php if(isset($user_event_stream)): ?>
-            <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
-            <?php endif; ?>
+    <h1 class="dashboard-title">Your sourcemap profile</h1>
+    <div class="dashboard-top">
+        <div class="dashboard-top-left">
+            <div>
+                <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
+            </div>
+            <hr />
+            <div id="user-profile">
+                <div class="user-gravatar">
+                    <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
+                </div>
+                <ul class="user-details">
+                    <li>Last Login <span><?= date('F j, Y', $user->last_login) ?></span><li>
+                </ul>
+                <div class="clear"></div>
+                <div class="upload-photo button">Upload photo</div>
+            </div>
         </div>
+        <div class="dashboard-top-right">
+            <div>
+                <h2>Recent Activity</h2>
+            </div>
+            <hr />
+            <div id="user-stream">
+                <?php if(isset($user_event_stream)): ?>
+                <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
+                <?php endif; ?>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
     </div>
 </div>
 <div class="clear"></div>
 
-<div class="container search-results">
+<div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>
         <h2>Your maps</h2>
+        <hr />
         <?php foreach($supplychains as $i => $sc): ?>
             <div id="user-map-list" class="<?= $i % 2 ? " alt" : ''; ?>">
                 <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>

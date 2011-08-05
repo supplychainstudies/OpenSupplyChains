@@ -15,9 +15,11 @@ $(document).ready(function() {
 
     // fetch supplychain
     Sourcemap.loadSupplychain(scid, function(sc) {
-        Sourcemap.view_instance.map.addSupplychain(sc);
+        var m = Sourcemap.view_instance.map;
+        m.addSupplychain(sc);
         if(sc.editable){
             new Sourcemap.Map.Editor(Sourcemap.view_instance);
         }
+        m.map.zoomToExtent(m.map.getMaxExtent());
     });
 });

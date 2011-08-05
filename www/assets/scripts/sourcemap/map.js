@@ -514,7 +514,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
     } else {
         this.map.zoomToExtent(this.map.getMaxExtent());
     }*/
-    this.map.zoomToExtent(this.map.getMaxExtent());
     this.broadcast('map:supplychain_mapped', this, supplychain);
     if(reselect) this.reselect();
 }

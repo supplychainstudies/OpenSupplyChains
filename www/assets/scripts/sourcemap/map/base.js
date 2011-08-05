@@ -200,7 +200,8 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id, 0
             );
         }
-    }, this)); 
+    }, this));
+
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.last_selected = null;
         this.hideDialog();

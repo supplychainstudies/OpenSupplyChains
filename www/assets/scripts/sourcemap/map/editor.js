@@ -79,8 +79,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
             Sourcemap.broadcast('supplychain-updated', sc);
             this.map.controls.select.unselectAll();
             // @todo review if the selection of the hop is ideal
-            this.map.controls.select.select(this.map.hopFeature(new_hop));
-            this.connect_from = false;             
+            this.connect_from = false;
+            // if you want to uncomment this, figure out why it breaks things.
+            //this.map.controls.select.select(this.map.hopFeature(new_hop));
         } 
         else if(ftr.attributes.hop_instance_id) {
             var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);

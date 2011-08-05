@@ -144,6 +144,21 @@ Sourcemap.Map.Editor.prototype.init = function() {
             }, this)
         }
     });
+
+    // save contents of editor ui on dialog close
+    Sourcemap.listen('sourcemap-base-dialog-close', $.proxy(function(b, vs) {
+        if(this.editing) {
+            // save updated attributes
+            var f = this.map_view.dialog_content.find('form');
+            var valsa = f.serializeArray();
+            var vals = {};
+            for(var i=0; i<valsa.length; i++) {
+                vals[valsa[i].name] = valsa[i].value;
+            }
+            this.updateFeature(this.editing, vals);
+        }
+        this.editing = null;
+    }, this));
     
     // set up drag control
     var stopl = false;
@@ -210,15 +225,6 @@ Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
     return this;
 }
 
-Sourcemap.Map.Editor.prototype.buildTransportCatalogSelect = function(catalog){
-    var select = '<input type="select"></input>';
-    console.log(catalog);
-    for(var k in catalog) {
-    }
-
-    return select;
-}
-
 Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, trigger_events) {
     var scid = ftr.attributes.supplychain_instance_id;
     var stid = ftr.attributes.stop_instance_id;
@@ -279,133 +285,139 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
     for(var k in ref.attributes) {
         if(attr[k] == undefined) attr[k] = ref.getAttr(k);
     }
-    Sourcemap.template('map/edit/edit-'+reftype, function(p, tx, th) {
+    var s = {"ref": ref, "editor": this, "attr": attr};
+    var cb = function(p, tx, th) {
         this.editor.map_view.showDialog(th);
-        $("#editor-tabs").tabs();
-        // load catalog button
-        $(this.editor.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
-            this.q = '';
-            this.params = {"name": ''};
-            this.editor.showCatalog(this);
-        }, this));
+        this.editor.prepEdit(this.ref, this.attr);
+    }
+    Sourcemap.template('map/edit/edit-'+reftype, cb, s, s);
+}
 
-        if (reftype === "stop"){
-            // load impact calculator for stops
-            $("#edit-stop-footprint input").keyup($.proxy(function(e){ 
-                // update calculation
-                editor = $('#edit-stop-footprint');
-                var quantity = editor.find('input[name="qty"]').val(); 
-                //var unit     = editor.find('input[name="unit"]').val(); 
-                var unit     = 'kg';
-                var factor   = editor.find('input[name="co2e"]').val(); 
+Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr) {
 
-                if (!isNaN(quantity && factor)){ 
-                    var output = quantity * factor; 
-                    var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
-                    editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
-                }
-            }, this)); 
-            
-            // trigger event on load
-            $("#edit-stop-footprint input").trigger('keyup');
-        }
-        else{
-            // load impact calculator for hops
-            $("#edit-hop-footprint input").keyup($.proxy(function(e){ 
-                // update calculation
-                editor = $('#edit-hop-footprint');
-                var distance = editor.find('input[name="distance"]').val(); 
-                var factor   = editor.find('input[name="co2e"]').val(); 
-                var unit     = 'kg';
-                
-                // drop in the transporation select box
-                $('#edit-hop-footprint #transportation-select').append(
-                    $(this.editor.transport_catalog_el).change(function(){
-                        $('#edit-hop-footprint input[name="co2e"]')
-                            .val($(this + ':selected').val());
-                    }));
+    // track currently edited feature
+    this.editing = ref;
 
-                if (!isNaN(distance && factor)){ 
-                    var output = distance * factor;
-                    var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
-                    editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
-                }
-            }, this)); 
-            $("#edit-hop-footprint input").trigger('keyup');
-            
-            // trigger event on load
-            $("#edit-stop-footprint input").trigger('keyup');
-        }
+    // init editor tabs
+    $("#editor-tabs").tabs();
 
-    
+    // load catalog button
+    $(this.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
+        this.q = '';
+        this.params = {"name": ''};
+        this.showCatalog(this);
+    }, this));
+
+    if(ref instanceof Sourcemap.Stop) {
+        // load impact calculator for stops
+        $("#edit-stop-footprint input").keyup($.proxy(function(e){ 
+            // update calculation
+            editor = $('#edit-stop-footprint');
+            var quantity = editor.find('input[name="qty"]').val(); 
+            //var unit     = editor.find('input[name="unit"]').val(); 
+            var unit     = 'kg';
+            var factor   = editor.find('input[name="co2e"]').val(); 
+
+            if (!isNaN(quantity && factor)){ 
+                var output = quantity * factor; 
+                var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+                editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+            }
+        }, this)); 
+        
+        // trigger event on load
+        $("#edit-stop-footprint input").trigger('keyup');
+    } else {
+        // load impact calculator for hops
+        $("#edit-hop-footprint input").keyup($.proxy(function(e){ 
+            // update calculation
+            editor = $('#edit-hop-footprint');
+            var distance = editor.find('input[name="distance"]').val(); 
+            var factor   = editor.find('input[name="co2e"]').val(); 
+            var unit     = 'kg';
+
+            if (!isNaN(distance && factor)){ 
+                var output = distance * factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+                editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+            }
+        }, this)); 
+        $("#edit-hop-footprint input").trigger('keyup');
+        
+        // trigger event on load
+        $("#edit-stop-footprint input").trigger('keyup');
+    }
+
+    var s = {"ref": ref, "editor": this, "attr": attr};
+
     // bind click event to connect button
-    $(this.editor.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
-
+    $(this.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
         this.editor.map_view.hideDialog();
         this.feature.renderIntent = "connecting";
         this.editor.map.getStopLayer(this.feature.attributes.supplychain_instance_id).drawFeature(this.feature);
         this.editor.connect_from = this.feature;
-    }, {"ref": ref, "editor": this.editor, "feature": ftr}));
+    }, s));
     
     // delete button
-    $(this.editor.map_view.dialog).find('.delete-button').click($.proxy(function(e) {
+    $(this.map_view.dialog).find('.delete-button').click($.proxy(function(e) {
         var supplychain = this.editor.map.findSupplychain(ref.supplychain_id);
         if(reftype == "stop") {
             alert("deleting");
             //supplychain.removeStop(ref.instance_id);
             this.editor.map_view.hideDialog();
         }
-    }, {"ref": ref, "editor": this.editor, "feature": ftr}));    
-        $(this.editor.map_view.dialog).find('.close').click($.proxy(function(e) {
-            // Edit should be disabled at this point
-            this.editor.map_view.hideDialog();            
-            
-            // save updated attributes
-            var f = $(e.target).parents('form');
-            var vals = f.serializeArray();
-            var reftype = this.ref instanceof Sourcemap.Stop ? 'stop' : 'hop';
-            var geocoding = false;
-            for(var k in vals) {
-                var val = vals[k].value;
-                k = vals[k].name;
-                if(reftype == 'stop' && k === "address" && (val != this.ref.getAttr("address", false))) {
-                    this.ref.setAttr(k, val);
-                    // if address is set, move the stop.
-                    $(f).find('input,textarea,select').attr("disabled", true);
-                    geocoding = true;
-                    Sourcemap.Stop.geocode(this.ref.getAttr("address"), $.proxy(function(res) {
-                        var pl = res && res.results ? res.results[0] : false;
-                        if(pl) {
-                            this.stop.setAttr("address", pl.placename);
-                            var new_geom = new OpenLayers.Geometry.Point(pl.lon, pl.lat);
-                            new_geom = new_geom.transform(
-                                new OpenLayers.Projection('EPSG:4326'),
-                                new OpenLayers.Projection('EPSG:900913')
-                            );
-                            this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
-                            var scid = this.stop.supplychain_id;
-                            //this.editor.map.getStopLayer(scid).addFeatures(this.editor.map.mapStop(this.stop, this.stop.supplychain_id));
-                           // @todo should be standard zoom/center this.editor.map.map.zoomToExtent(this.editor.map.getStopLayer(this.stop.supplychain_id).getDataExtent());
-                            this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
-                        } else {
-                            $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
-                            this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
-                        }
-          
-                        if(this.ref) {
-                            this.ref.setAttr(k, val);
-                        }
-                        this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
-                    }, {"stop": this.ref, "edit_form": f, "editor": this.editor, "attr": this.attr}));
+    }, s));
+
+    var cb = function(e) {
+
+        // Edit should be disabled at this point
+        // todo: maybe move this down and add a spinner
+        // or disable the map/editor?
+        this.editor.map_view.hideDialog();            
+        
+    }
+
+    $(this.map_view.dialog).find('.close').click($.proxy(cb, s));
+}
+
+Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
+    var geocoding = false;
+    var vals = updated_vals || {};
+    for(var k in vals) {
+        var val = vals[k];
+        if((ref instanceof Sourcemap.Stop) && k === "address" && (val != ref.getAttr("address", false))) {
+            ref.setAttr(k, val);
+            // if address is set, move the stop.
+            geocoding = true;
+            Sourcemap.Stop.geocode(ref.getAttr("address"), $.proxy(function(res) {
+                var pl = res && res.results ? res.results[0] : false;
+                if(pl) {
+                    this.stop.setAttr("address", pl.placename);
+                    var new_geom = new OpenLayers.Geometry.Point(pl.lon, pl.lat);
+                    new_geom = new_geom.transform(
+                        new OpenLayers.Projection('EPSG:4326'),
+                        new OpenLayers.Projection('EPSG:900913')
+                    );
+                    this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+                    var scid = this.stop.supplychain_id;
+                    this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
                 } else {
+                    $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
+                    this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
+                }
+  
+                if(this.ref) {
                     this.ref.setAttr(k, val);
                 }
-            }
-            if(!geocoding) {
-                this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.ref.supplychain_id]);
-            }
-        }, {"ref": this.ref, "editor": this.editor, "attr": attr}));
-    }, {"ref": ref, "editor": this, "attr": attr}, {"ref": ref, "editor": this, "attr": attr});
+                this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
+            }, {"stop": ref, "editor": this}));
+        } else {
+            ref.setAttr(k, val);
+        }
+    }
+    if(!geocoding) {
+        this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id]);
+    }
 }
 
 Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {

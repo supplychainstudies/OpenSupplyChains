@@ -283,9 +283,12 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 
 Sourcemap.Map.Base.prototype.hideDialog = function() {
     if(this.dialog) {
-        this.dialog_content.empty();
         $(this.dialog).hide();
-        this.map.controls["select"].unselectAll();        
+        this.map.controls["select"].unselectAll();
+        Sourcemap.broadcast('sourcemap-base-dialog-close', 
+            this, $(this.dialog).find("form").serializeArray()
+        );
+        this.dialog_content.empty();
     }
 }
 

@@ -219,18 +219,43 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'fullscreen',
         "callbacks": {
             "click": function() {
-                var viewportWidth  = window.innerWidth;
-                var viewportHeight = window.innerHeight;
-                $('#map-container')
-                    .css({
-                        'position': 'absolute', 
-                        'top' : '0', 
-                        'left' : '0',
-                        'z-index' : '9999'})
-                    .width(viewportWidth)
-                    .height(viewportHeight);
-                $('#map #sourcemap-map-view')
-                    .height(viewportHeight);
+                if ($('#map-container').css('position') === 'static' ){
+                    // init fullscreen mode
+                    var viewportWidth  = window.innerWidth;
+                    var viewportHeight = window.innerHeight;
+                    $('#map-container')
+                        .css({
+                            'position': 'absolute', 
+                            'top' : '0', 
+                            'left' : '0',
+                            'padding' : '0',
+                            'z-index' : '9999'})
+                        .width(viewportWidth - 20)
+                        .height(viewportHeight - 20);
+                    $('#map #sourcemap-map-view')
+                        .height(viewportHeight)
+                        .css({ 'border' : 'none'});
+                    $('#sourcemap-dock').find('.control.fullscreen')
+                        .addClass('active')
+                }
+                else{
+                    // return to inline mode
+                    $('#map-container')
+                        .css({
+                            'position': 'static', 
+                            'top' : 'auto', 
+                            'padding' : '4',
+                            'left' : 'auto'
+                             })
+                        .width(1040)
+                        .height(560);
+                    $('#map #sourcemap-map-view')
+                        .height(560)
+                        .css({ 'border' : '4px solid white'});
+                    $('#sourcemap-dock').find('.control.fullscreen')
+                        .removeClass('active')
+                }
+
             }
         }
     });

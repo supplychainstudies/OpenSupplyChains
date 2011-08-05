@@ -41,7 +41,7 @@ return array(
                 'less', 'sourcemap-map'
             )
         ),
-        /*'blog-view' => array(
+        'blog-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/blog.js',
                 'assets/scripts/sourcemap/map/blog.js'
@@ -49,7 +49,7 @@ return array(
             'requires' => array(
                 'sourcemap-map'
             )
-        ),*/
+        ),
         'sourcemap-social' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/social.js'

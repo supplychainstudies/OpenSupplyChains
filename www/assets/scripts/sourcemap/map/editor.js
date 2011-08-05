@@ -200,8 +200,55 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.activate();
     
     // load transport catalog
-    
     this.loadTransportCatalog();
+
+	// setup calculator display
+	$("#impact-use-co2e").change($.proxy(function(evt) {
+		var co2e = $(evt.target).is(':checked') ? true : false;
+        // grab the first supplychain
+        var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+		
+		if(co2e) { sc.attributes.sm_ui_co2e = sc.attributes.sm_ui_weight = true; } 
+		else { delete sc.attributes.sm_ui_co2e; }
+		
+		
+		this.map_view.updateFilterDisplay(sc);
+		Sourcemap.broadcast('supplychain-updated', sc);
+	}, this));
+	$("#impact-use-weight").change($.proxy(function(evt) {
+		var weight = $('#evt.target').is(':checked') ? true : false;
+        // grab the first supplychain
+        var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+		
+		if(weight) { sc.attributes.sm_ui_weight = true } 
+		else { delete sc.attributes.sm_ui_weight; }
+		
+		this.map_view.updateFilterDisplay(sc);
+		Sourcemap.broadcast('supplychain-updated', sc);
+	}, this));
+	$("#impact-use-water").change($.proxy(function(evt) {
+		var water = $('#evt.target').is(':checked') ? true : false;
+        // grab the first supplychain
+        var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+
+		if(water) { sc.attributes.sm_ui_water = sc.attributes.sm_ui_weight = true; } 
+		else { delete sc.attributes.sm_ui_water; }
+
+		this.map_view.updateFilterDisplay(sc);
+		Sourcemap.broadcast('supplychain-updated', sc);
+	}, this));
 }
 
 Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {

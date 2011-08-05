@@ -4,7 +4,7 @@
 
     <p class="author">
         <img src="<?= $supplychain_avatar ?>" alt="Avatar"></img>
-        Created on <?= $supplychain_date ?> by <a href="user/<?= $supplychain_ownerid ?>"><?= $supplychain_owner ?></a>
+        <?= $supplychain_date ?> by <a href="user/<?= $supplychain_ownerid ?>"><?= $supplychain_owner ?></a>
     </p>
 </div>
 <div id="blog-container">    

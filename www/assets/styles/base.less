@@ -37,7 +37,7 @@
         position:relative;
         
         border:4px solid #fff;
-        height:660px;
+        height:560px;
         .rounded(8px);
         overflow:hidden;
     }
@@ -51,7 +51,7 @@
 
 #dialog {
     position: absolute;
-    top: 100px; right: 21px;
+    top: 72px; right: 21px;
     max-height: 450px; width: 400px; /* Could set a height here for non-stretchy dialog */
     display:none;
     z-index: 1012;
@@ -361,8 +361,9 @@
     height: 42px; top:20px; left:20px; right:20px;    
     font-size:0.8em;
     .body-font; 
-    .gradient(rgba);
-    .rounded(8px);
+    .gradient(rgba(240,240,240,0.9),rgba(255,255,255,0.7));
+    .rounded(12px);
+    .box_shadow(0, 1px, 3px);
     #banner-content {
         width:960px;
         div {
@@ -373,32 +374,33 @@
             font-weight:bold;
             font-size: 22px;
             overflow:hidden;
-            width:225px;
-            border-right: 1px solid rgba(140,140,140,0.25);
         }
         #banner-description {
             min-width:250px;
             overflow:hidden;
         }
         #banner-favorite {
-            background: url(../images/icon-favorite.png) 6px -19px no-repeat;
+            background: url(../images/icon-favorite.png) 10px -19px no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);
+            padding-right: 20px;
             &.marked {
-                background: url(../images/icon-favorite.png) 6px 11px no-repeat;
+                background: url(../images/icon-favorite.png) 10px 11px no-repeat;
             }
         }
         #banner-owner {
-            background: url(../images/icon-owner.png) 6px center no-repeat;
+            background: url(../images/icon-owner.png) 10px center no-repeat;
             width:185px;
             border-left: 1px solid rgba(140,140,140,0.25);            
+            padding-left: 45px;
             overflow:hidden;
         }
         #banner-share {
-            background: url(../images/icon-share.png) 6px center no-repeat;
-            border-left: 1px solid rgba(140,140,140,0.25);            
+            background: url(../images/icon-share.png) 10px center no-repeat;
+            border-left: 1px solid rgba(140,140,140,0.25);    
+            padding-right: 0;
         }
         #banner-owner, #banner-favorite, #banner-share {
-            padding-left: 35px;
+            padding-left: 40px;
             float: right;
         }
          div {

@@ -76,146 +76,144 @@ a{
 
 /* Sticks the footer to the bottom of the page */
 #footer, .push {
-    height: 50px;
-    clear:both;
+    height: 62px;
 }
 #wrapper {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -50px;
+    margin: 0 auto -63px;
 }
 
 /* BRANDING, MASTHEAD & LIVE SEARCH 
  * -------------------------------------------------------------- */
 
-#masthead {
-    margin: 40px auto 10px auto;
+#masthead{
+    padding: 40px 0 26px;
     #header {
-        margin:20px auto;
-    }
-    #logo{
-        float:left;
-        h1{display:none;}
-    }
-    #navigation,#search{
-        margin-top: 10px;
-    }
-    #navigation{
-        float:right;
-        list-style:none;
-        li{
-            font-size: 18px;
-            font-weight: bold;
+        #logo{
             float:left;
-            text-align: center;
-            margin: 12px 15px;
-            a {
-                text-decoration: underline;
-                &.existing-login{
-                    font-weight:normal;
-                    font-size: 50%;
-                    text-decoration:none;
-                }
-            }
-            &.register{
-                margin: 0 15px;
-                a { text-decoration: none; }
-            }
+            h1{display:none;}
         }
-    }
-    a { color:#000000; }
-    #search-div{
-        background: #fff url(../images/shadow.png) top repeat-x; 
-        border: 1px solid #c9c9c9;
-        float:left;
-        margin-left: 40px;
-        margin-top: 10px;
-        height: 42px;
-        .rounded;
-        input{
-            width: 264px;
-            padding: 0 10px 10px 36px;
-            border: 0;
-            outline: none;
-            background: url(../images/search.png) 12px center no-repeat; 
-            -webkit-appearance: none;
+        #navigation,#search{
+            margin-top: 10px;
         }
-    }
-
-    #search-results{
-        border: 1px solid #333;
-        background: #fff;
-        z-index: 999;
-        display:none;
-        width: 400px; 
-        line-height: 26px;
-        ul {
+        #navigation{
+            float:right;
             list-style:none;
-            margin: 0;
-            li {
+            li{
+                font-size: 18px;
+                font-weight: bold;
                 float:left;
-                width: 100%;
-                padding: 10px 0;
-                &:hover{
-                    background:#eee;
-                    cursor: pointer;
+                text-align: center;
+                margin: 12px 15px;
+                a {
+                    text-decoration: underline;
+                    &.existing-login{
+                        font-weight:normal;
+                        font-size: 50%;
+                        text-decoration:none;
+                    }
                 }
-                &.more {
-                    .body-font;
-                    font-size:0.8em;
-                    clear: both;
-                    text-transform: lowercase;
-                    border-top: 1px solid #333;
-                    text-align:center;
+                &.register{
+                    margin: 0 15px;
+                    a { text-decoration: none; }
                 }
             }
-            .search-result {
-                position: relative;
-                
-                .search-link {
-                    color: #333;
-                    position:absolute; 
-                    width:100%;
-                    height:100%; 
-                    top:0;
-                    left: 0; 
-                    z-index: 1;  
-                    &:hover{
-                        text-decoration: none;
-                    }
-                }
-                .search-details {          
-                    float:left;        
-                    width: 200px;
-                    padding: 0 20px;
-                      
-                    .search-title {
-                        display:block;
-                    }
-                    .search-author {
-                        color: #888;
-                        font-style: italic;
-                        a {
-                            color: #888;
-                        }
-                    }
-                    .search-date {
-                        color: #888;
-                        font-style: italic;
-                        a {
-                            color: #888;
-                        }
-                    }
-                }
-                .search-preview {
+        }
+        a { color:#000000; }
+        #search-div{
+            background: #fff url(../images/shadow.png) top repeat-x; 
+            border: 1px solid #c9c9c9;
+            float:left;
+            margin-left: 40px;
+            margin-top: 10px;
+            height: 42px;
+            .rounded;
+            input{
+                width: 264px;
+                padding: 0 10px 10px 36px;
+                border: 0;
+                outline: none;
+                background: url(../images/search.png) 12px center no-repeat; 
+                -webkit-appearance: none;
+            }
+        }
+
+        #search-results{
+            border: 1px solid #333;
+            background: #fff;
+            z-index: 999;
+            display:none;
+            width: 400px; 
+            line-height: 26px;
+            ul {
+                list-style:none;
+                margin: 0;
+                li {
                     float:left;
-                    padding-left: 20px;
-                    width: 120px;
-                    .search-preview-map {
-                        width: 100%;
+                    width: 100%;
+                    padding: 10px 0;
+                    &:hover{
+                        background:#eee;
+                        cursor: pointer;
                     }
-                }                
+                    &.more {
+                        .body-font;
+                        font-size:0.8em;
+                        clear: both;
+                        text-transform: lowercase;
+                        border-top: 1px solid #333;
+                        text-align:center;
+                    }
+                }
+                .search-result {
+                    position: relative;
+                    
+                    .search-link {
+                        color: #333;
+                        position:absolute; 
+                        width:100%;
+                        height:100%; 
+                        top:0;
+                        left: 0; 
+                        z-index: 1;  
+                        &:hover{
+                            text-decoration: none;
+                        }
+                    }
+                    .search-details {          
+                        float:left;        
+                        width: 200px;
+                        padding: 0 20px;
+                          
+                        .search-title {
+                            display:block;
+                        }
+                        .search-author {
+                            color: #888;
+                            font-style: italic;
+                            a {
+                                color: #888;
+                            }
+                        }
+                        .search-date {
+                            color: #888;
+                            font-style: italic;
+                            a {
+                                color: #888;
+                            }
+                        }
+                    }
+                    .search-preview {
+                        float:left;
+                        padding-left: 20px;
+                        width: 120px;
+                        .search-preview-map {
+                            width: 100%;
+                        }
+                    }                
+                }
             }
         }
     }
@@ -405,143 +403,72 @@ a{
 /* FORM STYLES 
  * -------------------------------------------------------------- */
 
-@form-height: 1em;
 @hover-color: #FBF7D5;
-@form-width: 18em;
-
-.sourcemap-form-styles{
-    // Mix-in for all styles universal to form boxes
-    background-color:#FFFFFF;
-    background-repeat: no-repeat;
-    background-position: 0 5px;
-    border: 1px solid #ccc;
-    width:@form-width + 3;
-    font-size: 80%;
-    color: #999999;
-    padding:3px 5px 3px 19px;
-}
-
-
-.sourcemap-form-size(@width: 400px){
-    // Function for establishing pixel size
-    width: @width;
-    div{
-        width: @width - 60;
-        input{
-            width: @width - 60;
-        }
-    }
-}
+@form-width: 348px;
 
 .sourcemap-form{
     fieldset {
-    border: 1px dotted #ccc;
-    padding:0 10px 25px 10px;
-    }
-    legend {
-        font-size: 130%;
-        letter-spacing: -1px;
-        line-height: @form-height;
-        color: #333;
-        padding: 0px 13px;
-        .header-font;
+        border: 1px dotted #ccc;
+        padding:0 10px 25px 10px;
     }
     label {
-        margin: 3px 2px 0 0;
-        padding: 11px 0 0 6px;
-        float:left;
+        padding: 10px 0 4px 0;
         display: block;
-        font-size: 85%;
-        letter-spacing: -1px;
-        font-weight: normal;
-        line-height: 1.1;
         color:#666;
-        clear: both;
-        &.operator{
-            margin-top: 1.8em;
-            padding: 11px 5px 5px 0;
-            clear:none;
-            width:10px;
-        }
+        float: left; // this is so errors can float neatly to the right
     }
     
     div{
+        clear: left;
         width:@form-width;
-        margin-top:3px;
-        padding-left:5px;
-        input{
-            .sourcemap-form-styles;
-            &.edited{ color: #333; }
-            &.textbox { background-image: url(../images/16t.png); &.working{ background-image: url(../images/throbber.gif); }}
-            &.username { background-image: url(../images/16m.png); }
-            &.password { background-image: url(../images/16s.png); }
-            &.buttons {
-                background: #EEEEEE;
-                font-size:12px; 
-                font-weight:bold;
-                width: @form-width - 5;
-                color: #555; 
-                padding: 6px 14px;
-                border-width: 1px solid #333;
-                text-decoration: none;
-                text-transform:uppercase;
-                cursor: pointer;
-                &:hover{
-                    background: #eee;
-                }
-            }
-            &:focus, &:hover{
-                background-color:@hover-color;
-            }
+        background: #fff url(../images/16t.png) 0 10px no-repeat;
+        &.username { background-image: url(../images/16m.png); }
+        &.password { background-image: url(../images/16s.png); }
+        border: 1px solid #ccc;
+        font-size: 80%;
+        color: #999999;
+        padding:0 5px 0 19px;
+        .rounded(4px);
+        &:focus, &:hover{
+            background-color:@hover-color;
         }
-        input[disabled]{
-            color:#999;
-            cursor: auto;
-        }
-        textarea{
-            .sourcemap-form-styles;
-            background-image: url(../images/16t.png);
-            height:@form-height * 6;
-        }
-        &.sourcemap-form-checkbox{
-            float:left;
-            padding: 12px 0 5px;
-        }
-        &.sourcemap-form-select {
-            float: right;
+        input, textarea{
+            width: 100%;
+            height: 100%;
             padding: 10px 0;
-            select{
-                width:@form-width;
-            }
-        }
-        &.sourcemap-form-button-div{
-            width: auto;
-            text-align: right;
-        }
-        &.sourcemap-form-button {
-            float: right;
-            width: auto;
+            border: none;
+            background: none;
+            &.edited{ color: #333; }
         }
         &.sourcemap-form-error{
-            width: auto;
+            width:auto;
+            border: 0;
+            background: none;
+            padding: 10px 0 4px 30px;
             float:left;
-            font-size: 70%;
-            color: #999;
-            margin: 15px 0 0 15px;
+            clear: none;
+        }
+        &.sourcemap-form-button{
+            width: 100%;
+            border: none;
+            background: none;
         }
     }
-}
-
-.sourcemap-form-compact {
-    input[type=text], input[type=password] {
-        border: 1px solid #888;
+    select, input{
+        clear: left;
+        width: @form-width + 26px;
+        border: 1px solid #eee;
+        &.button{
+            width:150px;
+            border: none;
+            float: right;
+        }
     }
-    .textbox {
-        padding: 0;
-        margin: 0;
+    input[type=checkbox]{
+        width: auto;
+        margin: 12px 0 0 15px;
     }
 }
-
 
 /* MAP CONTENT 
  * -------------------------------------------------------------- */
@@ -787,38 +714,54 @@ a{
  * -------------------------------------------------------------- */
 
 #footer {
-    background-color: #454647;
-    margin-top:30px;
-    border-top:1px solid #ccc;
-    padding: 20px 0 0 0;
-    font-size: 13px;
-    font-weight: bold;
-    text-shadow: 0 -1px -1px #353637;
-    .container{
-        background: url(../images/logo-footer.png) top right no-repeat;
-    }
-    ul {
-        margin-left:0;
-        list-style: none;
-        li {
-            display:block;
-            float:left;
-            margin-right:20px;
-            border-right: 1px solid #4b4c4d;
-            &.last{
-                border:none;
+    div.footer {
+        height: 60px;
+        background-color: #454647;
+        border-top:1px solid #ccc;
+        font-size: 13px;
+        font-weight: bold;
+        text-shadow: 0 -1px -1px #353637;
+        .container{
+            background: url(../images/logo-footer.png) top right no-repeat;
+        }
+        ul {
+            margin-top: 20px;
+            margin-left:0;
+            list-style: none;
+            li {
+                display:block;
+                float:left;
+                margin-right:20px;
+                border-right: 1px solid #4b4c4d;
+                &.last{
+                    border:none;
+                }
             }
         }
+        p {
+            margin-top:0.5em;
+            clear:both;
+            color:#999;
+            font-size:0.7em;
+        }
+        a {
+            color: #7f7f7f;
+        }
     }
-    p {
-        margin-top:0.5em;
-        clear:both;
-        color:#999;
-        font-size:0.7em;
-    }
-    a {
-        color: #7f7f7f;
-    }
+}
+
+/* SUB-PAGE STYLES 
+ * -------------------------------------------------------------- */
+
+.register-copy, .login-copy{
+    float:left;
+    width: 505px;
+}
+
+.register-box, .login-box{
+    float:left;
+    margin-left: 40px;
+    width: 300px;
 }
 
 /* MODAL STRUCTURES 
@@ -894,12 +837,13 @@ img{
 
 .button {
     padding: .5em 1em;
-    border: 1px solid #666; 
+    border: 1px solid #666;
+    font-weight: bold;
+    cursor:pointer;
+    color:#f7f7f7 !important;
     .gradient(#246587,#50a3ce);
     .rounded(4px);
     .box_shadow();
-    cursor:pointer;
-    color:#f7f7f7 !important;
     a{
         color:#f7f7f7 !important;
         text-decoration: none;

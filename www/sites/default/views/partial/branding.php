@@ -34,8 +34,8 @@
             </div>
         </form>
         <div id="search-results"></div>
+        <div class="clear"></div>
     </div>
-    <div class="clear"></div>
     
 </div> <!-- #masthead -->
 

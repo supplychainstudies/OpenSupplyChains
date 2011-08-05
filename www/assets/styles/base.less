@@ -203,44 +203,60 @@
                 }
             }
         }
-}
 
-    #edit-actions {
-        padding:0; margin:15px 20px;
-        list-style:none;
-        li {
-            float:right;
-            cursor:pointer;
-            font-size:12px;
-            font-weight: bold;
-            padding: 3px 12px;
-            border: 1px solid #666;
-            .gradient(#cfcfcf,#e6e6e6);
-            .rounded(4px);
-            .box_shadow();
-            cursor:pointer;
-            color:#f7f7f7 !important;
-            &.left {
-                float:left;
-            }
-            a{
-                padding-left: 25px;
-                background: url("../images/icon-delete.png") no-repeat;
+        #edit-actions {
+            padding:0; margin:15px 20px;
+            list-style:none;
+            li {
+                float:right;
+                cursor:pointer;
+                font-size:12px;
+                font-weight: bold;
+                padding: 3px 12px;
+                border: 1px solid #666;
+                .gradient(#cfcfcf,#e6e6e6);
+                .rounded(4px);
+                .box_shadow();
+                cursor:pointer;
                 color:#f7f7f7 !important;
-                text-decoration: none;
+                &.left {
+                    float:left;
+                }
+                a{
+                    padding-left: 25px;
+                    background: url("../images/icon-delete.png") no-repeat;
+                    color:#f7f7f7 !important;
+                    text-decoration: none;
+                }
+            }
+            .connect-button {
+                .gradient(#246587,#50a3ce);
+                float:left;
+                a{ background: url("../images/icon-connect.png") no-repeat; }
+            }
+            .delete-button {
+                .gradient(#882b25,#cc4f4e);
+                a{ background: url("../images/icon-delete.png") no-repeat; }
             }
         }
-        .connect-button {
-            .gradient(#246587,#50a3ce);
-            float:left;
-            a{ background: url("../images/icon-connect.png") no-repeat; }
-        }
-        .delete-button {
-            .gradient(#882b25,#cc4f4e);
-            a{ background: url("../images/icon-delete.png") no-repeat; }
+
+        .sourcemap-form{
+            div{
+                width: 277px;
+                &#impact-result{
+                    border: none;
+                    background: none;
+                    padding: 10px;
+                    font-size: 22px;
+                    color: #999;
+                }
+            }
+            select{
+                width: 277px;
+                border: 0;
+            }
         }
     }
-
 }
 
 
@@ -411,13 +427,13 @@
         outline:none;
     }
     h2.title {
-         margin-left:10px;
+         border: 1px dashed #ddd;
          input {
              width:310px;
          }
      }
     h3.placename {
-        padding-left:12px !important;        
+        border: 1px dashed #ddd;
         input {
             width:330px;
             margin-left:6px;
@@ -426,7 +442,7 @@
     #edit-description, #edit-stop-footprint, #edit-hop-footprint, #edit-media, #edit-catalog {
         height:200px;
         background: rgb(200,200,200);
-        padding: 20px 20px 20px 20px;
+        padding: 10px 20px; 
         .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
         overflow:auto;
     }

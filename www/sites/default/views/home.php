@@ -37,7 +37,6 @@
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>
         <h2>Your maps</h2>
-        <hr />
         <?php foreach($supplychains as $i => $sc): ?>
             <div id="user-map-list" class="<?= $i % 2 ? " alt" : ''; ?>">
                 <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>

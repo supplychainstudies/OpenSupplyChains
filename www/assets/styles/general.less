@@ -346,7 +346,6 @@ a{
 
 .sourcemap-form{
     fieldset {
-        border: 1px dotted #ccc;
         padding:0 10px 25px 10px;
     }
     label {
@@ -560,7 +559,39 @@ a{
 /* EDIT MAP PAGE STYLES 
  * -------------------------------------------------------------- */
 
-
+#edit-map{
+    h1{
+        margin-bottom: 40px;
+        span{
+            font-size: 22px;
+            color: #999;
+            margin-left: 18px;
+        }
+    }
+    .edit-map-form{
+        float:left;
+        padding: 10px;
+        background: #fefefe;
+        width: 550px;
+        border: 1px solid #d4d4d4;
+        .rounded(12px);
+        .box_shadow_inset(0, 3px, 10px, #eee);
+        .sourcemap-form{
+            div{
+                width: 500px;
+            }
+        }
+    }
+    .edit-map-details{
+        margin-left: 40px;
+        float: left;
+        width: 300px;
+        padding: 10px;
+        > div{
+            margin-left: 20px;
+        }
+    } 
+}
 
 
 

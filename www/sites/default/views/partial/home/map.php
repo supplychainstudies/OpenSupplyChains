@@ -1,5 +1,5 @@
 <?php if(isset($supplychain) && $supplychain): ?>
-        <div class="map-item">
+        <div class="map-item medium">
             <a href="map/view/<?= $supplychain->id ?>">
                 <img class="user-map-preview" src="map/static/<?= $supplychain->id ?>.m.png" />
             </a>
@@ -25,18 +25,16 @@
             <?php endif; ?>
 
             <?php if($supplychain->other_perms & Sourcemap::READ): ?>
-            <?php else: ?>
-                <h4 class="map-details bad-news">(private)</h4>
             <?php endif; ?>
         </div>
         <div class="map-controls">
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
             <div class="map-controls-publish">
                 <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/>
-                <a id="map-publish-link" href="edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>"><?= $public ? "Unpublish" : "Publish" ?></a>
+                <a id="map-publish-link" href="edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>">Publish Map</a>
             </div>
             <div class="map-controls-edit">
-                <a href="edit/<?= $supplychain->id ?>">Edit</a>
+                <a href="edit/<?= $supplychain->id ?>">Edit this map</a>
             </div>
         </div>
         <div class="clear"></div>

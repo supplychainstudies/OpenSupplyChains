@@ -203,7 +203,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this)); 
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.last_selected = null;
-        this.hideDialog();
+        this.hideDialog(true);
     }, this));
 }
 
@@ -281,13 +281,15 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
     }
 }
 
-Sourcemap.Map.Base.prototype.hideDialog = function() {
+Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
     if(this.dialog) {
         $(this.dialog).hide();
         this.map.controls["select"].unselectAll();
-        Sourcemap.broadcast('sourcemap-base-dialog-close', 
-            this, $(this.dialog).find("form").serializeArray()
-        );
+        if(!notrigger) {
+            Sourcemap.broadcast('sourcemap-base-dialog-close', 
+                this, $(this.dialog).find("form").serializeArray()
+            );
+        }
         this.dialog_content.empty();
     }
 }

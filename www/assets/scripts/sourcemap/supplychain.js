@@ -76,12 +76,19 @@ Sourcemap.Supplychain.prototype.addStop = function(stop) {
 }
 
 Sourcemap.Supplychain.prototype.removeStop = function(target_id) {
+    if(target_id instanceof Sourcemap.Stop)
+        target_id = target_id.instance_id;
     var removed = false;
+    for(var i=0; i<this.hops.length; i++) {
+        var h = this.hops[i];
+        if(h.from_stop_id === target_id || h.to_stop_id === target_id) {
+            this.removeHop(h);
+        }
+    }
     for(var i=0; i<this.stops.length; i++) {
         if(this.stops[i].instance_id === target_id) {
-            removed = this.stops[i];
+            removed = this.stops.splice(i,1)[0];
             removed.supplychain_id = null;
-            delete this.stops[i];
             break;
         }
     }
@@ -180,12 +187,13 @@ Sourcemap.Supplychain.prototype.addHop = function(hop) {
 }
 
 Sourcemap.Supplychain.prototype.removeHop = function(hop_id) {
+    if(hop_id instanceof Sourcemap.Hop)
+        hop_id = hop_id.instance_id;
     var removed = false;
     for(var i=0; i<this.hops.length; i++) {
         if(hop_id === this.hops[i].instance_id) {
-            removed = this.hops[i];
+            removed = this.hops.splice(i,1)[0];
             removed.supplychain_id = null;
-            delete this.hops[i];
         }
     }
     this.broadcast('supplychain:hop_removed', this, removed);

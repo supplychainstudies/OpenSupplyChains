@@ -17,11 +17,11 @@ return array(
     'fields' => array(
         'title' => array(
             'type' => 'text',
-            'label' => 'Title'
+            'label' => 'Map Title'
         ),
         'description' => array(
             'type' => 'textarea',
-            'label' => 'Description',
+            'label' => 'Map Full Description',
             'attributes' => array(
                 "maxlength" => 80
             ),

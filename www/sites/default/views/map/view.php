@@ -7,6 +7,13 @@
 <div class="spacer"></div>
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
+        <?php if($can_edit): ?>
+            <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> Add Weight
+            <input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" /> Add Carbon   
+            <input type="checkbox" <?= $supplychain_water; ?> id="impact-use-water" /> Add Water            
+         
+            <hr />            
+        <?php endif; ?>
         <div class="container">
             <a id="share-info"><h2>Share this Sourcemap</h2></a>
         </div>
@@ -36,6 +43,9 @@
         
     </div>
     
+    <?php if($can_edit): ?>
+        <a href="">Edit</a>
+    <?php endif; ?>
     <h1><?= $supplychain_name ?></h1>
     <p class="description"><?= $supplychain_desc ?></p>
     

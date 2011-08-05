@@ -70,6 +70,7 @@ Sourcemap.Map.Base.prototype.init = function() {
     this.initMap();
     this.initDialog();
     this.initEvents();
+
     // todo: put this somewhere else.
     if(this.options.watermark) {
         this.watermark = $('<div id="watermark"></div>');
@@ -106,43 +107,6 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     //this.map.setBaseLayer(this.options.tileset);
 
     $(this.map.map.div).css("position", "relative");
-
-    // add filter controls to dock
-    this.map.dockAdd('weight', {
-        "title": 'Weight',
-        "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span>",
-        "toggle": true,
-        "panel": 'filter',
-        "callbacks": {
-            "click": $.proxy(function() {
-                this.toggleVisualization("weight");
-            }, this)
-        }
-    });
-
-    this.map.dockAdd('co2e', {
-        "title": 'Carbon',
-        "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
-        "toggle": true,
-        "panel": 'filter',
-        "callbacks": {
-            "click": $.proxy(function() {
-                this.toggleVisualization("co2e");
-            }, this)
-        }
-    });
-
-    this.map.dockAdd('water', {
-        "title": 'Water',
-        "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
-        "toggle": true,
-        "panel": 'filter',
-        "callbacks": {
-            "click": $.proxy(function() {
-                this.toggleVisualization("water");
-            }, this)
-        }
-    });
 
     Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
         if(value === undefined || value === null) {
@@ -183,6 +147,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             }
             Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
+		this.updateFilterDisplay(sc);
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
@@ -673,6 +638,57 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
     return range;
 }
 
+Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {	
+	//@todo, reed will make this better
+	// add filter controls to dock
+    if(sc.attributes.sm_ui_weight) {
+        this.map.dockAdd('weight', {
+            "title": 'Weight',
+            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span>",
+            "toggle": true,
+            "panel": 'filter',
+            "callbacks": {
+                "click": $.proxy(function() {
+                    this.toggleVisualization("weight");
+                }, this)
+            }
+        });
+	} else {
+		this.map.dockRemove('weight');
+	}
+
+    if(sc.attributes.sm_ui_co2e) {
+        this.map.dockAdd('co2e', {
+            "title": 'Carbon',
+            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
+            "toggle": true,
+            "panel": 'filter',
+            "callbacks": {
+                "click": $.proxy(function() {
+                    this.toggleVisualization("co2e");
+                }, this)
+            }
+        });
+    } else {
+		this.map.dockRemove('co2e');
+	}
+
+    if(sc.attributes.sm_ui_water) {   
+        this.map.dockAdd('water', {
+            "title": 'Water',
+            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
+            "toggle": true,
+            "panel": 'filter',
+            "callbacks": {
+                "click": $.proxy(function() {
+                    this.toggleVisualization("water");
+                }, this)
+            }
+        });
+    } else {
+		this.map.dockRemove('water');
+	}
+}
 Sourcemap.Map.Base.prototype.favorite = function() {
     for(var k in this.map.supplychains) {
         var sc = this.map.supplychains[k]; break;

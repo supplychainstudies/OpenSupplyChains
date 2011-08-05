@@ -205,6 +205,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
 	// setup calculator display
 	$("#impact-use-co2e").change($.proxy(function(evt) {
 		var co2e = $(evt.target).is(':checked') ? true : false;
+		
         // grab the first supplychain
         var sc = false;
         for(var k in this.map.supplychains) {
@@ -212,9 +213,11 @@ Sourcemap.Map.Editor.prototype.init = function() {
             break;
         }
 		
-		if(co2e) { sc.attributes.sm_ui_co2e = sc.attributes.sm_ui_weight = true; } 
+		if(co2e) { 
+			sc.attributes.sm_ui_co2e = sc.attributes.sm_ui_weight = true; 
+			$("#impact-use-weight").attr("checked", "checked");
+		} 
 		else { delete sc.attributes.sm_ui_co2e; }
-		
 		
 		this.map_view.updateFilterDisplay(sc);
 		Sourcemap.broadcast('supplychain-updated', sc);
@@ -243,7 +246,10 @@ Sourcemap.Map.Editor.prototype.init = function() {
             break;
         }
 
-		if(water) { sc.attributes.sm_ui_water = sc.attributes.sm_ui_weight = true; } 
+		if(water) { 
+			sc.attributes.sm_ui_water = sc.attributes.sm_ui_weight = true; 
+			$("#impact-use-weight").attr("checked", "checked");
+		} 
 		else { delete sc.attributes.sm_ui_water; }
 
 		this.map_view.updateFilterDisplay(sc);

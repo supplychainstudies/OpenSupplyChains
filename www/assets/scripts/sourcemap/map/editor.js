@@ -285,15 +285,15 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
     for(var k in ref.attributes) {
         if(attr[k] == undefined) attr[k] = ref.getAttr(k);
     }
-    var s = {"ref": ref, "editor": this, "attr": attr};
+    var s = {"ref": ref, "editor": this, "attr": attr, "feature": ftr};
     var cb = function(p, tx, th) {
         this.editor.map_view.showDialog(th);
-        this.editor.prepEdit(this.ref, this.attr);
+        this.editor.prepEdit(this.ref, this.attr, this.feature);
     }
     Sourcemap.template('map/edit/edit-'+reftype, cb, s, s);
 }
 
-Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr) {
+Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     // track currently edited feature
     this.editing = ref;
@@ -348,13 +348,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr) {
         $("#edit-stop-footprint input").trigger('keyup');
     }
 
-    var s = {"ref": ref, "editor": this, "attr": attr};
+    var s = {"ref": ref, "editor": this, "attr": attr, "feature": ftr};
 
     // bind click event to connect button
     $(this.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
         this.editor.map_view.hideDialog();
         this.feature.renderIntent = "connecting";
-        this.editor.map.getStopLayer(this.feature.attributes.supplychain_instance_id).drawFeature(this.feature);
+        var sl = this.editor.map.getStopLayer(this.feature.attributes.supplychain_instance_id);
+        sl.drawFeature(this.feature);
         this.editor.connect_from = this.feature;
     }, s));
     

@@ -22,6 +22,13 @@
         <div id="edit-hop-footprint">
             <div class="sourcemap-form">
                 <fieldset>
+
+                    <label for="distance">Weight</label>
+                    <div class="sourcemap-form-textbox">
+                        <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 1)); %>
+                        <%= $("<div></div>").append(el).html() %>
+                    </div>
+
                     <label for="distance">Distance</label>
                     <div class="sourcemap-form-textbox">
                         <% el = $("<input></input>").attr("type", "text").attr("name", "distance").addClass("textbox"); 

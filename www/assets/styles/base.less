@@ -253,6 +253,7 @@
                 &#impact-result{
                     border: none;
                     background: none;
+                    .box_shadow_inset(0, 0, 0);
                     padding: 10px;
                     font-size: 22px;
                     color: #999;
@@ -359,13 +360,13 @@
 #banner { 
     position:absolute;
     height: 42px; top:20px; left:20px; right:20px;    
+    width: 960px;
     font-size:0.8em;
     .body-font; 
     .gradient(rgba(240,240,240,0.9),rgba(255,255,255,0.7));
     .rounded(12px);
     .box_shadow(0, 1px, 3px);
     #banner-content {
-        width:960px;
         div {
             padding: 13px;
         }
@@ -389,7 +390,6 @@
         }
         #banner-owner {
             background: url(../images/icon-owner.png) 10px center no-repeat;
-            width:185px;
             border-left: 1px solid rgba(140,140,140,0.25);            
             padding-left: 45px;
             overflow:hidden;
@@ -397,7 +397,6 @@
         #banner-share {
             background: url(../images/icon-share.png) 10px center no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);    
-            padding-right: 0;
         }
         #banner-owner, #banner-favorite, #banner-share {
             padding-left: 40px;

@@ -333,12 +333,22 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         $("#edit-hop-footprint input").keyup($.proxy(function(e){ 
             // update calculation
             editor = $('#edit-hop-footprint');
+            var weight   = editor.find('input[name="qty"]').val();
             var distance = editor.find('input[name="distance"]').val(); 
             var factor   = editor.find('input[name="co2e"]').val(); 
             var unit     = 'kg';
 
-            if (!isNaN(distance && factor)){ 
-                var output = distance * factor;
+            // drop in the transporation select box 
+            $('#edit-hop-footprint #transportation-select').append( 
+                $(this.transport_catalog_el).change(function(){ 
+                    $('#edit-hop-footprint input[name="co2e"]') 
+                    .val($(this + ':selected').val());
+                    console.log($(this).parent()); 
+                })
+            );  
+
+            if (!isNaN(weight && distance && factor)){ 
+                var output = weight * distance * factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }

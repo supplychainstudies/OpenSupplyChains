@@ -29,8 +29,8 @@
         </div>
 
         <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-        <div class="container_16">
-            <div class="messages grid_16">
+        <div class="container">
+            <div class="messages">
                 <header>
                     <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
                     <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>

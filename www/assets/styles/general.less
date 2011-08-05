@@ -860,37 +860,28 @@ img{
     text-align: center;
 }
 
-.status-messages {
-    font-size: 1.4em;
-    list-style-type: none;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
-    display:none;
-    .status-message {
-        color: #333;
-        padding: .25em;
-        &.error {
-            background-color: #fbf7d5;
-            border-color: #ff8080;
+.messages{
+    margin-bottom: 20px;
+    .status-messages {
+        font-size: 1.4em;
+        font-weight: bold;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        display:none;
+        .status-message {
+            color: #fff;
+            padding: 8px 0 10px 20px;
+            text-shadow: -1px 0px 1px #255a76;
+            .gradient(#3884ab,#4f9fc9);
+            .rounded(10px);
         }
-        &.warning {
-            background-color: #ffff66;
-            border-color: #ff9900;
+        .status-wrap{
+            background: url('../images/close.png') top right transparent no-repeat;
+            margin: 0 20px 0 0;
+            padding: 5px 0;
         }
-        &.success {
-            background-color: #99ff99;
-            border-color: #55ff55;
-        }
-        &.info {
-            background-color: #9999ff;
-            border-color: #5555ff;
-        }
-    }
-    .status-wrap{
-        background: url('../images/close.png') top right transparent no-repeat;
-        padding: 5px 10px;
     }
 }
 

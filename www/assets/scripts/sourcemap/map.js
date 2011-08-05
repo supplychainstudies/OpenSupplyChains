@@ -214,6 +214,26 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
+    this.dockAdd('fullscreen', {
+        "title": 'Fullscreen',
+        "panel": 'fullscreen',
+        "callbacks": {
+            "click": function() {
+                var viewportWidth  = window.innerWidth;
+                var viewportHeight = window.innerHeight;
+                $('#map-container')
+                    .css({
+                        'position': 'absolute', 
+                        'top' : '0', 
+                        'left' : '0',
+                        'z-index' : '9999'})
+                    .width(viewportWidth)
+                    .height(viewportHeight);
+                $('#map #sourcemap-map-view')
+                    .height(viewportHeight);
+            }
+        }
+    });
     return this;
 }
 

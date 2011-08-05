@@ -502,7 +502,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
             }
         }
     }
-    if(supplychain.stops.length) {
+    /*if(supplychain.stops.length) {
         var ext = new OpenLayers.Bounds();
         for(var i=0; i<this.map.layers.length; i++) {
             var l = this.map.layers[i];
@@ -513,7 +513,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
         this.map.zoomToExtent(ext);
     } else {
         this.map.zoomToExtent(this.map.getMaxExtent());
-    }
+    }*/
+    this.map.zoomToExtent(this.map.getMaxExtent());
     this.broadcast('map:supplychain_mapped', this, supplychain);
     if(reselect) this.reselect();
 }

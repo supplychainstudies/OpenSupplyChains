@@ -203,7 +203,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this)); 
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.last_selected = null;
-        this.hideDialog(true);
+        this.hideDialog();
     }, this));
 }
 

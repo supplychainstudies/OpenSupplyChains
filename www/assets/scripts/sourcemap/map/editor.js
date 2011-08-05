@@ -419,7 +419,9 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
         }
     }
     if(!geocoding) {
-        this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id]);
+        // for just-deleted stops
+        if(ref && ref.supplychain_id)
+            this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id]);
     }
 }
 

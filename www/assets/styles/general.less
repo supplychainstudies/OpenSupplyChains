@@ -322,68 +322,6 @@ a{
     margin-top:2em;
 }
 
-#user-profile {
-    float:left;
-    width: 350px;
-    padding: 0px 20px 10px;
-    background: #fefefe;
-    border: 1px solid #888;
-    .rounded(12px);
-    .box_shadow(3px, 1px, 10px);    
-    .anythingWindow{
-        .rounded(12px);
-    }
-    .user-name {
-        text-transform:capitalize;
-    }
-    .user-title {
-
-    }
-    .user-gravatar {
-        float:left;
-        padding-right:1em; 
-    }
-    .user-details {
-        font-size:0.8em;
-        float:left;
-        list-style:none;
-    }
-}
-#user-stream {
-    float: right;
-    width: 530px;
-    .date {
-        .body-font;
-        font-size:0.8em;
-    }
-    .event {
-        line-height:1.2em;
-        font-size:0.8em;
-    }
-}
-#user-map-list, #search-results {
-    font-size:0.8em;
-    .user-map-preview {
-    }
-    .user-map-title {
-        .body-font;
-        border:none;
-        margin-top:0.5em;
-        margin-bottom:0;
-    }
-    .user-map-teaser {
-        .body-font;
-    }
-    .user-map-details {
-        .body-font;
-        font-size:0.8em;
-        color:#888;
-    }
-    .map-controls {
-        margin-top:0.5em;
-        text-align:right;
-    }
-}
 
 #document-content {
     .body-font;
@@ -617,99 +555,120 @@ a{
 
 /* DASHBOARD STYLES 
  * -------------------------------------------------------------- */
-/*
-#dashboard-profile {
-    height:100px;
-    background:@background;
-    background: -webkit-gradient(linear, left top, left bottom, from(@background), to(#f5f5f5)); 
-    background: -moz-linear-gradient(top,  @background,  #f5f5f5);
-    h2 {
-        font-size:1.2em;
-        padding-top:12px;
-    }
-    .user-avatar {
-        margin-left:5px;
-        height:64px;
-        width:64px;
-        border:1px solid #ccc;
-    }
+.dashboard-title{
+    margin-bottom: 30px;
 }
-#dashboard-pane {
-    height:600px;
-    border:1px solid #ccc;
-    border-top:none; 
-    background: #f5f5f5;
-    #dashboard-tabs {
-        > ul {
-            border-bottom:1px solid #ccc;
-            padding-left:0; margin-left:0;
-            > li {
-               display:block;
-               float:left;   
-               border:1px solid #ccc;
-               padding:5px;
-               margin:5px 2px -1px 2px;
-               background:#f5f5f5;      
-               a {
-                   text-decoration:none;
-                   color:#333;
-               }    
-           }
-       }
-       > div {
-           padding:10px;
-           height:376px;
-           background:@background;
-           overflow:auto;
-       }
-       .ui-tabs-selected {           
-           background:@background;
-           border-bottom:1px solid @background;
-           a {
-               color:#000;
-           }
-       }
-       .ui-tabs-panel {
-           display:block;
-       }
-       > div, .ui-tabs-panel.ui-tabs-hide {
-           display:none;
-       }
-       h3 {
-           font-size:1.4em;
-       }
+
+.dashboard-top{
+    padding: 0px 0 10px;
+    background: #fefefe;
+    border: 1px solid #d4d4d4;
+    .rounded(12px);
+    .box_shadow(3px, 1px, 10px);
+    .dashboard-top-left{
+        width: 470px;
+        margin-right: 30px;
+        float: left;
+        div {
+            margin: 0 20px;
+        }
     }
-    #dashboard-overview {
-        
-    }
-}
-#dashboard-preview {
-    .box_shadow_inset(5px, 5px, 5px);    
-    height:600px;    
-    margin:0 0 0 501px;
-    background:url("http://staticmaps.cloudmade.com/8ee2a50541944fb9bcedded5165f09d9/staticmap?bbox=51.35,-0.05,51.45,0.05&size=700x600");
-    border:1px solid #ccc;
-    border-top:none;
-    position:relative;
-    header {
-        position:absolute;
-        top:0; right:20px;
-        color:@brand-color;
-        background:rgba(255,255,255,0.8);
-        padding:5px 10px;
-        .box_shadow_inset(0,5px,5px);        
-        border-bottom-left-radius:4px;	      
-        -moz-border-radius-bottomleft:4px;
-        -webkit-border-bottom-left-radius:4px;
-        border-bottom-right-radius:4px;	      
-        -moz-border-radius-bottomright:4px;
-        -webkit-border-bottom-right-radius:4px;
-        h2 {
-            font-size:1.4em;
+    .dashboard-top-right{
+        float: right;
+        width: 445px;
+        h2{
+            margin-top: 10px;
+        }
+        #user-stream {
+            margin-top: 25px;
+            .date {
+                .body-font;
+                font-size:0.8em;
+            }
+            .event {
+                line-height:1.2em;
+                font-size:0.8em;
+                font-style: italic;
+            }
         }
     }
 }
-*/
+
+.user-name{
+    margin-top: 10px;
+    text-transform: capitalize;
+    text-transform:capitalize;
+    color: #595959;
+}
+
+#user-profile {
+    float:left;
+    padding: 10px;
+    background: #fefefe;
+    width: 420px;
+    border: 1px solid #d4d4d4;
+    .rounded(12px);
+    .box_shadow_inset(0, 3px, 10px, #eee);    
+    .anythingWindow{
+        .rounded(12px);
+    }
+    .user-gravatar {
+        float:left;
+        margin: 0;
+        padding: 4px;
+        .box_shadow(0, 1px, 5px);
+        .rounded(4px);
+    }
+    .user-details {
+        float:left;
+        margin: 0;
+        padding: 20px;
+        list-style:none;
+        font-size: 14px;
+        color: #949494;
+        span{
+            color:#22688d;
+            font-size: 17px;
+        }
+    }
+    .upload-photo{
+        width: 106px;
+        font-size: 14px;
+        text-align:center;
+        border: 1px solid #d4d4d4;
+        color: #328cbb;
+        margin:15px 0 0 0;
+        .gradient();
+    }        
+}
+#user-map-list, #search-results {
+    font-size:0.8em;
+    margin: 20px 0;
+    padding: 20px 0;
+    border-top: 1px solid #d4d4d4;
+    .user-map-preview {
+    }
+    .user-map-title {
+        .body-font;
+        border:none;
+        margin-top:0.5em;
+        margin-bottom:0;
+    }
+    .user-map-teaser {
+        .body-font;
+    }
+    .user-map-details {
+        .body-font;
+        font-size:0.8em;
+        color:#888;
+    }
+    .map-controls {
+        margin-top:0.5em;
+        text-align:right;
+    }
+}
+
+
 /* FOOTER STYLES 
  * -------------------------------------------------------------- */
 
@@ -840,7 +799,7 @@ img{
     border: 1px solid #666;
     font-weight: bold;
     cursor:pointer;
-    color:#f7f7f7 !important;
+    color:#f7f7f7;
     .gradient(#246587,#50a3ce);
     .rounded(4px);
     .box_shadow();
@@ -904,7 +863,8 @@ img{
 
 .search-results {
     > h2 {
-        margin:0 10px;
+        margin:20px 10px 12px;
+        color: #328cbb;
     }
     .pager {
         .header-font;

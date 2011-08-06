@@ -20,7 +20,7 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
-    "zoom_control": true,
+    "zoom_control": true, "fullscreen_control": false,
     "ol_layer_switcher": false, "tileswitcher": false,
     "google_tiles": false, "basetileset": "cloudmade",
     "cloudmade_tiles": true, "animation_enabled":false,
@@ -214,55 +214,58 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
-    this.dockAdd('fullscreen', {
-        "title": 'Fullscreen',
-        "panel": 'fullscreen',
-        "callbacks": {
-            "click": function() {
-                if ($('#map-container').css('position') === 'static' ){
-                    // init fullscreen mode
-                    var viewportWidth  = window.innerWidth;
-                    var viewportHeight = window.innerHeight;
-                    $('#map-container')
-                        .css({
-                            'position': 'absolute', 
-                            'top'     : '0', 
-                            'left'    : '0',
-                            'padding' : '0',
-                            'border'  : 'none',
-                            '-moz-border-radius' : '0',
-                            '-webkit-border-radius' : '0',
-                            'border-radius' : '0',
-                            'z-index' : '9999'})
-                        .width(viewportWidth)
-                        .height(viewportHeight);
-                    $('#map #sourcemap-map-view')
-                        .height(viewportHeight)
-                        .css({ 'border' : 'none'});
-                    $('#sourcemap-dock').find('.control.fullscreen')
-                        .addClass('active');
-                    $(window).bind('resize', function(){
-                        $('#map-container')
-                            .width(viewportWidth)
-                            .height(viewportHeight);
-                        $('#map #sourcemap-map-view')
-                            .height(viewportHeight);
-                    });
-                }
-                else{
-                    // return to inline mode
-                    $('#map-container')
-                        .removeAttr("style");
-                    $('#map #sourcemap-map-view')
-                        .removeAttr("style");
-                    $('#sourcemap-dock').find('.control.fullscreen')
-                        .removeClass('active')
-                    $(window).unbind('resize');
-                }
+	if(this.options.fullscreen_control) {
+	
+	    this.dockAdd('fullscreen', {
+	        "title": 'Fullscreen',
+	        "panel": 'fullscreen',
+	        "callbacks": {
+	            "click": function() {
+	                if ($('#map-container').css('position') === 'static' ){
+	                    // init fullscreen mode
+	                    var viewportWidth  = window.innerWidth;
+	                    var viewportHeight = window.innerHeight;
+	                    $('#map-container')
+	                        .css({
+	                            'position': 'absolute', 
+	                            'top'     : '0', 
+	                            'left'    : '0',
+	                            'padding' : '0',
+	                            'border'  : 'none',
+	                            '-moz-border-radius' : '0',
+	                            '-webkit-border-radius' : '0',
+	                            'border-radius' : '0',
+	                            'z-index' : '9999'})
+	                        .width(viewportWidth)
+	                        .height(viewportHeight);
+	                    $('#map #sourcemap-map-view')
+	                        .height(viewportHeight)
+	                        .css({ 'border' : 'none'});
+	                    $('#sourcemap-dock').find('.control.fullscreen')
+	                        .addClass('active');
+	                    $(window).bind('resize', function(){
+	                        $('#map-container')
+	                            .width(viewportWidth)
+	                            .height(viewportHeight);
+	                        $('#map #sourcemap-map-view')
+	                            .height(viewportHeight);
+	                    });
+	                }
+	                else{
+	                    // return to inline mode
+	                    $('#map-container')
+	                        .removeAttr("style");
+	                    $('#map #sourcemap-map-view')
+	                        .removeAttr("style");
+	                    $('#sourcemap-dock').find('.control.fullscreen')
+	                        .removeClass('active')
+	                    $(window).unbind('resize');
+	                }
 
-            }
-        }
-    });
+	            }
+	        }
+	    });
+	}
     return this;
 }
 

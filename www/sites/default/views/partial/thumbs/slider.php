@@ -18,8 +18,8 @@ if ($data):
             <h1 class="featured-title"><a href="/map/view/<?php print $item->id; ?>"><?= isset($item->attributes->title) ? $item->attributes->title : "Unknown Name" ?></a></h1>
             <? if(isset($item->teaser)) { ?><h3 class="featured-teaser"><?= $item->teaser; ?></h3><? } ?>
             <h4 class="featured-info">
-                Created by: <a href="user/<?php $item->owner->name; ?>">
-                    <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
+                 <a href="user/<?php $item->owner->name; ?>">
+                    <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a> 
                 <br />
                 <?php print date("F j, Y",$item->created);?>
             </h4>

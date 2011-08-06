@@ -61,7 +61,7 @@ if(getenv('SOURCEMAP_ENV')) {
  * - boolean  caching     enable or disable internal caching                 FALSE
  */
 Kohana::init(array(
-    'cache_dir' => CACHEPATH,
+    'cache_dir' => '/var/cache/kohana',
     'index_file' => ''
 ));
 

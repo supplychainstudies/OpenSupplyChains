@@ -22,9 +22,11 @@
         color:rgba(0,0,0,0.4);
         pointer-events:none;
         .msg{
-            background: url(../images/throbber.gif) right no-repeat transparent;
+			padding-top:10px;
+			height:26px;
+            background: url(../images/throbber.gif) right center no-repeat transparent;
             padding-right: 32px;
-            &.good-news{
+            &.good-news {
                 background: none;
             }
         }
@@ -365,10 +367,7 @@
 
 #banner { 
     position:absolute;
-    height: 42px; 
-    top:20px; left:50%;
-    margin-left: -480px;
-    width: 960px;
+    height: 42px; top:20px; left:20px; right:20px;
     font-size:0.8em;
     .body-font; 
     .gradient(rgba(240,240,240,0.9),rgba(255,255,255,0.7));

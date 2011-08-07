@@ -33,8 +33,8 @@
         <div class="clear"></div>
     </div>
     <div id="body-content">
-        <h1 id="site-tagline">Where things come from.</h1>
-        <p id="site-blurb">We believe that people have the right to know where things come from, what they're made of, and how they affect the environment. Using freely available data, Sourcemap helps you understand these complex interactions at a glance.</p>  
+        <h1 id="site-tagline">Find out where things come from.</h1>
+        <p id="site-blurb">Welcome to the website for sharing supply chains and understanding how they impact our communities and the environment. Join us to learn more and contribute.</p>  
 
         <div class="spacer"></div>
 

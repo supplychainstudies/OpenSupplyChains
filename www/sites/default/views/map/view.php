@@ -40,7 +40,6 @@
         <hr />
                 
         <?= View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>
-        
     </div>
     
     <?php if($can_edit): ?>

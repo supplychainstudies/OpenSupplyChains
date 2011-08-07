@@ -113,15 +113,27 @@ a{
                         font-weight:normal;
                         font-size: 50%;
                         text-decoration:none;
+                        color:#3d3d3d;
                     }
                 }
                 &.register{
                     margin: 0 15px;
-                    a { text-decoration: none; }
+                    a { 
+                        text-decoration: none; 
+                        color:#f7f7f7;
+                        &.existing-login{
+                            font-weight:normal;
+                            font-size: 50%;
+                            text-decoration:none;
+                            color:#3d3d3d;
+                        }
+                    }
+                }
+                a{
+                    color:#3d3d3d; 
                 }
             }
         }
-        a { color:#3d3d3d; }
         #search-div{
             background: #fff url(../images/shadow.png) top repeat-x; 
             border: 1px solid #c9c9c9;
@@ -226,6 +238,7 @@ a{
     float: right;
     width: 412px;
     margin-left: 64px;
+    margin-bottom: 60px;
     border:1px solid #d4d4d4;
     .rounded(8px);
     .box_shadow(0, 1px, 12px);       
@@ -580,6 +593,9 @@ a{
             div{
                 width: 500px;
             }
+            select{
+                width: 525px;
+            }
         }
     }
     .edit-map-details{
@@ -814,6 +830,23 @@ a{
     margin-left: 40px;
     width: 300px;
 }
+
+.about-sourcemap{
+    h1{
+        margin: 30px 0;
+    }
+    ol{
+        margin: 0 40px;
+        li{
+            margin: 20px 0;
+            line-height: 28px;
+        }
+    }
+    p{
+        margin-bottom: 20px;
+    }
+}
+
 
 /* MODAL STRUCTURES 
  * -------------------------------------------------------------- */

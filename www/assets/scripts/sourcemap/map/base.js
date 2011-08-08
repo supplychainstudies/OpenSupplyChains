@@ -168,7 +168,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
-        //this.hideDialog();
+        this.hideDialog();
     }, this));
 }
 
@@ -236,7 +236,6 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
 }
 
 Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
-    console.log('showdlg');
     if(this.dialog) {
         this.initDialog();
         $(this.dialog_content).html(mkup);
@@ -248,7 +247,6 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 }
 
 Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
-    console.log('hidedlg');
     if(this.dialog) {
         $(this.dialog).hide();
         this.map.controls["select"].unselectAll();

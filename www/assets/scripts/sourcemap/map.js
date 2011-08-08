@@ -344,14 +344,12 @@ Sourcemap.Map.prototype.initControls = function() {
                 "geometryTypes": ["OpenLayers.Geometry.Point", "OpenLayers.Geometry.MultiLineString"],
                 "onSelect": OpenLayers.Function.bind(
                     function(feature) {
-                        console.log('sel');
                         this.broadcast('map:feature_selected', this, feature); 
                     }, 
                     this
                 ),
                 "onUnselect": OpenLayers.Function.bind(
                     function(feature) {
-                        console.log('unsel');
                         this.broadcast('map:feature_unselected', this, feature); 
                     },
                     this
@@ -380,7 +378,6 @@ Sourcemap.Map.prototype.initControls = function() {
         // wrap clickoutFeature
         var cof = this.controls.select.clickoutFeature;
         this.controls.select.callbacks.clickout = $.proxy(function(f) {
-            console.log('clickout');
             $.proxy(cof, this.controls.select)(f);
         }, this);
 

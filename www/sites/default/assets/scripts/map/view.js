@@ -20,6 +20,5 @@ $(document).ready(function() {
         if(sc.editable){
             new Sourcemap.Map.Editor(Sourcemap.view_instance);
         }
-        m.map.zoomToExtent(m.map.getMaxExtent());
     });
 });

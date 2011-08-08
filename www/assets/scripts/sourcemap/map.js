@@ -20,11 +20,9 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
-    "zoom_control": true,
-    "ol_layer_switcher": false, "tileswitcher": false,
-    "google_tiles": false, "basetileset": "cloudmade",
-    "cloudmade_tiles": true, "animation_enabled":false,
-    "draw_hops": true, "hops_as_arcs": true, "stop_size": 14,
+ 	"zoom_control": true, "stop_size": 14,
+    "basetileset": "cloudmade", "tileswitcher": true, 
+    "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
     "default_feature_color": "#35a297", "clustering": false,
     "default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
@@ -103,10 +101,6 @@ Sourcemap.Map.prototype.defaults = {
 
 Sourcemap.Map.prototype.init = function() {
     this.initMap().initBaseLayer().initLayers().initControls().initDock();
-    var p = new OpenLayers.LonLat(-122.8764, 42.3263);
-    p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.getProjectionObject());
-    this.map.setCenter(p);
-    this.map.zoomTo(2);
     this.supplychains = {};
     this.mapped_features = {};
     this.stop_features = {}; // dicts of stop ftrs keyed by parent supplychain
@@ -115,7 +109,7 @@ Sourcemap.Map.prototype.init = function() {
     this.cluster = null;
     this.prepareStopFeature = this.options.prep_stop ? this.options.prep_stop : false;
     this.prepareHopFeature = this.options.prep_hop ? this.options.prep_hop : false;
-    this.broadcast('map:initialized', this);
+    //this.broadcast('map:initialized', this);
     return this;
 }
 Sourcemap.Map.prototype.initMap = function() {
@@ -133,6 +127,7 @@ Sourcemap.Map.prototype.initMap = function() {
         "controls": controls
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
+
     this.broadcast('map:openlayers_map_initialized', this);
     return this;
 }
@@ -140,26 +135,40 @@ Sourcemap.Map.prototype.initMap = function() {
 Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.Google(
         "terrain", {
-            'sphericalMercator': true, "wrapeDateLine": true,
+            'sphericalMercator': true,
             "type": google.maps.MapTypeId.TERRAIN,
-            "animationEnabled": this.options.animation_enabled
+            "animationEnabled": false,
+	        "minZoomLevel": 2, "maxZoomLevel": 17
+    }));
+    this.map.addLayer(new OpenLayers.Layer.Google(
+        "satellite", {
+            'sphericalMercator': true,
+            "type": google.maps.MapTypeId.SATELLITE,
+            "animationEnabled": false,
+	        "minZoomLevel": 2, "maxZoomLevel": 17
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 41413,
-        "minZoomLevel": 3,
-        "maxZoomLevel": 12
+        "minZoomLevel": 3, "maxZoomLevel": 12
     }));
     
-    this.map.addLayer( new OpenLayers.Layer.Google(
-        "satellite", {
-        "sphericalMercator": true,
-        "type": google.maps.MapTypeId.HYBRID,
-        "wrapDateLine": true, "animationEnabled": this.options.animation_enabled
-    })); 
+    var stylez = [ { featureType: "all", elementType: "all", stylers: [ { visibility: "simplified" }, { hue: "#000000" }, { saturation: -100 } ] } ];		
+	var gmap = new OpenLayers.Layer.Google(
+					"gstyled", {
+					"sphericalMercator": true,
+					"type": "styled",
+					"minZoomLevel": 2, "maxZoomLevel": 17,
+					"animationEnabled": false
+				});
+	var styledMapOptions = { name: "Styled Map"};
+	var styledMapType = new google.maps.StyledMapType(stylez, styledMapOptions);
+	this.map.addLayer(gmap); 
+    gmap.mapObject.mapTypes.set('styled', styledMapType);
+	gmap.mapObject.setMapTypeId('styled');
     
-    if(this.options.basetileset) {
+	if(this.options.basetileset) {
         this.map.setBaseLayer(
             this.map.getLayersByName(this.options.basetileset).pop()
         );
@@ -214,53 +223,6 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
-    /*
-    this.dockAdd('fullscreen', {
-        "title": 'Fullscreen',
-        "panel": 'fullscreen',
-        "callbacks": {
-            "click": function() {
-                if ($('#map-container').css('position') === 'static' ){
-                    // init fullscreen mode
-                    var viewportWidth  = window.innerWidth;
-                    var viewportHeight = window.innerHeight;
-                    $('#map-container')
-                        .css({
-                            'position': 'absolute', 
-                            'top' : '0', 
-                            'left' : '0',
-                            'padding' : '0',
-                            'z-index' : '9999'})
-                        .width(viewportWidth - 20)
-                        .height(viewportHeight - 20);
-                    $('#map #sourcemap-map-view')
-                        .height(viewportHeight)
-                        .css({ 'border' : 'none'});
-                    $('#sourcemap-dock').find('.control.fullscreen')
-                        .addClass('active')
-                }
-                else{
-                    // return to inline mode
-                    $('#map-container')
-                        .css({
-                            'position': 'static', 
-                            'top' : 'auto', 
-                            'padding' : '4',
-                            'left' : 'auto'
-                             })
-                        .width(1040)
-                        .height(560);
-                    $('#map #sourcemap-map-view')
-                        .height(560)
-                        .css({ 'border' : '4px solid white'});
-                    $('#sourcemap-dock').find('.control.fullscreen')
-                        .removeClass('active')
-                }
-
-            }
-        }
-    });
-    */
     return this;
 }
 
@@ -306,17 +268,13 @@ Sourcemap.Map.prototype.dockToggle = function(nm) {
 
 Sourcemap.Map.prototype.dockToggleActive = function(nm) {
     var cel = $(this.dock_content).find(".control."+nm);
-    if(cel) {
-        $(cel).addClass("active");
-    }
+    if(cel) {$(cel).addClass("active");}
     return this;
 }
 
 Sourcemap.Map.prototype.dockToggleInactive = function(nm) {
     var cel = $(this.dock_content).find(".control."+nm);
-    if(cel) {
-        $(cel).removeClass("active");
-    }
+    if(cel) {$(cel).removeClass("active");}
     return this;
 }
 
@@ -329,17 +287,13 @@ Sourcemap.Map.prototype.dockRemove = function(nm) {
     if(this.dockControlEl(nm)) this.dockControlEl(nm).remove();
 }
 
-Sourcemap.Map.prototype.initControls = function() {
+Sourcemap.Map.prototype.initControls = function() {    
     var layers = [];
     for(var k in this.layers) layers.push(this.layers[k]);
     if(layers.length) {
-        if(this.options.ol_layer_switcher) {
-            this.addControl('layer_switcher',
-                new OpenLayers.Control.LayerSwitcher()
-            );
-        }  
         if(this.options.tileswitcher) {
-            this.initTileSwitcher();
+			// @todo still need basic tile switcher
+            //this.initTileSwitcher();
         }
         this.addControl('select', 
             new OpenLayers.Control.SelectFeature(layers, {
@@ -391,8 +345,7 @@ Sourcemap.Map.prototype.initControls = function() {
         this.controls.select.activate();
     }
     $(document).one('map:layer_added', function(e, map, label, layer) {
-        if(!map.controls.select)
-            map.initControls();
+        if(!map.controls.select) { map.initControls(); }
     });
 
     this.broadcast('map:controls_initialized', this, ['select']);
@@ -402,8 +355,7 @@ Sourcemap.Map.prototype.initControls = function() {
 Sourcemap.Map.prototype.updateControls = function() {
     var layers = [];
     for(var k in this.layers) layers.push(this.layers[k]);
-    if(this.controls.select)
-        this.controls.select.setLayer(layers);
+    if(this.controls.select) { this.controls.select.setLayer(layers); }
     return this;
 }
 
@@ -565,18 +517,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
             }
         }
     }
-    /*if(supplychain.stops.length) {
-        var ext = new OpenLayers.Bounds();
-        for(var i=0; i<this.map.layers.length; i++) {
-            var l = this.map.layers[i];
-            if(!l.isBaseLayer) {
-                ext.extend(l.getDataExtent());
-            }
-        }
-        this.map.zoomToExtent(ext);
-    } else {
-        this.map.zoomToExtent(this.map.getMaxExtent());
-    }*/
+
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 

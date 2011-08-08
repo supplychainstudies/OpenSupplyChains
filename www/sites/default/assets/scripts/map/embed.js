@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     Sourcemap.embed_params.map_element_id = 'sourcemap-map-embed';
     Sourcemap.embed_instance = new Sourcemap.Map.Base(Sourcemap.embed_params);
-
+	console.log(Sourcemap.embed_params);
     Sourcemap.listen("map:supplychain_mapped", function(evt, map, sc) {
         var embed = Sourcemap.embed_instance;
         embed.user_loc = Sourcemap.embed_params.iploc ? Sourcemap.embed_params.iploc[0] : false;
@@ -17,10 +17,5 @@ $(document).ready(function() {
     // fetch supplychain
     Sourcemap.loadSupplychain(scid, function(sc) {
         Sourcemap.embed_instance.map.addSupplychain(sc);
-        if(sc.stops.length) {
-            Sourcemap.embed_instance.map.map.zoomToExtent(
-                Sourcemap.embed_instance.map.getDataExtent(), true
-            );
-        }
     });
 });

@@ -541,10 +541,10 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 
             $("#catalog-close").click($.proxy(function(e) {
                 // @todo return to hop
-                var ftr = this.editor.map.findFeaturesForStop(this.ref.supplychain_id,this.ref.instance_id);
-                ftr.attributes = {}; ftr.attributes.ref = this.ref;
-                this.editor.showEdit(ftr, this.ref.attributes);                            
-            }, {"ref": o.ref, "editor": this.editor}));
+                var ftr = this.editor.map.findFeaturesForStop(this.editor.editing.supplychain_id,this.editor.editing.instance_id);
+                ftr.attributes = {}; ftr.attributes.ref = this.editor.editing;
+                this.editor.showEdit(ftr, this.editor.editing.attributes);
+            }, {"o": this.o, "editor": this.editor}));
             $(this.editor.map_view.dialog).find('.catalog-pager').empty();
             // pager prev
             if(o.params.o > 0) {
@@ -601,7 +601,7 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     o.catalog = o.catalog ? o.catalog : "osi";
     var tscope = {"editor": this, "o": o, "ref": o.ref};
     Sourcemap.template('map/edit/catalog', function(p, txt, th) {        
-        this.editor.map_view.showDialog(th);
+        this.editor.map_view.showDialog(th);  
         this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }

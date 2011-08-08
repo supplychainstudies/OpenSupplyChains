@@ -20,7 +20,7 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
-    "zoom_control": true, "fullscreen_control": false,
+    "zoom_control": true,
     "ol_layer_switcher": false, "tileswitcher": false,
     "google_tiles": false, "basetileset": "cloudmade",
     "cloudmade_tiles": true, "animation_enabled":false,
@@ -193,11 +193,11 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                if(this.last_selected && this.last_selected.cluster_instance_id) {
+                var s = this.getSelected();
+                if(s.length && s[0].cluster_instance_id) {
                     this.controls.select.unselectAll();
                 }
                 this.map.zoomIn();
-                this.reselect();
             }
         }
     });
@@ -206,66 +206,59 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                if(this.last_selected && this.last_selected.cluster_instance_id) {
+                var s = this.getSelected();
+                if(s.length && s[0].cluster_instance_id) {
                     this.controls.select.unselectAll();
                 }
                 this.map.zoomOut();
-                this.reselect();
             }
         }
     });
-	if(this.options.fullscreen_control) {
-	
-	    this.dockAdd('fullscreen', {
-	        "title": 'Fullscreen',
-	        "panel": 'fullscreen',
-	        "callbacks": {
-	            "click": function() {
-	                if ($('#map-container').css('position') === 'static' ){
-	                    // init fullscreen mode
-	                    var viewportWidth  = window.innerWidth;
-	                    var viewportHeight = window.innerHeight;
-	                    $('#map-container')
-	                        .css({
-	                            'position': 'absolute', 
-	                            'top'     : '0', 
-	                            'left'    : '0',
-	                            'padding' : '0',
-	                            'border'  : 'none',
-	                            '-moz-border-radius' : '0',
-	                            '-webkit-border-radius' : '0',
-	                            'border-radius' : '0',
-	                            'z-index' : '9999'})
-	                        .width(viewportWidth)
-	                        .height(viewportHeight);
-	                    $('#map #sourcemap-map-view')
-	                        .height(viewportHeight)
-	                        .css({ 'border' : 'none'});
-	                    $('#sourcemap-dock').find('.control.fullscreen')
-	                        .addClass('active');
-	                    $(window).bind('resize', function(){
-	                        $('#map-container')
-	                            .width(viewportWidth)
-	                            .height(viewportHeight);
-	                        $('#map #sourcemap-map-view')
-	                            .height(viewportHeight);
-	                    });
-	                }
-	                else{
-	                    // return to inline mode
-	                    $('#map-container')
-	                        .removeAttr("style");
-	                    $('#map #sourcemap-map-view')
-	                        .removeAttr("style");
-	                    $('#sourcemap-dock').find('.control.fullscreen')
-	                        .removeClass('active')
-	                    $(window).unbind('resize');
-	                }
+    this.dockAdd('fullscreen', {
+        "title": 'Fullscreen',
+        "panel": 'fullscreen',
+        "callbacks": {
+            "click": function() {
+                if ($('#map-container').css('position') === 'static' ){
+                    // init fullscreen mode
+                    var viewportWidth  = window.innerWidth;
+                    var viewportHeight = window.innerHeight;
+                    $('#map-container')
+                        .css({
+                            'position': 'absolute', 
+                            'top' : '0', 
+                            'left' : '0',
+                            'padding' : '0',
+                            'z-index' : '9999'})
+                        .width(viewportWidth - 20)
+                        .height(viewportHeight - 20);
+                    $('#map #sourcemap-map-view')
+                        .height(viewportHeight)
+                        .css({ 'border' : 'none'});
+                    $('#sourcemap-dock').find('.control.fullscreen')
+                        .addClass('active')
+                }
+                else{
+                    // return to inline mode
+                    $('#map-container')
+                        .css({
+                            'position': 'static', 
+                            'top' : 'auto', 
+                            'padding' : '4',
+                            'left' : 'auto'
+                             })
+                        .width(1040)
+                        .height(560);
+                    $('#map #sourcemap-map-view')
+                        .height(560)
+                        .css({ 'border' : '4px solid white'});
+                    $('#sourcemap-dock').find('.control.fullscreen')
+                        .removeClass('active')
+                }
 
-	            }
-	        }
-	    });
-	}
+            }
+        }
+    });
     return this;
 }
 
@@ -335,7 +328,6 @@ Sourcemap.Map.prototype.dockRemove = function(nm) {
 }
 
 Sourcemap.Map.prototype.initControls = function() {
-    // todo: select feature controls for vector layers
     var layers = [];
     for(var k in this.layers) layers.push(this.layers[k]);
     if(layers.length) {
@@ -352,26 +344,46 @@ Sourcemap.Map.prototype.initControls = function() {
                 "geometryTypes": ["OpenLayers.Geometry.Point", "OpenLayers.Geometry.MultiLineString"],
                 "onSelect": OpenLayers.Function.bind(
                     function(feature) {
-                        this.last_selected = feature.attributes;
+                        console.log('sel');
                         this.broadcast('map:feature_selected', this, feature); 
                     }, 
                     this
                 ),
                 "onUnselect": OpenLayers.Function.bind(
                     function(feature) {
+                        console.log('unsel');
                         this.broadcast('map:feature_unselected', this, feature); 
                     },
                     this
                 ),
-                "clickoutFeature": OpenLayers.Function.bind(
-                    function(feature) {
-                        this.controls.select.unselectAll();
-                        this.broadcast('map:feature_clickout', this, feature); 
-                    }, 
-                    this
-                )
+                "toggle": true
             })
         );
+
+        // wrap select control select method to look for features
+        // after map redraw...
+        var sf = this.controls.select.select;
+        this.controls.select.select = $.proxy(function(f) {
+            if(!f.layer && f.attributes && f.attributes.ref) {
+                var nf = false;
+                var ref = f.attributes.ref;
+                if(ref instanceof Sourcemap.Stop) {
+                    nf = this.stopFeature(ref);
+                } else if(ref instanceof Sourcemap.Hop) {
+                    nf = this.hopFeature(hop);
+                }
+                if(nf) f = nf;
+            }
+            $.proxy(sf, this.controls.select)(f);
+        }, this);
+
+        // wrap clickoutFeature
+        var cof = this.controls.select.clickoutFeature;
+        this.controls.select.callbacks.clickout = $.proxy(function(f) {
+            console.log('clickout');
+            $.proxy(cof, this.controls.select)(f);
+        }, this);
+
         $(document).bind(['map:layer_added', 'map:layer_removed'], function(e, map, label, layer) {
             var layers = [];
             for(var k in map.layers) layers.push(map.layers[k]);
@@ -567,7 +579,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
         this.map.zoomToExtent(this.map.getMaxExtent());
     }*/
     this.broadcast('map:supplychain_mapped', this, supplychain);
-    if(reselect) this.reselect();
 }
 
 Sourcemap.Map.prototype.mapStop = function(stop, scid) {
@@ -626,9 +637,9 @@ Sourcemap.Map.prototype.eraseStop = function(scid, stid) {
 
 Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
     if(scid && !stid && (scid instanceof Sourcemap.Stop)) {
-        stid = scid;
-        scid = stid.supplychain_id;
-        stid = stid.instance_id;
+        var st = scid;
+        scid = st.supplychain_id;
+        stid = st.instance_id;
     }
     var stl = this.getStopLayer(scid);
     var f = false;
@@ -994,22 +1005,16 @@ Sourcemap.Map.prototype.redraw = function() {
     return this;
 }
 
-Sourcemap.Map.prototype.reselect = function() {
-    if(this.controls.select && this.last_selected) {
-        var scid = this.last_selected.supplychain_instance_id;
-        var stid = false;
-        var hid = false;
-        var f = null;
-        if(this.last_selected.stop_instance_id) {
-            stid = this.last_selected.stop_instance_id;
-            f = this.stopFeature(scid, stid);
-        } else {
-            hid = this.last_selected.hop_instance_id;
-            f = this.hopFeature(scid, hid);
+Sourcemap.Map.prototype.getSelected = function() {
+    var s = [];
+    for(var i=0; i<this.map.layers.length; i++) {
+        var l = this.map.layers[i];
+        if(l instanceof OpenLayers.Layer.Vector) {
+            if(l.selectedFeatures instanceof Array)
+                s = s.concat(l.selectedFeatures.slice(0));
         }
-        this.controls.select.select(f);
-        
     }
+    return s;
 }
 
 Sourcemap.Cluster = function(distance, threshold, map) {

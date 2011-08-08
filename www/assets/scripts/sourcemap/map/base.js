@@ -168,8 +168,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
-        this.last_selected = null;
-        this.hideDialog();
+        //this.hideDialog();
     }, this));
 }
 
@@ -237,6 +236,7 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
 }
 
 Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
+    console.log('showdlg');
     if(this.dialog) {
         this.initDialog();
         $(this.dialog_content).html(mkup);
@@ -248,12 +248,13 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 }
 
 Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
+    console.log('hidedlg');
     if(this.dialog) {
         $(this.dialog).hide();
         this.map.controls["select"].unselectAll();
         if(!notrigger) {
             Sourcemap.broadcast('sourcemap-base-dialog-close', 
-                this, $(this.dialog).find("form").serializeArray()
+                this, this.map.editor ? $(this.dialog).find("form").serializeArray() : false
             );
         }
         this.dialog_content.empty();
@@ -568,10 +569,8 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
-    this.map.last_selected = null;
     this.map.controls.select.unselectAll();
     
-    this.map.controls["select"].unselectAll();        
     switch(viz_nm) {
         //case "energy":
         //    break;

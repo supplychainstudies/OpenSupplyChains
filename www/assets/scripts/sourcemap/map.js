@@ -188,19 +188,6 @@ Sourcemap.Map.prototype.initDock = function() {
     this.dock_element = $('<div id="sourcemap-dock"></div>');
     $(this.map.div).css("position", "relative").append(
         this.dock_element.append(this.dock_outerwrap.append(this.dock_content)));
-    this.dockAdd('zoomin', {
-        "title": 'Zoom In',
-        "panel": 'zoom',
-        "callbacks": {
-            "click": function() {
-                var s = this.getSelected();
-                if(s.length && s[0].cluster_instance_id) {
-                    this.controls.select.unselectAll();
-                }
-                this.map.zoomIn();
-            }
-        }
-    });
     this.dockAdd('zoomout', {
         "title": 'Zoom Out',
         "panel": 'zoom',
@@ -214,6 +201,20 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
+    this.dockAdd('zoomin', {
+        "title": 'Zoom In',
+        "panel": 'zoom',
+        "callbacks": {
+            "click": function() {
+                var s = this.getSelected();
+                if(s.length && s[0].cluster_instance_id) {
+                    this.controls.select.unselectAll();
+                }
+                this.map.zoomIn();
+            }
+        }
+    });
+    /*
     this.dockAdd('fullscreen', {
         "title": 'Fullscreen',
         "panel": 'fullscreen',
@@ -259,6 +260,7 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
+    */
     return this;
 }
 

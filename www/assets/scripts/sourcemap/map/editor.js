@@ -172,6 +172,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
+            this.map_view.hideDialog();
             this.map.controls.select.unselectAll();
             this.map.last_selected = null;
             if(ftr.cluster) this.map.controls.stopdrag.cancel();
@@ -361,6 +362,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.params = {"name": ''};
         this.showCatalog(this);
     }, this));
+
+    $(this.map_view.dialog).find('input,select,textarea').bind('change', $.proxy(function(e) {
+        console.log('change.');
+        var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
+        var vals = {};
+        for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
+        this.editor.updateFeature(ref, vals);
+    }, {"ref": ref, "editor": this}));
 
     if(ref instanceof Sourcemap.Stop) {
         // load impact calculator for stops

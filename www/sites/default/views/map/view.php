@@ -10,8 +10,10 @@
         <?php if($can_edit): ?>
             <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> Add Weight
             <input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" /> Add Carbon   
+            <?php /*
             <input type="checkbox" <?= $supplychain_water; ?> id="impact-use-water" /> Add Water            
-         
+            */ ?>
+
             <hr />            
         <?php endif; ?>
         <div class="container">

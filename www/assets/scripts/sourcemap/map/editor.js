@@ -20,6 +20,9 @@ Sourcemap.Map.Editor.prototype.broadcast = function() {
 }
 
 Sourcemap.Map.Editor.prototype.init = function() {
+
+    // stack for deferred save operations
+    this.deferred_saves = [];
     
     // add symbol for 'connecting'
     if(!OpenLayers.Renderer.symbol.stareight)
@@ -76,22 +79,23 @@ Sourcemap.Map.Editor.prototype.init = function() {
             sc.addHop(new_hop);
             this.map.mapHop(new_hop, sc.instance_id);
             this.connect_from = false;
-            Sourcemap.broadcast('supplychain-updated', sc);
-            this.map.controls.select.unselectAll();
             // @todo review if the selection of the hop is ideal
             this.connect_from = false;
             // if you want to uncomment this, figure out why it breaks things.
             //this.map.controls.select.select(this.map.hopFeature(new_hop));
-        } 
-        else if(ftr.attributes.hop_instance_id) {
+            Sourcemap.broadcast('supplychain-updated', sc);
+        } else if(ftr.attributes.hop_instance_id) {
             var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
             var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
             this.showEdit(ftr);
-        }
-        else if(ftr.attributes.stop_instance_id) {
+        } else if(ftr.attributes.stop_instance_id) {
             var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
             var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
             this.showEdit(ftr);
+        }
+        if(this.deferred_saves.length && supplychain instanceof Sourcemap.Supplychain) {
+            this.deferred_saves = [];
+            Sourcemap.broadcast('supplychain-updated', supplychain, true);
         }
     }, this));
 
@@ -102,7 +106,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
         "panel": "edit",
         "callbacks": {
             "click": $.proxy(function() {
-                this.map.last_selected = null;
                 this.map.controls.select.unselectAll();
                 
                 // make a suitable geometry
@@ -132,7 +135,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
                         
                         this.stop.attributes.stop_instance_id = this.stop.instance_id;
                         this.stop.attributes.supplychain_instance_id = this.stop.supplychain_id;
-                        this.map.last_selected = new_stop.attributes;
                         this.map.controls.select.select(this.map.stopFeature(sc.instance_id, this.stop.instance_id));
                         
      
@@ -156,7 +158,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             for(var i=0; i<valsa.length; i++) {
                 vals[valsa[i].name] = valsa[i].value;
             }
-            this.updateFeature(this.editing, vals);
+            this.updateFeature(this.editing, vals, true);
         }
         this.editing = null;
     }, this));
@@ -172,9 +174,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
-            this.map_view.hideDialog();
-            this.map.controls.select.unselectAll();
-            this.map.last_selected = null;
             if(ftr.cluster) this.map.controls.stopdrag.cancel();
         }, this),
         "onDrag": $.proxy(function(ftr, px) {
@@ -364,7 +363,6 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     }, this));
 
     $(this.map_view.dialog).find('input,select,textarea').bind('change', $.proxy(function(e) {
-        console.log('change.');
         var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
         var vals = {};
         for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
@@ -406,6 +404,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                     $('#edit-hop-footprint input[name="co2e"]') 
                     .val($(this + ':selected').val());
                     console.log($(this).parent()); 
+                    console.log('alex? thought you were on this.');
                 })
             );  
 
@@ -449,16 +448,17 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         // Edit should be disabled at this point
         // todo: maybe move this down and add a spinner
         // or disable the map/editor?
-        this.editor.map_view.hideDialog();            
+        //this.editor.map_view.hideDialog();            
         
     }
 
-    $(this.map_view.dialog).find('.close').click($.proxy(cb, s));
+    //$(this.map_view.dialog).find('.close').click($.proxy(cb, s));
 }
 
-Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
+Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, defer_save) {
     var geocoding = false;
     var vals = updated_vals || {};
+    var defer = defer_save;
     for(var k in vals) {
         var val = vals[k];
         if((ref instanceof Sourcemap.Stop) && k === "address" && (val != ref.getAttr("address", false))) {
@@ -485,7 +485,12 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
                 if(this.ref) {
                     this.ref.setAttr(k, val);
                 }
-                this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
+                //this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
+                if(defer) {
+                    this.editor.deferred_saves.push(this.editor.map.supplychains[this.stop.supplychain_id]);
+                } else {
+                    this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
+                }
             }, {"stop": ref, "editor": this}));
         } else {
             ref.setAttr(k, val);
@@ -493,8 +498,11 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
     }
     if(!geocoding) {
         // for just-deleted stops
-        if(ref && ref.supplychain_id)
+        if(defer) {
+            this.deferred_saves.push(this.map.supplychains[ref.supplychain_id]);
+        } else if(ref && ref.supplychain_id) {
             this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id]);
+        }
     }
 }
 

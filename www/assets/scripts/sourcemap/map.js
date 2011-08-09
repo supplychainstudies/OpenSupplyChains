@@ -24,7 +24,7 @@ Sourcemap.Map.prototype.defaults = {
     "basetileset": "cloudmade", "tileswitcher": true, 
     "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
-    "default_feature_color": "#35a297", "clustering": false,
+    "default_feature_color": "#35a297", "clustering": true,
     "default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
     "stop_style": {
         "default": {
@@ -1016,12 +1016,13 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
         if(f.attributes.color) {
             fc = (new Sourcemap.Color()).fromHex(f.attributes.color);
         } else continue;
-        c.r += fc.r; c.g = fc.g; c.b = fc.b;
+        c.r += fc.r; c.g += fc.g; c.b += fc.b;
     }
-
+	
     c.r /= cluster.cluster.length;
     c.g /= cluster.cluster.length;
     c.b /= cluster.cluster.length;
+
     cluster.attributes.color = c.toString();
 
     cluster.attributes.count += 1;

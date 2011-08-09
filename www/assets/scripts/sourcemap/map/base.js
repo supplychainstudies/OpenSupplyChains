@@ -526,7 +526,6 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 f.attributes.fsize = fsize+"px";   
                 f.attributes.fcolor = this.color;             
                 f.attributes.yoffset = -1*(sval+fsize);
-
                 var unit = "kg";
                 if(attr_nm === "water") { unit = "L"; }                
                 var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   

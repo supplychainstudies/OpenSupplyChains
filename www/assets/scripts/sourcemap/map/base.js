@@ -640,7 +640,7 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
 Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {	
 	//@todo, reed will make this better
 	// add filter controls to dock
-    if(sc.attributes.sm_ui_weight) {	
+    if(sc.attributes["sm:ui:weight"]) {	
 		if(this.map.dockControlEl('weight').length == 0) {
 	        this.map.dockAdd('weight', {
 	            "title": 'Weight',
@@ -658,7 +658,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
 		this.map.dockRemove('weight');
 	}
 
-    if(sc.attributes.sm_ui_co2e) {
+    if(sc.attributes["sm:ui:co2e"]) {
 		if(this.map.dockControlEl('co2e').length == 0) {	
 	        this.map.dockAdd('co2e', {
 	            "title": 'Carbon',
@@ -676,7 +676,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
 		this.map.dockRemove('co2e');
 	}
 
-    if(sc.attributes.sm_ui_water) {   
+    if(sc.attributes["sm:ui:water"]) {   
 		if(this.map.dockControlEl('water').length == 0) {	
 	        this.map.dockAdd('water', {
 	            "title": 'Water',

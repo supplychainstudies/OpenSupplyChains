@@ -214,10 +214,10 @@ Sourcemap.Map.Editor.prototype.init = function() {
         }
 		
 		if(co2e) { 
-			sc.attributes.sm_ui_co2e = sc.attributes.sm_ui_weight = true; 
+			sc.attributes["sm:ui:co2e"] = sc.attributes["sm:ui:weight"] = true; 
 			$("#impact-use-weight").attr("checked", "checked");
 		} 
-		else { delete sc.attributes.sm_ui_co2e; }
+		else { delete sc.attributes["sm:ui:co2e"]; }
 		
 		this.map_view.updateFilterDisplay(sc);
 		Sourcemap.broadcast('supplychain-updated', sc);
@@ -231,8 +231,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
             break;
         }
 		
-		if(weight) { sc.attributes.sm_ui_weight = true } 
-		else { delete sc.attributes.sm_ui_weight; }
+		if(weight) { sc.attributes["sm:ui:weight"] = true } 
+		else { delete sc.attributes["sm:ui:weight"]; }
 		
 		this.map_view.updateFilterDisplay(sc);
 		Sourcemap.broadcast('supplychain-updated', sc);
@@ -247,10 +247,10 @@ Sourcemap.Map.Editor.prototype.init = function() {
         }
 
 		if(water) { 
-			sc.attributes.sm_ui_water = sc.attributes.sm_ui_weight = true; 
+			sc.attributes["sm:ui:water"] = sc.attributes["sm:ui:weight"] = true; 
 			$("#impact-use-weight").attr("checked", "checked");
 		} 
-		else { delete sc.attributes.sm_ui_water; }
+		else { delete sc.attributes["sm:ui:water"]; }
 
 		this.map_view.updateFilterDisplay(sc);
 		Sourcemap.broadcast('supplychain-updated', sc);

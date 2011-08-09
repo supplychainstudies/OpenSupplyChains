@@ -27,29 +27,29 @@ Sourcemap.Map.Base.prototype.defaults = {
     "viz_attr_map": {
         "weight": function(st) {
             var val = 0;
-            var qty = parseInt(st.getAttr("qty", 0));
-            var fac = parseInt(st.getAttr("weight", 0));
+            var qty = parseFloat(st.getAttr("qty", 0));
+            var fac = parseFloat(st.getAttr("weight", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
             return val;
         },
         "water": function(st) {
             var val = 0;
-            var qty = parseInt(st.getAttr("qty", 0));
+            var qty = parseFloat(st.getAttr("qty", 0));
             if(st instanceof Sourcemap.Hop) {
                 qty = parseFloat(st.attributes.distance);
             }
-            var fac = parseInt(st.getAttr("water", 0));
+            var fac = parseFloat(st.getAttr("water", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
             return val;
         }, 
         "co2e": function(st) {
             var val = 0;
 
-            var qty = parseInt(st.getAttr("qty", 0));
+            var qty = parseFloat(st.getAttr("qty", 0));
             if(st instanceof Sourcemap.Hop) {
                 qty = parseFloat(st.attributes.distance);
             }
-            var fac = parseInt(st.getAttr("co2e", 0));
+            var fac = parseFloat(st.getAttr("co2e", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
             return val;
         }

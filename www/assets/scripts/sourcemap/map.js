@@ -1004,7 +1004,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     return cluster;
 }
 Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
-    
+   
     // add
     cluster.cluster.push(feature);
     

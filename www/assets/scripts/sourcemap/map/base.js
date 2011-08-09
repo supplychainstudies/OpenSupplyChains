@@ -102,6 +102,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 	}, this));
     $(this.map.map.div).css("position", "relative");
 
+	// @todod check this update punch
     Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
         if(value === undefined || value === null) {
             var range = this.calcMetricRange(metric);
@@ -110,8 +111,10 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         var unit = "kg";
         if(metric === "water") unit = "L";
         var scaled = Sourcemap.Units.scale_unit_value(value, unit, 2);
+
         this.map.dockControlEl(metric).find('.value').text(scaled.value);
         this.map.dockControlEl(metric).find('.unit').text(scaled.unit);
+		
     }, this));
 
 }
@@ -121,6 +124,8 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
         // todo: do calculations here
+		this.updateFilterDisplay(sc);
+
         for(var vi=0; vi<this.options.visualizations.length; vi++) {
             var v = this.options.visualizations[vi];
             var range = null;
@@ -141,7 +146,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             }
             Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
-		this.updateFilterDisplay(sc);
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
@@ -636,50 +640,56 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
 Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {	
 	//@todo, reed will make this better
 	// add filter controls to dock
-    if(sc.attributes.sm_ui_weight) {
-        this.map.dockAdd('weight', {
-            "title": 'Weight',
-            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span>",
-            "toggle": true,
-            "panel": 'filter',
-            "callbacks": {
-                "click": $.proxy(function() {
-                    this.toggleVisualization("weight");
-                }, this)
-            }
-        });
+    if(sc.attributes.sm_ui_weight) {	
+		if(this.map.dockControlEl('weight').length == 0) {
+	        this.map.dockAdd('weight', {
+	            "title": 'Weight',
+	            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span>",
+	            "toggle": true,
+	            "panel": 'filter',
+	            "callbacks": {
+	                "click": $.proxy(function() {
+	                    this.toggleVisualization("weight");
+	                }, this)
+	            }
+	        });
+		}
 	} else {
 		this.map.dockRemove('weight');
 	}
 
     if(sc.attributes.sm_ui_co2e) {
-        this.map.dockAdd('co2e', {
-            "title": 'Carbon',
-            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
-            "toggle": true,
-            "panel": 'filter',
-            "callbacks": {
-                "click": $.proxy(function() {
-                    this.toggleVisualization("co2e");
-                }, this)
-            }
-        });
+		if(this.map.dockControlEl('co2e').length == 0) {	
+	        this.map.dockAdd('co2e', {
+	            "title": 'Carbon',
+	            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
+	            "toggle": true,
+	            "panel": 'filter',
+	            "callbacks": {
+	                "click": $.proxy(function() {
+	                    this.toggleVisualization("co2e");
+	                }, this)
+	            }
+	        });
+		}
     } else {
 		this.map.dockRemove('co2e');
 	}
 
     if(sc.attributes.sm_ui_water) {   
-        this.map.dockAdd('water', {
-            "title": 'Water',
-            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
-            "toggle": true,
-            "panel": 'filter',
-            "callbacks": {
-                "click": $.proxy(function() {
-                    this.toggleVisualization("water");
-                }, this)
-            }
-        });
+		if(this.map.dockControlEl('water').length == 0) {	
+	        this.map.dockAdd('water', {
+	            "title": 'Water',
+	            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
+	            "toggle": true,
+	            "panel": 'filter',
+	            "callbacks": {
+	                "click": $.proxy(function() {
+	                    this.toggleVisualization("water");
+	                }, this)
+	            }
+	        });
+		}
     } else {
 		this.map.dockRemove('water');
 	}

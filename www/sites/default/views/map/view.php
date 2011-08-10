@@ -45,7 +45,7 @@
     </div>
     
     <?php if($can_edit): ?>
-        <a href="">Edit</a>
+        <a href="edit/<?= $supplychain_id; ?>">Edit</a>
     <?php endif; ?>
     <h1><?= $supplychain_name ?></h1>
     <p class="description"><?= $supplychain_desc ?></p>

@@ -69,16 +69,24 @@
         color: #888888;
  
         h2.title {
+			position:relative;
             font-size: 22px;
             color: #454545;
             margin-top:0;
             padding: 5px 5px 0 10px;
-            background:url("../images/dot.png") 0 10px no-repeat;
             padding-left:28px;
             &.hop {
                 background:url("../images/chevron.png") 0 10px no-repeat;
                 padding-left:28px;
             }
+			.dot {
+				height:12px;
+				width:12px;
+				.rounded(40px);
+				border:4px solid #fff;
+				position:absolute;
+				top:10px; left:0;
+			}
         }
         h3.placename {
             font-style: italic;
@@ -128,7 +136,6 @@
             padding:0; margin:0 -10px 0 -10px;
             font-size: 14px;
             font-weight: bold;
-            overflow:auto;
             text-align:center;
             color: @link-color;
             list-style:none;
@@ -180,8 +187,8 @@
             background: url("../images/close-grey.png") right center no-repeat;
             height: 27px; width: 27px;
             position: absolute;
-            top: 8px;
-            right: 10px;
+            top: 4px;
+            right: 9px;
             a {
                 display: block;
                 width: 100%;
@@ -221,8 +228,7 @@
                 cursor:pointer;
                 font-size:12px;
                 font-weight: bold;
-                padding: 3px 12px;
-                border: 1px solid #666;
+                padding: 5px 14px;
                 .gradient(#cfcfcf,#e6e6e6);
                 .rounded(4px);
                 .box_shadow();
@@ -250,21 +256,31 @@
         }
 
         .sourcemap-form{
-            div{
+            .sourcemap-form-textbox, .sourcemap-form-textarea {
                 width: 277px;
-                &#impact-result{
-                    border: none;
-                    background: none;
-                    .box_shadow_inset(0, 0, 0);
-                    padding: 10px;
-                    font-size: 22px;
-                    color: #999;
-                }
+            }
+            #impact-result{
+                border: none;
+                background: none;
+                padding: 10px 0;
+                font-size: 22px;
+                color: #999;
             }
             select{
                 width: 277px;
-                border: 0;
-            }
+				border: 1px solid #999;
+			   	padding: 0.5em;
+				color:#999;
+				margin:0.5em 0;
+			   	font-size: 12px;
+				width:100%;
+			   	line-height: 1.2em;
+			   	background: #fff;
+			    .gradient(#ccc, #fff);			
+			   	-webkit-appearance: none;
+				outline:none;
+				.rounded(4px);
+			}
         }
     }
 }
@@ -443,13 +459,13 @@
         outline:none;
     }
     h2.title {
-         border: 1px dashed #ddd;
+        .box_shadow_inset(2px,2px,8px,rgba(0,0,0,.1));
          input {
              width:310px;
          }
      }
     h3.placename {
-        border: 1px dashed #ddd;
+        .box_shadow_inset(2px,2px,8px,rgba(0,0,0,.1));
         input {
             width:330px;
             margin-left:6px;
@@ -464,11 +480,63 @@
     }
     #edit-description {
         textarea {
-            height:180px;
-            width:98%;
-            border: 1% solid rgb(162,162,162);            
+            height:175px;
+            width:320px;
+			.box_shadow_inset(0px,0px,4px,rgba(0,0,0,.2));
+			padding:10px;
+			font-size:inherit;
+			color:#999;
+	        border:none;
         }
     }
+	#edit-stop-footprint, #edit-hop-footprint {
+		fieldset {
+			padding:0;
+		}
+		.footprint-section {
+			background:none;
+			float:left;
+			width:70px;
+			margin-right:5px;
+		}
+		.sourcemap-form-textbox {
+			width:50px !important;
+			input {
+				font-size:inherit;
+				color:#999;
+			}
+		}
+		label {
+			font-size:0.8em;
+		}
+	}
+	#edit-media {
+		fieldset {
+			margin-top:5px;
+			padding:0;
+		}
+		select {
+			width:100px !important;
+			float:left;
+			padding:10px !important;
+			margin:0 10px 0 0 !important;
+		}
+		.sourcemap-form-textbox {
+			float:left;
+			width:210px !important;
+			clear:none !important;
+		}
+		.media-preview {
+			margin-top:10px;
+			.rounded(8px);
+			width:330px;
+			height:125px;
+			overflow:hidden;
+			img { 
+				width:330px;
+			}			
+		}
+	}
     fieldset {
         border:none;    
         label { }

@@ -317,8 +317,8 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
             }, this));
                 
         }, 
-        {"stop": stop, "supplychain": sc, "magic_word": magic_word, 'base': this},
-        {"base": this, "magic_word": magic_word, "stop": stop, "supplychain": sc},
+        {"stop": stop, "supplychain": sc, "magic_word": magic_word, 'base': this, "feature":f},
+        {"base": this, "magic_word": magic_word, "stop": stop, "supplychain": sc, "feature": f},
         this.options.tpl_base_path
     );
     

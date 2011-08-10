@@ -16,9 +16,8 @@
                         An Unnamed Sourcemap
                     <?php endif; ?>
                 </a></h3>
-            <h4 class="preview-author">By <a href="user/<?= $item->owner->id; ?>"><?= (isset($item->owner->name)) ? HTML::chars($item->owner->name) : "Unknown Owner"?></a>,
+            <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?= (isset($item->owner->name)) ? HTML::chars($item->owner->name) : "Unknown Owner"?></a>,
             <?= date("F j, Y", $item->created) ?></h4>
-            <?php if(isset($item->teaser)): ?><p class="preview-teaser"><?= HTML::chars($item->teaser) ?></p><?php endif; ?>
         </div>
         <?php //limit to the first two ?>
         <?php if (++$c == 2) break; ?>

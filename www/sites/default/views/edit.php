@@ -1,5 +1,5 @@
 <div id="edit-map" class="container">
-    <h1>Edit your Sourcemap <span>"<?= $supplychain->attributes->name ?>"</span></h1>
+    <h1>Editing <?= $supplychain->attributes->title ?></span></h1>
     <div class="edit-map-form">
         <?= $form ?>
     </div>
@@ -22,9 +22,8 @@
                             An Unnamed Sourcemap
                         <?php endif; ?>
                     </a></h3>
-                <h4 class="preview-author">By <a href="user/<?= $supplychain->owner->id; ?>"><?= (isset($item->owner->name)) ? HTML::chars($item->owner->name) : "Unknown Owner"?></a>,
+                <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>"><?= (isset($supplychain->owner->name)) ? HTML::chars($supplychain->owner->name) : "Unknown Owner"?></a>,
                 <?= date("F j, Y", $supplychain->created) ?></h4>
-                <?php if(isset($supplychain->teaser)): ?><p class="preview-teaser"><?= HTML::chars($item->teaser) ?></p><?php endif; ?>
             </div>
         </div>
     </div>

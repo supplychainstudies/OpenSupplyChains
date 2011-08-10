@@ -1,4 +1,4 @@
-<h2 class="title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 30, true) %></h2>
+<h2 class="title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 30, true) %><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
 <% if(this.stop.attributes.address != undefined) { %>
         <h3 class="placename"><%= _S.ttrunc(_S.htesc(this.stop.attributes.address), 50, true) %></h3>
 <% } %>
@@ -13,11 +13,11 @@
         .wrap("<div></div>").parent().html() %>
 <% } %>
 
-<% if(this.stop.getAttr("qty", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("water", false)) { %>
+<% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false) || this.supplychain.getAttr("sm:ui:water", false)) { %>
 <ul id="dialog-footprint">
-    <% if(this.stop.getAttr("qty", false)) { %><li class="weight"><%= this.stop.getAttr("qty", "-") %> <%= this.stop.getAttr("unit", "ea") %></li><% } %>
-    <% if(this.stop.getAttr("co2e", false)) { %><li class="co2e"><%= this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0) %> kg CO2e</li> <% } %>
-    <% if(this.stop.getAttr("water", false)) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li> <% } %>
+    <% if(this.stop.getAttr("qty", false) && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="weight"><%= this.stop.getAttr("qty", "-") %> <%= this.stop.getAttr("unit", "ea") %></li><% } %>
+    <% if(this.stop.getAttr("co2e", false) && this.supplychain.getAttr("sm:ui:co2e", false)) { %><li class="co2e"><%= this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0) %> kg CO2e</li> <% } %>
+    <% if(this.stop.getAttr("water", false) && this.supplychain.getAttr("sm:ui:water", false)) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li> <% } %>
 </ul>
 <% } %>
 

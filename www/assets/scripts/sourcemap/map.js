@@ -318,8 +318,89 @@ Sourcemap.Map.prototype.initControls = function() {
         // wrap select control select method to look for features
         // after map redraw...
         var sf = this.controls.select.select;
+        var _that = this;
+        this.controls.select.handlers.feature.triggerCallback = function(type,mode,args) {
+            OpenLayers.Handler.Feature.prototype.triggerCallback.call(this, type, mode, args);
+        }
+        this.controls.select.handlers.feature.handle = function(evt) {
+            if(this.feature && !this.feature.layer) {
+                var nf = false;
+                var ref = this.feature.attributes.ref;
+                if(ref instanceof Sourcemap.Stop) {
+                    nf = _that.stopFeature(ref);
+                } else if(ref instanceof Sourcemap.Hop) {
+                    nf = _that.hopFeature(hop);
+                }
+                if(nf) {
+                    this.feature = nf;
+                } else nf = null;
+            }
+            if(this.lastFeature && !this.lastFeature.layer) {
+                var lf = false;
+                var ref = this.lastFeature.attributes.ref;
+                if(ref instanceof Sourcemap.Stop) {
+                    lf = _that.stopFeature(ref);
+                } else if(ref instanceof Sourcemap.Hop) {
+                    lf = _that.hopFeature(hop);
+                }
+                if(lf) {
+                    this.lastFeature = lf;
+                } else lf = null;
+
+            }
+            var handled = OpenLayers.Handler.Feature.prototype.handle.call(this, evt);
+            if(this.feature && !this.feature.layer) {
+                var nf = false;
+                var ref = this.feature.attributes.ref;
+                if(ref instanceof Sourcemap.Stop) {
+                    nf = _that.stopFeature(ref);
+                } else if(ref instanceof Sourcemap.Hop) {
+                    nf = _that.hopFeature(hop);
+                }
+                if(nf) {
+                    this.feature = nf;
+                } else nf = null;
+            }
+            if(this.lastFeature && !this.lastFeature.layer) {
+                var lf = false;
+                var ref = this.lastFeature.attributes.ref;
+                if(ref instanceof Sourcemap.Stop) {
+                    lf = _that.stopFeature(ref);
+                } else if(ref instanceof Sourcemap.Hop) {
+                    lf = _that.hopFeature(hop);
+                }
+                if(lf) {
+                    this.lastFeature = lf;
+                } else lf = null;
+
+            }
+            return handled;
+        }
         this.controls.select.select = $.proxy(function(f) {
-            if(!f.layer && f.attributes && f.attributes.ref) {
+            var sf = this.controls.select;
+            var nf = false;
+            var ref = f.attributes.ref;
+            if(ref instanceof Sourcemap.Stop) {
+                nf = this.stopFeature(ref);
+            } else if(ref instanceof Sourcemap.Hop) {
+                nf = this.hopFeature(hop);
+            }
+            if(nf) {
+                var sidx = nf.layer.selectedFeatures.indexOf(f);
+                if(sidx > -1) {
+                    nf.layer.selectedFeatures.splice(sidx,1);
+                }
+                f = nf;
+                $.proxy(OpenLayers.Control.SelectFeature.prototype.select, sf)(nf);
+            } else {
+                $.proxy(OpenLayers.Control.SelectFeature.prototype.select, sf)(f);
+            }
+        }, this);
+        this.controls.select.unselect = $.proxy(function(f) {
+            var sf = this.controls.select;
+            try {
+                $.proxy(OpenLayers.Control.SelectFeature.prototype.unselect, sf)(f);
+            } catch(e) {
                 var nf = false;
                 var ref = f.attributes.ref;
                 if(ref instanceof Sourcemap.Stop) {
@@ -327,9 +408,11 @@ Sourcemap.Map.prototype.initControls = function() {
                 } else if(ref instanceof Sourcemap.Hop) {
                     nf = this.hopFeature(hop);
                 }
-                if(nf) f = nf;
+                if(nf) {
+                    this.controls.select.handlers.feature.lastFeature = nf;
+                    this.controls.select.unselect(nf);
+                }
             }
-            $.proxy(sf, this.controls.select)(f);
         }, this);
 
         // wrap clickoutFeature

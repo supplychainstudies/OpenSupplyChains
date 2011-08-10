@@ -91,13 +91,18 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         }        
     });
 	Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
-	  	if(sc.stops.length && this.options.position == '0|0|0') {
-        	this.map.map.zoomToExtent(this.map.getDataExtent(), true);
+		var initpos = this.options.position.split("|");
+		var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
+	    p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
+
+	  	if(this.options.position == '0|0|0') {
+			if(sc.stops.length) {
+        		this.map.map.zoomToExtent(this.map.getDataExtent(), true);
+			} else {
+				this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
+			}
     	} else {
-			var initpos = this.options.position.split("|");
-			var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
-		    p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
-		    this.map.map.setCenter(p, initpos[2]);
+	 		this.map.map.setCenter(p, initpos[2]);
 		}
 	}, this));
     $(this.map.map.div).css("position", "relative");

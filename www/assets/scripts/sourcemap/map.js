@@ -533,9 +533,9 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
-    new_feature.attributes.size = Math.max(stop.getAttr("size", false), this.options.min_stop_size);
+    new_feature.attributes.size = Math.min(Math.max(stop.getAttr("size", this.options.default_stop_size), this.options.min_stop_size), this.options.max_stop_size);
     new_feature.attributes.fsize = fsize + "px";
-    new_feature.attributes.yoffset = -1*(Math.max(stop.getAttr("size", false), this.options.min_stop_size)+fsize);
+    new_feature.attributes.yoffset = -1*(Math.min(Math.max(stop.getAttr("size", this.options.default_stop_size), this.options.min_stop_size), this.options.max_stop_size)+fsize);
   
     var rand_color = this.options.default_feature_colors[0];
     new_feature.attributes.color = stop.getAttr("color", rand_color);

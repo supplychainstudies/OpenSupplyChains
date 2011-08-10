@@ -33,6 +33,9 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 if(isset($supplychain->attributes->title))
                     $form->field('title')->value($supplychain->attributes->title);
 
+                if(isset($supplychain->attributes->description))
+                    $form->field('description')->value($supplychain->attributes->description);
+
                 $form->field('tags')
                     ->add_class('tags');
                 if(isset($supplychain->attributes->tags))

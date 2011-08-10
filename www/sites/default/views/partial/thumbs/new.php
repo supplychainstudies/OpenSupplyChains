@@ -6,7 +6,7 @@ if ($data):
     $i = 0;
     foreach($results as $item):
         ?>
-        <div class="preview-map-item">
+saddsasds
             <div class="preview-badge">
             <a href="/map/view/<?php print $item->id; ?>">
                 <img class="preview-map small" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
@@ -19,7 +19,7 @@ if ($data):
             </h4>
             <h4>
                 <div class="preview-author">
-                    By <a href="user/<?php $item->owner->id; ?>">
+                    <a href="user/<?php $item->owner->id; ?>">
                         <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
                     <?php print date("F j, Y",$item->created);?>
                 </div>

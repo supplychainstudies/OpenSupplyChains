@@ -723,7 +723,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
             "color": hop.getAttr("color", rand_color),
-            "size": 6, "supplychain_instance_id": scid,
+			"width":2, "size": 4, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id, "ref": hop 
         });

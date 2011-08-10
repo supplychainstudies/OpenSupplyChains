@@ -207,17 +207,14 @@ Sourcemap.Map.Editor.prototype.init = function() {
             break;
         }
 		
-		if(co2e) { 
-			sc.attributes["sm:ui:co2e"] = sc.attributes["sm:ui:weight"] = true; 
-			$("#impact-use-weight").attr("checked", "checked");
-		} 
+		if(co2e) { sc.attributes["sm:ui:co2e"] = true; } 
 		else { delete sc.attributes["sm:ui:co2e"]; }
 		
 		this.map_view.updateFilterDisplay(sc);
 		Sourcemap.broadcast('supplychain-updated', sc);
 	}, this));
 	$("#impact-use-weight").change($.proxy(function(evt) {
-		var weight = $('#evt.target').is(':checked') ? true : false;
+		var weight = $(evt.target).is(':checked') ? true : false;
         // grab the first supplychain
         var sc = false;
         for(var k in this.map.supplychains) {
@@ -232,7 +229,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
 		Sourcemap.broadcast('supplychain-updated', sc);
 	}, this));
 	$("#impact-use-water").change($.proxy(function(evt) {
-		var water = $('#evt.target').is(':checked') ? true : false;
+		var water = $(evt.target).is(':checked') ? true : false;
         // grab the first supplychain
         var sc = false;
         for(var k in this.map.supplychains) {
@@ -240,10 +237,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             break;
         }
 
-		if(water) { 
-			sc.attributes["sm:ui:water"] = sc.attributes["sm:ui:weight"] = true; 
-			$("#impact-use-weight").attr("checked", "checked");
-		} 
+		if(water) { sc.attributes["sm:ui:water"] = true; } 
 		else { delete sc.attributes["sm:ui:water"]; }
 
 		this.map_view.updateFilterDisplay(sc);
@@ -355,6 +349,21 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.params = {"name": ''};
         this.showCatalog(this);
     }, this));
+	
+	$(this.map_view.dialog).find('#media-content-type').bind('change', $.proxy(function(e) {
+		var mediatype = $(e.target).val();
+		
+		$("#media-content-value").attr("name", mediatype);
+		$("#media-content-value").attr("value", ref.getAttr($(e.target).val(), ""));
+		if(mediatype == "youtube-url") {
+			var preview = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube-url").substr(31)+'/0.jpg" />';
+		} else {
+			var preview = "<div></div>";
+		}
+		$("#edit-media .media-preview").html(preview);
+		
+    }, {"ref": ref, "editor": this}));
+ 
 
     $(this.map_view.dialog).find('input,select,textarea').bind('change', $.proxy(function(e) {
         var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();

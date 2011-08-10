@@ -1,6 +1,6 @@
 <div id="stop-editor">
 <form>
-<h2 class="title"><input name="title" type="text" value="<%= this.attr["title"] %>" /></h2>
+<h2 class="title"><input name="title" type="text" value="<%= this.attr["title"] %>" /><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
 <h3 class="placename"><input name="address" type="text" value="<%= this.attr["address"] %>" /></h3>
 
 
@@ -22,28 +22,31 @@
         </div>
         <div id="edit-stop-footprint">
             <div class="sourcemap-form nopadding">
-                <fieldset>                    
-                    <label for="co2e">Quantity</label>
-                    <div class="sourcemap-form-textbox">
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 1)); %>
-                        <%= $("<div></div>").append(el).html() %>
-                    </div>
-
-
-                    <label for="co2e">Unit</label>
-                    <div class="sourcemap-form-textbox">
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("unit", "kg")); %>
-                        <%= $("<div></div>").append(el).html() %>
-                    </div>
-
-                    <div class="clear"></div>
+                <fieldset>           
+					<div class="footprint-section">        
+	                    <label for="co2e">Quantity</label>
+	                    <div class="sourcemap-form-textbox">
+	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 1)); %>
+	                        <%= $("<div></div>").append(el).html() %>
+	                    </div>
+					</div>
+					
+					<div class="footprint-section">
+	                    <label for="unit">Unit</label>
+	                    <div class="sourcemap-form-textbox">
+	                        <% el = $("<input></input>").attr("class", "footprint-unit").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("unit", "kg")); %>
+	                        <%= $("<div></div>").append(el).html() %>
+	                    </div>
+					</div>         
+					<div class="footprint-section">					           
+	                    <label for="co2e">Impact</label>
+	                    <div class="sourcemap-form-textbox">
+	                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e", 0)); %>
+	                        <%= $("<div></div>").append(el).html() %>
+	                    </div>
+					</div>
+               		<div class="clear"></div>
                     
-                    <label for="unit">Impact Factor</label>
-                    <div class="sourcemap-form-textbox">
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e", 0)); %>
-                        <%= $("<div></div>").append(el).html() %>
-                    </div>
-               
                     <div id="impact-result" class="result">0 kg C02e</div>
 
                 </fieldset>
@@ -52,19 +55,20 @@
         
         <div id="edit-media" class="sourcemap-form">
             <fieldset>
-
-                <label for="flickr-setid">Flickr Setid</label>
+				<% mediatype = this.ref.getAttr("youtube-url", false) ? "youtube-url" : "flickr-setid"; %>
+				<select id="media-content-type">
+					<option <% if(mediatype == "youtube-url") { %> "selected"<% } %> value="youtube-url">Youtube Url</option>				
+					<option <% if(mediatype == "flickr-setid") { %> "selected"<% } %> value="flickr-setid">Flickr Setid</option>
+				</select>
                 <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "flickr-setid").addClass("textbox"); el[0].setAttribute("value",this.attr["flickr-setid"] || ""); %>
+                    <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype)); %>
                     <%= $("<div></div>").append(el).html() %>
-                </div>
-                <label for="youtube-url">Youtube Url</label>
-                
-                <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("type", "text").attr("name", "youtube-url").addClass("textbox"); el[0].setAttribute("value",this.attr["youtube-url"] || ""); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>
-                http://img.youtube.com/vi/<insert-youtube-video-id-here>/0.jpg
+                </div>                
+                <div class="clear"></div>
+				
+                <div class="media-preview">
+					<img src="http://img.youtube.com/vi/<%= this.attr["youtube-url"].substr(31) %>/0.jpg" />
+				</div>
                 
             </fieldset>
         </div>

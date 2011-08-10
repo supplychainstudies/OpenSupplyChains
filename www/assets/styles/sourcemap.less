@@ -29,7 +29,13 @@
     background-image: -moz-linear-gradient(center bottom,@stop 0%,@start 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,@start),color-stop(1,@stop));
 }
-
+.backgroundsize(@w, @h) {
+	-o-background-size:@w @h; 
+	-webkit-background-size:@w @h;
+	-khtml-background-size:@w @h;
+	-moz-background-size:@w @h;
+	background-size:@w @h;	
+}
 .transparent(@opacity: .8){
   @ie-opacity: @opacity * 100;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@ie-opacity)";

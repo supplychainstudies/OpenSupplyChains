@@ -1,6 +1,4 @@
-<div>
-    <h2 id="detail-hop-title"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("title", "Hop")), 20, true) %>
-</div>
+<h2 class="title hop"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("title", "Hop")), 20, true) %></h2>
 
 <% if(this.hop.getAttr("description", false) && this.hop.getAttr("description").length > 1) { %>
     <div class="description"><%= _S.htesc(this.hop.getAttr("description")) %></div>
@@ -13,6 +11,14 @@
             .wrap("<div></div>").parent().html() %>
     </div>
 <% } %>
+<% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false)) { %>
+<ul id="dialog-footprint">
+    <% if(this.hop.getAttr("distance", false) && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="distance"><%= Math.round(this.hop.getAttr("distance", 0)) %> km</li><% } %>
+	<% if(this.hop.getAttr("distance", false) && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="weight"><%= this.hop.getAttr("weight", "-") %></li><% } %>
+    <% if(this.hop.getAttr("co2e", false) && this.supplychain.getAttr("sm:ui:co2e", false)) { %><li class="co2e"><%= this.hop.getAttr("co2e", 0) * this.hop.getAttr("distance", 0) * this.hop.getAttr("weight", 0) %> kg CO2e</li> <% } %>
+</ul>
+<% } %>
+
 <% if(this.magic_word === "youtube:link" || this.magic_word === "vimeo:link" || this.magic_word === "flickr:setid") { %>
 <div class="inset">
     <% if(this.magic_word === "youtube:link" && this.hop.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.popup_content.youtube.link(this.hop.getAttr("youtube:link")) %><% } %>
@@ -31,9 +37,3 @@
 </div>
 </div>
 <% } %>
-
-<div class="content-buttons">
-    <div class="weight">0 g</div>
-    <div class="co2e">0 g CO2e</div>
-    <div class="water">0 L H2O</div>
-</div>

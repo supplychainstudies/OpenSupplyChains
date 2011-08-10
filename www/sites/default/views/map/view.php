@@ -22,13 +22,7 @@
         <hr />
         <div id="qrcode-badge" class="container">
             <img class="qrcode" src="<?= $qrcode_url ?>" />
-            <div class="qrcode-about">
-                <p>You can share this physically with a qrcode.</p>
-                <p><em>Print the QR code, or use a QR enabled smart phone to return to this map.</em></p>
-            </div>
-            <div class="clear"></div>
         </div>
-        <hr />
         <div class="container links">
             <p>Link to this Sourcemap</p>
             <div>
@@ -39,6 +33,7 @@
                 <input value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
             </div>
         </div>
+		<div class="clear"></div>
         <hr />
                 
         <?= View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>

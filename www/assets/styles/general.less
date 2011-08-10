@@ -472,12 +472,13 @@ textarea:focus, input:focus { outline: none; }
     }
 }
 #qrcode-badge {
+	float:left;
     padding:0 5px 0 0;
     margin:5px 0;
     .qrcode {
         border: 1px solid #d9d9d9;
         float:left;
-        width:140px; height:140px;
+        width:70px; height:70px;
     }
     .qrcode-about {
         float:left;
@@ -488,18 +489,23 @@ textarea:focus, input:focus { outline: none; }
 }
 
 #sidebar.map-view{
+	#share-info {
+		text-decoration:none;
+	}
     .links{
+		float:left;
         margin-bottom: 20px;
+		padding-left:0 !important;
         p{ font-size: 12px;}
         div{
             background: url(../images/shadow.png) top repeat-x; 
             border: 1px solid #bfbfbf;
             .rounded(3px);
             input{
-                font-size: 15px;
-                width: 330px;
+                font-size: 12px;
+                width: 230px;
                 border: 0;
-                padding: 8px 20px;
+                padding: 8px 10px;
                 font-style: italic;    
             }
         }

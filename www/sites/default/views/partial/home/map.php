@@ -13,9 +13,7 @@
             </h4>
             <div class="clear"></div>
             
-            <?php if(isset($supplychain->attributes->teaser) && $supplychain->attributes->teaser): ?>
-                <span class="map-teaser"><?= HTML::chars($supplychain->attributes->teaser) ?></span>
-            <?php elseif(isset($supplychain->attributes->description) && $supplychain->attributes->description): ?>
+            <?php if(isset($supplychain->attributes->description) && $supplychain->attributes->description): ?>
                 <span class="map-teaser"><?= HTML::chars($supplychain->attributes->description) ?></span>
             <?php else: ?>
                 <span class="map-teaser">(No description yet)</span>
@@ -31,7 +29,7 @@
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
             <div class="map-controls-publish">
                 <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/>
-                <a id="map-publish-link" href="edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>">Publish Map</a>
+                <a id="map-publish-link">Publish Map</a>
             </div>
             <div class="map-controls-edit">
                 <a href="edit/<?= $supplychain->id ?>">Edit this map</a>

@@ -165,10 +165,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     var scid = k;
 
-    /*this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
+    this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
             if(ftr.cluster) this.map.controls.stopdrag.cancel();
-            this.map.controls.select.unselect(ftr);
         }, this),
         "onDrag": $.proxy(function(ftr, px) {
             if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
@@ -192,7 +191,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.handlers.feature.stopUp = false;
     this.map.controls.stopdrag.handlers.feature.stopClick = false;
 
-    this.map.controls.stopdrag.activate();*/
+    this.map.controls.stopdrag.activate();
     
     // load transport catalog
     this.loadTransportCatalog();

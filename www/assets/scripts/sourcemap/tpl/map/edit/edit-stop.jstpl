@@ -26,7 +26,7 @@
 					<div class="footprint-section">        
 	                    <label for="co2e">Quantity</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 1)); %>
+	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 0)); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
@@ -61,13 +61,15 @@
 					<option <% if(mediatype == "flickr-setid") { %> "selected"<% } %> value="flickr-setid">Flickr Setid</option>
 				</select>
                 <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype)); %>
+                    <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>
                     <%= $("<div></div>").append(el).html() %>
                 </div>                
                 <div class="clear"></div>
 				
                 <div class="media-preview">
+					<% if(this.attr["youtube-url"]) { %>
 					<img src="http://img.youtube.com/vi/<%= this.attr["youtube-url"].substr(31) %>/0.jpg" />
+					<% } %>
 				</div>
                 
             </fieldset>

@@ -20,7 +20,8 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
- 	"zoom_control": true, "stop_size": 12,
+ 	"zoom_control": true, "default_stop_size": 12,
+	"min_stop_size": 6, "max_stop_size": 48,
     "basetileset": "cloudmade", "tileswitcher": true, 
     "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
@@ -369,7 +370,7 @@ Sourcemap.Map.prototype.addLayer = function(label, layer) {
 
 Sourcemap.Map.prototype.addStopLayer = function(scid) {
     var sc = this.findSupplychain(scid);
-    this.cluster = new Sourcemap.Cluster({distance: this.options.stop_size, threshold: 2, map: this});
+    this.cluster = new Sourcemap.Cluster({distance: this.options.default_stop_size, threshold: 2, map: this});
     var strategies = this.options.clustering ? [this.cluster] : [];
     var slayer = new OpenLayers.Layer.Vector(
         "Stops - "+sc.getLabel(), {
@@ -528,14 +529,13 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     var new_feature = (new OpenLayers.Format.WKT()).read(stop.geometry);
     // copy attributes for starters.
     var fsize = 12;
-    
     new_feature.attributes = Sourcemap.deep_clone(stop.attributes);
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
-    new_feature.attributes.size = Math.max(stop.getAttr("size", false), this.options.stop_size);
+    new_feature.attributes.size = Math.max(stop.getAttr("size", false), this.options.min_stop_size);
     new_feature.attributes.fsize = fsize + "px";
-    new_feature.attributes.yoffset = -1*(Math.max(stop.getAttr("size", false), this.options.stop_size)+fsize);
+    new_feature.attributes.yoffset = -1*(Math.max(stop.getAttr("size", false), this.options.min_stop_size)+fsize);
   
     var rand_color = this.options.default_feature_colors[0];
     new_feature.attributes.color = stop.getAttr("color", rand_color);
@@ -968,7 +968,8 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var scid = feature.attributes.supplychain_instance_id;
     var center = feature.geometry.getBounds().getCenterLonLat();
     var cid = "cluster-"+feature.attributes.stop_instance_id;
-    var csize = this.map.options.stop_size;
+	// @todo aggregate size?
+    var csize = this.map.options.default_stop_size;
     var slabel = feature.attributes.title;
     var fsize = 12;
     slabel = 1;

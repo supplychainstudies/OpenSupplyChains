@@ -18,9 +18,8 @@ Sourcemap.Map.Base.prototype.defaults = {
     "banner": true, "watermark": true, "magic_word_sequence": [
         "youtube:link", "vimeo:link", "flickr:setid"
     ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
-    "tour_order_strategy": "upstream", "position": "0|0|0",
-    "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000",
-    "tour": false, "min_stop_size": 6, "max_stop_size": 48, "error_color": '#ff0000',
+    "tour_order_strategy": "upstream", "position": "0|0|0", "error_color": '#ff0000',
+    "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water"],
     "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"},
@@ -90,6 +89,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             //if(arrow) arrow.attributes.color = hop.getAttr('color', '#006633');
         }        
     });
+	
 	Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
 		var initpos = this.options.position.split("|");
 		var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
@@ -505,10 +505,10 @@ Sourcemap.Map.Base.prototype.decorateHopFeatures = function(dec_fn) {
 
 Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, smin, smax, active_color) {
     var active_color = active_color || this.options.attr_missing_color;
-    var smin = smin == undefined ? this.options.min_stop_size : parseInt(smin);
-    if(!smin) smin = this.options.min_stop_size;
-    var smax = smax == undefined ? this.options.max_stop_size : parseInt(smax);
-    if(!smax) smax = this.options.max_stop_size;
+    var smin = smin == undefined ? this.map.options.min_stop_size : parseInt(smin);
+    if(!smin) smin = this.map.options.min_stop_size;
+    var smax = smax == undefined ? this.map.options.max_stop_size : parseInt(smax);
+    if(!smax) smax = this.map.options.max_stop_size;
     var dec_fn = $.proxy(function(f, mb) {
         var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
         if(f.cluster) {

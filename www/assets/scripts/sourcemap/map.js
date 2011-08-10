@@ -20,7 +20,7 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
- 	"zoom_control": true, "stop_size": 14,
+ 	"zoom_control": true, "stop_size": 12,
     "basetileset": "cloudmade", "tileswitcher": true, 
     "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
@@ -151,7 +151,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 41413,
-        "minZoomLevel": 3, "maxZoomLevel": 12
+        "minZoomLevel": 2, "maxZoomLevel": 12
     }));
     
     var stylez = [ { featureType: "all", elementType: "all", stylers: [ { visibility: "simplified" }, { hue: "#000000" }, { saturation: -100 } ] } ];		
@@ -970,7 +970,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var cid = "cluster-"+feature.attributes.stop_instance_id;
     var csize = this.map.options.stop_size;
     var slabel = feature.attributes.title;
-    var fsize = 16;
+    var fsize = 12;
     slabel = 1;
     
     var stcolor = new Sourcemap.Color();    
@@ -985,9 +985,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
             "count": 1, 
             "size":csize,
             "fsize":fsize+"px",
-            "color":fcolor,
             "swidth":4,
-            "scolor":fcolor,
             "fcolor":fcolor,
             "label": slabel,
             "yoffset":0,          
@@ -1024,6 +1022,7 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
     c.b /= cluster.cluster.length;
 
     cluster.attributes.color = c.toString();
+    cluster.attributes.scolor = c.toString();
 
     cluster.attributes.count += 1;
     slabel = cluster.attributes.count;

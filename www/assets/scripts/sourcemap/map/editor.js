@@ -21,9 +21,6 @@ Sourcemap.Map.Editor.prototype.broadcast = function() {
 
 Sourcemap.Map.Editor.prototype.init = function() {
 
-    // stack for deferred save operations
-    this.deferred_saves = [];
-    
     // add symbol for 'connecting'
     if(!OpenLayers.Renderer.symbol.stareight)
         OpenLayers.Renderer.symbol.stareight = [
@@ -93,10 +90,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
             var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
             this.showEdit(ftr);
         }
-        if(this.deferred_saves.length && supplychain instanceof Sourcemap.Supplychain) {
-            this.deferred_saves = [];
-            Sourcemap.broadcast('supplychain-updated', supplychain, true);
-        }
     }, this));
 
     this.map.dockAdd('addstop', {
@@ -158,7 +151,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             for(var i=0; i<valsa.length; i++) {
                 vals[valsa[i].name] = valsa[i].value;
             }
-            this.updateFeature(this.editing, vals, true);
+            this.updateFeature(this.editing, vals);
         }
         this.editing = null;
     }, this));
@@ -172,9 +165,10 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     var scid = k;
 
-    this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
+    /*this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
             if(ftr.cluster) this.map.controls.stopdrag.cancel();
+            this.map.controls.select.unselect(ftr);
         }, this),
         "onDrag": $.proxy(function(ftr, px) {
             if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
@@ -186,6 +180,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 this.editor.moveStopToFeatureLoc(ftr, true, true);
                 this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
             }
+            this.editor.map.controls.select.select(ftr);
         }, {"editor": this})
     }));
 
@@ -197,7 +192,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.handlers.feature.stopUp = false;
     this.map.controls.stopdrag.handlers.feature.stopClick = false;
 
-    this.map.controls.stopdrag.activate();
+    this.map.controls.stopdrag.activate();*/
     
     // load transport catalog
     this.loadTransportCatalog();
@@ -455,10 +450,9 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     //$(this.map_view.dialog).find('.close').click($.proxy(cb, s));
 }
 
-Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, defer_save) {
+Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
     var geocoding = false;
     var vals = updated_vals || {};
-    var defer = defer_save;
     for(var k in vals) {
         var val = vals[k];
         if((ref instanceof Sourcemap.Stop) && k === "address" && (val != ref.getAttr("address", false))) {
@@ -486,11 +480,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, defer
                     this.ref.setAttr(k, val);
                 }
                 //this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
-                if(defer) {
-                    this.editor.deferred_saves.push(this.editor.map.supplychains[this.stop.supplychain_id]);
-                } else {
-                    this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
-                }
+                this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
             }, {"stop": ref, "editor": this}));
         } else {
             ref.setAttr(k, val);
@@ -498,11 +488,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, defer
     }
     if(!geocoding) {
         // for just-deleted stops
-        if(defer) {
-            this.deferred_saves.push(this.map.supplychains[ref.supplychain_id]);
-        } else if(ref && ref.supplychain_id) {
-            this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id]);
-        }
+        this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id]);
     }
 }
 

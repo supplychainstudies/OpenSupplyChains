@@ -154,6 +154,10 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        if(this.visualization_mode) {
+            this.toggleVisualization(this.visualization_mode);
+            return;
+        }
         //this.hideDialog();
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
@@ -256,7 +260,7 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
     if(this.dialog) {
         $(this.dialog).hide();
-        this.map.controls["select"].unselectAll();
+        //this.map.controls["select"].unselectAll();
         if(!notrigger) {
             Sourcemap.broadcast('sourcemap-base-dialog-close', 
                 this, this.map.editor ? $(this.dialog).find("form").serializeArray() : false

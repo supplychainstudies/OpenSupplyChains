@@ -15,8 +15,9 @@
             </li>
             <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
             <li>
+				<div>
                 <a href="/home">Dashboard</a>
-                <br />
+                </div>
                 <a class="existing-login" href="auth/logout">Log out</a>
             </li>
             <?php else:  // Otherwise, this ?>

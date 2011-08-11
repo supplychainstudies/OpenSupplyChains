@@ -329,7 +329,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 if(ref instanceof Sourcemap.Stop) {
                     nf = _that.stopFeature(ref);
                 } else if(ref instanceof Sourcemap.Hop) {
-                    nf = _that.hopFeature(hop);
+                    nf = _that.hopFeature(ref);
                 }
                 if(nf) {
                     this.feature = nf;
@@ -341,7 +341,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 if(ref instanceof Sourcemap.Stop) {
                     lf = _that.stopFeature(ref);
                 } else if(ref instanceof Sourcemap.Hop) {
-                    lf = _that.hopFeature(hop);
+                    lf = _that.hopFeature(ref);
                 }
                 if(lf) {
                     this.lastFeature = lf;
@@ -355,7 +355,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 if(ref instanceof Sourcemap.Stop) {
                     nf = _that.stopFeature(ref);
                 } else if(ref instanceof Sourcemap.Hop) {
-                    nf = _that.hopFeature(hop);
+                    nf = _that.hopFeature(ref);
                 }
                 if(nf) {
                     this.feature = nf;
@@ -367,7 +367,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 if(ref instanceof Sourcemap.Stop) {
                     lf = _that.stopFeature(ref);
                 } else if(ref instanceof Sourcemap.Hop) {
-                    lf = _that.hopFeature(hop);
+                    lf = _that.hopFeature(ref);
                 }
                 if(lf) {
                     this.lastFeature = lf;
@@ -406,7 +406,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 if(ref instanceof Sourcemap.Stop) {
                     nf = this.stopFeature(ref);
                 } else if(ref instanceof Sourcemap.Hop) {
-                    nf = this.hopFeature(hop);
+                    nf = this.hopFeature(ref);
                 }
                 if(nf) {
                     this.controls.select.handlers.feature.lastFeature = nf;
@@ -616,9 +616,12 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.supplychain_instance_id = scid;
     new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
-    new_feature.attributes.size = Math.min(Math.max(stop.getAttr("size", this.options.default_stop_size), this.options.min_stop_size), this.options.max_stop_size);
+    var sz = stop.getAttr("size", this.options.default_stop_size);
+    var maxsz = this.options.max_stop_size;
+    var minsz = this.options.min_stop_size;
+    new_feature.attributes.size = Math.min(Math.max(sz, minsz), maxsz);
     new_feature.attributes.fsize = fsize + "px";
-    new_feature.attributes.yoffset = -1*(Math.min(Math.max(stop.getAttr("size", this.options.default_stop_size), this.options.min_stop_size), this.options.max_stop_size)+fsize);
+    new_feature.attributes.yoffset = -1*(Math.min(Math.max(sz, minsz), maxsz)+fsize);
   
     var rand_color = this.options.default_feature_colors[0];
     new_feature.attributes.color = stop.getAttr("color", rand_color);
@@ -689,7 +692,8 @@ Sourcemap.Map.prototype.hopFeature = function(scid, hid) {
     if(hl) {
         for(var i=0; i<hl.features.length; i++) {
             var hlf = hl.features[i];
-            if(hlf.attributes.hop_instance_id == hid) {
+            if(hlf.attributes.hop_component == "hop" 
+                && hlf.attributes.hop_instance_id == hid) {
                 f = hlf;
                 break;
             }
@@ -723,7 +727,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
             "color": hop.getAttr("color", rand_color),
-			"width":2, "size": 4, "supplychain_instance_id": scid,
+			"width":1, "size": 7, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id, "ref": hop 
         });

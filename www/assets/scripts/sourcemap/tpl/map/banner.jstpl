@@ -1,12 +1,6 @@
 <div id="banner-content">
     <div id="banner-summary">
-       <%= _S.ttrunc(this.getAttr("title", this.getAttr("name", "Untitled Sourcemap")), 20) %>
-    </div>
-    <div id="banner-description">&nbsp;
-        <%= _S.ttrunc(this.getAttr("description", ""), 35) %>
-        <% if((this.getAttr("description", "")).length > 35) { %>
-            <a class="banner-description-link" href="javascript:void(0);">more</a>
-        <% } %>
+       <%= _S.ttrunc(this.getAttr("title", this.getAttr("name", "Untitled Sourcemap")), 55) %>
     </div>
     <div id="banner-share">
         <a class="banner-share-link" href="javascript:void(0);">Share</a>

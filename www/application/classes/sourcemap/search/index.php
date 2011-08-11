@@ -35,7 +35,7 @@ class Sourcemap_Search_Index {
 
     public static function delete($scid) {
         ORM::factory('supplychain_search')->where('supplychain_id', '=', $scid)
-            ->delete();
+            ->delete_all();
         return true;
     }
 }

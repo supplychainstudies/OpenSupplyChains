@@ -30,6 +30,25 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             }
         }
 
+        if(isset($this->parameters['q']) && $this->parameters['q']) {
+            $qts = preg_split('/\s+/', $this->parameters['q'], null, PREG_SPLIT_NO_EMPTY);
+            $q = array();
+            foreach($qts as $i => $qt) 
+                $q[] = $qt;
+            if($q) {
+                $search->and_where(
+                    DB::expr('to_tsvector(body)'), '@@', 
+                    DB::expr('plainto_tsquery('.
+                        Database::instance()->quote(join(' AND ', $q)).
+                    ')')
+                );
+            }
+        }
+
+        $search->reset(false);
+        $ct = $search->count_all();
+        
+
         // featured filter
         if(isset($this->parameters['featured']) && strtolower($this->parameters['featured']) == 'yes') {
             $search->and_where(DB::expr('featured'), 'and', DB::expr('TRUE'));
@@ -50,27 +69,11 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $search->order_by('favorited', 'desc');
         }
         
-        if(isset($this->parameters['q']) && $this->parameters['q']) {
-            $qts = preg_split('/\s+/', $this->parameters['q'], null, PREG_SPLIT_NO_EMPTY);
-            $q = array();
-            foreach($qts as $i => $qt) 
-                $q[] = $qt;
-            if($q) {
-                $search->and_where(
-                    DB::expr('to_tsvector(body)'), '@@', 
-                    DB::expr('plainto_tsquery('.
-                        Database::instance()->quote(join(' AND ', $q)).
-                    ')')
-                );
-            }
-        }
-
         $search->limit($this->limit);
         $search->offset($this->offset);
 
-        $results = self::prep_rows($search->find_all());
-
-        $ct = $search->count_all();
+        $raw = $search->find_all();
+        $results = self::prep_rows($raw);
 
         $this->results->hits_tot = $ct;
         $this->results->results = $results;

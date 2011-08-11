@@ -58,8 +58,8 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $iparams['favorited'] = 'yes';
         $this->template->interesting = Sourcemap_Search_Simple::find($iparams);
 
-
-        $this->template->primary = Sourcemap_Search::find($params);
+        $p = Sourcemap_Search::find($params);
+        $this->template->primary = $p;
 
         $recent_params = $params;
         $recent_params['recent'] = 'yes';

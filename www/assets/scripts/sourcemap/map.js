@@ -383,7 +383,7 @@ Sourcemap.Map.prototype.initControls = function() {
             if(ref instanceof Sourcemap.Stop) {
                 nf = this.stopFeature(ref);
             } else if(ref instanceof Sourcemap.Hop) {
-                nf = this.hopFeature(hop);
+                nf = this.hopFeature(ref);
             }
             if(nf) {
                 var sidx = nf.layer.selectedFeatures.indexOf(f);

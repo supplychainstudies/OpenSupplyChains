@@ -15,9 +15,9 @@ Sourcemap.Map.Base.prototype.broadcast = function() {
 Sourcemap.Map.Base.prototype.defaults = {
     "auto_init": true,
     "map_element_id": 'sourcemap-map-view',
-    "banner": true, "watermark": true, "magic_word_sequence": [
+    "banner": true, "watermark": true, "magic_word_list": [
         "youtube:link", "vimeo:link", "flickr:setid"
-    ], "magic_word_cur_idx": -1, "tpl_base_path": Sourcemap.TPL_PATH,
+    ], "tpl_base_path": Sourcemap.TPL_PATH,
     "tour_order_strategy": "upstream", "position": "0|0|0", "error_color": '#ff0000',
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
@@ -56,9 +56,7 @@ Sourcemap.Map.Base.prototype.defaults = {
 }
 
 Sourcemap.Map.Base.prototype.init = function() {
-    this.magic_word_sequence = this.options.magic_word_sequence;
-    this.magic_word_cur_idx = this.options.magic_word_cur_idx;
-    this.magic = this.options.magic || Sourcemap.MagicWords.popup_content;
+    this.magic_word_list = this.options.magic_word_list;
     this.viz_attr_map = this.options.viz_attr_map;
     this.initMap();
     this.initDialog();
@@ -68,25 +66,11 @@ Sourcemap.Map.Base.prototype.init = function() {
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id, {
         "prep_stop": $.proxy(function(stop, ftr) {
-            // todo: magic words for size (other than "size")?
-            var hasmagic = false;
-            for(var ski=0; ski<this.magic_word_sequence.length; ski++) {
-                var sk = this.magic_word_sequence[ski];
-                if(stop.getAttr(sk, false))
-                    hasmagic = true;
-            }
-            if(hasmagic) {
-                ftr.attributes.strokeWidth = 2;
-                ftr.attributes.strokeColor = "#fff";
-            } else {
-                ftr.attributes.label = "";
-            }
+
         }, this),
-        // callback for decorating hop feature and its arrow
+
         'prep_hop': function(hop, ftr, arrow) {
-            // set arc and related arrow color
-            //ftr.attributes.color = hop.getAttr('color', '#006633');
-            //if(arrow) arrow.attributes.color = hop.getAttr('color', '#006633');
+
         }        
     });
 	
@@ -154,22 +138,18 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        if(this.visualization_mode) {
-            this.toggleVisualization(this.visualization_mode);
-            return;
-        }
         //this.hideDialog();
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
         }
         else if(ftr.attributes.stop_instance_id && !(map.editor)) {
             this.showStopDetails(
-                ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id, 0
+                ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
         }
         else if (ftr.attributes.hop_instance_id && !(map.editor)) {
             this.showHopDetails(
-                ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id, 0
+                ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );
         }
     }, this));
@@ -260,7 +240,7 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
     if(this.dialog) {
         $(this.dialog).hide();
-        //this.map.controls["select"].unselectAll();
+        this.map.controls["select"].unselectAll();
         if(!notrigger) {
             Sourcemap.broadcast('sourcemap-base-dialog-close', 
                 this, this.map.editor ? $(this.dialog).find("form").serializeArray() : false
@@ -270,55 +250,37 @@ Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
     }
 }
 
-Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
-   // make sure the target magic word index is valid
-    var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-   
+Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {   
     // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
     var stop = sc.findStop(stid);
     var f = this.map.stopFeature(stop);
-    
-    // get magic word...make sure it's valid
-    var magic_word = this.magic_word_sequence[seq_idx];
-    while(((stop.getAttr(magic_word, false) === false) || (!stop.getAttr(magic_word).length || stop.getAttr(magic_word).length == 1)) 
-        && seq_idx < this.magic_word_sequence.length-1) {
-        magic_word = this.magic_word_sequence[++seq_idx];
-    }
-    
-    // sync cur seq idx
-    this.magic_word_sequence_cur_idx = seq_idx;
 
-    if(stop.getAttr(magic_word, false) === false) magic_word = false;
-
-    //"default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
+	for(var i in this.magic_word_list) {
+		if(stop.getAttr(this.magic_word_list[i], false)) {
+			if(!(stop.magic)) { stop.magic = {}; }
+			stop.magic[this.magic_word_list[i]] = stop.getAttr(this.magic_word_list[i], false);
+		}
+	}
     
-    // load template and render
-    // todo: make this intelligible
+    // load template and render @todo: make this intelligible
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-
+			
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
-                var clicked_idx = parseInt(evt.target.id.split('-').pop());
-                var idx = -1;
-                for(var i=0; i<this.base.magic_word_sequence.length; i++) {
-                    if(clicked_idx === i) {
-                        idx = i;
-                        break;
-                    }
-                }
-                if(idx >= 0) {
-                    this.base.showStopDetails(
-                        this.stop.instance_id, this.supplychain.instance_id, idx
-                    );
-                }
+                var target = evt.target.id.split('-').pop().replace(":","-");
+				$("#dialog-media").find(".navigation-item").removeClass("selected");
+				$(evt.target).addClass("selected");
+				$("#dialog-media").children("iframe, object, embed").css("left","-1000px");
+				$("#dialog-media").children("."+target).css("left","0");
+				
             }, this));
                 
         }, 
-        {"stop": stop, "supplychain": sc, "magic_word": magic_word, 'base': this, "feature":f},
-        {"base": this, "magic_word": magic_word, "stop": stop, "supplychain": sc, "feature": f},
+        {"stop": stop, "supplychain": sc, 'base': this, "feature":f},
+        {"base": this, "stop": stop, "supplychain": sc, "feature": f},
         this.options.tpl_base_path
     );
     
@@ -339,11 +301,15 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
                 
                 var stop_id = cluster.cluster[i].attributes.stop_instance_id;
 
-                var new_citem = $("<div id='target-"+stop_id+"' class='cluster-item'><a><h2>"+title+"</h2><h3 class='placename'>"+address+"</h3></a></div>");
+                var new_citem = $("<div id='target-"+stop_id+"' class='cluster-item'>"
+									+"<div class='dot' style='background:"
+									+cluster.cluster[i].attributes.color+"'></div><a><h2>"
+									+title+"</h2><h3 class='placename'>"
+									+address+"</h3></a></div>"
+								);
                 chtml.append(new_citem);        
             }
             this.showDialog(chtml);
-            $(this.dialog).attr("class","grey");
             $(this.dialog).find(".cluster-item").click($.proxy(function(evt) {
                 var sid = $(evt.currentTarget).attr("id").substring(7);
                 var scid = null;
@@ -351,63 +317,41 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
                 var sftr = this.map.stop_features[scid][sid].stop;
                 this.map.broadcast('map:feature_selected', this.map, sftr); 
 
-            },this));
+            },{"map":this.map, "cluster":cluster}));
 
 
     
 }
 Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
-
-    // make sure the target magic word index is valid
-    var seq_idx = seq_idx ? parseInt(seq_idx) : 0;
-   
-    // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
     var hop = sc.findHop(hid);
-
     var f = this.map.hopFeature(scid, hid);
 
-    // get magic word...make sure it's valid
-    var magic_word = this.magic_word_sequence[seq_idx];
-    
-    while(((hop.getAttr(magic_word, false) === false) || (!hop.getAttr(magic_word).length || hop.getAttr(magic_word).length == 1)) 
-        && seq_idx < this.magic_word_sequence.length-1) {
-        magic_word = this.magic_word_sequence[++seq_idx];
-    }
-    
-    // sync cur seq idx
-    this.magic_word_sequence_cur_idx = seq_idx;
-
-    if(hop.getAttr(magic_word, false) === false) magic_word = false;
-
-    //"default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
-    
-    // load template and render
-    // todo: make this intelligible
+	for(var i in this.magic_word_list) {
+		if(hop.getAttr(this.magic_word_list[i], false)) {
+			if(!(hop.magic)) { hop.magic = {}; }
+			hop.magic[this.magic_word_list[i]] = hop.getAttr(this.magic_word_list[i], false);
+		}
+	}
+	    
+    // load template and render @todo: make this intelligible
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
 
             // Sets up content-nav behavior
-            $(this.base.dialog_content).find('.navigation-item a').click($.proxy(function(evt) {
-                var clicked_idx = parseInt(evt.target.parentNode.id.split('-').pop());
-                var idx = -1;
-                for(var i=0; i<this.base.magic_word_sequence.length; i++) {
-                    if(clicked_idx === i) {
-                        idx = i;
-                        break;
-                    }
-                }
-                if(idx >= 0) {
-                    this.base.showHopDetails(
-                        this.hop.instance_id, this.supplychain.instance_id, idx
-                    );
-                }
+            $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
+                var target = evt.target.id.split('-').pop().replace(":","-");
+				$("#dialog-media").find(".navigation-item").removeClass("selected");
+				$(evt.target).addClass("selected");
+				$("#dialog-media").children("iframe, object, embed").css("left","-1000px");
+				$("#dialog-media").children("."+target).css("left","0");
+				
             }, this));
                 
         }, 
-        {"hop": hop, "supplychain": sc, "magic_word": magic_word, 'base': this},
-        {"base": this, "magic_word": magic_word, "hop": hop, "supplychain": sc},
+        {"hop": hop, "supplychain": sc, 'base': this},
+        {"base": this, "hop": hop, "supplychain": sc},
         this.options.tpl_base_path
     );
 

@@ -99,8 +99,9 @@
         div.description {
             font-size:15px;
             line-height:1.2em;
-            max-height:100px;
+            max-height:72px;
             overflow:auto;
+			margin-bottom:5px;
         }
         a.url {
             display:block;
@@ -111,10 +112,10 @@
             color: #2882B1;
             
         }
-        .youtube-player, .vimeo-player {
+        .youtube:link, .vimeo:link {
             background: url("../images/embed-video-icon.png") center center no-repeat #444;
         }
-        .flickr-photoset {
+        .flickr:setid {
             /*border: 1px solid #ddd;*/
             margin-top: 1em;
             img {
@@ -165,21 +166,31 @@
             border-bottom-right-radius:4px;	      
             -moz-border-radius-bottomright:4px;
             -webkit-border-bottom-right-radius:4px;
-
+			iframe, object, embed {
+				position:absolute;
+				top:0; bottom:0; left:-1000px; right:0;
+				margin:auto;
+			}
+			iframe:first-child, object:first-child, embed:first-child {
+				top:0; left:0; right:0;
+			}
             #dialog-media-navigation {
                 margin:0 auto;
                 position:absolute;
-                top:0; left:0; right:0;
+                top:2px; left:0; right:0;
                 text-align:center;
                 text-align:center;
                 height:12px;
                 a.navigation-item {
                     text-decoration:none;
-                    width:8px;
-                    height:8px;
+                    width:12px;
+                    height:12px;
                     background:rgba(255,255,255,0.4);
-                    .rounded(4px);
+                    .rounded(6px);
                     display: inline-block;
+					&.selected {
+						background:rgba(255,255,255,1);
+					}
                 }
             }
         }     
@@ -200,10 +211,18 @@
             max-height:445px;
             overflow:auto;
             .cluster-item {
+				position:relative;
                 border-bottom:1px solid #eee;
+				.dot {
+					height:12px;
+					width:12px;
+					.rounded(40px);
+					border:4px solid #fff;
+					position:absolute;
+					top:10px; left:0;
+				}
                 a {   
                     padding-left:28px;                
-                    background:url("../images/dot.png") center left no-repeat;
                     min-height:28px;
                     margin-bottom:6px;
                     display:block;
@@ -212,7 +231,6 @@
                         font-size:1em;   
                     }
                     &:hover {
-                        background:url("../images/dot-dark.png") center left no-repeat;
                         color:#000;
                         text-decoration:none;
                     }

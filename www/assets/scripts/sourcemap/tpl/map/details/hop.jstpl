@@ -19,21 +19,28 @@
 </ul>
 <% } %>
 
-<% if(this.magic_word === "youtube:link" || this.magic_word === "vimeo:link" || this.magic_word === "flickr:setid") { %>
-<div class="inset">
-    <% if(this.magic_word === "youtube:link" && this.hop.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.popup_content.youtube.link(this.hop.getAttr("youtube:link")) %><% } %>
-    <% if(this.magic_word === "vimeo:link" && this.hop.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.popup_content.vimeo.link(this.hop.getAttr("vimeo:link")) %><% } %>
-    <% if(this.magic_word === "flickr:setid" && this.hop.getAttr("flickr:setid", false)) {  %>
-    <div id="flickr-photoset-<%= this.hop.getAttr("flickr:setid") %>"><%= Sourcemap.MagicWords.popup_content.flickr.setid.call(this.embed, this.hop.getAttr("flickr:setid")) %></div>
+<% if(this.hop.magic) { %>
+<div id="dialog-media">
+        <% if(this.hop.magic["youtube:link"]) { %>
+            <%= Sourcemap.MagicWords.content.youtube.link(this.hop.magic["youtube:link"]) %>
+        <% } %>
+        <% if(this.hop.magic["vimeo:link"]) { %>
+            <%= Sourcemap.MagicWords.content.vimeo.link(this.hop.magic["vimeo:link"]) %>
+        <% } %>
+        <% if(this.hop.magic["flickr:setid"]) {  %>
+            <div id="flickr-photoset-<%= this.hop.magic["flickr:setid"] %>">
+                <%= Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.hop.magic["flickr:setid"]) %>
+            </div>
+        <% } %>
+
+
+    <div id="dialog-media-navigation">
+        <% for(var i in this.hop.magic) { %>
+                <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  
+        <% } %>
+        <div class="clear"></div>
+    </div>
+</div>
 <% } %>
 
-<div class="content-nav">
-<% for(var i=0; i< Sourcemap.MagicWords.sequence.length-2; i++) { %>
-    <% if(this.hop.getAttr(Sourcemap.MagicWords.sequence[i], false)) { %>
-        <a id="content-item-<%= i %>" class="content-item" href="javascript: void(0);">&nbsp;</a>  
-    <% } %>
-<% } %>
-<div class="clear"></div>
-</div>
-</div>
-<% } %>
+<div class="close"><a href="javascript: void(0);"></a></div>

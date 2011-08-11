@@ -281,10 +281,14 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
             if(data && data.results && data.results.length) {
                 this.editor.map_view.updateStatus("Updated address...");
                 this.stop.setAttr("address", data.results[0].placename);
+                Sourcemap.broadcast('supplychain-updated', 
+                    this.editor.map.findSupplychain(this.stop.supplychain_id)
+                );
+                this.editor.map.controls.select.select(ftr);
             }
         }, {"stop": st, "editor": this, "trigger_events": trigger_events}));
     } 
-    if(trigger_events) {
+    if(trigger_events && !geocode) {
         Sourcemap.broadcast('supplychain-updated', 
             this.map.findSupplychain(st.supplychain_id)
         );

@@ -717,8 +717,10 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(this.options.hops_as_arcs || this.options.hops_as_bezier) {
         var sc = this.supplychains[scid];
         var wkt = new OpenLayers.Format.WKT();
-        var from_pt = wkt.read(sc.findStop(hop.from_stop_id).geometry).geometry;
-        var to_pt = wkt.read(sc.findStop(hop.to_stop_id).geometry).geometry;
+		var from_stop = sc.findStop(hop.from_stop_id);
+		var to_stop = sc.findStop(hop.to_stop_id);
+        var from_pt = wkt.read(from_stop.geometry).geometry;
+        var to_pt = wkt.read(to_stop.geometry).geometry;
     }
     if(this.options.hops_as_arcs) {
         var new_feature = new OpenLayers.Feature.Vector(this.makeGreatCircleRoute(from_pt, to_pt));
@@ -750,6 +752,9 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.hop_instance_id = hop.instance_id;
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
+    hop.attributes.title = new_feature.attributes.title = 
+		hop.getAttr("title", from_stop.getAttr("title","")+" to "+to_stop.getAttr("title",""));
+
     new_feature.attributes.width = 2;
     new_feature.attributes.opacity = 0.8;
     new_feature.attributes.color = hop.getAttr("color", false) || rand_color;

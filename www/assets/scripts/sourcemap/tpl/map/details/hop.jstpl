@@ -1,3 +1,4 @@
+<%= console.log(this.hop) %>
 <h2 class="title hop"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("title", "Hop")), 20, true) %></h2>
 
 <% if(this.hop.getAttr("description", false) && this.hop.getAttr("description").length > 1) { %>

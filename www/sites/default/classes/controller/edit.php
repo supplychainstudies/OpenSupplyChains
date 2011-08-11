@@ -73,7 +73,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         try {
                             ORM::factory('supplychain')->save_raw_supplychain($supplychain, $supplychain->id);
                             Message::instance()->set('Map updated.', Message::SUCCESS);
-                            return $this->request->redirect('edit/'.$supplychain->id);
+                            return $this->request->redirect('view/'.$supplychain->id);
                         } catch(Exception $e) {
                             $this->request->status = 500;
                             Message::instance()->set('Couldn\t update your supplychain. Please contact support.');

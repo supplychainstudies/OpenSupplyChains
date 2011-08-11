@@ -197,7 +197,7 @@ class Model_Supplychain extends ORM {
             $scattr_insert_query = DB::query(Database::INSERT, $scattr_sql);
             foreach($sc->attributes as $k => $v) {
                 list($nothing, $affected) = $scattr_insert_query->param(':supplychain_id', $scid)
-                    ->param(':key', $k)->param(':value', $v)->execute();
+                    ->param(':key', $k)->param(':value', (string)$v)->execute();
                 if(!$affected) throw new Exception('Could not insert supplychain attribute: "'.$k.'".');
             }
             $sql = sprintf('insert into stop (supplychain_id, local_stop_id, geometry) values '.

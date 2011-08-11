@@ -678,6 +678,13 @@ Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
             }
         }
     }
+    if(!f) {
+        if(this.stop_features && this.stop_features[scid]) {
+            if(this.stop_features[scid][stid]) {
+                f = this.stop_features[scid][stid].stop;
+            }
+        }
+    }
     return f;
 }
 

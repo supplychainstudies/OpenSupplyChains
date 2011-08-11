@@ -78,10 +78,9 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 		var initpos = this.options.position.split("|");
 		var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
 	    p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
-
 	  	if(this.options.position == '0|0|0') {
 			if(sc.stops.length) {
-        		this.map.map.zoomToExtent(this.map.getDataExtent(), false);
+        		this.map.map.zoomToExtent(this.map.getStopLayer(sc.instance_id).getDataExtent(), false);
 			} else {
 				this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
 			}

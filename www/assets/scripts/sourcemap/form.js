@@ -4,7 +4,9 @@ Sourcemap.Form = function(form_el) {
     this._errors = false;
 
     this._fields = null;
-
+    this._checkq = [];
+    this._lastcheck = 0;
+    this._defer = false;
     this.init();
 }
 
@@ -33,7 +35,8 @@ Sourcemap.Form.prototype.init = function() {
     this.update();
     
     $(this.el()).find('div.error').hide();
-    $(this._form_el).find('input, select').change($.proxy(this.check, this));
+    $(this._form_el).find('input,select,textarea').bind("change blur", $.proxy(this.check, this));
+    this.check();
 }
 
 Sourcemap.Form.prototype.toggleThrobber = function() {
@@ -48,30 +51,51 @@ Sourcemap.Form.prototype.toggleThrobber = function() {
     }
 }
 
-Sourcemap.Form.prototype.check = function() {
+Sourcemap.Form.prototype.check = function(evt) {
 
-    //todo: more intelligent queueing
+    // should we enqueue this? (not if it's later than anything in the queue)
+    var _t = (new Date()).getTime();
+    if(this._lastcheck >= _t) return;
+    if(Math.max.apply(window, this._checkq) > _t) return;
+
+    // defer checking again on change events after a blur event
+    if(evt && evt.type == "blur") this._defer = true;
+    else if(evt && evt.type == "change" && this._defer) {
+        this._defer = false;
+        return;
+    }
+    
     this.toggleThrobber();
 
     var form_id = $(this._form_el).find('input[name=_form_id]').val();
     var p = 'services/validate/'+form_id;
-    var data = $(this._form_el).find('input, select').serializeArray();
+    var data = $(this._form_el).find('input,select,textarea').serializeArray();
     var serial = {};
     for(var i=0; i<data.length; i++) {
         var j = data[i];
         serial[j.name] = j.value;
     }
+    this._checkq.push(_t);
     $.ajax({ "type": "post",
         "url": p, "data": serial,
         "dataType": "json", "success": $.proxy(function(data) {
-            this.update(data);
-            this.toggleThrobber();
+            if(_t > this._lastcheck) {
+                this._lastcheck = _t;
+                this.update(data);
+                this.toggleThrobber();
+            }
+            // dequeue outdated checks
+            var tmpq = [];
+            for(var i=0; i<this._checkq.length; i++) {
+                if(this._checkq[i] > _t) tmpq.push(this._checkq[i]);
+            }
+            this._checkq = tmpq;
         }, this)
     });
     return this;
 }
 
-Sourcemap.Form.prototype.update = function(validation) {
+Sourcemap.Form.prototype.update = function(validation) {    
     if(validation !== true) this._errors = validation;
     for(var fn in this.fields()) {
         this.rm_error_el(fn);

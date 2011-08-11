@@ -207,6 +207,8 @@ Sourcemap.Map.prototype.initDock = function() {
                 if(s.length && s[0].cluster_instance_id) {
                     this.controls.select.unselectAll();
                 }
+				if(s[0]) { var selectedCenter = s[0].geometry.getBounds().getCenterLonLat();}
+				this.map.setCenter(selectedCenter)
                 this.map.zoomOut();
             }
         }
@@ -220,6 +222,8 @@ Sourcemap.Map.prototype.initDock = function() {
                 if(s.length && s[0].cluster_instance_id) {
                     this.controls.select.unselectAll();
                 }
+				if(s[0]) { var selectedCenter = s[0].geometry.getBounds().getCenterLonLat();}
+				this.map.setCenter(selectedCenter)
                 this.map.zoomIn();
             }
         }

@@ -302,10 +302,12 @@ Sourcemap.Map.prototype.initEvents = function() {
         if(!s) s = this._sel_before_zoom;
         if(s) {
             if(s.cluster) {
-                Sourcemap.broadcast("map:feature_unselected", this. s);
+                Sourcemap.broadcast("map:feature_unselected", this, s);
             } else {
                 if(s.layer)
                     this.controls.select.select(s);
+                else
+                    Sourcemap.broadcast("map:feature_unselected", this, s);
             }
             this.map.setCenter(s.geometry.getBounds().getCenterLonLat());
         }
@@ -964,6 +966,24 @@ Sourcemap.Map.prototype.makeGreatCircleRoute = function(from, to) {
 
 Sourcemap.Map.prototype.clearMap = function() {
     // clear map.
+}
+
+Sourcemap.Map.prototype.getFeaturesExtent = function() {
+    var bounds = new OpenLayers.Bounds();
+    for(var scid in this.stop_features) {
+        for(var k in this.stop_features[scid]) {
+            var s = this.stop_features[scid][k];
+            s = s.stop ? s.stop : s;
+            bounds.extend(s.geometry.bounds);
+        }
+    }
+    for(var scid in this.cluster_features) {
+        for(var k in this.cluster_features) {
+            var c = this.cluster_features[scid][k];
+            if(c) bounds = bounds.extend(c.geometry.bounds);
+        }
+    }
+    return bounds;
 }
 
 Sourcemap.Map.prototype.findSupplychain = function(scid) {

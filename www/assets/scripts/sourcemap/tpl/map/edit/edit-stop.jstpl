@@ -55,10 +55,10 @@
         
         <div id="edit-media" class="sourcemap-form">
             <fieldset>
-				<% mediatype = this.ref.getAttr("youtube-url", false) ? "youtube-url" : "flickr-setid"; %>
+				<% mediatype = this.ref.getAttr("youtube-url", false) ? "youtube-url" : this.ref.getAttr("flickr-setid", false) ? "flickr-setid" : ""; %>
 				<select id="media-content-type">
-					<option <% if(mediatype == "youtube-url") { %> "selected"<% } %> value="youtube-url">Youtube Url</option>				
-					<option <% if(mediatype == "flickr-setid") { %> "selected"<% } %> value="flickr-setid">Flickr Setid</option>
+					<option <% if(mediatype == "youtube-url") { %> selected<% } %> value="youtube-url">Youtube Url</option>				
+					<option <% if(mediatype == "flickr-setid") { %> selected<% } %> value="flickr-setid">Flickr Setid</option>
 				</select>
                 <div class="sourcemap-form-textbox"> 
                     <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>

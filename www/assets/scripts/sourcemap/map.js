@@ -197,7 +197,8 @@ Sourcemap.Map.prototype.initDock = function() {
     this.dock_content = $('<div class="sourcemap-dock-content"></div>');
     this.dock_element = $('<div id="sourcemap-dock"></div>');
     $(this.map.div).css("position", "relative").append(
-        this.dock_element.append(this.dock_outerwrap.append(this.dock_content)));
+        this.dock_element.append(this.dock_outerwrap.append(this.dock_content))
+	);
     this.dockAdd('zoomout', {
         "title": 'Zoom Out',
         "panel": 'zoom',

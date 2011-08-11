@@ -306,8 +306,7 @@ Sourcemap.Map.prototype.initEvents = function() {
             } else {
                 this.controls.select.select(s);
             }
-            // this is weird.
-            //this.map.setCenter(s.geometry.getBounds().getCenterLonLat());
+            this.map.setCenter(s.geometry.getBounds().getCenterLonLat());
         }
         this._sel_before_zoom = null;
     });

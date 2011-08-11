@@ -81,7 +81,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 
 	  	if(this.options.position == '0|0|0') {
 			if(sc.stops.length) {
-        		this.map.map.zoomToExtent(this.map.getDataExtent(), true);
+        		this.map.map.zoomToExtent(this.map.getDataExtent(), false);
 			} else {
 				this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
 			}

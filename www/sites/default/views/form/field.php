@@ -30,7 +30,7 @@
     <?= Form::label($field->name(), $field->label()) ?>
     <?php $attr['type'] = $field->field_type(); ?>
     <?php $attr['class'] = $field->css_class()."textbox"; ?>
-    <?= Form::checkbox($field->name(), null, $field->value(), $attr) ?>
+    <?= Form::checkbox($field->name(), null, (bool)$field->value(), $attr) ?>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>
         <div class="sourcemap-form-error">

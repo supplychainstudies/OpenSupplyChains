@@ -52,6 +52,8 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 }
                 $form->field('category')->value($supplychain->category);
 
+                $form->field('publish')->value($supplychain->other_perms & Sourcemap::READ);
+
                 if(strtolower(Request::$method) === 'post') {
                     if($form->validate($_POST)) {
                         $title = $form->get_field('title')->value();
@@ -60,7 +62,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         $category = $form->get_field('category')->value();
                         if($category) $supplychain->category = $category;
                         else $category = null;
-                        $public = isset($_POST['public']) ? Sourcemap::READ : 0;
+                        $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
                         $supplychain->attributes->title = $title;
                         $supplychain->attributes->description = $description;
                         $supplychain->attributes->tags = $tags;

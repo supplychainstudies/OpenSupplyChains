@@ -7,7 +7,7 @@ class Sourcemap_Form_Field_Checkbox extends Sourcemap_Form_Field {
         $attr = $this->_html_attr;
         $attr['class'] = $this->css_class();
         $attr['type'] = $this->field_type();
-        return Form::checkbox($this->name(), null, $this->value(), $attr);
+        return Form::checkbox($this->name(), null, (bool)$this->value(), $attr);
     }
 
 }

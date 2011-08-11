@@ -53,23 +53,25 @@
         </div>
         
         <div id="edit-media" class="sourcemap-form">
-            <fieldset>
-				<% mediatype = this.ref.getAttr("youtube-url", false) ? "youtube-url" : "flickr-setid"; %>
-				<select id="media-content-type">
-					<option <% if(mediatype == "youtube-url") { %> "selected"<% } %> value="youtube-url">Youtube Url</option>				
-					<option <% if(mediatype == "flickr-setid") { %> "selected"<% } %> value="flickr-setid">Flickr Setid</option>
-				</select>
-                <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype)); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>                
-                <div class="clear"></div>
-				
-                <div class="media-preview">
-					<img src="http://img.youtube.com/vi/<%= this.attr["youtube-url"].substr(31) %>/0.jpg" />
-				</div>
-                
-            </fieldset>
+           	 <fieldset>
+					<% mediatype = this.ref.getAttr("youtube-url", false) ? "youtube-url" : "flickr-setid"; %>
+					<select id="media-content-type">
+						<option <% if(mediatype == "youtube-url") { %> "selected"<% } %> value="youtube-url">Youtube Url</option>				
+						<option <% if(mediatype == "flickr-setid") { %> "selected"<% } %> value="flickr-setid">Flickr Setid</option>
+					</select>
+	                <div class="sourcemap-form-textbox"> 
+	                    <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>
+	                    <%= $("<div></div>").append(el).html() %>
+	                </div>                
+	                <div class="clear"></div>
+
+	                <div class="media-preview">
+						<% if(this.attr["youtube-url"]) { %>
+						<img src="http://img.youtube.com/vi/<%= this.attr["youtube-url"].substr(31) %>/0.jpg" />
+						<% } %>
+					</div>
+
+	            </fieldset>
         </div>
 
 </div>

@@ -301,8 +301,8 @@ Sourcemap.Map.prototype.initEvents = function() {
         s = s.length ? s[0] : false;
         if(!s) s = this._sel_before_zoom;
         if(s) {
-            if(s.cluster_instance_id) {
-                this.controls.select.unselectAll();
+            if(s.cluster) {
+                Sourcemap.broadcast("map:feature_unselected", this. s);
             } else {
                 if(s.layer)
                     this.controls.select.select(s);

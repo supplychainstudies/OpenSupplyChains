@@ -176,9 +176,6 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     }
     var cb = function(p, tx, th) {
         $(this.banner_div).html(th);
-        $(this.banner_div).find('.banner-description-link').click(function(){
-            $.scrollTo('#map-secondary', 600);
-        });
         $(this.banner_div).find('.banner-share-link').click(function(){
             $.scrollTo('#share-info', 600);
         });

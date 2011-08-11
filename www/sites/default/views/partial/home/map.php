@@ -29,7 +29,7 @@
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
             <div class="map-controls-publish">
                 <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/>
-                <a id="map-publish-link">Publish Map</a>
+                <a id="map-publish-link">Public Map</a>
             </div>
             <div class="map-controls-edit">
                 <a href="edit/<?= $supplychain->id ?>">Edit this map</a>

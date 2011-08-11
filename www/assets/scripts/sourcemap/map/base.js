@@ -592,7 +592,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
 		if(this.map.dockControlEl('weight').length == 0) {
 	        this.map.dockAdd('weight', {
 	            "title": 'Weight',
-	            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span>",
+	            "content": "",
 	            "toggle": true,
 	            "panel": 'filter',
 	            "callbacks": {

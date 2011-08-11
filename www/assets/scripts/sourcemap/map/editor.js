@@ -359,8 +359,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		
 		$("#media-content-value").attr("name", mediatype);
 		$("#media-content-value").attr("value", ref.getAttr($(e.target).val(), ""));
-		if(mediatype == "youtube-url") {
-			var preview = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube-url").substr(31)+'/0.jpg" />';
+		if(mediatype == "youtube:link") {
+			var preview = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube:link").substr(31)+'/0.jpg" />';
 		} else {
 			var preview = "<div></div>";
 		}

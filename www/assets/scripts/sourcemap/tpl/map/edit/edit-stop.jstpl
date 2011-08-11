@@ -55,10 +55,10 @@
         
         <div id="edit-media" class="sourcemap-form">
             <fieldset>
-				<% mediatype = this.ref.getAttr("youtube-url", false) ? "youtube-url" : this.ref.getAttr("flickr-setid", false) ? "flickr-setid" : ""; %>
+				<% mediatype = this.ref.getAttr("youtube:link", false) ? "youtube:link" : this.ref.getAttr("flickr:setid", false) ? "flickr:setid" : ""; %>
 				<select id="media-content-type">
-					<option <% if(mediatype == "youtube-url") { %> selected<% } %> value="youtube-url">Youtube Url</option>				
-					<option <% if(mediatype == "flickr-setid") { %> selected<% } %> value="flickr-setid">Flickr Setid</option>
+					<option <% if(mediatype == "youtube:link") { %> selected<% } %> value="youtube:link">Youtube Link</option>				
+					<option <% if(mediatype == "flickr:setid") { %> selected<% } %> value="flickr:setid">Flickr Setid</option>
 				</select>
                 <div class="sourcemap-form-textbox"> 
                     <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>
@@ -67,8 +67,8 @@
                 <div class="clear"></div>
 				
                 <div class="media-preview">
-					<% if(this.attr["youtube-url"]) { %>
-					<img src="http://img.youtube.com/vi/<%= this.attr["youtube-url"].substr(31) %>/0.jpg" />
+					<% if(this.attr["youtube:link"]) { %>
+					<img src="http://img.youtube.com/vi/<%= this.attr["youtube:link"].substr(31) %>/0.jpg" />
 					<% } %>
 				</div>
                 

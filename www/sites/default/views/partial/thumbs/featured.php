@@ -1,7 +1,7 @@
 <div id="popular-maps">
 <?php if(isset($supplychains) && $supplychains): ?>
-    <?php $c = 0; ?>
     <?php foreach($supplychains as $i => $item):?>
+        <?php if($i > 2) break; ?>
         <div class="preview-map-item medium">
             <div class="preview-badge">
             <a href="view/<?php print $item->id; ?>"><img class="preview-map small" src="static/<?= $item->id ?>.m.png" alt="" /></a>
@@ -20,7 +20,6 @@
             <?= date("F j, Y", $item->created) ?></h4>
         </div>
         <?php //limit to the first two ?>
-        <?php if (++$c == 2) break; ?>
     <?php endforeach; ?>
 <?php else: ?>
 <?php endif; ?>

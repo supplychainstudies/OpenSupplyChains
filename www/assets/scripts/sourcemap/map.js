@@ -304,7 +304,8 @@ Sourcemap.Map.prototype.initEvents = function() {
             if(s.cluster_instance_id) {
                 this.controls.select.unselectAll();
             } else {
-                this.controls.select.select(s);
+                if(s.layer)
+                    this.controls.select.select(s);
             }
             this.map.setCenter(s.geometry.getBounds().getCenterLonLat());
         }

@@ -465,6 +465,7 @@ textarea:focus, input:focus { outline: none; }
 #map-secondary {
 	margin-bottom:40px;
     .author {
+		margin-top:10px;
         padding-bottom:20px;
         img {
             vertical-align:middle;
@@ -487,10 +488,28 @@ textarea:focus, input:focus { outline: none; }
         margin-left:10px;
     }
 }
-
+#map-edit-button {
+    .gradient();
+	vertical-align:middle;
+}
 #sidebar.map-view{
 	#share-info {
 		text-decoration:none;
+	}
+	.impact-box {
+		border:1px solid #dfdfdf;
+		.rounded(4px);
+		padding:0; margin:10px;
+		input {
+			float:left;
+		}
+		label {
+			border-left:1px solid #dfdfdf;
+			line-height:2.4;
+			padding-left:10px;
+			margin-left:5px;
+			float: left;
+		}
 	}
     .links{
 		float:left;
@@ -565,6 +584,7 @@ textarea:focus, input:focus { outline: none; }
             font-size:inherit;
             font-family:inherit;
             .rounded(4px);
+			border:1px solid #999;
             &:focus { outline: none; }        
         }
     }

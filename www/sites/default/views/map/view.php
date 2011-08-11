@@ -8,25 +8,26 @@
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
         <?php if($can_edit): ?>
-            <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> Add Weight
-            <input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" /> Add Carbon   
-            <?php /*
-            <input type="checkbox" <?= $supplychain_water; ?> id="impact-use-water" /> Add Water            
-            */ ?>
-
+			<div class="impact-box">
+            	<input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
+				<label for="impact-use-weight">Add Weight</label>
+				<div class="clear"></div>
+			</div>
+			<div class="impact-box">
+            	<input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" />
+				<label for="impact-use-weight">Add Carbon</label>   
+				<div class="clear"></div>
+			</div>
             <hr />            
         <?php endif; ?>
-        <div class="container">
-            <a id="share-info"><h2>Share this Sourcemap</h2></a>
-        </div>
-        <hr />
+
         <div id="qrcode-badge" class="container">
-            <img class="qrcode" src="<?= $qrcode_url ?>" />
+            <a href="<?= $scaled_qrcode_url ?>"><img class="qrcode" src="<?= $qrcode_url ?>" /></a><br/>
         </div>
         <div class="container links">
             <p>Link to this Sourcemap</p>
             <div>
-                <input value="<?= URL::site(NULL, TRUE) ?>view/<?= $supplychain_id ?>" readonly="readonly" onclick="select()"></input>
+                <input value="<?= $short_link; ?>" readonly="readonly" onclick="select()"></input>
             </div>
             <p>Embed this Sourcemap</p>
             <div>
@@ -39,12 +40,15 @@
         <?= View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>
     </div>
     
-    <?php if($can_edit): ?>
-        <a href="edit/<?= $supplychain_id; ?>">Edit</a>
-    <?php endif; ?>
-    <h1><?= $supplychain_name ?></h1>
+
+    <h1>
+		<?= $supplychain_name ?> 
+		<?php if($can_edit): ?>
+        	<a id="map-edit-button" class="button" href="edit/<?= $supplychain_id; ?>">Edit</a>
+    	<?php endif; ?>
+	</h1>
     <p class="description"><?= $supplychain_desc ?></p>
-    
+    <hr />
     <p class="author">
         <img src="<?= $supplychain_avatar ?>" alt="Avatar"></img>
         <?= $supplychain_date ?> : <a href="user/<?= $supplychain_ownerid ?>"><?= $supplychain_owner ?></a>

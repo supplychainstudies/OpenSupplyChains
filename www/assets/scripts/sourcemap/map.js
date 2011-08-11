@@ -101,7 +101,8 @@ Sourcemap.Map.prototype.defaults = {
 }
 
 Sourcemap.Map.prototype.init = function() {
-    this.initMap().initBaseLayer().initLayers().initControls().initDock();
+    this.initMap().initBaseLayer().initLayers()
+        .initControls().initDock().initEvents();
     this.supplychains = {};
     this.mapped_features = {};
     this.stop_features = {}; // dicts of stop ftrs keyed by parent supplychain
@@ -110,6 +111,7 @@ Sourcemap.Map.prototype.init = function() {
     this.cluster = null;
     this.prepareStopFeature = this.options.prep_stop ? this.options.prep_stop : false;
     this.prepareHopFeature = this.options.prep_hop ? this.options.prep_hop : false;
+
     //this.broadcast('map:initialized', this);
     return this;
 }
@@ -204,12 +206,6 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                var s = this.getSelected();
-                if(s.length && s[0].cluster_instance_id) {
-                    this.controls.select.unselectAll();
-                }
-				if(s[0]) { var selectedCenter = s[0].geometry.getBounds().getCenterLonLat();}
-				this.map.setCenter(selectedCenter)
                 this.map.zoomOut();
             }
         }
@@ -219,12 +215,6 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                var s = this.getSelected();
-                if(s.length && s[0].cluster_instance_id) {
-                    this.controls.select.unselectAll();
-                }
-				if(s[0]) { var selectedCenter = s[0].geometry.getBounds().getCenterLonLat();}
-				this.map.setCenter(selectedCenter)
                 this.map.zoomIn();
             }
         }
@@ -291,6 +281,37 @@ Sourcemap.Map.prototype.dockControlEl = function(nm) {
 Sourcemap.Map.prototype.dockRemove = function(nm) {
     if(this.dock_controls[nm]) delete this.dock_controls[nm];
     if(this.dockControlEl(nm)) this.dockControlEl(nm).remove();
+}
+
+Sourcemap.Map.prototype.initEvents = function() {
+    this.map.events.register("movestart", this, function() {
+        var s = this.getSelected();
+        s = s.length ? s[0] : false;
+        if(s) {
+            if(s.cluster_instance_id) {
+                // pass
+            } else {
+                this._sel_before_zoom = s;
+            }
+        }
+    });
+    // zoom evts
+    this.map.events.register("zoomend", this, function() {
+        var s = this.getSelected();
+        s = s.length ? s[0] : false;
+        if(!s) s = this._sel_before_zoom;
+        if(s) {
+            if(s.cluster_instance_id) {
+                this.controls.select.unselectAll();
+            } else {
+                this.controls.select.select(s);
+            }
+            // this is weird.
+            //this.map.setCenter(s.geometry.getBounds().getCenterLonLat());
+        }
+        this._sel_before_zoom = null;
+    });
+    return this;
 }
 
 Sourcemap.Map.prototype.initControls = function() {    

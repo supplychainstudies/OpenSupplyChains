@@ -1,7 +1,9 @@
 Sourcemap.Form = function(form_el) {
     this._form_el = $(form_el);
     this._rules = [];
-    this._errors = false;
+    // null means we don't know.
+    // false means clean
+    this._errors = null;
 
     this._fields = null;
     this._checkq = [];
@@ -15,16 +17,8 @@ Sourcemap.Form.prototype.init = function() {
     if(!fs._form_id) return false;
     for(var fn in fs) {
         var fel = $(fs[fn]);
-        $(fel).focus(function(e){
-            if (this.defaultValue == this.value)
-                this.value = "";
-        });
-        $(fel).blur(function(e){
-            if (this.value === "")
-                this.value = this.defaultValue;
-        });
-        $(fel).change($.proxy(function() {
-            this.update();
+        $(fel).keydown($.proxy(function() {
+            this._errors = null;
         }, this));
         if(fel.hasClass('required'))
             this.add_hilite_el(fn);
@@ -32,11 +26,23 @@ Sourcemap.Form.prototype.init = function() {
             this.add_status_el(fn);
     }
     var fso = this.fields(); var fs = []; for(var fn in fso) fs.push(fso[fn]);
-    this.update();
+    //this.update();
     
     $(this.el()).find('div.error').hide();
     $(this._form_el).find('input,select,textarea').bind("change blur", $.proxy(this.check, this));
-    this.check();
+    $(this._form_el).bind("submit", $.proxy(function() {
+        if(this._errors === false) {
+            return true;
+        }
+        this.check(null, $.proxy(function(data) {
+            if(data === true) {
+                this._form_el.find("form").submit(); 
+            } else {
+                // pass
+            }
+        }, this));
+        return false;
+    }, this));
 }
 
 Sourcemap.Form.prototype.toggleThrobber = function() {
@@ -51,7 +57,7 @@ Sourcemap.Form.prototype.toggleThrobber = function() {
     }
 }
 
-Sourcemap.Form.prototype.check = function(evt) {
+Sourcemap.Form.prototype.check = function(evt, cb) {
 
     // should we enqueue this? (not if it's later than anything in the queue)
     var _t = (new Date()).getTime();
@@ -75,6 +81,7 @@ Sourcemap.Form.prototype.check = function(evt) {
         var j = data[i];
         serial[j.name] = j.value;
     }
+    var _cb = cb;
     this._checkq.push(_t);
     $.ajax({ "type": "post",
         "url": p, "data": serial,
@@ -82,6 +89,7 @@ Sourcemap.Form.prototype.check = function(evt) {
             if(_t > this._lastcheck) {
                 this._lastcheck = _t;
                 this.update(data);
+                if(_cb && _cb instanceof Function) _cb(data);
                 this.toggleThrobber();
             }
             // dequeue outdated checks
@@ -97,6 +105,7 @@ Sourcemap.Form.prototype.check = function(evt) {
 
 Sourcemap.Form.prototype.update = function(validation) {    
     if(validation !== true) this._errors = validation;
+    else this._errors = false;
     for(var fn in this.fields()) {
         this.rm_error_el(fn);
         //this.field_el(fn).removeClass('error');
@@ -109,7 +118,7 @@ Sourcemap.Form.prototype.update = function(validation) {
     if(validation === true) {
         this.el().find('input[type="submit"]').removeAttr('disabled');
     } else {
-        this.el().find('input[type="submit"]').attr('disabled', 'disabled');
+        //this.el().find('input[type="submit"]').attr('disabled', 'disabled');
         var eks = this.errors();
         for(var f in eks) {
             var es = eks[f];
@@ -313,21 +322,7 @@ $(document).ready(function() {
         (new Sourcemap.Form(this));
     });
 
-    $('.sourcemap-form input[type=text], .sourcemap-form textarea, .sourcemap-form select').each( function(){
-        $(this).focus(function(e){
-            if (this.defaultValue == this.value)
-                this.value = "";
-        });
-        $(this).blur(function(e){
-            if (this.value === "")
-                this.value = this.defaultValue;
-        });
-        $(this).keydown(function(e){
-            $(this).addClass('edited');
-        });
-    });
-
-    $('.sourcemap-form textarea').keyup(function() {
+   $('.sourcemap-form textarea').keyup(function() {
         var maxlength = $(this).attr('maxlength');
         if(maxlength != -1) {
             var val = $(this).val();

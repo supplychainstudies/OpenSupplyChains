@@ -80,7 +80,6 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         }
                     } else {
                         Message::instance()->set('Please correct the errors below.');
-                        $form->errors($post->errors('forms/create'));
                     }
                 }
 

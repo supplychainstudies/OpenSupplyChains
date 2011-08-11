@@ -277,7 +277,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid, seq_idx) {
     // load stop details template and show in detail pane
     var sc = this.map.supplychains[scid];
     var stop = sc.findStop(stid);
-    var f = this.map.stopFeature(scid, stid);
+    var f = this.map.stopFeature(stop);
     
     // get magic word...make sure it's valid
     var magic_word = this.magic_word_sequence[seq_idx];

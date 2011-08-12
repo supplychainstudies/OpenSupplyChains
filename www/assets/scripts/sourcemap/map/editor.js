@@ -177,9 +177,9 @@ Sourcemap.Map.Editor.prototype.init = function() {
         "onComplete": $.proxy(function(ftr, px) {
             if(ftr.attributes.stop_instance_id) {
                 this.editor.moveStopToFeatureLoc(ftr, true, true);
-                this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
+                //this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
             }
-            this.editor.map.controls.select.select(ftr);
+            //this.editor.map.controls.select.select(ftr);
         }, {"editor": this})
     }));
 
@@ -264,20 +264,23 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
     var ll = new OpenLayers.LonLat(ftr.geometry.x, ftr.geometry.y)
     ll = ll.clone();
     ll.transform(new OpenLayers.Projection('EPSG:900913'), new OpenLayers.Projection('EPSG:4326'));
+    this.syncStopHops(scid, st);
     if(geocode) {
         this.map_view.updateStatus("Moved stop '"+st.getLabel()+'"..."');
         Sourcemap.Stop.geocode(ll, $.proxy(function(data) {
+            console.log('geocoded');
             if(data && data.results && data.results.length) {
                 this.editor.map_view.updateStatus("Updated address...");
                 this.stop.setAttr("address", data.results[0].placename);
                 Sourcemap.broadcast('supplychain-updated', 
-                    this.editor.map.findSupplychain(this.stop.supplychain_id)
+                    this.editor.map.findSupplychain(this.stop.supplychain_id), true
                 );
-                this.editor.map.controls.select.select(ftr);
+                // if you uncomment this, be prepared to fix some things.
+                //this.editor.map.controls.select.select(ftr);
             }
         }, {"stop": st, "editor": this, "trigger_events": trigger_events}));
-    } 
-    if(trigger_events && !geocode) {
+    }
+    if(trigger_events) {
         Sourcemap.broadcast('supplychain-updated', 
             this.map.findSupplychain(st.supplychain_id)
         );

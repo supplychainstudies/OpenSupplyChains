@@ -41,7 +41,7 @@ return array(
         ),
         'publish' => array(
             'type' => 'checkbox',
-            'label' => 'Publish?'
+            'label' => 'Public'
         ),
         'save' => array(
             'type' => 'submit',

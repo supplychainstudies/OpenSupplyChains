@@ -17,7 +17,7 @@
         <?php endforeach; ?>
         </select><br />
         <?php endif; ?>
-        <input type="checkbox" name="publish" value="yes" checked="yes" /><label for="publish">Publish?</label><br />
+        <input type="checkbox" name="publish" value="yes" checked="yes" /><label for="publish">Public</label><br />
         <input type="submit" value="Import" />
         </form>
     </div>

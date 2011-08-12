@@ -26,7 +26,7 @@
 					<div class="footprint-section">        
 	                    <label for="co2e">Quantity</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 0)); %>
+	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.attr["qty"] || 0); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
@@ -34,14 +34,14 @@
 					<div class="footprint-section">
 	                    <label for="unit">Unit</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-unit").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("unit", "kg")); %>
+	                        <% el = $("<input></input>").attr("class", "footprint-unit").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || "kg"); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>         
 					<div class="footprint-section">					           
 	                    <label for="co2e">Impact</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e", 0)); %>
+	                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || 0); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>

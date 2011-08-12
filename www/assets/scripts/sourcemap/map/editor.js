@@ -250,21 +250,10 @@ Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
         "url": "services/catalogs/osi", "type": "get",
         "data": {"category": "transportation"},
         "success": $.proxy(function(data) { 
-            this.transport_catalog = data.results;
-            
-            // build select element for editor pane
-            this.transport_catalog_el = document.createElement('select');
-            $(this.transport_catalog_el).addClass('transport-catalog');
-            for (k in data.results){
-                option = "<option>" + data.results[k].name + "</option>";
-                $(this.transport_catalog_el).append(
-                    $(option).attr("value",data.results[k].co2e)
-                );
-            }
-        }, this)
-    };
+            this.transport_catalog = data.results;            
+    	}, this)
+	};
     $.ajax(o);
-    return this;
 }
 
 Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, trigger_events) {
@@ -325,7 +314,7 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
 
 Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
     var ref = ftr.attributes.ref;
-     
+    var update = attr ? true : false
     var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
     var attr = attr ? Sourcemap.deep_clone(attr) : {};
     for(var k in ref.attributes) {
@@ -335,6 +324,12 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
     var cb = function(p, tx, th) {
         this.editor.map_view.showDialog(th);
         this.editor.prepEdit(this.ref, this.attr, this.feature);
+		if(update) {
+			 var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
+		     var vals = {};
+		     for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
+		     this.editor.updateFeature(ref, vals);
+		}
     }
     Sourcemap.template('map/edit/edit-'+reftype, cb, s, s);
 }
@@ -343,11 +338,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     // track currently edited feature
     this.editing = ref;
-
-    // init editor tabs
     $("#editor-tabs").tabs();
 
-    // load catalog button
     $(this.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
         this.q = '';
         this.params = {"name": ''};
@@ -368,7 +360,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		
     }, {"ref": ref, "editor": this}));
  
-
+	// General case
     $(this.map_view.dialog).find('input,select,textarea').bind('change', $.proxy(function(e) {
         var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
         var vals = {};
@@ -376,10 +368,9 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.editor.updateFeature(ref, vals);
     }, {"ref": ref, "editor": this}));
 
+	// impact calculator for stops
     if(ref instanceof Sourcemap.Stop) {
-        // load impact calculator for stops
         $("#edit-stop-footprint input").keyup($.proxy(function(e){ 
-            // update calculation
             editor = $('#edit-stop-footprint');
             var quantity = editor.find('input[name="qty"]').val(); 
             //var unit     = editor.find('input[name="unit"]').val(); 
@@ -395,25 +386,15 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         
         // trigger event on load
         $("#edit-stop-footprint input").trigger('keyup');
+
+    // impact calculator for hops
     } else {
-        // load impact calculator for hops
         $("#edit-hop-footprint input").keyup($.proxy(function(e){ 
-            // update calculation
             editor = $('#edit-hop-footprint');
             var weight   = editor.find('input[name="qty"]').val();
             var distance = editor.find('input[name="distance"]').val(); 
             var factor   = editor.find('input[name="co2e"]').val(); 
             var unit     = 'kg';
-
-            // drop in the transporation select box 
-            $('#edit-hop-footprint #transportation-select').append( 
-                $(this.transport_catalog_el).change(function(){ 
-                    $('#edit-hop-footprint input[name="co2e"]') 
-                    .val($(this + ':selected').val());
-                    console.log($(this).parent()); 
-                    console.log('alex? thought you were on this.');
-                })
-            );  
 
             if (!isNaN(weight && distance && factor)){ 
                 var output = weight * distance * factor;
@@ -421,15 +402,34 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
         }, this)); 
+
+		// Transport is a special case value as impact, but save name
+		$("#transportation-type").unbind("change").change($.proxy(function(e){ 
+            $('#edit-hop-footprint input[name="co2e"]').val($(this + ':selected').val()); 
+            editor = $('#edit-hop-footprint');
+            var weight   = editor.find('input[name="qty"]').val();
+            var distance = editor.find('input[name="distance"]').val(); 
+            var factor   = editor.find('input[name="co2e"]').val(); 
+            var unit     = 'kg';
+
+            if (!isNaN(weight && distance && factor)){ 
+                var output = weight * distance * factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+                editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+            }
+			var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
+	        var vals = {};
+	       	for(var i=0; i<kvpairs.length; i++) {
+				if(kvpairs[i].name == "transport") { vals[kvpairs[i].name] = $(e.target).children("option:selected").text();}
+				else {vals[kvpairs[i].name] = kvpairs[i].value;}
+			}
+	        this.editor.updateFeature(ref, vals);
+		}, {"ref": ref, "editor": this}));
         $("#edit-hop-footprint input").trigger('keyup');
-        
-        // trigger event on load
-        $("#edit-stop-footprint input").trigger('keyup');
     }
+    
+	var s = {"ref": ref, "editor": this, "attr": attr, "feature": ftr};
 
-    var s = {"ref": ref, "editor": this, "attr": attr, "feature": ftr};
-
-    // bind click event to connect button
     $(this.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
         this.editor.map_view.hideDialog();
         this.feature.renderIntent = "connecting";
@@ -438,7 +438,6 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.editor.connect_from = this.feature;
     }, s));
     
-    // delete button
     $(this.map_view.dialog).find('.delete-button').click($.proxy(function(e) {
         var supplychain = this.editor.map.findSupplychain(this.ref.supplychain_id);
         if(this.ref instanceof Sourcemap.Stop) {
@@ -451,15 +450,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     }, s));
 
     var cb = function(e) {
-
-        // Edit should be disabled at this point
-        // todo: maybe move this down and add a spinner
-        // or disable the map/editor?
-        //this.editor.map_view.hideDialog();            
-        
+        // Edit should be disabled at this point @todo: maybe move this down and add a spinner or disable the map/editor?
     }
-
-    //$(this.map_view.dialog).find('.close').click($.proxy(cb, s));
 }
 
 Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
@@ -512,19 +504,14 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             var cat_html = $('<ul class="catalog-items"></ul>');
             var alt = "";
             for(var i=0; i<json.results.length; i++) {
-                // Todo: Template this
-                var cat_content = '<div class="cat-item-name">'+json.results[i].name+'</div>';
-                
-                cat_content += '<div class="cat-item-footprints">'                    
-                cat_content += 
-                    json.results[i].co2e ? '<div class="cat-item-co2e">' +json.results[i].co2e+'</div>' : '';
-                cat_content += 
-                    json.results[i].energy ? '<div class="cat-item-energy">' +json.results[i].energy+'</div>' : '';
-                cat_content += 
-                    json.results[i].waste ? '<div class="cat-item-waste">' +json.results[i].waste+'</div>' : '';
-                cat_content += 
-                    json.results[i].water ? '<div class="cat-item-water">' +json.results[i].water+'</div>' : '';
-                cat_content += '<div class="clear"></div></div>';                    
+				if(!(json.results[i].co2e)) { continue;}
+                // Todo: Template this                
+                var cat_content = '<div class="cat-item-footprints">'                    
+                cat_content +=  json.results[i].co2e ? '<div class="cat-item-co2e">' +Math.round(100*json.results[i].co2e)/100+'</div>' : '';
+                cat_content += '<div class="clear"></div></div>'; 
+                cat_content += '<div class="cat-item-name">'+json.results[i].name+'</div>';
+
+				cat_content += '<div class="clear"></div>';                    
                 
                 var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
                 
@@ -538,10 +525,8 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
 
             $("#catalog-close").click($.proxy(function(e) {
-                // @todo return to hop
                 var ftr = this.editor.map.findFeaturesForStop(this.editor.editing.supplychain_id,this.editor.editing.instance_id);
-                ftr.attributes = {}; ftr.attributes.ref = this.editor.editing;
-                this.editor.showEdit(ftr, this.editor.editing.attributes);
+			    this.editor.showEdit(ftr.stop);
             }, {"o": this.o, "editor": this.editor}));
             $(this.editor.map_view.dialog).find('.catalog-pager').empty();
             // pager prev
@@ -629,8 +614,6 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
             } else if(catalog_map[cat][k]) attr[k] = item[k];
         }
     }
-    for(var k in attr) ref.attributes[k] = attr[k];
-    var ftr = this.map.stop_features[ref.supplychain_id][ref.instance_id];
-    ftr.attributes = {}; ftr.attributes.ref = ref;
-    this.showEdit(ftr, attr);
+	var ftr = this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id);
+    this.showEdit(ftr.stop, attr);
 }

@@ -43,8 +43,14 @@
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
     				</div>
-                    <div id="transportation-select" class="sourcemap-form-select">
-                    </div>
+
+                    <select id="transportation-type" name="transport" class="sourcemap-form-select">	
+						<% for(var i in this.editor.transport_catalog) { %>
+							<option <% if(this.ref.getAttr("transport", false) == this.editor.transport_catalog[i].name) { %> selected <% } %> value="<%= this.editor.transport_catalog[i].co2e %>">
+								<%= this.editor.transport_catalog[i].name %>
+							</option>											
+				        <% } %>
+                    </select>
 
                     <div id="impact-result" class="result">0 kg C02e</div>
 

@@ -25,7 +25,7 @@ return array(
         ),
         'sourcemap-welcome' => array(
             'scripts' => array(
-                'sites/default/assets/scripts/slider/anythingslider.min.js',
+                'sites/default/assets/scripts/slider/anythingslider.js',
                 'sites/default/assets/scripts/slider/easing.1.2.js',
                 'sites/default/assets/scripts/welcome.js'
             ),
@@ -48,14 +48,6 @@ return array(
             ),
             'requires' => array(
                 'sourcemap-map'
-            )
-        ),
-        'sourcemap-social' => array(
-            'scripts' => array(
-                'sites/default/assets/scripts/social.js'
-            ),
-            'requires' => array(
-                'sourcemap-jquery'
             )
         )
     )

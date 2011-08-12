@@ -1,5 +1,5 @@
 <div id="catalog">
-    <h2><div id="catalog-close">Edit &raquo;</div> Material Catalog</h2>
+    <h2><div id="catalog-close">&laquo; Back</div> Material Catalog</h2>
     <form id="catalog-search">
         <fieldset>       
                 <input id="catalog-search-field" autocomplete="off" />

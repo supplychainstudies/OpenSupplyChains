@@ -13,8 +13,8 @@ jQuery.fn.liveSearch = function (conf) {
     var config = jQuery.extend({
         url:            '/services/search/', 
         id:             'search-results', 
-        duration:       400, 
-        typeDelay:      200,
+        duration:       0, 
+        typeDelay:      0,
         loadingClass:   'loading', 
         onSlideUp:      function () {}, 
         updatePosition: false
@@ -135,7 +135,7 @@ jQuery.fn.liveSearch = function (conf) {
                                     html += "<a class=\"search-link\" href=\"/map/view/"+ json.results[i].id + "\">";
                                     html += "</a>";
                                     html += "<div class=\"search-details\">";
-                                    html += "<span class=\"search-title\">";
+                                    html += "<span class=\"search-title\">sdfasdfsdaf";
                                     html += json.results[i].attributes.title || "An Unnamed Sourcemap";
                                     html += "</span>";
                                     html += "<span class=\"search-author\">";
@@ -143,8 +143,8 @@ jQuery.fn.liveSearch = function (conf) {
                                     html += json.results[i].owner.name;
                                     html += "</span> ";
                                     html += "<span class=\"search-date\" href=\"\">";
-                                    var myDate = new Date(json.results[i].created);
-                                    html += myDate.toUTCString();
+                                    var d = new Date(json.results[i].created*1000);
+                                    html += _S.ttrunc(_S.fmt_date(d),14);
                                     html += "</span>";
                                     html += "</div>";
                                     html += "<div class=\"search-preview\"\>";

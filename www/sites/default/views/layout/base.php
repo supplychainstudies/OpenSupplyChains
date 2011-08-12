@@ -8,16 +8,19 @@
     <base href="<?= URL::base(true, true) ?>" />
     <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<meta name="description" content="" /> 
+	<meta name="keywords" content="" />
+    <meta name="author" content="The Sourcemap Team">
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
+	<meta http-equiv="content-language" content="en-us">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow&v1' rel='stylesheet' type='text/css'>
+
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="assets/images/favicon-large.png">
+    <link rel="image_src" href="assets/images/favicon-large.png">
 
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
-
 </head>
 <body class="main">
     <div id="wrapper">

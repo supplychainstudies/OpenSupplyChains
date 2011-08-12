@@ -31,14 +31,14 @@ return array(
             ),
             'attributes' => array(
                 'maxlength' => 144,
-				'placeholder' => 'Maximum 144 characters.'
+				'placeholder' => 'Maximum 140 characters.'
             )
         ),
         'tags' => array(
             'type' => 'text',
             'label' => 'Tags',
 	        'attributes' => array(
-				'placeholder' => 'As many as you want, separated by spaces.'
+				'placeholder' => 'Separated by spaces.'
 	        )
         ),
         'category' => array(

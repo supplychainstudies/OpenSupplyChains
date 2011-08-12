@@ -182,13 +182,20 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             this.favorite();
         }, this));
          $.ajax({"url": 'services/favorites', "type": "GET",
-                "success": $.proxy(function(resp) {
-                   for(var k in resp) {
-                       if(resp[k].id == sc.remote_id) {
-                           $(".banner-favorite-link").parent().addClass("marked");
-                       }
-                   }                   
-                }, this)});        
+            "success": $.proxy(function(resp) {
+               for(var k in resp) {
+                   if(resp[k].id == sc.remote_id) {
+                       $(".banner-favorite-link").parent().addClass("marked");
+                   }
+               }                   
+            }, this),
+            "error": $.proxy(function(resp) {
+                if(resp.status == 403) {
+                    $("#banner-favorite a.banner-favorite-link")
+                        .attr("href", "register");
+                }
+            },this)
+        });
     }
 
     Sourcemap.tpl('map/banner', sc, $.proxy(cb, this));

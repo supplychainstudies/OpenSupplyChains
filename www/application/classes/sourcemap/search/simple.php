@@ -38,8 +38,8 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             if($q) {
                 $search->and_where(
                     DB::expr('to_tsvector(body)'), '@@', 
-                    DB::expr('plainto_tsquery('.
-                        Database::instance()->quote(join(' AND ', $q)).
+                    DB::expr('plainto_tsquery(\'english\','.
+                        Database::instance()->quote(join(' ', $q)).
                     ')')
                 );
             }

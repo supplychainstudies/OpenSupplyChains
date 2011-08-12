@@ -17,7 +17,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             'sourcemap-core',
         );
         
-        $this->layout->page_title = 'Browse Sourcemaps';
+        $this->layout->page_title = 'Browsing maps on Sourcemap';
 
         $cats = Sourcemap_Taxonomy::arr();
         $nms = array();
@@ -28,7 +28,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
 
 
-        $params = array('l' => 12);
+        $params = array('l' => 20);
         if($category && isset($nms[$category])) {
             $slug = $category;
             $category = $nms[$category];
@@ -41,30 +41,12 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         } else {
             $this->template->category = false;
         }
-        
-        // most favorited
-        $fparams = $params;
-        $fparams['favorited'] = 'yes';
-        $this->template->favorited = Sourcemap_Search_Simple::find($fparams);
+        $this->template->primary = Sourcemap_Search::find($params);
 
-        // most discussed
-        $dparams = $params;
-        $dparams['comments'] = 'yes';
-        $this->template->discussed = Sourcemap_Search_Simple::find($dparams);
-
-        // most interesting
-        $iparams = $params;
-        $iparams['comments'] = 'yes';
-        $iparams['favorited'] = 'yes';
-        $this->template->interesting = Sourcemap_Search_Simple::find($iparams);
-
-        $p = Sourcemap_Search::find($params);
-        $this->template->primary = $p;
-
-        $recent_params = $params;
-        $recent_params['recent'] = 'yes';
-        $recent_params['l'] = 3;
-        $this->template->recent = Sourcemap_Search::find($recent_params);
-
+		$params['l'] = 1;
+        $this->template->favorited = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));
+        $this->template->discussed = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
+        $this->template->interesting = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes','comments' => 'yes'));
+        $this->template->recent = Sourcemap_Search_Simple::find($params+array('recent' => 'yes'));
     }
 }

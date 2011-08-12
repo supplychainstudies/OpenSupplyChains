@@ -13,7 +13,8 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     public $template = 'create';
     
     public function action_index() {
-
+		$this->layout->page_title = 'Create a map on Sourcemap';
+		
         $f = Sourcemap_Form::load('/create');
         $f->action('create')->method('post');
 

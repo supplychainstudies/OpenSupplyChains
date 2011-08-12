@@ -11,7 +11,10 @@
                     <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
                 </div>
                 <ul class="user-details">
-                    <li>Last Login <span><?= date('F j, Y', $user->last_login) ?></span><li>
+	                <li>Username: <span><?= $user->username ?></span><li>
+                    <li>Email: <span><?= $user->email ?></span><li>
+	
+                    <li>Last Login: <span><?= date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
             </div>
             <div class="clear"></div>

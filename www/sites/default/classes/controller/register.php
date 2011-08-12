@@ -16,6 +16,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     public function action_index() {
         
         $this->layout->scripts = array('sourcemap-core');
+		$this->layout->page_title = 'Register an account on Sourcemap';
 
         $f = Sourcemap_Form::factory('register')
             ->method('post')

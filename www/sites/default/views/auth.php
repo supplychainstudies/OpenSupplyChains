@@ -18,11 +18,11 @@
             <form name="auth-login" class="form" method="post" action="auth/login">
                 <label for="username">Username</label> 
                 <div class="sourcemap-form-textbox username"> 
-                    <input name="username" type="text" class="username" id="username" value="username" /> 
+                    <input name="username" type="text" class="username" id="username" placeholder="Username" /> 
                 </div> 
                 <label for="password">Password</label> 
                 <div class="sourcemap-form-textbox password"> 
-                    <input name="password" type="password" class="password" id="password" value="password" /> 
+                    <input name="password" type="password" class="password" id="password" placeholder="Password" /> 
                 </div> 
                 <?php if (isset($_GET['next'])): ?>
                     <input type="hidden" name="next" value="<?= $_GET['next']; ?>" /> 

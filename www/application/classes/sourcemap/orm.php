@@ -7,6 +7,10 @@ class Sourcemap_ORM extends Kohana_ORM {
 
     protected $_get_currval = true;
 
+    public function get_db() {
+        return $this->_db;
+    }
+
     public function sequence_name() {
         return $this->_table_name.'_'.$this->_primary_key.'_seq';
     }

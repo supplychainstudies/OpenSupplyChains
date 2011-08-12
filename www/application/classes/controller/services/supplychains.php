@@ -142,7 +142,23 @@
         try {
             if($this->_validate_raw_supplychain($put)) {
                 $raw_sc = $put->supplychain;
-                $supplychain->save_raw_supplychain($raw_sc, $id);
+                $retries = 3;
+                $retry = true;
+                while($retry && $retries--) {
+                    $ecode = false;
+                    try {
+                        $supplychain->save_raw_supplychain($raw_sc, $id);
+                        $retry = false;
+                    } catch(Exception $e) {
+                        $ecode = $supplychain->get_db()->get_pdo()->errorCode();
+                        if($ecode === 40001) {
+                            $retry = true;
+                        }
+                    }
+                    if($ecode !== false && $ecode === 40001) {
+                        throw new Exception('Dammit, Jim! The data! The data is not being saved!');
+                    }
+                }
                 Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
                     'baseurl' => Kohana_URL::site('/', true),
                     'environment' => Sourcemap::$env,
@@ -150,7 +166,7 @@
                     'sizes' => Sourcemap_Map_Static::$image_sizes,
                     'thumbs' => Sourcemap_Map_Static::$image_thumbs
                 ));
-            } else  throw new Exception('Invalid supplychain data: '.$e);
+            } else throw new Exception('Invalid supplychain data: '.$e);
         } catch(Exception $e) {
             return $this->_bad_request('Could not save supplychain: '.$e->getMessage());
         }

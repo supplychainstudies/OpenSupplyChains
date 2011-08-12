@@ -40,7 +40,7 @@ return array(
                 'assets/scripts/sourcemap/supplychain.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-search', 'sourcemap-jquery', 'openlayers' 
+                'less', 'sourcemap-search', 'sourcemap-jquery'
             )
         ),
         'sourcemap-search' => array(
@@ -68,7 +68,8 @@ return array(
                 'assets/scripts/sourcemap/supplychain/graph.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-core', 'google-maps', 'openlayers-cloudmade' 
+                'sourcemap-template', 'sourcemap-core', 
+                'google-maps', 'openlayers-cloudmade' 
             )
         ),
         'sourcemap-tabbed-edit' => array(

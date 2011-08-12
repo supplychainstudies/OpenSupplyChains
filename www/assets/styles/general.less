@@ -403,12 +403,14 @@ textarea:focus, input:focus { outline: none; }
         }
         textarea{ height: 55px; }
         &.sourcemap-form-error{
-            width:auto;
-            border: 0;
-            background: none;
-            padding: 10px 0 4px 30px;
-            float:left;
-            clear: none;
+            font-size:0.8em;
+			font-weight:bold;
+			&:before {
+				content:"(";
+			}
+			&:after {
+				content:")";
+			}
         }
         &.sourcemap-form-button{
             width: 100%;
@@ -435,7 +437,11 @@ textarea:focus, input:focus { outline: none; }
         width: 100% !important;
 	   	line-height: 1.2em;
 	   	background: #fff;
-	    .gradient(#ccc, #fff);			
+	    .gradient(#ccc, #fff);	
+	    background:  url(../images/dropdown.png) right center no-repeat, -moz-linear-gradient(center bottom,#ccc 0%,#fff 100%) 0 0 repeat;
+	    background: url(../images/dropdown.png) right center no-repeat, -webkit-gradient(linear,left bottom,left top,color-stop(0,#ccc),color-stop(1,#fff));
+	
+
 	   	-webkit-appearance: none;
 		outline:none;
 		.rounded(4px);

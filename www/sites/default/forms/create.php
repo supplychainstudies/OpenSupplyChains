@@ -17,7 +17,11 @@ return array(
     'fields' => array(
         'title' => array(
             'type' => 'text',
-            'label' => 'Title'
+            'label' => 'Title',
+			'attributes' => array(
+				'maxlength' => 55,
+				'placeholder' => 'Maximum 55 characters.'				
+			)
         ),
         'description' => array(
             'type' => 'textarea',
@@ -26,12 +30,16 @@ return array(
                 'preview'
             ),
             'attributes' => array(
-                'maxlength' => 80
+                'maxlength' => 144,
+				'placeholder' => 'Maximum 144 characters.'
             )
         ),
         'tags' => array(
             'type' => 'text',
-            'label' => 'Tags'
+            'label' => 'Tags',
+	        'attributes' => array(
+				'placeholder' => 'As many as you want, separated by spaces.'
+	        )
         ),
         'category' => array(
             'type' => 'select',
@@ -41,7 +49,8 @@ return array(
         ),
         'publish' => array(
             'type' => 'checkbox',
-            'label' => 'Public'
+            'label' => 'Public',
+            'default' => 0
         ),
         'create' => array(
             'type' => 'submit',

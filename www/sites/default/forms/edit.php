@@ -17,21 +17,29 @@ return array(
     'fields' => array(
         'title' => array(
             'type' => 'text',
-            'label' => 'Map Title'
+            'label' => 'Title',
+			'attributes' => array(
+				'maxlength' => 55,
+				'placeholder' => 'Maximum 55 characters.'				
+			)
         ),
         'description' => array(
             'type' => 'textarea',
-            'label' => 'Map Full Description',
-            'attributes' => array(
-                "maxlength" => 80
-            ),
+            'label' => 'Description',
+			'attributes' => array(
+				'maxlength' => 144,
+				'placeholder' => 'Maximum 144 characters.'				
+			),
             'css_class' => array(
                 'preview'
             )
         ),
         'tags' => array(
             'type' => 'text',
-            'label' => 'Tags'
+            'label' => 'Tags',
+	        'attributes' => array(
+				'placeholder' => 'As many as you want, separated by spaces.'
+	        )
         ),
         'category' => array(
             'type' => 'select',
@@ -41,7 +49,8 @@ return array(
         ),
         'publish' => array(
             'type' => 'checkbox',
-            'label' => 'Public'
+            'label' => 'Public',
+			'default' => 0
         ),
         'save' => array(
             'type' => 'submit',

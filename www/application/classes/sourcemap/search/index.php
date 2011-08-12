@@ -22,7 +22,16 @@ class Sourcemap_Search_Index {
             $scidx->modified = $sc->modified;
             $scidx->category = $sc->category;
             $scidx->user_id = $sc->user_id;
-            $scidx->body = json_encode($sc->kitchen_sink($sc->id));
+            $rawsc = $sc->kitchen_sink($sc->id);
+            $body = "";
+            foreach($rawsc->attributes as $k => $v) $body .= "$k $v\n";
+            foreach($rawsc->stops as $i => $st) {
+                foreach($st->attributes as $k => $v) $body .= "$k $v\n";
+            }
+            foreach($rawsc->hops as $i => $h) {
+                foreach($h->attributes as $k => $v) $body .= "$k $v\n";
+            }
+            $scidx->body = $body;
             $scidx->featured = (boolean)(($sc->flags & Sourcemap::FEATURED) > 0);
             $scidx->favorited = ORM::factory('user_favorite')
                 ->where('supplychain_id', '=', $sc->id)->count_all();

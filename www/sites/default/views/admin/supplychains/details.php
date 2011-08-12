@@ -9,6 +9,7 @@
 
 
 <h3><?= isset($attributes['title']) ? HTML::chars($attributes['title']) : 'Untitled Sourcemap' ?></h3>
+ <a target="map_view" href="view/<?= $id ?>"><img src="static/<?= $id ?>.l.png" /></a><br />
 <?php if($flags & Sourcemap::FEATURED): ?><p class="featured good-news">** This map is a <a href="admin/featured">featured</a> map. **</p><?php endif; ?>
 <p><?php if($owner): ?>
 This map belongs to <a href="admin/users/<?= $owner_id ?>"><?= HTML::chars($owner)?></a>.

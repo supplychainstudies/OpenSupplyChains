@@ -100,7 +100,6 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout->supplychain_id = $supplychain_id;
-				$this->layout->page_title = 'Create a map on Sourcemap';
                 $this->template->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array('map-view');
                 $this->layout->styles = array(

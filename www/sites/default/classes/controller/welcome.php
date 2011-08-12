@@ -22,36 +22,16 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
         
         $this->layout->page_title = 'Welcome to Sourcemap.';
-        $recent1 = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 4));
-        $recent2 = Sourcemap_Search::find(array('recent' => 'yes', 'o' => 3, 'l' => 3));
-        $recent3 = Sourcemap_Search::find(array('recent' => 'yes', 'o' => 6, 'l' => 3));
+        $recent = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 4));
+        $popular = Sourcemap_Search::find(array('comments' => 'yes', 'favorited' => 'yes', 'l' => 4));
+        $featured = Sourcemap_Search::find(array('featured' => 'yes', 'l' => 4));
+        $morefeatured = Sourcemap_Search::find(array('featured' => 'yes', 'l' => 2, 'o' => 0));
 
-        $this->template->recent1 = $recent1->results;
-        $this->template->recent2 = $recent2->results;
-        $this->template->recent3 = $recent3->results;
-
-        $featured = Sourcemap_Search::find(array('featured' => 'yes', 'l' => 12));
-        $this->template->featured = $featured;
-
-        $params = array('l' => 12);
-
-        // most favorited
-        $fparams = $params;
-        $fparams['favorited'] = 'yes';
-        $this->template->favorited = Sourcemap_Search_Simple::find($fparams);
-
-        // most discussed
-        $dparams = $params;
-        $dparams['comments'] = 'yes';
-        $this->template->discussed = Sourcemap_Search_Simple::find($dparams);
-
-        // most interesting
-        $iparams = $params;
-        $iparams['comments'] = 'yes';
-        $iparams['favorited'] = 'yes';
-        $this->template->popular = Sourcemap_Search_Simple::find($iparams);
+        $this->template->recent = $recent->results;
+        $this->template->popular = $popular->results;
+        $this->template->featured = $featured->results;
+        $this->template->morefeatured = $morefeatured->results;
 
         $this->template->news = Blognews::fetch(4);
-        $this->template->supplychains = $recent1;
     }
 }

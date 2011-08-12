@@ -6,7 +6,6 @@ if ($data):
     $i = 0;
     foreach($results as $item):
         ?>
-saddsasds
             <div class="preview-badge">
             <a href="/map/view/<?php print $item->id; ?>">
                 <img class="preview-map small" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />

@@ -1,12 +1,6 @@
-<?php // Display the slider ?>
+<?php if(isset($supplychains) && $supplychains): ?>
 <ul id="featured-slider">
-<?php 
-$data = Sourcemap_Search::Find(array('l'=>4));
-if ($data):
-    $results = $data->results;
-    $i = 0;
-    foreach($results as $item):
-    ?>
+<?php foreach($supplychains as $i => $item): ?>
     <li class="featured-item">
         <div class="featured-content">
             <a href="/map/view/<?php print $item->id; ?>">
@@ -24,10 +18,7 @@ if ($data):
             </h4>
         </div>
     </li>
-    <?php $i++;
-    endforeach;
-else:
-    print "<h2>No maps have been created yet.</h2>";
-endif;
-?>
+    <?php endforeach; ?>
 </ul>
+<?php else: ?>
+<?php endif; ?>

@@ -68,7 +68,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public function action_forgot_password() {
    
         $this->template = View::factory('auth/forgot_password');
-        
+        $this->layout->page_title = "Forgot password on Sourcemap";
         $post = Validate::factory($_POST);
         $post ->rule('email', 'not_empty')
             ->rule('email', 'validate::email')

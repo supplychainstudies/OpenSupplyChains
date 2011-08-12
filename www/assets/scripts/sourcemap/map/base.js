@@ -137,7 +137,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        //this.hideDialog();
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
         }

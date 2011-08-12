@@ -157,20 +157,6 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "minZoomLevel": 2, "maxZoomLevel": 12
     }));
     
-    var stylez = [ { featureType: "all", elementType: "all", stylers: [ { visibility: "simplified" }, { hue: "#000000" }, { saturation: -100 } ] } ];		
-	var gmap = new OpenLayers.Layer.Google(
-					"gstyled", {
-					"sphericalMercator": true,
-					"type": "styled",
-					"minZoomLevel": 2, "maxZoomLevel": 17,
-					"animationEnabled": false
-				});
-	var styledMapOptions = { name: "Styled Map"};
-	var styledMapType = new google.maps.StyledMapType(stylez, styledMapOptions);
-	this.map.addLayer(gmap); 
-    gmap.mapObject.mapTypes.set('styled', styledMapType);
-	gmap.mapObject.setMapTypeId('styled');
-    
 	if(this.options.basetileset) {
         this.map.setBaseLayer(
             this.map.getLayersByName(this.options.basetileset).pop()
@@ -411,7 +397,7 @@ Sourcemap.Map.prototype.initControls = function() {
             if(ref instanceof Sourcemap.Stop) {
                 nf = this.stopFeature(ref);
             } else if(ref instanceof Sourcemap.Hop) {
-                nf = this.hopFeature(ref);
+                nf = this.hopFeature(ref, null, "arrow");
             }
             if(nf) {
                 var sidx = nf.layer.selectedFeatures.indexOf(f);
@@ -434,7 +420,7 @@ Sourcemap.Map.prototype.initControls = function() {
                 if(ref instanceof Sourcemap.Stop) {
                     nf = this.stopFeature(ref);
                 } else if(ref instanceof Sourcemap.Hop) {
-                    nf = this.hopFeature(ref);
+                    nf = this.hopFeature(ref, null, "arrow");
                 }
                 if(nf) {
                     this.controls.select.handlers.feature.lastFeature = nf;
@@ -716,18 +702,19 @@ Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
     return f;
 }
 
-Sourcemap.Map.prototype.hopFeature = function(scid, hid) {
+Sourcemap.Map.prototype.hopFeature = function(scid, hid, comp) {
     if(scid && !hid && (scid instanceof Sourcemap.Hop)) {
         hid = scid;
         scid = hid.supplychain_id;
         hid = hid.instance_id;
     }
+    var comp = comp || "hop";
     var hl = this.getHopLayer(scid);
     var f = false;
     if(hl) {
         for(var i=0; i<hl.features.length; i++) {
             var hlf = hl.features[i];
-            if(hlf.attributes.hop_component == "hop" 
+            if(hlf.attributes.hop_component == comp 
                 && hlf.attributes.hop_instance_id == hid) {
                 f = hlf;
                 break;
@@ -802,6 +789,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     }
        
     var r = {"hop":new_feature};
+    r.hop.attributes.hop_component = "hop";
     if(new_arrow) {
         r.arrow = new_arrow;
         if(new_arrow2) {
@@ -876,7 +864,7 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     mid_pt = new OpenLayers.Geometry.Point(mid_pt.x, mid_pt.y);
     mid_pt = mid_pt.transform(pdst, psrc);
 
-    var attrs = {"type": "arrow", "width": 0, "opacity":1.0, "angle": angle};
+    var attrs = {"type": "arrow", "hop_component": "arrow", "width": 0, "opacity":1.0, "angle": angle};
     var o = o || {};
     for(var k in o) attrs[k] = o[k];
     var a = new OpenLayers.Feature.Vector(mid_pt, attrs);
@@ -884,7 +872,9 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     if(wrapped) {
         mid_pt2 = new OpenLayers.Geometry.Point(mid_pt2.x, mid_pt2.y);
         mid_pt2 = mid_pt2.transform(pdst, psrc);
+        var attrs = _S.deep_clone(attrs);
         attrs.angle = angle2;
+        attrs.hop_component = "arrow2";
         var a2 = new OpenLayers.Feature.Vector(mid_pt2, attrs);
     }
     return a2 ? [a,a2] : a;

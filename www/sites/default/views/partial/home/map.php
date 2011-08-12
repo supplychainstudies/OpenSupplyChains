@@ -1,7 +1,7 @@
 <?php if(isset($supplychain) && $supplychain): ?>
-        <div class="map-item medium">
+        <div class="map-item small">
             <a href="map/view/<?= $supplychain->id ?>">
-                <img class="user-map-preview" src="map/static/<?= $supplychain->id ?>.m.png" />
+                <img class="user-map-preview" src="map/static/<?= $supplychain->id ?>.s.png" />
             </a>
         </div>
         <div class="map-description">
@@ -15,14 +15,6 @@
             
             <?php if(isset($supplychain->attributes->description) && $supplychain->attributes->description): ?>
                 <span class="map-teaser"><?= HTML::chars($supplychain->attributes->description) ?></span>
-            <?php else: ?>
-                <span class="map-teaser">(No description yet)</span>
-            <?php endif; ?>
-            
-            <?php if(isset($supplychain->owner->name) && $supplychain->owner->name): ?>
-            <?php endif; ?>
-
-            <?php if($supplychain->other_perms & Sourcemap::READ): ?>
             <?php endif; ?>
         </div>
         <div class="map-controls">

@@ -1,27 +1,26 @@
 <!doctype html>  
-
 <html lang="en" class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <base href="<?= URL::base(true, true) ?>"></base>
+    <base href="<?= URL::base(true, true) ?>" />
     <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+	<meta name="description" content="" /> 
+	<meta name="keywords" content="" />
+    <meta name="author" content="The Sourcemap Team">
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
+	<meta http-equiv="content-language" content="en-us">
+	
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="assets/images/favicon-large.png">
+    <link rel="image_src" href="assets/images/favicon-large.png">
 
-    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
-
-    </head>
-    
-
+    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>    
 </head>
 
 <body id="embedded-supplychain">

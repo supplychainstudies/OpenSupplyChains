@@ -41,7 +41,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_co2e = isset($sc->attributes->{"sm:ui:co2e"}) ? "checked" : "";
                 $this->template->supplychain_water = isset($sc->attributes->{"sm:ui:water"}) ? "checked" : "";
 
-
+				$this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
+		        
                 $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
                     
                 
@@ -99,6 +100,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout->supplychain_id = $supplychain_id;
+				$this->layout->page_title = 'Create a map on Sourcemap';
                 $this->template->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array('map-view');
                 $this->layout->styles = array(
@@ -231,6 +233,10 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout = View::factory('layout/embed');
                 $this->template = View::factory('map/embed');
+		        $sc = $supplychain->kitchen_sink($supplychain_id);
+
+				$this->layout->page_title = (isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "")).' on Sourcemap';
+
                 $this->layout->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array(
                     'sourcemap-embed'

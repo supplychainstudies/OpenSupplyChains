@@ -231,7 +231,9 @@ textarea:focus, input:focus { outline: none; }
 
 /* HOME PAGE STYLES 
  * -------------------------------------------------------------- */
-
+h1#site-tagline {
+	font-size:30px;
+}
 #sidebar{
     float: right;
     width: 412px;
@@ -302,7 +304,7 @@ textarea:focus, input:focus { outline: none; }
     }
     .preview-title {
         .body-font;
-        line-height:1em;
+        line-height:1.2em;
         margin-bottom:0;
     }
     .preview-author {
@@ -788,6 +790,10 @@ textarea:focus, input:focus { outline: none; }
         background: #fff;
         margin-right: 20px;
         .rounded(4px);
+		&.small {
+			width:160px;
+			height:98px;
+		}
         &.medium{
             width: 220px;
             height: 128px;
@@ -800,12 +806,9 @@ textarea:focus, input:focus { outline: none; }
         font-size: 15px;
         font-weight: normal;
         .map-title{
-            float:left;
-            color: #595959;
         }
         .map-details{
-            float:left;
-            margin: 12px 0 0 20px;
+            margin: 0 0 0 0;
             font-weight: normal;
             font-style: italic;
             font-size: 13px;
@@ -813,9 +816,6 @@ textarea:focus, input:focus { outline: none; }
         .map-teaser {
             clear: left;
         }
-		a {
-			color:#595959;
-		}
     }
     .user-map-details {
     }
@@ -1071,7 +1071,6 @@ img{
 .search-results {
     > h2 {
         margin:20px 10px 12px;
-        color: #328cbb;
     }
     .pager {
         .header-font;

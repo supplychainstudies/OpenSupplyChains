@@ -24,7 +24,7 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         }
 
         $this->template->user = (object)$user_arr;
-        $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user->id, 8);
+        $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user->id, 6);
         $this->template->user_profile = $p;
         $this->template->supplychains = $scs;
     }

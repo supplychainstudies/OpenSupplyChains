@@ -592,7 +592,6 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
 		if(this.map.dockControlEl('weight').length == 0) {
 	        this.map.dockAdd('weight', {
 	            "title": 'Weight',
-	            "content": "",
 	            "toggle": true,
 	            "panel": 'filter',
 	            "callbacks": {

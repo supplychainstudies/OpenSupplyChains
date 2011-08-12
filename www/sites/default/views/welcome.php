@@ -1,7 +1,7 @@
 <?php // Returns featured maps ?>
 <div class="clear"></div>
 <div id="featured-maps">
-    <?= View::factory('partial/thumbs/slider', array('data' => $featured)) ?>
+    <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
 </div>
 
 <div class="spacer"></div>
@@ -14,7 +14,7 @@
         <hr />
         <div class="container">
             <div class="preview-map-section">
-                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent1)) ?>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
             </div>
         </div>
              
@@ -26,7 +26,7 @@
         <hr />
         <div class="container">
             <div class="preview-map-section">
-                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent1)) ?>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
 
         <h2 class="section-title highlighted">Featured Sourcemaps</h2>
         <hr />
-        <?= View::factory('partial/thumbs/featured', array('supplychains' => $popular)) ?>
+        <?= View::factory('partial/thumbs/featured', array('supplychains' => $morefeatured)) ?>
         
         <?php //News Section ?>
         <?php if(isset($news) && $news && isset($news->posts)): ?>

@@ -8,7 +8,7 @@
             </div>
             <h3 class="preview-title">
                 <a href="view/<?php print $item->id; ?>">
-                <?= isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap" ?>
+                <?= Text::limit_chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap", 18) ?>
                 </a>
             </h3>
             <h4>

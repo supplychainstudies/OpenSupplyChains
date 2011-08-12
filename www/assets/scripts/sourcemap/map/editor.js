@@ -426,7 +426,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 				if(kvpairs[i].name == "transport") { vals[kvpairs[i].name] = $(e.target).children("option:selected").text();}
 				else {vals[kvpairs[i].name] = kvpairs[i].value;}
 			}
-	        this.editor.updateFeature(ref, vals);
+	        this.editor.updateFeature(ref, vals, true);
 		}, {"ref": ref, "editor": this}));
         $("#edit-hop-footprint input").trigger('keyup');
     }
@@ -457,7 +457,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     }
 }
 
-Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
+Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, noremap) {
     var geocoding = false;
     var vals = updated_vals || {};
     for(var k in vals) {
@@ -494,8 +494,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals) {
         }
     }
     if(!geocoding) {
-        // for just-deleted stops
-        this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id]);
+        this.map.broadcast('supplychain-updated', this.map.supplychains[ref.supplychain_id], noremap);
     }
 }
 

@@ -36,8 +36,7 @@
 #map {
     overflow:hidden;
     #sourcemap-map-view {
-        position:relative;
-        
+        position:relative;        
         border:4px solid #fff;
         height:560px;
         .rounded(8px);
@@ -596,7 +595,7 @@
         padding:0 !important;
         margin:0 -10px;
         height:260px;
-        background: rgb(200,200,200);
+        background: rgb(230,230,230);
         .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
         overflow:auto;
     
@@ -609,7 +608,7 @@
                 color:#777;
                 list-style:none;
                 display:block;
-                border-bottom:2px solid #bbb;
+                border-bottom:2px solid #eee;
                 &:hover {
                     background:rgba(255,255,255,0.6);
                     color:#000;
@@ -617,23 +616,30 @@
                 .cat-item-name {
                     font-size:1.2em;
                     font-weight:bold;
+					float:left;
+					width:200px;
                 }
                 .cat-item-footprints { 
+					float:left;
                     .cat-item-co2e {
-                        float:left; padding:10px 10px 0 30px; min-height:20px;
-                        background: url(../images/dock-icon-co2.png) 0 5px no-repeat;
+						width:40px;
+                        float:left; padding-top:30px; 
+                        background: url(../images/dock-icon-co2.png) 0 0 no-repeat;
                     }
                     .cat-item-energy {
-                        float:left; padding:10px 10px 0 30px; min-height:20px;
-                        background: url(../images/dock-icon-mass.png) 0 5px no-repeat;
+						width:40px;
+                        float:left; padding-top:30px; 
+                        background: url(../images/dock-icon-energy.png) 0 0 no-repeat;
                     }
                     .cat-item-waste {
-                        float:left; padding:10px 10px 0 30px; min-height:20px;
-                        background: url(../images/dock-icon-mass.png) 0 5px no-repeat;            
+						width:40px;
+                        float:left; padding-top:30px; 
+                        background: url(../images/dock-icon-waste.png) 0 0 no-repeat;
                     }
                     .cat-item-water {
-                        float:left; padding:10px 10px 0 30px; min-height:20px;
-                        background: url(../images/dock-icon-h2o.png) 0 5px no-repeat;
+						width:40px;
+                        float:left; padding-top:30px; 
+                        background: url(../images/dock-icon-h20.png) 0 0 no-repeat;
                     }
                 }
             }

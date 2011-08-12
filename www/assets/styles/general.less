@@ -115,7 +115,7 @@ textarea:focus, input:focus { outline: none; }
                     }
                 }
                 &.register{
-                    margin: 0 15px;
+                    margin: 5px 15px;
                     a { 
                         text-decoration: none; 
                         color:#f7f7f7;
@@ -136,13 +136,13 @@ textarea:focus, input:focus { outline: none; }
             background: #fff url(../images/shadow.png) top repeat-x; 
             border: 1px solid #c9c9c9;
             float:left;
-            margin-left: 45px;
+            margin-left: 36px;
             margin-top: 10px;
             height: 42px;
             .rounded;
             input{
                 width: 264px;
-                padding: 0 10px 10px 36px;
+                padding: 0 10px 8px 36px;
                 border: 0;
                 outline: none;
                 background: url(../images/search.png) 12px center no-repeat; 
@@ -251,10 +251,13 @@ textarea:focus, input:focus { outline: none; }
     margin: 0 auto;
     padding: 4px;
     background: #fefefe;
-    border: 1px solid #888;
     .rounded(12px);
-    .box_shadow(3px, 1px, 10px);    
+    border: 1px solid #d4d4d4;
+    .rounded(12px);
+    .box_shadow(3px, 1px, 10px);
     .anythingWindow{
+		border:4px solid #fff;
+        
         .rounded(12px);
     }
 	img.large {
@@ -468,9 +471,18 @@ textarea:focus, input:focus { outline: none; }
 		margin-top:10px;
         padding-bottom:20px;
         img {
+			width:64px; height:64px;
             vertical-align:middle;
         }
+		.author-link {
+			text-transform:capitalize;
+		}
     }
+	p.description {
+        font-size:18px;
+        line-height:1.2em;
+		margin-bottom:10px;
+	}
 }
 #qrcode-badge {
 	float:left;
@@ -494,6 +506,7 @@ textarea:focus, input:focus { outline: none; }
 	vertical-align:middle;
 }
 #sidebar.map-view {
+	padding-top:10px;
 	#share-info {
 		text-decoration:none;
 	}
@@ -567,6 +580,7 @@ textarea:focus, input:focus { outline: none; }
             margin-bottom:10px;
             padding:10px 10px 10px 50px;
             .user-avatar {
+				width:32px; height:32px;
                 position:absolute; 
                 top:10px; left:10px;
                 vertical-align:middle;
@@ -700,6 +714,8 @@ textarea:focus, input:focus { outline: none; }
                 float:left;
                 margin: 0;
                 padding: 4px;
+				width:128px;
+				height:128px;
                 .box_shadow(0, 1px, 5px);
                 .rounded(4px);
             }
@@ -988,7 +1004,9 @@ img{
 	}
 }
 
-.button:hover { background: #eaeaea; color: #333; }
+.button:hover { 
+	background:#024365; 
+}
 
 .small{
     font-size:75%;

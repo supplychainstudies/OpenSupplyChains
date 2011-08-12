@@ -60,6 +60,8 @@ class Controller_Admin_Featured extends Controller_Admin {
             }
             $sc->flags = $sc->flags | Sourcemap::FEATURED;
             $sc->save();
+            if(Sourcemap_Search_Index::should_index($sc->id))
+                Sourcemap_Search_Index::update($sc->id);
             Message::instance()->set('Added featured map.', Message::SUCCESS);
             $this->request->redirect('admin/featured');
         } else {
@@ -73,6 +75,8 @@ class Controller_Admin_Featured extends Controller_Admin {
         if($sc->loaded()) {
             $sc->flags = $sc->flags & ~Sourcemap::FEATURED;
             $sc->save();
+            if(Sourcemap_Search_Index::should_index($sc->id))
+                Sourcemap_Search_Index::update($sc->id);
             Message::instance()->set('Unfeatured map.', Message::SUCCESS);
             $this->request->redirect('admin/featured');
         } else {

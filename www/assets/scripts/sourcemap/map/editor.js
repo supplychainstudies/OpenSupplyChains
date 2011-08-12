@@ -269,7 +269,6 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
     if(geocode) {
         this.map_view.updateStatus("Moved stop '"+st.getLabel()+'"..."');
         Sourcemap.Stop.geocode(ll, $.proxy(function(data) {
-            console.log('geocoded');
             if(data && data.results && data.results.length) {
                 this.editor.map_view.updateStatus("Updated address...");
                 this.stop.setAttr("address", data.results[0].placename);

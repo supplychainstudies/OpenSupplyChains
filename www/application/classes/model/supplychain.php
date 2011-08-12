@@ -174,7 +174,7 @@ class Model_Supplychain extends ORM {
     }
 
     public function save_raw_supplychain($sc, $scid=null) {
-        $this->_db->query(null, 'BEGIN', true);
+        $this->_db->query(null, 'BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE', true);
         if(!$scid) {
             # todo: create here.
             $new_sc = ORM::factory('supplychain');

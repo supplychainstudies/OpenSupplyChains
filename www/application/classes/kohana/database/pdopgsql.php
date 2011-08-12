@@ -11,6 +11,10 @@ class Kohana_Database_PDOPGSQL extends Kohana_Database_PDO {
 
     #public function set_charset($charset) {} // TODO: this
 
+    public function get_pdo() {
+        return $this->_connection;
+    }
+
     public function list_tables($like = NULL) {
         if (is_string($like)) {
             // Search for table names

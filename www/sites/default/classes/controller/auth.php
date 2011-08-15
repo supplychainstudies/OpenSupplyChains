@@ -109,10 +109,13 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         $body .= "To reset your password, follow the link below. If this seems suspicious, \n";
         $body .= "contact ".Sourcemap::$admin_email." immediately.\n";
         $body .= URL::site('auth/reset_password?t='.$ticket, true);
+
+        $addlheaders = "From: noreply@sourcemap.com\r\n";
+
         $sent = false;
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);
-            $sent = mail($email, 'SOURCEMAP: Password Reset', $body);
+            $sent = mail($email, 'SOURCEMAP: Password Reset', $body, $addlheaders);
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
             Message::instance()->set('Sorry, could not send an email.');

@@ -99,8 +99,10 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $msgbody .= $url."\n\n";
                 $msgbody .= "-- The Sourcemap Team\n";
 
+                $addlheaders = "From: noreply@sourcemap.com\r\n";
+
                 try {
-                    $sent = mail($new_user->email,  $subj, $msgbody);
+                    $sent = mail($new_user->email,  $subj, $msgbody, $addlheaders);
                     Message::instance()->set('Please check your email for further instructions.', Message::INFO);
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete registration. Please contact support.'.$e);

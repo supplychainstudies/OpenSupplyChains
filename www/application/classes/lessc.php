@@ -612,13 +612,13 @@ class lessc {
 	}
 
 	// consume a list of property values delimited by ; and wrapped in ()
-	function argumentValues(&$args, $delim = ';') {
+	function argumentValues(&$args, $delim = ',') {
 		$s = $this->seek();
 		if (!$this->literal('(')) return false;
 
 		$values = array();
 		while (true) {
-			if ($this->propertyValue($value)) $values[] = $value;
+			if ($this->argumentValue($value)) $values[] = $value;
 			if (!$this->literal($delim)) break;
 			else {
 				if ($value == null) $values[] = null;
@@ -632,6 +632,24 @@ class lessc {
 		}
 		
 		$args = $values;
+		return true;
+	}
+
+	function argumentValue(&$value) {
+		$values = array();	
+		
+		$s = null;
+		while ($this->expression($v)) {
+			$values[] = $v;
+			$s = $this->seek();
+			if($this->literal(',')) break;
+		}
+
+		if ($s) $this->seek($s);
+
+		if (count($values) == 0) return false;
+
+		$value = $this->compressList($values, ', ');
 		return true;
 	}
 

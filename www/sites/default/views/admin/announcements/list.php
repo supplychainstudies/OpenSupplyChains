@@ -1,6 +1,6 @@
 <form name="announcement" method="post" action="admin/announcements/announce">
 <fieldset><legend>Make an announcement:</legend>
-<textarea name="announcement_message"></textarea><br />
+<textarea name="announcement_message" cols="80" rows="3" placeholder="Must be between 8 and 256 characters."></textarea><br />
 
 <label for="confirm1">Are you sure?</label><br/>
 <input name="confirm1" type="checkbox" /><br />

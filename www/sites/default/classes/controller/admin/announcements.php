@@ -44,7 +44,7 @@ class Controller_Admin_Announcements extends Controller_Admin {
     public function action_announce() {
         if(Request::$method === 'POST') {
             $post = Validate::factory($_POST);
-            $post->rule('announcement_message', 'min_length', array(16))
+            $post->rule('announcement_message', 'min_length', array(8))
                 ->rule('announcement_message', 'max_length', array(256))
                 ->rule('announcement_message', 'not_empty')
                 ->rule('confirm1', 'not_empty')

@@ -15,7 +15,7 @@
 			</div>
 			<div class="impact-box">
             	<input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" />
-				<label for="impact-use-weight">Show Carbon Footprint (co2e)</label>   
+				<label for="impact-use-weight">Show Carbon Footprint (CO2e)</label>   
 				<div class="clear"></div>
 			</div>
             <hr />            

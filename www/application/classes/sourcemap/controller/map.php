@@ -165,6 +165,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 header('Content-Type: image/png');
+                //header('Cache-Control: private,max-age=600');
                 $ckeyfmt = "static-map-%010d-%s-png";
                 //$cache_key = sprintf($ckeyfmt, $supplychain_id, $sz);
                 $cache_key = Sourcemap_Map_Static::cache_key($supplychain_id, $sz);

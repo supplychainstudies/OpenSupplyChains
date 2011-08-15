@@ -23,7 +23,7 @@
 					<div class="footprint-section">        					
 	                    <label for="distance">Weight</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 1)); %>
+	                        <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 0)); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>

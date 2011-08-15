@@ -65,9 +65,9 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->can_comment = (bool)$current_user_id;
                 // qrcode url
 				$shortener = new Sourcemap_Bitly;
-				$shortlink = $shortener->shorten(URL::site('map/view/'.$supplychain->id, true));
-                $qrcode_query = URL::query(array('q' => $shortener->shorten($shortlink), 'sz' => 2));
-                $scaled_qrcode_query = URL::query(array('q' => $shortener->shorten($shortlink), 'sz' => 16));
+				$shortlink = $shortener->shorten(URL::site('view/'.$supplychain->id, true));
+                $qrcode_query = URL::query(array('q' => $shortlink, 'sz' => 2));
+                $scaled_qrcode_query = URL::query(array('q' => $shortlink, 'sz' => 16));
 
 				$this->template->short_link = $shortlink;
                 $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;

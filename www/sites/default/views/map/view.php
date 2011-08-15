@@ -10,12 +10,12 @@
         <?php if($can_edit): ?>
 			<div class="impact-box">
             	<input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
-				<label for="impact-use-weight">Add Weight</label>
+				<label for="impact-use-weight">Show Weight</label>
 				<div class="clear"></div>
 			</div>
 			<div class="impact-box">
             	<input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" />
-				<label for="impact-use-weight">Add Carbon</label>   
+				<label for="impact-use-weight">Show Carbon Footprint (co2e)</label>   
 				<div class="clear"></div>
 			</div>
             <hr />            

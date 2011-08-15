@@ -9,7 +9,7 @@
 
 <% if(this.stop.getAttr("url:moreinfo", false)) { %>
     <%= $("<a class='url'>></a>").attr("href", this.stop.getAttr("url:moreinfo"))
-        .text(this.stop.getAttr("urltitle:moreinfo", "Learn More")).attr("target", "blank")
+        .text(this.stop.getAttr("urltitle:moreinfo", this.stop.getAttr("url:moreinfo",""))).attr("target", "blank")
         .wrap("<div></div>").parent().html() %>
 <% } %>
 

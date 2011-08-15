@@ -73,7 +73,7 @@
 <target name="build-js">
     <phingcall target="build-js-bundles" />
     <foreach param="jssfile" absparam="jsfile_abs" target="minify-js">
-        <fileset dir="${builddir}assets/scripts/">
+        <fileset dir="${builddir}/">
             <include name="*.js" />
             <include name="**/*.js" />
         </fileset>

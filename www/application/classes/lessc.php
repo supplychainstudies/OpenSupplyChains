@@ -634,7 +634,7 @@ class lessc {
 		$args = $values;
 		return true;
 	}
-
+    // RU, 2011.08.15 -- added this method to avoid php compiler req. that arg lists be semicolon delimited...
 	function argumentValue(&$value) {
 		$values = array();	
 		

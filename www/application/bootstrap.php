@@ -193,7 +193,7 @@ if (!defined('SUPPRESS_REQUEST')) {
                         <div class="gigantic">404</div>
                         <img src="assets/images/monsters.png" />
                         <p>This is the part of the map where it says, "Here be monsters."</p><p>Please, <a href="/">go back</a>.</p>
-                        <p>If you have questions or concerns, please, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
+                        <p>If you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
                     </div>
                     <!--
                         <?= $e ?>

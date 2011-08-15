@@ -102,20 +102,34 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public function email_reset_ticket($username, $email, $ticket) {
         //$email_vars = array('username' => $username, 'password' => $temp_password);
         $to = $email;
-        $subject = 'Your Sourcemap account information';
-        //$view = View::factory('email/password_template')->bind('email_vars', $email_vars);
-        //$body = Sourcemap_Markdown::parse($view);
-        $body = "You (or somebody else) requested a password reset at Sourcemap.com.\n";
-        $body .= "To reset your password, follow the link below. If this seems suspicious, \n";
-        $body .= "contact ".Sourcemap::$admin_email." immediately.\n";
-        $body .= URL::site('auth/reset_password?t='.$ticket, true);
 
-        $addlheaders = "From: noreply@sourcemap.com\r\n";
+        $subject = 'Re: Password Reset Request on Sourcemap.com';
+
+        $body = "Dear '{$username}',\n";
+        $body .= <<<EREIAM
+
+If you asked us to reset the password associated with your user account on Sourcemap.com, please visit the URL below:
+
+
+EREIAM;
+        $body .= URL::site('auth/reset_password?t='.$ticket, true);
+        $body .= <<<EREIAM
+
+
+If you believe that someone else made this request, please contact supporta@sourcemap.com as soon as possible.
+
+Thank you for using Sourcemap!
+
+Sincerely,
+The Sourcemap Team
+EREIAM;
+
+        $addlheaders = "From: The Sourcemap Team <noreply@sourcemap.com>\r\n";
 
         $sent = false;
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);
-            $sent = mail($email, 'SOURCEMAP: Password Reset', $body, $addlheaders);
+            $sent = mail($email, $subject, $body, $addlheaders);
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
             Message::instance()->set('Sorry, could not send an email.');

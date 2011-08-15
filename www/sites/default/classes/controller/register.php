@@ -90,16 +90,20 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 }
 
                 //send a notification
-                $subj = 'SOURCEMAP: Your new account.';
+                $subj = 'Re: Your New Account on Sourcemap.com';
                 $h = md5(sprintf('%s-%s', $new_user->username, $new_user->email));
                 $lid = strrev(base64_encode($new_user->username));
                 $url = URL::site("register/confirm?t=$lid-$h", true);
-                $msgbody = 'Welcome to Sourcemap. Your username is "'.$new_user->username.'".'."\n\n";
-                $msgbody .= 'Go to the url below to activate your account.'."\n\n";
-                $msgbody .= $url."\n\n";
-                $msgbody .= "-- The Sourcemap Team\n";
 
-                $addlheaders = "From: noreply@sourcemap.com\r\n";
+                $msgbody = "Dear '{$new_user->username}',\n\n";
+                $msgbody .= 'Welcome to Sourcemap! ';
+                $msgbody .= "Go to the url below to activate your account.\n\n";
+                $msgbody .= $url."\n\n";
+                $msgbody .= "If you have any questions, please contact support@sourcemap.com.\n\n";
+                $msgbody .= "Sincerely,\n";
+                $msgbody .= "The Sourcemap Team\n";
+
+                $addlheaders = "From: The Sourcemap Team <noreply@sourcemap.com>\r\n";
 
                 try {
                     $sent = mail($new_user->email,  $subj, $msgbody, $addlheaders);

@@ -22,6 +22,11 @@ return array(
                 'jquery'
             )
         ),
+		'google-analytics' => array(
+            'scripts' => array(
+                'assets/scripts/analytics.js',
+            )
+        ),
         'showdown' => array(
             'scripts' => array(
                 'assets/scripts/showdown.js',
@@ -40,7 +45,7 @@ return array(
                 'assets/scripts/sourcemap/supplychain.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-search', 'sourcemap-jquery'
+                'less', 'sourcemap-search', 'sourcemap-jquery', 'google-analytics'
             )
         ),
         'sourcemap-search' => array(

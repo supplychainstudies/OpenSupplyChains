@@ -4,7 +4,7 @@
     <p><h4>Introduction</h4>
     Sourcemap respects the privacy of its users. This policy sets out the limited manner in which Sourcemap will collect and use its users’ information to provide and improve its services.  </p> 
     <p><h4>(1)  Information Sourcemap Collects</h4>
-    The Sourcemap website (the “Site”), like many other websites, collects certain information about visitors, even those who are not registered users and users who are not logged in. When a user browses or downloads information from the Site, data is collected including but not limited to the user’s IP address, URL request, browser type, and the date and time of the user’s request.  </p> 
+    The Sourcemap website (the “Site”), like many other websites, collects certain information about visitors, even those who are not registered users and users who are not signed in. When a user browses or downloads information from the Site, data is collected including but not limited to the user’s IP address, URL request, browser type, and the date and time of the user’s request.  </p> 
     <p>Sourcemap also collects and stores any information a registered user (“Member”) provides to the Site, including but not limited to the Member’s username, email address, and profile data.   </p> 
     <p><h4>(2) Use of Information</h4>
     The data Sourcemap collects is analyzed in various ways, largely through an analysis service called Google Analytics, whose privacy policy can be found here.

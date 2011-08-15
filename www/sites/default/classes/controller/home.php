@@ -8,9 +8,12 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-core',
         );
+    	$admin = ORM::factory('role')->where('name', '=', 'admin')->find();
         if(!($user = Auth::instance()->get_user())) {
             $this->request->redirect('');
-        }
+        } else if(Auth::instance()->get_user() && Auth::instance()->get_user()->has('roles', $admin)) {
+			$this->request->redirect('admin/');           	
+		}
 
         $p = false;
 

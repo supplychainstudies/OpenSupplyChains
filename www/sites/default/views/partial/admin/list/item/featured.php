@@ -1,7 +1,7 @@
 <td><a href="admin/supplychains/<?= $item->id ?>"><?= $item->id ?></a></td>
 <td><?= Html::chars($item->created) ?></td>
 <td><?= Html::chars($item->owner) ?></td>
-<td><img src="static/<?= $item->id ?>.m.png" /></td>
+<td><img class="medium" src="static/<?= $item->id ?>.m.png" /></td>
 <td>
     <?php if(isset($item->attributes['title'])): ?>
         <?= HTML::chars($item->attributes['title']) ?>

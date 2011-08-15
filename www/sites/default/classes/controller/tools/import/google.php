@@ -13,7 +13,7 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
 
     public function before() {
         if(!Auth::instance()->get_user()) {
-            Message::instance()->set('You must be logged in to use the importer.');
+            Message::instance()->set('You must be signed in to use the importer.');
             $this->request->redirect('/auth?next=/tools/import/google');
         }
         $current_user = Auth::instance()->get_user();

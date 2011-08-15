@@ -120,7 +120,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     public function action_confirm(){
         if(Auth::instance()->get_user()) {
             Message::instance()->set(
-                'You\'re already logged in. Log out and click the '.
+                'You\'re already signed in. Sign out and click the '.
                 'confirmation url again.', Message::INFO
             );
             return $this->request->redirect('home');
@@ -147,7 +147,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             }
             // add login role
             $user->add('roles', $login);
-            Message::instance()->set('Your account has been confirmed. Please log in (and start mapping).', Message::SUCCESS);
+            Message::instance()->set('Your account has been confirmed. Please Sign in (and start mapping).', Message::SUCCESS);
             Sourcemap_User_Event::factory(Sourcemap_User_Event::REGISTERED, $user->id)->trigger();
             return $this->request->redirect('auth');
         } else {

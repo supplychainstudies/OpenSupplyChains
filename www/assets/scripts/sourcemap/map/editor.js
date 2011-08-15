@@ -93,9 +93,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
     }, this));
 
     this.map.dockAdd('addstop', {
-        "icon_url": "sites/default/assets/images/dock/add.png",
         "title": 'Add a Point',
-        "content": "<span class=\"value\">Add a Point</span>",
+        "content": "<span>Add a Point</span>",
         "ordinal": 4,
         "panel": "edit",
         "callbacks": {

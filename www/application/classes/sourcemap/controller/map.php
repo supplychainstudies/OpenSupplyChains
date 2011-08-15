@@ -85,7 +85,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
 
     public function action_create(){
         if(!Auth::instance()->get_user()) {
-            Message::instance()->set('You must be logged in to create maps.');
+            Message::instance()->set('You must be signed in to create maps.');
             $this->request->redirect('auth');
         }
 
@@ -97,6 +97,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
         $supplychain = ORM::factory('supplychain', $supplychain_id);
         if($supplychain->loaded()) {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout->supplychain_id = $supplychain_id;

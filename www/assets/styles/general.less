@@ -92,6 +92,7 @@ textarea:focus, input:focus { outline: none; }
         #logo{
             float:left;
             h1{display:none;}
+			img {width:257px; height:64px;}
         }
         #navigation,#search{
             margin-top: 10px;
@@ -136,7 +137,7 @@ textarea:focus, input:focus { outline: none; }
             background: #fff url(../images/shadow.png) top repeat-x; 
             border: 1px solid #c9c9c9;
             float:left;
-            margin-left: 36px;
+            margin-left: 48px;
             margin-top: 10px;
             height: 42px;
             .rounded;
@@ -151,21 +152,26 @@ textarea:focus, input:focus { outline: none; }
         }
 
         #search-results{
-            border: 1px solid #333;
+            border: 1px solid #ddd;
+			border-bottom:none;
             background: #fff;
             z-index: 999;
             display:none;
-            width: 400px; 
+            width: 310px; 
             line-height: 26px;
+			font-size:0.8em;
+			margin-top:10px;
             ul {
                 list-style:none;
                 margin: 0;
                 li {
                     float:left;
-                    width: 100%;
-                    padding: 10px 0;
+                    width: 290px;
+                    padding: 10px;
+					background:#eee;
+					border-bottom:1px solid #ddd;
                     &:hover{
-                        background:#eee;
+                        background:#fff;
                         cursor: pointer;
                     }
                     &.more {
@@ -179,11 +185,12 @@ textarea:focus, input:focus { outline: none; }
                 }
                 .search-result {
                     position: relative;
-                    
                     .search-link {
                         color: #333;
                         position:absolute; 
                         width:100%;
+	                    padding:10px;
+
                         height:100%; 
                         top:0;
                         left: 0; 
@@ -193,36 +200,16 @@ textarea:focus, input:focus { outline: none; }
                         }
                     }
                     .search-details {          
-                        float:left;        
-                        width: 200px;
-                        padding: 0 20px;
-                          
-                        .search-title {
-                            display:block;
-                        }
                         .search-author {
                             color: #888;
                             font-style: italic;
-                            a {
-                                color: #888;
-                            }
                         }
                         .search-date {
                             color: #888;
                             font-style: italic;
-                            a {
-                                color: #888;
-                            }
                         }
                     }
-                    .search-preview {
-                        float:left;
-                        padding-left: 20px;
-                        width: 120px;
-                        .search-preview-map {
-                            width: 100%;
-                        }
-                    }                
+                          
                 }
             }
         }
@@ -255,7 +242,6 @@ h1#site-tagline {
     background: #fefefe;
     .rounded(12px);
     border: 1px solid #d4d4d4;
-    .rounded(12px);
     .box_shadow(3px, 1px, 10px);
     .anythingWindow{
 		border:4px solid #fff;
@@ -263,8 +249,8 @@ h1#site-tagline {
         .rounded(12px);
     }
 	img.large {
-		width: "710px";
-		height: "320";
+		width: 710px;
+		height: 320px;
 	}
 }
 
@@ -374,7 +360,11 @@ h1#site-tagline {
 @hover-color: #FBF7D5;
 @form-width: 368px;
 
+.form-button {
+	margin-top:10px;
+}
 .sourcemap-form{
+
     fieldset {
         padding:0 10px 25px 10px;
     }
@@ -382,15 +372,13 @@ h1#site-tagline {
         padding: 10px 0 4px 0;
         display: block;
         color:#666;
-        float: left; // this is so errors can float neatly to the right
+        float: left; 
     }
     
     .sourcemap-form-textbox, .sourcemap-form-textarea {
         clear: left;
         width:@form-width;
         background: #fff;
-        &.username {  }
-        &.password {  margin-bottom:10px; }
         border: 1px solid #ccc;
         font-size: 80%;
         color: #999999;
@@ -447,8 +435,6 @@ h1#site-tagline {
 	    .gradient(#ccc, #fff);	
 	    background:  url(../images/dropdown.png) right center no-repeat, -moz-linear-gradient(center bottom,#ccc 0%,#fff 100%) 0 0 repeat;
 	    background: url(../images/dropdown.png) right center no-repeat, -webkit-gradient(linear,left bottom,left top,color-stop(0,#ccc),color-stop(1,#fff));
-	
-
 	   	-webkit-appearance: none;
 		outline:none;
 		.rounded(4px);
@@ -782,7 +768,7 @@ h1#site-tagline {
 /* SEARCH STYLES
  * -------------------------------------------------------------- */
 
-#user-map-list, #search-results {
+#user-map-list {
     font-size:0.8em;
     margin: 20px 0;
     padding: 20px 0;
@@ -900,15 +886,27 @@ h1#site-tagline {
 /* SUB-PAGE STYLES 
  * -------------------------------------------------------------- */
 
-.register-copy, .login-copy{
+.register-copy, .login-copy, .create-copy {
     float:left;
     width: 505px;
+	p { 
+		font-size:20px;
+	}
+	ul li {
+		margin-bottom:10px;
+	}
 }
-
-.register-box, .login-box{
+.login-copy {
+	margin-bottom:20px;
+}
+.register-box, .login-box, .create-box{
     float:left;
     margin-left: 40px;
     width: 300px;
+	margin-top:-40px;
+}
+.create-box {
+	margin-top:20px;
 }
 
 .about-sourcemap{
@@ -1220,7 +1218,7 @@ img{
 }
 
 table.google-spreadsheets-list {
-	width: 1040px;
+  	width:960px;
     margin: 0 auto;
 	tr {
 		padding:5px;
@@ -1234,5 +1232,105 @@ table.google-spreadsheets-list {
 	th {
 		font-weight:bold;
 		padding-bottom:10px;
+	}
+}
+
+body.admin {
+    .gradient(#333, #777);	
+	color:#ccc;
+	#wrapper {
+		width: 1040px;
+	    margin: 0 auto;
+	}
+	#admin-head {
+		width: 1040px;
+	    margin: 0 auto 20px auto;
+	    padding: 20px 10px 0 10px;
+	    background: #fefefe;
+	    .rounded(12px);
+	    border: 1px solid #d4d4d4;
+	    .box_shadow(3px, 1px, 10px);
+		a {
+			color:#333;
+			font-size:20px;
+			font-weight:bold;
+		}
+	}
+	#summary {
+		border-bottom:1px solid #eee;
+		padding-bottom:10px;
+		margin-bottom:10px;
+		font-size:18px;
+		color:#fff;
+		line-height:1.2em;
+	}
+	a {
+		color:rgb(0,190,250);
+		text-decoration:none;
+	}
+	
+	table {
+		width:100%;
+		tr {
+			padding:5px;
+		}
+		td {
+			padding:5px;
+		}
+		tr.even {
+			background:#333;
+		}
+		th {
+			font-weight:bold;
+			padding-bottom:10px;
+		}
+	}
+	fieldset {
+		margin:15px 0;
+	}
+	ol,ul,dl {
+		margin-left:25px;
+	}
+	ol {
+		margin:10px 0 10px 40px;
+	}
+	dl {
+		
+		dt {
+			font-weight:bold;
+		}
+		dd {
+			margin-bottom:20px;
+		}
+	}
+	input[type="submit"] {
+		padding: .5em 1em;
+	    border: none;
+	    font-size: 14px;
+	    font-weight: bold;
+	    cursor:pointer;
+	    color:#f7f7f7;
+	    .gradient(#246587,#50a3ce);
+	    .rounded(4px);
+	    .box_shadow();
+	    a{
+	        color:#f7f7f7;
+	        text-decoration: none;
+	    }
+		&:hover {
+			color: #f7f7f7;
+		}
+	}
+	.large {
+		width:710px;
+		height:320px;
+	}
+	.small {
+		width:102px;
+		height:60px;
+	}
+	.medium {
+		width:102px;
+		height:60px;
 	}
 }

@@ -6,7 +6,7 @@ class Controller_Services_Comments extends Sourcemap_Controller_Service {
     public function before() {
         $pbefore = parent::before();
         if(!Auth::instance()->get_user()) {
-            return $this->_forbidden('You\'re not logged in.');
+            return $this->_forbidden('You\'re not signed in.');
         }
         return $pbefore;
     }
@@ -67,7 +67,7 @@ class Controller_Services_Comments extends Sourcemap_Controller_Service {
 
     public function action_delete($comment_id=null) {
         if(!Auth::instance()->get_user()) {
-            return $this->_forbidden('You\'re not logged in.');
+            return $this->_forbidden('You\'re not signed in.');
         } 
         $user = Auth::instance()->get_user();
         if(!$comment_id) return $this->_bad_request('Missing comment id.');

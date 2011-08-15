@@ -1,5 +1,5 @@
 <div id="summary">
-<p>The last administrator login was on <strong><?= $admin_lastlogin?></strong>.
+The last administrator login was on <strong><?= $admin_lastlogin?></strong>.
 In the last week,
 <?php if($supplychain_lastweek > 0): ?>
     <strong><?= $supplychain_lastweek?></strong> supplychains have been created,
@@ -12,21 +12,18 @@ In the last week,
     <strong class="bad-news">no new users</strong> registered, and
 <?php endif; ?>
 <?php if($user_lastlogin > 0): ?>
-    <strong><?= $user_lastlogin ?> user<?= $user_lastlogin > 1 ? 's' : '' ?></strong> <?= $user_lastlogin > 1 ? 'have' : 'has' ?> logged in at least once.
+    <strong><?= $user_lastlogin ?> user<?= $user_lastlogin > 1 ? 's' : '' ?></strong> <?= $user_lastlogin > 1 ? 'have' : 'has' ?> signed in at least once.
 <?php else: ?>
-    <strong class="bad-news">nobody</strong> logged in at all.
+    <strong class="bad-news">nobody</strong> signed in at all.
 <?php endif; ?>
-</p>
 
-<p>
 <?php if($supplychain_id): ?>
 The <a href="map/view/<?= $supplychain_id ?>">largest map</a> so far has 
     <strong><?= $stop ?></strong> stops.
 <?php else: ?>
 There don't seem to be any supplychains yet. <a href="map/create">Make some</a>!
 <?php endif; ?>
-</p>
-<p>
+
 Today,
 <?php if($user_today > 0): ?>
     <strong><?= $user_today ?></strong> <?= $user_today > 1 ? 'users have' : 'user has' ?> registered,
@@ -39,7 +36,6 @@ and
 <?php else: ?>
     <strong class="bad-news">zero</strong> supplychains have been created.
 <?php endif; ?>
-</p>
 </div>
 
 <dl>

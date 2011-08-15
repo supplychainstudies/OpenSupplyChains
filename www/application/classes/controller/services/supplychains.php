@@ -99,7 +99,7 @@
     public function action_post() {
         $current_user = $this->get_current_user();
         if(!$current_user) {
-            return $this->_forbidden('You must be logged in to create supplychains.');
+            return $this->_forbidden('You must be signed in to create supplychains.');
         }
         $posted = $this->request->posted_data;
         try {
@@ -128,7 +128,7 @@
         }
         $current_user = $this->get_current_user();
         if(!$current_user) {
-            return $this->_forbidden('You must be logged in to create or edit supplychains.');
+            return $this->_forbidden('You must be signed in to create or edit supplychains.');
         }
         if(!$supplychain->user_can($current_user->id, Sourcemap::WRITE)) {
             // todo: use user_can method

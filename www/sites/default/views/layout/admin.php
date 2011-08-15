@@ -1,141 +1,51 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>  
+<html lang="en" class="no-js">
 <head>
-<base href="<?= URL::base(true, true) ?>" />
-<title>Administration - <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
-<style>
-html, body { margin: 0; padding: 0; }
-body {
-    font-family: sans-serif;
-}
-#masthead {
-    margin: 0;
-    padding: 0;
-    color: #333;
-    background-color: #ddd;
-    border-bottom: 1px solid #222;
-    height: 100%;
-}
-#masthead h1 {
-    padding: .25em .5em .25em .5em;
-    margin: 0;
-}
-#masthead a { text-decoration: none; }
-.nav {
-    text-align: right;
-    padding-right: 1em;
-}
-.breadcrumbs {
-    background-color: #eee;
-    padding: .25em;
-}
 
-#extra {
-    width: 100%;
-}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-#extra .status-messages {
-    list-style-type: none;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
+    <base href="<?= URL::base(true, true) ?>" />
+	<title>Admin :: <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
-#extra .status-message {
-    padding: .25em;
-    border-bottom: 1px solid;
-    font-weight: bold;
-}
+	<meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
+	<meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
+    <meta name="author" content="The Sourcemap Team">
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
+	<meta http-equiv="content-language" content="en-us">
 
-#extra .error {
-    background-color: #ffc0c0;
-    border-color: #ff8080;
-}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-#extra .warn {
-    background-color: #ffff66;
-    border-color: #ff9900;
-}
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="assets/images/favicon-large.png">
+    <link rel="image_src" href="assets/images/favicon-large.png">
 
-#extra .success {
-    background-color: #99ff99;
-    border-color: #55ff55;
-}
-
-#extra .info {
-    background-color: #9999ff;
-    border-color: #5555ff;
-}
-
-#summary {
-    width: 80%;
-    margin: auto;
-}
-
-#summary strong, .good-news {
-    color: #50aa50;
-}
-#summary strong.bad-news, .bad-news {
-    color: #aa5050;
-}
-
-#main {
-    padding: 1em 2em 1em 2em;
-}
-
-table {
-}
-
-tbody tr.odd td {
-    background-color: #ccc;
-    border-bottom: 1px solid #333;
-}
-
-tbody td {
-    font-size: .8em;
-    font-family: Helvetica, Arial, sans-serif;
-    text-align: middle;
-    padding: .5em;
-}
-fieldset {
-    border: 1px solid #ddd;
-}
-.attr-list { 
-    font-family: monospace;
-}
-.attr-list dt {
-    border-bottom: .1em solid #ddd;
-    font-weight: bold;
-}
-div.righty-tighty {
-    float: right;
-}
-.taxonomy-tree {
-    padding: 0;
-    margin: 0;
-}
-.taxonomy-tree ul.children {
-    list-style-type: none;
-    margin: 0;
-}
-.taxonomy-tree > ul.children {
-    border-left: 1px solid #333;
-}
-</style>
+    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>
-<body>
-<div id="masthead">
-<h1><a href="admin"><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></a></h1>
-<div class="nav"><a href="auth/logout">log out</a>&nbsp;|&nbsp;<a href="">view site</a></div>
-</div>
-<div id="extra">
-<?php if(Breadcrumbs::instance()->get()): ?><?= Breadcrumbs::instance()->render() ?><?php endif; ?>
-<?php if(Message::instance()->get()): ?><?= Message::instance()->render() ?><?php endif; ?>
-</div>
-<div id="main">
-<?= $content ?>
-</div>
-<div id="footer">
-</div>
-</body>
+<body class="main admin">
+	<?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <div id="admin-head" class="container">
+        <div class="messages">
+        <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+        <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+        </div>
+    </div>
+    <div id="wrapper">
+
+        <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
+        <div class="push"></div>
+    </div><!-- #wrapper -->
+    <div id="footer">
+         <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    </div>
+    
+    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
+      
+    <!--[if lt IE 7 ]>
+        <script src="js/libs/dd_belatedpng.js"></script>
+        <script> DD_belatedPNG.fix('img, .png_bg'); 
+    <![endif]-->
+
+
+
 </html>

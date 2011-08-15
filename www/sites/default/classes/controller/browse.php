@@ -28,7 +28,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
 
 
-        $params = array('l' => 20);
+        $params = array('l' => 20, 'recent' => 'yes');
         if($category && isset($nms[$category])) {
             $slug = $category;
             $category = $nms[$category];

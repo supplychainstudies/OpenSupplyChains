@@ -68,7 +68,7 @@
 	 <input id="password" name="password" value="" title="Text: enter your password" type="password" />
 	</p>
 	<p class="remember">
-	 <input id="signin_submit" value="Log In" type="submit" />
+	 <input id="signin_submit" value="Sign in" type="submit" />
 	 <a href="http://www.wholefoodsmarket.com/password/" id="forgot_pass_link" title="Request a password reset link be sent to your Email.">Forgot Password</a> | <a href="http://www.wholefoodsmarket.com/register/" id="register_link" title="Create new account for login to the Whole Foods Market site.">Register</a>
 	 </p>
 	 <p class="forgot-username">

@@ -1,10 +1,17 @@
-<div class="container_16">
-<div class="grid_9">
-    <h1>Create a new map</h1>
-</div>
-<div class="grid_7">
-    <h1>&nbsp;</h1>
-    <?= $create_form ?>
+<div class="container">
+	<div class="create-copy">    
+	    <h1>Create a new map</h1>
+		<p>Tell the story behind a product or a service: map the locations of suppliers, add descriptions, photos and videos, calculate the carbon footprint, and embed or link to the map to share it with the world!</p>
+		<? if($can_import) { ?>
+		<br/>
+		<ul>
+			<li><a href="tools/import/csv">Import from CSV File</a></li>
+			<li><a href="tools/import/google">Import from Google Spreadsheets</a></li>
+		</ul>
+		<? } ?>
+	</div>
+    <div class="create-box">
+    	<?= $create_form ?>
+	</div> 
 </div> 
-</div> 
-
+<div class="clear"></div>

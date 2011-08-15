@@ -2,10 +2,8 @@
 
 <div class="container">
     <div class="register-copy">
-        <h1>Register with Sourcemap</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet ultrices neque.</p>
-        <p>In pulvinar ipsum quis orci ornare non lobortis turpis tincidunt. Integer at ligula erat, in hendrerit risus. Vivamus mattis</p>
-        <p>Fusce ultricies pharetra eros, nec ornare magna auctor blandit. Fusce non risus non odio elementum mollis.</p>
+        <h1>Join Us</h1>
+        <p>Register to create sourcemaps, leave comments, save favorites, and stay  informed about our work.</p>
         <div class="spacer">&nbsp;</div>
         <ul>
             <li>Already have an account? <a href="/auth">Sign in here</a>.</li>
@@ -17,7 +15,6 @@
         $f = Sourcemap_Form::factory('register')
             ->method('post')
             ->action('register');
-
         $f->input('email', 'Email', 1)
             ->input('username', 'Username', 2)
             ->password('password', 'Password', 3)
@@ -42,6 +39,6 @@
 
 
 <?php else: ?>
-<h2>You&apos;re logged in as <?= $current_user->username ?>.</h2>
+<h2>You&apos;re signed in as <?= $current_user->username ?>.</h2>
 <?php endif; ?>
 

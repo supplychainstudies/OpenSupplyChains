@@ -63,7 +63,7 @@ jQuery.fn.liveSearch = function (conf) {
                 position:   'absolute', 
                 left:       inputDim.left + 'px', 
                 top:        inputDim.topPos + 'px',
-                width:      (inputDim.totalWidth <= 400) ? '400px' : inputDim.totalwidth + 'px'
+                width:      (inputDim.totalWidth <= 310) ? '310px' : inputDim.totalwidth + 'px'
             });
         };
 
@@ -135,22 +135,17 @@ jQuery.fn.liveSearch = function (conf) {
                                     html += "<a class=\"search-link\" href=\"/map/view/"+ json.results[i].id + "\">";
                                     html += "</a>";
                                     html += "<div class=\"search-details\">";
-                                    html += "<span class=\"search-title\">sdfasdfsdaf";
+                                    html += "<span class=\"search-title\">";
                                     html += json.results[i].attributes.title || "An Unnamed Sourcemap";
                                     html += "</span>";
                                     html += "<span class=\"search-author\">";
-                                    html += "By ";
+                                    html += " ";
                                     html += json.results[i].owner.name;
                                     html += "</span> ";
                                     html += "<span class=\"search-date\" href=\"\">";
                                     var d = new Date(json.results[i].created*1000);
                                     html += _S.ttrunc(_S.fmt_date(d),14);
                                     html += "</span>";
-                                    html += "</div>";
-                                    html += "<div class=\"search-preview\"\>";
-                                    html += "<img class=\"search-preview-map\" src=\"/map/static/";
-                                    html += json.results[i].id;
-                                    html += ".t.png\" alt=\"\" />";
                                     html += "</div>";
                                     html += "<div class=\"clear\"></div>";
                                     html += "</li>";

@@ -1,5 +1,5 @@
 <div class="user-details<?= $user->has_flag(Sourcemap::VERIFIED) ? ' verified' : '' ?>">
-<?= HTML::chars($user->username)?> last logged in on <?= $last_login?><br />
+<?= HTML::chars($user->username)?> last signed in on <?= $last_login?><br />
 <fieldset><legend>Flags</legend>
 <form name="user-verification" method="post" action="admin/users/<?= $user->id ?>/flags">
 <label for="verfified">Verified</label>

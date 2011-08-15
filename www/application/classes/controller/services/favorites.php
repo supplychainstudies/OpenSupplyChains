@@ -8,12 +8,12 @@ class Controller_Services_Favorites extends Sourcemap_Controller_Service {
     public function action_get() {
         if($user = Auth::instance()->get_user()) {
             $this->response = $user->favorites->find_all()->as_array(null, true);
-        } else return $this->_forbidden('You\'re not logged in.');
+        } else return $this->_forbidden('You\'re not signed in.');
     }
 
     public function action_post() {
         if(!Auth::instance()->get_user()) {
-            return $this->_forbidden('You\'re not logged in.');
+            return $this->_forbidden('You\'re not signed in.');
         } 
         $posted = $this->request->posted_data;
         
@@ -46,7 +46,7 @@ class Controller_Services_Favorites extends Sourcemap_Controller_Service {
 
     public function action_delete($scid) {
         if(!Auth::instance()->get_user()) {
-            return $this->_forbidden('You\'re not logged in.');
+            return $this->_forbidden('You\'re not signed in.');
         } 
         $user = Auth::instance()->get_user();
         $sc = ORM::factory('supplychain', $scid);

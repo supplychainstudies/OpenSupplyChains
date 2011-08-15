@@ -16,7 +16,7 @@
     
         <div id="edit-description" class="sourcemap-form">        
             <%= $("<div></div>").append(
-                    $("<textarea></textarea>").attr("name", "description").addClass("textbox").html(this.attr["description"] || "")
+                    $("<textarea></textarea>").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 140 characters.").html(this.attr["description"] || "")
                 ).html()
             %>
         </div>
@@ -39,7 +39,7 @@
 	                    </div>
 					</div>         
 					<div class="footprint-section">					           
-	                    <label for="co2e">Impact</label>
+	                    <label for="co2e">Factor</label>
 	                    <div class="sourcemap-form-textbox">
 	                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || 0); %>
 	                        <%= $("<div></div>").append(el).html() %>

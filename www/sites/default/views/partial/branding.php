@@ -18,14 +18,14 @@
 				<div>
                 <a href="/home">Dashboard</a>
                 </div>
-                <a class="existing-login" href="auth/logout">Log out</a>
+                <a class="existing-login" href="auth/logout">Sign out</a>
             </li>
             <?php else:  // Otherwise, this ?>
             <li class="register">
                 <div class="button">
                     <a href="/register">Register</a> 
                 </div>
-                <a class="existing-login" href="auth">Existing user login</a>
+                <a class="existing-login" href="auth">Existing user? Sign in.</a>
                 <?php endif; ?>
             </li>
         </ul>

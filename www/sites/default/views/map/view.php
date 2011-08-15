@@ -69,7 +69,7 @@
         </div>
        
         <?php else: ?>
-        <p><a href="/auth">Log in</a> or <a href="/register">register</a> to add to the discussion</p> 
+        <p><a href="/auth">Sign in</a> or <a href="/register">register</a> to add to the discussion</p> 
         <?php endif; ?>
         <?php if($comments): ?>
         <ul id="comments">

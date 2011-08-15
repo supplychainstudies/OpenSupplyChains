@@ -13,7 +13,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public $template = 'auth';
 
     public function action_index() {
-        $this->layout->page_title = Auth::instance()->get_user() ? 'Logged in to Sourcemap' : 'Log in to Sourcemap';
+        $this->layout->page_title = Auth::instance()->get_user() ? 'Signed in to Sourcemap' : 'Sign in to Sourcemap';
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
             $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());
@@ -49,10 +49,12 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             Message::instance()->set('Invalid username or password.', Message::ERROR);
             $this->request->redirect('auth');
         }
+		
         if (!empty($post->next)) {
             $this->request->redirect($post->next);
         } else {
-            $this->request->redirect('home/');
+			print_r($post->next);
+           	$this->request->redirect('home/');
         }
     }
 

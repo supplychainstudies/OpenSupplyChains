@@ -2,6 +2,9 @@
 // todo: make configurable at init(), rather than loading config files...?
 class Sourcemap_JS {
 
+    const EXT = '.js';
+    const MIN_EXT = '.min.js';
+
     const BUNDLE_EXT = '.bundle.js';
     const BUNDLE_MIN_EXT = '.bundle.min.js';
 
@@ -99,10 +102,21 @@ class Sourcemap_JS {
             }
             $scripts = array();
             foreach($pkgs as $pi => $pkg) {
-                $scripts[] = self::get_package_scripts($pkg);
+                $pscripts = self::get_package_scripts($pkg);
+                foreach($pscripts as $pi => $ps) {
+                    if(preg_match('/^http/', $ps)) {
+                        $scripts[] = $ps;
+                    } else {
+                        if(self::$minified) {
+                            $scripts[] = dirname($ps).'/'.basename($ps, self::EXT).self::MIN_EXT;
+                        } else {
+                            $scripts[] = $ps;
+                        }
+                    }
+                }
             }
-            if(!$scripts) $scripts[] = array();
-            $scripts = array_values(array_unique(call_user_func_array('array_merge', $scripts)));
+            //if(!$scripts) $scripts[] = array();
+            //$scripts = array_values(array_unique(call_user_func_array('array_merge', $scripts)));
         }
         return $scripts;
     }

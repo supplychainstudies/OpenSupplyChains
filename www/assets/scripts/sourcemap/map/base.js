@@ -297,8 +297,8 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
                 var title = cluster.cluster[i].attributes.title ?
                     cluster.cluster[i].attributes.title.substring(0,36) : "";
                 title += title.length == 36 ? "..." : "";
-                var address = cluster.cluster[i].attributes.address ? 
-                    cluster.cluster[i].attributes.address.substring(0,46) : "";
+                var address = cluster.cluster[i].attributes.placename || cluster.cluster[i].attributes.address;
+                address = address ? address.substring(0,46) : "";
                 address += address.length == 46 ? "..." : "";
                 
                 var stop_id = cluster.cluster[i].attributes.stop_instance_id;

@@ -147,13 +147,16 @@ if (!defined('SUPPRESS_REQUEST')) {
             header('HTTP/1.1 500 Internal Server Error');
             header('Content-Type: text/plain');
             die($e);
+        } else {
+            header('HTTP/1.1 404 Not Found');
         }
         $response = <<<HTML
             <!DOCTYPE html>
             <html>
                 <head>
-                    <title>Page not found.</title>
-                    <link href="assets/styles/style.css" rel="stylesheet" type="text/css" />
+                    <title>Sourcemap :: Page not found.</title>
+                    <link href="assets/styles/reset.css" rel="stylesheet" type="text/css" />
+                    <link href="assets/styles/general.css" rel="stylesheet" type="text/css" />
                     <style>
                         body > * {
                             padding: .5em;
@@ -161,22 +164,36 @@ if (!defined('SUPPRESS_REQUEST')) {
                         }
                         header {
                             font-size: 1.2em;
-                            color: #006600;
-                            background-color: #eee;
-                            border-bottom: 1px solid #ccc;
+                            color: #332;
                         }
                         .article-content p {
                             margin: .25em;
                             margin-bottom: .5em;
+                            clear: both;
+                        }
+                        .article-content img {
+                            float: left;
+                            clear: none;
+                            width: 50%;
+                            max-width: 515px;
+                        }
+                        .article-content div.gigantic {
+                            font-size: 1800%;
+                            font-weight: bold;
+                            float: right;
+                            max-width: 50%;
                         }
                     </style>
                 </head>
                 <body>
                     <header id="masthead">
-                        <h1>Sourcemap couldn't fulfill your request</h1>
+                        <h1>You've Strayed into Uncharted Waters</h1>
                     </header>
                     <div class="article-content">
+                        <div class="gigantic">404</div>
+                        <img src="assets/images/monsters.png" />
                         <p>This is the part of the map where it says, "Here be monsters."</p><p>Please, <a href="/">go back</a>.</p>
+                        <p>If you have questions or concerns, please, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
                     </div>
                     <!--
                         <?= $e ?>

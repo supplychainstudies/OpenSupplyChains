@@ -16,8 +16,11 @@ class Controller_Admin_Analytics extends Controller_Admin {
 
     public function action_index() {
     
-        $today =  strtotime("now");
-        $start_time = strtotime(strftime('%Y-%m-%d 00:00:00'));
+        $now = time();
+        $midnight = strtotime(strftime('%Y-%m-%d 00:00:00'));
+        $weekago = strtotime("-1 week");
+        $firstofmonth = strtotime(strftime('%Y-%m-1 00:00:00'));
+        $sixmosago = strtotime(strftime('-6 months'));
 
         $supplychain = ORM::factory('supplychain');
         $user = ORM::factory('user');
@@ -25,28 +28,136 @@ class Controller_Admin_Analytics extends Controller_Admin {
 
         // todo: clean this up
         
-        $usercreated_today = $user->where('created', 'BETWEEN', array($start_time, $today))
-            ->find_all()->as_array('id', array('id', 'username', 'email'));
+        $today = array();
+        $today['users'] = $user->where('created', 'BETWEEN', array($midnight, $now))
+            ->count_all();
+        $today['maps'] = $supplychain->where('created', 'BETWEEN', array($midnight, $now))
+            ->count_all();
+        $today['logins'] = $user->where('last_login', 'BETWEEN', array($midnight, $now))
+            ->count_all();
+        $this->template->today = (object)$today;
 
-        $supplychaincreated_today = $supplychain->where('created', 'BETWEEN', array($start_time, $today))
-            ->find_all()->as_array('id', array('id', 'user_id', 'created'));
+        $lastweek = array();
+        $lastweek['users'] = $user->where('created', 'BETWEEN', array($weekago, $now))
+            ->count_all();
+        $lastweek['maps'] = $supplychain->where('created', 'BETWEEN', array($weekago, $now))
+            ->count_all();
+        $lastweek['logins'] = $user->where('last_login', 'BETWEEN', array($weekago, $now))
+            ->count_all();
+        $this->template->lastweek = (object)$lastweek;
 
-        $today_supplychains = array();
-        $scmodel = ORM::factory('supplychain');
-        foreach($supplychaincreated_today as $scid => $sc) {
-            $today_supplychains[] = $scmodel->kitchen_sink($scid);
+        $thismonth = array();
+        $thismonth['users'] = $user->where('created', 'BETWEEN', array($firstofmonth, $now))
+            ->count_all();
+        $thismonth['maps'] = $supplychain->where('created', 'BETWEEN', array($firstofmonth, $now))
+            ->count_all();
+        $thismonth['logins'] = $user->where('last_login', 'BETWEEN', array($firstofmonth, $now))
+            ->count_all();
+        $this->template->thismonth = (object)$thismonth;
+
+        $sixmos = array();
+        $sixmos['users'] = $user->where('created', 'BETWEEN', array($sixmosago, $now))
+            ->count_all();
+        $sixmos['maps'] = $supplychain->where('created', 'BETWEEN', array($sixmosago, $now))
+            ->count_all();
+        $sixmos['logins'] = $user->where('last_login', 'BETWEEN', array($sixmosago, $now))
+            ->count_all();
+        $this->template->sixmos = (object)$sixmos;
+
+
+        $stop = $now;
+
+        $week_maps = array();
+        for($i=7; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'days' : 'day'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'days' : 'day'));
+            $week_maps[] = $supplychain->where('created', 'BETWEEN', array($start, $stop))
+                ->count_all();
         }
 
-        $usergroupcreated_today = $usergroup->where('created', 'BETWEEN', array($start_time, $today))
-            ->find_all()->as_array('id', array('id', 'owner_id', 'name'));
+        $this->template->week_maps = $week_maps;
 
-        $user_logins = $user->where('last_login', 'BETWEEN', array($start_time, $today))
-            ->find_all()->as_array('id', array('id', 'username', 'last_login'));
+        $fourweeks_maps = array();
+        for($i=4; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'weeks' : 'week'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'weeks' : 'week'));
+            $fourweeks_maps[] = $supplychain->where('created', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
 
-        $this->template->today_users = $usercreated_today;
-        $this->template->today_supplychains = $today_supplychains;
-        $this->template->today_usergroups = $usergroupcreated_today;
-        $this->template->user_logins = $user_logins;
+        $this->template->fourweeks_maps = $fourweeks_maps;
+
+        $sixmos_maps = array();
+        for($i=6; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'months' : 'month'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'months' : 'month'));
+            $sixmos_maps[] = $supplychain->where('created', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
+
+        $this->template->sixmos_maps = $sixmos_maps;
+
+        $week_users = array();
+        for($i=7; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'days' : 'day'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'days' : 'day'));
+            $week_users[] = $user->where('created', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
+
+        $this->template->week_users = $week_users;
+
+        $fourweeks_users = array();
+        for($i=4; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'weeks' : 'week'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'weeks' : 'week'));
+            $fourweeks_users[] = $user->where('created', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
+
+        $this->template->fourweeks_users = $fourweeks_users;
+
+        $sixmos_users = array();
+        for($i=6; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'months' : 'month'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'months' : 'month'));
+            $sixmos_users[] = $user->where('created', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
+
+        $this->template->sixmos_users = $sixmos_users;
+
+        $week_logins = array();
+        for($i=7; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'days' : 'day'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'days' : 'day'));
+            $week_logins[] = $user->where('last_login', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
+
+        $this->template->week_logins = $week_logins;
+
+        $fourweeks_logins = array();
+        for($i=4; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'weeks' : 'week'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'weeks' : 'week'));
+            $fourweeks_logins[] = $user->where('last_login', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
+
+        $this->template->fourweeks_logins = $fourweeks_logins;
+
+        $sixmos_logins = array();
+        for($i=6; $i; $i--) {
+            $start = strtotime(sprintf("-%d %s", $i, $i > 1 ? 'months' : 'month'));
+            $stop = strtotime(sprintf("-%d %s", $i-1, $i > 1 ? 'months' : 'month'));
+            $sixmos_logins[] = $user->where('last_login', 'BETWEEN', array($start, $stop))
+                ->count_all();
+        }
+
+        $this->template->sixmos_logins = $sixmos_logins;
+
+
 
         Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Analytics', 'admin/analytics');

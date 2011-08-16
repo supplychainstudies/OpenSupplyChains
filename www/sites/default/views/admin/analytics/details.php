@@ -1,56 +1,66 @@
-<h3>Today on Sourcemap</h3>
+<h3>Today</h3>
 <p>
-    <?php if(isset($today_users) && $today_users): ?>&raquo;<a href="#new-users">New Users</a><?php endif; ?>
-    <?php if(isset($today_supplychains) && $today_supplychains): ?>&raquo;<a href="#new-supplychains">New Supplychains</a><?php endif; ?>
-    <?php if(isset($today_usergroups) && $today_usergroups): ?>&raquo;<a href="#new-groups">New Groups</a><?php endif; ?>
-    <?php if(isset($user_logins) && $user_logins): ?>&raquo;<a href="#logins">Logins</a><?php endif; ?>
+    <?php if($today->users): ?><?= $today->users ?> new user<?= $today->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
+    <?php endif; ?>
+    <?php if($today->maps): ?><?= $today->maps ?> new map<?= $today->maps > 1 ? 's' : '' ?>.
+    <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($today->logins): ?><?= $today->logins ?> user<?= $today->logins > 1 ? 's' : '' ?> logged in.
+    <?php else: ?>No logins.
+    <?php endif; ?>
 </p>
 
-<?php if(isset($user_logins) && $user_logins): ?>
-<h4><span class="good-news"><?= count($user_logins) ?></a> User Login<?php count($user_logins) > 1 ? 's' : '' ?></h4>
-<ol>
-<?php foreach($user_logins as $login):?>
-    <li><a href="admin/users/<?= $login->id ?>"><?= HTML::chars($login->username) ?></a> at <?= $login->last_login ?></li>
- <?php endforeach;?>
-</ol>
-<?php else: ?>
-<h4 class="bad-news">No user logins.</h4>
-<?php endif; ?>
+<?php $chbaseurl = "http://chart.googleapis.com/chart?";  ?>
+<?php $chsz = "220x200"; ?>
+<h3>The Last Week</h3>
+<p>
+    <?php if($lastweek->users): ?><?= $lastweek->users ?> new user<?= $lastweek->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
+    <?php endif; ?>
+    <?php if($lastweek->maps): ?><?= $lastweek->maps ?> new map<?= $lastweek->maps > 1 ? 's' : '' ?>.
+    <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($lastweek->logins): ?><?= $lastweek->logins ?> user<?= $lastweek->logins > 1 ? 's' : '' ?> logged in.
+    <?php else: ?>No logins.
+    <?php endif; ?>
+</p>
+
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=00BEFA&cht=bvs&chd=t:'.join(',',$week_maps).'&chds=a&chxt=x,y&chxl=0:|7|6|5|4|3|2|1|0|&chxr=0,7,0|1,0,'.max($week_maps).'&chtt=New+Maps&chs='.$chsz ?>" />
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=FA00C0&cht=bvs&chd=t:'.join(',',$week_users).'&chds=a&chxt=x,y&chxl=0:|7|6|5|4|3|2|1|0|&chxr=0,7,0|1,0,'.max($week_users).'&chtt=New+Users&chs='.$chsz ?>" />
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=FAB700&cht=bvs&chd=t:'.join(',',$week_logins).'&chds=a&chxt=x,y&chxl=0:|7|6|5|4|3|2|1|0|&chxr=0,7,0|1,0,'.max($week_logins).'&chtt=User+Logins&chs='.$chsz ?>" />
 
 
-<?php if(isset($today_users) && $today_users): ?>
-<h4 id="new-users"><span class="good-news"><?= count($today_users) ?></span> New User Registration<?= count($today_users) > 1 ? 's' : '' ?></h4>
-<ol>
-<?php foreach($today_users as $user): ?>
-<li><a href="admin/users/<?= $user->id ?>"><?= HTML::chars($user->username) ?></a> - <?= HTML::chars($user->email) ?></li>
-<?php endforeach;?>
-</ol>
-<?php else: ?>
-<h4 class="bad-news">No new users.</h4>
-<?php endif; ?>
-
-<?php if(isset($today_supplychains) && $today_supplychains): ?>
-<h4><span class="good-news"><?= count($today_supplychains) ?></span> New Supplychain<?= count($today_supplychains) > 1 ? 's' : '' ?></h4>
-<ol>
-<?php foreach($today_supplychains as $supplychain):?>
-    <li><a href="map/view/<?=$supplychain->id?>">
-        <?= isset($supplychain->attributes->name) ? HTML::chars($supplychain->attributes->name) : 
-            (isset($supplychain->attributes->title) ? HTML::chars($supplychain->attributes->title) : '-unnamed-')
-        ?></a> at <?= date('h:i a', $supplychain->created) ?></li>
-<?php endforeach;?>
-</ol>
-<?php else: ?>
-<h4 class="bad-news">No new supplychains.</h4>
-<?php endif; ?>
-
-<?php if(isset($today_usergroups) && $today_usergroups): ?>
-<h4><span class="good-news"><?= count($today_usergroups) ?></span> New User Group<?= count($today_usergroups) > 1 ? 's' : '' ?></h4>
-<ol>
-<?php foreach($today_usergroups as $group):?>
-    <li><a href="admin/groups/<?=$group->id?>"><?= HTML::chars($group->name) ?></a></li>
- <?php endforeach;?>
-<?php else: ?>
-<h4 class="bad-news">No new user groups.</h4>
-<?php endif; ?>
+<h3>The Last Month</h3>
+<p>
+    <?php if($thismonth->users): ?><?= $thismonth->users ?> new user<?= $thismonth->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
+    <?php endif; ?>
+    <?php if($thismonth->maps): ?><?= $thismonth->maps ?> new map<?= $thismonth->maps > 1 ? 's' : '' ?>.
+    <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($thismonth->logins): ?><?= $thismonth->logins ?> user<?= $thismonth->logins > 1 ? 's' : '' ?> logged in.
+    <?php else: ?>No logins.
+    <?php endif; ?>
+</p>
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=00BEFA&cht=bvs&chd=t:'.join(',',$fourweeks_maps).'&chds=a&chxt=x,y&chxl=0:|4|3|2|1|0|&chxr=0,4,0|1,0,'.max($fourweeks_maps).'&chtt=New+Maps&chs='.$chsz ?>" />
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=FA00C0&cht=bvs&chd=t:'.join(',',$fourweeks_users).'&chds=a&chxt=x,y&chxl=0:|4|3|2|1|0|&chxr=0,4,0|1,0,'.max($fourweeks_users).'&chtt=New+Users&chs='.$chsz ?>" />
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=FAB700&cht=bvs&chd=t:'.join(',',$fourweeks_logins).'&chds=a&chxt=x,y&chxl=0:|4|3|2|1|0|&chxr=0,4,0|1,0,'.max($fourweeks_logins).'&chtt=User+Logins&chs='.$chsz ?>" />
 
 
+<h3>The Last Six Months</h3>
+<p>
+    <?php if($sixmos->users): ?><?= $sixmos->users ?> new user<?= $sixmos->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
+    <?php endif; ?>
+    <?php if($sixmos->maps): ?><?= $sixmos->maps ?> new map<?= $sixmos->maps > 1 ? 's' : '' ?>.
+    <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($sixmos->logins): ?><?= $sixmos->logins ?> user<?= $sixmos->logins > 1 ? 's' : '' ?> logged in.
+    <?php else: ?>No logins.
+    <?php endif; ?>
+</p>
+
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=00BEFA&cht=bvs&chd=t:'.join(',',$sixmos_maps).'&chds=a&chxt=x,y&chxl=0:|6|5|4|3|2|1|0|&chxr=0,6,0|1,0,'.max($sixmos_maps).'&chtt=New+Maps&chs='.$chsz ?>" />
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=FA00C0&cht=bvs&chd=t:'.join(',',$sixmos_users).'&chds=a&chxt=x,y&chxl=0:|6|5|4|3|2|1|0|&chxr=0,6,0|1,0,'.max($sixmos_users).'&chtt=New+Users&chs='.$chsz ?>" />
+<img src="<?= $chbaseurl.'chf=bg,s,ffffff&chco=FAB700&cht=bvs&chd=t:'.join(',',$sixmos_logins).'&chds=a&chxt=x,y&chxl=0:|6|5|4|3|2|1|0|&chxr=0,6,0|1,0,'.max($sixmos_logins).'&chtt=User+Logins&chs='.$chsz ?>" />

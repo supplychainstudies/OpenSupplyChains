@@ -42,7 +42,8 @@ return array(
         'sourcemap-core' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap.js', 
-                'assets/scripts/sourcemap/supplychain.js'
+                'assets/scripts/sourcemap/supplychain.js',
+                'assets/scripts/sourcemap/supplychain/graph.js'
             ),
             'requires' => array(
                 'less', 'sourcemap-search', 'sourcemap-jquery', 'google-analytics'
@@ -70,11 +71,10 @@ return array(
                 'assets/scripts/sourcemap/map.js',
                 'assets/scripts/sourcemap/map/base.js',
                 'assets/scripts/sourcemap/map/editor.js',
-                'assets/scripts/sourcemap/supplychain/graph.js'
             ),
             'requires' => array(
                 'sourcemap-template', 'sourcemap-core', 
-                'google-maps', 'openlayers-cloudmade' 
+                'google-maps', 'openlayers-cloudmade'
             )
         ),
         'sourcemap-tabbed-edit' => array(

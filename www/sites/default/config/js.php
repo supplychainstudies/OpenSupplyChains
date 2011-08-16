@@ -10,7 +10,6 @@ return array(
         ),
         'sourcemap-edit' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap/supplychain/graph.js',
                 'assets/scripts/sourcemap/supplychain/editor/tabbed.js',
                 'sites/default/assets/scripts/supplychain/edit.js'
             ),

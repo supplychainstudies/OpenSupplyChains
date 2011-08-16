@@ -15,7 +15,7 @@ return array(
                 'sites/default/assets/scripts/supplychain/edit.js'
             ),
             'requires' => array(
-                'sourcemap-template', 'sourcemap-map'
+                'sourcemap-core', 'sourcemap-template', 'sourcemap-map'
             )
         ),
         'sourcemap-create' => array(

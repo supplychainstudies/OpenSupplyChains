@@ -129,8 +129,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                         this.stop.attributes.stop_instance_id = this.stop.instance_id;
                         this.stop.attributes.supplychain_instance_id = this.stop.supplychain_id;
                         this.map.controls.select.select(this.map.stopFeature(sc.instance_id, this.stop.instance_id));
-                        
-     
+                           
                     }
                 }, {"stop":new_stop, "map":this.map, "sc":sc});
                                 

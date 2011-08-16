@@ -9,8 +9,7 @@
 
 <% if(this.stop.getAttr("url:moreinfo", false)) { %>
     <%= $("<a class='url'>></a>").attr("href", this.stop.getAttr("url:moreinfo"))
-        .text(this.stop.getAttr("urltitle:moreinfo", this.stop.getAttr("url:moreinfo",""))).attr("target", "blank")
-        .wrap("<div></div>").parent().html() %>
+        .text(this.stop.getAttr("urltitle:moreinfo", this.stop.getAttr("url:moreinfo",""))).attr("target", "blank").wrap("<div></div>").parent().html() %>
 <% } %>
 
 <% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false) || this.supplychain.getAttr("sm:ui:water", false)) { %>

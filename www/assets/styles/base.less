@@ -124,13 +124,36 @@
             }
         }            
 
-        iframe, object {
+        iframe, object, div.media-object {
             display:block;
             margin: 0;
             background:#444;
             width: 360px;
             height: 224px;
         }
+		.flickr-slideshow-item {
+			display:block;
+            margin: 0;
+            background:#444;
+            width: 360px;
+            height: 224px;
+			position:relative;
+			overflow:hidden;
+			h4 {
+				z-index:10;
+				position:absolute;
+				top:0; left:0; right:0;
+				background:rgba(0,0,0,0.6);
+				padding:5px;
+				color:#fff;
+				
+			}
+			img {
+				z-index:5;
+				position:absolute;
+				top:0; left:0; right:0;
+			}
+		}
         ul#dialog-footprint {            
             height:45px;
             padding:0; margin:0 -10px 0 -10px;
@@ -167,12 +190,12 @@
             border-bottom-right-radius:4px;	      
             -moz-border-radius-bottomright:4px;
             -webkit-border-bottom-right-radius:4px;
-			iframe, object, embed {
+			iframe, object, embed, div.media-object {
 				position:absolute;
 				top:0; bottom:0; left:-1000px; right:0;
 				margin:auto;
 			}
-			iframe:first-child, object:first-child, embed:first-child {
+			iframe:first-child, object:first-child, embed:first-child, div.media-object:first-child {
 				top:0; left:0; right:0;
 			}
             #dialog-media-navigation {
@@ -355,7 +378,7 @@
                     }
                     &.zoomin{width: 29px; padding: 14px;  background: url(../images/icon-zoomin.png) 15px 9px no-repeat;}
                     &.zoomout{width: 29px; padding: 14px;  background: url(../images/icon-zoomout.png) 15px 9px no-repeat;}
-                    &.weight{padding-left: 40px; background: url(../images/dock-icon-mass.png) 10px 12px no-repeat;}
+                    &.weight{padding-left: 30px; background: url(../images/dock-icon-mass.png) 10px 12px no-repeat;}
                     &.co2e{padding-left: 40px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
                     &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
                     &.addstop{padding-left: 40px; background: url(../images/dock-icon-addpoint.png) 10px 12px no-repeat;}

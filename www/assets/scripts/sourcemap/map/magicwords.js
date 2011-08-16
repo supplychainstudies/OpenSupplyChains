@@ -34,8 +34,15 @@ Sourcemap.MagicWords.content = {
                 "api_key": Sourcemap.MagicWords.content.flickr.api_key, "photoset_id": setid
             }, $.proxy(function(data) {
                 if(data && data.photoset && data.photoset.photo && data.photoset.photo.length) {
+					var newmkup = "";
+					for(var p in data.photoset.photo) {
+						var photo = data.photoset.photo[p];
+						newmkup += '<div class="flickr-slideshow-item"><h4>'+photo.title+'</h4>';
+						newmkup += '<img src="http://farm'+photo.farm+'.static.flickr.com/'+photo.server+'/'+photo.id+'_'+photo.secret+'.jpg" />';
+						newmkup += '</div>';
+					}
                     var mkup = '<object  class="flickr-setid" width="500" height="360"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F'+
-                        data.photoset.owner+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F'+
+                        data.photoset.owner+'%2Fsets%2F'+setid+'%2Fshow%2F&page_show_back_url=%2Fphotos%2F&text=true'+
                         data.photoset.owner+'%2Fsets%2F'+setid+'%2F&set_id='+setid+'&jump_to="></param> '+
                         '<param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=71649"></param> '+
                         '<param name="allowFullScreen" value="true"></param><embed class="flickr-setid" type="application/x-shockwave-flash"'+

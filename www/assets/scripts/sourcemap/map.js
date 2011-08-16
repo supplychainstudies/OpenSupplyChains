@@ -1159,6 +1159,7 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
 
     cluster.attributes.color = c.toString();
     cluster.attributes.scolor = c.toString();
+    cluster.attributes.fcolor = c.toString();
 
     cluster.attributes.count += 1;
     slabel = cluster.attributes.count;

@@ -1,11 +1,8 @@
 <div class="container_16">
-<?php if(isset($email_sent) && $email_sent): ?>
-<a href="auth/reset_password?t=<?= HTML::chars($ticket) ?>">Reset Your Password</a>
-<?php else: ?>
     <div class="sourcemap-form">
         <fieldset>
         <legend>Forgot your password?</legend>
-        <form name="create" method="post" action="auth/forgot_password">
+        <form name="create" method="post" action="auth/forgot">
             <label for="email">Email:</label>
             <input type="text" id="email" name="email" class="required" value="" />
             <div class="clear"></div>
@@ -14,5 +11,4 @@
         </fieldset>
         <div><span class="highlighted">*</span> denotes required field</div>
     </div>
-<?php endif; ?>
 </div>

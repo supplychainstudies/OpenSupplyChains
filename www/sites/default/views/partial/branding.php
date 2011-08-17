@@ -15,9 +15,7 @@
             </li>
             <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
             <li>
-				<div>
-                <a href="/home">Dashboard</a>
-                </div>
+				<div> <a href="/home">Dashboard</a> </div>
                 <a class="existing-login" href="auth/logout">Sign out</a>
             </li>
             <?php else:  // Otherwise, this ?>
@@ -25,7 +23,7 @@
                 <div class="button">
                     <a href="/register">Register</a> 
                 </div>
-                <a class="existing-login" href="auth">Existing user? Sign in.</a>
+                <a class="existing-login" href="auth">Sign in.</a>
                 <?php endif; ?>
             </li>
         </ul>

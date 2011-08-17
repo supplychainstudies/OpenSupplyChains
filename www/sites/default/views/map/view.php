@@ -51,7 +51,7 @@
     <hr />
     <p class="author">
         <img src="<?= $supplychain_avatar ?>" alt="Avatar"></img>
-        <?= $supplychain_date ?>, <a class="author-link" href="user/<?= $supplychain_ownerid ?>"><?= $supplychain_owner ?></a>
+        <a class="author-link" href="user/<?= $supplychain_ownerid ?>"><?= $supplychain_owner ?></a>, <?= $supplychain_date ?>.
     </p>
 
     <div id="discussion-section">

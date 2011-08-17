@@ -35,7 +35,6 @@
             </div>
         <% } %>
 
-
     <div id="dialog-media-navigation">
         <% for(var i in this.stop.magic) { %>
                 <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  

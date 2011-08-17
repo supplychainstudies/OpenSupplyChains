@@ -28,7 +28,6 @@
 	                    </div>
 					</div>
                     <div class="footprint-section">
-                        <label for="unit">Unit</label>
                         	<input type="text" name="unit" value="<%= this.ref.getAttr("unit", "kg") %>" disabled />
                         </label>
                     </div>
@@ -40,7 +39,7 @@
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
-					<div class="footprint-math">x</div>					
+					<div class="footprint-math">km x</div>					
 					<div class="footprint-section">        					
 	                    <label for="co2e">Factor</label>
 	                    <div class="sourcemap-form-textbox">

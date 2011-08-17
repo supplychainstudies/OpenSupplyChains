@@ -312,7 +312,6 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
         var fromst = sc.findStop(h.from_stop_id);
         var tost = st;
         var tmph = fromst.makeHopTo(tost);
-        h.attributes.distance = h.gc_distance();
         h.geometry = tmph.geometry;
     }
     // outbound hops
@@ -321,31 +320,20 @@ Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
         var fromst = st;
         var tost = sc.findStop(h.to_stop_id);
         var tmph = fromst.makeHopTo(tost);
-        h.attributes.distance = h.gc_distance();
         h.geometry = tmph.geometry;
     }
     // both
 }
 
-Sourcemap.Map.Editor.prototype.showEdit = function(ftr, attr) {
+Sourcemap.Map.Editor.prototype.showEdit = function(ftr) {
     var ref = ftr.attributes.ref;
-    var update = attr ? true : false
     var reftype = ref instanceof Sourcemap.Hop ? 'hop' : 'stop';
-    var attr = attr ? Sourcemap.deep_clone(attr) : {};
-    for(var k in ref.attributes) {
-        if(attr[k] == undefined) attr[k] = ref.getAttr(k);
-    }
-    var s = {"ref": ref, "editor": this, "attr": attr, "feature": ftr};
+
+    var s = {"ref": ref, "editor": this, "feature": ftr};
     var cb = function(p, tx, th) {
-        this.editor.map_view.showDialog(th);
-        this.editor.prepEdit(this.ref, this.attr, this.feature);
-		if(update) {
-			 var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
-		     var vals = {};
-		     for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
-		     this.editor.updateFeature(ref, vals);
-		}
-    }
+	 	this.editor.map_view.showDialog(th);
+		this.editor.prepEdit(this.ref, this.attr, this.feature);
+	}
     Sourcemap.template('map/edit/edit-'+reftype, cb, s, s);
 }
 
@@ -459,12 +447,13 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                     vals[kvpairs[i].name] = kvpairs[i].value;
                 }
 			}
+			console.log(vals);
 	        this.editor.updateFeature(ref, vals, true);
 		}, {"ref": ref, "editor": this}));
         $("#edit-hop-footprint input").trigger('keyup');
     }
     
-	var s = {"ref": ref, "editor": this, "attr": attr, "feature": ftr};
+	var s = {"ref": ref, "editor": this, "feature": ftr};
 
     $(this.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
         this.editor.map_view.hideDialog();
@@ -486,13 +475,15 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     }, s));
 
     var cb = function(e) {
-        // Edit should be disabled at this point @todo: maybe move this down and add a spinner or disable the map/editor?
+        // @todo: maybe move this down and add a spinner or disable the map/editor?
     }
 }
 
 Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, noremap) {
     var geocoding = false;
     var vals = updated_vals || {};
+	console.log(ref);
+	console.log(updated_vals);
     for(var k in vals) {
         var val = vals[k];
         if((ref instanceof Sourcemap.Stop) && k === "address" && (val != ref.getAttr("address", false))) {
@@ -542,9 +533,10 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 				if(!(json.results[i].co2e)) { continue;}
                 // Todo: Template this                
                 var cat_content = '<div class="cat-item-footprints">'                    
-                cat_content +=  json.results[i].co2e ? '<div class="cat-item-co2e">' +Math.round(100*json.results[i].co2e)/100+'</div>' : '';
+                cat_content +=  json.results[i].co2e ? '<div class="cat-item-co2e"></div>' : '';
                 cat_content += '<div class="clear"></div></div>'; 
-                cat_content += '<div class="cat-item-name">'+json.results[i].name+'</div>';
+                cat_content += '<div class="cat-item-name">'+_S.ttrunc(json.results[i].name, 30)+' <span class="cat-value">('+
+								Math.round(100*json.results[i].co2e)/100+' kg co2e)</span></div>';
 
 				cat_content += '<div class="clear"></div>';                    
                 
@@ -559,10 +551,6 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             o.params = json.parameters;
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
 
-            $("#catalog-close").click($.proxy(function(e) {
-                var ftr = this.editor.map.findFeaturesForStop(this.editor.editing.supplychain_id,this.editor.editing.instance_id);
-			    this.editor.showEdit(ftr.stop);
-            }, {"o": this.o, "editor": this.editor}));
             $(this.editor.map_view.dialog).find('.catalog-pager').empty();
             // pager prev
             if(o.params.o > 0) {
@@ -608,7 +596,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                 this.editor.updateCatalogListing(o);
             }, {"o": o, "editor": this.editor}));
         }, {"editor": this, "o": o}), "failure": $.proxy(function() {
-            this.map_view.showDialog('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
+            $(this.editor.map_view).find("#edit-catalog").html('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
         }, this)
     });
 }
@@ -618,8 +606,8 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     o.q = o.q ? o.q : '';
     o.catalog = o.catalog ? o.catalog : "osi";
     var tscope = {"editor": this, "o": o, "ref": o.ref};
-    Sourcemap.template('map/edit/catalog', function(p, txt, th) {        
-        this.editor.map_view.showDialog(th);  
+    Sourcemap.template('map/edit/catalog', function(p, txt, th) {  
+	    $("#edit-catalog").html(th);  
         this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }
@@ -628,27 +616,45 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
     // @todo add the unit
     var catalog_map = {
         "osi": {
-            "name": ["title", "name"],
+            "name": ["title"],
             "co2e": true,
             "waste": true,
             "water": true,
             "energy": true
         }
     }
-    var attr = {};
+    var vals = {};
     for(var k in item) {
         if(catalog_map[cat] && catalog_map[cat][k]) {
             if(catalog_map[cat][k] instanceof Array) {
                 var map_to = catalog_map[cat][k];
                 for(var i=0; i<map_to.length; i++) {
-                    attr[map_to[i]] = item[k];
+                    vals[map_to[i]] = item[k];
                 }
             } else if(catalog_map[cat][k] instanceof Function) {
                 var map_with = catalog_map[cat][k];
-                map_with(ref, attr);
-            } else if(catalog_map[cat][k]) attr[k] = item[k];
+                map_with(ref, vals);
+            } else if(catalog_map[cat][k]) {
+				vals[k] = item[k];
+			}
         }
     }
-	var ftr = this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id);
-    this.showEdit(ftr.stop, attr);
+	//var ftr = this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop;
+	//var ref = ftr.stop.attributes.ref;
+    //attr = Sourcemap.deep_clone(attr);
+    //for(var k in ref.attributes) {
+      //  if(attr[k] == undefined) attr[k] = ref.getAttr(k);
+    //}
+		//	 var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
+		  //   var vals = {};
+		  //   for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
+
+
+
+
+	this.updateFeature(this.editing, vals);
+	this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);     
+	$("#editor-tabs").tabs('select', 2);
+    //$("#editor-tabs").tabs('select', 3);
+	
 }

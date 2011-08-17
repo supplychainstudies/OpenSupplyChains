@@ -653,53 +653,56 @@
 #catalog {
     .catalog-content {
         padding:0 !important;
-        margin:0 -10px;
-        height:260px;
-        background: rgb(230,230,230);
-        .box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
-        overflow:auto;
+
     
         ul.catalog-items {
             margin:0;
             li.catalog-item {
                 font-size:0.8em;
                 cursor: pointer;
-                padding: 0.8em;
+                padding: 0.8em 0;
                 color:#777;
                 list-style:none;
                 display:block;
-                border-bottom:2px solid #eee;
+                border-bottom:1px solid #999;
                 &:hover {
                     background:rgba(255,255,255,0.6);
                     color:#000;
                 }
                 .cat-item-name {
-                    font-size:1.2em;
                     font-weight:bold;
 					float:left;
-					width:200px;
+					span.cat-value {
+						font-weight:normal;
+					}
                 }
                 .cat-item-footprints { 
 					float:left;
                     .cat-item-co2e {
-						width:40px;
-                        float:left; padding-top:30px; 
+						width:20px;
+						height:20px;
+						margin-right:5px;
+                        float:left;
                         background: url(../images/dock-icon-co2.png) 0 0 no-repeat;
+						background-size: 100%;
                     }
                     .cat-item-energy {
 						width:40px;
                         float:left; padding-top:30px; 
                         background: url(../images/dock-icon-energy.png) 0 0 no-repeat;
+						background-size: 40%;
                     }
                     .cat-item-waste {
 						width:40px;
                         float:left; padding-top:30px; 
                         background: url(../images/dock-icon-waste.png) 0 0 no-repeat;
+						background-size: 40%;
                     }
                     .cat-item-water {
 						width:40px;
                         float:left; padding-top:30px; 
                         background: url(../images/dock-icon-h20.png) 0 0 no-repeat;
+						background-size: 40%;
                     }
                 }
             }
@@ -719,7 +722,7 @@
              .rounded;
 
              input#catalog-search-field{
-                  width: 100%;
+                  width: 300px;
                   padding: 10px 0 10px 36px;
                   border: 0;
                   outline: none;

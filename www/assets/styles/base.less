@@ -263,7 +263,7 @@
         }
 
         #edit-actions {
-            padding:0; margin:15px 20px;
+            padding:0; margin:15px 0;
             list-style:none;
             li {
                 float:right;
@@ -302,8 +302,9 @@
                 width: 277px;
             }
             #impact-result{
-                border: none;
+                border-top: 1px solid #999;
                 background: none;
+				margin:10px 0 0 0;
                 padding: 10px 0;
                 font-size: 22px;
                 color: #999;
@@ -549,15 +550,33 @@
 		.footprint-section {
 			background:none;
 			float:left;
-			width:70px;
+			width:60px;
 			margin-right:5px;
 		}
+		.footprint-math {
+			background:none;
+			float:left;
+			width:20px;
+			font-size:1em;
+			padding:40px 5px 0 5px;
+		}
+		input[disabled] {
+			font-size:inherit;
+			width:auto;
+			color:#eee;
+			padding:8px 0;
+			border:none;
+			background:none;
+		}
 		.sourcemap-form-textbox {
-			width:50px !important;
+			width:40px !important;
 			input {
 				font-size:inherit;
 				color:#999;
 			}
+		}
+		.footprint-unit {
+			width:60px !important;
 		}
 		label {
 			font-size:0.8em;

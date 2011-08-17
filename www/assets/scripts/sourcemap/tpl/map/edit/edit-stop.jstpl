@@ -30,14 +30,15 @@
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
-					
+					<% var unittype = this.attr["unit"] || "kg"; %>
 					<div class="footprint-section">
 	                    <label for="unit">Unit</label>
-	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-unit").attr("type", "text").attr("name", "unit").addClass("textbox"); el[0].setAttribute("value",this.attr["unit"] || "kg"); %>
-	                        <%= $("<div></div>").append(el).html() %>
-	                    </div>
+						<select class="footprint-unit" name="unit">
+							<option <% if(unittype == "kg") { %>selected<% } %> value="kg">Kg</option>
+							<option <% if(unittype == "kg") { %>selected<% } %> vvalue="ea">Unit</option>								
+						</select>
 					</div>         
+					<div class="footprint-math">@</div>
 					<div class="footprint-section">					           
 	                    <label for="weight">Weight</label>
 	                    <div class="sourcemap-form-textbox">
@@ -45,6 +46,8 @@
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
+					<div class="footprint-math">x</div>
+					
 					<div class="footprint-section">					           
 	                    <label for="co2e">Factor</label>
 	                    <div class="sourcemap-form-textbox">

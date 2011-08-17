@@ -44,7 +44,42 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
             Message::instance()->set('Bad request: '.print_r($post->errors(), true));
             $this->request->redirect('admin/taxonomy');
         }
+        Breadcrumbs::instance()->add('Management', 'admin/')
+            ->add('Categories', 'admin/taxonomy');
 
+    }
+
+    public function action_edit($id) {
+
+        $term = ORM::factory('category', $id);
+
+        if(!$term->loaded()) {
+            Message::instance()->set('Invalid category.');
+            $this->request->redirect('admin/taxonomy');
+        }
+
+        if(strtolower(Request::$method) == 'post') {
+            $post = Validate::factory($_POST);
+            $post->rule('title', 'not_empty')
+                ->rule('name', 'not_empty');
+            if($post->check()) {
+                $term->title = $post["title"];         
+                $term->name = $post["name"];
+                $term->save();
+                Message::instance()->set('Category updated.', Message::INFO);
+                $this->request->redirect('admin/taxonomy');
+            } else {
+                Message::instance()->set('Try again.');
+                $this->request->redirect('admin/taxonomy/'.$id.'/edit');
+            }
+        } else {
+            $this->template = View::factory('admin/taxonomy/edit');
+            $term = ORM::factory('category', (int)$id);
+            $this->template->term = $term;
+        }
+        Breadcrumbs::instance()->add('Management', 'admin/')
+            ->add('Categories', 'admin/taxonomy')
+            ->add($term->title, 'admin/taxonomy/'.$term->id.'/edit');
     }
 
     public function action_rm() {

@@ -53,6 +53,8 @@ and
 <dd>Sourcemap Analytics.</dd>
 <dt><a href="admin/announcements">Announcements</a></dt>
 <dd>Sourcemap Analytics.</dd>
+<dt><a href="admin/taxonomy">Categories</a></dt>
+<dd>Manage map categories.</dd>
 <dt><a href="admin/featured">Featured Supplychains</a></dt>
 <dd>Choose which maps are "featured".</dd>
 <dt><a href="tools/import/csv">CSV Import</a></dt>

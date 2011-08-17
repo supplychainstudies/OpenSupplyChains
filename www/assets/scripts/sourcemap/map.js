@@ -331,108 +331,45 @@ Sourcemap.Map.prototype.initControls = function() {
 
         // wrap select control select method to look for features
         // after map redraw...
-        var sf = this.controls.select.select;
-        var _that = this;
-        this.controls.select.handlers.feature.triggerCallback = function(type,mode,args) {
-            OpenLayers.Handler.Feature.prototype.triggerCallback.call(this, type, mode, args);
-        }
-        this.controls.select.handlers.feature.handle = function(evt) {
-            if(this.feature && !this.feature.layer) {
-                var nf = false;
-                var ref = this.feature.attributes.ref;
-                if(ref instanceof Sourcemap.Stop) {
-                    nf = _that.stopFeature(ref);
-                } else if(ref instanceof Sourcemap.Hop) {
-                    nf = _that.hopFeature(ref);
-                }
-                if(nf) {
-                    this.feature = nf;
-                } else nf = null;
-            }
-            if(this.lastFeature && !this.lastFeature.layer) {
-                var lf = false;
-                var ref = this.lastFeature.attributes.ref;
-                if(ref instanceof Sourcemap.Stop) {
-                    lf = _that.stopFeature(ref);
-                } else if(ref instanceof Sourcemap.Hop) {
-                    lf = _that.hopFeature(ref);
-                }
-                if(lf) {
-                    this.lastFeature = lf;
-                } else lf = null;
-
-            }
-            var handled = OpenLayers.Handler.Feature.prototype.handle.call(this, evt);
-            if(this.feature && !this.feature.layer) {
-                var nf = false;
-                var ref = this.feature.attributes.ref;
-                if(ref instanceof Sourcemap.Stop) {
-                    nf = _that.stopFeature(ref);
-                } else if(ref instanceof Sourcemap.Hop) {
-                    nf = _that.hopFeature(ref);
-                }
-                if(nf) {
-                    this.feature = nf;
-                } else nf = null;
-            }
-            if(this.lastFeature && !this.lastFeature.layer) {
-                var lf = false;
-                var ref = this.lastFeature.attributes.ref;
-                if(ref instanceof Sourcemap.Stop) {
-                    lf = _that.stopFeature(ref);
-                } else if(ref instanceof Sourcemap.Hop) {
-                    lf = _that.hopFeature(ref);
-                }
-                if(lf) {
-                    this.lastFeature = lf;
-                } else lf = null;
-
-            }
-            return handled;
-        }
-        this.controls.select.select = $.proxy(function(f) {
-            var sf = this.controls.select;
-            var nf = false;
-            var ref = f.attributes.ref;
-            if(ref instanceof Sourcemap.Stop) {
-                nf = this.stopFeature(ref);
-            } else if(ref instanceof Sourcemap.Hop) {
-                nf = this.hopFeature(ref, null, "arrow");
-            }
-            if(nf) {
-                var sidx = nf.layer.selectedFeatures.indexOf(f);
-                if(sidx > -1) {
-                    nf.layer.selectedFeatures.splice(sidx,1);
-                }
-                f = nf;
-                $.proxy(OpenLayers.Control.SelectFeature.prototype.select, sf)(nf);
-            } else {
-                $.proxy(OpenLayers.Control.SelectFeature.prototype.select, sf)(f);
-            }
-        }, this);
-        this.controls.select.unselect = $.proxy(function(f) {
-            var sf = this.controls.select;
-            try {
-                $.proxy(OpenLayers.Control.SelectFeature.prototype.unselect, sf)(f);
-            } catch(e) {
-                var nf = false;
-                var ref = f.attributes.ref;
-                if(ref instanceof Sourcemap.Stop) {
-                    nf = this.stopFeature(ref);
-                } else if(ref instanceof Sourcemap.Hop) {
-                    nf = this.hopFeature(ref, null, "arrow");
-                }
-                if(nf) {
-                    this.controls.select.handlers.feature.lastFeature = nf;
-                    this.controls.select.unselect(nf);
-                }
-            }
-        }, this);
 
         // wrap clickoutFeature
         var cof = this.controls.select.clickoutFeature;
         this.controls.select.callbacks.clickout = $.proxy(function(f) {
             $.proxy(cof, this.controls.select)(f);
+        }, this);
+
+        this.controls.select.select = $.proxy(function(f) {
+            if(!f.layer && f.attributes.ref) {
+                f = this.refFeature(f.attributes.ref);
+            } else if(!f.layer && f.cluster) {
+                var cl = f.cluster.slice(0);
+                var stops = [];
+                for(var i=0; i<cl.length; i++) stops.push(cl[i].attributes.ref.instance_id);
+                f = this.findCluster(stops);
+                if(f && !f.layer) f.layer = this.getStopLayer(f.cluster[0].attributes.supplychain_instance_id);
+            }
+            var c = this.controls.select;
+            if(c.handlers.feature.feature && !c.handlers.feature.feature.layer) {
+                if(c.handlers.feature.feature.attributes.ref) {
+                    c.handlers.feature.feature = this.refFeature(c.handlers.feature.feature.attributes.ref);
+                } else if(c.handlers.feature.feature.cluster) {
+                    var cl = c.handlers.feature.feature.cluster.slice(0);
+                    var stops = [];
+                    for(var i=0; i<cl.length; i++) stops.push(cl[i].attributes.ref.instance_id);
+                    c.handlers.feature.feature = this.findCluster(stops);
+                }
+            }
+            if(c.handlers.feature.lastFeature && !c.handlers.feature.lastFeature.layer) {
+                if(c.handlers.feature.lastFeature.attributes.ref) {
+                    c.handlers.feature.lastFeature = this.refFeature(c.handlers.feature.lastFeature.attributes.ref);
+                } else if(c.handlers.feature.lastFeature.cluster) {
+                    var cl = c.handlers.feature.lastFeature.cluster.slice(0);
+                    var stops = [];
+                    for(var i=0; i<cl.length; i++) stops.push(cl[i].attributes.ref.instance_id);
+                    c.handlers.feature.lastFeature = this.findCluster(stops);
+                }
+            }
+            OpenLayers.Control.SelectFeature.prototype.select.call(c, f);
         }, this);
 
         $(document).bind(['map:layer_added', 'map:layer_removed'], function(e, map, label, layer) {
@@ -477,7 +414,7 @@ Sourcemap.Map.prototype.addStopLayer = function(scid) {
             "wrapDateLine": false,
             "strategies": strategies
         }
-    );    
+    );
     this.addLayer(([scid, 'stops']).join('-'), slayer);
     return this;
 }
@@ -552,7 +489,7 @@ Sourcemap.Map.prototype.getControl = function(label) {
     return this.controls[label];
 }
 
-Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
+Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     var supplychain = this.findSupplychain(scid);
     if(!(supplychain instanceof Sourcemap.Supplychain))
         throw new Error('Supplychain not found/Sourcemap.Supplychain required.');
@@ -579,7 +516,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
     }
     var palette = Sourcemap.Color.graduate(dfc, max_plen);
     
-    reselect = prevent_reselect ? false : true;
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     var featureList = [];
@@ -615,7 +551,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid, prevent_reselect) {
             }
         }
     }
-
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 
@@ -678,6 +613,16 @@ Sourcemap.Map.prototype.eraseStop = function(scid, stid) {
     return this;
 }
 
+Sourcemap.Map.prototype.refFeature = function(ref) {
+    var f = false;
+    if(ref instanceof Sourcemap.Stop) {
+        f = this.stopFeature(ref);
+    } else if(ref instanceof Sourcemap.Hop) {
+        f = this.hopFeature(ref);
+
+    }
+    return f;
+}
 
 Sourcemap.Map.prototype.stopFeature = function(scid, stid) {
     if(scid && !stid && (scid instanceof Sourcemap.Stop)) {
@@ -726,6 +671,39 @@ Sourcemap.Map.prototype.hopFeature = function(scid, hid, comp) {
         }
     }
     return f;
+}
+
+Sourcemap.Map.prototype.findCluster = function(stop_ids) {
+    var make_id = function(s) {
+        var ss = [];
+        if(s.length && s[0] instanceof Sourcemap.Stop) {
+            ss = [];
+            for(i=0; i<s.length; i++)
+                ss.push(s.instance_id);
+            ss = ss.sort();
+        } else {
+            ss = s.sort();
+        }
+        var id = ss.join(',');
+        return id;
+    }
+    var targetid = make_id(stop_ids);
+    for(var sc in this.cluster_features) {
+        var sccls = this.cluster_features[sc];
+        for(var i=0; i<sccls.length; i++) {
+            var cl = sccls[i].cluster;
+            if(cl.length <= 1) continue;
+            var st = [];
+            for(var k in cl) {
+                st.push(cl[k].attributes.ref.instance_id);
+            }
+            var cid = st.sort().join(',');
+            if(cid == targetid) {
+                return sccls[i];
+            }
+        }
+    }
+    return false;
 }
 
 // todo: removeStop
@@ -1002,7 +980,7 @@ Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     this.addHopLayer(scid).addStopLayer(scid);
     this.stop_features[scid] = {};
     this.hop_features[scid] = {};
-    this.cluster_features[scid] = {};    
+    this.cluster_features[scid] = [];
     this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);
     
@@ -1141,7 +1119,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     cluster.renderIntent = "cluster";
 
     cluster.cluster = [feature];    
-    this.map.cluster_features[scid][cluster.cluster_instance_id] = {"cluster": cluster};
+    this.map.cluster_features[scid].push(cluster);
     
     return cluster;
 }

@@ -392,7 +392,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
         }, this)); 
-        
+        		
+		$(".footprint-unit").change($.proxy(function(e){
+			if($(e.target).val() != "kg") {
+				$(".weight-context").removeClass("hidden");
+			} else {
+				$(".weight-context").addClass("hidden");
+			}
+		}, this));
         // trigger event on load
         $("#edit-stop-footprint input").trigger('keyup');
 
@@ -447,7 +454,6 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                     vals[kvpairs[i].name] = kvpairs[i].value;
                 }
 			}
-			console.log(vals);
 	        this.editor.updateFeature(ref, vals, true);
 		}, {"ref": ref, "editor": this}));
         $("#edit-hop-footprint input").trigger('keyup');
@@ -482,8 +488,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, noremap) {
     var geocoding = false;
     var vals = updated_vals || {};
-	console.log(ref);
-	console.log(updated_vals);
+
     for(var k in vals) {
         var val = vals[k];
         if((ref instanceof Sourcemap.Stop) && k === "address" && (val != ref.getAttr("address", false))) {

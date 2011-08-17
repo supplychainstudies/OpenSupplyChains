@@ -140,7 +140,7 @@ EREIAM;
 
     public function action_reset() {
 
-        $this->template = View::factory('auth/reset');
+        $this->template = View::factory('auth/reset_password');
 
         $current_user = Auth::instance()->get_user();
 

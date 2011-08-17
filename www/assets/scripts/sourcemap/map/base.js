@@ -139,13 +139,11 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
-        }
-        else if(ftr.attributes.stop_instance_id && !(map.editor)) {
+        } else if(ftr.attributes.stop_instance_id && !(map.editor)) {
             this.showStopDetails(
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
-        }
-        else if (ftr.attributes.hop_instance_id && !(map.editor)) {
+        } else if (ftr.attributes.hop_instance_id && !(map.editor)) {
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );

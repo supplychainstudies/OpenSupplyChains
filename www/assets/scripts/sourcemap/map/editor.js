@@ -64,6 +64,10 @@ Sourcemap.Map.Editor.prototype.init = function() {
         this.connect_from = false;
     }, this));
 
+    Sourcemap.listen('map:feature_unselected', $.proxy(function() {
+        // pass
+    }, this));
+
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(this.connect_from) {
             var fromstid = this.connect_from.attributes.stop_instance_id;
@@ -167,6 +171,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
             if(ftr.cluster) this.map.controls.stopdrag.cancel();
+            return false;
         }, this),
         "onDrag": $.proxy(function(ftr, px) {
             if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))

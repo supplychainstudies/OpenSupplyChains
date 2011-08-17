@@ -1,6 +1,9 @@
 <div class="taxonomy-tree">
 <dl>
-    <dt><?= HTML::chars($tree->data->title) ?></dt>
+    <dt><?php if(isset($tree->data->id)): ?><a href="admin/taxonomy/<?= $tree->data->id ?>/edit"><?php endif; ?>
+        <?= HTML::chars($tree->data->title) ?>
+        <?php if(isset($tree->data->id)): ?></a><?php endif; ?>
+    </dt>
 </dl>
 <?php if(isset($tree->data->id) && $tree->data->id): ?>
 <form method="post" action="admin/taxonomy/rm">

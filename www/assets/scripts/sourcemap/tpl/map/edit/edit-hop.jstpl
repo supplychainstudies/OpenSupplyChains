@@ -49,7 +49,7 @@
 	                    </div>
     				</div>
 
-                    <select id="transportation-type" name="transport" class="sourcemap-form-select">	
+                    <select id="transportation-type" name="transportcat" class="sourcemap-form-select">	
 						<% for(var i in this.editor.transport_catalog) { %>
 							<option <% if(this.ref.getAttr("transport", false) == this.editor.transport_catalog[i].name) { %> selected <% } %> value="<%= this.editor.transport_catalog[i].co2e %>">
 								<%= this.editor.transport_catalog[i].name %>

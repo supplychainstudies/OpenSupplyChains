@@ -453,7 +453,7 @@ Sourcemap.Map.Base.prototype.decorateHopFeatures = function(dec_fn) {
     return this.decorateFeatures(dec_fn, h_ftrs);
 }
 
-Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, smin, smax, active_color) {
+Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, vtot, smin, smax, active_color) {
     var active_color = active_color || this.options.attr_missing_color;
     var smin = smin == undefined ? this.map.options.min_stop_size : parseInt(smin);
     if(!smin) smin = this.map.options.min_stop_size;
@@ -498,8 +498,9 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 var voff = val - this.vmin;
                 var vrange = this.vmax - this.vmin;
                 var sval = this.smin;
-                if(vrange)
-                    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+                //if(vrange)
+                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+                sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
                 f.attributes.size = sval;
                 var fsize = 18;
                 f.attributes.fsize = fsize+"px";     
@@ -555,7 +556,7 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
                     }
                 }
             }
-            this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, null, null, this.options.visualization_colors[viz_nm]);
+            this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, range.total, null, null, this.options.visualization_colors[viz_nm]);
             
             this.map.dockToggleActive(viz_nm);
             this.map.redraw();

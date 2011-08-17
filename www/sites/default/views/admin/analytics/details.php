@@ -1,10 +1,10 @@
 <h3>Today</h3>
 <p>
-    <?php if($today->users): ?><?= $today->users ?> new user<?= $today->users > 1 ? 's' : '' ?>.
-    <?php else: ?>No new users.
-    <?php endif; ?>
     <?php if($today->maps): ?><?= $today->maps ?> new map<?= $today->maps > 1 ? 's' : '' ?>.
     <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($today->users): ?><?= $today->users ?> new user<?= $today->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
     <?php endif; ?>
     <?php if($today->logins): ?><?= $today->logins ?> user<?= $today->logins > 1 ? 's' : '' ?> logged in.
     <?php else: ?>No logins.
@@ -12,14 +12,14 @@
 </p>
 
 <?php $chbaseurl = "http://chart.googleapis.com/chart?";  ?>
-<?php $chsz = "220x200"; ?>
+<?php $chsz = "230x100"; ?>
 <h3>The Last Week</h3>
 <p>
-    <?php if($lastweek->users): ?><?= $lastweek->users ?> new user<?= $lastweek->users > 1 ? 's' : '' ?>.
-    <?php else: ?>No new users.
-    <?php endif; ?>
     <?php if($lastweek->maps): ?><?= $lastweek->maps ?> new map<?= $lastweek->maps > 1 ? 's' : '' ?>.
     <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($lastweek->users): ?><?= $lastweek->users ?> new user<?= $lastweek->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
     <?php endif; ?>
     <?php if($lastweek->logins): ?><?= $lastweek->logins ?> user<?= $lastweek->logins > 1 ? 's' : '' ?> logged in.
     <?php else: ?>No logins.
@@ -33,11 +33,11 @@
 
 <h3>The Last Month</h3>
 <p>
-    <?php if($thismonth->users): ?><?= $thismonth->users ?> new user<?= $thismonth->users > 1 ? 's' : '' ?>.
-    <?php else: ?>No new users.
-    <?php endif; ?>
     <?php if($thismonth->maps): ?><?= $thismonth->maps ?> new map<?= $thismonth->maps > 1 ? 's' : '' ?>.
     <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($thismonth->users): ?><?= $thismonth->users ?> new user<?= $thismonth->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
     <?php endif; ?>
     <?php if($thismonth->logins): ?><?= $thismonth->logins ?> user<?= $thismonth->logins > 1 ? 's' : '' ?> logged in.
     <?php else: ?>No logins.
@@ -50,11 +50,11 @@
 
 <h3>The Last Six Months</h3>
 <p>
-    <?php if($sixmos->users): ?><?= $sixmos->users ?> new user<?= $sixmos->users > 1 ? 's' : '' ?>.
-    <?php else: ?>No new users.
-    <?php endif; ?>
     <?php if($sixmos->maps): ?><?= $sixmos->maps ?> new map<?= $sixmos->maps > 1 ? 's' : '' ?>.
     <?php else: ?>No new maps.
+    <?php endif; ?>
+    <?php if($sixmos->users): ?><?= $sixmos->users ?> new user<?= $sixmos->users > 1 ? 's' : '' ?>.
+    <?php else: ?>No new users.
     <?php endif; ?>
     <?php if($sixmos->logins): ?><?= $sixmos->logins ?> user<?= $sixmos->logins > 1 ? 's' : '' ?> logged in.
     <?php else: ?>No logins.

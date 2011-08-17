@@ -649,7 +649,11 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.ref = stop;
     stcolor = new Sourcemap.Color();    
     if(new_feature.attributes.color) {
-        stcolor = stcolor.fromHex(new_feature.attributes.color);
+        try {
+            stcolor = stcolor.fromHex(new_feature.attributes.color);
+        } catch(e) {
+            stcolor = stcolor.fromHex(rand_color);
+        }
         stcolor.r -= 8; stcolor.g -= 8; stcolor.b -= 8;
         new_feature.attributes.scolor = stcolor.toString();
     } else {
@@ -1109,8 +1113,12 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var fsize = 12;
     slabel = 1;
     
-    var stcolor = new Sourcemap.Color();    
-    stcolor = stcolor.fromHex(feature.attributes.color);
+    var stcolor = new Sourcemap.Color();
+    try {
+        stcolor = stcolor.fromHex(feature.attributes.color);
+    } catch(e) {
+        stcolor = stcolor.fromHex(Sourcemap.Map.prototype.defaults.default_feature_color);
+    }
     stcolor.r = Math.max(0,stcolor.r-30); 
     stcolor.g = Math.max(0,stcolor.g-30);
     stcolor.b = Math.max(0,stcolor.b-30);

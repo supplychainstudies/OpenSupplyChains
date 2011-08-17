@@ -112,7 +112,7 @@ If you asked us to reset the password associated with your user account on Sourc
 
 
 EREIAM;
-        $body .= URL::site('auth/reset_password?t='.$ticket, true);
+        $body .= URL::site('auth/reset?t='.$ticket, true);
         $body .= <<<EREIAM
 
 
@@ -138,9 +138,9 @@ EREIAM;
     }
     
 
-    public function action_reset_password() {
+    public function action_reset() {
 
-        $this->template = View::factory('auth/reset_password');
+        $this->template = View::factory('auth/reset');
 
         $current_user = Auth::instance()->get_user();
 
@@ -201,9 +201,9 @@ EREIAM;
             } else {
                 Message::instance()->set('Please try again.', Message::ERROR);
                 if(isset($_POST['t'])) {
-                    $this->request->redirect('auth/reset_password?t='.$_POST['t']);
+                    $this->request->redirect('auth/reset?t='.$_POST['t']);
                 } else {
-                    $this->request->redirect('auth/reset_password');
+                    $this->request->redirect('auth/reset');
                 }
             }
 

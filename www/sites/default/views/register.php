@@ -10,7 +10,7 @@
     </div>
     <div class="register-box">
         <h1>&nbsp;</h1>
-        <?= $register_form ?>
+        <?= $form ?>
     </div>
 </div>
 

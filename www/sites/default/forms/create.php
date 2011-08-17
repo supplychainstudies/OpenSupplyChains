@@ -30,7 +30,7 @@ return array(
                 'preview'
             ),
             'attributes' => array(
-                'maxlength' => 144,
+                'maxlength' => 140,
 				'placeholder' => 'Maximum 140 characters.'
             )
         ),

@@ -27,7 +27,7 @@ return array(
             'type' => 'textarea',
             'label' => 'Description',
 			'attributes' => array(
-				'maxlength' => 144,
+				'maxlength' => 140,
 				'placeholder' => 'Maximum 140 characters.'				
 			),
             'css_class' => array(
@@ -66,7 +66,7 @@ return array(
             array('in_array', array($valid_cats))
         ),
         'description' => array(
-            array('max_length', array(80))
+            array('max_length', array(140))
         )
     ),
     'filters' => array()

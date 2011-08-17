@@ -428,7 +428,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		$("#transportation-type").unbind("change").change($.proxy(function(e){ 
             $('#edit-hop-footprint input[name="co2e"]').val($(this + ':selected').val()); 
             var unit = false;
-            var transnm = $('#edit-hop-footprint select[name="transport"] option:selected').text();
+            var transnm = $('#edit-hop-footprint select[name="transportcat"] option:selected').text();
             for(var k in this.editor.transport_catalog) {
                 var item = this.editor.transport_catalog[k];
                 if(item.name == transnm) {
@@ -453,8 +453,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 			var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
 	        var vals = {};
 	       	for(var i=0; i<kvpairs.length; i++) {
-				if(kvpairs[i].name == "transport") { 
-                    vals[kvpairs[i].name] = $(e.target).children("option:selected").text();
+				if(kvpairs[i].name == "transportcat") {
+                    vals['transport'] = transnm;
                 } else {
                     vals[kvpairs[i].name] = kvpairs[i].value;
                 }

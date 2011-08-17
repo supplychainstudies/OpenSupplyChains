@@ -177,6 +177,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             if(this.map.map.getMaxExtent().containsLonLat(this.map.map.getLonLatFromPixel(px)))
                 this.moveStopToFeatureLoc(ftr, false, false);
             else this.map.controls.stopdrag.cancel();
+            this.map.controls.select.unselectAll();
         }, this),
         "onComplete": $.proxy(function(ftr, px) {
             if(ftr.attributes.stop_instance_id) {

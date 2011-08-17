@@ -1167,6 +1167,11 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
 
     cluster.attributes.color = c.toString();
     cluster.attributes.scolor = c.toString();
+
+	// darken font color
+    c.r = Math.max(0,c.r-30); 
+    c.g = Math.max(0,c.g-30);
+    c.b = Math.max(0,c.b-30);    
     cluster.attributes.fcolor = c.toString();
 
     cluster.attributes.count += 1;

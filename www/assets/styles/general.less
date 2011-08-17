@@ -377,7 +377,12 @@ h1#site-tagline {
         color:#666;
         float: left; 
     }
-    
+    .sourcemap-form-error{
+		font-weight:bold;
+		float:right;
+		padding:10px 0 4px 0;
+		color:red;
+    }
     .sourcemap-form-textbox, .sourcemap-form-textarea {
         clear: left;
         width:@form-width;
@@ -400,16 +405,7 @@ h1#site-tagline {
             &.edited{ color: #333; }
         }
         textarea{ height: 55px; }
-        &.sourcemap-form-error{
-            font-size:0.8em;
-			font-weight:bold;
-			&:before {
-				content:"(";
-			}
-			&:after {
-				content:")";
-			}
-        }
+
         &.sourcemap-form-button{
             width: 100%;
             border: none;

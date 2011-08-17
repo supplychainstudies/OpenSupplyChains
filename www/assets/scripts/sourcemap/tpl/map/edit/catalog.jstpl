@@ -1,5 +1,4 @@
 <div id="catalog">
-    <h2><div id="catalog-close">&laquo; Back</div> Material Catalog</h2>
     <form id="catalog-search">
         <fieldset>       
                 <input id="catalog-search-field" autocomplete="off" />
@@ -8,5 +7,4 @@
     </form>
     <div class="catalog-pager"></div>
     <div class="catalog-content"></div>
-    <div class="close"></div>
 </div>

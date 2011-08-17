@@ -1,22 +1,22 @@
 <div id="stop-editor">
 <form>
-<h2 class="title"><input name="title" type="text" value="<%= this.attr["title"] %>" /><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
-<h3 class="placename"><input name="address" type="text" value="<%= this.attr["address"] %>" /></h3>
+<h2 class="title"><input name="title" type="text" value="<%= this.ref.getAttr("title","") %>" /><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
+<h3 class="placename"><input name="address" type="text" value="<%= this.ref.getAttr("address","") %>" /></h3>
 
 
 <div id="editor-tabs">
 	<ul>
 		<li><a href="#edit-description">Description</a></li>
-		<li><a href="#edit-stop-footprint">Footprint</a></li>
 		<li><a href="#edit-media">Media</a></li>
-		<li><a class="load-catalog-button">Material Catalog</a></li>
+		<li><a href="#edit-stop-footprint">Footprint</a></li>
+		<li><a href="#edit-catalog" class="load-catalog-button">Material Catalog</a></li>
 		<div class="clear"></div>
 	</ul>
     <div class="clear"></div>
     
         <div id="edit-description" class="sourcemap-form">        
             <%= $("<div></div>").append(
-                    $("<textarea></textarea>").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 140 characters.").html(this.attr["description"] || "")
+                    $("<textarea></textarea>").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 140 characters.").html(this.ref.getAttr("description",""))
                 ).html()
             %>
         </div>
@@ -26,11 +26,11 @@
 					<div class="footprint-section">        
 	                    <label for="co2e">Quantity</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.attr["qty"] || 0); %>
+	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty",0)); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
-					<% var unittype = this.attr["unit"] || "kg"; %>
+					<% var unittype = this.ref.getAttr("unit","kg"); %>
 					<div class="footprint-section">
 	                    <label for="unit">Unit</label>
 						<select class="footprint-unit" name="unit">
@@ -42,7 +42,7 @@
 					<div class="footprint-section">					           
 	                    <label for="weight">Weight</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-weight").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.attr["weight"] || 0); %>
+	                        <% el = $("<input></input>").attr("class", "footprint-weight").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("weight",0)); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
@@ -51,7 +51,7 @@
 					<div class="footprint-section">					           
 	                    <label for="co2e">Factor</label>
 	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.attr["co2e"] || 0); %>
+	                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
@@ -84,13 +84,14 @@
 					<% } %>
 				</div>
                 <div class="media-preview">
-					<% if(this.attr["youtube:link"]) { %>
-					<img src="http://img.youtube.com/vi/<%= this.attr["youtube:link"].substr(31) %>/0.jpg" />
+					<% if(this.ref.getAttr("youtube:link",false)) { %>
+					<img src="http://img.youtube.com/vi/<%= this.ref.getAttr("youtube:link","").substr(31) %>/0.jpg" />
 					<% } %>
 				</div>
                 
             </fieldset>
         </div>
+        <div id="edit-catalog"></div>
 
 </div>
 <div class="clear"></div>

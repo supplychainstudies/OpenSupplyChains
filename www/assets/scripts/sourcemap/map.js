@@ -575,7 +575,16 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     var rand_color = this.options.default_feature_colors[0];
     new_feature.attributes.color = stop.getAttr("color", rand_color);
     new_feature.attributes.fcolor = stop.getAttr("color", rand_color);
-    stop.attributes.title = new_feature.attributes.title = stop.getAttr("title", false) || "" + stop.instance_id.split("-")[1];
+    stop.attributes.title = new_feature.attributes.title = stop.getAttr("title", false);
+    if(!stop.attributes.title) {
+        var idx = parseInt(stop.instance_id.split("-")[1]);
+        var ct = Math.ceil(idx/26);
+        var c = String.fromCharCode("A".charCodeAt(0)+(idx%26));
+        var l = "";
+        while(l.length < ct) l += c;
+        stop.attributes.title = l;
+        new_feature.attributes.title = l;
+    }
     var slabel = stop.getAttr("title", false) || "";
     //slabel = slabel.length > 24 ? slabel.substring(0,24)+"..." : slabel;
     slabel = Sourcemap.ttrunc(slabel, 24);

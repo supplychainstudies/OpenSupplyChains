@@ -18,7 +18,6 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         $f = Sourcemap_Form::load('/create');
         $f->action('create')->method('post');
 
-
         if(!Auth::instance()->get_user()) {
             $this->request->redirect('auth');
         }

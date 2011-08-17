@@ -13,79 +13,43 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     public $layout = 'base';
     public $template = 'register';
     
-    public function action_index() {
-        
-        $this->layout->scripts = array('sourcemap-core');
+    public function action_index() {        
 		$this->layout->page_title = 'Register an account on Sourcemap';
+        
+        $this->layout->scripts = array(
+            'sourcemap-core', 'sourcemap-template'
+        );
 
-        $f = Sourcemap_Form::factory('register')
-            ->method('post')
-            ->action('register');
-
-        $f->input('email', 'Email', 1)
-            ->input('username', 'Username', 2)
-            ->password('password', 'Password', 3)
-            ->password('password_confirm', 'Password (again)', 4)
-            ->submit('register', 'Go!', 5);
-
-        $f->field('email')->label('Email')
-            ->add_class('email')
-            ->add_class('required');
-        $f->field('username')->label('Username')
-            ->add_class('alphadash')
-            ->add_class('required');
-        $f->field('password')->label('Password')
-            ->add_class('required');
-        $f->field('password_confirm')->label('Password (again)')
-            ->add_class('confirm')
-            ->add_class('required');
-
+        $f = Sourcemap_Form::load('/register');
+        $f->action('register')->method('post');
+       
         $this->template->register_form = $f;
 
         if(strtolower(Request::$method) === 'post') {
-            $f->values($_POST);
-            $post = Validate::factory($_POST);
-            $post->rule('email', 'not_empty')
-                ->rule('email', 'email')
-                ->rule('username', 'not_empty')
-                ->rule('username', 'alpha_dash')
-                ->rule('username', 'min_length', array(4))
-                ->rule('username', 'max_length', array(32))
-                ->rule('password', 'not_empty')
-                ->rule('password', 'min_length', array(4))
-                ->rule('password_confirm', 'matches', array('password'))
-                ->rule('password_confirm', 'not_empty');
-
-            $this->template->posted = $post->as_array();
-
-            if($post->check()) {
+            if($f->validate($_POST)) {
+	            $p = $f->values();
+    
                 // check for username in use
-                $exists = ORM::factory('user')
-                    ->where('username', '=', $post['username'])
-                    ->find()->loaded();
+                $exists = ORM::factory('user')->where('username', '=', $p['username'])->find()->loaded();
                 if($exists) {
                     Message::instance()->set('That username is taken.');
-                    $f->field('username')->add_class('error');
                     return;
                 }
                 // check for email in use
-                $exists = ORM::factory('user')
-                    ->where('email', '=', $post['email'])
-                    ->find()->loaded();
+                $exists = ORM::factory('user')->where('email', '=', $p['email'])->find()->loaded();
                 if($exists) {
                     Message::instance()->set('An account exists for that email address.');
-                    $f->field('email')->add_class('error');
                     return;
                 }
 
                 $new_user = ORM::factory('user');
-                $new_user->username = $post['username'];
-                $new_user->email = $post['email'];
-                $new_user->password = $post['password'];
+                $new_user->username = $p['username'];
+                $new_user->email = $p['email'];
+                $new_user->password = $p['password'];
                 $new_user->save();
+
                 if(!$new_user->id) {
-                    Message::instance()
-                        ->set('Could not complete registration. Please contact support.');
+                    Message::instance()->set('Could not complete registration. Please contact support.');
                     return $this->request->redirect('register');
                 }
 
@@ -114,12 +78,10 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 return $this->request->redirect('register');
             } else {
                 Message::instance()->set('Check the information below and try again.');
-                $this->template->errors = $post->errors();
-                $f->errors($post->errors('forms/register'));
             }
-        } else {
-            // pass
-        }
+        } else { 
+		/* pass */ 
+		}
     }
     
     

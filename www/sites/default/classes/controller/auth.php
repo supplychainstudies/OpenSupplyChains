@@ -67,7 +67,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     }
 
 
-    public function action_forgot_password() {
+    public function action_forgot() {
    
         $this->template = View::factory('auth/forgot_password');
         $this->layout->page_title = "Forgot password on Sourcemap";
@@ -105,7 +105,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
         $subject = 'Re: Password Reset Request on Sourcemap.com';
 
-        $body = "Dear '{$username}',\n";
+        $body = "Dear {$username},\n";
         $body .= <<<EREIAM
 
 If you asked us to reset the password associated with your user account on Sourcemap.com, please visit the URL below:

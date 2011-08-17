@@ -21,12 +21,19 @@
             <div class="sourcemap-form">
                 <fieldset>
 					<div class="footprint-section">        					
-	                    <label for="distance">Weight</label>
+	                    <label for="distance">Qty.</label>
 	                    <div class="sourcemap-form-textbox">
 	                        <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 0)); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>
+                    <div class="footprint-section">
+                        <label for="unit">Unit</label>
+                            <div class="sourcemap-form-textbox">
+                                <input type="text" name="unit" value="<%= this.ref.getAttr("unit", "kg") %>" disabled />
+                            </div>
+                        </label>
+                    </div>
 					<div class="footprint-section">        					
 	                    <label for="distance">Distance</label>
 	                    <div class="sourcemap-form-textbox">

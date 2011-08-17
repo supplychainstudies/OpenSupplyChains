@@ -248,8 +248,12 @@ Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
     var o = {
         "url": "services/catalogs/osi", "type": "get",
         "data": {"category": "transportation"},
-        "success": $.proxy(function(data) { 
-            this.transport_catalog = data.results;            
+        "success": $.proxy(function(data) {
+            var nil = {
+                "name": 'None', "co2e": 0.0, "unit": "kg*km"
+            }
+            this.transport_catalog = data.results;
+            this.transport_catalog.unshift(nil);
     	}, this)
 	};
     $.ajax(o);
@@ -275,6 +279,10 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
                 );
                 // if you uncomment this, be prepared to fix some things.
                 //this.editor.map.controls.select.select(ftr);
+            } else {
+                var geom = (new OpenLayers.Format.WKT()).read(this.stop.geometry);
+                var ll = new OpenLayers.LonLat(geom.geometry.x, geom.geometry.y)
+                this.stop.setAttr('address', ll.lat+','+ll.lon);
             }
         }, {"stop": st, "editor": this, "trigger_events": trigger_events}));
     }
@@ -379,8 +387,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             var factor   = editor.find('input[name="co2e"]').val(); 
 
             if (!isNaN(quantity && factor)){ 
-                var output = quantity * factor; 
-                var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+                var output = quantity * factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
         }, this)); 
@@ -392,14 +400,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     } else {
         $("#edit-hop-footprint input").keyup($.proxy(function(e){ 
             editor = $('#edit-hop-footprint');
-            var weight   = editor.find('input[name="qty"]').val();
+            var qty   = editor.find('input[name="qty"]').val();
             var distance = editor.find('input[name="distance"]').val(); 
             var factor   = editor.find('input[name="co2e"]').val(); 
             var unit     = 'kg';
 
-            if (!isNaN(weight && distance && factor)){ 
-                var output = weight * distance * factor;
-                var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+            if(!isNaN(qty && distance && factor)){ 
+                var output = qty * distance * factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
         }, this)); 
@@ -407,22 +415,37 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		// Transport is a special case value as impact, but save name
 		$("#transportation-type").unbind("change").change($.proxy(function(e){ 
             $('#edit-hop-footprint input[name="co2e"]').val($(this + ':selected').val()); 
+            var unit = false;
+            var transnm = $('#edit-hop-footprint select[name="transport"] option:selected').text();
+            for(var k in this.editor.transport_catalog) {
+                var item = this.editor.transport_catalog[k];
+                if(item.name == transnm) {
+                    if(item.unit.match(/person|passenger|pax/i))
+                        unit = "pax";
+                }
+            }
             editor = $('#edit-hop-footprint');
-            var weight   = editor.find('input[name="qty"]').val();
+            var qty = editor.find('input[name="qty"]').val();
             var distance = editor.find('input[name="distance"]').val(); 
-            var factor   = editor.find('input[name="co2e"]').val(); 
-            var unit     = 'kg';
+            var factor = editor.find('input[name="co2e"]').val(); 
+            var unit = unit || 'kg';
+            
+            // update unit
+            $('#edit-hop-footprint input[name="unit"]').val(unit);
 
-            if (!isNaN(weight && distance && factor)){ 
-                var output = weight * distance * factor;
-                var scaled = Sourcemap.Units.scale_unit_value(output, unit, 2);
+            if (!isNaN(qty && distance && factor)){ 
+                var output = qty * distance * factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
 			var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
 	        var vals = {};
 	       	for(var i=0; i<kvpairs.length; i++) {
-				if(kvpairs[i].name == "transport") { vals[kvpairs[i].name] = $(e.target).children("option:selected").text();}
-				else {vals[kvpairs[i].name] = kvpairs[i].value;}
+				if(kvpairs[i].name == "transport") { 
+                    vals[kvpairs[i].name] = $(e.target).children("option:selected").text();
+                } else {
+                    vals[kvpairs[i].name] = kvpairs[i].value;
+                }
 			}
 	        this.editor.updateFeature(ref, vals, true);
 		}, {"ref": ref, "editor": this}));

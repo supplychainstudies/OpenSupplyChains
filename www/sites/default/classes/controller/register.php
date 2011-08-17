@@ -95,7 +95,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $lid = strrev(base64_encode($new_user->username));
                 $url = URL::site("register/confirm?t=$lid-$h", true);
 
-                $msgbody = "Dear '{$new_user->username}',\n\n";
+                $msgbody = "Dear {$new_user->username},\n\n";
                 $msgbody .= 'Welcome to Sourcemap! ';
                 $msgbody .= "Go to the url below to activate your account.\n\n";
                 $msgbody .= $url."\n\n";

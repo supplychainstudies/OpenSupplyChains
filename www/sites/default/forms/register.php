@@ -49,10 +49,10 @@ return array(
         // todo: wildcard
         //'*' => array(),
         'email' => array(
-            array('not_empty','email')
+            array('not_empty', array('email'))
         ),
 	    'username' => array(
-	        array('not_empty', 'alphadash')
+	        array('not_empty', array('alphadash'))
 	    ),
         'password' => array(
 	        array('not_empty')

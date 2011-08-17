@@ -5,10 +5,10 @@ return array(
         'email' => 'A valid email address is required.'
     ),
     'username' => array(
-        'default' => 'A username of letters, numbers, underscores, and dashes is required.'
+        'default' => 'Invalid username.'
     ),
     'password' => array(
-        'default' => 'Your password must be between 4 and 32 characters.'
+        'default' => 'Your password is too long.'
     ),
     'password_confirm' => array(
         'default' => 'Please confirm your password.'

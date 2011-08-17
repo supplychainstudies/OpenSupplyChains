@@ -357,15 +357,21 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	
 	$(this.map_view.dialog).find('#media-content-type').bind('change', $.proxy(function(e) {
 		var mediatype = $(e.target).val();
-		
+
 		$("#media-content-value").attr("name", mediatype);
 		$("#media-content-value").attr("value", ref.getAttr($(e.target).val(), ""));
+		
 		if(mediatype == "youtube:link") {
-			var preview = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube:link").substr(31)+'/0.jpg" />';
+			var preview = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube:link","").substr(31)+'/0.jpg" />';
+			var help = 'You can insert a Youtube movie or a Flickr slide show.<br/><br/>' 
+						+'A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk';					
 		} else {
 			var preview = "<div></div>";
+			var help = 'You can insert a Youtube movie or a Flickr slide show.<br/><br/>' 
+						+'A Flickr set ID is the sequence of numbers at the end of a set URL.';
 		}
 		$("#edit-media .media-preview").html(preview);
+		$("#edit-media .media-help").html(help);
 		
     }, {"ref": ref, "editor": this}));
  

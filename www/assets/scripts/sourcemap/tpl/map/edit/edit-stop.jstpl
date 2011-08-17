@@ -55,7 +55,7 @@
         
         <div id="edit-media" class="sourcemap-form">
             <fieldset>
-				<% mediatype = this.ref.getAttr("youtube:link", false) ? "youtube:link" : this.ref.getAttr("flickr:setid", false) ? "flickr:setid" : ""; %>
+				<% mediatype = this.ref.getAttr("youtube:link", false) ? "youtube:link" : this.ref.getAttr("flickr:setid", false) ? "flickr:setid" : "youtube:link"; %>
 				<select id="media-content-type">
 					<option <% if(mediatype == "youtube:link") { %> selected<% } %> value="youtube:link">Youtube Link</option>				
 					<option <% if(mediatype == "flickr:setid") { %> selected<% } %> value="flickr:setid">Flickr Setid</option>
@@ -65,7 +65,13 @@
                     <%= $("<div></div>").append(el).html() %>
                 </div>                
                 <div class="clear"></div>
-				
+				<div class="media-help">You can insert a Youtube movie or a Flickr slide show.<br/><br/> 
+					<% if(mediatype == "youtube:link") { %>
+						A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk
+					<% } if(mediatype == "flickr:setid") { %>
+						A Flickr set ID is the sequence of numbers at the end of a set URL.
+					<% } %>
+				</div>
                 <div class="media-preview">
 					<% if(this.attr["youtube:link"]) { %>
 					<img src="http://img.youtube.com/vi/<%= this.attr["youtube:link"].substr(31) %>/0.jpg" />

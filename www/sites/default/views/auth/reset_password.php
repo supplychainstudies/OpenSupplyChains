@@ -3,7 +3,7 @@
         <div class="form">
             <fieldset>
             <legend>Forgot your password?</legend>
-            <form name="auth-reset-password" method="post" action="auth/reset_password">
+            <form name="auth-reset-password" method="post" action="auth/reset">
             <label for="new">New Password:</label><br />
             <input type="password" name="new" class="input text password" /><br />
             <label for="new">New Password (again):</label><br />

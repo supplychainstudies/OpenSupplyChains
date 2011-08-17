@@ -12,5 +12,8 @@ return array(
     ),
     'password_confirm' => array(
         'default' => 'Please confirm your password.'
-    )
+    ),
+	'confirm_terms' => array(
+	    'default' => 'Please agree to the terms and conditions.'
+	)
 );

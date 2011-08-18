@@ -30,7 +30,9 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     	$admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
 		if(Auth::instance()->get_user()->has('roles', $import_role) || Auth::instance()->get_user()->has('roles', $admin_role)) {
 			$this->template->can_import = true;                         	
-		} else { $this->template->can_import = false; }
+		} else { 
+            $this->template->can_import = false; 
+        }
         $this->template->create_form = $f;
 		
 

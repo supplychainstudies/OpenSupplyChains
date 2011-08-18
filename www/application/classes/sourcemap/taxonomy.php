@@ -47,6 +47,16 @@ class Sourcemap_Taxonomy {
         return self::arr2tree($tree);
     }
 
+    public static function flatten($tree=null, $d=0) {
+        if($tree === null) $tree = self::load_tree();
+        $flat = array();
+        $flat[] = array($tree->data->id, $tree->data->name, $tree->data->title, $d);
+        foreach($tree->children as $ci => $ch) {
+            $flat = array_merge($flat, self::flatten($ch, $d+1));
+        }
+        return $flat;
+    }
+
     public static function load_ancestors($cat_id) {
         $cat = ORM::factory('category', $cat_id);
         $a = false;

@@ -17,6 +17,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
             $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());
+           	$this->request->redirect('home/');
         } else {
             $this->template->current_user_id = false;
             $this->template->current_user = false;
@@ -53,7 +54,6 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         if (!empty($post->next)) {
             $this->request->redirect($post->next);
         } else {
-			print_r($post->next);
            	$this->request->redirect('home/');
         }
     }

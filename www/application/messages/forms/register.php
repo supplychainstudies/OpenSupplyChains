@@ -5,15 +5,15 @@ return array(
         'email' => 'A valid email address is required.'
     ),
     'username' => array(
-        'default' => 'Invalid username.'
+        'default' => 'Please enter a unique username.'
     ),
     'password' => array(
-        'default' => 'Your password is too long.'
+        'not_empty' => 'Please enter a password.'
     ),
     'password_confirm' => array(
         'default' => 'Please confirm your password.'
     ),
 	'confirm_terms' => array(
-	    'default' => 'Please agree to the terms and conditions.'
+	    'not_empty' => ' '
 	)
 );

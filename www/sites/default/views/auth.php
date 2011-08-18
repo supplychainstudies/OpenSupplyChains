@@ -1,4 +1,3 @@
-<?php if(!isset($current_user) || !$current_user): ?>
 <div class="container">
     <div class="login-copy">
         <h1>Sign in to Sourcemap</h1>
@@ -29,10 +28,5 @@
             </fieldset>
         </div>
     </div>
-</div>
-<div class="clear"></div>
-<div class="container">
-<?php else: ?>
-<h2>You&apos;re signed in as <?= $current_user->username ?>.</h2>
-<?php endif; ?>
+	<div class="clear"></div>
 </div>

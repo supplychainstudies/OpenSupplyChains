@@ -132,7 +132,7 @@ return array(
         'confirm_terms' => array(
             'type' => 'checkbox',
             'label' => 'I have read and agree to the terms of service.',
-            'default' => 1
+            'default' => 0
         ),
         'register' => array(
             'type' => 'submit',
@@ -141,8 +141,6 @@ return array(
     ),
     'messages_file' => 'forms/register',
     'rules' => array(
-        // todo: wildcard
-        //'*' => array(),
         'email' => array(
             array('not_empty', array('email'))
         ),

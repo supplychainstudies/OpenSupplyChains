@@ -775,12 +775,12 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
             "to_stop_id": hop.to_stop_id, "ref": hop, 
 			"color": hop.getAttr("color", rand_color), "label":""
         });
-		new_arrow.renderIntent = "arrow";
         var tmp = new_arrow;
         if(new_arrow instanceof Array) {
             new_arrow = tmp[0];
             new_arrow2 = tmp[1];
         }
+		new_arrow.renderIntent = new_arrow2.renderIntent = "arrow";
     }
 
     new_feature.attributes = Sourcemap.deep_clone(hop.attributes);

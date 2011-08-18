@@ -338,6 +338,7 @@ Sourcemap.Map.prototype.initControls = function() {
         }, this);
 
         this.controls.select.select = $.proxy(function(f) {
+            var c = this.controls.select;
             if(!f.layer && f.attributes.ref) {
                 f = this.refFeature(f.attributes.ref);
             } else if(!f.layer && f.cluster) {
@@ -345,9 +346,10 @@ Sourcemap.Map.prototype.initControls = function() {
                 var stops = [];
                 for(var i=0; i<cl.length; i++) stops.push(cl[i].attributes.ref.instance_id);
                 f = this.findCluster(stops);
-                if(f && !f.layer) f.layer = this.getStopLayer(f.cluster[0].attributes.supplychain_instance_id);
+                if(f && !f.layer) {
+                    f.layer = this.getStopLayer(f.cluster[0].attributes.supplychain_instance_id);
+                }
             }
-            var c = this.controls.select;
             if(c.handlers.feature.feature && !c.handlers.feature.feature.layer) {
                 if(c.handlers.feature.feature.attributes.ref) {
                     c.handlers.feature.feature = this.refFeature(c.handlers.feature.feature.attributes.ref);
@@ -356,6 +358,10 @@ Sourcemap.Map.prototype.initControls = function() {
                     var stops = [];
                     for(var i=0; i<cl.length; i++) stops.push(cl[i].attributes.ref.instance_id);
                     c.handlers.feature.feature = this.findCluster(stops);
+                    var hf = c.handlers.feature.feature;
+                    if(hf && !hf.layer) {
+                        c.handlers.feature.feature.layer = this.getStopLayer(hf.cluster[0].attributes.supplychain_instance_id);
+                    }
                 }
             }
             if(c.handlers.feature.lastFeature && !c.handlers.feature.lastFeature.layer) {
@@ -366,8 +372,13 @@ Sourcemap.Map.prototype.initControls = function() {
                     var stops = [];
                     for(var i=0; i<cl.length; i++) stops.push(cl[i].attributes.ref.instance_id);
                     c.handlers.feature.lastFeature = this.findCluster(stops);
+                    var hlf = c.handlers.feature.lastFeature;
+                    if(hlf && !hlf.layer) {
+                        c.handlers.feature.lastFeature.layer = this.getStopLayer(hlf.cluster[0].attributes.supplychain_instance_id);
+                    }
                 }
             }
+            if(!f) return;
             OpenLayers.Control.SelectFeature.prototype.select.call(c, f);
         }, this);
 
@@ -576,8 +587,8 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     new_feature.attributes.fcolor = stop.getAttr("color", rand_color);
     stop.attributes.title = new_feature.attributes.title = stop.getAttr("title", false);
     if(!stop.attributes.title) {
-        var idx = parseInt(stop.instance_id.split("-")[1]);
-        var ct = Math.ceil(idx/26);
+        var idx = parseInt(stop.instance_id.split("-")[1])-1;
+        var ct = Math.floor(idx/26)+1;
         var c = String.fromCharCode("A".charCodeAt(0)+(idx%26));
         var l = "";
         while(l.length < ct) l += c;

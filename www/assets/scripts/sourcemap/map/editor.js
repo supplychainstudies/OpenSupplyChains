@@ -212,8 +212,11 @@ Sourcemap.Map.Editor.prototype.init = function() {
             break;
         }
 		
-		if(co2e) { sc.attributes["sm:ui:co2e"] = true; } 
-		else { delete sc.attributes["sm:ui:co2e"]; }
+		if(co2e) { 
+            sc.attributes["sm:ui:co2e"] = true; 
+        } else { 
+            delete sc.attributes["sm:ui:co2e"]; 
+        }
 		
 		this.map_view.updateFilterDisplay(sc);
 		Sourcemap.broadcast('supplychain-updated', sc);

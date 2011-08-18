@@ -27,16 +27,10 @@
 
 .gradient(@start: rgba(245,245,245,0.85), @stop: rgba(255,255,255,0.85)) {
 	background-color: @start;
-    background-image: -moz-linear-gradient(center bottom,@stop 0%,@start 100%);
+    background-image: -moz-linear-gradient(center bottom,@start 0%,@stop 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,@start),color-stop(1,@stop));
 }
-.backgroundsize(@w, @h) {
-	-o-background-size:@w @h; 
-	-webkit-background-size:@w @h;
-	-khtml-background-size:@w @h;
-	-moz-background-size:@w @h;
-	background-size:@w @h;	
-}
+
 .transparent(@opacity: .8){
   @ie-opacity: @opacity * 100;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@ie-opacity)";
@@ -52,10 +46,6 @@
     border-radius: @radius;
 }
 
-.background_size(@height, @width){
-    background-size: @height @width;
-    moz-background-size: @height @width;
-}
 .box_shadow (@h: 1px, @v: 1px, @blur: 1px, @color: rgba(0, 0, 0, 0.2)) {
     -webkit-box-shadow: @h @v @blur @color;
     -moz-box-shadow: @h @v @blur @color;

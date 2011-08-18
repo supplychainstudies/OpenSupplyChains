@@ -27,8 +27,8 @@ Sourcemap.Map.Base.prototype.defaults = {
         "weight": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 0));
-            var fac = parseFloat(st.getAttr("weight", 0));
-            if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
+            var wgt = parseFloat(st.getAttr("weight", 0));
+            if(!isNaN(qty) && !isNaN(wgt)) val = qty * wgt;
             return val;
         },
         "water": function(st) {
@@ -43,13 +43,13 @@ Sourcemap.Map.Base.prototype.defaults = {
         }, 
         "co2e": function(st) {
             var val = 0;
-
             var qty = parseFloat(st.getAttr("qty", 0));
+            var wgt = parseFloat(st.getAttr("weight", 0));
             if(st instanceof Sourcemap.Hop) {
-                qty = parseFloat(st.attributes.distance);
+                wgt = parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("co2e", 0));
-            if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
+            if(!isNaN(qty) && !isNaN(fac)) val = qty * wgt* fac;
             return val;
         }
     }
@@ -64,15 +64,7 @@ Sourcemap.Map.Base.prototype.init = function() {
 }
 
 Sourcemap.Map.Base.prototype.initMap = function() {
-    this.map = new Sourcemap.Map(this.options.map_element_id, {
-        "prep_stop": $.proxy(function(stop, ftr) {
-
-        }, this),
-
-        'prep_hop': function(hop, ftr, arrow) {
-
-        }        
-    });
+    this.map = new Sourcemap.Map(this.options.map_element_id);
 	
 	Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
 		var initpos = this.options.position.split("|");
@@ -174,7 +166,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     var cb = function(p, tx, th) {
         $(this.banner_div).html(th);
         $(this.banner_div).find('.banner-share-link').click(function(){
-            $.scrollTo('#share-info', 600);
+            $.scrollTo('#sidebar', 600);
         });
         $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
             this.favorite();

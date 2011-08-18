@@ -382,13 +382,16 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         $("#edit-stop-footprint input").keyup($.proxy(function(e){ 
             editor = $('#edit-stop-footprint');
             var quantity = editor.find('input[name="qty"]').val(); 
-            //var unit     = editor.find('input[name="unit"]').val(); 
-            var unit     = 'kg';
+            var unit     = editor.find('.footprint-unit').val(); 
+            var weight   = (unit == "kg") ? 1 : Math.max(editor.find('input[name="weight"]').val(), 0); 
             var factor   = editor.find('input[name="co2e"]').val(); 
 
-            if (!isNaN(quantity && factor)){ 
-                var output = quantity * factor;
+            if (!isNaN(quantity && factor && weight)){ 
+				console.log("stop result");
+				console.log(weight);
+                var output = quantity * weight * factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
+				console.log(scaled);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
         }, this)); 
@@ -399,6 +402,20 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 			} else {
 				$(".weight-context").addClass("hidden");
 			}
+			editor = $('#edit-stop-footprint');
+            var quantity = editor.find('input[name="qty"]').val(); 
+            var unit     = editor.find('.footprint-unit').val(); 
+            var weight   = (unit == "kg") ? 1 : Math.max(editor.find('input[name="weight"]').val(), 0); 
+            var factor   = editor.find('input[name="co2e"]').val(); 
+
+            if (!isNaN(quantity && factor && weight)){ 
+				console.log("stop result");
+				console.log(weight);
+                var output = quantity * weight * factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
+				console.log(scaled);
+                editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+            }
 		}, this));
         // trigger event on load
         $("#edit-stop-footprint input").trigger('keyup');

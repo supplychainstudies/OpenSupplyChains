@@ -450,6 +450,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
     var smin = smin == undefined ? this.map.options.min_stop_size : parseInt(smin);
     if(!smin) smin = this.map.options.min_stop_size;
     var smax = smax == undefined ? this.map.options.max_stop_size : parseInt(smax);
+
     if(!smax) smax = this.map.options.max_stop_size;
     var dec_fn = $.proxy(function(f, mb) {
         var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
@@ -468,17 +469,17 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 	            var sval = this.smin;
 	            if(vrange)
 	                sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
-	            f.attributes.size = sval;
+	            f.attributes.size = Math.max(sval, smin);
 	            var fsize = 18;
 	            f.attributes.fsize = fsize+"px";   
 	            f.attributes.fcolor = this.color;             
-	            f.attributes.yoffset = -1*(sval+fsize);
+	            f.attributes.yoffset = -1*(f.attributes.size+fsize);
 	            var unit = "kg";
 	            if(attr_nm === "water") { unit = "L"; }                
 	            var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
 	            if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
                 f.attributes.label = scaled.value + " " + scaled.unit;
-	        }
+	        } 
         } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
             if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
             else val = f.attributes[attr_nm];
@@ -493,11 +494,11 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 //if(vrange)
                 //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
                 sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
-                f.attributes.size = sval;
+	            f.attributes.size = Math.max(sval, smin);
                 var fsize = 18;
                 f.attributes.fsize = fsize+"px";     
                 f.attributes.fcolor = this.color
-                f.attributes.yoffset = -1*(sval+fsize);                
+                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
                 
                 var unit = "kg";
                 if(attr_nm === "water") { unit = "L"; }                
@@ -505,7 +506,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 if(attr_nm === "co2e") { scaled.unit += " co2e"}        
                     
                 f.attributes.label = scaled.value + " " + scaled.unit;
-            }
+            } 
         } 
         f.attributes.size = f.attributes.size || smin;
         f.attributes.yoffset = f.attributes.yoffset || 0;

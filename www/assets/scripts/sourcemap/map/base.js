@@ -234,8 +234,8 @@ Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
 Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
     if(this.dialog) {
         $(this.dialog).hide();
-        this.map.controls["select"].unselectAll();
         if(!notrigger) {
+            this.map.controls["select"].unselectAll();
             Sourcemap.broadcast('sourcemap-base-dialog-close', 
                 this, this.map.editor ? $(this.dialog).find("form").serializeArray() : false
             );

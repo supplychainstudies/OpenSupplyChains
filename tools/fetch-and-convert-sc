@@ -23,7 +23,7 @@ require_once(SOURCEMAP_DIR.'/www/index.php');
 // a string means change to the given key
 // an array means copy to all the keys in the array
 $migrate_sc_attrs = array(
-    'name' => true,
+    'name' => 'title',
     'emissions' => 'emissions:total',
     'weight' => true, //kg
     'embodied' => array('legacy:emissions', 'emissions:embodied'),
@@ -128,8 +128,13 @@ function get_old_pt_stop_attributes($oldpart, $oldst) {
         }
     }
     $attrs->title = $oldpart->name;
-    $attrs->qty = 1;
+    $attrs->qty = $oldpart->weight;
     $attrs->co2e = isset($oldpart->rawemissions) ? $oldpart->rawemissions : 0;
+    $attrs->weight = $oldpart->weight;
+    $attrs->unit = 'kg';
+    if($yt = extract_youtube_link($oldpart->description)) {
+        $attrs->{'youtube:link'} = $yt;
+    }
     return $attrs;
 
 }
@@ -171,6 +176,15 @@ function get_old_sc_hop_attributes() {
     return new stdClass();
 }
 
+function extract_youtube_link($desc) {
+    $m = preg_match('/http:\/\/(www\.)?youtube\.com\/embed\/([A-Za-z0-9-]+)/', $desc, $ms);
+    if($m) {
+        $m = $ms[0];
+        $m = "http://www.youtube.com/?v={$ms[2]}";
+    } else $m = false;
+    return $m;
+}
+
 $oldsc = fetch_sc(FETCH_URL);
 if(!$oldsc) die('Could not fetch: '.FETCH_URL);
 if(!isset($oldsc) || !isset($oldsc->stops)) {
@@ -184,8 +198,12 @@ $newhops = get_old_sc_hops($oldsc, $newstops);
 $newsc = new stdClass();
 $newsc->attributes = get_old_sc_attributes($oldsc);
 $newsc->other_perms = 1;
-$newsc->attributes->{'sm:ui:co2e'} = 1;
-$newsc->attributes->{'sm:ui:weight'} = 1;
+if(isset($oldsc->type) && $oldsc->type == 'trace') {
+    // pass
+} else {
+    $newsc->attributes->{'sm:ui:co2e'} = 1;
+    $newsc->attributes->{'sm:ui:weight'} = 1;
+}
 $newsc->stops = array_values($newstops);
 $newsc->hops = $newhops;
 if(!ORM::factory('supplychain')->validate_raw_supplychain($newsc)) {

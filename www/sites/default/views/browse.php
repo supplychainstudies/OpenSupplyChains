@@ -3,13 +3,10 @@
     <div class="container_16">
             <div id="category-list-content">
                 <a href="browse/">Everything &nbsp;</a>
-                <?php $tstack = array($taxonomy); ?>
-                <?php while($t = array_shift($tstack)): ?>
-                    <?php for($i=0; $i<count($t->children); $i++) array_unshift($tstack, $t->children[$i]); ?>
-                    <?php if($t === $taxonomy) continue; ?>
-                    <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"<?php if(!count($tstack)): ?> class="last"<?php endif;?>><?= HTML::chars($t->data->title) ?></a>
-                    <?php if(count($tstack)): ?>&nbsp;<?php endif; ?>
-                <?php endwhile; ?>
+                    <?php for($i=0; $i<count($taxonomy->children); $i++): ?>
+                    <?php $t = $taxonomy->children[$i]; ?>
+                    <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"<?php if(count($taxonomy->children)-1 == $i): ?> class="last"<?php endif;?>><?= HTML::chars($t->data->title) ?></a>
+                    <?php endfor; ?>
                 <div class="clear"></div>
         </div>
     </div>

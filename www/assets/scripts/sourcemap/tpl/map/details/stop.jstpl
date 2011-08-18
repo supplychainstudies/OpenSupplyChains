@@ -14,10 +14,16 @@
 
 <% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false) || this.supplychain.getAttr("sm:ui:water", false)) { %>
 <ul id="dialog-footprint">	
-    <% if(this.stop.getAttr("qty", false) && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="weight"><%= this.stop.getAttr("qty", 0) * this.stop.getAttr("weight",0) %> <%= this.stop.getAttr("unit", "ea") %></li><% } %>
+	<% var unit = (this.stop.getAttr("unit","kg") == "kg") ? 1 : 0; %>
+	<% var weight = unit || this.stop.getAttr("weight"); %>
+    <% if(weight && this.supplychain.getAttr("sm:ui:weight", false)) { %>
+		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("qty", 0) * weight), "kg", 2); %>
+		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %></li>
+	<% } %>
     <% if(this.stop.getAttr("co2e", false) && this.supplychain.getAttr("sm:ui:co2e", false)) { %>
-		<% var scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0) * this.stop.getAttr("weight",0)), "kg", 2); %>		
-		<li class="co2e"><%= scaled.value %> <%= scaled.unit %> CO2e</li> <% } %>
+		<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0) * weight), "kg", 2); %>		
+		<li class="co2e"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> CO2e</li> 
+	<% } %>
     <% if(this.stop.getAttr("water", false) && this.supplychain.getAttr("sm:ui:water", false)) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li> <% } %>
 </ul>
 <% } %>

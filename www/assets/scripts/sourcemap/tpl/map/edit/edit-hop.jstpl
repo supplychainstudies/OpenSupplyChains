@@ -35,7 +35,7 @@
 	                    <label for="distance">Distance</label>
 	                    <div class="sourcemap-form-textbox">
 	                        <% el = $("<input></input>").attr("type", "text").attr("name", "distance").addClass("textbox"); 
-	                            el[0].setAttribute("value", Math.round(this.ref.gc_distance())); %>
+	                            el[0].setAttribute("value", Math.round(this.ref.gc_distance()) || 0); %>
 	                        <%= $("<div></div>").append(el).html() %>
 	                    </div>
 					</div>

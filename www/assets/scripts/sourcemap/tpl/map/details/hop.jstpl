@@ -13,9 +13,11 @@
 <% } %>
 <% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false)) { %>
 <ul id="dialog-footprint">
-    <% if(this.hop.getAttr("distance", false) && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="distance"><%= Math.round(this.hop.getAttr("distance", 0)) %> km</li><% } %>
-	<% if(this.hop.getAttr("distance", false) && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="weight"><%= this.hop.getAttr("weight", "-") %></li><% } %>
-    <% if(this.hop.getAttr("co2e", false) && this.supplychain.getAttr("sm:ui:co2e", false)) { %><li class="co2e"><%= this.hop.getAttr("co2e", 0) * this.hop.getAttr("distance", 0) * this.hop.getAttr("weight", 0) %> kg CO2e</li> <% } %>
+    <% if(this.hop.gc_distance() && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li><% } %>
+	<% if(this.hop.gc_distance() && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="weight"><%= this.hop.getAttr("qty", 0) %></li><% } %>
+    <% if(this.hop.getAttr("co2e", false) && this.supplychain.getAttr("sm:ui:co2e", false)) { %>
+	<% var scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("co2e", 0) * this.hop.gc_distance() * this.hop.getAttr("qty", 0)), "kg", 2); %>
+		<li class="co2e"> <%= scaled.value %> <%= scaled.unit %> CO2e</li> <% } %>
 </ul>
 <% } %>
 

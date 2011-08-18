@@ -118,8 +118,7 @@ Sourcemap.Map.prototype.init = function() {
 Sourcemap.Map.prototype.initMap = function() {
     var controls = [
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),
-            new OpenLayers.Control.ArgParser(),
-            new OpenLayers.Control.Attribution(),
+            new OpenLayers.Control.Attribution()
     ];
     //if(this.options.zoom_control) 
     //    controls.push(new OpenLayers.Control.ZoomPanel());

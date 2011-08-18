@@ -21,13 +21,13 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         );
 
         $f = Sourcemap_Form::load('/register');
-        $f->action('create')->method('post');
+        $f->action('register')->method('post');
 
         $this->template->form = $f;
 
         if(strtolower(Request::$method) === 'post') {
             if($f->validate($_POST)) {
-                die($f->values());
+                $p = $f->values();
                 // check for username in use
                 $exists = ORM::factory('user')->where('username', '=', $p['username'])->find()->loaded();
                 if($exists) {

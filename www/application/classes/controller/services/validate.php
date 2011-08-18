@@ -14,7 +14,7 @@ class Controller_Services_Validate extends Sourcemap_Controller_Service {
                 $this->response = (object)$f->errors();
             }
         } else {
-            return $this->_not_found('Form no exist.');
+            return $this->_not_found('Form does not exist.');
         }
     }
 }

@@ -11,9 +11,9 @@ return array(
         'not_empty' => 'Please enter a password.'
     ),
     'password_confirm' => array(
-        'default' => 'Please confirm your password.'
+        'default' => 'Your password needs to match.'
     ),
 	'confirm_terms' => array(
-	    'not_empty' => ' '
+	    'not_empty' => 'Please agree to the TOS.'
 	)
 );

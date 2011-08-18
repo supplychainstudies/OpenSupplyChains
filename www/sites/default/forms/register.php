@@ -142,10 +142,12 @@ return array(
     'messages_file' => 'forms/register',
     'rules' => array(
         'email' => array(
-            array('not_empty', array('email'))
+            array('email'),
+            array('not_empty')
         ),
 	    'username' => array(
-	        array('not_empty', array('alphadash'))
+	        array('not_empty'), 
+			array('alpha_dash')
 	    ),
         'password' => array(
 	        array('not_empty')

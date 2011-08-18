@@ -543,7 +543,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     for(var i=0; i<dfc.length; i++) {
         dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
     }
-    var palette = Sourcemap.Color.graduate(dfc, max_plen);
+    var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
     
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();

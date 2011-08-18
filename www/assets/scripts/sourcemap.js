@@ -428,7 +428,13 @@ Sourcemap.Color.prototype.midpoint = function(to_color) {
 
 Sourcemap.Color.graduate = function(colors, ticks) {
     ticks = isNaN(parseInt(ticks)) ? colors.length : parseInt(ticks);
+    if(!ticks) return [];
     var g = [];
+    var colors = colors.slice(0);
+    while(colors.length > ticks) {
+        var ri = Math.floor(colors.length / 2);
+        colors.splice(ri,1);
+    }
     while(colors.length < ticks) {
         var g = [];
         var d = Math.min(ticks - colors.length, colors.length-1);
@@ -597,8 +603,10 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
     var base = Sourcemap.Units.to_base_unit(value, unit);
     var pot = base.value === 0 ? 0 : Math.floor((Math.log(base.value)/Math.log(10))+.000000000001);
     var new_unit = null;
-    if(value == 0 || pot === 0) {
-        new_unit = {"label": base.unit, "mult": 0};
+    //if(value == 0 || pot === 0) {
+    if(pot < 2) {
+        //new_unit = {"label": base.unit, "mult": 0};
+        return base;
     } else {
         new_unit = false;
         while(new_unit === false) {

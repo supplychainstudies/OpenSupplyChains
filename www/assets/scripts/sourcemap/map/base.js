@@ -476,7 +476,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 	            if(attr_nm === "water") { unit = "L"; }                
 	            var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
 	            if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
-                f.attributes.label = scaled.value + " " + scaled.unit;
+                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
 	        } 
         } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
             if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
@@ -503,7 +503,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
                 if(attr_nm === "co2e") { scaled.unit += " co2e"}        
                     
-                f.attributes.label = scaled.value + " " + scaled.unit;
+                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
             } 
         } 
         f.attributes.size = f.attributes.size || smin;

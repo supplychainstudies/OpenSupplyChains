@@ -14,6 +14,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     public $template = 'register';
     
     public function action_index() {        
+	    if(Auth::instance()->get_user()) {
+            $this->template->current_user_id = Auth::instance()->get_user();
+            $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());
+           	$this->request->redirect('home/');
+		}
 		$this->layout->page_title = 'Register an account on Sourcemap';
         
         $this->layout->scripts = array(

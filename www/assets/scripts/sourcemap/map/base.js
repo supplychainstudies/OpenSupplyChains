@@ -462,13 +462,11 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 	        }
 	        if(!isNaN(val)) {
 	            // scale
-	            val = Math.max(val, this.vmin);
-	            val = Math.min(val, this.vmax);
 	            var voff = val - this.vmin;
 	            var vrange = this.vmax - this.vmin;
 	            var sval = this.smin;
-	            if(vrange)
-	                sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+                sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
+	            f.attributes.size = Math.max(sval, smin);
 	            f.attributes.size = Math.max(sval, smin);
 	            var fsize = 18;
 	            f.attributes.fsize = fsize+"px";   

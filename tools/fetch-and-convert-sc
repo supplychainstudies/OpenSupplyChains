@@ -5,8 +5,8 @@
 // json suitable for posting to the new SM api
 if(php_sapi_name() !== 'cli') die('cli only');
 
-if($argc == 2)
-    define('FETCH_URL', $argv[1]);
+if($argc == 3)
+    define('FETCH_URL', 'http://'.$argv[1].'/services/objects/'.$argv[2]);
 else
     die("Supplychain url required as first parameter.\n");
 
@@ -30,14 +30,17 @@ $migrate_sc_attrs = array(
     'transport' => array('legacy:emissions', 'emissions:transport'),
     'shipping' => array('legacy:distance', 'distance:transport'),
     'slug' => 'alias:preferred',
-    'creator' => 'legacy:creator'
+    'creator' => 'legacy:creator',
+    'oid' => 'legacy:oid'
 );
 
 $migrate_st_attrs = array(
     'name' => false,
-    'placename' => true,
+    'title' => true,
+    'placename' => array(true, 'address'),
     'category' => true,
     'emissions' => 'emissions:total',
+    'rawemissions' => 'co2e',
     'weight' => true, //kg
     'embodied' => array('legacy:emissions', 'emissions:embodied'),
     'transport' => array('legacy:emissions', 'emissions:transport'),
@@ -124,6 +127,9 @@ function get_old_pt_stop_attributes($oldpart, $oldst) {
             }
         }
     }
+    $attrs->title = $oldpart->name;
+    $attrs->qty = 1;
+    $attrs->co2e = isset($oldpart->rawemissions) ? $oldpart->rawemissions : 0;
     return $attrs;
 
 }
@@ -132,19 +138,19 @@ function get_old_sc_hops($oldsc, $newstops) { // outbound hops.
     $newhops = array();
     foreach($oldsc->stops as $i => $oldstop) {
         foreach($oldstop->hops->outgoing as $hi => $oldhop) {
-            $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id);
+            $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq);
         }
     }
     foreach($oldsc->parts as $pi => $oldpart) {
         foreach($oldpart->stops as $i => $oldstop) {
             foreach($oldstop->hops->outgoing as $hi => $oldhop) {
-                $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id);
+                $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq);
             }
         }
     }
     $hops = array();
     foreach($newhops as $i => $hoparr) {
-        list($oldfrom, $oldto) = $hoparr;
+        list($oldfrom, $oldto, $co2e) = $hoparr;
         $newhop = new stdClass();
         $frompt = Sourcemap_Wkt::read($newstops[$oldfrom]->geometry);
         $frompt = new Sourcemap_Proj_Point($frompt[1][0], $frompt[1][1]);
@@ -154,6 +160,8 @@ function get_old_sc_hops($oldsc, $newstops) { // outbound hops.
         $newhop->from_stop_id = $oldfrom;
         $newhop->to_stop_id = $oldto;
         $newhop->attributes = get_old_sc_hop_attributes();
+        $newhop->attributes->{'co2e'} = $co2e;
+        $newhop->attributes->{'qty'} = 1;
         $hops[] = $newhop;
     }
     return $hops;
@@ -165,10 +173,19 @@ function get_old_sc_hop_attributes() {
 
 $oldsc = fetch_sc(FETCH_URL);
 if(!$oldsc) die('Could not fetch: '.FETCH_URL);
+if(!isset($oldsc) || !isset($oldsc->stops)) {
+    foreach($oldsc as $oid => $sc) {
+        break;
+    }
+    $oldsc = $sc;
+}
 $newstops = get_old_sc_stops($oldsc);
 $newhops = get_old_sc_hops($oldsc, $newstops);
 $newsc = new stdClass();
 $newsc->attributes = get_old_sc_attributes($oldsc);
+$newsc->other_perms = 1;
+$newsc->attributes->{'sm:ui:co2e'} = 1;
+$newsc->attributes->{'sm:ui:weight'} = 1;
 $newsc->stops = array_values($newstops);
 $newsc->hops = $newhops;
 if(!ORM::factory('supplychain')->validate_raw_supplychain($newsc)) {

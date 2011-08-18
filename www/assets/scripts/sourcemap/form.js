@@ -29,7 +29,6 @@ Sourcemap.Form.prototype.init = function() {
     //this.update();
     
     $(this.el()).find('div.error').hide();
-    $(this._form_el).find('input,select,textarea').bind("change blur", $.proxy(this.check, this));
     $(this._form_el).bind("submit", $.proxy(function() {
         if(this._errors === false) {
             return true;

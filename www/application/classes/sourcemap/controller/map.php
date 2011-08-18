@@ -37,11 +37,9 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
                 $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
                 $this->template->supplychain_desc = isset($sc->attributes->description) ? $sc->attributes->description : "" ;
-                $taxonomy = Sourcemap_Taxonomy::load_tree();
 
-				//print_r($taxonomy);
-                $this->template->supplychain_cat = isset($sc->attributes->category) ? $sc->attributes->category : "";
-
+				$this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : "";
+                
                 $this->template->supplychain_weight = isset($sc->attributes->{'sm:ui:weight'}) ? "checked" : "";
                 $this->template->supplychain_co2e = isset($sc->attributes->{"sm:ui:co2e"}) ? "checked" : "";
                 $this->template->supplychain_water = isset($sc->attributes->{"sm:ui:water"}) ? "checked" : "";

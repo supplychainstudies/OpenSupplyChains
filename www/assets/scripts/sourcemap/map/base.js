@@ -454,31 +454,31 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
     var dec_fn = $.proxy(function(f, mb) {
         var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
         if(f.cluster) {
-            var val = 0;
-            for(var c in f.cluster) {
-                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
-                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
-            }
-            if(!isNaN(val)) {
-                // scale
-                val = Math.max(val, this.vmin);
-                val = Math.min(val, this.vmax);
-                var voff = val - this.vmin;
-                var vrange = this.vmax - this.vmin;
-                var sval = this.smin;
-                if(vrange)
-                    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
-                f.attributes.size = sval;
-                var fsize = 18;
-                f.attributes.fsize = fsize+"px";   
-                f.attributes.fcolor = this.color;             
-                f.attributes.yoffset = -1*(sval+fsize);
-                var unit = "kg";
-                if(attr_nm === "water") { unit = "L"; }                
-                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
-                if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
+	        var val = 0;
+	        for(var c in f.cluster) {
+	            if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
+	            else val += parseFloat(f.cluster[c].attributes[attr_nm]);
+	        }
+	        if(!isNaN(val)) {
+	            // scale
+	            val = Math.max(val, this.vmin);
+	            val = Math.min(val, this.vmax);
+	            var voff = val - this.vmin;
+	            var vrange = this.vmax - this.vmin;
+	            var sval = this.smin;
+	            if(vrange)
+	                sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+	            f.attributes.size = sval;
+	            var fsize = 18;
+	            f.attributes.fsize = fsize+"px";   
+	            f.attributes.fcolor = this.color;             
+	            f.attributes.yoffset = -1*(sval+fsize);
+	            var unit = "kg";
+	            if(attr_nm === "water") { unit = "L"; }                
+	            var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
+	            if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
                 f.attributes.label = scaled.value + " " + scaled.unit;
-            }
+	        }
         } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
             if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
             else val = f.attributes[attr_nm];

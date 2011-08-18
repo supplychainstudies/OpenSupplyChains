@@ -90,7 +90,16 @@ Sourcemap.Map.prototype.defaults = {
             "strokeColor": "${color}",
             "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
-            "rotation": "${angle}"
+            "rotation": "${angle}",
+            "cursor":"pointer",
+            "fontColor": "${fcolor}",
+            "fontWeight": "bold",           
+            "fontSize": "${fsize}",
+            "fontFamily": "Helvetica, sans-serif",
+            "label": "${label}",
+            "labelAlign": "cm",
+            "labelXOffset": 0,
+            "labelYOffset": "${yoffset}",
         },
         "select": {
             "strokeColor": "${color}",
@@ -751,10 +760,10 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
 
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
-            "color": hop.getAttr("color", rand_color),
 			"width":1, "size": 7, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
-            "to_stop_id": hop.to_stop_id, "ref": hop 
+            "to_stop_id": hop.to_stop_id, "ref": hop, 
+			"color": hop.getAttr("color", rand_color), "label":""
         });
         var tmp = new_arrow;
         if(new_arrow instanceof Array) {
@@ -773,7 +782,9 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
 
     new_feature.attributes.width = 2;
     new_feature.attributes.opacity = 0.8;
-    new_feature.attributes.color = hop.getAttr("color", false) || rand_color;
+    new_feature.attributes.color = hop.getAttr("color", false) || rand_color;	
+	new_feature.attributes.label = "";
+
     new_feature.attributes.ref = hop;
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
     // save references to features

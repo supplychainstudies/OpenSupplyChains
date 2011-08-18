@@ -21,7 +21,7 @@ Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
  	"zoom_control": true, "default_stop_size": 12,
-	"min_stop_size": 6, "max_stop_size": 48,
+	"min_stop_size": 6, "max_stop_size": 32,
     "basetileset": "cloudmade", "tileswitcher": true, 
     "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
@@ -90,6 +90,16 @@ Sourcemap.Map.prototype.defaults = {
             "strokeColor": "${color}",
             "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
+            "rotation": "${angle}"
+        },
+		"arrow": {
+			"graphicName": "${type}",
+            "pointRadius": "${size}",
+            "fillColor": "${color}",
+            "strokeWidth": "${width}",
+            "strokeColor": "${color}",
+            "fillOpacity": 1,
+            "strokeOpacity": "${opacity}",
             "rotation": "${angle}",
             "cursor":"pointer",
             "fontColor": "${fcolor}",
@@ -100,7 +110,7 @@ Sourcemap.Map.prototype.defaults = {
             "labelAlign": "cm",
             "labelXOffset": 0,
             "labelYOffset": "${yoffset}",
-        },
+		},
         "select": {
             "strokeColor": "${color}",
             "fillColor": "#ffffff",
@@ -765,6 +775,7 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
             "to_stop_id": hop.to_stop_id, "ref": hop, 
 			"color": hop.getAttr("color", rand_color), "label":""
         });
+		new_arrow.renderIntent = "arrow";
         var tmp = new_arrow;
         if(new_arrow instanceof Array) {
             new_arrow = tmp[0];
@@ -783,7 +794,6 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.width = 2;
     new_feature.attributes.opacity = 0.8;
     new_feature.attributes.color = hop.getAttr("color", false) || rand_color;	
-	new_feature.attributes.label = "";
 
     new_feature.attributes.ref = hop;
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);

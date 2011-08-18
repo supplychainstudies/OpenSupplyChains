@@ -1,7 +1,7 @@
 <div id="search-results">
     <div class="container">
         <div class="spacer"></div>
-        <h2>Search Results for "<?= isset($search_result->parameters['q']) ? HTML::chars($search_result->parameters['q']) : ''; ?>"</h2>
+        <h1>Results for "<?= isset($search_result->parameters['q']) ? HTML::chars($search_result->parameters['q']) : ''; ?>"</h1>
     </div>
     <div class="clear"></div>
     <?php if(isset($search_result->results) && $search_result && $search_result->results): ?>

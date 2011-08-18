@@ -53,7 +53,7 @@
         <img src="<?= $supplychain_avatar ?>" alt="Avatar"></img>
         <a class="author-link" href="user/<?= $supplychain_ownerid ?>"><?= $supplychain_owner ?></a>, <?= $supplychain_date ?>
 		<? $first = true; foreach($supplychain_taxonomy as $cat) { ?>
-			<? if($first) { ?>Categorized as <a href="browse/<?= $cat->name; ?>"><?= $cat->title; ?></a>
+			<? if($first) { ?>in <a href="browse/<?= $cat->name; ?>"><?= $cat->title; ?></a>
 			<? $first = false; } else { ?>, <a href="browse/<?= $cat->name; ?>"><?= $cat->title; ?></a> <? } ?>
 		<? } ?>
     </p>

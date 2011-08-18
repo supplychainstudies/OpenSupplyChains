@@ -44,7 +44,8 @@ Sourcemap.Map.Base.prototype.defaults = {
         "co2e": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 0));
-            var wgt = parseFloat(st.getAttr("weight", 0));
+			var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
+            var wgt = parseFloat(unt || st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
                 wgt = parseFloat(st.gc_distance());
             }
@@ -500,7 +501,8 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 var unit = "kg";
                 if(attr_nm === "water") { unit = "L"; }                
                 var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
-                if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
+                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
+                    
                 f.attributes.label = scaled.value + " " + scaled.unit;
             }
         } 

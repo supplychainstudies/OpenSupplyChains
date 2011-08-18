@@ -387,11 +387,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             var factor   = editor.find('input[name="co2e"]').val(); 
 
             if (!isNaN(quantity && factor && weight)){ 
-				console.log("stop result");
-				console.log(weight);
                 var output = quantity * weight * factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
-				console.log(scaled);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
         }, this)); 
@@ -409,11 +406,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             var factor   = editor.find('input[name="co2e"]').val(); 
 
             if (!isNaN(quantity && factor && weight)){ 
-				console.log("stop result");
-				console.log(weight);
                 var output = quantity * weight * factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
-				console.log(scaled);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             }
 		}, this));

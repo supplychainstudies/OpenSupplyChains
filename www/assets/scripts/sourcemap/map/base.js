@@ -27,7 +27,8 @@ Sourcemap.Map.Base.prototype.defaults = {
         "weight": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 0));
-            var wgt = parseFloat(qty * st.getAttr("weight",0));
+			var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
+            var wgt = parseFloat(unt || st.getAttr("weight"));
             if(!isNaN(qty) && !isNaN(wgt)) val = qty * wgt;
             return val;
         },

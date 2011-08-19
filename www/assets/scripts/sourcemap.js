@@ -606,6 +606,8 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
     //if(value == 0 || pot === 0) {
     if(pot < 2) {
         //new_unit = {"label": base.unit, "mult": 0};
+        if(base.value < 10) base.value = base.value.toFixed(1);
+        else base.value = Math.round(base.value);
         return base;
     } else {
         new_unit = false;

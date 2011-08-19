@@ -537,6 +537,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
                 } else {
                     $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
                     this.editor.map_view.updateStatus("Could not geocode...", "bad-news");
+                    this.stop.attributes.address = "Invalid Address";
                 }
   
                 if(this.ref) {

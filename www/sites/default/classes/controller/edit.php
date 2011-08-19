@@ -44,12 +44,6 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 // fetch the taxonomy tree and use first level
                 $taxonomy = Sourcemap_Taxonomy::load_tree();
     
-                $cats = $form->field('category')->option(0, 'None');
-                $valid_cats = array(0);
-                foreach($taxonomy->children as $ti => $t) {
-                    $valid_cats[] = $t->data->id;
-                    $cats->option($t->data->id, $t->data->name);
-                }
                 $form->field('category')->value($supplychain->category);
 
                 $form->field('publish')->value($supplychain->other_perms & Sourcemap::READ);

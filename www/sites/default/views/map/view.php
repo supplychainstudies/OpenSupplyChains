@@ -17,19 +17,19 @@
 			</div>
 			<div class="impact-box">
             	<input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" />
-				<label for="impact-use-weight">Show Carbon Footprint (CO2e)</label>   
+				<label for="impact-use-co2e">Show Carbon Footprint (CO2e)</label>   
 				<div class="clear"></div>
 			</div>
 			<div class="sourcemap-form">
 	        <select id="tileset-select" name="tileset-select">	
     			<option <? if($supplychain_tileset == "cloudmade") { ?>selected<? } ?> value="cloudmade">
-					Show Default Maptiles
+					Show Default Map
 				</option>
     			<option <? if($supplychain_tileset == "satellite") { ?>selected<? } ?> value="satellite">
-					Show Satellite Maptiles
+					Show Satellite Map
 				</option>
     			<option <? if($supplychain_tileset == "terrain") { ?>selected<? } ?> value="terrain">
-					Show Terrain Maptiles
+					Show Terrain Map
 				</option>
 			</select>
 			</div>

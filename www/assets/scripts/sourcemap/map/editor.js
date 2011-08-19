@@ -202,6 +202,18 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.loadTransportCatalog();
 
 	// setup calculator display
+	$("#tileset-select").change($.proxy(function(evt) {
+		var sc = false;
+        for(var k in this.editor.map.supplychains) {
+            sc = this.editor.map.supplychains[k];
+            break;
+        }
+ 		sc.attributes["sm:ui:tileset"] = $(evt.target).val();
+		this.editor.map_view.toggleTileset(sc);
+		Sourcemap.broadcast('supplychain-updated', sc);
+		
+	}, {"editor":this}));
+	
 	$("#impact-use-co2e").change($.proxy(function(evt) {
 		var co2e = $(evt.target).is(':checked') ? true : false;
 		

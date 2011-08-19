@@ -43,6 +43,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_weight = isset($sc->attributes->{'sm:ui:weight'}) ? "checked" : "";
                 $this->template->supplychain_co2e = isset($sc->attributes->{"sm:ui:co2e"}) ? "checked" : "";
                 $this->template->supplychain_water = isset($sc->attributes->{"sm:ui:water"}) ? "checked" : "";
+                $this->template->supplychain_tileset = isset($sc->attributes->{"sm:ui:tileset"}) ? $sc->attributes->{"sm:ui:tileset"} : "";
 
 				$this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
 		        
@@ -255,7 +256,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     'tour' => 'yes', 'tour_start_delay' => 7,
                     'tour_interval' => 5, 'banner' => 'yes',
                     'tileswitcher' => 'no', 'geoloc' => true, 
-                    'downstream_sc' => null, 'tileset' => 'terrain',
+                    'downstream_sc' => null, 'tileset' => 'cloudmade',
                     'locate_user' => 'no', 'position' => '0|0|0'
                 );
                 foreach($params as $k => $v) 

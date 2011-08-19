@@ -17,7 +17,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "map_element_id": 'sourcemap-map-view',
     "banner": true, "watermark": true, "magic_word_list": [
         "youtube:link", "vimeo:link", "flickr:setid"
-    ], "tpl_base_path": Sourcemap.TPL_PATH,
+    ], "tpl_base_path": Sourcemap.TPL_PATH, "tileset":"cloudmade",
     "tour_order_strategy": "upstream", "position": "0|0|0", "error_color": '#ff0000',
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
@@ -68,6 +68,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
 	
 	Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
+		
+		this.toggleTileset(sc);
 		var initpos = this.options.position.split("|");
 		var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
 	    p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
@@ -416,6 +418,53 @@ Sourcemap.Map.Base.prototype.mapUserLoc = function() {
     return this;
 }
 
+Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
+	var tileset = sc.attributes["sm:ui:tileset"] || this.options.tileset;
+	var cloudmade = {
+		"stop_style": {
+			"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}" },
+			"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}" }
+		},
+		"hop_style": {
+			"default": { "strokeColor": "${color}"},
+			"arrow": { "strokeColor": "${color}", "fontColor": "${fcolor}" }
+		}
+	}
+	var satellite = {
+		"stop_style": {
+			"default": { "strokeColor": "#ffffff", "fontColor": "#ffffff" },
+			"cluster": { "strokeColor": "#ffffff", "fontColor": "#ffffff" }
+		},
+		"hop_style": {
+			"default": { "strokeColor": "#ffffff"},
+			"arrow": { "strokeColor": "#ffffff", "fontColor": "#ffffff" }
+		}
+	}
+	var terrain = {
+		"stop_style": {
+			"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}" },
+			"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}" }
+		},
+		"hop_style": {
+			"default": { "strokeColor": "${color}"},
+			"arrow": { "strokeColor": "${color}", "fontColor": "${fcolor}" }
+		}
+	}
+	if(tileset == "cloudmade") {
+		$.extend(true, this.map.options, cloudmade); 
+		$("#watermark").css("display","block"); 				
+	}
+	else if(tileset == "satellite") { 
+		$.extend(true, this.map.options, satellite); 
+		$("#watermark").css("display","none"); 
+	} 
+	else if(tileset == "terrain") { 
+		$.extend(true, this.map.options, terrain); 
+		$("#watermark").css("display","none"); 
+	}	
+	this.map.setBaseLayer(tileset);
+	
+}
 Sourcemap.Map.Base.prototype.decorateFeatures = function(dec_fn, features) {
     for(var i=0; i<features.length; i++) {
         if(dec_fn instanceof Function) {
@@ -473,12 +522,12 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 	            f.attributes.size = Math.max(sval, smin);
 	            var fsize = 18;
 	            f.attributes.fsize = fsize+"px";   
-	            f.attributes.fcolor = this.color;             
+	            f.attributes.fcolor = this.color;   
 	            f.attributes.yoffset = -1*(f.attributes.size+fsize);
 	            var unit = "kg";
 	            if(attr_nm === "water") { unit = "L"; }                
 	            var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
-	            if(attr_nm === "co2e") { scaled.unit += " co2e"}                            
+	            if(attr_nm === "co2e") { scaled.unit += " co2e"}              
                 f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
 	        } 
         } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
@@ -505,8 +554,11 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 if(attr_nm === "water") { unit = "L"; }                
                 var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);   
                 if(attr_nm === "co2e") { scaled.unit += " co2e"}        
-                    
-                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
+				if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
+					f.attributes.label = "";
+				} else {
+				    f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	 	
+				}	              
             } 
         } 
         f.attributes.size = f.attributes.size || smin;

@@ -8,6 +8,8 @@
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
         <?php if($can_edit): ?>
+			<h3>Map Preferences</h3>
+			<hr/>
 			<div class="impact-box">
             	<input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
 				<label for="impact-use-weight">Show Weight</label>
@@ -18,9 +20,25 @@
 				<label for="impact-use-weight">Show Carbon Footprint (CO2e)</label>   
 				<div class="clear"></div>
 			</div>
-            <hr />            
+			<div class="sourcemap-form">
+	        <select id="tileset-select" name="tileset-select">	
+    			<option <? if($supplychain_tileset == "cloudmade") { ?>selected<? } ?> value="cloudmade">
+					Show Default Maptiles
+				</option>
+    			<option <? if($supplychain_tileset == "satellite") { ?>selected<? } ?> value="satellite">
+					Show Satellite Maptiles
+				</option>
+    			<option <? if($supplychain_tileset == "terrain") { ?>selected<? } ?> value="terrain">
+					Show Terrain Maptiles
+				</option>
+			</select>
+			</div>
+			<br/>
+            <hr />
         <?php endif; ?>
 
+		<h3>Share this Sourcemap</h3>
+        <hr/>
         <div id="qrcode-badge" class="container">
             <a href="<?= $scaled_qrcode_url ?>"><img class="qrcode" src="<?= $qrcode_url ?>" /></a><br/>
         </div>

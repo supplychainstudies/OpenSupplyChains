@@ -1,4 +1,3 @@
-
 <div id="search-page">
     <div class="container">
         <h1>Results for "<?= isset($search_result->parameters['q']) ? HTML::chars($search_result->parameters['q']) : ''; ?>"</h1>

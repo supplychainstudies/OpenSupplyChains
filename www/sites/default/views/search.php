@@ -6,7 +6,7 @@
         <?= $pager->render() ?>
         <?php $count = 0; ?>
         <?php foreach($search_result->results as $i => $result): ?>
-            <div id="user-map-list">
+            <div class="user-map-list">
                 <?= View::factory('partial/search/result', array('supplychain' => $result)) ?>
             </div>
             <?php $count++; ?>

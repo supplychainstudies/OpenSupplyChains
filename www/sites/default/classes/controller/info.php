@@ -6,7 +6,7 @@ class Controller_Info extends Sourcemap_Controller_Layout {
     public function action_index() {}    
     public function action_api() { $this->template = View::factory('info/api'); }
     public function action_terms() { $this->template = View::factory('info/terms'); }
-    public function action_dmca() { $this->template = View::factory('info/dmca'); }
+    public function action_dmca() { $this->template = View::factory('info/terms'); }
     
 }
 

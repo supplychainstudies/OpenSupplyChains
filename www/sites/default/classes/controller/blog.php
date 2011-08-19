@@ -41,7 +41,7 @@ class Controller_Blog extends Sourcemap_Controller_Layout {
                     'assets/styles/general.less'
                 );
                 // qrcode url
-                $qrcode_query = URL::query(array('q' => URL::site('map/view/'.$supplychain->id, true), 'sz' => 8));
+                $qrcode_query = URL::query(array('q' => URL::site('view/'.$supplychain->id, true), 'sz' => 8));
                 $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;
             } else {
                 Message::instance()->set('That map is private.');

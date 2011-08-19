@@ -7,12 +7,12 @@ if ($data):
     foreach($results as $item):
         ?>
             <div class="preview-badge">
-            <a href="/map/view/<?php print $item->id; ?>">
+            <a href="view/<?php print $item->id; ?>">
                 <img class="preview-map small" src="/map/static/<?php print $item->id; ?>.t.png" alt="" />
             </a>
             </div>
             <h3 class="preview-title">
-                <a href="/map/view/<?php print $item->id; ?>">
+                <a href="view/<?php print $item->id; ?>">
                 <?= HTML::chars($item->attributes->title) ?>
                 </a>
             </h4>

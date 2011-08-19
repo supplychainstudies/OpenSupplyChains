@@ -1,7 +1,13 @@
 <div id="stop-editor">
 <form>
-<h2 class="title"><input name="title" type="text" value="<%= this.ref.getAttr("title","") %>" /><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
-<h3 class="placename"><input name="address" type="text" value="<%= this.ref.getAttr("address","") %>" /></h3>
+<h2 class="title">
+    <% var i = $("<input type=\"text\" name=\"title\" />"); i[0].setAttribute("value",this.ref.getAttr("title","")); %>
+    <%= $("<div></div>").append(i).html() %>
+    <div class="dot" style="background:<%= this.feature.attributes.color %>"></div>
+</h2>
+<h3 class="placename"><% var i = $("<input type=\"text\" name=\"address\" />"); i[0].setAttribute("value",this.ref.getAttr("address","")); %>
+    <%= $("<div></div>").append(i).html() %>
+</h3>
 
 
 <div id="editor-tabs">

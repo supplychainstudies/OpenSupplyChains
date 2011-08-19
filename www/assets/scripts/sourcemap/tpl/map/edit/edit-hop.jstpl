@@ -1,6 +1,10 @@
 <div id="hop-editor">
 <form>
-<h2 class="title hop"><input name="title" type="text" value="<%= this.ref.getAttr("title", "Untitled Hop") %>"/></h2>
+	
+<h2 class="title hop">
+	<% var i = $("<input type=\"text\" name=\"title\" />"); i[0].setAttribute("value",this.ref.getAttr("title","")); %>
+    <%= $("<div></div>").append(i).html() %>
+</h2>
 
 <div id="editor-tabs">
 	<ul>
@@ -82,7 +86,8 @@
 				</div>
                 <div class="media-preview">
 					<% if(this.ref.getAttr("youtube:link",false)) { %>
-					<img src="http://img.youtube.com/vi/<%= this.ref.getAttr("youtube:link","").substr(31) %>/0.jpg" />
+						<% el = $("<img></img"); el[0].setAttribute("src","http://img.youtube.com/vi/"+this.ref.getAttr("youtube:link","").substr(31)+"/0.jpg"); %>
+                        <%= $("<div></div>").append(el).html() %>
 					<% } %>
 				</div>
                 

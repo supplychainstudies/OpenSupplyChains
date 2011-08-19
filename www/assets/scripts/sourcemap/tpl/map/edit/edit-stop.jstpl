@@ -94,7 +94,8 @@
 				</div>
                 <div class="media-preview">
 					<% if(this.ref.getAttr("youtube:link",false)) { %>
-					<img src="http://img.youtube.com/vi/<%= this.ref.getAttr("youtube:link","").substr(31) %>/0.jpg" />
+						<% el = $("<img>"); el[0].setAttribute("src","http://img.youtube.com/vi/"+this.ref.getAttr("youtube:link","").substr(31)+"/0.jpg"); %>
+                        <%= $("<div></div>").append(el).html() %>
 					<% } %>
 				</div>
                 

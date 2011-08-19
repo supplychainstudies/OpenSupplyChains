@@ -44,6 +44,11 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
                 );
             }
         }
+        
+        // by userid
+        if(isset($this->parameters['user']) && (int)$this->parameters['user']) {
+            $search->and_where('user_id', '=', $this->parameters['user']);
+        }
 
         $search->reset(false);
         $ct = $search->count_all();
@@ -68,7 +73,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         if(isset($this->parameters['favorited']) && strtolower($this->parameters['favorited']) == 'yes') {
             $search->order_by('favorited', 'desc');
         }
-        
+
         $search->limit($this->limit);
         $search->offset($this->offset);
 

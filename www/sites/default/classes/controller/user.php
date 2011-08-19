@@ -5,6 +5,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
     public $template = 'user/profile';
 
     public function action_index($identifier=false) {
+        // todo: cache this crap
         if(!$identifier) {
             Message::instance()->set('No user specified.');
             return $this->request->redirect('');
@@ -21,11 +22,35 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $user->avatar = Gravatar::avatar($user->email);
             unset($user->email);
             $this->template->user = $user;
-            $scs = ORM::factory('supplychain')->where(DB::expr('other_perms & '.Sourcemap::READ), '>', 0)
-                ->and_where('user_id', '=', $user->id)->limit(5)
-                ->order_by('created', 'desc')
-                ->find_all();
-            $this->template->supplychains = $scs->as_array('id', true);
+            
+            $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
+            $pg = max($pg,1);
+
+            $l = 10;
+            $q = array(
+                'user' => $user->id,
+                'l' => $l, 'o' => ($pg-1)*$l,
+                'p' => $pg, 'recent' => 'yes'
+            );
+
+            $r = Sourcemap_Search::find($q);
+
+            $this->template->search_result = $r;
+            
+            $p = Pagination::factory(array(
+                'current_page' => array(
+                    'source' => 'query_string',
+                    'key' => 'p'
+                ),
+                'total_items' => $r->hits_tot,
+                'items_per_page' => $r->limit,
+                'view' => 'pagination/basic'
+            ));
+
+            $this->template->pager = $p;
+
+            $this->template->supplychains = $r->results;
+
         } else {
             Message::instance()->set('That user doesn\'t exist.');
             return $this->request->redirect('');

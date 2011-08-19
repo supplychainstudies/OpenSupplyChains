@@ -8,21 +8,22 @@ class Controller_Search extends Sourcemap_Controller_Layout {
             'sourcemap-core'
         );
         
-        $q = "NOAP";
+        $defaults = array(
+            'q' => false,
+            'p' => 1,
+            'l' => 15
+        );
 
-        if (isset($_GET['q'])){
-            $q = $_GET['q'];
-        }
+        $params = $_GET;
+        if(strtolower(Request::$method) == 'post')
+            $params = $_POST;
 
-        elseif (isset($_POST['q'])){
-            $q = $_POST['q'];
-        }
+        $params = array_merge($defaults, $params);
 
-
-        $r = Sourcemap_Search::simple($q);
+        $r = Sourcemap_Search::find($params);
 
         $this->template->search_result = $r;
-		$this->layout->page_title = 'Search results for ['.$q.'] on Sourcemap';
+		$this->layout->page_title = 'Search results for ['.$params['q'].'] on Sourcemap';
         
         $p = Pagination::factory(array(
             'current_page' => array(

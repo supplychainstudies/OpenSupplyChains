@@ -42,7 +42,7 @@
     <?php if(isset($supplychains) && $supplychains): ?>
         <h2>Your Sourcemaps</h2>
         <?php foreach($supplychains as $i => $sc): ?>
-            <div id="user-map-list">
+            <div class="user-map-list">
                 <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>
             </div>
         <?php endforeach; ?>

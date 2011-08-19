@@ -422,8 +422,8 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
 	var tileset = sc.attributes["sm:ui:tileset"] || this.options.tileset;
 	var cloudmade = {
 		"stop_style": {
-			"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}" },
-			"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}" }
+			"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" },
+			"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" }
 		},
 		"hop_style": {
 			"default": { "strokeColor": "${color}"},
@@ -442,12 +442,12 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
 	}
 	var terrain = {
 		"stop_style": {
-			"default": { "strokeColor": "#ffffff", "fontColor": "${fcolor}" },
-			"cluster": { "strokeColor": "#ffffff", "fontColor": "${fcolor}" }
+			"default": { "strokeColor": "#000000", "fontColor": "#000000", "strokeWidth":1 },
+			"cluster": { "strokeColor": "#000000", "fontColor": "#000000", "strokeWidth":1 }
 		},
 		"hop_style": {
 			"default": { "strokeColor": "#000000"},
-			"arrow": { "strokeColor": "#ffffff", "fontColor": "${fcolor}" }
+			"arrow": { "strokeColor": "#000000", "fontColor": "#000000" }
 		}
 	}
 	if(tileset == "cloudmade") {

@@ -7,7 +7,7 @@
                     <img src="<?= $user->avatar ?>" />
                 </div>
                 <ul class="user-details">
-	                <li><h2 class="user-name"><?= HTML::chars($user->username) ?></h2><li>
+	                <li><h2 class="user-name"><?= ucwords(HTML::chars($user->username)) ?></h2><li>
                     <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
             </div>
@@ -20,10 +20,10 @@
     </div>
 </div>
 <div class="clear"></div>
-
+<div class="user-profile-view">
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?><br/>
-        <h2><?= HTML::chars($user->username) ?>'s Sourcemaps</h2>
+        <h2><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
         <div class="container pager">
             <?= $pager->render() ?>
         </div>
@@ -38,4 +38,7 @@
     <?php else: ?>
         <h2 class="bad-news">No maps yet!</h2>
     <?php endif; ?>
+
 </div>
+</div>
+

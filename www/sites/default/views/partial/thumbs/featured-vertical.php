@@ -8,13 +8,13 @@
             </div>
             <h3 class="preview-title">
                 <a href="view/<?php print $item->id; ?>">
-                <?= Text::limit_chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap", 18) ?>
+                <?= Text::limit_chars(HTML::chars($item->attributes->title), 18) ?>
                 </a>
             </h3>
             <h4>
                 <div class="preview-author">
                     <a href="user/<?php print $item->owner->id; ?>">
-                        <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
+                        <?= HTML::chars($item->owner->name) ?></a>, 
                     <?php print date("F j, Y",$item->created);?>
                 </div>
             </h4>

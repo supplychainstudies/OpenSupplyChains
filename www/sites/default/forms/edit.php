@@ -7,10 +7,9 @@ $cat_opts = array();
 $cat_opts[] = array(0, 'None');
 
 $valid_cats = array(0);
-
 foreach($taxonomy->children as $ti => $t) {
     $valid_cats[] = $t->data->id;
-    $cat_opts[] = array($t->data->id, $t->data->name);
+    $cat_opts[] = array($t->data->id, $t->data->title);
 }
 
 return array(

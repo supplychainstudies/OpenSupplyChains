@@ -14,7 +14,7 @@
                     <a href="view/<?= $supplychain->id; ?>">
                         <?= HTML::chars($supplychain->attributes->title) ?>                    
                     </a></h3>
-                <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>">HTML::chars($supplychain->owner->name) ?></a>,
+                <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>"><?= HTML::chars($supplychain->owner->name) ?></a>,
                 <?= date("F j, Y", $supplychain->created) ?></h4>
             </div>
         </div>

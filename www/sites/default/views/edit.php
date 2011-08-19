@@ -12,15 +12,9 @@
                 </div>
                 <h3 class="preview-title">
                     <a href="view/<?= $supplychain->id; ?>">
-                        <?php if(isset($supplychain->attributes->title)): ?>
-                            <?= HTML::chars($supplychain->attributes->title) ?>
-                        <?php elseif(isset($supplychain->attributes->name)): ?>
-                            <?= HTML::chars($supplychain->attributes->name) ?>
-                        <?php else: ?>
-                            An Unnamed Sourcemap
-                        <?php endif; ?>
+                        <?= HTML::chars($supplychain->attributes->title) ?>                    
                     </a></h3>
-                <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>"><?= (isset($supplychain->owner->name)) ? HTML::chars($supplychain->owner->name) : "Unknown Owner"?></a>,
+                <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>">HTML::chars($supplychain->owner->name) ?></a>,
                 <?= date("F j, Y", $supplychain->created) ?></h4>
             </div>
         </div>

@@ -6,7 +6,7 @@
         </div>
         <div class="map-description">
             <a href="map/view/<?= $supplychain->id ?>">
-                <h2 class="map-title"><?= isset($supplychain->attributes->title) ? HTML::chars($supplychain->attributes->title) : "An Unnamed Sourcemap" ?></h2>
+                <h2 class="map-title"><?= HTML::chars($supplychain->attributes->title) ?></h2>
             </a>
             <h4 class="map-details">
             	<?= date('F j, Y', $supplychain->created) ?>

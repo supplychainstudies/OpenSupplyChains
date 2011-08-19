@@ -7,15 +7,9 @@
             </div>
             <h3 class="preview-title">
                 <a href="view/<?= $item->id; ?>">
-                    <?php if(isset($item->attributes->title)): ?>
-                        <?= Text::limit_chars(HTML::chars($item->attributes->title), 25) ?>
-                    <?php elseif(isset($item->attributes->name)): ?>
-                        <?= Text::limit_chars(HTML::chars($item->attributes->name), 25) ?>
-                    <?php else: ?>
-	                    <?= Text::limit_chars(HTML::chars("An Unnamed Sourcemap"), 25) ?>                        
-                    <?php endif; ?>
+                    <?= Text::limit_chars(HTML::chars($item->attributes->title), 25) ?>                   
                 </a></h3>
-            <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?= (isset($item->owner->name)) ? HTML::chars($item->owner->name) : "Unknown Owner"?></a>,
+            <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?= HTML::chars($item->owner->name) ?></a>,
             <?= date("F j, Y", $item->created) ?></h4>
         </div>
     <?php endforeach; ?>

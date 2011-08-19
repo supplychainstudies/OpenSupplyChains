@@ -13,13 +13,13 @@ if ($data):
             </div>
             <h3 class="preview-title">
                 <a href="/map/view/<?php print $item->id; ?>">
-                <?= isset($item->attributes->title) ? $item->attributes->title : "A Sourcemap" ?>
+                <?= HTML::chars($item->attributes->title) ?>
                 </a>
             </h4>
             <h4>
                 <div class="preview-author">
                     <a href="user/<?php $item->owner->id; ?>">
-                        <?= isset($item->owner->name) ? $item->owner->name : "Unknown Author" ?></a>, 
+                        <?= isset($item->owner->name) ? HTML::chars($item->owner->name) : "Unknown Author" ?></a>, 
                     <?php print date("F j, Y",$item->created);?>
                 </div>
             </h4>

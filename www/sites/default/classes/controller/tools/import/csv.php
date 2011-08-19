@@ -69,7 +69,7 @@ class Controller_Tools_Import_Csv extends Sourcemap_Controller_Layout {
                     $attr->save();
                 }
                 if($new_sc_id)
-                    Request::instance()->redirect('map/view/'.$new_sc_id);
+                    Request::instance()->redirect('view/'.$new_sc_id);
                 else
                     return $this->_internal_server_error('Could not save.');
             } else {

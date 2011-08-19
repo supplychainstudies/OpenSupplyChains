@@ -124,7 +124,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->comments = $comment_data;
                 $this->template->can_comment = (bool)$current_user_id;
                 // qrcode url
-                $qrcode_query = URL::query(array('q' => URL::site('map/view/'.$supplychain->id, true), 'sz' => 8));
+                $qrcode_query = URL::query(array('q' => URL::site('view/'.$supplychain->id, true), 'sz' => 8));
                 $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;
             } else {
                 Message::instance()->set('That map is private.');
@@ -351,11 +351,11 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     $this->request->status = 500;
                     Message::instance()->set('There was a problem saving your comment.');
                 }
-                return $this->request->redirect('map/view/'.$scid.'#comments');
+                return $this->request->redirect('view/'.$scid.'#comments');
             } else {
                 $this->request->status = 400;
                 Message::instance()->set('What good is a comment if it\'s empty?');
-                return $this->request->redirect('map/view/'.$scid.'#comments');
+                return $this->request->redirect('view/'.$scid.'#comments');
             }
         } else {
             $this->request->status = 400;

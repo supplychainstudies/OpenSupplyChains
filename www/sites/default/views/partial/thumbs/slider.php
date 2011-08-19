@@ -3,7 +3,7 @@
 <?php foreach($supplychains as $i => $item): ?>
     <li class="featured-item">
         <div class="featured-content">
-            <a href="/map/view/<?php print $item->id; ?>">
+            <a href="view/<?php print $item->id; ?>">
                 <img class="featured-preview-map large" src="/map/static/<?php print $item->id; ?>.l.png" alt="" />
             </a>
         </div>

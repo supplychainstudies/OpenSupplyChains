@@ -18,7 +18,7 @@ In the last week,
 <?php endif; ?>
 
 <?php if($supplychain_id): ?>
-The <a href="map/view/<?= $supplychain_id ?>">largest map</a> so far has 
+The <a href="view/<?= $supplychain_id ?>">largest map</a> so far has 
     <strong><?= $stop ?></strong> stops.
 <?php else: ?>
 There don't seem to be any supplychains yet. <a href="map/create">Make some</a>!

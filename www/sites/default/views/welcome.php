@@ -34,7 +34,7 @@
     </div>
     <div id="body-content">
         <h1 id="site-tagline">Find out where things come from.</h1>
-        <p id="site-blurb">Welcome to the website for sharing supply chains and understanding how they impact our communities and the environment. Join us to learn more and contribute.</p>  
+        <p id="site-blurb">Sourcemap is the crowdsourced directory of product supply chains and carbon footprints. <a href="http://www.sourcemap.com/register/">Join us</a> to learn more and contribute.</p>  
 
         <div class="spacer"></div>
 

@@ -532,6 +532,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
                 }
                 //this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
                 this.editor.map.broadcast('supplychain-updated', this.editor.map.supplychains[this.stop.supplychain_id]);
+                this.editor.map.controls.select.select(this.editor.map.stopFeature(ref));
             }, {"stop": ref, "editor": this}));
         } else {
             ref.setAttr(k, val);

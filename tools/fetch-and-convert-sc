@@ -143,19 +143,19 @@ function get_old_sc_hops($oldsc, $newstops) { // outbound hops.
     $newhops = array();
     foreach($oldsc->stops as $i => $oldstop) {
         foreach($oldstop->hops->outgoing as $hi => $oldhop) {
-            $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq);
+            $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq, $oldsc->weight);
         }
     }
     foreach($oldsc->parts as $pi => $oldpart) {
         foreach($oldpart->stops as $i => $oldstop) {
             foreach($oldstop->hops->outgoing as $hi => $oldhop) {
-                $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq);
+                $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq, $oldpart->weight);
             }
         }
     }
     $hops = array();
     foreach($newhops as $i => $hoparr) {
-        list($oldfrom, $oldto, $co2e) = $hoparr;
+        list($oldfrom, $oldto, $co2e, $wt) = $hoparr;
         $newhop = new stdClass();
         $frompt = Sourcemap_Wkt::read($newstops[$oldfrom]->geometry);
         $frompt = new Sourcemap_Proj_Point($frompt[1][0], $frompt[1][1]);
@@ -167,6 +167,7 @@ function get_old_sc_hops($oldsc, $newstops) { // outbound hops.
         $newhop->attributes = get_old_sc_hop_attributes();
         $newhop->attributes->{'co2e'} = $co2e;
         $newhop->attributes->{'qty'} = 1;
+        $newhop->attributes->{'weight'} = $wt;
         $hops[] = $newhop;
     }
     return $hops;
@@ -206,6 +207,13 @@ if(isset($oldsc->type) && $oldsc->type == 'trace') {
 }
 $newsc->stops = array_values($newstops);
 $newsc->hops = $newhops;
+$user = $oldsc->user->name;
+$cdate = date('F j, Y', strtotime($oldsc->timecreated));
+$newsc->attributes->description = "Created on $cdate by $user on Sourcemap.org";
+if(strlen(strip_tags($oldsc->description)))
+    $newsc->attributes->description .= ":\n\n".strip_tags($oldsc->description);
+else $newsc->attributes->description .= '.';
+$newsc->attributes->{"sm:migrated:time"} = time();
 if(!ORM::factory('supplychain')->validate_raw_supplychain($newsc)) {
     die('Invalid supplychain generated. Reed really blew it.'."\n");
 } else {

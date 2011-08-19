@@ -1,0 +1,14 @@
+#!/bin/bash
+
+while getopts "h:d:u:p:" option_name; do
+case "$option_name" in
+d) desthostnm="$OPTARG";;
+u) username="$OPTARG";;
+p) password="$OPTARG";;
+[?]) echo "Invalid usage."; exit 1;;
+esac
+done
+
+./curl-login.sh "${desthostnm}" "${username}" "${password}"
+
+curl -b /tmp/smap-cookies.txt -is -XPOST -d @- -H "Content-Type: application/json" "http://${desthostnm}/services/supplychains/"

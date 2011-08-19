@@ -6,23 +6,23 @@
             <div class="grid_4">
                 <div class="toc">
                 <ol class="classic-list">
-                    <li><a href="api#intro">Introduction</a></li>
-                    <li><a href="api#api">API</a>
+                    <li><a href="/info/api#intro">Introduction</a></li>
+                    <li><a href="/info/api#api">API</a>
                         <ol>
-                            <li><a href="api#api-overview">Overview</a></li>
-                            <li><a href="api#api-authentication">Authentication</a></li>
-                            <li><a href="api#api-supplychains">Supplychains</a>
+                            <li><a href="/info/api#api-overview">Overview</a></li>
+                            <li><a href="/info/api#api-authentication">Authentication</a></li>
+                            <li><a href="/info/api#api-supplychains">Supplychains</a>
                                 <ol>
                                     <li>Fetching Supplychains</li>
                                     <li>Creating/Updating Supplychains</li>
                                 </ol>
                             </li>
-                            <li><a href="api#api-search">Search</a></li>
+                            <li><a href="/info/api#api-search">Search</a></li>
                             <li>QR Codes</li>
                             <li>Static Maps</li>
                         </ol>
                     </li>
-                    <li><a href="api#code">Code</a></li>
+                    <li><a href="/info/api#code">Code</a></li>
                 </ol>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                     <p>
                         Sourcemap is committed to providing tools to our users to make it as easy as possible to
                         build interesting and useful applications on top of and alongside our essential offerings.
-                        Learn more about our web services <a href="api/#api">API</a> and source <a href="api/#code">
+                        Learn more about our web services <a href="/info/api/#api">API</a> and source <a href="/info/api/#code">
                         code</a> repositories below.
                     </p>
                 </div>

@@ -60,12 +60,12 @@
     
 
     <h1>
-		<?= $supplychain_name ?> 
+		<?= HTML::chars($supplychain_name) ?> 
 		<?php if($can_edit): ?>
         	<a id="map-edit-button" class="button" href="edit/<?= $supplychain_id; ?>">Edit</a>
     	<?php endif; ?>
 	</h1>
-    <p class="description"><?= $supplychain_desc ?></p>
+    <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
     <hr />
     <p class="author">
         <img src="<?= $supplychain_avatar ?>" alt="Avatar"></img>

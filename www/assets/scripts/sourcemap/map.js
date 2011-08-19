@@ -21,8 +21,7 @@ Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
  	"zoom_control": true, "default_stop_size": 12,
-	"min_stop_size": 6, "max_stop_size": 32,
-    "basetileset": "cloudmade", "tileswitcher": true, 
+	"min_stop_size": 6, "max_stop_size": 32, "tileswitcher": true, 
     "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
     "default_feature_color": "#35a297", "clustering": true,
@@ -88,6 +87,7 @@ Sourcemap.Map.prototype.defaults = {
             "fillColor": "${color}",
             "strokeWidth": "${width}",
             "strokeColor": "${color}",
+            "fontColor": "${fcolor}",
             "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
             "rotation": "${angle}"
@@ -112,9 +112,16 @@ Sourcemap.Map.prototype.defaults = {
             "labelYOffset": "${yoffset}",
 		},
         "select": {
-            "strokeColor": "${color}",
             "fillColor": "#ffffff",
-            "fillOpacity": 1.0
+            "fillOpacity": 1.0,
+            "fontColor": "${fcolor}",
+            "fontWeight": "bold",           
+            "fontSize": "${fsize}",
+            "fontFamily": "Helvetica, sans-serif",
+            "label": "${label}",
+            "labelAlign": "cm",
+            "labelXOffset": 0,
+            "labelYOffset": "${yoffset}",
         }
     }, "prep_stop": null, "prep_hop": null
 }
@@ -175,19 +182,15 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "minZoomLevel": 2, "maxZoomLevel": 12
     }));
     
-	if(this.options.basetileset) {
-        this.map.setBaseLayer(
-            this.map.getLayersByName(this.options.basetileset).pop()
-        );
-        this.map.minZoomLevel = this.map.baseLayer.minZoomLevel;
-        this.map.maxZoomLevel = this.map.baseLayer.maxZoomLevel;
-    }
     this.broadcast('map:base_layer_initialized', this);
     return this;
 }
 
 Sourcemap.Map.prototype.setBaseLayer = function(nm) {
     this.map.setBaseLayer(this.map.getLayersByName(nm).pop());
+    this.map.minZoomLevel = this.map.baseLayer.minZoomLevel;
+    this.map.maxZoomLevel = this.map.baseLayer.maxZoomLevel;
+
     return this;
 }
 
@@ -772,8 +775,8 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
         new_arrow = this.makeArrow(new_feature.geometry, {
 			"width":1, "size": 7, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
-            "to_stop_id": hop.to_stop_id, "ref": hop, 
-			"color": hop.getAttr("color", rand_color), "label":""
+            "to_stop_id": hop.to_stop_id, "ref": hop, "color": hop.getAttr("color", rand_color),
+			"fcolor": hop.getAttr("color", rand_color), "label":""
         });
         var tmp = new_arrow;
         if(new_arrow instanceof Array) {

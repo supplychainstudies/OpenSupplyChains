@@ -147,6 +147,10 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.hideDialog();
     }, this));
+
+    this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
+        this.toggleVisualization();
+    }, this));
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {

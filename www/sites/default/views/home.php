@@ -18,7 +18,7 @@
             </div>
             <div class="clear"></div>
             <div>
-                <div class="upload-photo button"><a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a></div>
+                <div class="upload-photo button"><a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a></div> <div class="reset-password button"><a href="auth/reset">Change Password</a></div>
             </div>
         </div>
         <div class="dashboard-top-right">

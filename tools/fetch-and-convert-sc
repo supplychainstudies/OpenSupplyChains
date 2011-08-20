@@ -47,6 +47,37 @@ $migrate_st_attrs = array(
     'shipping' => array('legacy:distance', 'distance:transport')
 );
 
+$banned_slugs = array(
+'Brasiliansk-k%C3%B6ttproduktion-1',
+'LAC',
+'LAC-1',
+'deezhuevosrancheros',
+'Mac-n-Cheese',
+'Cheeseburger',
+'Brasiliansk-k%C3%B6ttproduktion-3',
+'Brasiliansk-k%C3%B6ttproduktion-4',
+'Brasiliansk-k%C3%B6ttproduktion',
+'haiku-handbags',
+'maternity',
+'a-sample-test-map-1',
+'another-sample-test-map',
+'a-sample-test-map-3',
+'a-sample-test-map-4',
+'separate-sourcemap-name-lets-see-what-happens',
+'sandpit-carbon-footprint-test',
+'separate-sourcemap-name-lets-see-what-happens-2',
+'sandpit-carbon-footprint-test-4',
+'ldpe-plastic-wrap',
+'schlage-lock-company',
+'schlage-brass-key',
+'crest-natures-expressions-toothpaste',
+'konnect-mobile',
+'ken-webster',
+'ken-webster-1',
+'typical-silicon-solar-module',
+);
+foreach($banned_slugs as $i => $s) $banned_slugs[$i] = urldecode($s);
+
 function fetch_sc($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -188,6 +219,7 @@ function extract_youtube_link($desc) {
 
 $oldsc = fetch_sc(FETCH_URL);
 if(!$oldsc) die('Could not fetch: '.FETCH_URL);
+if(in_array($oldsc->slug, $banned_slugs)) die('Slug is banned.');
 if(!isset($oldsc) || !isset($oldsc->stops)) {
     foreach($oldsc as $oid => $sc) {
         break;

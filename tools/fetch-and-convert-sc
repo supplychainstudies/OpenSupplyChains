@@ -219,13 +219,13 @@ function extract_youtube_link($desc) {
 
 $oldsc = fetch_sc(FETCH_URL);
 if(!$oldsc) die('Could not fetch: '.FETCH_URL);
-if(in_array($oldsc->slug, $banned_slugs)) die('Slug is banned.');
 if(!isset($oldsc) || !isset($oldsc->stops)) {
     foreach($oldsc as $oid => $sc) {
         break;
     }
     $oldsc = $sc;
 }
+if(in_array($oldsc->slug, $banned_slugs)) die('Slug is banned.');
 $newstops = get_old_sc_stops($oldsc);
 $newhops = get_old_sc_hops($oldsc, $newstops);
 $newsc = new stdClass();

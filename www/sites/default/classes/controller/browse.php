@@ -28,7 +28,21 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
 
 
-        $params = array('l' => 20, 'recent' => 'yes');
+        $defaults = array(
+            'q' => false,
+            'p' => 1,
+            'l' => 20
+        );
+
+        $params = $_GET;
+        if(strtolower(Request::$method) == 'post')
+            $params = $_POST;
+
+        $params = array_merge($defaults, $params);
+
+        $params['recent'] = 'yes';
+        $params['l'] = 20;
+
         if($category && isset($nms[$category])) {
             $slug = $category;
             $category = $nms[$category];
@@ -41,7 +55,18 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         } else {
             $this->template->category = false;
         }
-        $this->template->primary = Sourcemap_Search::find($params);
+        $r = Sourcemap_Search::find($params);
+        $p = Pagination::factory(array(
+            'current_page' => array(
+                'source' => 'query_string',
+                'key' => 'p'
+            ),
+            'total_items' => $r->hits_tot,
+            'items_per_page' => $r->limit,
+            'view' => 'pagination/basic'
+        ));
+        $this->template->primary = $r;
+        $this->template->pager = $p;
 
 		$params['l'] = 1;
         $this->template->favorited = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));

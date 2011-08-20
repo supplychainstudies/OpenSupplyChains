@@ -22,6 +22,9 @@
             <h2>Viewing all categories</h2>
         <?php endif; ?>
     </div>
+    <div class="grid_16">
+    <?= $pager ?><br />
+    </div>
     <?= View::factory('partial/thumbs/featured', array('supplychains' => $primary->results)) ?>
 </div><!-- .container -->
 

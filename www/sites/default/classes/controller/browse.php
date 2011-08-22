@@ -47,7 +47,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             $slug = $category;
             $category = $nms[$category];
             $this->template->category = $category;
-            $params['c'] = $category->title;
+            $params['c'] = $category->name;
             $this->layout->page_title .= ' - '.$category->title;
         } elseif($category) {
             Message::instance()->set('"'.$category.'" is not a valid category slug.');

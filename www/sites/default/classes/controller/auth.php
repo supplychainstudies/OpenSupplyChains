@@ -13,6 +13,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public $template = 'auth';
 
     public function action_index() {
+
         $this->layout->page_title = Auth::instance()->get_user() ? 'Signed in to Sourcemap' : 'Sign in to Sourcemap';
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
@@ -21,41 +22,37 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         } else {
             $this->template->current_user_id = false;
             $this->template->current_user = false;
+            $f = Sourcemap_Form::load('/auth');
+            $f->action('auth')->method('post');
+            $this->template->login_form = $f;
+
+
+        }
+        
+        if(strtolower(Request::$method) === 'post') {
+            if($f->validate($_POST)) {
+                // Login
+                if(Auth::instance()->login($_POST['username'], $_POST['password'])) {
+                } else {
+                    Message::instance()->set('Invalid username or password.', Message::ERROR);
+                    $this->request->redirect('auth');
+                }
+                
+                if (!empty($_POST->next)) {
+                    $this->request->redirect($_POST->next);
+                } else {
+                    $this->request->redirect('home/');
+                }
+       
+            } else {
+                Message::instance()->set('Correct the errors below.');
+            }
         }
     
         $this->layout->scripts = array(
             'sourcemap-core'
         );
 
-    }
-
-    public function action_login() {
-        $post = Validate::factory($_POST);
-        $post->rule('username', 'not_empty')
-            ->rule('username', 'max_length', array(318))
-            ->rule('username', 'min_length', array(3))
-            ->rule('password', 'not_empty')
-            ->rule('password', 'max_length', array(16))
-            ->rule('password', 'min_length', array(6))
-            ->rule('next', 'max_length', array(500))
-            ->filter(true, 'trim');
-        if($post->check()) {
-            $post = (object)$post->as_array();
-            if(Auth::instance()->login($post->username, $post->password)) {
-            } else {
-                Message::instance()->set('Invalid username or password.', Message::ERROR);
-                $this->request->redirect('auth');
-            }
-        } else {
-            Message::instance()->set('Invalid username or password.', Message::ERROR);
-            $this->request->redirect('auth');
-        }
-		
-        if (!empty($post->next)) {
-            $this->request->redirect($post->next);
-        } else {
-           	$this->request->redirect('home/');
-        }
     }
 
     public function action_logout() {

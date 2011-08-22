@@ -34,9 +34,8 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             $this->template->can_import = false; 
         }
         $this->template->create_form = $f;
-		
+	
 
-		
         if(strtolower(Request::$method) === 'post') {
             if($f->validate($_POST)) {
                 // create!

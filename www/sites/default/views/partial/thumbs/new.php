@@ -13,14 +13,14 @@ if ($data):
             </div>
             <h3 class="preview-title">
                 <a href="view/<?php print $item->id; ?>">
-                <?= HTML::chars($item->attributes->title) ?>
+                <?= Text::limit_chars(HTML::chars($item->attributes->title), 16) ?>
                 </a>
             </h4>
             <h4>
                 <div class="preview-author">
                     <a href="user/<?php $item->owner->id; ?>">
-                        <?= isset($item->owner->name) ? HTML::chars($item->owner->name) : "Unknown Author" ?></a>, 
-                    <?php print date("F j, Y",$item->created);?>
+                        <?= isset($item->owner->name) ? Text::limit_chars(HTML::chars($item->owner->name), 17) : "Unknown Author" ?></a>, 
+                    <?php print date("M j, Y",$item->created);?>
                 </div>
             </h4>
         </div>

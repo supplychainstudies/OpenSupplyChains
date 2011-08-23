@@ -180,7 +180,7 @@ Sourcemap.Supplychain.prototype.hopExists = function(from_stop_id, to_stop_id) {
 
 Sourcemap.Supplychain.prototype.addHop = function(hop) {
     if(hop instanceof Sourcemap.Hop) {
-        if(this.hopExists(hop.from_stop_id, hop.to_stop_id)) {
+        if(this.hopExists(hop.from_stop_id, hop.to_stop_id) || this.hopExists(hop.to_stop_id, hop.from_stop_id)) {
             throw new Error("Hop exists.");
         }
         this.hops.push(hop);

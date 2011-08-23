@@ -25,8 +25,6 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             $f = Sourcemap_Form::load('/auth');
             $f->action('auth')->method('post');
             $this->template->login_form = $f;
-
-
         }
         
         if(strtolower(Request::$method) === 'post') {

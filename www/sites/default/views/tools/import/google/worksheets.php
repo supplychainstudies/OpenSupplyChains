@@ -3,10 +3,8 @@
 <form class="sourcemap-form" action="/tools/import/google/import" method="post">
 <input type="hidden" name="k" value="<?= HTML::chars($spreadsheet_key) ?>" />
 <label for="supplychain_name">Name:</label><br />
-<div class="sourcemap-form-textbox">
-	<input name="supplychain_name" type="text" value="A Sourcemap" />
-</div>
-<br />
+<input name="supplychain_name" type="text" value="A Sourcemap" />
+
 <label for="stops-wsid">Stops Worksheet:</label><br />
 <select name="stops-wsid">
 <option value="0"></option>

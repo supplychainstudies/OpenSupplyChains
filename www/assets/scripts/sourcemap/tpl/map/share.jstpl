@@ -1,6 +1,0 @@
-<div id="share-dialog">
-<h2>Share This Map</h2>
-<img class="preview-map" src="static/<%= this.remote_id %>.m.png" />
-<a class="embed-link" href="http://<%= window.location.hostname %>/embed/<%= this.remote_id %>">http://<%= window.location.hostname %>/embed/<%= this.remote_id %></a>
-<textarea onClick="select()" class="embed-code"><iframe width="500px" height="300px" frameborder="0" src="http://<%= window.location.hostname %>/embed/<%= this.remote_id %>" /></textarea>
-</div>

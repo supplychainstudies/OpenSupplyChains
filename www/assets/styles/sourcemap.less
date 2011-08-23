@@ -1,4 +1,4 @@
-/* Sourcemap Stylesheet ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> */
+/* Sourcemap Stylesheet --------------------------------------------- */
 
 /* Style Variables */
 @brand-color: #328cbb;
@@ -8,30 +8,13 @@
 @link-color: #2d78af;
 @link-hover-color: #444;
 
-.header-font{
-     font-family:
-        "Helvetica Neue",
-        Helvetica,
-        Arial,
-        sans-serif;
-}
-
-.body-font{
-     font-family:
-        Helvetica,
-        Arial,
-        sans-serif;
-    }
-
 /* Style Functions */
-
 .gradient(@start: rgba(245,245,245,0.85), @stop: rgba(255,255,255,0.85)) {
 	background-color: #fff;
 	background-color: @start;
     background-image: -moz-linear-gradient(center bottom,@start 0%,@stop 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,@start),color-stop(1,@stop));
 }
-
 
 .transparent(@opacity: .8){
   @ie-opacity: @opacity * 100;
@@ -67,8 +50,7 @@
     background-size: @w @h;
 }
 
-.clear {
-    clear: both;
-}
-
-/* Sourcemap Stylesheet ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> ~~~~~~~~~> */
+.clear { clear: both; }
+.hidden { display:none; }
+.center { text-align:center; }
+.red { color:red !important; }

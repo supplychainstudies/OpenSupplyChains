@@ -31,10 +31,8 @@
                 <fieldset>           
 					<div class="footprint-section">        
 	                    <label for="co2e">Quantity</label>
-	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty",0)); %>
-	                        <%= $("<div></div>").append(el).html() %>
-	                    </div>
+                        <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty",0)); %>
+                        <%= $("<div></div>").append(el).html() %>
 					</div>
 					<% var unittype = this.ref.getAttr("unit","kg"); %>
 					<div class="footprint-section selection">
@@ -48,10 +46,8 @@
 					<div class="footprint-math weight-context <% if(unittype == "kg") { %>hidden<% } %>">@</div>						
 					<div class="footprint-section weight-context <% if(unittype == "kg") { %>hidden<% } %>">					           
 	                    <label for="weight">Weight</label>
-	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-weight").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("weight",0)); %>
-	                        <%= $("<div></div>").append(el).html() %>
-	                    </div>
+                        <% el = $("<input></input>").attr("class", "footprint-weight").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("weight",0)); %>
+                        <%= $("<div></div>").append(el).html() %>
 					</div>					
 					<div class="footprint-math weight-context <% if(unittype == "kg") { %>hidden<% } %>">kg</div>		
 
@@ -59,10 +55,8 @@
 					
 					<div class="footprint-section">					           
 	                    <label for="co2e">Factor</label>
-	                    <div class="sourcemap-form-textbox">
-	                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>
-	                        <%= $("<div></div>").append(el).html() %>
-	                    </div>
+                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>
+                        <%= $("<div></div>").append(el).html() %>
 					</div>
 
                		<div class="clear"></div>
@@ -80,10 +74,10 @@
 					<option <% if(mediatype == "youtube:link") { %> selected<% } %> value="youtube:link">Youtube Link</option>				
 					<option <% if(mediatype == "flickr:setid") { %> selected<% } %> value="flickr:setid">Flickr Setid</option>
 				</select>
-                <div class="sourcemap-form-textbox"> 
-                    <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>
-                    <%= $("<div></div>").append(el).html() %>
-                </div>                
+				
+                <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>
+                <%= $("<div></div>").append(el).html() %>
+
                 <div class="clear"></div>
 				<div class="media-help">You can insert a Youtube movie or a Flickr slide show.<br/><br/> 
 					<% if(mediatype == "youtube:link") { %>

@@ -25,20 +25,11 @@
 </head>
 <body class="main">
     <div id="wrapper">
-        <div class="overlay">
-            <div id="auth" class="dialog">
-                <div class="dialog-content">
-                </div>
-            </div>
-        </div>
-
         <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         <div class="container">
             <div class="messages">
-                <header>
-                    <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
-                    <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
-                </header>
+            	<p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+                <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
             </div>
         </div>
         <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>

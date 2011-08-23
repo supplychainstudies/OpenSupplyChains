@@ -1,5 +1,5 @@
 <div id="edit-map" class="container">
-    <h1><?= $supplychain->attributes->title ?></span></h1>
+    <h1><?= $supplychain->attributes->title ?></h1>
     <div class="edit-map-form">
         <?= $form ?>
     </div>

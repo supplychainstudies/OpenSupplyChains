@@ -13,6 +13,7 @@ Sourcemap.Form = function(form_el) {
 }
 
 Sourcemap.Form.prototype.init = function() {
+    var lock = false;
     var fs = this.fields();
     if(!fs._form_id) return false;
     for(var fn in fs) {

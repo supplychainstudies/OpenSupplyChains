@@ -13,7 +13,6 @@ Sourcemap.Form = function(form_el) {
 }
 
 Sourcemap.Form.prototype.init = function() {
-    var lock = false;
     var fs = this.fields();
     if(!fs._form_id) return false;
     for(var fn in fs) {
@@ -32,6 +31,7 @@ Sourcemap.Form.prototype.init = function() {
     $(this.el()).find('div.error').hide();
     $(this._form_el).bind("submit", $.proxy(function() {
         if(this._errors === false) {
+            (this._form_el).find('input[type=submit]').attr("disabled", "true");
             return true;
         }
         this.check(null, $.proxy(function(data) {

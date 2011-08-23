@@ -1,7 +1,7 @@
 <?php if(isset($supplychain) && $supplychain): ?>
         <div class="map-item small">
             <a href="view/<?= $supplychain->id ?>">
-                <img class="user-map-preview" src="map/static/<?= $supplychain->id ?>.s.png" />
+                <img class="user-map-preview small" src="map/static/<?= $supplychain->id ?>.s.png" />
             </a>
         </div>
         <div class="map-description">

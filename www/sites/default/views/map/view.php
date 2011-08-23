@@ -1,10 +1,9 @@
 <div id="map-container">    
     <div id="map">
         <div id="sourcemap-map-view"></div>
-    </div>
-    
+    </div>    
 </div>
-<div class="spacer"></div>
+
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
         <?php if($can_edit): ?>

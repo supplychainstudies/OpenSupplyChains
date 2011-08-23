@@ -24,10 +24,13 @@
 </head>
 <body class="main admin">
 	<?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
-    <div id="admin-head" class="container">
+    <div class="container">
         <div class="messages">
+        	<p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+        </div>
+    </div>
+    <div id="admin-head" class="container">
         <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
-        <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
         </div>
     </div>
     <div id="wrapper">

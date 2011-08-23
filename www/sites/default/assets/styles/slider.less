@@ -1,18 +1,6 @@
-/* IMPORT 
- * -------------------------------------------------------------- */
+/* AnythingSlider v1.4 By Chris Coyier: http://css-tricks.com */
 
-@import "sourcemap";
-
-/*
-    AnythingSlider v1.4
-
-    By Chris Coyier: http://css-tricks.com
-    with major improvements by Doug Neiner: http://pixelgraphics.us/
-    based on work by Remy Sharp: http://jqueryfordesigners.com/
-*/
-
-/* SLIDER STYLES 
- * -------------------------------------------------------------- */
+@import "../../../../assets/styles/sourcemap.less";
 
 #featured-slider-description{
     position: absolute;
@@ -25,23 +13,14 @@
     .rounded(5px);
     .box_shadow(2px, 2px, 4px); 
 }
-
-.featured-description{
-    display:none;
-}
-
-.anythingWindow img{
-    position:relative;
-}
-
-/* Navigation Links */
+.featured-description { display:none; }
+.anythingWindow img { position:relative; }
 .anythingSlider .anythingControls {
     position: absolute;
     bottom: 20px;
     left: 270px;
     z-index: 100;
 }
-
 .anythingSlider .featured-title-leader {
     font-size: 22px;
     font-weight: bold;
@@ -101,9 +80,7 @@
     box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-.anythingSlider .thumbNav a span {
-    display: none;
-}
+.anythingSlider .thumbNav a span { display: none; }
 
 
 .anythingSlider .thumbNav a.cur {
@@ -112,34 +89,16 @@
     border-color: #2e6683;
 }
 
-/******* SET DEFAULT DIMENSIONS HERE ********/
-.anythingSlider {
-    margin: 0 auto;
-}
-
-/****** SET COLORS HERE *******/
-/* Default State */
-.anythingSlider.activeSlider .anythingWindow {
-    border-color: #eaeaea;
-}
-
-.anythingSlider .anythingControls .start-stop{
-    display:none;
-}
-
-/**** DO NOT CHANGE BELOW THIS LINE ****/
-/* anythingSlider viewport window */
+.anythingSlider { margin: 0 auto; }
+.anythingSlider.activeSlider .anythingWindow { border-color: #eaeaea; }
+.anythingSlider .anythingControls .start-stop { display:none; }
 .anythingSlider .anythingWindow {
         overflow: hidden;
         position: relative;
         width: 100%;
         height: 100%;
 }
-/* wrapper: 45px right & left padding for the arrows, 28px @ bottom for navigation */
-.anythingSlider {
-        position: relative;
-}
-/* anythingSlider base UL */
+.anythingSlider { position: relative; }
 .anythingBase {
         background: transparent;
         list-style: none;
@@ -156,8 +115,6 @@
         padding: 0;
         margin: 0;
 }
-
-/* Navigation Arrows */
 .anythingSlider .arrow {
         top: 50%;
         position: absolute;
@@ -179,21 +136,13 @@
 .anythingSlider .back a { background-position: -88px -40px; }
 .anythingSlider .forward a:hover, div.anythingSlider .forward a.hover { background-position: 0 -240px; }
 .anythingSlider .back a:hover, div.anythingSlider .back a.hover { background-position: -88px -240px; }
-
-/* Navigation Links */
 .anythingSlider .anythingControls { outline: 0; }
 .anythingSlider .thumbNav { margin: 0; }
 .anythingSlider .thumbNav li { display: inline; }
-.anythingSlider .thumbNav a:hover {
-        background-image: none;
-}
+.anythingSlider .thumbNav a:hover { background-image: none; }
 
-/* slider autoplay right-to-left, reverse order of nav links to look better */
-.anythingSlider.rtl .thumbNav a { float: right; } /* reverse order of nav links */
-.anythingSlider.rtl .thumbNav { float: left; }    /* move nav link group to left */
-/* div.anythingSlider.rtl .start-stop { float: right; } */ /* move start/stop button - in case you want to switch sides */
-
-/* Autoplay Start/Stop button */
+.anythingSlider.rtl .thumbNav a { float: right; }
+.anythingSlider.rtl .thumbNav { float: left; }  
 .anythingSlider .start-stop {
         padding: 2px 5px;
         width: 40px;
@@ -207,7 +156,6 @@
         -webkit-border-radius: 0 0 5px 5px;
 }
 .anythingSlider .start-stop:hover, .anythingSlider .start-stop.hover { background-image: none; }
-
 .anythingSlider, .anythingSlider .anythingWindow, .anythingSlider .thumbNav a, .anythingSlider .arrow a, .anythingSlider .start-stop {
         transition-duration: 0;
         -o-transition-duration: 0;

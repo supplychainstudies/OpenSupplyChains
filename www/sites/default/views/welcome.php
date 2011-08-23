@@ -4,41 +4,32 @@
     <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
 </div>
 
-<div class="spacer"></div>
-
 <div class="container">
     <div id="sidebar">
-        <div class="container">
-            <h2>Popular Sourcemaps</h2>
-        </div>
-        <hr />
-        <div class="container">
+        <div class="container"> 
+			<h2>Popular Sourcemaps</h2>  
+			<hr />
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
             </div>
-        </div>
-             
-        <div class="spacer clear"></div>
+	        <div class="clear"></div>
 
-        <div class="container">
-            <h2>Recent Sourcemaps</h2>
-        </div>
-        <hr />
-        <div class="container">
+        </div>           
+
+        <div class="container"> 
+			<h2>Recent Sourcemaps</h2> 
+        	<hr />
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
             </div>
+	        <div class="clear"></div>
         </div>
-
-        <div class="clear"></div>
     </div>
     <div id="body-content">
         <h1 id="site-tagline">Find out where things come from.</h1>
         <p id="site-blurb">Sourcemap is the crowdsourced directory of product supply chains and carbon footprints. <a href="http://www.sourcemap.com/register/">Join us</a> to learn more and contribute.</p>  
 
-        <div class="spacer"></div>
-
-        <h2 class="section-title highlighted">Featured Sourcemaps</h2>
+        <h2 class="section-title">Featured Sourcemaps</h2>
         <hr />
         <?= View::factory('partial/thumbs/featured', array('supplychains' => $morefeatured)) ?>
         

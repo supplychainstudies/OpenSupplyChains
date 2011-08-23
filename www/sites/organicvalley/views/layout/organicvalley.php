@@ -32,7 +32,7 @@
 </head>
 
 <body>
-  <div id="pagecolumn" class="container_24">
+  <div id="pagecolumn">
   <div id="header">
     <h2><a href="/"><span>Organic Valley, a farmer owned organic dairy
     cooperative.</span></a></h2>
@@ -76,7 +76,7 @@
 
   <div class="clear"></div>
 
-  <div id="body" class="grid_20 push_4">
+  <div id="body" class=" push_4">
     <!--TYPO3SEARCH_begin-->
 
     <div id="c9904" class="csc-default">
@@ -88,7 +88,7 @@
     </div><!--TYPO3SEARCH_end-->
   </div>
 
-  <div id="sectionnav" class="grid_4 pull_20">
+  <div id="sectionnav" class=" pull_20">
     <div id="submenu">
       <ul>
         <li class="selected"><a href="">Home</a></li>
@@ -109,7 +109,7 @@
     </div>
   </div>
 
-  <div id="features" class="grid_6"></div>
+  <div id="features" class=""></div>
 
   <div class="clear"></div>
 
@@ -283,7 +283,7 @@
         <hr />
 
         <ul id="sitemap">
-          <li class="grid_1 active">
+          <li class=" active">
             <h6><a href="who-is-your-farmer/index/">Who's Your Farmer</a></h6>
 
             <ul>
@@ -307,7 +307,7 @@
             </ul>
           </li>
 
-          <li class="grid_1 alpha">
+          <li class=" alpha">
             <h6><a href="products/">Products</a></h6>
 
             <ul>
@@ -354,7 +354,7 @@
             </ul>
           </li>
 
-          <li class="grid_1">
+          <li class="">
             <h6><a href="recipes/search-recipes/">Recipes</a></h6>
 
             <ul>
@@ -367,7 +367,7 @@
             </ul>
           </li>
 
-          <li class="grid_1">
+          <li class="">
             <h6><a href="why-organic/overview/">Why Organic?</a></h6>
 
             <ul>
@@ -405,7 +405,7 @@
             </ul>
           </li>
 
-          <li class="grid_1">
+          <li class="">
             <h6><a href="community/overview/">Community</a></h6>
 
             <ul>
@@ -432,7 +432,7 @@
             </ul>
           </li>
 
-          <li class="grid_1">
+          <li class="">
             <h6><a href="newsroom/overview/">Newsroom</a></h6>
 
             <ul>
@@ -452,7 +452,7 @@
             </ul>
           </li>
 
-          <li class="grid_1">
+          <li class="">
             <h6><a href="about-us/overview/our-history/">About Us</a></h6>
 
             <ul>
@@ -484,7 +484,7 @@
             </ul>
           </li>
 
-          <li class="grid_1 omega">
+          <li class="omega">
             <h6><a href="trade/overview/">Trade</a></h6>
 
             <ul>

@@ -7,25 +7,19 @@
             </a>
         </div>
         <ul id="navigation">
-            <li>
-                <a href="browse">Browse</a>            
-            </li>
-            <li>
-                <a href="create">Create</a>
-            </li>
-            <?php if($current_user = Auth::instance()->get_user()): // This happens if the user is logged in ?>
+            <li> <a href="browse">Browse</a> </li>
+            <li> <a href="create">Create</a> </li>
+            <?php if($current_user = Auth::instance()->get_user()): ?>
             <li>
 				<div> <a href="/home">Dashboard</a> </div>
                 <a class="existing-login" href="auth/logout">Sign out</a>
             </li>
-            <?php else:  // Otherwise, this ?>
+            <?php else: ?>
             <li class="register">
-                <div class="button">
-                    <a href="/register">Register</a> 
-                </div>
+                <div class="button"> <a href="/register">Register</a> </div>
                 <a class="existing-login" href="auth">Sign in.</a>
-                <?php endif; ?>
             </li>
+        	<?php endif; ?>
         </ul>
         <form method="post" action="/search/">
             <div id="search-div">
@@ -34,7 +28,5 @@
         </form>
         <div id="search-results"></div>
         <div class="clear"></div>
-    </div>
-    
+    </div>    
 </div> <!-- #masthead -->
-

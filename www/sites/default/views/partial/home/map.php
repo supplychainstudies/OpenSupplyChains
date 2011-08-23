@@ -1,7 +1,7 @@
 <?php if(isset($supplychain) && $supplychain): ?>
         <div class="map-item small">
             <a href="view/<?= $supplychain->id ?>">
-                <img class="user-map-preview" src="map/static/<?= $supplychain->id ?>.s.png" />
+                <img class="user-map-preview small" src="map/static/<?= $supplychain->id ?>.s.png" />
             </a>
         </div>
         <div class="map-description">
@@ -24,7 +24,10 @@
                 <a id="map-publish-link">Public</a>
             </div>
             <div class="map-controls-edit">
-                <a href="edit/<?= $supplychain->id ?>">Edit this map</a>
+                <a href="edit/<?= $supplychain->id ?>">Edit</a>
+            </div>
+            <div class="map-controls-delete">
+                <a class="red" href="delete/<?= $supplychain->id ?>">Delete</a>
             </div>
         </div>
         <div class="clear"></div>

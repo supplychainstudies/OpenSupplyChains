@@ -79,12 +79,18 @@ Sourcemap.Supplychain.prototype.removeStop = function(target_id) {
     if(target_id instanceof Sourcemap.Stop)
         target_id = target_id.instance_id;
     var removed = false;
+    var hrmd = [];
     for(var i=0; i<this.hops.length; i++) {
         var h = this.hops[i];
         if(h.from_stop_id === target_id || h.to_stop_id === target_id) {
-            this.removeHop(h);
+            //this.removeHop(h);
+            hrmd.push(i);
+            h.supplychain_id = null;
+            h.from_stop_id = null;
+            h.to_stop_id = null;
         }
     }
+    for(var i=hrmd.length; i>0; i--) this.hops.splice(hrmd[i-1],1);
     for(var i=0; i<this.stops.length; i++) {
         if(this.stops[i].instance_id === target_id) {
             removed = this.stops.splice(i,1)[0];

@@ -7,9 +7,19 @@ $cat_opts = array();
 $cat_opts[] = array(0, 'None');
 
 $valid_cats = array(0);
-foreach($taxonomy->children as $ti => $t) {
-    $valid_cats[] = $t->data->id;
-    $cat_opts[] = array($t->data->id, $t->data->title);
+
+$flat_cats = Sourcemap_Taxonomy::flatten();
+
+$p = array();
+foreach($flat_cats as $i => $cat) {
+    list($id,$nm,$title,$depth) = $cat;
+    if($depth < count($p)) {
+        while(count($p) > $depth) array_pop($p);
+    }
+    $p[] = $title;
+    $valid_cats[] = $id;
+    if($id)
+        $cat_opts[] = array($id, join(' / ', array_slice($p, 1)));
 }
 
 return array(

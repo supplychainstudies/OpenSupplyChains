@@ -54,8 +54,12 @@
     border: 1px solid rgb(162,162,162);
     background: rgba(255,255,255,0.85);
     .box_shadow(3px, 1px, 10px);
-
     .rounded(5px);
+	&.called-out {
+		background-color:#eee;
+		height:140px;
+		margin:auto; top:0; left:0; right:0; bottom:0;
+	}
     #dialog-content {
         overflow:hidden;                       
         padding: 0 10px; margin: 0;
@@ -565,7 +569,11 @@
     .ui-tabs .ui-tabs-hide { display: none !important; }
     .ui-state-active { text-decoration:underline; }
 }
-
+#newpoint-button {
+	text-align:center;
+	height:20px;
+	margin:20px 32px 10px 28px;
+}
 #catalog {
     .catalog-content {
         padding:0 !important;   

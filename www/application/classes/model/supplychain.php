@@ -282,7 +282,7 @@ class Model_Supplychain extends ORM {
             Sourcemap_User_Event::factory($evt, $sc->user_id, $scid)->trigger();
         } catch(Exception $e) {
             // pass
-            die($e);
+            //die($e);
         }
         Cache::instance()->delete('supplychain-'.$scid);
         if(Sourcemap_Search_Index::should_index($scid)) {

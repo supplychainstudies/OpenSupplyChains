@@ -151,63 +151,38 @@ if (!defined('SUPPRESS_REQUEST')) {
         } else {
             header('HTTP/1.1 404 Not Found');
         }
+		$e = addcslashes($e,"\\\'\"&\n\r<>:"); ;
         $response = <<<HTML
-            <!DOCTYPE html>
-            <html>
-                <head>
-                    <title>Sourcemap :: Page not found.</title>
-                    <link href="assets/styles/reset.css" rel="stylesheet" type="text/css" />
-                    <link href="assets/styles/general.css" rel="stylesheet" type="text/css" />
-                    <style>
-                        body > * {
-                            padding: .5em;
-                            font-family: Helvetica, Arial, sans-serif;
-                        }
-                        header {
-                            font-size: 1.2em;
-                            color: #332;
-                        }
-                        .article-content p {
-                            margin: .25em;
-                            margin-bottom: .5em;
-                            clear: both;
-                        }
-                        .article-content img {
-                            float: left;
-                            clear: none;
-                            width: 50%;
-                            max-width: 515px;
-                        }
-                        .article-content div.gigantic {
-                            font-size: 1800%;
-                            font-weight: bold;
-                            float: right;
-                            max-width: 50%;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <header id="masthead">
-                        <h1>You've Strayed into Uncharted Waters</h1>
-                    </header>
-                    <div class="article-content">
-                        <div class="gigantic">404</div>
-                        <img src="assets/images/monsters.png" />
-                        <p>This is the part of the map where it says, "Here be monsters."</p><p>Please, <a href="/">go back</a>.</p>
-                        <p>If you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
-                    </div>
-                    <!--
-                        <?= $e ?>
-                    -->
-                </body>
-            </html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Page Not Found</title>
+	<style>
+		body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+		#wrapper{width:516px;margin:0 auto;}
+		h1{text-align:center;font-size:300%;}
+		img{position:absolute;top:0;left:0;right:0;margin:0 auto;}
+		.article-content{position:relative;padding-top:340px;}
+		.article-content p{text-align:center;line-height:1.5em;
+		margin:.25em;margin-bottom:.5em;clear:both;}
+		.article-content div.gigantic{position:absolute;top:0;left:0;right:0;
+		margin:0 auto;color:#ddd;font-size:1800%;font-weight:bold;}
+	</style>
+</head>
+<body>
+<div id="wrapper">
+	<h1>You've Strayed into Uncharted Waters</h1>
+	<div class="article-content">
+		<div class="gigantic">404</div>
+		<img src="http://www.sourcemap.com/assets/images/monsters.png" />
+		<p>This is the part of the map where it says, "Here be monsters." Please, <a href="/">go back</a>, and if you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
+	</div>
+</div>
+<script type="text/javascript"> if (window.console) { var error = "$e"; console.log(error); } </script>
+</body>
+</html>
 HTML;
     }
     echo $response;
     exit;
-    /*echo Request::instance()
-        ->execute()
-        ->send_headers()
-        ->response;
-    */
 }

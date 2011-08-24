@@ -38,7 +38,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // listen for supplychain updates and save
     Sourcemap.listen('supplychain-updated', function(evt, sc, no_remap) {
         var succ = $.proxy(function() {
-            this.map_view.updateStatus("Saved...", "good-news");            
+            this.map_view.updateStatus("Saved...", "good-news");           
         }, this);
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
@@ -103,6 +103,70 @@ Sourcemap.Map.Editor.prototype.init = function() {
         "panel": "edit",
         "callbacks": {
             "click": $.proxy(function() {
+				var s = this.map_view;
+			    var cb = function(p, tx, th) {
+					if(this.dialog) {
+						if(!this.dialog) {
+					        this.dialog = $('<div id="dialog"></div>');
+					        $(this.map.map.div).append(this.dialog);
+					    } else $(this.dialog).empty();
+
+					    this.dialog_content = $('<div id="dialog-content"></div>');
+					    this.dialog.append(this.dialog_content);
+				        $(this.dialog_content).html(th);
+				        $(this.dialog_content).find(".close").click($.proxy(function() { 
+					        $(this.dialog).hide();
+					        $(this.dialog).removeClass("called-out");					
+							this.dialog_content.empty(); 
+						}, this));
+						$(this.dialog_content).find("#newpoint-button").click($.proxy(function() {
+							var f = this.dialog_content.find('form');
+				            var vals = f.serializeArray();
+				            var attributes = {};
+				            for(var i=0; i<vals.length; i++) {
+				                attributes[vals[i].name] = vals[i].value;
+				            }
+				
+			                var sc = false;
+			                for(var k in this.map.supplychains) { sc = this.map.supplychains[k]; break; }
+							
+							$(this.dialog_content).find("#newpoint-button").attr("disabled","disabled").addClass("disabled");
+							
+			                var cb = $.proxy(function(data) {
+			                    if(data && data.results && data.results.length) {
+									this.map.controls.select.unselectAll();
+									var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
+				                    new_geom = new_geom.transform(
+				                        new OpenLayers.Projection('EPSG:4326'),
+				                        new OpenLayers.Projection('EPSG:900913')
+				                    );
+				                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+									var stop = new Sourcemap.Stop(geometry, this.attr);
+			                        stop.setAttr("address", data.results[0].placename);
+									this.sc.addStop(stop);
+					                
+			                        stop.attributes.stop_instance_id = stop.instance_id;
+			                        stop.attributes.supplychain_instance_id = stop.supplychain_id;
+					                this.map.mapSupplychain(this.sc.instance_id);                									
+			                        this.map.controls.select.select(this.map.stopFeature(this.sc.instance_id, stop.instance_id));
+									Sourcemap.broadcast('supplychain-updated', sc);			
+			                    } else {
+									$("#dialog").shake();
+									$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
+						        }
+			                }, {"map":this.map, "sc":sc, "attr":attributes});
+
+			                Sourcemap.Stop.geocode(attributes.address, cb);
+						}, this));
+				        var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
+				        $(this.dialog).fadeIn(fade, function() {});
+						$(this.dialog).addClass("called-out");
+						
+				    }
+					
+				}
+			    Sourcemap.template('map/edit/add-stop', cb, s, s);
+				/*
                 this.map.controls.select.unselectAll();
                 
                 // make a suitable geometry
@@ -138,7 +202,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 }, {"stop":new_stop, "map":this.map, "sc":sc});
                                 
                 Sourcemap.Stop.geocode(new_stop, cb);
-                
+                */
    
             }, this)
         }

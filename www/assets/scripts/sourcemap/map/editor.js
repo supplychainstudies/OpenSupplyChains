@@ -137,7 +137,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
 									this.map.controls.select.unselectAll();
 									var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
 				                    new_geom = new_geom.transform(
-				                         new OpenLayers.Projection('EPSG:4326'),
+				                        new OpenLayers.Projection('EPSG:4326'),
 				                        new OpenLayers.Projection('EPSG:900913')
 				                    );
 				                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));

@@ -137,19 +137,19 @@ Sourcemap.Map.Editor.prototype.init = function() {
 									this.map.controls.select.unselectAll();
 									var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
 				                    new_geom = new_geom.transform(
-				                        new OpenLayers.Projection('EPSG:4326'),
+				                         new OpenLayers.Projection('EPSG:4326'),
 				                        new OpenLayers.Projection('EPSG:900913')
 				                    );
 				                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
 									var stop = new Sourcemap.Stop(geometry, this.attr);
 			                        stop.setAttr("address", data.results[0].placename);
 									this.sc.addStop(stop);
-					                
+					                Sourcemap.broadcast('supplychain-updated', sc);			
+									
 			                        stop.attributes.stop_instance_id = stop.instance_id;
 			                        stop.attributes.supplychain_instance_id = stop.supplychain_id;
 					                this.map.mapSupplychain(this.sc.instance_id);                									
 			                        this.map.controls.select.select(this.map.stopFeature(this.sc.instance_id, stop.instance_id));
-									Sourcemap.broadcast('supplychain-updated', sc);			
 			                    } else {
 									$("#dialog").shake();
 									$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
@@ -160,8 +160,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
 						}, this));
 				        var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
 				        $(this.dialog).fadeIn(fade, function() {});
-						$(this.dialog).addClass("called-out");
-						
+						$(this.dialog).addClass("called-out");						
 				    }
 					
 				}

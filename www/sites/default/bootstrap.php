@@ -13,7 +13,7 @@ Route::set('view', '<controller>/<id>', array(
 );
 
 Route::set('toplevel static maps', 'static/<id>.<sz>.png', array(
-    'id' => '[a-z0-9]+', 'sz' => '(t|s|m|l|o|th-m)'
+    'id' => '[a-z0-9]+', 'sz' => '(t|s|m|l|f|th-m)'
 ))->defaults(array(
     'controller' => 'map',
     'action' => 'static',

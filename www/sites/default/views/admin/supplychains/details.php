@@ -18,6 +18,13 @@ This map belongs to <span class="bad-news">*nobody*</span>.
 <?php endif;?> It has <?= $stop_count ?> stop<?= $stop_count == 1 ? '' : 's' ?>
  and <?= $hop_count ?> hop<?= $hop_count == 1 ? '' : 's' ?>.
 
+ <form name="chown" method="post" action="admin/supplychains/<?= $id ?>/chown">
+<label for="chown">Change owner?</label><input type="checkbox" name="chown" /><br />
+<label for="new_owner">New Owner:</label><br />
+<input name="new_owner" type="text" value="<?= HTML::chars($owner) ?>" /><br />
+<input type="submit" value="Change" />
+ </form>
+
 <h3>Attribute(s):</h3>
 <?php if($attributes): ?>
     <dl class="attr-list">

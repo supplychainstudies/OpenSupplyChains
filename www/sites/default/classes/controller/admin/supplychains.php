@@ -27,7 +27,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
               'items_per_page' => $items,
             ));
 
-        $supplychains = $supplychain->order_by('modified', 'ASC')
+        $supplychains = $supplychain->order_by('modified', 'DESC')
             ->limit($pagination->items_per_page)
             ->offset($pagination->offset)
             ->find_all();        
@@ -92,7 +92,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $alias = $supplychain->alias->find_all()->as_array(null, array('supplychain_id', 'site', 'alias'));
         
         $owner_group = $supplychain->owner_group->find()->as_array(null, array('id', 'name'));
-        $owner = $supplychain->owner->find()->as_array(null, 'username');
+        $owner = $supplychain->owner->as_array(null, 'username');
         
         
         $this->template->stop_count = $stop_count;
@@ -129,7 +129,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             $supplychain_alias->supplychain_id = $id;
             $supplychain_alias->site = $site_added;
             $supplychain_alias->alias = $alias_added;
-            
+
             try {
                 $supplychain_alias->save();
             } catch(Exception $e) {
@@ -194,6 +194,38 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         }
     }
 
+    public function action_chown($id) {
+        if(strtolower(Request::$method) == 'post') {
+            $post = $_POST;
+            $sc = ORM::factory('supplychain', $id);
+            if($sc->loaded()) {
+                if(isset($post["chown"])) {
+                    if(isset($post["new_owner"]) && $post["new_owner"]) {
+                        if(is_numeric($post["new_owner"])) {
+                            $new_owner = ORM::factory('user', $post["new_owner"]);
+                        } elseif(is_string($post["new_owner"])) {
+                            $new_owner = ORM::factory('user')->where('username', '=', $post["new_owner"])
+                                ->find();
+                        } else $new_owner = false;
+                        if($new_owner && $new_owner->loaded()) {
+                            $sc->user_id = $new_owner->id;
+                            try {
+                                $sc->save();
+                                Message::instance()->set('Changed owner to "'.$post["new_owner"].'".');
+                            } catch(Exception $e) {
+                                Message::instance()->set('Could not update owner.');
+                            }
+                        } else {
+                            Message::instance()->set('Invalid user.');
+                        }
+                    }
+                }
+            } else {
+                Message::instance()->set('Invalid supplychain.');
+            }
+        }
+        $this->request->redirect('admin/supplychains/'.$id);
+    }
     
     public function action_delete_supplychain($id) {
     

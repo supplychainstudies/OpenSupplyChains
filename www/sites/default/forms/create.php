@@ -10,16 +10,16 @@ $valid_cats = array(0);
 
 $flat_cats = Sourcemap_Taxonomy::flatten();
 
-$p = array();
+$_p = array();
 foreach($flat_cats as $i => $cat) {
     list($id,$nm,$title,$depth) = $cat;
-    if($depth < count($p)) {
-        while(count($p) > $depth) array_pop($p);
+    if($depth < count($_p)) {
+        while(count($_p) > $depth) array_pop($_p);
     }
-    $p[] = $title;
+    $_p[] = $title;
     $valid_cats[] = $id;
     if($id)
-        $cat_opts[] = array($id, join(' / ', array_slice($p, 1)));
+        $cat_opts[] = array($id, join(' / ', array_slice($_p, 1)));
 }
 
 return array(

@@ -52,7 +52,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
 
     /*
      * Lists all the details associated with supplychain_id
-     * 
      */
     public function action_details($id) {
 
@@ -239,6 +238,43 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         }
     }
 
+    public function action_refresh_supplychain($id) {
+    
+        $supplychain = ORM::factory('supplychain', $id);
+   
+        try {
+            Message::instance()->set('Supplychain is being refreshed.');
+            // Delete and recreate cache entry
+            Cache::instance()->delete('supplychain-'.$id);
+            if(Sourcemap_Search_Index::should_index($id)) {
+                Sourcemap_Search_Index::update($id);
+            } else {
+                Sourcemap_Search_Index::delete($id);
+            }
+           
+            // Recreate static image
+            $szs = Sourcemap_Map_Static::$image_sizes;
+            foreach($szs as $snm => $sz) {
+                $ckey = Sourcemap_Map_Static::cache_key($id, $snm);
+                Cache::instance()->delete($ckey);
+            }
+            Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
+                'baseurl' => Kohana_URL::site('/', true),
+                'environment' => Sourcemap::$env,
+                'supplychain_id' => (int)$id,
+                'sizes' => Sourcemap_Map_Static::$image_sizes,
+                'thumbs' => Sourcemap_Map_Static::$image_thumbs
+            ));
+
+            $sc = ORM::factory('supplychain', $id);
+            $sc->modified = time();
+            $sc->save();
+
+            $this->request->redirect("admin/supplychains/");
+        } catch (Exception $e) {
+        Message::instance()->set('Could not refresh the supplychain.');
+        }
+    }
 
     public function action_change_usergroup_perms($id) {
 

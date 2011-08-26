@@ -68,17 +68,15 @@ return array(
     ),
     'messages_file' => 'forms/create',
     'rules' => array(
-        // todo: wildcard
-        //'*' => array(),
         'title' => array(
             array('not_empty')
         ),
         'category' => array(
             array('in_array', array($valid_cats))
         ),
-        'description' => array(
-            array('in_array', array($valid_cats))
-        )
+	    'description' => array(
+	        array('max_length', array(140))
+	    )
     ),
     'filters' => array()
 );

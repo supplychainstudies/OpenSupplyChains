@@ -56,7 +56,7 @@ and
 <dd>System-wide announcements.</dd>
 <dt><a href="admin/taxonomy">Categories</a></dt>
 <dd>Manage map categories.</dd>
-<dt><a href="admin/taxonomy">Comments</a></dt>
+<dt><a href="admin/comments">Comments</a></dt>
 <dd>Moderate and manage comments.</dd>
 <dt><a href="admin/featured">Featured Supplychains</a></dt>
 <dd>Choose which maps are "featured".</dd>

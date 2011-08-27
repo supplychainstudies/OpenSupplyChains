@@ -4,8 +4,8 @@
 <td><?= HTML::chars(isset($item->attributes['title']) ? $item->attributes['title'] : '') ?></td>
 <td><a href="static/<?= $item->id ?>.l.png" target="map_preview"><img class="medium" src="static/<?= $item->id ?>.m.png" /></a></td>
 
-<form name="delete-supplychain" method="post" action="admin/supplychains/<?= $item->id?>/delete_supplychain">
-<td><input type ="submit" value="delete" /></form></td>
+<form name="refresh-supplychain" method="post" action="admin/supplychains/<?= $item->id?>/refresh_supplychain">
+<td><input type ="submit" value="refresh" /></form></td>
 
 
 

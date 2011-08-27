@@ -241,14 +241,24 @@ class Controller_Admin_Supplychains extends Controller_Admin {
     public function action_refresh_supplychain($id) {
     
         $supplychain = ORM::factory('supplychain', $id);
+
+        if($supplychain->loaded()) {
+            // pass
+        } else {
+            Message::instance()->set('Invalid supplychain.');
+            $this->request->redirect('admin/supplychains/');
+        }
    
         try {
-            Message::instance()->set('Supplychain is being refreshed.');
             // Delete and recreate cache entry
             Cache::instance()->delete('supplychain-'.$id);
+            Message::instance()->set('Primary cache entry for supplychain '.$id.' deleted.', Message::INFO);
+
             if(Sourcemap_Search_Index::should_index($id)) {
+                Message::instance()->set('Supplychain '.$id.' re-indexed.', Message::INFO);
                 Sourcemap_Search_Index::update($id);
             } else {
+                Message::instance()->set('Supplychain '.$id.' de-indexed.', Message::INFO);
                 Sourcemap_Search_Index::delete($id);
             }
            
@@ -258,6 +268,8 @@ class Controller_Admin_Supplychains extends Controller_Admin {
                 $ckey = Sourcemap_Map_Static::cache_key($id, $snm);
                 Cache::instance()->delete($ckey);
             }
+            Message::instance()->set('Removed cached static map images for map '.$id.'.', Message::INFO);
+
             Sourcemap::enqueue(Sourcemap_Job::STATICMAPGEN, array(
                 'baseurl' => Kohana_URL::site('/', true),
                 'environment' => Sourcemap::$env,
@@ -265,14 +277,18 @@ class Controller_Admin_Supplychains extends Controller_Admin {
                 'sizes' => Sourcemap_Map_Static::$image_sizes,
                 'thumbs' => Sourcemap_Map_Static::$image_thumbs
             ));
+            Message::instance()->set('Queued job for new static maps. Should regenerate within 30-60 seconds.', Message::INFO);
 
-            $sc = ORM::factory('supplychain', $id);
-            $sc->modified = time();
-            $sc->save();
+            // I don't know that lotus, et al. want to update
+            // the modified time. I think we just want to trigger
+            // a reload/redraw for cache and static maps, respectively.
+            //$sc = ORM::factory('supplychain', $id);
+            //$sc->modified = time();
+            //$sc->save();
 
-            $this->request->redirect("admin/supplychains/");
+            $this->request->redirect("admin/supplychains/$id");
         } catch (Exception $e) {
-        Message::instance()->set('Could not refresh the supplychain.');
+            Message::instance()->set('Could not refresh supplychain '.$id.'.');
         }
     }
 

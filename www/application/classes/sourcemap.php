@@ -17,6 +17,7 @@ class Sourcemap {
 
     // add'l comment flags
     const ABUSE = 2;
+    const HIDDEN = 4;
 
     // env constants
     const DEV = 'development';

@@ -38,27 +38,34 @@ and
 <?php endif; ?>
 </div>
 
+<h3>Import</h3>
 <dl>
-<dt><a href="admin/supplychains">Supplychains</a></dt>
-<dd>Browse and manage supplychains.</dd>
-<dt><a href="admin/users">Users</a></dt>
-<dd>Manage users.</dd>
-<dt><a href="admin/groups">Groups</a></dt>
-<dd>Manage groups.</dd>
-<dt><a href="admin/roles">Roles</a></dt>
-<dd>Manage Roles.</dd>
+<dt><a href="tools/import/csv">CSV Import</a></dt>
+<dd>Import data from uploaded comma-delimited files.</dd>
+<dt><a href="tools/import/google">Google Spreadsheet Import</a></dt>
+<dd>Import data from Google Spreadsheets.</dd>
+</dl>
+
+<h3>Management</h3>
+<dl>
 <dt><a href="admin/aliases">Aliases</a></dt>
 <dd>Manage Aliases.</dd>
 <dt><a href="admin/analytics">Analytics</a></dt>
 <dd>Sourcemap Analytics.</dd>
 <dt><a href="admin/announcements">Announcements</a></dt>
-<dd>Sourcemap Analytics.</dd>
+<dd>System-wide announcements.</dd>
 <dt><a href="admin/taxonomy">Categories</a></dt>
 <dd>Manage map categories.</dd>
+<dt><a href="admin/taxonomy">Comments</a></dt>
+<dd>Moderate and manage comments.</dd>
 <dt><a href="admin/featured">Featured Supplychains</a></dt>
 <dd>Choose which maps are "featured".</dd>
-<dt><a href="tools/import/csv">CSV Import</a></dt>
-<dd>Import data from comma-delimited.</dd>
-<dt><a href="tools/import/google">Google Spreadsheet Import</a></dt>
-<dd>Import data from Google Spreadsheets.</dd>
+<dt><a href="admin/groups">Groups</a></dt>
+<dd>Manage groups.</dd>
+<dt><a href="admin/roles">Roles</a></dt>
+<dd>Manage Roles.</dd>
+<dt><a href="admin/supplychains">Supplychains</a></dt>
+<dd>Browse and manage supplychains.</dd>
+<dt><a href="admin/users">Users</a></dt>
+<dd>Manage users.</dd>
 </dl>

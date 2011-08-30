@@ -17,7 +17,7 @@
             <?php else: ?>
             <li class="register">
                 <div class="button"> <a href="/register">Register</a> </div>
-                <a class="existing-login" href="auth">Sign in.</a>
+                <a class="existing-login" href="auth">Sign in</a>
             </li>
         	<?php endif; ?>
         </ul>

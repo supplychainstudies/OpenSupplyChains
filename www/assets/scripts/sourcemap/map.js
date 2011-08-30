@@ -891,7 +891,7 @@ Sourcemap.Map.prototype.makeArrow = function(hop_geom, o) {
     if(wrapped) {
         mid_pt = Sourcemap.great_circle_midpoint(from, wrap);
         mid_pt2 = Sourcemap.great_circle_midpoint(wrap2, to);
-        angle = Sourcemap.great_circle_bearing(from, wrap);
+        angle = Sourcemap.great_circle_bearing(mid_pt, wrap);
         angle2 = Sourcemap.great_circle_bearing(mid_pt2, to);
     } else {
         mid_pt = Sourcemap.great_circle_midpoint(from, to);

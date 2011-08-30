@@ -510,7 +510,7 @@ Sourcemap.haversine = function(pt1, pt2) {
     return d;
 }
 
-Sourcemap.great_circle_bearing = function(pt1, pt2) {
+Sourcemap.great_circle_bearing = function(pt1, pt2) {       //Note longitude is 0 at Greenich - in western hemisphere and positive in eastern
     var lat1 = pt1.y;
     var lon1 = pt1.x;
     var lat2 = pt2.y;
@@ -519,12 +519,13 @@ Sourcemap.great_circle_bearing = function(pt1, pt2) {
     lon1 = Sourcemap.radians(lon1)
     lat2 = Sourcemap.radians(lat2)
     lon2 = Sourcemap.radians(lon2)
-    var dLon = lon2 - lon1
-    var y = Math.sin(dLon)*Math.cos(lat2)
+    var dLon = lon2 - lon1     //Longitude is east-west distance...note this returns directional value (might be bigger than pi but cos symetric around 0) 
+                                       //Note we switch sin and cos for latitude b/c 0 latitude is at equator    
+    var y = Math.sin(dLon)*Math.cos(lat2)  //This calculates y position in cartesian coordinates with radius earth=1
     var x = Math.cos(lat1)*Math.sin(lat2) - 
         Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon)
-    var brng = Sourcemap.degrees(Math.atan2(y, x))
-    return brng
+    var brng = Sourcemap.degrees(Math.atan2(y, x))     //Note bearing is the differential direction of the arc given in degrees relative to east being 0
+    return brng  //Using the plane carie (sp?) projection EPSG:4326 (sending long to x and lat to y) brng is also differential direction of arc in projection
 }
 
 Sourcemap.great_circle_midpoint = function(pt1, pt2) {
@@ -533,7 +534,7 @@ Sourcemap.great_circle_midpoint = function(pt1, pt2) {
     var lat2 = pt2.y;
     var lon2 = pt2.x;
     lat1 = Sourcemap.radians(lat1);
-    lon1 = Sourcemap.radians(lon1);
+    lon1 = Sourcemap.radians(lon1);   
     lat2 = Sourcemap.radians(lat2);
     lon2 = Sourcemap.radians(lon2);
     var dLon = lon2 - lon1;

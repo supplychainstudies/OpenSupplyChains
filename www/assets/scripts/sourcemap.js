@@ -657,7 +657,7 @@ Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
     }
     var scaled_value = parseFloat(base.value * Math.pow(10, -new_unit.mult)).toFixed(1);
     if(scaled_value < 10) scaled_value = parseFloat(scaled_value).toFixed(1);
-    else scaled_value = Math.round(scaled_value);
+    else scaled_value = parseFloat(Math.round(scaled_value));
     var scaled_unit = new_unit;
     var scaled = {"unit": scaled_unit.label, "value": scaled_value};
     if(Sourcemap.Units.si_equiv[scaled.unit] !== undefined) 

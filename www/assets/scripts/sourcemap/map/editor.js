@@ -426,34 +426,24 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.params = {"name": ''};
         this.showCatalog(this);
     }, this));
-	
-	$(this.map_view.dialog).find('#media-content-type').bind('change', $.proxy(function(e) {
-		var mediatype = $(e.target).val();
 
-		$("#media-content-value").attr("name", mediatype);
-		$("#media-content-value").attr("value", ref.getAttr($(e.target).val(), ""));
-		
-		if(mediatype == "youtube:link") {
-			var preview = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube:link","").substr(31)+'/0.jpg" />';
-			var help = 'You can insert a Youtube movie or a Flickr slide show.<br/><br/>' 
-						+'A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk';					
-		} else {
-			var preview = "<div></div>";
-			var help = 'You can insert a Youtube movie or a Flickr slide show.<br/><br/>' 
-						+'A Flickr set ID is the sequence of numbers at the end of a set URL.';
-		}
-		$("#edit-media .media-preview").html(preview);
-		$("#edit-media .media-help").html(help);
-		
-    }, {"ref": ref, "editor": this}));
- 
-	// General case
+	$(this.map_view.dialog).find('#media-content-type').bind('change', $.proxy(function(e) {
+        this.editor.updateMedia(ref, this);
+    }, {"ref" : ref, "editor" : this}));
+
+    // populate media type preview on load 
+    $(this.map_view.dialog).find('#media-content-type').trigger('change'); 
+
+	// general case, save on every change
     $(this.map_view.dialog).find('input,select,textarea').bind('change', $.proxy(function(e) {
         var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
         var vals = {};
         for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
         this.editor.updateFeature(ref, vals);
+        this.editor.updateMedia(ref, this);
     }, {"ref": ref, "editor": this}));
+
+    
 
 	// impact calculator for stops
     if(ref instanceof Sourcemap.Stop) {
@@ -697,6 +687,40 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
         }, this)
     });
 }
+
+Sourcemap.Map.Editor.prototype.updateMedia = function(ref, editor) {
+		var mediatype = $("#media-content-type").val();
+        var message = "";
+
+		$("#media-content-value").attr("name", mediatype);
+		$("#media-content-value").attr("value", ref.getAttr($("#media-content-type").val(), ""));
+
+		if(mediatype == "youtube:link") {
+            // if we have a valid youtube URL
+            if ($('#media-content-value').val().match(/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/)){
+                var message = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube:link","").substr(31)+'/0.jpg" />';
+            }
+            else{
+                var message = '<p>You can insert a Youtube movie or a Flickr slide show.<br/>' 
+						+'A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk</p>';				
+            }
+		} 
+        if(mediatype == "flickr:setid") {
+            // if we have a valid flickr set ID
+            if ($('#media-content-value').val().length > 16){
+                var message = '<iframe align="center" src="http://www.flickr.com/slideShow/index.gne?set_id='
+                + ref.getAttr("flickr:setid","") +
+                '&" frameBorder="0" width="500" scrolling="no" height="500"></iframe>';
+            }
+            else{
+                var message = '<p>You can insert a Youtube movie or a Flickr slide show.<br/>' 
+						+'A Flickr set ID is the sequence of numbers at the end of a set URL.</p>';
+            }
+		}
+		
+        $("#edit-media .media-preview").html(message);
+}
+
 
 Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     var o = o || {};

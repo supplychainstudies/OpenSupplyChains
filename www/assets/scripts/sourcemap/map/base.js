@@ -283,6 +283,8 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
         {"base": this, "stop": stop, "supplychain": sc, "feature": f},
         this.options.tpl_base_path
     );
+
+    // this.map.map.panTo(this.getFeatureLonLat(f));
     
 }
 
@@ -355,6 +357,7 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
         this.options.tpl_base_path
     );
 
+    // this.map.map.panTo(this.getFeatureLonLat(f));
 }
 
 Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {
@@ -721,6 +724,21 @@ Sourcemap.Map.Base.prototype.favorite = function() {
             });
     }
 }
+
+
+// Returns LonLat coordinates from a feature
+Sourcemap.Map.Base.prototype.getFeatureLonLat = function(ftr) {
+    var ll = null;
+    if(ftr.geometry && ftr.geometry instanceof OpenLayers.Geometry.Point) {
+        ll = new OpenLayers.LonLat(ftr.geometry.x, ftr.geometry.y);
+    } else if(ftr.geometry && ftr.geometry instanceof OpenLayers.Geometry.MultiLineString) {
+        var ctr = ftr.geometry.getBounds().getCenterLonLat();
+        ll = ctr;
+    }
+    return ll;
+}
+
+
 // jQuery fxn to center an detailed element
 jQuery.fn.detail_center = function () {
     this.css("position","absolute");

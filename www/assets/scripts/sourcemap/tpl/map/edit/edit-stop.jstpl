@@ -79,19 +79,7 @@
                 <%= $("<div></div>").append(el).html() %>
 
                 <div class="clear"></div>
-				<div class="media-help">You can insert a Youtube movie or a Flickr slide show.<br/><br/> 
-					<% if(mediatype == "youtube:link") { %>
-						A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk
-					<% } if(mediatype == "flickr:setid") { %>
-						A Flickr set ID is the sequence of numbers at the end of a set URL.
-					<% } %>
-				</div>
-                <div class="media-preview">
-					<% if(this.ref.getAttr("youtube:link",false)) { %>
-						<% el = $("<img>"); el[0].setAttribute("src","http://img.youtube.com/vi/"+this.ref.getAttr("youtube:link","").substr(31)+"/0.jpg"); %>
-                        <%= $("<div></div>").append(el).html() %>
-					<% } %>
-				</div>
+				<div class="media-preview"></div>
                 
             </fieldset>
         </div>

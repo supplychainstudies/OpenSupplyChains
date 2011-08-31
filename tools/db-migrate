@@ -1,11 +1,31 @@
 #!/bin/bash
+echo ""
 
-source "env/${1}"
+if [[ $1 = "-h" || $1 = "--help"  ]]; then
+	cat <<FRED
+	Usage: db-migrate [-h|--help] envname  up/dn  [currentidx]  
+		Loads enviornment variables specified in PATH_TO_DBMIGRATE/env/envname the
+		Loads the num.FOO..up.sql or num.FOO..dn.sql files as specified in second arg from (in order)
+			${SOURCEMAP_DIR}/db/schema
+			${SOURCEMAP_DIR}/db/data
+			${SOURCEMAP_DIR}/db/fixtures
+	
+	If the third argument is given it is assumed that the database has already been migrated to that index
+	
+FRED
+	exit 0
+fi
 
-echo
+	 
+cd "$(dirname "${0}")" # Change to directory db-migrate is in so we get enviornment relative to that
+source "env/${1}" &> /dev/null || source "${1}" &> /dev/null 
 
-if [ ! -n "${SOURCEMAP_ENV}" ]; then
-    echo -e "\t- ** FATAL: You must provide a valid env name ('dev', 'stage', etc.).\n"
+if [[ ! $? = 0 ]]; then
+	echo -e "\t- ** FATAL: Enviornment file is invalid/nonexistant\n"
+fi
+
+if [[ -z "${SOURCEMAP_ENV}" || -z "${SMAP_DB}" || -z "${SMAP_DBHOST}" || -z "${SOURCEMAP_DIR}" ]]; then
+    echo -e "\t- ** FATAL: Enviornment file is incomplete\n"
     exit 1
 fi
 

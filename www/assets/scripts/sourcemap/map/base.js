@@ -446,12 +446,12 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
 	}
 	var terrain = {
 		"stop_style": {
-			"default": { "strokeColor": "#000000", "fontColor": "#000000", "strokeWidth":1 },
-			"cluster": { "strokeColor": "#000000", "fontColor": "#000000", "strokeWidth":1 }
+			"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" },
+			"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" }
 		},
 		"hop_style": {
-			"default": { "strokeColor": "#000000"},
-			"arrow": { "strokeColor": "#000000", "fontColor": "#000000" }
+			"default": { "strokeColor": "${color}"},
+			"arrow": { "strokeColor": "${color}", "fontColor": "${fcolor}" }
 		}
 	}
 	if(tileset == "cloudmade") {

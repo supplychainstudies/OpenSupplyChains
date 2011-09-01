@@ -1,6 +1,6 @@
 <?php
 // todo: groups -> fieldsets
-
+             ; 
 class Sourcemap_Form {
     
     public static $use_templates = true;
@@ -309,5 +309,9 @@ class Sourcemap_Form {
 
     public function checkbox($f, $v=null, $wt=null) {
        return $this->field($f, Sourcemap_Form_Field::CHECKBOX, $v, $wt);
-    }
+    } 
+	
+	public function recaptcha($f, $v=null, $wt=null) {  
+	   return $this->field($f, Sourcemap_Form_Field::RECAPTCHA, $v, $wt);
+	}
 }

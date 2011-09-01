@@ -32,8 +32,14 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
         $this->template->form = $f;
 
-        if(strtolower(Request::$method) === 'post') {
-            if($f->validate($_POST)) {
+        if(strtolower(Request::$method) === 'post') { 
+			 $validate= $f->validate($_POST);   
+			 if (array_key_exists('recaptcha', Kohana::modules())) { 
+					    	 $recap = Recaptcha::instance();  
+				 $revalid = (BOOL)($recap->is_valid($_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"])); 
+				$validate = ($validate && $revalid);
+			}    
+             if( $validate ) {  
                 $p = $f->values();
                 // check for username in use
                 $exists = ORM::factory('user')->where('username', '=', $p['username'])->find()->loaded();

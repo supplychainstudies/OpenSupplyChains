@@ -1,0 +1,15 @@
+/**
+ *  Kohana (KO3) FirePHP Module http://github.com/jeremyf76/KO3_FirePHP
+ *  Version 0.3
+ *  Last changed: 2010-01-27
+ *  Author: Jeremy Fowler (jeremy.f76@gmail.com)
+ *  Based on source from:
+ *  Fire_Profiler by dlib: http://learn.kohanaphp.com/2008/07/21/introducing-fire-profiler/
+ *  KO3 conversion by ralf: http://code.goldenzazu.de/fireprofiler.php
+ */
+
+Copy files to kohana/modules/firephp
+
+See example-bootstap.php for some examples...
+
+Documentation is at http://wiki.github.com/jeremyf76/KO3_FirePHP/

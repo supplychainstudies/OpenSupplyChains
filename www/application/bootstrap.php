@@ -2,6 +2,7 @@
 
 //-- Environment setup --------------------------------------------------------
 
+
 /**
  * Set the default time zone.
  *
@@ -83,8 +84,12 @@ if(isset(Kohana::config('sourcemap')->cache_dir)) {
 
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
- */
-Kohana::modules(array(
+ */      
+
+
+
+Kohana::modules(array(  
+	// 'firephp'   => MODPATH.'firephp', //FIREphp debug extension 
 	'auth'       => MODPATH.'auth',       // Basic authentication
 	'cache'      => MODPATH.'cache',      // Caching with multiple backends
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
@@ -95,7 +100,8 @@ Kohana::modules(array(
 	'pagination' => MODPATH.'pagination', // Paging of results
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-    'sitemap' => MODPATH.'sitemap'
+    'sitemap' => MODPATH.'sitemap',
+	'recaptcha' => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
 	));
 
 Kohana::add_include_path(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/');

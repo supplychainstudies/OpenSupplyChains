@@ -9,6 +9,7 @@ class Sourcemap_Form_Field {
     const TEXTAREA = 'textarea';
     const CHECKBOX = 'checkbox';
     const HIDDEN = 'hidden';
+	const RECAPTCHA = 'recaptcha';
 
     protected $_name = 'field';
 
@@ -106,7 +107,7 @@ class Sourcemap_Form_Field {
         return $new_field;
     }
 
-    public static function factory($t=null) {
+    public static function factory($t=null) { 
         $instance = false;
         switch($t) {
             case self::CHECKBOX:
@@ -126,7 +127,10 @@ class Sourcemap_Form_Field {
                 break;
             case self::TEXTAREA:
                 $cls = 'Sourcemap_Form_Field_Textarea';
-                break;
+                break; 
+			case self::RECAPTCHA:   
+	            $cls = 'Sourcemap_Form_Field_Recaptcha';
+	            break;
             case self::TEXT:
             case self::INPUT:
             default:

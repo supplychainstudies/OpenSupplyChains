@@ -8,15 +8,6 @@ return array(
                 'sites/default/assets/scripts/curtain.js',
             )
         ),
-        'sourcemap-edit' => array(
-            'scripts' => array(
-                'assets/scripts/sourcemap/supplychain/editor/tabbed.js',
-                'sites/default/assets/scripts/supplychain/edit.js'
-            ),
-            'requires' => array(
-                'sourcemap-core', 'sourcemap-template', 'sourcemap-map'
-            )
-        ),
         'sourcemap-create' => array(
             'scripts' => array(
                 'assets/scripts/sourcemap/supplychain/create.js',

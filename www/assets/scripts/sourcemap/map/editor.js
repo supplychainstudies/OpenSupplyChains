@@ -526,6 +526,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             } else { editor.find('.result').text("-"); }
 	        
 			var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
+			kvpairs.push({'name':'unit', 'value':unit});
 	        var vals = {};
 	       	for(var i=0; i<kvpairs.length; i++) {
 				if(kvpairs[i].name == "transportcat") {

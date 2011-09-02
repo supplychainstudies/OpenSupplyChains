@@ -51,7 +51,7 @@ return array(
         ),
         'sourcemap-search' => array(
             'scripts' => array(
-                'assets/scripts/search.js'
+                'assets/scripts/sourcemap/search.js'
             ),
             'requires' => array(
                 'sourcemap-jquery'

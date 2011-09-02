@@ -88,13 +88,13 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 	    p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
 	  	if(this.options.position == '0|0|0') {
 			if(sc.stops.length) {
-        		this.map.map.zoomToExtent(this.map.getFeaturesExtent(), false);
+                this.map.map.zoomToExtent(this.map.getFeaturesExtent(), true);
 			} else {
 				this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
 			}
     	} else {
 	 		this.map.map.setCenter(p, initpos[2]);
-		}
+        }
 	}, this));
     $(this.map.map.div).css("position", "relative");
 

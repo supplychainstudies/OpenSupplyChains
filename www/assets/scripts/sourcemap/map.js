@@ -158,8 +158,6 @@ Sourcemap.Map.prototype.initMap = function() {
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),
             new OpenLayers.Control.Attribution()
     ];
-    //if(this.options.zoom_control) 
-    //    controls.push(new OpenLayers.Control.ZoomPanel());
     var options = {
         "theme": "assets/scripts/libs/openlayers/theme/sourcemap/style.css",
         "projection": new OpenLayers.Projection("EPSG:900913"),
@@ -235,6 +233,15 @@ Sourcemap.Map.prototype.initDock = function() {
         "callbacks": {
             "click": function() {
                 this.map.zoomIn();
+            }
+        }
+    });
+    this.dockAdd('fitscreen', {
+        "title": 'Fit Screen',
+        "panel": 'zoom',
+        "callbacks": {
+            "click": function() {
+                this.map.zoomToExtent(this.getFeaturesExtent(), false);
             }
         }
     });
@@ -1010,6 +1017,17 @@ Sourcemap.Map.prototype.getFeaturesExtent = function() {
             if(c) bounds = bounds.extend(c.geometry.bounds);
         }
     }
+    // extend by the height of the banner and the dock
+    var screen = new OpenLayers.Bounds();
+
+    // determine pixel bounds of screen
+    var pixel = new OpenLayers.Pixel(0,20);
+    var topleft = this.map.getLonLatFromPixel(pixel);
+
+    var bottomright = this.map.getLonLatFromPixel(new OpenLayers.Pixel(960,300));
+   
+    bounds.extend(topleft, bottomright);
+
     return bounds;
 }
 

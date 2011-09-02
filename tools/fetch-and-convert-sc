@@ -166,6 +166,7 @@ function get_old_pt_stop_attributes($oldpart, $oldst) {
     if($yt = extract_youtube_link($oldpart->description)) {
         $attrs->{'youtube:link'} = $yt;
     }
+    $attrs->description = strip_tags($oldpart->description);
     return $attrs;
 
 }

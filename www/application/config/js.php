@@ -3,12 +3,12 @@ return array(
     'packages' => array(
         'jquery' => array(
             'scripts' => array(
-                'assets/scripts/jquery/jquery.js'
+                'assets/scripts/libs/jquery/jquery.js'
             )
         ),
         'jquery-ui' => array(
             'scripts' => array(
-                'assets/scripts/jquery/jquery-ui.js'
+                'assets/scripts/libs/jquery/jquery-ui.js'
             ),
             'requires' => array(
                 'jquery'
@@ -16,7 +16,7 @@ return array(
         ),
         'jqote' => array(
             'scripts' => array(
-                'assets/scripts/jquery/jquery.jqote.js'
+                'assets/scripts/libs/jquery/jquery.jqote.js'
             ),
             'requires' => array(
                 'jquery'
@@ -24,19 +24,19 @@ return array(
         ),
 		'google-analytics' => array(
             'scripts' => array(
-                'assets/scripts/analytics.js',
+                'assets/scripts/extra/analytics.js',
             )
         ),
         'showdown' => array(
             'scripts' => array(
-                'assets/scripts/showdown.js',
+                'assets/scripts/libs/showdown.js',
             )
         ),
         'sourcemap-jquery' => array(
             'scripts' => array(
-                'assets/scripts/jquery/jquery.js',
-                'assets/scripts/jquery/jquery-ui.js',
-                'assets/scripts/jquery/jquery.jqote.js'
+                'assets/scripts/libs/jquery/jquery.js',
+                'assets/scripts/libs/jquery/jquery-ui.js',
+                'assets/scripts/libs/jquery/jquery.jqote.js'
             )
         ),
         'sourcemap-core' => array(
@@ -95,12 +95,12 @@ return array(
         ),
         'openlayers' => array(
             'scripts' => array(
-                'assets/scripts/openlayers/OpenLayers.js'
+                'assets/scripts/libs/openlayers/OpenLayers.js'
             )
         ),
         'openlayers-cloudmade' => array(
             'scripts' => array(
-                'assets/scripts/openlayers/cloudmade.js'
+                'assets/scripts/libs/openlayers/cloudmade.js'
             ),
             'requires' => array(
                 'openlayers'
@@ -113,7 +113,7 @@ return array(
         ),
         'less' => array(
             'scripts' => array(
-                'assets/scripts/less/less.js'
+                'assets/scripts/libs/less/less.js'
             ),
             'env' => array(
                 Sourcemap::DEV
@@ -121,7 +121,7 @@ return array(
         ),
         'modernizr' => array(
             'scripts' => array(
-                'assets/scripts/modernizr/modernizr.js'
+                'assets/scripts/libs/modernizr/modernizr.js'
             )
         ),
         'sourcemap-embed' => array(

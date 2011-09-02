@@ -1,37 +1,8 @@
 <?php
+/* Lessphp v0.2.1
+ * Copyright (c) 2010 Leaf Corcoran <leafot@gmail.com>
+ * <http://leafo.net/lessphp> */
 
-/**
- * lessphp v0.2.1
- * http://leafo.net/lessphp
- *
- * LESS css compiler, adapted from http://lesscss.org/docs.html
- *
- * Copyright 2010, Leaf Corcoran <leafot@gmail.com>
- * Licensed under MIT or GPLv3, see LICENSE
- */
-
-
-/**
- * The less compiler and parser.
- *
- * Converting LESS to CSS is a two stage process. First the incoming document
- * must be parsed. Parsing creates a tree in memory that represents the 
- * structure of the document. Then, the tree of the document is recursively
- * compiled into the CSS text. The compile step has an implicit step called
- * reduction, where values are brought to their lowest form before being
- * turned to text, eg. mathematical equations are solved, and variables are
- * dereferenced.
- *
- * The parsing stage produces the final structure of the document, for this
- * reason mixins are mixed in and attribute accessors are referenced during
- * the parse step. A reduction is done on the mixed in block as it is mixed in.
- *
- *  See the following:
- *    - entry point for parsing and compiling: lessc::parse()
- *    - parsing: lessc::parseChunk()
- *    - compiling: lessc::compileBlock()
- *
- */
 class lessc {
 	protected $buffer;
 	protected $count;

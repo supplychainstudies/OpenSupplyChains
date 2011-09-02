@@ -1,13 +1,6 @@
-/***
-@title: Live Search
-@version: 2.0
-@author: Alex Ose.  Based on code from Andreas Lagerkvist
-@date: 2008-08-31
-@url: http://andreaslagerkvist.com/jquery/live-search/
-@license: http://creativecommons.org/licenses/by/3.0/
-@copyright: 2008 Andreas Lagerkvist (andreaslagerkvist.com)
-@requires: jquery, jquery.liveSearch.css
-***/
+/* Live search (modified)
+ * Copyright (c) 2008 Andreas Lagerkvist 
+ * <http://andreaslagerkvist.com/jquery/live-search/> */
 
 jQuery.fn.liveSearch = function (conf) {
     var config = jQuery.extend({

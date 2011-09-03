@@ -1,4 +1,15 @@
 <?php                     
+/* Copyright (C) Sourcemap 2011
+ * This program is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 $terms = <<<TERMS
 Sourcemap.com is a free and open-source website dedicated to providing the information people need to make sustainable choices and share them with the world. Through increasing the transparency of supply chains, Sourcemap hopes to educate consumers and allow individuals and companies to share information about the components, origins and social and environmental costs of various products and services. Users of the Sourcemap.com website (the “Site”) are encouraged to contribute their own items and products as well as build off of the information contributed by others. Sourcemap itself maintains an ever-growing library of the carbon costs associated with various raw materials, processes, and modes of transport.

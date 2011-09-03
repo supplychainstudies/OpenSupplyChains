@@ -1,12 +1,12 @@
 <?php
 class Sourcemap_Proj_Transform_Sinu extends Sourcemap_Proj_Transform {
 /*******************************************************************************
-NAME                  		SINUSOIDAL
+NAME                      	SINUSOIDAL
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Sinusoidal projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Sinusoidal projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
 
 PROGRAMMER              DATE            
 ----------              ----           
@@ -33,11 +33,11 @@ ALGORITHM REFERENCES
         $this->R = 6370997.0; //Radius of earth
     }
 
-	/* Sinusoidal forward equations--mapping lat,long to x,y
-	-----------------------------------------------------*/
+    /* Sinusoidal forward equations--mapping lat,long to x,y
+    -----------------------------------------------------*/
     public function forward($p) {
         $lon = $p->x;
-        $lat = $p->y;	
+        $lat = $p->y;    
         /* Forward equations
            -----------------*/
         $delta_lon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
@@ -45,7 +45,7 @@ ALGORITHM REFERENCES
         $y = $this->R * $lat + $this->y0;
 
         $p->x = $x;
-        $p->y = $y;	
+        $p->y = $y;    
         return $p;
     }
 

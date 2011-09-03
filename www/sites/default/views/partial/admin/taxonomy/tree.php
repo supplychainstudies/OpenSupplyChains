@@ -15,13 +15,13 @@
 <div class="taxonomy-tree">
 <dl>
     <dt>
-		<?php if(isset($tree->data->id) && $tree->data->id): ?>
-		<form method="post" class="delete-taxonomy" action="admin/taxonomy/rm">
-		<input type="hidden" name="taxonomy_id" value="<?= HTML::chars($tree->data->id) ?>" />
-		<input type="submit" value="" name="rm" />
-		</form>
-		<?php endif; ?>
-		<?php if(isset($tree->data->id)): ?><a href="admin/taxonomy/<?= $tree->data->id ?>/edit"><?php endif; ?>
+    	<?php if(isset($tree->data->id) && $tree->data->id): ?>
+    	<form method="post" class="delete-taxonomy" action="admin/taxonomy/rm">
+    	<input type="hidden" name="taxonomy_id" value="<?= HTML::chars($tree->data->id) ?>" />
+    	<input type="submit" value="" name="rm" />
+    	</form>
+    	<?php endif; ?>
+    	<?php if(isset($tree->data->id)): ?><a href="admin/taxonomy/<?= $tree->data->id ?>/edit"><?php endif; ?>
         <?= HTML::chars($tree->data->title) ?>
         <?php if(isset($tree->data->id)): ?></a><?php endif; ?>
     </dt>

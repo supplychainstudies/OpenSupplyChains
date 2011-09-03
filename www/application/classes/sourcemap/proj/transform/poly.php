@@ -44,14 +44,14 @@ class Sourcemap_Proj_Transform_Poly extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                             POLYCONIC 
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Polyconic projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Polyconic projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
 
 PROGRAMMER              DATE
 ----------              ----
-T. Mittan		Mar, 1993
+T. Mittan    	Mar, 1993
 
 ALGORITHM REFERENCES
 
@@ -65,7 +65,7 @@ ALGORITHM REFERENCES
 *******************************************************************************/
     # Initialize the POLYCONIC projection
     public function init() {
-        $temp;			/* temporary variable		*/
+        $temp;    		/* temporary variable		*/
         if($this->lat0=0) $this->lat0=90;//$this->lat0 ca
 
         /* Place parameters in static storage for common use
@@ -84,15 +84,15 @@ ALGORITHM REFERENCES
 
     # Polyconic forward equations--mapping lat,long to x,y
     public function forward($p) {
-#        $sinphi, $cosphi;	/* sin and cos value				*/
-#        $al;				/* temporary values				*/
-#        $c;				/* temporary values				*/
-#        $con, $ml;		/* cone constant, small m			*/
-#        $ms;				/* small m					*/
+#        $sinphi, $cosphi;    /* sin and cos value				*/
+#        $al;    			/* temporary values				*/
+#        $c;    			/* temporary values				*/
+#        $con, $ml;    	/* cone constant, small m			*/
+#        $ms;    			/* small m					*/
 #        $x, $y;
 
         $lon = $p->x;
-        $lat = $p->y;	
+        $lat = $p->y;    
 
         $con = Sourcemap_Proj::adjust_lon($lon - $this->long0);
         if(abs($lat) <= .0000001) {
@@ -100,7 +100,7 @@ ALGORITHM REFERENCES
             $y = $this->y0 - $this->a * $this->ml0;
         } else {
             $sinphi = sin($lat);
-            $cosphi = cos($lat);	   
+            $cosphi = cos($lat);       
 
             $ml = Sourcemap_Proj::mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
             $ms = Sourcemap_Proj::msfnz($this->e, $sinphi, $cosphi);
@@ -115,15 +115,15 @@ ALGORITHM REFERENCES
     }
 
 
-	/* Inverse equations
-	-----------------*/
+    /* Inverse equations
+    -----------------*/
     public function inverse($p) {
-#        $sin_phi, $cos_phi;	/* sin and cos value				*/
-#        $al;					/* temporary values				*/
-#        $b;					/* temporary values				*/
-#        $c;					/* temporary values				*/
-#        $con, $ml;			/* cone constant, small m			*/
-#        $iflg;				/* error flag					*/
+#        $sin_phi, $cos_phi;    /* sin and cos value				*/
+#        $al;    				/* temporary values				*/
+#        $b;    				/* temporary values				*/
+#        $c;    				/* temporary values				*/
+#        $con, $ml;    		/* cone constant, small m			*/
+#        $iflg;    			/* error flag					*/
 #        $lon, $lat;
         $p->x -= $this->x0;
         $p->y -= $this->y0;

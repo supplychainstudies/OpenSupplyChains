@@ -74,32 +74,32 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
  
-	// Encoding modes
-	 
-	define('QR_MODE_NUL', -1);
-	define('QR_MODE_NUM', 0);
-	define('QR_MODE_AN', 1);
-	define('QR_MODE_8', 2);
-	define('QR_MODE_KANJI', 3);
-	define('QR_MODE_STRUCTURE', 4);
+    // Encoding modes
+     
+    define('QR_MODE_NUL', -1);
+    define('QR_MODE_NUM', 0);
+    define('QR_MODE_AN', 1);
+    define('QR_MODE_8', 2);
+    define('QR_MODE_KANJI', 3);
+    define('QR_MODE_STRUCTURE', 4);
 
-	// Levels of error correction.
+    // Levels of error correction.
 
-	define('QR_ECLEVEL_L', 0);
-	define('QR_ECLEVEL_M', 1);
-	define('QR_ECLEVEL_Q', 2);
-	define('QR_ECLEVEL_H', 3);
-	
-	// Supported output formats
-	
-	define('QR_FORMAT_TEXT', 0);
-	define('QR_FORMAT_PNG',  1);
-	
-	class qrstr {
-		public static function set(&$srctab, $x, $y, $repl, $replLen = false) {
-			$srctab[$y] = substr_replace($srctab[$y], ($replLen !== false)?substr($repl,0,$replLen):$repl, $x, ($replLen !== false)?$replLen:strlen($repl));
-		}
-	}	
+    define('QR_ECLEVEL_L', 0);
+    define('QR_ECLEVEL_M', 1);
+    define('QR_ECLEVEL_Q', 2);
+    define('QR_ECLEVEL_H', 3);
+    
+    // Supported output formats
+    
+    define('QR_FORMAT_TEXT', 0);
+    define('QR_FORMAT_PNG',  1);
+    
+    class qrstr {
+    	public static function set(&$srctab, $x, $y, $repl, $replLen = false) {
+    		$srctab[$y] = substr_replace($srctab[$y], ($replLen !== false)?substr($repl,0,$replLen):$repl, $x, ($replLen !== false)?$replLen:strlen($repl));
+    	}
+    }	
 
 
 
@@ -211,23 +211,23 @@
         //----------------------------------------------------------------------
         public static function buildCache()
         {
-			QRtools::markTime('before_build_cache');
-			
-			$mask = new QRmask();
+    		QRtools::markTime('before_build_cache');
+    		
+    		$mask = new QRmask();
             for ($a=1; $a <= QRSPEC_VERSION_MAX; $a++) {
                 $frame = QRspec::newFrame($a);
                 if (QR_IMAGE) {
                     $fileName = QR_CACHE_DIR.'frame_'.$a.'.png';
                     QRimage::png(self::binarize($frame), $fileName, 1, 0);
                 }
-				
-				$width = count($frame);
-				$bitMask = array_fill(0, $width, array_fill(0, $width, 0));
-				for ($maskNo=0; $maskNo<8; $maskNo++)
-					$mask->makeMaskNo($maskNo, $width, $frame, $bitMask, true);
+    			
+    			$width = count($frame);
+    			$bitMask = array_fill(0, $width, array_fill(0, $width, 0));
+    			for ($maskNo=0; $maskNo<8; $maskNo++)
+    				$mask->makeMaskNo($maskNo, $width, $frame, $bitMask, true);
             }
-			
-			QRtools::markTime('after_build_cache');
+    		
+    		QRtools::markTime('after_build_cache');
         }
 
         //----------------------------------------------------------------------
@@ -647,11 +647,11 @@
 
         // Version information pattern -----------------------------------------
 
-		// Version information pattern (BCH coded).
+    	// Version information pattern (BCH coded).
         // See Table 1 in Appendix D (pp.68) of JIS X0510:2004.
         
-		// size: [QRSPEC_VERSION_MAX - 6]
-		
+    	// size: [QRSPEC_VERSION_MAX - 6]
+    	
         public static $versionPattern = array(
             0x07c94, 0x085bc, 0x09a99, 0x0a4d3, 0x0bbf6, 0x0c762, 0x0d847, 0x0e60d,
             0x0f928, 0x10b78, 0x1145d, 0x12a17, 0x13532, 0x149a6, 0x15683, 0x168c9,
@@ -2497,17 +2497,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
  
-	define('N1', 3);
-	define('N2', 3);
-	define('N3', 40);
-	define('N4', 10);
+    define('N1', 3);
+    define('N2', 3);
+    define('N3', 40);
+    define('N4', 10);
 
-	class QRmask {
-	
-		public $runLength = array();
-		
-		//----------------------------------------------------------------------
-		public function __construct() 
+    class QRmask {
+    
+    	public $runLength = array();
+    	
+    	//----------------------------------------------------------------------
+    	public function __construct() 
         {
             $this->runLength = array_fill(0, QRSPEC_WIDTH_MAX + 1, 0);
         }

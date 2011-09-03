@@ -25,7 +25,7 @@ return array(
     'password_confirm' => array(
         'default' => 'Your password needs to match.'
     ),
-	'confirm_terms' => array(
-	    'not_empty' => 'Please agree to the TOS.'
-	)
+    'confirm_terms' => array(
+        'not_empty' => 'Please agree to the TOS.'
+    )
 );

@@ -25,7 +25,7 @@
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
             </div>
-	        <div class="clear"></div>
+            <div class="clear"></div>
 
         </div>           
 
@@ -35,7 +35,7 @@
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
             </div>
-	        <div class="clear"></div>
+            <div class="clear"></div>
         </div>
     </div>
     <div id="body-content">

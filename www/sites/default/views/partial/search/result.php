@@ -23,7 +23,7 @@
                 <h2 class="map-title"><?= HTML::chars($supplychain->attributes->title) ?></h2>
             </a>
             <h4 class="map-details">
-            	<?= HTML::chars($supplychain->owner->name) ?>, <?= date('F j, Y', $supplychain->created) ?>
+                <?= HTML::chars($supplychain->owner->name) ?>, <?= date('F j, Y', $supplychain->created) ?>
             </h4>
             <div class="clear"></div>
             

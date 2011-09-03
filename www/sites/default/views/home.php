@@ -25,8 +25,8 @@
                     <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
                 </div>
                 <ul class="user-details">
-	                <li>Username: <span><?= HTML::chars($user->username) ?></span><li>
-                    <li>Email: <span><?= HTML::chars($user->email) ?></span><li>	
+                    <li>Username: <span><?= HTML::chars($user->username) ?></span><li>
+                    <li>Email: <span><?= HTML::chars($user->email) ?></span><li>    
                     <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
             </div>

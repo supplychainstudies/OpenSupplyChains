@@ -3,14 +3,14 @@ class Sourcemap_Proj_Transform_Omerc extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                       OBLIQUE MERCATOR (HOTINE) 
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Oblique Mercator projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Oblique Mercator projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
 
 PROGRAMMER              DATE
 ----------              ----
-T. Mittan		Mar, 1993
+T. Mittan    	Mar, 1993
 
 ALGORITHM REFERENCES
 
@@ -148,11 +148,11 @@ ALGORITHM REFERENCES
 
     # Oblique Mercator forward equations--mapping lat,long to x,y
     public function forward($p) {
-#        $theta;		/* angle					*/
-#        $sin_phi, $cos_phi;/* sin and cos value				*/
-#        $b;		/* temporary values				*/
-#        $c, $t, $tq;	/* temporary values				*/
-#        $con, $n, $ml;	/* cone constant, small m			*/
+#        $theta;    	/* angle					*/
+#        $sin_phi, $cos_phi;/* sin and cos value    			*/
+#        $b;    	/* temporary values				*/
+#        $c, $t, $tq;    /* temporary values				*/
+#        $con, $n, $ml;    /* cone constant, small m			*/
 #        $q, $us, $vl;
 #        $ul, $vs;
 #        $s;
@@ -201,13 +201,13 @@ ALGORITHM REFERENCES
     }
 
     public function inverse($p) {
-#        $delta_lon;	/* Delta longitude (Given longitude - center 	*/
-#        $theta;		/* angle					*/
-#        $delta_theta;	/* adjusted longitude				*/
-#        $sin_phi, $cos_phi;/* sin and cos value				*/
-#        $b;		/* temporary values				*/
-#        $c, $t, $tq;	/* temporary values				*/
-#        $con, $n, $ml;	/* cone constant, small m			*/
+#        $delta_lon;    /* Delta longitude (Given longitude - center 	*/
+#        $theta;    	/* angle					*/
+#        $delta_theta;    /* adjusted longitude				*/
+#        $sin_phi, $cos_phi;/* sin and cos value    			*/
+#        $b;    	/* temporary values				*/
+#        $c, $t, $tq;    /* temporary values				*/
+#        $con, $n, $ml;    /* cone constant, small m			*/
 #        $vs, $us, $q, $s, $ts1;
 #        $vl, $ul, $bs;
 #        $dlon;

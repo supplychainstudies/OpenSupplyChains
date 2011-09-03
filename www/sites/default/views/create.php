@@ -25,8 +25,8 @@
     </div>
     <div class="box-section">
         <div class="sourcemap-form">
-	        <?= $create_form ?>
-	    </div>
+            <?= $create_form ?>
+        </div>
     </div>
-	<div class="clear"></div>
+    <div class="clear"></div>
 </div>

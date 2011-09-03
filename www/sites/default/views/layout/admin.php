@@ -20,7 +20,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <base href="<?= URL::base(true, true) ?>" />
-	<title>Admin :: <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
+    <title>Admin :: <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
 	<meta name="description" content="" /> 
 	<meta name="keywords" content="" />
@@ -37,10 +37,10 @@
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>
 <body class="main admin">
-	<?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <div class="container">
         <div class="messages">
-        	<p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+            <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
         </div>
     </div>
     <div id="admin-head" class="container">

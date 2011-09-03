@@ -17,6 +17,6 @@ class Model_Openidusers extends ORM {
         'openuser' => array(
             'model' => 'user',
             'foreign_key' => 'user_id'
-	    )
-	);
+        )
+    );
 }

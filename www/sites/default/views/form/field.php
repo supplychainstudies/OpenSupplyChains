@@ -73,10 +73,10 @@
         </div>
     <?php endif; ?>
 <?php else: ?>    
-	<?= Form::label($field->name(), $field->label()) ?>
-    	<?php $attr['type'] = $field->field_type(); ?>
-    	<?php $attr['class'] = $field->css_class()." textbox"; ?>
-    	<?= Form::input($field->name(), $field->value(), $attr ) ?>
+    <?= Form::label($field->name(), $field->label()) ?>
+        <?php $attr['type'] = $field->field_type(); ?>
+        <?php $attr['class'] = $field->css_class()." textbox"; ?>
+        <?= Form::input($field->name(), $field->value(), $attr ) ?>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>
         <div class="sourcemap-form-error">

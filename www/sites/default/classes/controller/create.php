@@ -17,8 +17,8 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     public $template = 'create';
     
     public function action_index() {
-		$this->layout->page_title = 'Create a map on Sourcemap';
-		
+    	$this->layout->page_title = 'Create a map on Sourcemap';
+    	
         $f = Sourcemap_Form::load('/create');
         $f->action('create')->method('post');
 
@@ -30,15 +30,15 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             'sourcemap-core', 'sourcemap-template'
         );
 
-    	$import_role = ORM::factory('role')->where('name', '=', 'import')->find();
-    	$admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
-		if(Auth::instance()->get_user()->has('roles', $import_role) || Auth::instance()->get_user()->has('roles', $admin_role)) {
-			$this->template->can_import = true;                         	
-		} else { 
+        $import_role = ORM::factory('role')->where('name', '=', 'import')->find();
+        $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
+    	if(Auth::instance()->get_user()->has('roles', $import_role) || Auth::instance()->get_user()->has('roles', $admin_role)) {
+    		$this->template->can_import = true;                         	
+    	} else { 
             $this->template->can_import = false; 
         }
         $this->template->create_form = $f;
-	
+    
 
         if(strtolower(Request::$method) === 'post') {
             if($f->validate($_POST)) {

@@ -16,16 +16,16 @@ return array(
         'username' => array(
             'type' => 'text',
             'label' => 'Username',
-			'attributes' => array(
-				'maxlength' => 55,
-			)
+    		'attributes' => array(
+    			'maxlength' => 55,
+    		)
         ),
         'password' => array(
             'type' => 'password',
             'label' => 'Password',
-			'attributes' => array(
-				'maxlength' => 55,
-			)
+    		'attributes' => array(
+    			'maxlength' => 55,
+    		)
         ),
         'auth' => array(
             'type' => 'submit',

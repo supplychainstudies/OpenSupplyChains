@@ -25,8 +25,8 @@ class Controller_Delete extends Sourcemap_Controller_Map {
             $owner_id = (int)$supplychain->user_id;
             if($current_user_id && $supplychain->user_can($current_user_id, Sourcemap::WRITE)) {
                 $supplychain = $supplychain->kitchen_sink($supplychain->id);
-				$this->layout->page_title = 'Delete a map on Sourcemap';
-				
+    			$this->layout->page_title = 'Delete a map on Sourcemap';
+    			
                 // create the form object and add fields
                 $form = Sourcemap_Form::factory('delete')
                     ->method('post')->action('delete/'.$supplychain_id)

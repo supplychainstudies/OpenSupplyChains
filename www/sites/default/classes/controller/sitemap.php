@@ -73,7 +73,7 @@ class Controller_Sitemap extends Controller {
 
         header('Content-Type: application/xml');
         $this->response = $xml;
-		
+    	
         die($this->response);
     }
 }

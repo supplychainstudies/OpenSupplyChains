@@ -30,7 +30,7 @@ class Sourcemap_Proj_Transform_Gauss extends Sourcemap_Proj_Transform {
             $lat = 2.0 * atan($num * Sourcemap_Proj::srat($this->e * sin($p->y), -0.5 * $this->e)) - Sourcemap_Proj::HALF_PI;
             if (abs($lat - $p->y) < $DEL_TOL) break;
             $p->y = $lat;
-        }	
+        }    
         /* convergence failed */
         if (!$i) {
             throw new Exception("Convergence failed.");

@@ -38,10 +38,10 @@ return array(
         'title' => array(
             'type' => 'text',
             'label' => 'Title',
-			'attributes' => array(
-				'maxlength' => 55,
-				'placeholder' => 'Maximum 55 characters.'				
-			)
+    		'attributes' => array(
+    			'maxlength' => 55,
+    			'placeholder' => 'Maximum 55 characters.'				
+    		)
         ),
         'description' => array(
             'type' => 'textarea',
@@ -51,15 +51,15 @@ return array(
             ),
             'attributes' => array(
                 'maxlength' => 140,
-				'placeholder' => 'Maximum 140 characters.'
+    			'placeholder' => 'Maximum 140 characters.'
             )
         ),
         'tags' => array(
             'type' => 'text',
             'label' => 'Tags',
-	        'attributes' => array(
-				'placeholder' => 'Separated by spaces.'
-	        )
+            'attributes' => array(
+    			'placeholder' => 'Separated by spaces.'
+            )
         ),
         'category' => array(
             'type' => 'select',
@@ -85,9 +85,9 @@ return array(
         'category' => array(
             array('in_array', array($valid_cats))
         ),
-	    'description' => array(
-	        array('max_length', array(140))
-	    )
+        'description' => array(
+            array('max_length', array(140))
+        )
     ),
     'filters' => array()
 );

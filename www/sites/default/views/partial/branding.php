@@ -25,7 +25,7 @@
             <li> <a href="create">Create</a> </li>
             <?php if($current_user = Auth::instance()->get_user()): ?>
             <li>
-				<div> <a href="/home">Dashboard</a> </div>
+    			<div> <a href="/home">Dashboard</a> </div>
                 <a class="existing-login" href="auth/logout">Sign out</a>
             </li>
             <?php else: ?>
@@ -33,7 +33,7 @@
                 <div class="button"> <a href="/register">Register</a> </div>
                 <a class="existing-login" href="auth">Sign in</a>
             </li>
-        	<?php endif; ?>
+            <?php endif; ?>
         </ul>
         <form method="post" action="/search/">
             <div id="search-div">

@@ -21,7 +21,7 @@
                 <?php $t = $taxonomy->children[$i]; ?>
                 <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"<?php if(count($taxonomy->children)-1 == $i): ?> class="last"<?php endif;?>><?= HTML::chars($t->data->title) ?></a>
                 <?php endfor; ?>
-        	</div>
+            </div>
             <div class="clear"></div>
     </div>
 </div>
@@ -63,5 +63,5 @@
         <h2>Discussed:</h2>
         <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $discussed)) ?>
     </li>
-	<div class="clear"></div>
+    <div class="clear"></div>
 </ul><!-- .container -->

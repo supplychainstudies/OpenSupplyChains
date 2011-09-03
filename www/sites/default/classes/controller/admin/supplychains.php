@@ -71,7 +71,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $permissions_array = array("public", "private");
         $group_permissions_array = array("Nothing", "Read", "Write", "Read and Write");
         
-        // todo: fix this (masks)
+        // TODO: fix this (masks)
         switch($supplychain->usergroup_perms) {
             case 0:
                 $usergroup_perms = "Nothing";

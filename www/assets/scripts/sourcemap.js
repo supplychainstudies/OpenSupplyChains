@@ -578,7 +578,7 @@ Sourcemap.great_circle_route = function(pt1, pt2, ttl) {
     }
     rt.push(pt2);
     //var rtuniq = []
-    // todo: find and discard duplicates...
+    // TODO: find and discard duplicates...
     return rt;
 }
 

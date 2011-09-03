@@ -123,7 +123,7 @@ jQuery.fn.liveSearch = function (conf) {
                                 var html = "<ul id=\"live-search-results\">";
                                 for (var i = 0; i < json.results.length; i++) { 
 
-                                    // todo:  turn this into a JSTPL template
+                                    // TODO:  turn this into a JSTPL template
                                     html += "<li class=\"search-result\">";
                                     html += "<a class=\"search-link\" href=\"view/"+ json.results[i].id + "\">";
                                     html += "</a>";

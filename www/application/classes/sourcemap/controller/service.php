@@ -205,7 +205,7 @@ class Sourcemap_Controller_Service extends Controller_REST {
         if(in_array(strtolower(Request::$method), array('post', 'put'))) {
             $ct = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
             // ignore add'l params, charset, etc. for now.
-            // todo: stop ignoring.
+            // TODO: stop ignoring.
             $ct = preg_replace('/;.+$/', '', $ct);
         }
         return $ct;

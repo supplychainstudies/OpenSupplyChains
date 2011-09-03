@@ -19,7 +19,7 @@ class Sourcemap_Http_Response {
 
     const OK = 200;
     const NOTFOUND = 404;
-    const BADREQUEST = 400; // todo: ...
+    const BADREQUEST = 400; // TODO: ...
 
     public static function factory($raw_resp) {
         $raw_resp = self::raw_split($raw_resp);

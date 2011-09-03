@@ -168,7 +168,7 @@ EREIAM;
                                 $user->save();
                                 Auth::instance()->login($user->username, $post['new']);
                                 Message::instance()->set('Password reset.', Message::SUCCESS);
-                                // todo: notify via email of reset?
+                                // TODO: notify via email of reset?
                                 return $this->request->redirect('auth');
                             } else {
                                 // pass
@@ -192,7 +192,7 @@ EREIAM;
                 $this->request->redirect('auth');
             } elseif($post->check()) { // && $tgth === $current_user->password) {
                 // user is logged in...reset password...
-                // todo: notify user via email?
+                // TODO: notify user via email?
                 $current_user->password = $post['new'];
                 $current_user->save();
                 Message::instance()->set('Your password has been reset.', Message::SUCCESS);

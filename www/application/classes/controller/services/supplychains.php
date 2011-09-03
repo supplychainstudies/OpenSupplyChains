@@ -136,7 +136,7 @@
             return $this->_forbidden('You must be signed in to create or edit supplychains.');
         }
         if(!$supplychain->user_can($current_user->id, Sourcemap::WRITE)) {
-            // todo: use user_can method
+            // TODO: use user_can method
             $user_groups = ORM::factory('user', $current_user->id)
                 ->groups->find_all()->as_array('id', true);
             return $this->_forbidden(

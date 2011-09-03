@@ -81,7 +81,7 @@ class Sourcemap {
     }
 
     public static function assets_path() {
-        //todo: make this configurable
+        //TODO: make this configurable
         static $assets_path;
         if(!$assets_path)
             $assets_path = dirname(dirname(dirname(__FILE__))).'/assets/';

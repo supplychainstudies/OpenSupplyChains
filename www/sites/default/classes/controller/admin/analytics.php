@@ -29,7 +29,7 @@ class Controller_Admin_Analytics extends Controller_Admin {
         $user = ORM::factory('user');
         $usergroup = ORM::factory('usergroup');
 
-        // todo: clean this up
+        // TODO: clean this up
         
         $today = array();
         $today['users'] = $user->where('created', 'BETWEEN', array($midnight, $now))

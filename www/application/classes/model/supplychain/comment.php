@@ -13,7 +13,7 @@
 
 class Model_Supplychain_Comment extends ORM {
 
-    // todo: comment flags, e.g. 'suspended'/'deleted', 'flagged for removal'?
+    // TODO: comment flags, e.g. 'suspended'/'deleted', 'flagged for removal'?
 
     public $_belongs_to = array(
         'supplychain' => array(

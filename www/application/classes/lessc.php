@@ -1043,7 +1043,7 @@ class lessc {
 	}
 
 	// convert rgb, rgba into color type suitable for math
-	// todo: add hsl
+	// TODO: add hsl
 	function funcToColor($func) {
 		$fname = $func[1];
 		if (!preg_match('/^(rgb|rgba)$/', $fname)) return false;
@@ -1597,7 +1597,7 @@ class lessc {
 	}
 
 	// remove comments from $text
-	// todo: make it work for all functions, not just url
+	// TODO: make it work for all functions, not just url
 	function removeComments($text) {
 		$look = array(
 			'url(', '//', '/*', '"', "'"

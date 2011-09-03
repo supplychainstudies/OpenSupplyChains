@@ -33,7 +33,7 @@ class Controller_Upload extends Sourcemap_Controller_Layout {
     
     public function action_auth() {
 
-	$this->layout->scripts = array(
+    $this->layout->scripts = array(
             'sourcemap-core', 'sourcemap-template', 
             'sourcemap-working', 'sourcemap-upload'
         );
@@ -53,17 +53,17 @@ class Controller_Upload extends Sourcemap_Controller_Layout {
         }
         $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
         $acc_token = $oauth->get_acc_token($auth_tok);
-	$url = "https://spreadsheets.google.com/feeds/cells/0Aqwz6ZHrexb7dHNBa0tsVDhlX1N5MkVrV3FxczE2cmc/od6/private/full";
-	$oauth_header = $oauth->get_token_auth_header($acc_token, $url);
+    $url = "https://spreadsheets.google.com/feeds/cells/0Aqwz6ZHrexb7dHNBa0tsVDhlX1N5MkVrV3FxczE2cmc/od6/private/full";
+    $oauth_header = $oauth->get_token_auth_header($acc_token, $url);
 
-	$headers = array(); 
-	$headers = array( 
-	    'Authorization' => $oauth_header
-	    ); 
-	
+    $headers = array(); 
+    $headers = array( 
+        'Authorization' => $oauth_header
+        ); 
+    
 
-	$response = Sourcemap_Http_Client::do_get($url, null, $headers);
-	$data =$response;
+    $response = Sourcemap_Http_Client::do_get($url, null, $headers);
+    $data =$response;
 
     }
   }

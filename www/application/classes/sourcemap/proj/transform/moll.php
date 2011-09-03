@@ -3,16 +3,16 @@ class Sourcemap_Proj_Transform_Moll extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                            MOLLWEIDE
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the MOllweide projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the MOllweide projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
 
 PROGRAMMER              DATE
 ----------              ----
 D. Steinwand, EROS      May, 1991;  Updated Sept, 1992; Updated Feb, 1993
-S. Nelson, EDC		Jun, 2993;	Made corrections in precision and
-					number of iterations.
+S. Nelson, EDC    	Jun, 2993;	Made corrections in precision and
+    				number of iterations.
 
 ALGORITHM REFERENCES
 

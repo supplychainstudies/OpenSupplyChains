@@ -72,7 +72,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->template->primary = $r;
         $this->template->pager = $p;
 
-		$params['l'] = 1;
+    	$params['l'] = 1;
         $this->template->favorited = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));
         $this->template->discussed = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
         $this->template->interesting = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes','comments' => 'yes'));

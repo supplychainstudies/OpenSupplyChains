@@ -20,13 +20,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <base href="<?= URL::base(true, true) ?>" />
-	<title>Admin :: <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
+    <title>Admin :: <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
-	<meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
-	<meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
+    <meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
+    <meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
     <meta name="author" content="The Sourcemap Team">
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
-	<meta http-equiv="content-language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
+    <meta http-equiv="content-language" content="en-us">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -37,10 +37,10 @@
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>
 <body class="main admin">
-	<?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <div class="container">
         <div class="messages">
-        	<p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+            <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
         </div>
     </div>
     <div id="admin-head" class="container">

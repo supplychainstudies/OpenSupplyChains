@@ -39,7 +39,7 @@ Sourcemap.Map.Base.prototype.defaults = {
         "weight": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 0));
-			var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
+    		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
             var wgt = parseFloat(unt || st.getAttr("weight"));
             if(!isNaN(qty) && !isNaN(wgt)) val = qty * wgt;
             return val;
@@ -57,7 +57,7 @@ Sourcemap.Map.Base.prototype.defaults = {
         "co2e": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 0));
-			var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
+    		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
             var wgt = parseFloat(unt || st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
                 wgt = parseFloat(st.gc_distance());
@@ -79,26 +79,26 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
-	
-	Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
-		
-		this.toggleTileset(sc);
-		var initpos = this.options.position.split("|");
-		var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
-	    p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
-	  	if(this.options.position == '0|0|0') {
-			if(sc.stops.length) {
+    
+    Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
+    	
+    	this.toggleTileset(sc);
+    	var initpos = this.options.position.split("|");
+    	var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
+        p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
+      	if(this.options.position == '0|0|0') {
+    		if(sc.stops.length) {
                 this.map.map.zoomToExtent(this.map.getFeaturesExtent(), true);
-			} else {
-				this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
-			}
-    	} else {
-	 		this.map.map.setCenter(p, initpos[2]);
+    		} else {
+    			this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
+    		}
+        } else {
+     		this.map.map.setCenter(p, initpos[2]);
         }
-	}, this));
+    }, this));
     $(this.map.map.div).css("position", "relative");
 
-	// TODO: check this update punch
+    // TODO: check this update punch
     Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
         if(value === undefined || value === null) {
             var range = this.calcMetricRange(metric);
@@ -110,7 +110,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 
         this.map.dockControlEl(metric).find('.value').text(scaled.value);
         this.map.dockControlEl(metric).find('.unit').text(scaled.unit);
-		
+    	
     }, this));
 
 }
@@ -120,7 +120,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
         // TODO: do calculations here
-		this.updateFilterDisplay(sc);
+    	this.updateFilterDisplay(sc);
 
         for(var vi=0; vi<this.options.visualizations.length; vi++) {
             var v = this.options.visualizations[vi];
@@ -210,7 +210,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 
     Sourcemap.tpl('map/banner', sc, $.proxy(cb, this));
 
-	if(this.options.watermark) {
+    if(this.options.watermark) {
         this.watermark = $('<div id="watermark"></div>');
         $(this.map.map.div).append(this.watermark);
     }
@@ -223,7 +223,7 @@ Sourcemap.Map.Base.prototype.initDialog = function() {
         this.dialog = $('<div id="dialog"></div>');
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
-	$(this.dialog).removeClass("called-out");
+    $(this.dialog).removeClass("called-out");
     this.dialog_content = $('<div id="dialog-content"></div>');
     this.dialog.append(this.dialog_content);
 }
@@ -268,26 +268,26 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     var stop = sc.findStop(stid);
     var f = this.map.stopFeature(stop);
 
-	for(var i in this.magic_word_list) {
-		if(stop.getAttr(this.magic_word_list[i], false)) {
-			if(!(stop.magic)) { stop.magic = {}; }
-			stop.magic[this.magic_word_list[i]] = stop.getAttr(this.magic_word_list[i], false);
-		}
-	}
+    for(var i in this.magic_word_list) {
+    	if(stop.getAttr(this.magic_word_list[i], false)) {
+    		if(!(stop.magic)) { stop.magic = {}; }
+    		stop.magic[this.magic_word_list[i]] = stop.getAttr(this.magic_word_list[i], false);
+    	}
+    }
     
     // load template and render TODO: make this intelligible
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			
+    		
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
-				$("#dialog-media").find(".navigation-item").removeClass("selected");
-				$(evt.target).addClass("selected");
-				$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
-				$("#dialog-media").children("."+target).css("left","0");
-				
+    			$("#dialog-media").find(".navigation-item").removeClass("selected");
+    			$(evt.target).addClass("selected");
+    			$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
+    			$("#dialog-media").children("."+target).css("left","0");
+    			
             }, this));
                 
         }, 
@@ -316,11 +316,11 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
                 var stop_id = cluster.cluster[i].attributes.stop_instance_id;
 
                 var new_citem = $("<div id='target-"+stop_id+"' class='cluster-item'>"
-									+"<div class='dot' style='background:"
-									+cluster.cluster[i].attributes.color+"'></div><a><h2>"
-									+title+"</h2><h3 class='placename'>"
-									+address+"</h3></a></div>"
-								);
+    								+"<div class='dot' style='background:"
+    								+cluster.cluster[i].attributes.color+"'></div><a><h2>"
+    								+title+"</h2><h3 class='placename'>"
+    								+address+"</h3></a></div>"
+    							);
                 chtml.append(new_citem);        
             }
             this.showDialog(chtml);
@@ -341,13 +341,13 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     var hop = sc.findHop(hid);
     var f = this.map.hopFeature(scid, hid);
 
-	for(var i in this.magic_word_list) {
-		if(hop.getAttr(this.magic_word_list[i], false)) {
-			if(!(hop.magic)) { hop.magic = {}; }
-			hop.magic[this.magic_word_list[i]] = hop.getAttr(this.magic_word_list[i], false);
-		}
-	}
-	    
+    for(var i in this.magic_word_list) {
+    	if(hop.getAttr(this.magic_word_list[i], false)) {
+    		if(!(hop.magic)) { hop.magic = {}; }
+    		hop.magic[this.magic_word_list[i]] = hop.getAttr(this.magic_word_list[i], false);
+    	}
+    }
+        
     // load template and render TODO: make this intelligible
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
@@ -356,11 +356,11 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
-				$("#dialog-media").find(".navigation-item").removeClass("selected");
-				$(evt.target).addClass("selected");
-				$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
-				$("#dialog-media").children("."+target).css("left","0");
-				
+    			$("#dialog-media").find(".navigation-item").removeClass("selected");
+    			$(evt.target).addClass("selected");
+    			$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
+    			$("#dialog-media").children("."+target).css("left","0");
+    			
             }, this));
                 
         }, 
@@ -435,51 +435,51 @@ Sourcemap.Map.Base.prototype.mapUserLoc = function() {
 }
 
 Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
-	var tileset = sc.attributes["sm:ui:tileset"] || this.options.tileset;
-	var cloudmade = {
-		"stop_style": {
-			"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" },
-			"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" }
-		},
-		"hop_style": {
-			"default": { "strokeColor": "${color}"},
-			"arrow": { "strokeColor": "${color}", "fontColor": "${fcolor}" }
-		}
-	}
-	var satellite = {
-		"stop_style": {
-			"default": { "strokeColor": "#ffffff", "fontColor": "#ffffff" },
-			"cluster": { "strokeColor": "#ffffff", "fontColor": "#ffffff" }
-		},
-		"hop_style": {
-			"default": { "strokeColor": "#ffffff"},
-			"arrow": { "strokeColor": "#ffffff", "fontColor": "#ffffff" }
-		}
-	}
-	var terrain = {
-		"stop_style": {
-			"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" },
-			"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" }
-		},
-		"hop_style": {
-			"default": { "strokeColor": "${color}"},
-			"arrow": { "strokeColor": "${color}", "fontColor": "${fcolor}" }
-		}
-	}
-	if(tileset == "cloudmade") {
-		$.extend(true, this.map.options, cloudmade); 
-		$("#watermark").css("display","block"); 				
-	}
-	else if(tileset == "satellite") { 
-		$.extend(true, this.map.options, satellite); 
-		$("#watermark").css("display","none"); 
-	} 
-	else if(tileset == "terrain") { 
-		$.extend(true, this.map.options, terrain); 
-		$("#watermark").css("display","none"); 
-	}	
-	this.map.setBaseLayer(tileset);
-	
+    var tileset = sc.attributes["sm:ui:tileset"] || this.options.tileset;
+    var cloudmade = {
+    	"stop_style": {
+    		"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" },
+    		"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" }
+    	},
+    	"hop_style": {
+    		"default": { "strokeColor": "${color}"},
+    		"arrow": { "strokeColor": "${color}", "fontColor": "${fcolor}" }
+    	}
+    }
+    var satellite = {
+    	"stop_style": {
+    		"default": { "strokeColor": "#ffffff", "fontColor": "#ffffff" },
+    		"cluster": { "strokeColor": "#ffffff", "fontColor": "#ffffff" }
+    	},
+    	"hop_style": {
+    		"default": { "strokeColor": "#ffffff"},
+    		"arrow": { "strokeColor": "#ffffff", "fontColor": "#ffffff" }
+    	}
+    }
+    var terrain = {
+    	"stop_style": {
+    		"default": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" },
+    		"cluster": { "strokeColor": "${scolor}", "fontColor": "${fcolor}", "strokeWidth":"${swidth}" }
+    	},
+    	"hop_style": {
+    		"default": { "strokeColor": "${color}"},
+    		"arrow": { "strokeColor": "${color}", "fontColor": "${fcolor}" }
+    	}
+    }
+    if(tileset == "cloudmade") {
+    	$.extend(true, this.map.options, cloudmade); 
+    	$("#watermark").css("display","block"); 				
+    }
+    else if(tileset == "satellite") { 
+    	$.extend(true, this.map.options, satellite); 
+    	$("#watermark").css("display","none"); 
+    } 
+    else if(tileset == "terrain") { 
+    	$.extend(true, this.map.options, terrain); 
+    	$("#watermark").css("display","none"); 
+    }	
+    this.map.setBaseLayer(tileset);
+    
 }
 Sourcemap.Map.Base.prototype.decorateFeatures = function(dec_fn, features) {
     for(var i=0; i<features.length; i++) {
@@ -523,29 +523,29 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
     var dec_fn = $.proxy(function(f, mb) {
         var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
         if(f.cluster) {
-	        var val = 0;
-	        for(var c in f.cluster) {
-	            if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
-	            else val += parseFloat(f.cluster[c].attributes[attr_nm]);
-	        }
-	        if(!isNaN(val)) {
-	            // scale
-	            var voff = val - this.vmin;
-	            var vrange = this.vmax - this.vmin;
-	            var sval = this.smin;
+            var val = 0;
+            for(var c in f.cluster) {
+                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
+                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
+            }
+            if(!isNaN(val)) {
+                // scale
+                var voff = val - this.vmin;
+                var vrange = this.vmax - this.vmin;
+                var sval = this.smin;
                 sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
-	            f.attributes.size = Math.max(sval, smin);
-	            f.attributes.size = Math.max(sval, smin);
-	            var fsize = 18;
-	            f.attributes.fsize = fsize+"px";   
-	            f.attributes.fcolor = this.color;   
-	            f.attributes.yoffset = -1*(f.attributes.size+fsize);
-	            var unit = "kg";
-	            if(attr_nm === "water") { unit = "L"; }                
-	            var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
-	            if(attr_nm === "co2e") { scaled.unit += " co2e"}              
+                f.attributes.size = Math.max(sval, smin);
+                f.attributes.size = Math.max(sval, smin);
+                var fsize = 18;
+                f.attributes.fsize = fsize+"px";   
+                f.attributes.fcolor = this.color;   
+                f.attributes.yoffset = -1*(f.attributes.size+fsize);
+                var unit = "kg";
+                if(attr_nm === "water") { unit = "L"; }                
+                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
+                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
                 f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
-	        } 
+            } 
         } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
             if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
             else val = f.attributes[attr_nm];
@@ -560,7 +560,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 //if(vrange)
                 //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
                 sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
-	            f.attributes.size = Math.max(sval, smin);
+                f.attributes.size = Math.max(sval, smin);
                 var fsize = 18;
                 f.attributes.fsize = fsize+"px";     
                 f.attributes.fcolor = this.color
@@ -570,11 +570,11 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
                 if(attr_nm === "water") { unit = "L"; }
                 var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
                 if(attr_nm === "co2e") { scaled.unit += " co2e"}        
-				if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
-					f.attributes.label = "";
-				} else {
-				    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
-				}	              
+    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
+    				f.attributes.label = "";
+    			} else {
+    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
+    			}	              
             } 
         } 
         f.attributes.size = f.attributes.size || smin;
@@ -655,61 +655,61 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
     return range;
 }
 
-Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {	
-	// TODO: reed will make this better
-	// add filter controls to dock
-    if(sc.attributes["sm:ui:weight"]) {	
-		if(this.map.dockControlEl('weight').length == 0) {
-	        this.map.dockAdd('weight', {
-	            "title": 'Weight',
-	            "toggle": true,
-	            "panel": 'filter',
-	            "callbacks": {
-	                "click": $.proxy(function() {
-	                    this.toggleVisualization("weight");
-	                }, this)
-	            }
-	        });
-		}
-	} else {
-		this.map.dockRemove('weight');
-	}
+Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {    
+    // TODO: reed will make this better
+    // add filter controls to dock
+    if(sc.attributes["sm:ui:weight"]) {    
+    	if(this.map.dockControlEl('weight').length == 0) {
+            this.map.dockAdd('weight', {
+                "title": 'Weight',
+                "toggle": true,
+                "panel": 'filter',
+                "callbacks": {
+                    "click": $.proxy(function() {
+                        this.toggleVisualization("weight");
+                    }, this)
+                }
+            });
+    	}
+    } else {
+    	this.map.dockRemove('weight');
+    }
 
     if(sc.attributes["sm:ui:co2e"]) {
-		if(this.map.dockControlEl('co2e').length == 0) {	
-	        this.map.dockAdd('co2e', {
-	            "title": 'Carbon',
-	            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
-	            "toggle": true,
-	            "panel": 'filter',
-	            "callbacks": {
-	                "click": $.proxy(function() {
-	                    this.toggleVisualization("co2e");
-	                }, this)
-	            }
-	        });
-		}
+    	if(this.map.dockControlEl('co2e').length == 0) {	
+            this.map.dockAdd('co2e', {
+                "title": 'Carbon',
+                "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
+                "toggle": true,
+                "panel": 'filter',
+                "callbacks": {
+                    "click": $.proxy(function() {
+                        this.toggleVisualization("co2e");
+                    }, this)
+                }
+            });
+    	}
     } else {
-		this.map.dockRemove('co2e');
-	}
+    	this.map.dockRemove('co2e');
+    }
 
     if(sc.attributes["sm:ui:water"]) {   
-		if(this.map.dockControlEl('water').length == 0) {	
-	        this.map.dockAdd('water', {
-	            "title": 'Water',
-	            "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
-	            "toggle": true,
-	            "panel": 'filter',
-	            "callbacks": {
-	                "click": $.proxy(function() {
-	                    this.toggleVisualization("water");
-	                }, this)
-	            }
-	        });
-		}
+    	if(this.map.dockControlEl('water').length == 0) {	
+            this.map.dockAdd('water', {
+                "title": 'Water',
+                "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
+                "toggle": true,
+                "panel": 'filter',
+                "callbacks": {
+                    "click": $.proxy(function() {
+                        this.toggleVisualization("water");
+                    }, this)
+                }
+            });
+    	}
     } else {
-		this.map.dockRemove('water');
-	}
+    	this.map.dockRemove('water');
+    }
 }
 Sourcemap.Map.Base.prototype.favorite = function() {
     for(var k in this.map.supplychains) {

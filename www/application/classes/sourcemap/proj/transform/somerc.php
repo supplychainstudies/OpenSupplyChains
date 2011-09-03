@@ -3,7 +3,7 @@ class Sourcemap_Proj_Transform_Somerc extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                       SWISS OBLIQUE MERCATOR
 
-PURPOSE:	Swiss projection.
+PURPOSE:    Swiss projection.
 WARNING:  X and Y are inverted (weird) in the swiss coordinate system. Not
    here, since we want X to be horizontal and Y vertical.
 

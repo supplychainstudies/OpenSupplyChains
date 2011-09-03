@@ -21,7 +21,7 @@ class Sourcemap_Form_Field {
     const TEXTAREA = 'textarea';
     const CHECKBOX = 'checkbox';
     const HIDDEN = 'hidden';
-	const RECAPTCHA = 'recaptcha';
+    const RECAPTCHA = 'recaptcha';
 
     protected $_name = 'field';
 
@@ -140,9 +140,9 @@ class Sourcemap_Form_Field {
             case self::TEXTAREA:
                 $cls = 'Sourcemap_Form_Field_Textarea';
                 break; 
-			case self::RECAPTCHA:   
-	            $cls = 'Sourcemap_Form_Field_Recaptcha';
-	            break;
+    		case self::RECAPTCHA:   
+                $cls = 'Sourcemap_Form_Field_Recaptcha';
+                break;
             case self::TEXT:
             case self::INPUT:
             default:

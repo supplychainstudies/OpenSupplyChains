@@ -2,14 +2,14 @@
 /*******************************************************************************
 NAME                             EQUIRECTANGULAR 
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Equirectangular projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Equirectangular projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
 
 PROGRAMMER              DATE
 ----------              ----
-T. Mittan		Mar, 1993
+T. Mittan    	Mar, 1993
 
 ALGORITHM REFERENCES
 
@@ -35,8 +35,8 @@ class Sourcemap_Proj_Transform_Equi extends Sourcemap_Proj_Transform {
     # Equirectangular forward equations--mapping lat,long to x,y
     public function forward($p) {
 
-        $lon=$p->x;				
-        $lat=$p->y;			
+        $lon=$p->x;    			
+        $lat=$p->y;    		
 
         $dlon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
         $x = $this->x0 +$this->a * $dlon * cos($this->lat0);

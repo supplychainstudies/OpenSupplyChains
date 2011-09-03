@@ -16,13 +16,13 @@ class Model_Usergroup extends ORM {
         'members' => array(
             'model' => 'user',
             'through' => 'user_usergroup',
-	    'far_key' => 'user_id'
+        'far_key' => 'user_id'
         )
     );
     protected $_belongs_to = array(
         'owner' => array(
             'model' => 'user',
             'foreign_key' => 'owner_id'
-	    )
-	);
+        )
+    );
 }

@@ -93,14 +93,14 @@ Sourcemap reserves the right to terminate a user’s Sourcemap account(s), to re
 
 <hr/>
 <h2>Digital Millennium Copyright Act Notice Policy</h2>
-<p><h4>(1)	Introduction</h4>
+<p><h4>(1)    Introduction</h4>
 Sourcemap responds expeditiously to clear notices of alleged copyright infringement that comply with the United States Digital Millennium Copyright Act (DMCA). This page describes the information that should be present in these notices. It is designed to make submitting notices of alleged infringement to Sourcemap as straightforward as possible while reducing the number of notices that are fraudulent or difficult to understand or verify. The form of notice specified below is consistent with the form suggested by the DMCA (the text of which can be found at the U.S. Copyright Office website, http://www.copyright.gov), but Sourcemap will respond to notices of this type from other jurisdictions as well.
 
 <br/><br/>Sourcemap expects all its users to comply with applicable copyright laws. However, if Sourcemap receives proper notification of claimed copyright infringement, Sourcemap's response to these notices will include removing or disabling access to material claimed to be the subject of infringing activity and/or terminating subscribers, regardless of whether Sourcemap may be liable for such infringement under United States law or the laws of another jurisdiction.
 
 <br/><br/>If Sourcemap removes or disables access in response to such a notice, Sourcemap will make a good-faith attempt to contact the owner, administrator, or poster of the affected site or content so that they may make a counter notification pursuant to Sections 512(g)(2) and (3) of the DMCA. Sourcemap may also document the notices of alleged infringement on which it acts. </p>
 
-<p><h4>(2)	Designated Agent</h4>
+<p><h4>(2)    Designated Agent</h4>
 Sourcemap's Designated Agent to receive notification of alleged infringement under the DMCA is:
 Leonardo Bonanni<br/>
 Email: dmca@sourcemap.com<br/>
@@ -108,29 +108,29 @@ Mail: 167 Erie St, Cambridge MA 02139
 
 <br/><br/>Upon receipt of proper notification of claimed infringement, Sourcemap will follow the procedures outlined herein and in the DMCA.</p>
 
-<p><h4>(3)	Infringement Notification</h4>
+<p><h4>(3)    Infringement Notification</h4>
 If you believe that your work has been copied in a way that constitutes copyright infringement, or your intellectual property rights have been otherwise violated, please provide Sourcemap's Registered Agent (listed above) with the following information in a written communication (preferably via email): 
-<br/><br/>1.	Identification of the copyrighted work claimed to have been infringed, or, if multiple copyrighted works at a single online site are covered by a single notification, a representative list of such works at that site; 
+<br/><br/>1.    Identification of the copyrighted work claimed to have been infringed, or, if multiple copyrighted works at a single online site are covered by a single notification, a representative list of such works at that site; 
 
-<br/><br/>2.	Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit Sourcemap to locate the material; 
+<br/><br/>2.    Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit Sourcemap to locate the material; 
 
-<br/><br/>3.	Information reasonably sufficient to permit Sourcemap to contact the complaining party, such as an address, telephone number, and, if available, an email address at which the complaining party may be contacted; 
-<br/><br/>4.	The following statement: I have a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law; 
-<br/><br/>5.	The following statement: I swear, under penalty of perjury, that the information in the notification is accurate, and that I am the copyright owner or am authorized to act on behalf of the owner of an exclusive right that is allegedly infringed; and 
-<br/><br/>6.	A physical or electronic signature of the owner or a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed. 
+<br/><br/>3.    Information reasonably sufficient to permit Sourcemap to contact the complaining party, such as an address, telephone number, and, if available, an email address at which the complaining party may be contacted; 
+<br/><br/>4.    The following statement: I have a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law; 
+<br/><br/>5.    The following statement: I swear, under penalty of perjury, that the information in the notification is accurate, and that I am the copyright owner or am authorized to act on behalf of the owner of an exclusive right that is allegedly infringed; and 
+<br/><br/>6.    A physical or electronic signature of the owner or a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed. 
 <br/><br/>Please note that you may be liable for damages (including costs and attorneys' fees) if you materially misrepresent that material is infringing your copyright. Accordingly, if you are not sure whether material available online infringes your copyright, you should first contact an attorney.
-</p><p><h4>(4)	Counter Notification</h4>
+</p><p><h4>(4)    Counter Notification</h4>
 A provider of content subject to a claim of infringement may make a counter notification pursuant to sections 512(g)(2) and (3) of the DMCA. To file a counter notification with us, please provide Sourcemap's Registered Agent (listed above) with the following information in a written communication (preferably via email): 
-<br/><br/>1.	Identification of the material that has been removed or to which access has been disabled and the location at which the material appeared before it was removed or access to it was disabled; 
-<br/><br/>2.	Your name, address, and telephone number; 
-<br/><br/>3.	The following statement: I consent to the jurisdiction of Federal District Court for the [insert the federal judicial district in which your address is located]; 
-<br/><br/>4.	The following statement: I will accept service of process from [insert the name of the person who submitted the infringement notification] or his/her agent; 
-<br/><br/>5.	The following statement: I swear, under penalty of perjury, that I have a good faith belief that the affected material was removed or disabled as a result of a mistake or misidentification of the material to be removed or disabled; and 
-<br/><br/>6.	Your signature, in physical or electronic form. 
+<br/><br/>1.    Identification of the material that has been removed or to which access has been disabled and the location at which the material appeared before it was removed or access to it was disabled; 
+<br/><br/>2.    Your name, address, and telephone number; 
+<br/><br/>3.    The following statement: I consent to the jurisdiction of Federal District Court for the [insert the federal judicial district in which your address is located]; 
+<br/><br/>4.    The following statement: I will accept service of process from [insert the name of the person who submitted the infringement notification] or his/her agent; 
+<br/><br/>5.    The following statement: I swear, under penalty of perjury, that I have a good faith belief that the affected material was removed or disabled as a result of a mistake or misidentification of the material to be removed or disabled; and 
+<br/><br/>6.    Your signature, in physical or electronic form. 
 Upon receipt of such counter notification, Sourcemap will promptly provide the person who provided the original infringement notification with a copy of the counter notification, and inform that person that Sourcemap will replace the removed material or cease disabling access to it in 10 business days. Sourcemap will replace the removed material and cease disabling access to it not less than 10, nor more than 14, business days following receipt of the counter notice, unless Sourcemap's Designated Agent first receives notice from the person who submitted the original infringement notification that such person has filed an action seeking a court order to restrain the subscriber from engaging in infringing activity relating to the material on our system or network.
-</p><p><h4>(5)	Repeat Infringers</h4>
+</p><p><h4>(5)    Repeat Infringers</h4>
 In accordance with Section 512(i)(1)(a) of the DMCA, Sourcemap will, in appropriate circumstances, disable and/or terminate the accounts of users who are repeat infringers. 
-</p><p><h4>(6)	Accommodation of Standard Technical Measures</h4>
+</p><p><h4>(6)    Accommodation of Standard Technical Measures</h4>
 It is Sourcemap's policy to accommodate and not interfere with standard technical measures used by copyright owners to identify or protect copyrighted works that Sourcemap determines are reasonable under the circumstances. </p>
 
 </div>

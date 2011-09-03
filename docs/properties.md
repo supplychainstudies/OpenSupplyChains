@@ -1,12 +1,12 @@
-##Sourcemap Properties
+#Sourcemap Properties
 
 This file is a description of the native sourcemap objects, supplychains, stops (points on the map), and hops (lines on the map) as well as suggested default values.
 
-###Supplychain Properties
+##Supplychain Properties
 
 For common properties of supplychain objects, please see `api.md`.
 
-###Stop Properties
+##Stop Properties
 
 * **id** - A unique incremental id representing the stop.
 * **title** - Add the name of the source as you want it to appear in the map bubbles.	
@@ -28,7 +28,7 @@ For common properties of supplychain objects, please see `api.md`.
 * **vimeo:title** - The title for the vimeo video.	
 * **vimeo:link** - The link to a vimeo movie to be embedded.	
 
-###Hop Properties
+##Hop Properties
 * **from** - The id of the stop the hop is coming from.	
 * **to** - The id of the stop the hop is going to.
 * **description**	- Type the text description of the transport here. Can be a fact about procurement, the product, the region, etc.	

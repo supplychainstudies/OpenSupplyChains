@@ -11,7 +11,6 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-
 $application = 'application';
 $modules = 'modules';
 $system = 'system';
@@ -55,9 +54,16 @@ define('SOURCEMAP_SITES_PATH', realpath(dirname(APPPATH)).'/sites/');
 
 unset($application, $modules, $system);
 
-if (file_exists('install'.EXT)) { return include 'install'.EXT; }
+if (file_exists('install'.EXT)) { 
+	return include 'install'.EXT; 
+}
+
 require SYSPATH.'base'.EXT;
 require SYSPATH.'classes/kohana/core'.EXT;
-if (is_file(APPPATH.'classes/kohana'.EXT)) { require APPPATH.'classes/kohana'.EXT; }
-else { require SYSPATH.'classes/kohana'.EXT;}
+
+if (is_file(APPPATH.'classes/kohana'.EXT)) { 
+	require APPPATH.'classes/kohana'.EXT; 
+} else { 
+	require SYSPATH.'classes/kohana'.EXT;
+}
 require APPPATH.'bootstrap'.EXT;

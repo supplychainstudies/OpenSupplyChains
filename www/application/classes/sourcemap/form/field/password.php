@@ -11,10 +11,6 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-class Sourcemap_Form_Field_Submit extends Sourcemap_Form_Field {
-    protected $_type = 'submit';
-
-    public function label($l=null) {
-        return $this->value($l);
-    }
+class Sourcemap_Form_Field_Password extends Sourcemap_Form_Field {
+    protected $_type = 'password';
 }

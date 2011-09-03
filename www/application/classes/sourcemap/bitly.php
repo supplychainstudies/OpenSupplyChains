@@ -26,6 +26,7 @@ class Sourcemap_Bitly {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         $result = json_decode($result);
+
         if($result->status_code == "200") {
             return $result->data->url;
         } else { 

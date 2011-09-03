@@ -1,3 +1,5 @@
+<?php /* Copyright (C) Sourcemap 2011 */ ?>
+
 <div id="document-content" class="container">
 <h1 id="document-title">Terms of Service</h1>
 <p>Sourcemap.com is a free and open-source website dedicated to providing the information people need to make sustainable choices and share them with the world. Through increasing the transparency of supply chains, Sourcemap hopes to educate consumers and allow individuals and companies to share information about the components, origins and social and environmental costs of various products and services. Users of the Sourcemap.com website (the “Site”) are encouraged to contribute their own items and products as well as build off of the information contributed by others. Sourcemap itself maintains an ever-growing library of the carbon costs associated with various raw materials, processes, and modes of transport.</p>

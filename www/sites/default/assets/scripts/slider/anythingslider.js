@@ -1,22 +1,6 @@
-/*
-    AnythingSlider v1.5.17
-
-    By Chris Coyier: http://css-tricks.com
-    with major improvements by Doug Neiner: http://pixelgraphics.us/
-    based on work by Remy Sharp: http://jqueryfordesigners.com/
-    and crazy mods by Rob Garrison (aka Mottie): https://github.com/ProLoser/AnythingSlider
-
-    To use the navigationFormatter function, you must have a function that
-    accepts two paramaters, and returns a string of HTML text.
-
-    index = integer index (1 based);
-    panel = jQuery wrapped LI item this tab references
-    @return = Must return a string of HTML/Text
-
-    navigationFormatter: function(index, panel){
-        return "Panel #" + index; // This would have each tab with the text 'Panel #X' where X = index
-    }
-*/
+/* AnythingSlider v1.5.17
+ * Copyright (c) Chris Coyier, Doug Neiner, Remy Sharp, Rob Garrison
+ * <https://github.com/ProLoser/AnythingSlider> */
 
 (function($) {
 

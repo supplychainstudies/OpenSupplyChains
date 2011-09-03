@@ -36,8 +36,8 @@ Sourcemap.Map.prototype.defaults = {
 	"min_stop_size": 6, "max_stop_size": 32, "tileswitcher": true, 
     "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
-    "default_feature_color": "#35a297", "clustering": true,
-    "default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
+    "default_feature_color": "#444444", "clustering": true,
+    "default_feature_colors": ["#444444", "#666666", "#888888"],
     "stop_style": {
         "default": {
             "pointRadius": "${size}",

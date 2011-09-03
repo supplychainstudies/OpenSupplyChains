@@ -13,7 +13,7 @@
 ?>
 
 <div class="container">
-    <h1 class="dashboard-title">Your sourcemap profile</h1>
+    <h1 class="dashboard-title">Your profile</h1>
     <div class="dashboard-top">
         <div class="dashboard-top-left">
             <div>
@@ -54,7 +54,7 @@
 
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>
-        <h2>Your Sourcemaps</h2>
+        <h2>Your Supply Chains</h2>
         <?php foreach($supplychains as $i => $sc): ?>
             <div class="user-map-list">
                 <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>

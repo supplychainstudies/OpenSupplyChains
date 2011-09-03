@@ -50,17 +50,17 @@
             <hr />
         <?php endif; ?>
 
-		<h3>Share this Sourcemap</h3>
+		<h3>Share this</h3>
         <hr/>
         <div id="qrcode-badge" class="container">
             <a href="<?= $scaled_qrcode_url ?>"><img class="qrcode" src="<?= $qrcode_url ?>" /></a><br/>
         </div>
         <div class="container links">
-            <p>Link to this Sourcemap</p>
+            <p>Link to this</p>
             <div>
                 <input value="<?= $short_link; ?>" readonly="readonly" onclick="select()"></input>
             </div>
-            <p>Embed this Sourcemap</p>
+            <p>Embed this</p>
             <div>
                 <input value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
             </div>

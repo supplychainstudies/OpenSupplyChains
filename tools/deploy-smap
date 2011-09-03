@@ -19,7 +19,7 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
-source env/prod
+source env/dev
 
 newbuilddir=`date +sourcemap_deploy_%Y-%m-%d_%H%M%S_%N`
 newrollbackdir=`date +sourcemap_rollback_%Y-%m-%d_%H%M%S_%N`

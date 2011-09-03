@@ -15,7 +15,7 @@
 <div class="container">
 	<form class="sourcemap-form" name="csv-import" method="post" enctype="multipart/form-data">
 	<label for="supplychain_name">Name:</label><br />
-	<input name="supplychain_name" type="text" value="A Sourcemap" />
+	<input name="supplychain_name" type="text" value="A Supply Chain" />
 
 	<label for="stop_file">Stop File:</label><br /><br/>
 	<input type="file" name="stop_file" /><br />

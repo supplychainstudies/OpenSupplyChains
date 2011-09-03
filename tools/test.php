@@ -41,7 +41,7 @@ if(php_sapi_name() === 'cli') {
     $args = $argv;
     array_shift($args);
     foreach($args as $i => $arg) {
-        include(SOURCEMAP_DIR.'t/'.basename($arg));
+        include(SOURCEMAP_DIR.'tests/'.basename($arg));
     }
     list($total, $good, $bad) = sm_test();
     print "\n>>>\n";

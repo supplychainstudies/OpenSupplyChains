@@ -45,7 +45,7 @@ Sourcemap.log = function(message, level) {
     return true;
 }
 
-Sourcemap.log('Welcome to Sourcemap.', Sourcemap.INFO);
+Sourcemap.log('Welcome to Open Supply Chains.', Sourcemap.INFO);
 
 Sourcemap.deep_clone = function(o) {
     if(typeof o === "object") {

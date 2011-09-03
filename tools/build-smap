@@ -14,4 +14,4 @@
 
 source env/dev
 
-./phing -buildfile build-phing/build.xml -Dbuilddir="${SOURCEMAP_DIR}build/" -Dsrcdir="${SOURCEMAP_DIR}www/" build
+./phing -buildfile build-phing/build.xml -Dbuilddir="${SOURCEMAP_DIR}build/" -Dsrcdir="${SOURCEMAP_DIR}www/"

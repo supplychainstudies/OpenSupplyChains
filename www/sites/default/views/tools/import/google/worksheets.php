@@ -17,7 +17,7 @@
 <form class="sourcemap-form" action="/tools/import/google/import" method="post">
 <input type="hidden" name="k" value="<?= HTML::chars($spreadsheet_key) ?>" />
 <label for="supplychain_name">Name:</label><br />
-<input name="supplychain_name" type="text" value="A Sourcemap" />
+<input name="supplychain_name" type="text" value="A Supply Chain" />
 
 <label for="stops-wsid">Stops Worksheet:</label><br />
 <select name="stops-wsid">

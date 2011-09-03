@@ -37,7 +37,7 @@
 <div class="user-profile-view">
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?><br/>
-        <h2><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
+        <h2><?= ucwords(HTML::chars($user->username)) ?>'s Supply Chains</h2>
         <div class="container pager">
             <?= $pager->render() ?>
         </div>

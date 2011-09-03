@@ -21,7 +21,7 @@
             </div>
             <h3 class="preview-title">
                 <a href="view/<?= $item->id; ?>">
-                    <?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"), 23) ?>                   
+                    <?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Supply Chain"), 23) ?>                   
                 </a></h3>
             <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?=  Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
             <?= date("M j, Y", $item->created) ?></h4>

@@ -16,8 +16,8 @@
     <div id="header">
         <div id="logo">
             <a name="home" href="">        
-                <h1 id="site-title">Sourcemap</h1>
-                <img src="/assets/images/logo.png" alt="sourcemap" />
+                <h1 id="site-title">Open Supply Chains</h1>
+                <img src="/assets/images/logo.png" alt="Open Supply Chains" />
             </a>
         </div>
         <ul id="navigation">

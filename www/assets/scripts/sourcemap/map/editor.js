@@ -115,69 +115,69 @@ Sourcemap.Map.Editor.prototype.init = function() {
         "panel": "edit",
         "callbacks": {
             "click": $.proxy(function() {
-				var s = this.map_view;
-			    var cb = function(p, tx, th) {
-					if(this.dialog) {
-						if(!this.dialog) {
-					        this.dialog = $('<div id="dialog"></div>');
-					        $(this.map.map.div).append(this.dialog);
-					    } else $(this.dialog).empty();
+    			var s = this.map_view;
+    		    var cb = function(p, tx, th) {
+    				if(this.dialog) {
+    					if(!this.dialog) {
+    				        this.dialog = $('<div id="dialog"></div>');
+    				        $(this.map.map.div).append(this.dialog);
+    				    } else $(this.dialog).empty();
 
-					    this.dialog_content = $('<div id="dialog-content"></div>');
-					    this.dialog.append(this.dialog_content);
-				        $(this.dialog_content).html(th);
-				        $(this.dialog_content).find(".close").click($.proxy(function() { 
-					        $(this.dialog).hide();
-					        $(this.dialog).removeClass("called-out");					
-							this.dialog_content.empty(); 
-						}, this));
-						$(this.dialog_content).find("#newpoint-button").click($.proxy(function() {
-							var f = this.dialog_content.find('form');
-				            var vals = f.serializeArray();
-				            var attributes = {};
-				            for(var i=0; i<vals.length; i++) {
-				                attributes[vals[i].name] = vals[i].value;
-				            }
-				
-			                var sc = false;
-			                for(var k in this.map.supplychains) { sc = this.map.supplychains[k]; break; }
-							
-							$(this.dialog_content).find("#newpoint-button").attr("disabled","disabled").addClass("disabled");
-							
-			                var cb = $.proxy(function(data) {
-			                    if(data && data.results && data.results.length) {
-									this.map.controls.select.unselectAll();
-									var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
-				                    new_geom = new_geom.transform(
-				                        new OpenLayers.Projection('EPSG:4326'),
-				                        new OpenLayers.Projection('EPSG:900913')
-				                    );
-				                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
-									var stop = new Sourcemap.Stop(geometry, this.attr);
-			                        stop.setAttr("address", data.results[0].placename);
-									this.sc.addStop(stop);
-					                Sourcemap.broadcast('supplychain-updated', sc);			
-									
-			                        stop.attributes.stop_instance_id = stop.instance_id;
-			                        stop.attributes.supplychain_instance_id = stop.supplychain_id;
-					                this.map.mapSupplychain(this.sc.instance_id);                									
-			                        this.map.controls.select.select(this.map.stopFeature(this.sc.instance_id, stop.instance_id));
-			                    } else {
-									$("#dialog").shake();
-									$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
-						        }
-			                }, {"map":this.map, "sc":sc, "attr":attributes});
+    				    this.dialog_content = $('<div id="dialog-content"></div>');
+    				    this.dialog.append(this.dialog_content);
+    			        $(this.dialog_content).html(th);
+    			        $(this.dialog_content).find(".close").click($.proxy(function() { 
+    				        $(this.dialog).hide();
+    				        $(this.dialog).removeClass("called-out");					
+    						this.dialog_content.empty(); 
+    					}, this));
+    					$(this.dialog_content).find("#newpoint-button").click($.proxy(function() {
+    						var f = this.dialog_content.find('form');
+    			            var vals = f.serializeArray();
+    			            var attributes = {};
+    			            for(var i=0; i<vals.length; i++) {
+    			                attributes[vals[i].name] = vals[i].value;
+    			            }
+    			
+    		                var sc = false;
+    		                for(var k in this.map.supplychains) { sc = this.map.supplychains[k]; break; }
+    						
+    						$(this.dialog_content).find("#newpoint-button").attr("disabled","disabled").addClass("disabled");
+    						
+    		                var cb = $.proxy(function(data) {
+    		                    if(data && data.results && data.results.length) {
+    								this.map.controls.select.unselectAll();
+    								var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
+    			                    new_geom = new_geom.transform(
+    			                        new OpenLayers.Projection('EPSG:4326'),
+    			                        new OpenLayers.Projection('EPSG:900913')
+    			                    );
+    			                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+    								var stop = new Sourcemap.Stop(geometry, this.attr);
+    		                        stop.setAttr("address", data.results[0].placename);
+    								this.sc.addStop(stop);
+    				                Sourcemap.broadcast('supplychain-updated', sc);			
+    								
+    		                        stop.attributes.stop_instance_id = stop.instance_id;
+    		                        stop.attributes.supplychain_instance_id = stop.supplychain_id;
+    				                this.map.mapSupplychain(this.sc.instance_id);                									
+    		                        this.map.controls.select.select(this.map.stopFeature(this.sc.instance_id, stop.instance_id));
+    		                    } else {
+    								$("#dialog").shake();
+    								$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
+    					        }
+    		                }, {"map":this.map, "sc":sc, "attr":attributes});
 
-			                Sourcemap.Stop.geocode(attributes.address, cb);
-						}, this));
-				        var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
-				        $(this.dialog).fadeIn(fade, function() {});
-						$(this.dialog).addClass("called-out");						
-				    }
-					
-				}
-			    Sourcemap.template('map/edit/add-stop', cb, s, s);
-				/*
+    		                Sourcemap.Stop.geocode(attributes.address, cb);
+    					}, this));
+    			        var fade = $(this.dialog).css("display") == "block" ? 0 : 100;
+    			        $(this.dialog).fadeIn(fade, function() {});
+    					$(this.dialog).addClass("called-out");						
+    			    }
+    				
+    			}
+    		    Sourcemap.template('map/edit/add-stop', cb, s, s);
+    			/*
                 this.map.controls.select.unselectAll();
                 
                 // make a suitable geometry
@@ -276,55 +276,55 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // load transport catalog
     this.loadTransportCatalog();
 
-	// setup calculator display
-	$("#tileset-select").change($.proxy(function(evt) {
-		var sc = false;
+    // setup calculator display
+    $("#tileset-select").change($.proxy(function(evt) {
+    	var sc = false;
         for(var k in this.editor.map.supplychains) {
             sc = this.editor.map.supplychains[k];
             break;
         }
- 		sc.attributes["sm:ui:tileset"] = $(evt.target).val();
-		this.editor.map_view.toggleTileset(sc);
-		Sourcemap.broadcast('supplychain-updated', sc);
-		
-	}, {"editor":this}));
-	
-	$("#impact-use-co2e").change($.proxy(function(evt) {
-		var co2e = $(evt.target).is(':checked') ? true : false;
-		
+     	sc.attributes["sm:ui:tileset"] = $(evt.target).val();
+    	this.editor.map_view.toggleTileset(sc);
+    	Sourcemap.broadcast('supplychain-updated', sc);
+    	
+    }, {"editor":this}));
+    
+    $("#impact-use-co2e").change($.proxy(function(evt) {
+    	var co2e = $(evt.target).is(':checked') ? true : false;
+    	
         // grab the first supplychain
         var sc = false;
         for(var k in this.map.supplychains) {
             sc = this.map.supplychains[k];
             break;
         }
-		
-		if(co2e) { 
+    	
+    	if(co2e) { 
             sc.attributes["sm:ui:co2e"] = true; 
         } else { 
             delete sc.attributes["sm:ui:co2e"]; 
         }
-		
-		this.map_view.updateFilterDisplay(sc);
-		Sourcemap.broadcast('supplychain-updated', sc);
-	}, this));
-	$("#impact-use-weight").change($.proxy(function(evt) {
-		var weight = $(evt.target).is(':checked') ? true : false;
+    	
+    	this.map_view.updateFilterDisplay(sc);
+    	Sourcemap.broadcast('supplychain-updated', sc);
+    }, this));
+    $("#impact-use-weight").change($.proxy(function(evt) {
+    	var weight = $(evt.target).is(':checked') ? true : false;
         // grab the first supplychain
         var sc = false;
         for(var k in this.map.supplychains) {
             sc = this.map.supplychains[k];
             break;
         }
-		
-		if(weight) { sc.attributes["sm:ui:weight"] = true } 
-		else { delete sc.attributes["sm:ui:weight"]; }
-		
-		this.map_view.updateFilterDisplay(sc);
-		Sourcemap.broadcast('supplychain-updated', sc);
-	}, this));
-	$("#impact-use-water").change($.proxy(function(evt) {
-		var water = $(evt.target).is(':checked') ? true : false;
+    	
+    	if(weight) { sc.attributes["sm:ui:weight"] = true } 
+    	else { delete sc.attributes["sm:ui:weight"]; }
+    	
+    	this.map_view.updateFilterDisplay(sc);
+    	Sourcemap.broadcast('supplychain-updated', sc);
+    }, this));
+    $("#impact-use-water").change($.proxy(function(evt) {
+    	var water = $(evt.target).is(':checked') ? true : false;
         // grab the first supplychain
         var sc = false;
         for(var k in this.map.supplychains) {
@@ -332,12 +332,12 @@ Sourcemap.Map.Editor.prototype.init = function() {
             break;
         }
 
-		if(water) { sc.attributes["sm:ui:water"] = true; } 
-		else { delete sc.attributes["sm:ui:water"]; }
+    	if(water) { sc.attributes["sm:ui:water"] = true; } 
+    	else { delete sc.attributes["sm:ui:water"]; }
 
-		this.map_view.updateFilterDisplay(sc);
-		Sourcemap.broadcast('supplychain-updated', sc);
-	}, this));
+    	this.map_view.updateFilterDisplay(sc);
+    	Sourcemap.broadcast('supplychain-updated', sc);
+    }, this));
 }
 
 Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
@@ -350,8 +350,8 @@ Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
             }
             this.transport_catalog = data.results;
             this.transport_catalog.unshift(nil);
-    	}, this)
-	};
+        }, this)
+    };
     $.ajax(o);
 }
 
@@ -421,9 +421,9 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr) {
 
     var s = {"ref": ref, "editor": this, "feature": ftr};
     var cb = function(p, tx, th) {
-	 	this.editor.map_view.showDialog(th);
-		this.editor.prepEdit(this.ref, this.attr, this.feature);
-	}
+     	this.editor.map_view.showDialog(th);
+    	this.editor.prepEdit(this.ref, this.attr, this.feature);
+    }
     Sourcemap.template('map/edit/edit-'+reftype, cb, s, s);
 }
 
@@ -439,14 +439,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.showCatalog(this);
     }, this));
 
-	$(this.map_view.dialog).find('#media-content-type').bind('change', $.proxy(function(e) {
+    $(this.map_view.dialog).find('#media-content-type').bind('change', $.proxy(function(e) {
         this.editor.updateMedia(ref, this);
     }, {"ref" : ref, "editor" : this}));
 
     // populate media type preview on load 
     $(this.map_view.dialog).find('#media-content-type').trigger('change'); 
 
-	// general case, save on every change
+    // general case, save on every change
     $(this.map_view.dialog).find('input,select,textarea').bind('change', $.proxy(function(e) {
         var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
         var vals = {};
@@ -457,7 +457,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     
 
-	// impact calculator for stops
+    // impact calculator for stops
     if(ref instanceof Sourcemap.Stop) {
         $("#edit-stop-footprint input").keyup($.proxy(function(e){ 
             editor = $('#edit-stop-footprint');
@@ -472,14 +472,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             } else { editor.find('.result').text("-"); }
         }, this)); 
-        		
-		$(".footprint-unit").change($.proxy(function(e){
-			if($(e.target).val() != "kg") {
-				$(".weight-context").removeClass("hidden");
-			} else {
-				$(".weight-context").addClass("hidden");
-			}
-			editor = $('#edit-stop-footprint');
+            	
+    	$(".footprint-unit").change($.proxy(function(e){
+    		if($(e.target).val() != "kg") {
+    			$(".weight-context").removeClass("hidden");
+    		} else {
+    			$(".weight-context").addClass("hidden");
+    		}
+    		editor = $('#edit-stop-footprint');
             var quantity = editor.find('input[name="qty"]').val(); 
             var unit     = editor.find('.footprint-unit').val(); 
             var weight   = (unit == "kg") ? 1 : Math.max(editor.find('input[name="weight"]').val(), 0); 
@@ -489,8 +489,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                 var output = quantity * weight * factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
-            } else { editor.find('.result').text("-"); }	        
-		}, this));
+            } else { editor.find('.result').text("-"); }            
+    	}, this));
         // trigger event on load
         $("#edit-stop-footprint input").trigger('keyup');
 
@@ -507,11 +507,11 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                 var output = qty * distance * factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
-            } else { editor.find('.result').text("-"); }	        
+            } else { editor.find('.result').text("-"); }            
         }, this)); 
 
-		// Transport is a special case value as impact, but save name
-		$("#transportation-type").unbind("change").change($.proxy(function(e){ 
+    	// Transport is a special case value as impact, but save name
+    	$("#transportation-type").unbind("change").change($.proxy(function(e){ 
             $('#edit-hop-footprint input[name="co2e"]').val($(this + ':selected').val()); 
             var unit = false;
             var transnm = $('#edit-hop-footprint select[name="transportcat"] option:selected').text();
@@ -536,23 +536,23 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
                 editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
             } else { editor.find('.result').text("-"); }
-	        
-			var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
-			kvpairs.push({'name':'unit', 'value':unit});
-	        var vals = {};
-	       	for(var i=0; i<kvpairs.length; i++) {
-				if(kvpairs[i].name == "transportcat") {
+            
+    		var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
+    		kvpairs.push({'name':'unit', 'value':unit});
+            var vals = {};
+           	for(var i=0; i<kvpairs.length; i++) {
+    			if(kvpairs[i].name == "transportcat") {
                     vals['transport'] = transnm;
                 } else {
                     vals[kvpairs[i].name] = kvpairs[i].value;
                 }
-			}
-	        this.editor.updateFeature(ref, vals, true);
-		}, {"ref": ref, "editor": this}));
+    		}
+            this.editor.updateFeature(ref, vals, true);
+    	}, {"ref": ref, "editor": this}));
         $("#edit-hop-footprint input").trigger('keyup');
     }
     
-	var s = {"ref": ref, "editor": this, "feature": ftr};
+    var s = {"ref": ref, "editor": this, "feature": ftr};
 
     $(this.map_view.dialog).find('.connect-button').click($.proxy(function(e) {
         this.editor.map_view.hideDialog();
@@ -630,15 +630,15 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             var cat_html = $('<ul class="catalog-items"></ul>');
             var alt = "";
             for(var i=0; i<json.results.length; i++) {
-				if(!(json.results[i].co2e)) { continue;}
+    			if(!(json.results[i].co2e)) { continue;}
                 // Todo: Template this                
                 var cat_content = '<div class="cat-item-footprints">'                    
                 cat_content +=  json.results[i].co2e ? '<div class="cat-item-co2e"></div>' : '';
                 cat_content += '<div class="clear"></div></div>'; 
                 cat_content += '<div class="cat-item-name">'+_S.ttrunc(json.results[i].name, 30)+' <span class="cat-value">('+
-								Math.round(100*json.results[i].co2e)/100+' kg co2e)</span></div>';
+    							Math.round(100*json.results[i].co2e)/100+' kg co2e)</span></div>';
 
-				cat_content += '<div class="clear"></div>';                    
+    			cat_content += '<div class="clear"></div>';                    
                 
                 var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
                 
@@ -702,22 +702,22 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 }
 
 Sourcemap.Map.Editor.prototype.updateMedia = function(ref, editor) {
-		var mediatype = $("#media-content-type").val();
+    	var mediatype = $("#media-content-type").val();
         var message = "";
 
-		$("#media-content-value").attr("name", mediatype);
-		$("#media-content-value").attr("value", ref.getAttr($("#media-content-type").val(), ""));
+    	$("#media-content-value").attr("name", mediatype);
+    	$("#media-content-value").attr("value", ref.getAttr($("#media-content-type").val(), ""));
 
-		if(mediatype == "youtube:link") {
+    	if(mediatype == "youtube:link") {
             // if we have a valid youtube URL
             if ($('#media-content-value').val().match(/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/)){
                 var message = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube:link","").substr(31)+'/0.jpg" />';
             }
             else{
                 var message = '<p>You can insert a Youtube movie or a Flickr slide show.<br/>' 
-						+'A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk</p>';				
+    					+'A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk</p>';				
             }
-		} 
+    	} 
         if(mediatype == "flickr:setid") {
             // if we have a valid flickr set ID
             if ($('#media-content-value').val().length > 16){
@@ -727,10 +727,10 @@ Sourcemap.Map.Editor.prototype.updateMedia = function(ref, editor) {
             }
             else{
                 var message = '<p>You can insert a Youtube movie or a Flickr slide show.<br/>' 
-						+'A Flickr set ID is the sequence of numbers at the end of a set URL.</p>';
+    					+'A Flickr set ID is the sequence of numbers at the end of a set URL.</p>';
             }
-		}
-		
+    	}
+    	
         $("#edit-media .media-preview").html(message);
 }
 
@@ -741,7 +741,7 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     o.catalog = o.catalog ? o.catalog : "osi";
     var tscope = {"editor": this, "o": o, "ref": o.ref};
     Sourcemap.template('map/edit/catalog', function(p, txt, th) {  
-	    $("#edit-catalog").html(th);  
+        $("#edit-catalog").html(th);  
         this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }
@@ -769,26 +769,26 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
                 var map_with = catalog_map[cat][k];
                 map_with(ref, vals);
             } else if(catalog_map[cat][k]) {
-				vals[k] = item[k];
-			}
+    			vals[k] = item[k];
+    		}
         }
     }
-	//var ftr = this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop;
-	//var ref = ftr.stop.attributes.ref;
+    //var ftr = this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop;
+    //var ref = ftr.stop.attributes.ref;
     //attr = Sourcemap.deep_clone(attr);
     //for(var k in ref.attributes) {
       //  if(attr[k] == undefined) attr[k] = ref.getAttr(k);
     //}
-		//	 var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
-		  //   var vals = {};
-		  //   for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
+    	//	 var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
+    	  //   var vals = {};
+    	  //   for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
 
 
 
 
-	this.updateFeature(this.editing, vals);
-	this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);     
-	$("#editor-tabs").tabs('select', 2);
+    this.updateFeature(this.editing, vals);
+    this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);     
+    $("#editor-tabs").tabs('select', 2);
     //$("#editor-tabs").tabs('select', 3);
-	
+    
 }

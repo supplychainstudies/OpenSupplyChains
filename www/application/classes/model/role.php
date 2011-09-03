@@ -15,21 +15,21 @@ class Model_Role extends Model_Auth_Role {
 
     public $_table_names_plural = false;
 
-	// Relationships
-	//protected $_has_many = array('user' => array('through' => 'user_role'));
+    // Relationships
+    //protected $_has_many = array('user' => array('through' => 'user_role'));
     protected $_belongs_to = array('user' => array('through' => 'user_role'));
 
-	// Validation rules
-	protected $_rules = array(
-		'name' => array(
-			'not_empty'  => NULL,
-			'min_length' => array(4),
-			'max_length' => array(32),
-		),
-		'description' => array(
-			'max_length' => array(255),
-		),
-	);
+    // Validation rules
+    protected $_rules = array(
+    	'name' => array(
+    		'not_empty'  => NULL,
+    		'min_length' => array(4),
+    		'max_length' => array(32),
+    	),
+    	'description' => array(
+    		'max_length' => array(255),
+    	),
+    );
 
 
 }

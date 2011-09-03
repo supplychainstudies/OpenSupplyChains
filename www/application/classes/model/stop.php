@@ -29,23 +29,23 @@ class Model_Stop extends ORM {
     }
 
     /**
-	 * Saves the current object. Will hash password if it was changed.
-	 *
-	 * @return  ORM
-	 */
-	public function save()
-	{
-		if (array_key_exists('geometry', $this->_changed))
-		{
-			$this->_object['geometry'] = 
+     * Saves the current object. Will hash password if it was changed.
+     *
+     * @return  ORM
+     */
+    public function save()
+    {
+    	if (array_key_exists('geometry', $this->_changed))
+    	{
+    		$this->_object['geometry'] = 
                 DB::expr(sprintf('ST_SetSRID(ST_GeometryFromText(%s), %d)',
                     $this->_db->quote($this->_object['geometry']), Sourcemap::PROJ));
-		}
+    	}
 
-		parent::save();
+    	parent::save();
         $this->reload();
         return $this;
-	}
+    }
 
     /**
      * Determines whether a raw data structure is stop-like.

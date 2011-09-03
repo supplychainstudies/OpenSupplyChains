@@ -2,7 +2,7 @@
 /**
     NAME                            MERCATOR
 
-    PURPOSE:	Transforms input longitude and latitude to Easting and
+    PURPOSE:    Transforms input longitude and latitude to Easting and
             Northing for the Mercator projection.  The
             longitude and latitude must be in radians.  The Easting
             and Northing values will be returned in meters.
@@ -10,7 +10,7 @@
     PROGRAMMER              DATE
     ----------              ----
     D. Steinwand, EROS      Nov, 1991
-    T. Mittan		Mar, 1993
+    T. Mittan    	Mar, 1993
 
     ALGORITHM REFERENCES
 
@@ -25,14 +25,14 @@
         Printing Office, Washington D.C., 1989.
 **/
 
-//static double r_major = a;		   /* major axis 				*/
-//static double r_minor = b;		   /* minor axis 				*/
-//static double lon_center = long0;	   /* Center longitude (projection center) */
-//static double lat_origin =  lat0;	   /* center latitude			*/
-//static double e,es;		           /* eccentricity constants		*/
-//static double m1;		               /* small value m			*/
-//static double false_northing = y0;   /* y offset in meters			*/
-//static double false_easting = x0;	   /* x offset in meters			*/
+//static double r_major = a;    	   /* major axis 				*/
+//static double r_minor = b;    	   /* minor axis 				*/
+//static double lon_center = long0;       /* Center longitude (projection center) */
+//static double lat_origin =  lat0;       /* center latitude			*/
+//static double e,es;    	           /* eccentricity constants		*/
+//static double m1;    	               /* small value m			*/
+//static double false_northing = y0;   /* y offset in meters    		*/
+//static double false_easting = x0;       /* x offset in meters			*/
 //scale_fact = k0 
 class Sourcemap_Proj_Transform_Merc extends Sourcemap_Proj_Transform {
     public function init() {
@@ -53,7 +53,7 @@ class Sourcemap_Proj_Transform_Merc extends Sourcemap_Proj_Transform {
 /* Mercator forward equations--mapping lat,long to x,y
   --------------------------------------------------*/
 
-    public function forward($pt) {	
+    public function forward($pt) {    
         $lon = $pt->x;
         $lat = $pt->y;
         // convert to radians
@@ -85,7 +85,7 @@ class Sourcemap_Proj_Transform_Merc extends Sourcemap_Proj_Transform {
 
   /* Mercator inverse equations--mapping x,y to lat/long
   --------------------------------------------------*/
-    public function inverse($pt) {	
+    public function inverse($pt) {    
 
         $x = $pt->x - $this->_proj->x0;
         $y = $pt->y - $this->_proj->y0;

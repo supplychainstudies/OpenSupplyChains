@@ -23,7 +23,7 @@
                 <h2 class="map-title"><?= HTML::chars(isset($supplychain->attributes->title) ? $supplychain->attributes->title : "An Unnamed Sourcemap") ?></h2>
             </a>
             <h4 class="map-details">
-            	<?= date('F j, Y', $supplychain->created) ?>
+                <?= date('F j, Y', $supplychain->created) ?>
             </h4>
             <div class="clear"></div>
             

@@ -29,7 +29,7 @@
             <?= $pager->render() ?>
         </div>
     <?php else: ?>
-    	<h3 class="bad-news">No results.  Please try broadening your search terms.</h3>
+        <h3 class="bad-news">No results.  Please try broadening your search terms.</h3>
     <?php endif; ?>
-	</div>
+    </div>
 </div>

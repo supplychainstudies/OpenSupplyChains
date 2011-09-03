@@ -51,7 +51,7 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  * 
  */
 if(getenv('SOURCEMAP_ENV')) {
-	Kohana::$environment = getenv('SOURCEMAP_ENV');
+    Kohana::$environment = getenv('SOURCEMAP_ENV');
 } else {
     Kohana::$environment = Sourcemap::PRODUCTION;
 }
@@ -94,20 +94,20 @@ if(isset(Kohana::config('sourcemap')->cache_dir)) {
  * Enable modules. Modules are referenced by a relative or absolute path.
  */      
 Kohana::modules(array(  
-	// 'firephp'   => MODPATH.'firephp', //FIREphp debug extension 
-	'auth'       => MODPATH.'auth',       // Basic authentication
-	'cache'      => MODPATH.'cache',      // Caching with multiple backends
-	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
-	'database'   => MODPATH.'database',   // Database access
-	// 'image'      => MODPATH.'image',      // Image manipulation
-	'orm'        => MODPATH.'orm',        // Object Relationship Mapping
-	// 'oauth'      => MODPATH.'oauth',      // OAuth authentication
-	'pagination' => MODPATH.'pagination', // Paging of results
-	// 'unittest'   => MODPATH.'unittest',   // Unit testing
-	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
+    // 'firephp'   => MODPATH.'firephp', //FIREphp debug extension 
+    'auth'       => MODPATH.'auth',       // Basic authentication
+    'cache'      => MODPATH.'cache',      // Caching with multiple backends
+    // 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
+    'database'   => MODPATH.'database',   // Database access
+    // 'image'      => MODPATH.'image',      // Image manipulation
+    'orm'        => MODPATH.'orm',        // Object Relationship Mapping
+    // 'oauth'      => MODPATH.'oauth',      // OAuth authentication
+    'pagination' => MODPATH.'pagination', // Paging of results
+    // 'unittest'   => MODPATH.'unittest',   // Unit testing
+    // 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
     'sitemap' => MODPATH.'sitemap',
-	'recaptcha' => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
-	));
+    'recaptcha' => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
+    ));
 
 Kohana::add_include_path(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/');
 
@@ -162,32 +162,32 @@ if (!defined('SUPPRESS_REQUEST')) {
         } else {
             header('HTTP/1.1 404 Not Found');
         }
-		$e = addcslashes($e,"\\\'\"&\n\r<>:"); ;
+    	$e = addcslashes($e,"\\\'\"&\n\r<>:"); ;
         $response = <<<HTML
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Page Not Found</title>
-	<style>
-		body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
-		#wrapper{width:516px;margin:0 auto;}
-		h1{text-align:center;font-size:300%;}
-		img{position:absolute;top:0;left:0;right:0;margin:0 auto;}
-		.article-content{position:relative;padding-top:340px;}
-		.article-content p{text-align:center;line-height:1.5em;
-		margin:.25em;margin-bottom:.5em;clear:both;}
-		.article-content div.gigantic{position:absolute;top:0;left:0;right:0;
-		margin:0 auto;color:#ddd;font-size:1800%;font-weight:bold;}
-	</style>
+    <title>Page Not Found</title>
+    <style>
+    	body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+    	#wrapper{width:516px;margin:0 auto;}
+    	h1{text-align:center;font-size:300%;}
+    	img{position:absolute;top:0;left:0;right:0;margin:0 auto;}
+    	.article-content{position:relative;padding-top:340px;}
+    	.article-content p{text-align:center;line-height:1.5em;
+    	margin:.25em;margin-bottom:.5em;clear:both;}
+    	.article-content div.gigantic{position:absolute;top:0;left:0;right:0;
+    	margin:0 auto;color:#ddd;font-size:1800%;font-weight:bold;}
+    </style>
 </head>
 <body>
 <div id="wrapper">
-	<h1>You've Strayed into Uncharted Waters</h1>
-	<div class="article-content">
-		<div class="gigantic">404</div>
-		<img src="http://www.sourcemap.com/assets/images/monsters.png" />
-		<p>This is the part of the map where it says, "Here be monsters." Please, <a href="/">go back</a>, and if you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
-	</div>
+    <h1>You've Strayed into Uncharted Waters</h1>
+    <div class="article-content">
+    	<div class="gigantic">404</div>
+    	<img src="http://www.sourcemap.com/assets/images/monsters.png" />
+    	<p>This is the part of the map where it says, "Here be monsters." Please, <a href="/">go back</a>, and if you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
+    </div>
 </div>
 <script type="text/javascript"> if (window.console) { var error = "$e"; console.log(error); } </script>
 </body>

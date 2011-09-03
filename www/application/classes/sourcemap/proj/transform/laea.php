@@ -3,10 +3,10 @@ class Sourcemap_Proj_Transform_Laea extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                  LAMBERT AZIMUTHAL EQUAL-AREA
  
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Lambert Azimuthal Equal-Area projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Lambert Azimuthal Equal-Area projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
 
 PROGRAMMER              DATE            
 ----------              ----           

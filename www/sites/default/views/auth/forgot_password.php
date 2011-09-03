@@ -23,14 +23,14 @@
     </div>
     <div class="box-section">
         <div class="sourcemap-form">
-	        <fieldset>
-	        <form name="forgot" method="post" action="auth/forgot">
-		    	<label for="email">Email:</label>    
-		        <input type="text" id="email" name="email" class="required" value="" />
-	            <input class="button" type="submit" value="Request"/>
-	        </form>
-	        </fieldset>
-	    </div>
+            <fieldset>
+            <form name="forgot" method="post" action="auth/forgot">
+    	    	<label for="email">Email:</label>    
+    	        <input type="text" id="email" name="email" class="required" value="" />
+                <input class="button" type="submit" value="Request"/>
+            </form>
+            </fieldset>
+        </div>
     </div>
-	<div class="clear"></div>
+    <div class="clear"></div>
 </div>

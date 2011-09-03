@@ -50,15 +50,15 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
                 $this->template->supplychain_desc = isset($sc->attributes->description) ? $sc->attributes->description : "" ;
 
-				$this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();
+    			$this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();
                 
                 $this->template->supplychain_weight = isset($sc->attributes->{'sm:ui:weight'}) ? "checked" : "";
                 $this->template->supplychain_co2e = isset($sc->attributes->{"sm:ui:co2e"}) ? "checked" : "";
                 $this->template->supplychain_water = isset($sc->attributes->{"sm:ui:water"}) ? "checked" : "";
                 $this->template->supplychain_tileset = isset($sc->attributes->{"sm:ui:tileset"}) ? $sc->attributes->{"sm:ui:tileset"} : "";
 
-				$this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
-		        
+    			$this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
+    	        
                 $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
                     
                 
@@ -80,12 +80,12 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->comments = $comment_data;
                 $this->template->can_comment = (bool)$current_user_id;
                 // qrcode url
-				$shortener = new Sourcemap_Bitly;
-				$shortlink = $shortener->shorten(URL::site('view/'.$supplychain->id, true));
+    			$shortener = new Sourcemap_Bitly;
+    			$shortlink = $shortener->shorten(URL::site('view/'.$supplychain->id, true));
                 $qrcode_query = URL::query(array('q' => $shortlink, 'sz' => 3));
                 $scaled_qrcode_query = URL::query(array('q' => $shortlink, 'sz' => 16));
 
-				$this->template->short_link = $shortlink;
+    			$this->template->short_link = $shortlink;
                 $this->template->qrcode_url = URL::site('services/qrencode', true).$qrcode_query;
                 $this->template->scaled_qrcode_url = URL::site('services/qrencode', true).$scaled_qrcode_query;
 
@@ -250,9 +250,9 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout = View::factory('layout/embed');
                 $this->template = View::factory('map/embed');
-		        $sc = $supplychain->kitchen_sink($supplychain_id);
+    	        $sc = $supplychain->kitchen_sink($supplychain_id);
 
-				$this->layout->page_title = (isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "")).' on Sourcemap';
+    			$this->layout->page_title = (isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "")).' on Sourcemap';
 
                 $this->layout->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array(

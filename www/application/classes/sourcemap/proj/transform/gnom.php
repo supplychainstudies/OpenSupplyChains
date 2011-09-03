@@ -3,8 +3,8 @@ class Sourcemap_Proj_Transform_Gnom extends Sourcemap_Proj_Transform {
 /*****************************************************************************
 NAME                             GNOMONIC
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Gnomonic Projection.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Gnomonic Projection.
                 Implementation based on the existing sterea and ortho
                 implementations.
 
@@ -35,19 +35,19 @@ ALGORITHM REFERENCES
 
     # Gnomonic forward equations--mapping lat,long to x,y
     public function forward($p) {
-        #$sinphi, $cosphi;	/* sin and cos value				*/
-        #$dlon;		/* delta longitude value			*/
-        #$coslon;		/* cos of longitude				*/
-        #$ksp;		/* scale factor					*/
-        #$g;		
+        #$sinphi, $cosphi;    /* sin and cos value				*/
+        #$dlon;    	/* delta longitude value			*/
+        #$coslon;    	/* cos of longitude				*/
+        #$ksp;    	/* scale factor					*/
+        #$g;    	
         $lon = $p->x;
-        $lat= $p->y;	
+        $lat= $p->y;    
         /* Forward equations
            -----------------*/
         $dlon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
 
         $sinphi = sin($lat);
-        $cosphi = cos($lat);	
+        $cosphi = cos($lat);    
 
         $coslon = cos($dlon);
         $g = $this->sin_p14 * $sinphi + $this->cos_p14 * $cosphi * $coslon;
@@ -76,8 +76,8 @@ ALGORITHM REFERENCES
 
 
     public function inverse($p) {
-        #$rh;		/* Rho */
-        #$z;		/* angle */
+        #$rh;    	/* Rho */
+        #$z;    	/* angle */
         #$sinc, $cosc;
         #$c;
         #$lon , $lat;

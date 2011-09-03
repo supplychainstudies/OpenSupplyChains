@@ -2,10 +2,10 @@
 /*******************************************************************************
 NAME                            CASSINI
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Cassini projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Cassini projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
     Ported from PROJ.4.
 
 
@@ -33,9 +33,9 @@ class Sourcemap_Proj_Transform_Cass {
     public $C5 = .06666666666666666666;
 
 /* meridinal distance for ellipsoid and inverse
-**	8th degree - accurate to < 1e-5 meters when used in conjuction
-**		with typical major axis values.
-**	Inverse determines phi to EPS (1e-11) radians, about 1e-6 seconds.
+**    8th degree - accurate to < 1e-5 meters when used in conjuction
+**    	with typical major axis values.
+**    Inverse determines phi to EPS (1e-11) radians, about 1e-6 seconds.
 */
     public $C00 = 1.0;
     public $C02 = .25;

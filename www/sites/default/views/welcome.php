@@ -20,22 +20,22 @@
 <div class="container">
     <div id="sidebar">
         <div class="container"> 
-			<h2>Popular Sourcemaps</h2>  
-			<hr />
+    		<h2>Popular Sourcemaps</h2>  
+    		<hr />
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
             </div>
-	        <div class="clear"></div>
+            <div class="clear"></div>
 
         </div>           
 
         <div class="container"> 
-			<h2>Recent Sourcemaps</h2> 
-        	<hr />
+    		<h2>Recent Sourcemaps</h2> 
+            <hr />
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
             </div>
-	        <div class="clear"></div>
+            <div class="clear"></div>
         </div>
     </div>
     <div id="body-content">

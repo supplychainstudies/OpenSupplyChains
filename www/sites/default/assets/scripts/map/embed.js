@@ -22,23 +22,23 @@ $(document).ready(function() {
     var scid = Sourcemap.embed_supplychain_id;
 
     // fetch supplychain
-	$(window).resize(function() {
-		if(parseInt($(window).height()) > 480 && parseInt($(window).width()) > 640) {
-			$("body").removeClass("zoom");
-		}
-		else {
-			$("body").addClass("zoom");			
-		}
-	  	$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
-		// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
+    $(window).resize(function() {
+    	if(parseInt($(window).height()) > 480 && parseInt($(window).width()) > 640) {
+    		$("body").removeClass("zoom");
+    	}
+    	else {
+    		$("body").addClass("zoom");			
+    	}
+      	$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
+    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
 
-	});
+    });
     Sourcemap.loadSupplychain(scid, function(sc) {
         Sourcemap.embed_instance.map.addSupplychain(sc);
-		$(window).resize();
-		$("#banner").click(function() {
-			window.location.href = "view/" + window.location.pathname.split("/")[2];
-		});
+    	$(window).resize();
+    	$("#banner").click(function() {
+    		window.location.href = "view/" + window.location.pathname.split("/")[2];
+    	});
     });
 
 });

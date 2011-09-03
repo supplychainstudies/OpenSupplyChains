@@ -20,8 +20,8 @@ class Controller_Services_Users extends Sourcemap_Controller_Service {
             $this->response = $user->get('id');
 
         } else {
-	    $this->response = 'not found';
-	    
+        $this->response = 'not found';
+        
         }
     }
 }

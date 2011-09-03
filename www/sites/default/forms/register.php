@@ -111,17 +111,17 @@ return array(
         'email' => array(
             'type' => 'text',
             'label' => 'Email Address',
-			'attributes' => array(
-				'maxlength' => 100,
-				'placeholder' => 'Enter your email address.'				
-			)
+    		'attributes' => array(
+    			'maxlength' => 100,
+    			'placeholder' => 'Enter your email address.'				
+    		)
         ),
         'username' => array(
             'type' => 'text',
             'label' => 'Username',
             'attributes' => array(
                 'maxlength' => 32,
-				'placeholder' => 'Please choose a unique username.'
+    			'placeholder' => 'Please choose a unique username.'
             )
         ),
         'password' => array(
@@ -132,19 +132,19 @@ return array(
             'type' => 'password',
             'label' => 'Password (Repeat)'
         ),
-		'recaptcha' => array(
-			'type' => 'recaptcha',
-			'label' => 'recaptcha_form'
-		),
-	    'terms' => array(
-	        'type' => 'textarea',
-	        'label' => 'Terms and Conditions',
-			'default' => $terms
-	    ),
-		'sourcemaporg_account' => array(
-	        'type' => 'text',
-	        'label' => 'If you had a Sourcemap.org account, enter it here:'
-	    ),
+    	'recaptcha' => array(
+    		'type' => 'recaptcha',
+    		'label' => 'recaptcha_form'
+    	),
+        'terms' => array(
+            'type' => 'textarea',
+            'label' => 'Terms and Conditions',
+    		'default' => $terms
+        ),
+    	'sourcemaporg_account' => array(
+            'type' => 'text',
+            'label' => 'If you had a Sourcemap.org account, enter it here:'
+        ),
         'confirm_terms' => array(
             'type' => 'checkbox',
             'label' => 'I have read and agree to the terms of service.',
@@ -161,19 +161,19 @@ return array(
             array('email'),
             array('not_empty')
         ),
-	    'username' => array(
-	        array('not_empty'), 
-			array('alpha_dash')
-	    ),
+        'username' => array(
+            array('not_empty'), 
+    		array('alpha_dash')
+        ),
         'password' => array(
-	        array('not_empty')
+            array('not_empty')
         ),
         'password_confirm' => array(
             array('matches', array("password"))
         ),
-	    'confirm_terms' => array(
-	        array('not_empty')
-	    ),
+        'confirm_terms' => array(
+            array('not_empty')
+        ),
     ),
     'filters' => array()
 );

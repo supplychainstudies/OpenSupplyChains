@@ -3,14 +3,14 @@ class Sourcemap_Proj_Transform_Ortho extends Sourcemap_Proj_Transform {
 /*******************************************************************************
 NAME                             ORTHOGRAPHIC 
 
-PURPOSE:	Transforms input longitude and latitude to Easting and
-		Northing for the Orthographic projection.  The
-		longitude and latitude must be in radians.  The Easting
-		and Northing values will be returned in meters.
+PURPOSE:    Transforms input longitude and latitude to Easting and
+    	Northing for the Orthographic projection.  The
+    	longitude and latitude must be in radians.  The Easting
+    	and Northing values will be returned in meters.
 
 PROGRAMMER              DATE
 ----------              ----
-T. Mittan		Mar, 1993
+T. Mittan    	Mar, 1993
 
 ALGORITHM REFERENCES
 
@@ -26,30 +26,30 @@ ALGORITHM REFERENCES
   /* Initialize the Orthographic projection
     -------------------------------------*/
     public function init() {
-        //double temp;			/* temporary variable		*/
+        //double temp;    		/* temporary variable		*/
 
         /* Place parameters in static storage for common use
            -------------------------------------------------*/;
         $this->sin_p14 = sin($this->lat0);
-        $this->cos_p14 = cos($this->lat0);	
+        $this->cos_p14 = cos($this->lat0);    
     }
 
 
     # Orthographic forward equations--mapping lat,long to x,y
     public function forward($p) {
-#        $sinphi, $cosphi;	/* sin and cos value				*/
-#        $dlon;		/* delta longitude value			*/
-#        $coslon;		/* cos of longitude				*/
-#        $ksp;		/* scale factor					*/
-#        $g;		
+#        $sinphi, $cosphi;    /* sin and cos value				*/
+#        $dlon;    	/* delta longitude value			*/
+#        $coslon;    	/* cos of longitude				*/
+#        $ksp;    	/* scale factor					*/
+#        $g;    	
         $lon = $p->x;
-        $lat = $p->y;	
+        $lat = $p->y;    
         /* Forward equations
            -----------------*/
         $dlon = Sourcemap_Proj::adjust_lon($lon - $this->long0);
 
         $sinphi = sin($lat);
-        $cosphi = cos($lat);	
+        $cosphi = cos($lat);    
 
         $coslon = cos($dlon);
         $g = $this->sin_p14 * $sinphi + $this->cos_p14 * $cosphi * $coslon;
@@ -66,9 +66,9 @@ ALGORITHM REFERENCES
     }
 
     public function inverse($p) {
-#        $rh;		/* height above ellipsoid			*/
-#        $z;		/* angle					*/
-#        $sinz, $cosz;	/* sin of z and cos of z			*/
+#        $rh;    	/* height above ellipsoid			*/
+#        $z;    	/* angle					*/
+#        $sinz, $cosz;    /* sin of z and cos of z			*/
 #        $temp;
 #        $con;
 #        $lon, $lat;

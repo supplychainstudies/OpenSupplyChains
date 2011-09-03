@@ -38,10 +38,10 @@ return array(
         'title' => array(
             'type' => 'text',
             'label' => 'Title',
-			'attributes' => array(
-				'maxlength' => 55,
-				'placeholder' => 'Maximum 55 characters.'				
-			)
+    		'attributes' => array(
+    			'maxlength' => 55,
+    			'placeholder' => 'Maximum 55 characters.'				
+    		)
         ),
         'description' => array(
             'type' => 'textarea',
@@ -49,17 +49,17 @@ return array(
             'css_class' => array(
                 'preview'
             ),
-			'attributes' => array(
-				'maxlength' => 140,
-				'placeholder' => 'Maximum 140 characters.'				
-			)
+    		'attributes' => array(
+    			'maxlength' => 140,
+    			'placeholder' => 'Maximum 140 characters.'				
+    		)
         ),
         'tags' => array(
             'type' => 'text',
             'label' => 'Tags',
-	        'attributes' => array(
-				'placeholder' => 'Separated by spaces.'
-	        )
+            'attributes' => array(
+    			'placeholder' => 'Separated by spaces.'
+            )
         ),
         'category' => array(
             'type' => 'select',
@@ -70,7 +70,7 @@ return array(
         'publish' => array(
             'type' => 'checkbox',
             'label' => 'Public',
-			'default' => 0
+    		'default' => 0
         ),
         'save' => array(
             'type' => 'submit',

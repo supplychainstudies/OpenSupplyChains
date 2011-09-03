@@ -32,8 +32,8 @@ Sourcemap.Map.prototype.broadcast = function() {
 Sourcemap.Map.prototype.defaults = {
     "auto_init": true, "element_id": "map",
     "supplychains_uri": "services/supplychains/",
- 	"zoom_control": true, "default_stop_size": 12,
-	"min_stop_size": 6, "max_stop_size": 32, "tileswitcher": true, 
+     "zoom_control": true, "default_stop_size": 12,
+    "min_stop_size": 6, "max_stop_size": 32, "tileswitcher": true, 
     "draw_hops": true, "hops_as_arcs": true, 
     "hops_as_bezier": false, "arrows_on_hops": true,
     "default_feature_color": "#35a297", "clustering": true,
@@ -104,8 +104,8 @@ Sourcemap.Map.prototype.defaults = {
             "strokeOpacity": "${opacity}",
             "rotation": "${angle}"
         },
-		"arrow": {
-			"graphicName": "${type}",
+    	"arrow": {
+    		"graphicName": "${type}",
             "pointRadius": "${size}",
             "fillColor": "${color}",
             "strokeWidth": "${width}",
@@ -122,7 +122,7 @@ Sourcemap.Map.prototype.defaults = {
             "labelAlign": "cm",
             "labelXOffset": 0,
             "labelYOffset": "${yoffset}",
-		},
+    	},
         "select": {
             "fillColor": "#ffffff",
             "fillOpacity": 1.0,
@@ -176,14 +176,14 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
             'sphericalMercator': true,
             "type": google.maps.MapTypeId.TERRAIN,
             "animationEnabled": false,
-	        "minZoomLevel": 2, "maxZoomLevel": 17
+            "minZoomLevel": 2, "maxZoomLevel": 17
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
         "satellite", {
             'sphericalMercator': true,
             "type": google.maps.MapTypeId.SATELLITE,
             "animationEnabled": false,
-	        "minZoomLevel": 2, "maxZoomLevel": 17
+            "minZoomLevel": 2, "maxZoomLevel": 17
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
@@ -217,7 +217,7 @@ Sourcemap.Map.prototype.initDock = function() {
     this.dock_element = $('<div id="sourcemap-dock"></div>');
     $(this.map.div).css("position", "relative").append(
         this.dock_element.append(this.dock_outerwrap.append(this.dock_content))
-	);
+    );
     this.dockAdd('zoomout', {
         "title": 'Zoom Out',
         "panel": 'zoom',
@@ -347,7 +347,7 @@ Sourcemap.Map.prototype.initControls = function() {
     for(var k in this.layers) layers.push(this.layers[k]);
     if(layers.length) {
         if(this.options.tileswitcher) {
-			// TODO: still need basic tile switcher
+    		// TODO: still need basic tile switcher
             //this.initTileSwitcher();
         }
         this.addControl('select', 
@@ -774,8 +774,8 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(this.options.hops_as_arcs || this.options.hops_as_bezier) {
         var sc = this.supplychains[scid];
         var wkt = new OpenLayers.Format.WKT();
-		var from_stop = sc.findStop(hop.from_stop_id);
-		var to_stop = sc.findStop(hop.to_stop_id);
+    	var from_stop = sc.findStop(hop.from_stop_id);
+    	var to_stop = sc.findStop(hop.to_stop_id);
         var from_pt = wkt.read(from_stop.geometry).geometry;
         var to_pt = wkt.read(to_stop.geometry).geometry;
     }
@@ -792,17 +792,17 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
 
     if(this.options.arrows_on_hops) {
         new_arrow = this.makeArrow(new_feature.geometry, {
-			"width":1, "size": 7, "supplychain_instance_id": scid,
+    		"width":1, "size": 7, "supplychain_instance_id": scid,
             "hop_instance_id": hop.instance_id, "from_stop_id": hop.from_stop_id,
             "to_stop_id": hop.to_stop_id, "ref": hop, "color": hop.getAttr("color", rand_color),
-			"fcolor": hop.getAttr("color", rand_color), "label":""
+    		"fcolor": hop.getAttr("color", rand_color), "label":""
         });
         var tmp = new_arrow;
         if(new_arrow instanceof Array) {
             new_arrow = tmp[0];
             new_arrow2 = tmp[1];
         }
-		new_arrow.renderIntent = new_arrow2.renderIntent = "arrow";
+    	new_arrow.renderIntent = new_arrow2.renderIntent = "arrow";
     }
 
     new_feature.attributes = Sourcemap.deep_clone(hop.attributes);
@@ -811,11 +811,11 @@ Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     new_feature.attributes.from_stop_id = hop.from_stop_id;
     new_feature.attributes.to_stop_id = hop.to_stop_id;
     hop.attributes.title = new_feature.attributes.title = 
-		hop.getAttr("title", from_stop.getAttr("title","")+" to "+to_stop.getAttr("title",""));
+    	hop.getAttr("title", from_stop.getAttr("title","")+" to "+to_stop.getAttr("title",""));
 
     new_feature.attributes.width = 2;
     new_feature.attributes.opacity = 0.8;
-    new_feature.attributes.color = hop.getAttr("color", false) || rand_color;	
+    new_feature.attributes.color = hop.getAttr("color", false) || rand_color;    
 
     new_feature.attributes.ref = hop;
     this.broadcast('map:hop_mapped', this, this.findSupplychain(scid), hop, new_feature);
@@ -1158,7 +1158,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var scid = feature.attributes.supplychain_instance_id;
     var center = feature.geometry.getBounds().getCenterLonLat();
     var cid = "cluster-"+feature.attributes.stop_instance_id;
-	// TODO: aggregate size?
+    // TODO: aggregate size?
     var csize = this.map.options.default_stop_size;
     var slabel = feature.attributes.title;
     var fsize = 12;
@@ -1211,7 +1211,7 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
         } else continue;
         c.r += fc.r; c.g += fc.g; c.b += fc.b;
     }
-	
+    
     c.r /= cluster.cluster.length;
     c.g /= cluster.cluster.length;
     c.b /= cluster.cluster.length;
@@ -1219,7 +1219,7 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
     cluster.attributes.color = c.toString();
     cluster.attributes.scolor = c.toString();
 
-	// darken font color
+    // darken font color
     c.r = Math.max(0,c.r-30); 
     c.g = Math.max(0,c.g-30);
     c.b = Math.max(0,c.b-30);    

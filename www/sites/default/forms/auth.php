@@ -34,7 +34,7 @@ return array(
     ),
     'messages_file' => 'forms/auth',
     'rules' => array(
-        // todo: wildcard
+        // TODO: wildcard
         //'*' => array(),
         'username' => array(
             array('not_empty')

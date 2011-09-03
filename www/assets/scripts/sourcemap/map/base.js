@@ -98,7 +98,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 	}, this));
     $(this.map.map.div).css("position", "relative");
 
-	// @todod check this update punch
+	// TODO: check this update punch
     Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
         if(value === undefined || value === null) {
             var range = this.calcMetricRange(metric);
@@ -119,7 +119,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
-        // todo: do calculations here
+        // TODO: do calculations here
 		this.updateFilterDisplay(sc);
 
         for(var vi=0; vi<this.options.visualizations.length; vi++) {
@@ -176,7 +176,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.map.map.div).append('<div class="map-status"></div>');
     }
     if(!sc) {
-        // todo: this is bad, but it's worst case
+        // TODO: this is bad, but it's worst case
         sc = false;
         for(var k in this.map.supplychains) {
             sc = this.map.supplychains[k];
@@ -275,7 +275,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 		}
 	}
     
-    // load template and render @todo: make this intelligible
+    // load template and render TODO: make this intelligible
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
@@ -348,7 +348,7 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 		}
 	}
 	    
-    // load template and render @todo: make this intelligible
+    // load template and render TODO: make this intelligible
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
@@ -656,7 +656,7 @@ Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
 }
 
 Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {	
-	//@todo, reed will make this better
+	// TODO: reed will make this better
 	// add filter controls to dock
     if(sc.attributes["sm:ui:weight"]) {	
 		if(this.map.dockControlEl('weight').length == 0) {

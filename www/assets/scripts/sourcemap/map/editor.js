@@ -92,7 +92,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             sc.addHop(new_hop);
             this.map.mapHop(new_hop, sc.instance_id);
             this.connect_from = false;
-            // @todo review if the selection of the hop is ideal
+            // TODO: review if the selection of the hop is ideal
             this.connect_from = false;
             // if you want to uncomment this, figure out why it breaks things.
             //this.map.controls.select.select(this.map.hopFeature(new_hop));
@@ -574,7 +574,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     }, s));
 
     var cb = function(e) {
-        // @todo: maybe move this down and add a spinner or disable the map/editor?
+        //TODO: maybe move this down and add a spinner or disable the map/editor?
     }
 }
 
@@ -747,7 +747,7 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
 }
 
 Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
-    // @todo add the unit
+    // TODO: add the unit
     var catalog_map = {
         "osi": {
             "name": ["title"],

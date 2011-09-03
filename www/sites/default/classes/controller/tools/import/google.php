@@ -97,7 +97,7 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             Message::instance()->set('Please choose a spreadsheet to import.');
             $this->request->redirect('/tools/import/google/list');
         }
-        // todo: validation
+        // TODO: validation
         if(!isset($_POST['k'], $_POST['stops-wsid'])) {
             Message::instance()->set('Spreadsheet key and worksheet id required.');
             $this->request->redirect('/tools/import/google/list');

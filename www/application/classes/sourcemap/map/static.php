@@ -93,7 +93,7 @@ class Sourcemap_Map_Static {
         return $rimg;
     }
 
-    public static function to_binary($img) { // todo: other fmts, png only for now
+    public static function to_binary($img) { // TODO: other fmts, png only for now
         ob_start();
         imagepng($img);
         $ibin = ob_get_contents();

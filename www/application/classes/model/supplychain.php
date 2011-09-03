@@ -188,7 +188,7 @@ class Model_Supplychain extends ORM {
     public function save_raw_supplychain($sc, $scid=null) {
         $this->_db->query(null, 'BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE', true);
         if(!$scid) {
-            # todo: create here.
+            # TODO: create here.
             $new_sc = ORM::factory('supplychain');
             $new_sc->user_id = isset($sc->user_id) ? $sc->user_id : null;
             $new_sc->save();
@@ -202,7 +202,7 @@ class Model_Supplychain extends ORM {
             $sql = sprintf('delete from hop where supplychain_id = %d', $scid);
             $this->_db->query(Database::DELETE, $sql, true);
         }
-        # todo: concurrency? check last rev?
+        # TODO: concurrency? check last rev?
         try {
             $scattr_sql = 'insert into supplychain_attribute (supplychain_id, "key", "value") '.
                 'values (:supplychain_id, :key, :value)';

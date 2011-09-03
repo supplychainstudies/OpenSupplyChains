@@ -17,7 +17,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
     public $template = 'user/profile';
 
     public function action_index($identifier=false) {
-        // todo: cache this crap
+        // TODO: cache this crap
         if(!$identifier) {
             Message::instance()->set('No user specified.');
             return $this->request->redirect('');

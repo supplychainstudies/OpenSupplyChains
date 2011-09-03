@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-// todo: groups -> fieldsets
+// TODO: groups -> fieldsets
              ; 
 class Sourcemap_Form {
     
@@ -93,7 +93,7 @@ class Sourcemap_Form {
     }
 
     public static function from_array($arr) {
-        // todo: wildcards
+        // TODO: wildcards
         $f = new Sourcemap_Form();
         if(isset($arr['messages_file']) && $arr['messages_file'])
             $f->messages_file($arr['messages_file']);

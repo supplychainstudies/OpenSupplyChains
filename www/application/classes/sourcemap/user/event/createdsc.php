@@ -22,7 +22,7 @@ class Sourcemap_User_Event_Createdsc extends Sourcemap_User_Event {
     }
 
     protected function get_recipients() {
-        //todo: friendz...?
+        //TODO: friendz...?
         return array($this->user_id);
     }
 

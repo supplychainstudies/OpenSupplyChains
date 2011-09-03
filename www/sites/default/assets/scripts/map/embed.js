@@ -30,7 +30,7 @@ $(document).ready(function() {
 			$("body").addClass("zoom");			
 		}
 	  	$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
-		// @todo, throw supplychain:loaded equivalant event on resize and retrigger center
+		// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
 
 	});
     Sourcemap.loadSupplychain(scid, function(sc) {

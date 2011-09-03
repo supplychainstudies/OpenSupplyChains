@@ -42,7 +42,7 @@ class CloudMade_StaticMap {
         $stop_dict = array();
         $min_lat = $max_lat = $min_lon = $max_lon = null;
         foreach($raw_sc->stops as $i => $stop) {
-            # todo: address hard limit of 100 stops.
+            # TODO: address hard limit of 100 stops.
             if($pt = Sourcemap_Proj_Point::fromGeometry($stop->geometry)) {
                 $pt = Sourcemap_Proj::transform('EPSG:900913', 'WGS84', $pt);
                 if($min_lat === null || ($pt->y < $min_lat)) $min_lat = $pt->y;

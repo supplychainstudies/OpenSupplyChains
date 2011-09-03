@@ -275,7 +275,7 @@ Sourcemap.Map.prototype.dockAdd = function(nm, o) {
     }
     if(o.toggle) {
         $(cel).addClass("toggle");
-        // todo: callback arg here...
+        // TODO: callback arg here...
     }
 }
 
@@ -347,7 +347,7 @@ Sourcemap.Map.prototype.initControls = function() {
     for(var k in this.layers) layers.push(this.layers[k]);
     if(layers.length) {
         if(this.options.tileswitcher) {
-			// @todo still need basic tile switcher
+			// TODO: still need basic tile switcher
             //this.initTileSwitcher();
         }
         this.addControl('select', 
@@ -614,7 +614,7 @@ Sourcemap.Map.prototype.mapStop = function(stop, scid) {
     var fsize = 12;
     new_feature.attributes = Sourcemap.deep_clone(stop.attributes);
     new_feature.attributes.supplychain_instance_id = scid;
-    new_feature.attributes.local_stop_id = stop.local_stop_id; // todo: clarify this
+    new_feature.attributes.local_stop_id = stop.local_stop_id; // TODO: clarify this
     new_feature.attributes.stop_instance_id = stop.instance_id;
     var sz = stop.getAttr("size", this.options.default_stop_size);
     var maxsz = this.options.max_stop_size;
@@ -766,7 +766,7 @@ Sourcemap.Map.prototype.findCluster = function(stop_ids) {
     return false;
 }
 
-// todo: removeStop
+// TODO: removeStop
 Sourcemap.Map.prototype.mapHop = function(hop, scid) {
     if(!(hop instanceof Sourcemap.Hop))
         throw new Error('Sourcemap.Hop required.');
@@ -1158,7 +1158,7 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
     var scid = feature.attributes.supplychain_instance_id;
     var center = feature.geometry.getBounds().getCenterLonLat();
     var cid = "cluster-"+feature.attributes.stop_instance_id;
-	// @todo aggregate size?
+	// TODO: aggregate size?
     var csize = this.map.options.default_stop_size;
     var slabel = feature.attributes.title;
     var fsize = 12;

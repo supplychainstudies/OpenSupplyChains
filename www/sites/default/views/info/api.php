@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 
- /* @todo just generate this from the markdown doc */
+ /* TODO: just generate this from the markdown doc */
 ?>
 
 <div class="grid container_16">

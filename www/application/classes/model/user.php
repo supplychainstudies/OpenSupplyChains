@@ -45,7 +45,7 @@ class Model_User extends Model_Auth_User {
         'supplychains' => array(
             'model' => 'supplychain', 'foreign_key' => 'user_id'
         ),
-        //todo: make this make sense
+        //TODO: make this make sense
         'openidusers' => array(
             'model' => 'openidusers', 'foreign_key' => 'user_id'
         )           

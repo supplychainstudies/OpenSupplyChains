@@ -1,0 +1,71 @@
+<!doctype html>  
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sourcemap API Client Example (JS)</title>   
+ 	<style> body { width:960px; margin:0 auto; font-family:sans-serif; }</style>
+	<script type="text/javascript" src="lib/src-client.js"></script>
+	<script type="text/javascript">
+		function explain(data) {
+			if(console.log) {
+				if(data.supplychain && typeof(data.supplychain) != 'function') {
+					console.log(data, 'Supplychain '+data.supplychain.id);
+				} else if(data.services) {
+						console.log(data, 'Available Services');
+				}
+				else if(data.parameters && data.parameters['q']) { 
+					console.log(data, 'Search for <'+data.parameters['q']+">"); 
+				} else { console.log(data); }
+			} else { alert("We got some data!"); }
+		}
+	</script>
+	
+</head>
+
+<body class="main">
+	<h1>Sourcemap API Client</h1>
+	<p>This is an example page for a simple javascript client to the <a href="http://www.sourcemap.com">Sourcemap.com</a> API. Here we create a new SrcClient and use it to perform some basic searches, and get information about a particular supplychain. The results are delivered using jsonp, so we need to pass a callback function. In this case we're using a simple 'explain' function that console.logs the results.</p>
+	
+	<h3>Load the Sourcemap API Client</h3>
+	<blockquote>
+		<code>var src = new SrcClient();</code>
+		<script type="text/javascript">
+			var src = new SrcClient();
+			explain(src);
+		</script>
+	</blockquote>
+
+	<h3>List available services</h3>
+	<blockquote>
+		<script type="text/javascript">
+			src.available('explain');
+		</script>
+		<code>src.supplychain(744, 'explain');</code>
+	</blockquote>
+
+	<h3>Get supplychain id 744</h3>
+	<blockquote>
+		<script type="text/javascript">
+			src.supplychain(744, 'explain');
+		</script>
+		<code>src.supplychain(744, 'explain');</code>
+	</blockquote>
+
+	<h3>Get a list of supplychains</h3>
+	<blockquote>
+		<script type="text/javascript">
+			src.supplychains(['25'], 'explain');
+		</script>
+		<code>src.supplychains(['25'], 'explain');</code>
+	</blockquote>
+
+	<h3>Get supplychains that match a search</h3>
+	<blockquote>
+		<script type="text/javascript">
+			src.supplychains(['laptop'], 'explain');
+		</script>
+		<code>src.supplychains(['laptop'], 'explain');</code>
+	</blockquote>
+	
+</body>
+</html>

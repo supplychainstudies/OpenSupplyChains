@@ -3,4 +3,4 @@ www/application/config/cache.php
 www/application/config/database.php
 www/application/config/sourcemap.php
 www/application/config/recaptcha.php
-www/assets/images/.DS_Store
+.DS_Store

@@ -37,5 +37,5 @@ If you want custom routing or a non-standard routing, you'll want to put your ow
 
 [1]: http://www.sourcemap.com "Sourcemap.com"
 [2]: http://github.com/SourcemapFoundation/SrcClient "SrcClient on Github"
-[3]: docs/img/preview.png  "Open Supply Chains"
+[3]: http://github.com/SourcemapFoundation/OpenSupplyChains/raw/master/docs/img/preview.png "Open Supply Chains"
 [4]: http://wiki.openstreetmap.org/wiki/Mapnik/PostGIS "Mapnik PostGIS Guide"

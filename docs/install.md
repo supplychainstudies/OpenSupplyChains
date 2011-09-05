@@ -12,26 +12,19 @@
 	
 		sudo a2enmod rewrite 
 		
-	After setting DOCROOT to the location of the sourcemap code change the settings on that directory to either
-		AllowOverrides All 
-	Or
-		AllowOverride FileInfo .... 
-	So that rewrite rules in .htaccess files will be checked.  Also 
+	After setting DOCROOT to the location of the sourcemap code change the settings on that directory to `AllowOverrides All` So that rewrite rules in `.htaccess` files will be checked.
 	
 2. There are a number of dependencies which you'll need. 
 
-	apt-get install php5-cli php5-dev php5-gd php5-mcrypt php5-curl php5-pgsql 	
+		apt-get install php5-gd php5-mcrypt php5-curl php5-pgsql 	
 	
 ##Basic Database Installation
 
-1. Be sure you have PostgreSQL properly installed.  I use 8.4. On Ubuntu, or other Linux distributions which use apt, you can do the following:
+1. Be sure you have PostgreSQL properly installed.  
 		
 		apt-get install postgresql
 
-2. Install PostGIS.  Most packaged installations will also make available a database template you can use to create a database with GIS features.
-	
-	Alternatively, you can install PostGIS 1.4 which is compatible with 
-	PostgreSQL 8.4. Install all the neccessary files from synaptic then run the below commands.  
+2. Install PostGIS.  Most packaged installations will also make available a database template you can use to create a database with GIS features. Make sure you get the right version, like PostGIS 1.4 which is compatible with PostgreSQL 8.4. Install all the necessary files then install its.  
 	
 		./configure
 		make
@@ -65,37 +58,34 @@
         \i /usr/share/doc/postgresql/8.4/contrib/spatial_ref_sys.sql
 		\i /usr/share/doc/postgresql/8.4/contrib/postgis_comment.sql
 		
-  The locations of these files may vary depending on your distribution.  Using Ubuntu 11.04 you would instead enter:
+	The locations of these files may vary depending on your distribution.  Using Ubuntu 11.04 you would instead enter:
 		  
 		\i /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql
 		\i /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql
 		\i /usr/share/postgresql/8.4/contrib/postgis_comments.sql
 		  
- 
-
 7. Setup the development configuration for the db-migrate script to use:
 
 		cd /path/to/my/repository/tools/env
 		cp dev.example dev
 		vi dev  
 		
-  Change the dev file to reflect your database and username.
+	Change the dev file to reflect your database and username.
 
 8. Execute the db-migrate script in the tools directory:
 
 		cd /path/to/my/repository/tools/
 		./db-migrate dev up
    	
-
 9. Alternatively load the Sourcemap core schema and additional sequentially numbered schemas by hand :
 
         \i /path/to/my/repository/db/schema/00.initial.up.sql  
      	\i /path/to/my/repository/db/schema/00.test_supplychain.up.sql
         ....
-   Be sure you run the commands as the user you hope to use. If you need to change ownership of a table, you can do this with the 'alter table' command:
 
-				alter table tablename owner to 'newowner';  
+   	Be sure you run the commands as the user you hope to use. If you need to change ownership of a table, you can do this with the 'alter table' command:
 
+		alter table tablename owner to 'newowner';  
 
 10. Configure your Kohana/Sourcemap configuration to use this database.
         
@@ -104,26 +94,26 @@
 
 1.  Create settings files by copying the example files:
 
-	cd /path/to/my/repository/www/application/config
-	cp cache.php.sample cache.php
-	cp database.php.sample database.php
-	cp sourcemap.php.example sourcemap.php
-	cp apis.php.sample apis.php
+		cd /path/to/my/repository/www/application/config
+		cp cache.php.sample cache.php
+		cp database.php.sample database.php
+		cp sourcemap.php.example sourcemap.php
+		cp apis.php.sample apis.php
 	
 2. Edit the database.php file from step 1 to reflect your username, password and database.
 
 3. Create a cache directory writeable by the php code.
 
-	cd /path/to/my/repository/www/application/
-	mkdir cache
+		cd /path/to/my/repository/www/application/
+		mkdir cache
 	
- Give the cache directory appropriate ownership/permissions.  In Ubuntu changing the group to www-data and giving the group rwx permissions suffices.
+	Give the cache directory appropriate ownership/permissions.  In Ubuntu changing the group to www-data and giving the group rwx permissions suffices.
 	
-
-##Notes on Database Configuration for Kohana/Sourcemap Core and Sites  #dbconfig
+	
+##Notes on Database Configuration for Kohana/Sourcemap Core and Sites
 
 1. If you're editing the core Sourcemap database configuration, do so in the www/application/config/database.php file. You'll need to be sure you use the value PDOPGSQL as the database type. This is a custom class which extends Kohana's PDO library in order to support the lean Kohana ORM.
 
-2. If you're editing a site-specific configuration, this is done the same way as in number one above, but the database.php file goes in www/sites/mysite/config/.
+2. If you're editing a site-specific configuration, this is done the same way as in number one above, but the database.php file goes in `www/sites/mysite/config/`
 
-3. The repository is (sometimes) missing default database.php files in these directories. A sample can be found in modules/database/.
+3. The repository is (sometimes) missing default database.php files in these directories. A sample can be found in `modules/database/`.

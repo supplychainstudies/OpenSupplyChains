@@ -121,7 +121,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     					if(!this.dialog) {
     				        this.dialog = $('<div id="dialog"></div>');
     				        $(this.map.map.div).append(this.dialog);
-    				    } else $(this.dialog).empty();
+    				    } else this.hideDialog();
 
     				    this.dialog_content = $('<div id="dialog-content"></div>');
     				    this.dialog.append(this.dialog_content);

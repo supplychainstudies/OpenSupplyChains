@@ -186,7 +186,7 @@ if (!defined('SUPPRESS_REQUEST')) {
     <div class="article-content">
     	<div class="gigantic">404</div>
     	<img src="http://www.sourcemap.com/assets/images/monsters.png" />
-    	<p>This is the part of the map where it says, "Here be monsters." Please, <a href="/">go back</a>, and if you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
+    	<p>This is the part of the map where it says, "Here be monsters." Please, <a href="javascript:history.go(-1)">go back</a>, and if you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
     </div>
 </div>
 <script type="text/javascript"> if (window.console) { var error = "$e"; console.log(error); } </script>

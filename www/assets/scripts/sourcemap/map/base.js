@@ -95,6 +95,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         } else {
      		this.map.map.setCenter(p, initpos[2]);
         }
+		this.loadExternals(sc);
+        
     }, this));
     $(this.map.map.div).css("position", "relative");
 
@@ -226,6 +228,26 @@ Sourcemap.Map.Base.prototype.initDialog = function() {
     $(this.dialog).removeClass("called-out");
     this.dialog_content = $('<div id="dialog-content"></div>');
     this.dialog.append(this.dialog_content);
+}
+
+Sourcemap.Map.Base.prototype.loadExternals = function(sc) {
+	/* Load Geojson feeds */
+	if(sc.attributes["sm:ext:geojson"]) {
+		if(typeof(sc.attributes["sm:ext:geojson"]) == "string") {
+			var geofeeds = [sc.attributes["sm:ext:geojson"]];
+		} else { var geofeeds = sc.attributes["sm:ext:geojson"]; }
+	
+		console.log(this.map.options.polygons);
+		console.log(this.map.options);
+		for(var i in geofeeds) {
+			var geojson = new OpenLayers.Layer.GML(geofeeds[i], geofeeds[i], {
+		            format: OpenLayers.Format.GeoJSON, 
+		            projection: new OpenLayers.Projection("EPSG:4326")
+			});
+			console.log(geojson);		 
+		}
+		this.map.map.addLayers([geojson]);
+	}
 }
 
 Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {

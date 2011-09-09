@@ -135,7 +135,7 @@ Sourcemap.Map.prototype.defaults = {
             "labelXOffset": 0,
             "labelYOffset": "${yoffset}",
         }
-    }, "prep_stop": null, "prep_hop": null
+	}, "prep_stop": null, "prep_hop": null
 }
 
 Sourcemap.Map.prototype.init = function() {

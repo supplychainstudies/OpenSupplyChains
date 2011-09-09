@@ -11,6 +11,8 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 /* EMBED STYLES  -------------------------------------------------------------- */ 
+@import "sourcemap";
+
 html { overflow:hidden } /* Ideal embed width/height right now is no less than 640 by 480 */
 
 body#embedded-supplychain {
@@ -24,6 +26,12 @@ body#embedded-supplychain {
 	    width:1px; height:1px;
         background: #fff;
         margin: 0 auto; padding: 0;
+		&.google-earth {
+			top:40px;
+			width:100%;
+			height:100%;
+			background:#000;
+		}
     }
 }
 
@@ -62,4 +70,17 @@ body.zoom {
 	    }    
 	}
 	#sourcemap-dock { zoom: .8; -moz-transform: scale(.8);}
+}
+
+.static-embed {
+	margin:auto;
+	display:block;
+	text-align:center;
+}
+.earth-banner {
+	padding:10px;
+	height:20px;
+	text-align:center;
+	.gradient(#111111,#333333);
+    a { color:#999; }
 }

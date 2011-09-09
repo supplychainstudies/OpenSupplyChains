@@ -34,6 +34,7 @@ class Sourcemap_Kml {
 		$k .= '</Style>';
 		$k .= '<Style id="defaultpoint">';
 		$k .= '<IconStyle>';
+		$k .= '<scale>1.0</scale>';
 		$k .= '<Icon><href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href></Icon>';
 		$k .= '</IconStyle>';
 		$k .= '</Style>';

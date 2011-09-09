@@ -37,8 +37,10 @@ class Sourcemap_Controller_Service extends Controller_REST {
     public $_jsonp_callback = 'console.log';
     public $_content_types = array(
         'json' => 'application/json',
+		'geojson' => 'application/json',
         'jsonp' => 'text/javascript',
         'php' => 'application/vnd.php.serialized',
+		'kml' => 'application/vnd.google-earth.kml+xml',
         'form' => array(
             'application/x-www-form-urlencoded',
             'multipart/form-data'
@@ -349,50 +351,14 @@ class Sourcemap_Controller_Service extends Controller_REST {
         return sprintf('%s(%s);', $callback, $this->_serialize_json($data));
     }
 	
-	protected function  _serialize_kml($data) {
-        throw new Exception('KML is terrible.'); 
-    }
-
 	protected function  _serialize_geojson($data) {
 		$supplychain = array_shift($data);
-		
-		$geojson = array("type" => "FeatureCollection", "features"=>array());
+		return Sourcemap_Geojson::make($supplychain);				
+    }
 
-		foreach($supplychain->attributes as $k => $v) {
-			$geojson["properties"][$k] = $v;
-		}
-		foreach(array_merge($supplychain->stops, $supplychain->hops) as $item) {
-			$geom = Sourcemap_Wkt::read($item->geometry);
-			switch($geom[0]) {
-				case "point":
-					$pt = new Sourcemap_Proj_Point($geom[1][0], $geom[1][1]);
-		        	$pt = Sourcemap_Proj::transform('EPSG:900913 ', 'WGS84', $pt);
-					$geometry = array("type"=>"Point","coordinates"=>array($pt->x,$pt->y));
-				break;
-				case "multilinestring":
-					$return = array();
-					array_walk_recursive($geom[1], function($a) use (&$return) { $return[] = $a; });
-					$pt1 = new Sourcemap_Proj_Point($return[2], $return[3]);
-					$pt2 = new Sourcemap_Proj_Point($return[5], $return[6]);
-					
-		        	$pt1 = Sourcemap_Proj::transform('EPSG:900913 ', 'WGS84', $pt1);
-		        	$pt2 = Sourcemap_Proj::transform('EPSG:900913 ', 'WGS84', $pt2);
-		
-					$geometry = array("type"=>"LineString","coordinates"=>array(array($pt1->x,$pt1->y), array($pt2->x,$pt2->y)));
-				break;
-				
-				default:
-				break;
-					
-			}
-			$props = array();
-			foreach($item->attributes as $k => $v) {
-				$props[$k] = $v;
-			}
-			array_push($geojson["features"], array("type"=>"Feature", "geometry"=>$geometry, "properties"=>$props));
-			
-		}
-		return json_encode($geojson);		
+	protected function  _serialize_kml($data) {
+		$supplychain = array_shift($data);
+		return Sourcemap_Kml::make($supplychain);
     }
 
     protected function  _rest_error($code=400, $msg='Not found.') {

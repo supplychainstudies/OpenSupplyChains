@@ -53,7 +53,7 @@ $(document).ready(function() {
 			var id = window.location.pathname.split("/")[2];
 			$('#sourcemap-map-embed').addClass("google-earth");
 			$('body').prepend(
-				"<div class='earth-banner'><a href='view/"+id+"'>View on Sourcemap</a> | <a href='services/supplychains/"+id+"?f=kml'>Download for Google Earth</a></div>"
+				"<div class='earth-banner'><a href='view/"+id+"'>View this Supplychain</a> | <a href='services/supplychains/"+id+"?f=kml'>Download for Google Earth</a></div>"
 			);
 			$(window).resize(function() {
 		      	$('#sourcemap-map-embed').css("height", $(window).height()-40).css("width", $(window).width());

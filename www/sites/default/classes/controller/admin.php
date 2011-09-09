@@ -29,7 +29,7 @@ class Controller_Admin extends Sourcemap_Controller_Layout {
             $this->request->redirect('auth');
         } 
         parent::before();
-        $this->layout->page_title = 'Sourcemap Management';
+        $this->layout->page_title = 'Management';
     }
     
     public function action_index() {

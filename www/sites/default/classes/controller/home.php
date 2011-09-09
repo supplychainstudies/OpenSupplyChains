@@ -39,7 +39,7 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         }
 
         $this->template->user = (object)$user_arr;
-        $this->layout->page_title = "Dashboard for ".$this->template->user->username." on Sourcemap";
+        $this->layout->page_title = "Dashboard for ".$this->template->user->username;
         $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user->id, 6);
         $this->template->user_profile = $p;
         $this->template->supplychains = $scs;

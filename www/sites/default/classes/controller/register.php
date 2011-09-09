@@ -15,8 +15,6 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
     public $layout = 'base';
     public $template = 'register';
-
-    const MIGRATE_EMAIL = 'account-migration@sourcemap.com';
     
     public function action_index() {        
         if(Auth::instance()->get_user()) {
@@ -24,7 +22,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());
                $this->request->redirect('home/');
     	}
-    	$this->layout->page_title = 'Register an account on Sourcemap';
+    	$this->layout->page_title = 'Register an account';
         
         $this->layout->scripts = array(
             'sourcemap-core', 'sourcemap-template'
@@ -69,40 +67,24 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 }
 
                 //send a notification
-                $subj = 'Re: Your New Account on Sourcemap.com';
+                $subj = 'Re: Your New Account on Open Supply Chains';
                 $h = md5(sprintf('%s-%s', $new_user->username, $new_user->email));
                 $lid = strrev(base64_encode($new_user->username));
                 $url = URL::site("register/confirm?t=$lid-$h", true);
 
                 $msgbody = "Dear {$new_user->username},\n\n";
-                $msgbody .= 'Welcome to Sourcemap! ';
+                $msgbody .= 'Welcome to Open Supply Chains! ';
                 $msgbody .= "Go to the url below to activate your account.\n\n";
                 $msgbody .= $url."\n\n";
-                $msgbody .= "If you have any questions, please contact support@sourcemap.com.\n\n";
-                $msgbody .= "Sincerely,\n";
-                $msgbody .= "The Sourcemap Team\n";
+                $msgbody .= "If you have any questions, please contact us.\n";         
 
-                $addlheaders = "From: The Sourcemap Team <noreply@sourcemap.com>\r\n";
+                $addlheaders = "From: Open Supply Chains\r\n";
 
                 try {
                     $sent = mail($new_user->email,  $subj, $msgbody, $addlheaders);
                     Message::instance()->set('Please check your email for further instructions.', Message::INFO);
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete registration. Please contact support.');
-                }
-                if(isset($p['sourcemaporg_account']) && $p['sourcemaporg_account']) {
-                    try {
-                        $msgbody = 'New user '.$new_user->username.' requested migration from Sourcemap.org.'."\r\n\r\n";
-                        $msgbody .= "Sourcemap.org Account Name: {$p['sourcemaporg_account']}\r\n";
-                        $msgbody .= "New User Email: {$new_user->email}\r\n\r\n";
-                        $msgbody .= "Go to: ".URL::site('user/'.$new_user->id, true)." to view this user's profile.\r\n";
-                        $msgbody .= "Go to: ".URL::site('admin/users/'.$new_user->id, true)." to view this user's details.\r\n";
-                        $sent = mail(self::MIGRATE_EMAIL, "MIGRATE REQUEST: ".$p['sourcemaporg_account'], $msgbody, $addlheaders);
-                    } catch(Exception $e) {
-                        error_log('COULD NOT SEND MIGRATION REQUEST EMAIL FOR: '.$new_user->username.':'.$p['sourcemaporg_account']);
-                        Message::instance()->set('We had trouble contacting the Sourcemap team. Please email us at '.self::MIGRATE_EMAIL
-                            .' to help us make sure things go smoothly.');
-                    }
                 }
                 return $this->request->redirect('register');
             } else {

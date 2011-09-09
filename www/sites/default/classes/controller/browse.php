@@ -21,7 +21,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             'sourcemap-core',
         );
         
-        $this->layout->page_title = 'Browsing maps on Sourcemap';
+        $this->layout->page_title = 'Browsing supply chains';
 
         $cats = Sourcemap_Taxonomy::arr();
         $nms = array();

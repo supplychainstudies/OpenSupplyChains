@@ -57,7 +57,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_water = isset($sc->attributes->{"sm:ui:water"}) ? "checked" : "";
                 $this->template->supplychain_tileset = isset($sc->attributes->{"sm:ui:tileset"}) ? $sc->attributes->{"sm:ui:tileset"} : "";
 
-    			$this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
+    			$this->layout->page_title = $this->template->supplychain_name;
     	        
                 $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
                     
@@ -252,7 +252,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template = View::factory('map/embed');
     	        $sc = $supplychain->kitchen_sink($supplychain_id);
 
-    			$this->layout->page_title = (isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "")).' on Sourcemap';
+    			$this->layout->page_title = (isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : ""));
 
                 $this->layout->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array(

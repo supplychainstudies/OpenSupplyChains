@@ -41,10 +41,6 @@ return array(
     		'type' => 'recaptcha',
     		'label' => 'recaptcha_form'
     	),
-    	'sourcemaporg_account' => array(
-            'type' => 'text',
-            'label' => 'If you had a Sourcemap.org account, enter it here:'
-        ),
         'confirm_terms' => array(
             'type' => 'checkbox',
             'label' => 'I have read and agree to the <a href="/info/terms/#document-content?w=500" target="_blank" class="modal">terms of service</a>.',

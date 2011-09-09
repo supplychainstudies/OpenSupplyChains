@@ -39,7 +39,7 @@ class Controller_Search extends Sourcemap_Controller_Layout {
         $r = Sourcemap_Search::find($search_params);
 
         $this->template->search_result = $r;
-    	$this->layout->page_title = 'Search results for ['.$search_params['q'].'] on Sourcemap';
+    	$this->layout->page_title = 'Search results for ['.$search_params['q'].']';
         
         $p = Pagination::factory(array(
             'current_page' => array(

@@ -18,7 +18,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
     public function action_index() {
 
-        $this->layout->page_title = Auth::instance()->get_user() ? 'Signed in to Sourcemap' : 'Sign in to Sourcemap';
+        $this->layout->page_title = Auth::instance()->get_user() ? 'Signed in' : 'Sign in';
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
             $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());
@@ -69,7 +69,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public function action_forgot() {
    
         $this->template = View::factory('auth/forgot_password');
-        $this->layout->page_title = "Forgot password on Sourcemap";
+        $this->layout->page_title = "Forgot password";
         $post = Validate::factory($_POST);
         $post ->rule('email', 'not_empty')
             ->rule('email', 'validate::email')
@@ -102,28 +102,23 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         //$email_vars = array('username' => $username, 'password' => $temp_password);
         $to = $email;
 
-        $subject = 'Password Reset Request on Sourcemap.com';
+        $subject = 'Password Reset Request';
 
         $body = "Dear {$username},\n";
         $body .= <<<EREIAM
 
-If you asked us to reset the password associated with your user account on Sourcemap.com, please visit the URL below:
+If you asked us to reset the password associated with your user account, please visit the URL below:
 
 
 EREIAM;
         $body .= URL::site('auth/reset?t='.$ticket, true);
         $body .= <<<EREIAM
 
-
-If you believe that someone else made this request, please contact supporta@sourcemap.com as soon as possible.
-
-Thank you for using Sourcemap!
-
-Sincerely,
-The Sourcemap Team
+If you believe that someone else made this request, please contact us as soon as possible.
+Thank you for using Open Supply Chains!
 EREIAM;
 
-        $addlheaders = "From: The Sourcemap Team <noreply@sourcemap.com>\r\n";
+        $addlheaders = "From: Open Supply Chains\r\n";
 
         $sent = false;
         try {

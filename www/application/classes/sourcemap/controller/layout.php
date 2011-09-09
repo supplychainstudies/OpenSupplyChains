@@ -18,6 +18,7 @@ class Sourcemap_Controller_Layout extends Controller_Template {
 
     public $default_styles = array(
         'sites/default/assets/styles/reset.css',
+        'sites/default/assets/styles/modal.less',
         'assets/styles/general.less',
     );
 

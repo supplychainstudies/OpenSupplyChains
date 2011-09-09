@@ -14,7 +14,7 @@
 
 <div class="container form-page">
     <div class="copy-section">
-        <h1>Password Reset</h1>
+        <h1>Reset password for <?= $current_user ?></h1>
         <p>Enter your new password below.</p>
         <ul>
             <li><a href="/auth">Sign in to Sourcemap</a></li>

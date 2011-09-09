@@ -90,8 +90,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                 }
                 $this->request->redirect('auth');
             } else {
-                Message::instance()->set('I don\'t recognize you.');
-                $this->request->redirect('auth/forgot_password');
+                Message::instance()->set('We don\'t recognize that address.');
+                $this->request->redirect('auth/forgot');
             }
         } else {
             // pass
@@ -102,7 +102,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         //$email_vars = array('username' => $username, 'password' => $temp_password);
         $to = $email;
 
-        $subject = 'Re: Password Reset Request on Sourcemap.com';
+        $subject = 'Password Reset Request on Sourcemap.com';
 
         $body = "Dear {$username},\n";
         $body .= <<<EREIAM
@@ -174,15 +174,15 @@ EREIAM;
                                 // pass
                             }
                         } else {
-                            Message::instance()->set('That token has expired.');
+                            Message::instance()->set('That token has expired.  Please create a new request.');
                             return $this->request->redirect('auth');
                         }
                     } else {
-                        Message::instance()->set('That didn\'t work.');
+                        Message::instance()->set('Password reset failed.  Please contact support for assistance.');
                         return $this->request->redirect('auth');
                     }
                 } else {
-                    Message::instance()->set('I don\'t recognize you.');
+                    Message::instance()->set('We don\'t have this address on record.  Please create a new request.');
                     return $this->request->redirect('auth');
                 }
             } 
@@ -233,7 +233,6 @@ EREIAM;
                             return $this->request->redirect('auth');
                         }
                     } else {
-                        Message::instance()->set('I don\'t recognize you.');
                         return $this->request->redirect('auth');
                     }
                 } else {

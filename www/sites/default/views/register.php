@@ -16,6 +16,7 @@
     <div class="copy-section">
         <h1>Join Us</h1>
         <p>Register to create supply chains, leave comments, save favorites, and stay informed about our work.</p>
+        <p class="promise">We promise not to use your e-mail address for anything besides registering an account.</p>
         <ul>
             <li>Already have an account? <a href="/auth">Sign in here</a>.</li>
         </ul>

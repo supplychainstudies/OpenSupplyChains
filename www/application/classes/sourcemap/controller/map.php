@@ -269,7 +269,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     'tour_interval' => 5, 'banner' => 'yes',
                     'tileswitcher' => 'no', 'geoloc' => true, 
                     'downstream_sc' => null, 'tileset' => 'cloudmade',
-                    'locate_user' => 'no', 'position' => '0|0|0'
+                    'locate_user' => 'no', 'position' => '0|0|0',
+					'served_as' => 'default'
                 );
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 
@@ -286,7 +287,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     ->rule('locate_user', 'regex', array('/yes|no/i'))
                     ->rule('tileset', 'regex', array('/terrain|satellite|cloudmade/i'))
                     ->rule('downstream_sc', 'numeric')
-                    ->rule('position', 'not_empty');
+                    ->rule('position', 'not_empty')
+                    ->rule('served_as', 'regex', array('/default|static|earth/i'));
 
                 if($v->check()) {
                     $params = $v->as_array();
@@ -302,7 +304,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                         strtolower(trim($params['locate_user'])) === 'yes' ? true : false;
                     $params['tileset'] = strtolower(trim($params['tileset']));
                     $params['position'] = strtolower(trim($params['position']));
-                    
+                    $params['served_as'] = strtolower(trim($params['served_as']));
                     /*
                     if($params['geoloc']) {
                         $params['iploc'] = false;

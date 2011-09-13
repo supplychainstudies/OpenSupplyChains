@@ -480,7 +480,8 @@ Sourcemap.Color.graduate = function(colors, ticks) {
     return colors;
 }
 
-Sourcemap.R = 6371 //km
+
+Sourcemap.R = 6371 //km = 3959 miles
 
 Sourcemap.radians = function(deg) {
     return deg*Math.PI/180;

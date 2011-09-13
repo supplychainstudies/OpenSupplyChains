@@ -43,7 +43,7 @@ return array(
     	),
     	'sourcemaporg_account' => array(
             'type' => 'text',
-            'label' => 'If you had a Sourcemap.org account, enter it here:'
+            'label' => 'If you had a Sourcemap.org user account, enter your old username here:'
         ),
         'confirm_terms' => array(
             'type' => 'checkbox',

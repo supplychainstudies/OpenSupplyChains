@@ -17,15 +17,15 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     public $template = 'register';
 
     const MIGRATE_EMAIL = 'account-migration@sourcemap.com';
-    
+
     public function action_index() {        
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
             $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());
                $this->request->redirect('home/');
-    	}
-    	$this->layout->page_title = 'Register an account on Sourcemap';
-        
+        }
+        $this->layout->page_title = 'Register an account on Sourcemap';
+
         $this->layout->scripts = array(
             'sourcemap-core', 'sourcemap-template'
         );
@@ -36,12 +36,12 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         $this->template->form = $f;
 
         if(strtolower(Request::$method) === 'post') { 
-    		 $validate= $f->validate($_POST);   
-    		 if (array_key_exists('recaptcha', Kohana::modules())) { 
-    				    	 $recap = Recaptcha::instance();  
-    			 $revalid = (BOOL)($recap->is_valid($_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"])); 
-    			$validate = ($validate && $revalid);
-    		}    
+             $validate= $f->validate($_POST);   
+             if (array_key_exists('recaptcha', Kohana::modules())) { 
+                             $recap = Recaptcha::instance();  
+                 $revalid = (BOOL)($recap->is_valid($_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"])); 
+                $validate = ($validate && $revalid);
+            }    
              if( $validate ) {  
                 $p = $f->values();
                 // check for username in use
@@ -109,11 +109,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 Message::instance()->set('Check the information below and try again.');
             }
         } else { 
-    	/* pass */ 
-    	}
+        /* pass */ 
+        }
     }
-    
-    
+
+
     public function action_confirm(){
         if(Auth::instance()->get_user()) {
             Message::instance()->set(

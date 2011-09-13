@@ -3,4 +3,7 @@ www/application/config/cache.php
 www/application/config/database.php
 www/application/config/sourcemap.php
 www/application/config/recaptcha.php
+www/application/cache/
+tools/env/dev
+
 .DS_Store

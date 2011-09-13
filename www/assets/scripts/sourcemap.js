@@ -298,6 +298,13 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
     return;
 }
 
+/*
+ * Sourcemap.humanDate
+ *  
+ * now  : Current local time millisecond
+ * then : Previous time in millisecond
+ */
+
 Sourcemap.humanDate = function(then, now) {
     var now = Math.floor((now ? now.getTime() : (new Date()).getTime())/1000);
     var then = Math.floor(then.getTime()/1000);

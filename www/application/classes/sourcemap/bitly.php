@@ -20,17 +20,30 @@ class Sourcemap_Bitly {
 
         $base = "http://api.bitly.com/v3/shorten?";
 
-        $request = $base . http_build_query($params); 
+        $cache_key = 'bitly-' + $url;
+        $ttl = 60 * 60 * 24;
 
-        $ch = curl_init($request);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        $result = json_decode($result);
+        if($cached = Cache::instance()->get($cache_key)) {
+        
+            return $cached;
+        
+        } else {
 
-        if($result->status_code == "200") {
-            return $result->data->url;
-        } else { 
-            return false;
+            $request = $base . http_build_query($params); 
+
+            $ch = curl_init($request);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            $result = json_decode($result);
+
+            if($result->status_code == "200") {
+            
+                Cache::instance()->set($cache_key, $result->data->url, $ttl);
+                return $result->data->url;
+
+            } else { 
+                return false;
+            }
         }
     }
 }

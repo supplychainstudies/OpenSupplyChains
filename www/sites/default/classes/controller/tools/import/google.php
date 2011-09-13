@@ -136,7 +136,15 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             $new_sc->attributes = (object)array('title' => $title ? $title : 'Imported Sourcemap');
             $scid = ORM::factory('supplychain')->save_raw_supplychain($new_sc, $replace_into);
             $new_sc = ORM::factory('supplychain', $scid);
-            $new_sc->other_perms |= Sourcemap::READ;
+            
+            //$new_sc->other_perms |= Sourcemap::READ;
+            $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
+            $new_sc->other_perms = 0;
+            if($public)
+                $new_sc->other_perms |= $public;
+            else
+                $new_sc->other_perms &= ~Sourcemap::READ;
+
             $new_sc->save();
             Message::instance()->set('Your spreadsheet was imported.', Message::SUCCESS);
             $this->request->redirect('view/'.$scid);

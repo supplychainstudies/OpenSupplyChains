@@ -12,6 +12,9 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<?
+    $edit_mode = isset($_GET["edit"])&&$can_edit ? isset($_GET["edit"]) : 0;
+?>
 <div id="map-container">    
     <div id="map">
         <div id="sourcemap-map-view"></div>
@@ -22,7 +25,7 @@
     <div id="sidebar" class="map-view">
         <?php if($can_edit): ?>
     		<h3>Map Options</h3>
-    		<hr/>
+            <hr/>
     		<div class="impact-box">
                 <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
     			<label for="impact-use-weight">Show Weight</label>

@@ -190,6 +190,12 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find('.banner-share-link').click(function(){
             $.scrollTo('#sidebar', 600);
         });
+        $(this.banner_div).find('.banner-edit-link').click(function(){
+            window.location.replace(window.location.pathname +"?edit");
+        });
+        $(this.banner_div).find('.banner-preview-link').click(function(){
+            window.location.replace(window.location.pathname);
+        });
         $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
             this.favorite();
         }, this));

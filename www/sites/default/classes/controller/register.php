@@ -86,11 +86,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
                 try {
                     $sent = mail($new_user->email,  $subj, $msgbody, $addlheaders);
-                    Message::instance()->set('Activation email sent.');
-                    return $this->request->redirect('register/thankyou');
+                    Message::instance()->set('Please check your email for further instructions.', Message::INFO);
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete registration. Please contact support.');
-                }
+                } 
+
                 if(isset($p['sourcemaporg_account']) && $p['sourcemaporg_account']) {
                     try {
                         $msgbody = 'New user '.$new_user->username.' requested migration from Sourcemap.org.'."\r\n\r\n";
@@ -115,7 +115,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     }
 
     public function action_thankyou(){
-        $this->template->set_filename('register/thankyou');
+        $this->template->set_filename('admin/newsedit');
     }
 
     public function action_confirm(){

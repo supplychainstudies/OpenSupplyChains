@@ -15,6 +15,14 @@
     <div id="banner-summary">
        <%= _S.ttrunc(_S.htesc(this.getAttr("title", this.getAttr("name", "Untitled Sourcemap"))), 55) %>
     </div>
+    <% if(this.editable){ %>
+    <div id="banner-preview" <% if(window.location.href.split("?")[1]!="edit"){ %> class="active" <% } %> >
+        <a class="banner-preview-link" href="javascript:void(0);">Preview</a>
+    </div>
+    <div id="banner-edit"  <% if(window.location.href.split("?")[1]=="edit"){  %> class="active" <% }  %> >
+        <a class="banner-edit-link" href="javascript:void(0);">Edit</a>
+    </div>
+    <% } %>
     <div id="banner-share">
         <a class="banner-share-link" href="javascript:void(0);">Share</a>
     </div>

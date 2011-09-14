@@ -29,8 +29,12 @@ $(document).ready(function() {
     Sourcemap.loadSupplychain(scid, function(sc) {
         var m = Sourcemap.view_instance.map;
         m.addSupplychain(sc);
+
         if(sc.editable){
-            new Sourcemap.Map.Editor(Sourcemap.view_instance);
+            // /view/[map_num]#edit
+            if(document.location.href.split("?")[1]=="edit") {
+                new Sourcemap.Map.Editor(Sourcemap.view_instance);
+            }
         }
     });
 });

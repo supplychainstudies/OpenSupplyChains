@@ -264,10 +264,11 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
     var payload = null;
     if(typeof supplychain === "string") payload = supplychain;
     else payload = JSON.stringify({"supplychain": supplychain});
+    
     $.ajax({
         "url": 'services/supplychains/'+(scid ? scid : ''),
         "type": scid ? 'PUT' : 'POST', // put to update, post to create
-        "contentType": 'application/json', "data": payload,
+        "contentType": 'json', "data": payload,
         "dataType": "json", "success": $.proxy(function(data) {
     		window.onbeforeunload = null;
             var new_uri = null; // indicates 'created'
@@ -277,6 +278,7 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
             } else if(data && data.success) {
                 var scid = this.supplychain_id;
             }
+            
             if(this.success && ((typeof this.success) === "function")) {
                 this.success(this.supplychain, scid, new_uri);
             }

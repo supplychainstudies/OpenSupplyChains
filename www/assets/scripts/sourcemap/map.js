@@ -188,7 +188,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
-        "styleId": 41413,
+        "styleId": 44909,
         "minZoomLevel": 2, "maxZoomLevel": 12
     }));
     

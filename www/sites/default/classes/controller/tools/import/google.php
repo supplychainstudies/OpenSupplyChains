@@ -118,7 +118,14 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
                 )
             );
         } else $hops_csv = null;
-        $new_sc = Sourcemap_Import_Csv::csv2sc($csv, $hops_csv, array('headers' => true));
+        try{
+            $new_sc = Sourcemap_Import_Csv::csv2sc($csv, $hops_csv, array('headers' => true));
+        }
+        catch(Exception $e){
+            //die($e);
+            Message::instance()->set('Problem with import: '.$e->getMessage());
+            $this->request->redirect('tools/import/google/list');
+        }
         if(isset($_POST['replace-into']) && $_POST['replace-into']) {
             $exists = ORM::factory('supplychain')->where('id', '=', $_POST['replace-into'])->find();
             if($exists && $exists->user_id == Auth::instance()->get_user()->id) {

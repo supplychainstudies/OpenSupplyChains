@@ -20,14 +20,14 @@
 <input name="supplychain_name" type="text" value="A Sourcemap" />
 
 <label for="stops-wsid">Stops Worksheet:</label><br />
-<select name="stops-wsid">
+<select name="stops-wsid"  onblur="DisableOption(this.value);" >
 <option value="0"></option>
 <?php foreach($worksheets as $i => $sheet): ?>
 <option value="<?= HTML::chars($sheet['id']) ?>"><?= HTML::chars($sheet['title']) ?></option>
 <?php endforeach; ?>
 </select><br />
 <label for="hops-wsid">Hops Worksheet:</label><br />
-<select name="hops-wsid">
+<select name="hops-wsid" onblur="DisableOption(this.value);" >
 <option value="0"></option>
 <?php foreach($worksheets as $i => $sheet): ?>
 <option value="<?= HTML::chars($sheet['id']) ?>"><?= HTML::chars($sheet['title']) ?></option>

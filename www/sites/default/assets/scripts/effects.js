@@ -83,3 +83,15 @@ $(document).ready(function(){
 
 });
 
+
+function DisableOption(input)
+{
+
+    // Reest disable function
+    $("OPTION").removeAttr("disabled");
+
+    // Set selected value not available to others
+    if(input!="0")
+        $("OPTION[value="+input+"]").attr('disabled', "disabled");
+}
+

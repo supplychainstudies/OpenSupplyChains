@@ -87,16 +87,16 @@ $(document).ready(function(){
 function DisableOption(input)
 {
     // Reest disable function
-    $("OPTION").removeAttr("style");
+    $("OPTION").removeAttr("disabled");
 
     // Set selected value not available to others
     if(input!="0")
-        $("OPTION[value="+input+"]").attr('style', "display:none");
+        $("OPTION[value="+input+"]").attr('disabled', "disabled");
 }
 
 function beforeSubmit()
 {
-    $("OPTION").removeAttr("style");    
+    $("OPTION").removeAttr("disabled");    
     return true;
 }
 

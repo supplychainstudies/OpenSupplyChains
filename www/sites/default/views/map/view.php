@@ -23,7 +23,7 @@
 
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
-        <?php if($can_edit): ?>
+        <?php if($edit_mode): ?>
     		<h3>Map Options</h3>
             <hr/>
     		<div class="impact-box">

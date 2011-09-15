@@ -14,7 +14,7 @@
 
 <?php if(isset($worksheets, $spreadsheet_key) && $worksheets): ?>
 <div class="container">
-<form class="sourcemap-form" action="/tools/import/google/import" method="post">
+<form class="sourcemap-form" action="/tools/import/google/import" method="post" onsubmit="return beforeSubmit()">
 <input type="hidden" name="k" value="<?= HTML::chars($spreadsheet_key) ?>" />
 <label for="supplychain_name">Name:</label><br />
 <input name="supplychain_name" type="text" value="A Sourcemap" />

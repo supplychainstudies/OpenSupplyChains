@@ -351,9 +351,9 @@ class Sourcemap_Controller_Service extends Controller_REST {
         return sprintf('%s(%s);', $callback, $this->_serialize_json($data));
     }
 	
-	// TODO: Implement this.
-	protected function  _unserialize_geojson($str) {
-        return "";
+	protected function  _serialize_geojson($data) {
+		$supplychain = array_shift($data);
+		return Sourcemap_Geojson::make($supplychain);				
     }
 
 	protected function  _serialize_kml($data) {
@@ -361,15 +361,10 @@ class Sourcemap_Controller_Service extends Controller_REST {
 		return Sourcemap_Kml::make($supplychain);
     }
 
-	// TODO: Implement this.
-	protected function  _unserialize_kml($str) {
-        return "";
-    }
-
-	protected function  _unserialize_geojson($str) {
-        return "";
-    }
-
+	// TODO: Implement these. 
+	protected function  _unserialize_geojson($str) { return ""; }
+	protected function  _unserialize_kml($str) { return ""; }
+	
     protected function  _rest_error($code=400, $msg='Not found.') {
         $this->request->status = $code;
         $this->headers['Content-Type'] = $this->_format_content_type();

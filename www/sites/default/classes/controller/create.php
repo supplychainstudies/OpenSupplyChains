@@ -27,7 +27,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         }
         
         $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template'
+            'sourcemap-template'
         );
 
         $import_role = ORM::factory('role')->where('name', '=', 'import')->find();

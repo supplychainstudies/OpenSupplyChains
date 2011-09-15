@@ -496,16 +496,18 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
     }
     if(tileset == "cloudmade") {
     	$.extend(true, this.map.options, cloudmade); 
-    	$("#watermark").css("display","block"); 				
+    	//$("#watermark").css("display","block"); 				
     }
     else if(tileset == "satellite") { 
     	$.extend(true, this.map.options, satellite); 
-    	$("#watermark").css("display","none"); 
+    	//$("#watermark").css("display","none");
     } 
     else if(tileset == "terrain") { 
     	$.extend(true, this.map.options, terrain); 
-    	$("#watermark").css("display","none"); 
-    }	
+    	//$("#watermark").css("display","none"); 
+    }
+    $("#watermark").css("display","block");
+    $("#watermark").removeClass("cloudmade satellite terrain").addClass(tileset);
     this.map.setBaseLayer(tileset);
     
 }

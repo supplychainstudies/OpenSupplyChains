@@ -264,15 +264,15 @@ class Sourcemap_Controller_Service extends Controller_REST {
         if(!$formats) $formats = $this->_serialization_formats();
         $format = $format === null ? $this->_format : $format;
         if(in_array($format, $formats)) {
-            /*try {*/
+            try {
                 $serial = call_user_func(
                     array($this, '_serialize_'.$format), $data
                 );
-            /*} catch(Exception $e) {
+            } catch(Exception $e) {
                 throw new Sourcemap_Exception_REST(
                     sprintf('Serialization error for format "%s".', $format)
                 );
-            }*/
+            }
         } else {
             throw new Sourcemap_Exception_REST(
                 sprintf('Bad format "%s". (%s)', $format, join(',', $formats))
@@ -356,9 +356,23 @@ class Sourcemap_Controller_Service extends Controller_REST {
 		return Sourcemap_Geojson::make($supplychain);				
     }
 
+	// TODO: Implement this.
+	protected function  _unserialize_geojson($str) {
+        return "";
+    }
+
 	protected function  _serialize_kml($data) {
 		$supplychain = array_shift($data);
 		return Sourcemap_Kml::make($supplychain);
+    }
+
+	// TODO: Implement this.
+	protected function  _unserialize_kml($str) {
+        return "";
+    }
+
+	protected function  _unserialize_geojson($str) {
+        return "";
     }
 
     protected function  _rest_error($code=400, $msg='Not found.') {

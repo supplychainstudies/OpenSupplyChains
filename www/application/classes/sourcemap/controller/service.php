@@ -37,9 +37,9 @@ class Sourcemap_Controller_Service extends Controller_REST {
     public $_jsonp_callback = 'console.log';
     public $_content_types = array(
         'json' => 'application/json',
-		'geojson' => 'application/json',
         'jsonp' => 'text/javascript',
         'php' => 'application/vnd.php.serialized',
+		'geojson' => 'application/geo+json',
 		'kml' => 'application/vnd.google-earth.kml+xml',
         'form' => array(
             'application/x-www-form-urlencoded',
@@ -355,15 +355,11 @@ class Sourcemap_Controller_Service extends Controller_REST {
 		$supplychain = array_shift($data);
 		return Sourcemap_Geojson::make($supplychain);				
     }
-
+	
 	protected function  _serialize_kml($data) {
 		$supplychain = array_shift($data);
 		return Sourcemap_Kml::make($supplychain);
-    }
-
-	// TODO: Implement these. 
-	protected function  _unserialize_geojson($str) { return ""; }
-	protected function  _unserialize_kml($str) { return ""; }
+    }	
 	
     protected function  _rest_error($code=400, $msg='Not found.') {
         $this->request->status = $code;

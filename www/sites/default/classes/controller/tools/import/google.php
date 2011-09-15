@@ -70,7 +70,7 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             );
         } else {
             Message::instance()->set('Invalid OAuth token or identifier. Try again.');
-            $this->redirect('/tools/import/google/');
+            $this->request->redirect('/tools/import/google/');
         }
         $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
         $acc_token = $oauth->get_acc_token($auth_tok);
@@ -100,6 +100,10 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
         // TODO: validation
         if(!isset($_POST['k'], $_POST['stops-wsid'])) {
             Message::instance()->set('Spreadsheet key and worksheet id required.');
+            $this->request->redirect('/tools/import/google/list');
+        }
+        if(!$_POST['stops-wsid']) {
+            Message::instance()->set('Worksheet for stops should not be empty.');
             $this->request->redirect('/tools/import/google/list');
         }
         $csv = Sourcemap_Csv::arr2csv(

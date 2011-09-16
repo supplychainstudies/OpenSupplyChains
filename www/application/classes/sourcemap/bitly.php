@@ -20,7 +20,10 @@ class Sourcemap_Bitly {
 
         $base = "http://api.bitly.com/v3/shorten?";
 
-        $cache_key = 'bitly-' + $url;
+
+        $path_name = parse_url($url,PHP_URL_PATH);
+        $cache_key = 'bitly-'.$path_name;
+        
         $ttl = 60 * 60 * 24;
 
         if($cached = Cache::instance()->get($cache_key)) {
@@ -28,6 +31,7 @@ class Sourcemap_Bitly {
             return $cached;
         
         } else {
+
 
             $request = $base . http_build_query($params); 
 

@@ -14,20 +14,20 @@
 
 <?php if(isset($worksheets, $spreadsheet_key) && $worksheets): ?>
 <div class="container">
-<form class="sourcemap-form" action="/tools/import/google/import" method="post">
+<form class="sourcemap-form" action="/tools/import/google/import" method="post" onsubmit="return beforeSubmit()">
 <input type="hidden" name="k" value="<?= HTML::chars($spreadsheet_key) ?>" />
 <label for="supplychain_name">Name:</label><br />
 <input name="supplychain_name" type="text" value="A Sourcemap" />
 
 <label for="stops-wsid">Stops Worksheet:</label><br />
-<select name="stops-wsid">
+<select name="stops-wsid"  onblur="DisableOption(this.value);" >
 <option value="0"></option>
 <?php foreach($worksheets as $i => $sheet): ?>
 <option value="<?= HTML::chars($sheet['id']) ?>"><?= HTML::chars($sheet['title']) ?></option>
 <?php endforeach; ?>
 </select><br />
 <label for="hops-wsid">Hops Worksheet:</label><br />
-<select name="hops-wsid">
+<select name="hops-wsid" onblur="DisableOption(this.value);" >
 <option value="0"></option>
 <?php foreach($worksheets as $i => $sheet): ?>
 <option value="<?= HTML::chars($sheet['id']) ?>"><?= HTML::chars($sheet['title']) ?></option>

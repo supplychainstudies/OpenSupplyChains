@@ -401,11 +401,27 @@
     display:block;
     width: 75px;
     height: 25px;
-    background: url("../images/watermark.png") center center no-repeat;
     text-align:center;
     position:absolute;
     bottom:1em; left:10px;
     z-index:1010;
+    &.cloudmade{
+        background: url("../images/watermark.png") center center no-repeat;
+    }
+
+    // Postioning with Google watermark
+    &.satellite{
+        background: url("../images/watermark-white.png") center center no-repeat;
+        left:68px;
+        bottom:0.45em;
+    }    
+    &.terrain{
+        background: url("../images/watermark.png") center center no-repeat;
+        left:68px;        
+        bottom:0.45em;
+    }
+        
+
 }
 
 /* Editor   -------------------------------------------------------------- */
@@ -697,6 +713,26 @@
             cursor:pointer;
         }
     }    
+}
+
+#color-picker-holder {
+    position:absolute;
+    overflow:hidden;
+    white-space:nowrap;
+    color:white;
+    width:0px;
+    background-color:gray;
+    border: 1px solid rgb(162,162,162);
+    background: rgba(255,255,255,0.9);
+    
+    border-radius: 5px 0 0 12px;
+    height:275px;
+    right:400px;
+
+}
+#color-selector
+{
+    padding-left:10px;
 }
 
 /* Openlayers  ------------------------------------------------- */

@@ -26,6 +26,17 @@
     	<li><a href="info/privacy">Privacy Policy</a></li>
     	<li><a href="info/terms">Terms of Service</a></li>
     </ul>   
-    <p>&copy; 2011 Sourcemap Inc.<p>         
+    <p>&copy; 2011 Sourcemap Inc. 
+    <?
+        $subdomain = str_replace(".sourcemap.com", "", $_SERVER["HTTP_HOST"]);
+        if( $subdomain != "www" ) {
+            try{
+            $commit_hash = exec('git log -1 --pretty=format:%h --abbrev=10');
+            $commit_date = exec('git log -1 --pretty=format:%cd');
+            $codebase_url = "https://sourcemap.codebasehq.com/projects/sourcemap/repositories/sourcemap/commit/";
+    ?>
+    <a href="<?=$codebase_url.$commit_hash?>"> <?=$commit_date?> </a>
+    <?}catch(Exception $e){}}?>
+    </p>
 </div>
 <div class="clear"></div>

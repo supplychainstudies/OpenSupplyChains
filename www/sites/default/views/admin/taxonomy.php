@@ -17,7 +17,7 @@
 <form name="add-taxonomy" method="post" action="admin/taxonomy/add">
 <label for="parent">Parent:</label>
 <select name="parent">
-<?= View::factory('partial/admin/taxonomy/options', array('tree' => $tree, 'indent' => 0)) ?>
+<?php View::factory('partial/admin/taxonomy/options', array('tree' => $tree, 'indent' => 0)) ?>
 </select><br />
 <label for="title">Title:</label><br />
 <input type="text" name="title" /><br />
@@ -29,4 +29,4 @@
 </form>
 </fieldset>
 </div>
-<?= View::factory('partial/admin/taxonomy/tree', array('tree' => $tree)) ?>
+<?php View::factory('partial/admin/taxonomy/tree', array('tree' => $tree)) ?>

@@ -12,12 +12,12 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<td><?= $item->id ?></td>
-<td><?= $item->message ?></td>
-<td><?= date('F d, Y @ H:ia', $item->timestamp) ?></td>
+<td><?php $item->id ?></td>
+<td><?php $item->message ?></td>
+<td><?php date('F d, Y @ H:ia', $item->timestamp) ?></td>
 <td>
 <form name="delete-announcement-entry" method="post" action="admin/announcements/delete">
-    <input name="user_event_id" type="hidden" value="<?= $item->id ?>" />
+    <input name="user_event_id" type="hidden" value="<?php $item->id ?>" />
     <input type ="submit" value="delete" />
 </form>
 </td>

@@ -12,8 +12,8 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<td><?= $item->id ?></td>
-<td><a href="admin/groups/<?= $item->id ?>"><?= Html::chars($item->name) ?></a></td>
-<td><?= Html::chars($item->owner) ?></td>
-<form name="delete-group" method="post" action="admin/groups/<?= $item->id?>/delete_group">
+<td><?php $item->id ?></td>
+<td><a href="admin/groups/<?php $item->id ?>"><?php Html::chars($item->name) ?></a></td>
+<td><?php Html::chars($item->owner) ?></td>
+<form name="delete-group" method="post" action="admin/groups/<?php $item->id?>/delete_group">
 <td><input type ="submit" value="delete" /></form></td>

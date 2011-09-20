@@ -1,4 +1,4 @@
-<ul class="map-nav<?= isset($scalias) ? " $scalias" : '' ?>">
+<ul class="map-nav<?php isset($scalias) ? " $scalias" : '' ?>">
     <li class="yogurt"><a href="yogurt">Home</a></li>
     <li class="dairy"><a href="milk">Milk</a>
         <!--ul>
@@ -17,5 +17,5 @@
 </ul>
 <div id="map">
 <iframe height="500" width="100%" scrolling="no" frameborder="0" 
-    src="http://alpha.sourcemap.org/map/embed/<?= $scid ?>?banner=no"></iframe>
+    src="http://alpha.sourcemap.org/map/embed/<?php $scid ?>?banner=no"></iframe>
 </div>

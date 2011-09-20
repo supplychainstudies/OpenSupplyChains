@@ -82,7 +82,7 @@
     <div id="c9904" class="csc-default">
       <div class="user-farmer-pi1">
           <div id="map">
-            <?= $content ?>
+            <?php $content ?>
           </div>
       </div>
     </div><!--TYPO3SEARCH_end-->

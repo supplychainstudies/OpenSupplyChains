@@ -24,12 +24,12 @@
             }
         ?>
         <?php if($partial): ?>
-            <?= $partial ?>
+            <?php $partial ?>
         <?php else: ?>
         <thead>
             <tr>
                 <?php foreach($headings as $hi => $h): ?>
-                <th><?= Html::chars($h) ?></th>
+                <th><?php Html::chars($h) ?></th>
                 <?php endforeach; ?>
             </tr>
         </thead>
@@ -42,13 +42,13 @@
             }
         ?>
         <?php $icount = 0; foreach($list as $lk => $item): ?>
-            <tr class="<?= $icount++ % 2 ? 'odd' : 'even' ?>">
+            <tr class="<?php $icount++ % 2 ? 'odd' : 'even' ?>">
                 <?php if($partial): ?>
                     <?php $partial->item = is_object($item) ? $item : (object)$item; ?>
-                    <?= $partial ?>
+                    <?php $partial ?>
                 <?php else: ?>
                     <?php foreach($item as $ik => $iv): ?>
-                        <td><?= Html::chars($iv); ?></td>
+                        <td><?php Html::chars($iv); ?></td>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </tr>

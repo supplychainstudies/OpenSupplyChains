@@ -12,8 +12,8 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<li class="comment" id="comment-<?= $comment->id ?>">
-<img class="user-avatar" src="<?= $comment->avatar ?>" />
-Posted by <a class="user-link" href="user/<?= $comment->username ?>"><?= $comment->username ?></a> on <?= date('F d, Y', $comment->timestamp) ?> @ <?= date('H:i a', $comment->timestamp) ?>.
-<p><?= HTML::chars($comment->body) ?></p>
+<li class="comment" id="comment-<?php $comment->id ?>">
+<img class="user-avatar" src="<?php $comment->avatar ?>" />
+Posted by <a class="user-link" href="user/<?php $comment->username ?>"><?php $comment->username ?></a> on <?php date('F d, Y', $comment->timestamp) ?> @ <?php date('H:i a', $comment->timestamp) ?>.
+<p><?php HTML::chars($comment->body) ?></p>
 </li>

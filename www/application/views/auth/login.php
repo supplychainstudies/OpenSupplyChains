@@ -12,4 +12,4 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 ?>
 
-<?= View::factory('partial/auth/login-form') ?>
+<?php View::factory('partial/auth/login-form') ?>

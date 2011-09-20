@@ -19,8 +19,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <base href="<?= URL::base(true, true) ?>" />
-    <title>Admin :: <?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
+    <base href="<?php URL::base(true, true) ?>" />
+    <title>Admin :: <?php HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
     <meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
     <meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
@@ -34,29 +34,29 @@
     <link rel="apple-touch-icon" href="assets/images/favicon-large.png">
     <link rel="image_src" href="assets/images/favicon-large.png">
 
-    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
+    <?php isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>
 <body class="main admin">
-    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <?php View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <div class="container">
         <div class="messages">
-            <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
+            <p><?php Message::instance()->get() ? Message::instance()->render() : false ?></p>
         </div>
     </div>
     <div id="admin-head" class="container">
-        <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
+        <p><?php Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
         </div>
     </div>
     <div id="wrapper">
 
-        <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
+        <?php isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
         <div class="push"></div>
     </div><!-- #wrapper -->
     <div id="footer">
-         <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+         <?php View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     
-    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
+    <?php isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
       
     <!--[if lt IE 7 ]>
         <script src="js/libs/dd_belatedpng.js"></script>

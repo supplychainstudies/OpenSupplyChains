@@ -12,9 +12,9 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-Dear <?=HTML::chars($email_vars['username']); ?>,
+Dear <?phpHTML::chars($email_vars['username']); ?>,
 
-   Here is your temporary password: __<?=$email_vars['password']?>__.
+   Here is your temporary password: __<?php$email_vars['password']?>__.
    Please remember to change your password once you sign in.
 
 \-Sourcemap Team

@@ -20,7 +20,7 @@
 <input type="submit" value="Feature" />
 </form><br />
  
-<?= View::factory('partial/admin/list', array('list' => $list, 'list_type' => 'featured')) ?>
+<?php View::factory('partial/admin/list', array('list' => $list, 'list_type' => 'featured')) ?>
 
 <?php echo $page_links; ?>
     

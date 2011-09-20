@@ -12,4 +12,4 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<p><?= Sourcemap_Markdown::markdown($message) ?></p>
+<p><?php Sourcemap_Markdown::markdown($message) ?></p>

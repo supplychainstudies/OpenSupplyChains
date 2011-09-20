@@ -13,23 +13,23 @@
 ?>
 
 <div id="edit-map" class="container">
-    <h1><?= $supplychain->attributes->title ?></h1>
+    <h1><?php $supplychain->attributes->title ?></h1>
     <div class="edit-map-form">
-        <?= $form ?>
+        <?php $form ?>
     </div>
 
     <div class="edit-map-details">
         <div class="edit-map-thumbnail">
             <div class="preview-map-item medium">
                 <div class="preview-badge">
-                <a href="view/<?php print $supplychain->id; ?>"><img class="preview-map medium" src="static/<?= $supplychain->id ?>.m.png" alt="" /></a>
+                <a href="view/<?php print $supplychain->id; ?>"><img class="preview-map medium" src="static/<?php $supplychain->id ?>.m.png" alt="" /></a>
                 </div>
                 <h3 class="preview-title">
-                    <a href="view/<?= $supplychain->id; ?>">
-                        <?= HTML::chars($supplychain->attributes->title) ?>                    
+                    <a href="view/<?php $supplychain->id; ?>">
+                        <?php HTML::chars($supplychain->attributes->title) ?>                    
                     </a></h3>
-                <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>"><?= HTML::chars($supplychain->owner->name) ?></a>,
-                <?= date("F j, Y", $supplychain->created) ?></h4>
+                <h4 class="preview-author"><a href="user/<?php $supplychain->owner->id; ?>"><?php HTML::chars($supplychain->owner->name) ?></a>,
+                <?php date("F j, Y", $supplychain->created) ?></h4>
             </div>
         </div>
     </div>

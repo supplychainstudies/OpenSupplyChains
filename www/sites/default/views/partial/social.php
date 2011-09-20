@@ -15,7 +15,7 @@
 <div class="container social">
     <!-- Facebook like -->
     <div class="social-icon">
-        <div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="<?= URL::site(NULL, TRUE) ?>view/<?= $supplychain_id ?>" send="false" layout="button_count" width="120" show_faces="true" font=""></fb:like>
+        <div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="<?php URL::site(NULL, TRUE) ?>view/<?php $supplychain_id ?>" send="false" layout="button_count" width="120" show_faces="true" font=""></fb:like>
     </div>
     
     <!-- Google +1 -->

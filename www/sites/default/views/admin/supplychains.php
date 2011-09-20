@@ -12,4 +12,4 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?= View::factory('partial/admin/list', array('list' => $list, 'list_type' => 'supplychains'));
+<?php View::factory('partial/admin/list', array('list' => $list, 'list_type' => 'supplychains'));

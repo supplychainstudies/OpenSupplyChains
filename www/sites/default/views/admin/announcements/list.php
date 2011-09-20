@@ -32,5 +32,5 @@
 </fieldset>
 </form>
   
-<?= View::factory('partial/admin/list', array('list' => $announcements, 'list_type' => 'announcements')) ?>
+<?php View::factory('partial/admin/list', array('list' => $announcements, 'list_type' => 'announcements')) ?>
 <?php echo $page_links; ?>

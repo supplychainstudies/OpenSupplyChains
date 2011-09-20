@@ -18,11 +18,11 @@
     		<br/>
             <div id="user-profile">
                 <div class="user-gravatar">
-                    <img src="<?= $user->avatar ?>" />
+                    <img src="<?php $user->avatar ?>" />
                 </div>
                 <ul class="user-details">
-                    <li><h2 class="user-name"><?= ucwords(HTML::chars($user->username)) ?></h2><li>
-                    <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li>
+                    <li><h2 class="user-name"><?php ucwords(HTML::chars($user->username)) ?></h2><li>
+                    <li>Last Signed In: <span><?php date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
             </div>
             <div class="clear"></div>
@@ -37,17 +37,17 @@
 <div class="user-profile-view">
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?><br/>
-        <h2><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
+        <h2><?php ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
         <div class="container pager">
-            <?= $pager->render() ?>
+            <?php $pager->render() ?>
         </div>
         <?php foreach($supplychains as $i => $sc): ?>
             <div class="user-map-list">
-                <?= View::factory('partial/user/map', array('supplychain' => $sc)) ?>
+                <?php View::factory('partial/user/map', array('supplychain' => $sc)) ?>
             </div>
         <?php endforeach; ?>
         <div class="container pager">
-            <?= $pager->render() ?>
+            <?php $pager->render() ?>
         </div>
     <?php else: ?>
         <h2 class="bad-news">No maps yet!</h2>

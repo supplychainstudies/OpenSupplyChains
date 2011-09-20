@@ -18,8 +18,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <base href="<?= URL::base(true, true) ?>" />
-    <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
+    <base href="<?php URL::base(true, true) ?>" />
+    <title><?php HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
     <meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
     <meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
@@ -35,14 +35,14 @@
     <link rel="image_src" href="assets/images/favicon-large.png">
     <link rel="alternate" type="application/rss+xml" title="Sourcemap Blog Feed" href="http://blog.sourcemap.com/feed/" />
     
-    <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>    
+    <?php isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>    
 </head>
 
 <body id="embedded-supplychain">
-<?= $content ?>
+<?php $content ?>
 
 
-    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
+    <?php isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
 
     <!--[if lt IE 7 ]>
     <script src="js/libs/dd_belatedpng.js"></script>
@@ -50,11 +50,11 @@
     <![endif]-->
   
     <script>
-        Sourcemap.embed_supplychain_id = <?= isset($supplychain_id) ? $supplychain_id : '"null"' ?>;
-        Sourcemap.embed_params = <?= isset($embed_params) ? json_encode($embed_params) : '{}' ?>;
+        Sourcemap.embed_supplychain_id = <?php isset($supplychain_id) ? $supplychain_id : '"null"' ?>;
+        Sourcemap.embed_params = <?php isset($embed_params) ? json_encode($embed_params) : '{}' ?>;
     </script>
 	<? if(isset($embed_params) && $embed_params['served_as'] == "earth") { ?>
-		<script type="text/javascript" src="http://www.google.com/jsapi?autoload=%7B%22modules%22%3A%5B%7B%22name%22%3A%22earth%22%2C%22version%22%3A%221%22%7D%5D%7D&key=<?= Kohana::config('apis')->earth_api_key; ?>"></script>
+		<script type="text/javascript" src="http://www.google.com/jsapi?autoload=%7B%22modules%22%3A%5B%7B%22name%22%3A%22earth%22%2C%22version%22%3A%221%22%7D%5D%7D&key=<?php Kohana::config('apis')->earth_api_key; ?>"></script>
 	<? } ?>
 </body>
 </html>

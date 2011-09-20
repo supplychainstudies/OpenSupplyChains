@@ -17,22 +17,22 @@
     <div class="dashboard-top">
         <div class="dashboard-top-left">
             <div>
-                <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
+                <h2 class="user-name"><?php HTML::chars($user->username) ?></h2>       
             </div>
             <hr />
             <div id="user-profile">
                 <div class="user-gravatar">
-                    <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
+                    <img src="<?php Gravatar::avatar($user->email, 128) ?>" />
                 </div>
                 <ul class="user-details">
-                    <li>Username: <span><?= HTML::chars($user->username) ?></span><li>
-                    <li>Email: <span><?= HTML::chars($user->email) ?></span><li>    
-                    <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li>
+                    <li>Username: <span><?php HTML::chars($user->username) ?></span><li>
+                    <li>Email: <span><?php HTML::chars($user->email) ?></span><li>    
+                    <li>Last Signed In: <span><?php date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
             </div>
             <div class="clear"></div>
             <div>
-                <div class="upload-photo button"><a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a></div> <div class="reset-password button"><a href="auth/reset">Change Password</a></div>
+                <div class="upload-photo button"><a href="http://www.gravatar.com/<?php Gravatar::hash($user->email) ?>">Change photo</a></div> <div class="reset-password button"><a href="auth/reset">Change Password</a></div>
             </div>
         </div>
         <div class="dashboard-top-right">
@@ -42,7 +42,7 @@
             <hr />
             <div id="user-stream">
                 <?php if(isset($user_event_stream)): ?>
-                <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
+                <?php View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
                 <?php endif; ?>
             </div>
             <div class="clear"></div>
@@ -57,7 +57,7 @@
         <h2>Your Sourcemaps</h2>
         <?php foreach($supplychains as $i => $sc): ?>
             <div class="user-map-list">
-                <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>
+                <?php View::factory('partial/home/map', array('supplychain' => $sc)) ?>
             </div>
         <?php endforeach; ?>
     <?php else: ?>

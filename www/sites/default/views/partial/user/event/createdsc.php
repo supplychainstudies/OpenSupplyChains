@@ -12,5 +12,5 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<a href="user/<?= $user_id ?>"><?= ucwords(HTML::chars($username)) ?></a> made a new 
-<a href="view/<?= $supplychain_id ?>">sourcemap</a><?= isset($supplychain_title) ? ' called <a href="view/'.$supplychain_id.'">'.Text::limit_chars(HTML::chars($supplychain_title),30).'</a>' : ''?>.</a>
+<a href="user/<?php $user_id ?>"><?php ucwords(HTML::chars($username)) ?></a> made a new 
+<a href="view/<?php $supplychain_id ?>">sourcemap</a><?php isset($supplychain_title) ? ' called <a href="view/'.$supplychain_id.'">'.Text::limit_chars(HTML::chars($supplychain_title),30).'</a>' : ''?>.</a>

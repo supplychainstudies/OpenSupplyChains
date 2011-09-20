@@ -27,7 +27,7 @@
     <select name="replace_into">
     <option value="0">Create a new map</option>
     <?php foreach($user_supplychains as $sc): ?>
-    <option value="<?= $sc->id ?>"><?= isset($sc->title) ? HTML::chars($sc->title) : 'Replace map ('.$sc->id.') created on '.date("F j, Y, g:i a", $sc->created) ?></option>
+    <option value="<?php $sc->id ?>"><?php isset($sc->title) ? HTML::chars($sc->title) : 'Replace map ('.$sc->id.') created on '.date("F j, Y, g:i a", $sc->created) ?></option>
     <?php endforeach; ?>
     </select><br />
     <?php endif; ?>

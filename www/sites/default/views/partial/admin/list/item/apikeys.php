@@ -12,9 +12,9 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<td><?= $item->apikey ?></td>
-<td><?= $item->apisecret ?></td>
-<td><?= date('r', $item->created) ?></td>
-<td><?= $item->id ?></td>
-<td><?= $item->requests ?></td>
-<td><a href="admin/users/<?= $item->user_id ?>"><?= Html::chars($item->owner->username) ?></a></td>
+<td><?php $item->apikey ?></td>
+<td><?php $item->apisecret ?></td>
+<td><?php date('r', $item->created) ?></td>
+<td><?php $item->id ?></td>
+<td><?php $item->requests ?></td>
+<td><a href="admin/users/<?php $item->user_id ?>"><?php Html::chars($item->owner->username) ?></a></td>

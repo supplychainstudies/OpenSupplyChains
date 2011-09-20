@@ -22,20 +22,20 @@
 </form><br />
 
 
-<h3><?= isset($attributes['title']) ? HTML::chars($attributes['title']) : 'Untitled Sourcemap' ?></h3>
- <a target="map_view" href="view/<?= $id ?>"><img class="large" src="static/<?= $id ?>.l.png" /></a><br />
+<h3><?php isset($attributes['title']) ? HTML::chars($attributes['title']) : 'Untitled Sourcemap' ?></h3>
+ <a target="map_view" href="view/<?php $id ?>"><img class="large" src="static/<?php $id ?>.l.png" /></a><br />
 <?php if($flags & Sourcemap::FEATURED): ?><p class="featured good-news">** This map is a <a href="admin/featured">featured</a> map. **</p><?php endif; ?>
 <p><?php if($owner): ?>
-This map belongs to <a href="admin/users/<?= $owner_id ?>"><?= HTML::chars($owner)?></a>.
+This map belongs to <a href="admin/users/<?php $owner_id ?>"><?php HTML::chars($owner)?></a>.
 <? else: ?>
 This map belongs to <span class="bad-news">*nobody*</span>.
-<?php endif;?> It has <?= $stop_count ?> stop<?= $stop_count == 1 ? '' : 's' ?>
- and <?= $hop_count ?> hop<?= $hop_count == 1 ? '' : 's' ?>.
+<?php endif;?> It has <?php $stop_count ?> stop<?php $stop_count == 1 ? '' : 's' ?>
+ and <?php $hop_count ?> hop<?php $hop_count == 1 ? '' : 's' ?>.
 
- <form name="chown" method="post" action="admin/supplychains/<?= $id ?>/chown">
+ <form name="chown" method="post" action="admin/supplychains/<?php $id ?>/chown">
 <label for="chown">Change owner?</label><input type="checkbox" name="chown" /><br />
 <label for="new_owner">New Owner:</label><br />
-<input name="new_owner" type="text" value="<?= HTML::chars($owner) ?>" /><br />
+<input name="new_owner" type="text" value="<?php HTML::chars($owner) ?>" /><br />
 <input type="submit" value="Change" />
  </form>
 
@@ -43,35 +43,35 @@ This map belongs to <span class="bad-news">*nobody*</span>.
 <?php if($attributes): ?>
     <dl class="attr-list">
     <?php foreach($attributes as $k => $v): ?>
-        <dt><?= HTML::chars($k) ?></dt>
+        <dt><?php HTML::chars($k) ?></dt>
         <dd>
-            <?= substr(HTML::chars($v), 0, 32) ?>
+            <?php substr(HTML::chars($v), 0, 32) ?>
             <?php if(strlen(HTML::chars($v)) > 32): ?>...<?php endif; ?>
         </dd>
      <?php endforeach;?>
     </dl>
 <?php endif;?>
 
-<form name="permissions" method="post" action="admin/supplychains/<?=$id?>/change_perms">
+<form name="permissions" method="post" action="admin/supplychains/<?php$id?>/change_perms">
  <strong>Reset Permissions:</strong> 
 <select name="perms">
      <?php foreach($permissions_array as $i => $perm):?>
-     <option value="<?=$perm ?>" <?php if($perm == $permissions):?>selected<?php endif; ?>><?= HTML::chars($perm); ?>
+     <option value="<?php$perm ?>" <?php if($perm == $permissions):?>selected<?php endif; ?>><?php HTML::chars($perm); ?>
      </option>
      <?php endforeach;?>
 </select>
 <input type="submit" value="Save" /></form><br />
 
 <?php if(!empty($owner_group)): ?>
- <strong>Owned by group:</strong> <?=HTML::chars($owner_group)?>
+ <strong>Owned by group:</strong> <?phpHTML::chars($owner_group)?>
 <?php endif;?>
 
 
-<form name="group-permissions" method="post" action="admin/supplychains/<?=$id?>/change_usergroup_perms">
+<form name="group-permissions" method="post" action="admin/supplychains/<?php$id?>/change_usergroup_perms">
  <strong>Group Permissions:</strong> 
 <select name="groupperm">
       <?php foreach($group_permissions_array as $i => $group_perm): ?>
-      <option value="<?=$group_perm ?>" <?php if($group_perm == $usergroup_perms):?>selected<?php endif; ?>><?= HTML::chars($group_perm); ?>
+      <option value="<?php$group_perm ?>" <?php if($group_perm == $usergroup_perms):?>selected<?php endif; ?>><?php HTML::chars($group_perm); ?>
       </option>
      <?php endforeach;?>
 </select>
@@ -86,9 +86,9 @@ This map belongs to <span class="bad-news">*nobody*</span>.
 </tr>
 <?php foreach($alias as $alias_name): ?>
 <tr>
-<form name="delete-alias" method="post" action="admin/supplychains/<?= $alias_name['supplychain_id']?>/delete_alias">
-<td><?= Html::chars($alias_name['site'])?><input type="hidden" name="site" value="<?=$alias_name['site'];?>"></td>
-<td><?= Html::chars($alias_name['alias'])?><input type="hidden" name="alias" value="<?=$alias_name['alias'];?>"></td>
+<form name="delete-alias" method="post" action="admin/supplychains/<?php $alias_name['supplychain_id']?>/delete_alias">
+<td><?php Html::chars($alias_name['site'])?><input type="hidden" name="site" value="<?php$alias_name['site'];?>"></td>
+<td><?php Html::chars($alias_name['alias'])?><input type="hidden" name="alias" value="<?php$alias_name['alias'];?>"></td>
 <td><input type ="submit" value="delete" /></form></td>
 </tr>
 <?php endforeach;?>

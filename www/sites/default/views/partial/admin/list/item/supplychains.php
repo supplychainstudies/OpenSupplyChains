@@ -12,11 +12,11 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<td><a href="admin/supplychains/<?= $item->id ?>"><?= $item->id ?></a></td>
-<td><?= HTML::chars($item->created) ?></td>
-<td><?= HTML::chars($item->owner) ?></td>
-<td><?= HTML::chars(isset($item->attributes['title']) ? $item->attributes['title'] : '') ?></td>
-<td><a href="static/<?= $item->id ?>.l.png" target="map_preview"><img class="medium" src="static/<?= $item->id ?>.m.png" /></a></td>
+<td><a href="admin/supplychains/<?php $item->id ?>"><?php $item->id ?></a></td>
+<td><?php HTML::chars($item->created) ?></td>
+<td><?php HTML::chars($item->owner) ?></td>
+<td><?php HTML::chars(isset($item->attributes['title']) ? $item->attributes['title'] : '') ?></td>
+<td><a href="static/<?php $item->id ?>.l.png" target="map_preview"><img class="medium" src="static/<?php $item->id ?>.m.png" /></a></td>
 
-<form name="refresh-supplychain" method="post" action="admin/supplychains/<?= $item->id?>/refresh_supplychain">
+<form name="refresh-supplychain" method="post" action="admin/supplychains/<?php $item->id?>/refresh_supplychain">
 <td><input type ="submit" value="refresh" /></form></td>

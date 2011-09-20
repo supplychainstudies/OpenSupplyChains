@@ -12,10 +12,10 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<td><?= $item->id ?></td>
-<td><?= Html::chars($item->site) ?></a></td>
-<td><?= Html::chars($item->alias) ?></td>
-<td><a href="admin/supplychains/<?= $item->supplychain_id ?>"><?= $item->supplychain_id?></td>
-<form name="delete-alias" method="post" action="admin/aliases/<?= $item->id?>/delete_supplychain_alias">
+<td><?php $item->id ?></td>
+<td><?php Html::chars($item->site) ?></a></td>
+<td><?php Html::chars($item->alias) ?></td>
+<td><a href="admin/supplychains/<?php $item->supplychain_id ?>"><?php $item->supplychain_id?></td>
+<form name="delete-alias" method="post" action="admin/aliases/<?php $item->id?>/delete_supplychain_alias">
 <td><input type ="submit" value="delete" /></form></td>
 

@@ -23,7 +23,7 @@
     </div>
     <div class="box-section">
         <div class="sourcemap-form">
-            <?php $login_form ?>
+            <?= $login_form ?>
         </div>
     </div>
     <div class="clear"></div>

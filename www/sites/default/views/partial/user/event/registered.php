@@ -12,4 +12,4 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<a href="user/<?php $user_id ?>"><?php ucwords(HTML::chars($username)) ?></a> registered at Sourcemap.
+<a href="user/<?= $user_id ?>"><?= ucwords(HTML::chars($username)) ?></a> registered at Sourcemap.

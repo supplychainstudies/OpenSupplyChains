@@ -20,7 +20,7 @@
 </form>
 </fieldset>
 
-<?php View::factory('partial/admin/list', array('list' => $users, 'list_type' => 'users')) ?>
+<?= View::factory('partial/admin/list', array('list' => $users, 'list_type' => 'users')) ?>
 <?php echo $page_links; ?>
 
     

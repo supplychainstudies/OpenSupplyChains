@@ -21,7 +21,7 @@
 </form>
 </fieldset>
 
-<?php View::factory('partial/admin/list', array('list' => $roles, 'list_type' => 'roles')) ?>
+<?= View::factory('partial/admin/list', array('list' => $roles, 'list_type' => 'roles')) ?>
 <?php echo $page_links; ?>
 
     

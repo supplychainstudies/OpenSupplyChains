@@ -14,7 +14,7 @@
 
 <div class="clear"></div>
 <div id="featured-maps">
-    <?php View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
+    <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
 </div>
 
 <div class="container">
@@ -23,7 +23,7 @@
     		<h2>Popular Sourcemaps</h2>  
     		<hr />
             <div class="preview-map-section">
-                <?php View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
             </div>
             <div class="clear"></div>
 
@@ -33,7 +33,7 @@
     		<h2>Recent Sourcemaps</h2> 
             <hr />
             <div class="preview-map-section">
-                <?php View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
             </div>
             <div class="clear"></div>
         </div>
@@ -44,7 +44,7 @@
 
         <h2 class="section-title">Featured Sourcemaps</h2>
         <hr />
-        <?php View::factory('partial/thumbs/featured', array('supplychains' => $morefeatured)) ?>
+        <?= View::factory('partial/thumbs/featured', array('supplychains' => $morefeatured)) ?>
         
         <?php //News Section ?>
         <?php if(isset($news) && $news && isset($news->posts)): ?>
@@ -53,10 +53,10 @@
                 <ul>
                     <?php foreach($news->posts as $i => $news_item): ?>
                     <li class="news-item">
-                        <h5 class="title"><a href="http://blog.sourcemap.com"><?php HTML::chars($news_item->title_plain) ?></a></h5>
+                        <h5 class="title"><a href="http://blog.sourcemap.com"><?= HTML::chars($news_item->title_plain) ?></a></h5>
                         <p>
-                            <?php substr(HTML::chars($news_item->excerpt), 0, 130) ?>&hellip; 
-                            <a class="readmore" href="<?php $news_item->url ?>">More &raquo;</a>
+                            <?= substr(HTML::chars($news_item->excerpt), 0, 130) ?>&hellip; 
+                            <a class="readmore" href="<?= $news_item->url ?>">More &raquo;</a>
                         </p>
                     </li>
                     <?php endforeach; ?>

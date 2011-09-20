@@ -35,7 +35,7 @@
             $commit_date = exec('git log -1 --pretty=format:%cd');
             $codebase_url = "https://sourcemap.codebasehq.com/projects/sourcemap/repositories/sourcemap/commit/";
     ?>
-    <a href="<?php$codebase_url.$commit_hash?>"> <?php$commit_date?> </a>
+    <a href="<?=$codebase_url.$commit_hash?>"> <?=$commit_date?> </a>
     <?}catch(Exception $e){}}?>
     </p>
 </div>

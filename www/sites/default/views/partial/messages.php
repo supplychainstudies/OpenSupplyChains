@@ -16,9 +16,9 @@
 <div class="status-wrap">
 <ul class="status-messages">
 <?php foreach($messages as $i => $msg): ?>
-<li class="status-message <?php isset($msg->level) ? HTML::chars($msg->level).' ' : '' ?><?php $i % 2 ? 'odd' : 'even' ?>">
+<li class="status-message <?= isset($msg->level) ? HTML::chars($msg->level).' ' : '' ?><?= $i % 2 ? 'odd' : 'even' ?>">
 <div class="status-wrap">
-<?php isset($msg->message) ? HTML::chars($msg->message) : '' ?>
+<?= isset($msg->message) ? HTML::chars($msg->message) : '' ?>
 </div>
 </li>
 <?php endforeach; ?>

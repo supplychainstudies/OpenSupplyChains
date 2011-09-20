@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="<?php URL::base(true, true) ?>"></base>
+    <base href="<?= URL::base(true, true) ?>"></base>
 <title>
 Stonyfield Yogurt - Sourcemap
 </title>
@@ -102,13 +102,13 @@ Stonyfield Yogurt - Sourcemap
         left: ;
     }
 </style>
-<?php isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
+<?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : '' ?>
 </head>
 <body>
 <div id="wrapper">
     <div id="head">
     </div>
-    <div id="content"><?php $content ?>
+    <div id="content"><?= $content ?>
         <div class="clear">&nbsp;</div>
         <div class="dateline">Last updated on May 04, 2011</div>
     </div>
@@ -126,7 +126,7 @@ $(document).ready(function() {
     Sourcemap.TPL_PATH = "sites/stonyfield/assets/scripts/tpl/";
 
     // supplychains to map
-    var scid = <?php isset($supplychain_id) ? $supplychain_id : false ?>;
+    var scid = <?= isset($supplychain_id) ? $supplychain_id : false ?>;
     
     // new map instance with custom stop and popup decoratorsa
     Sourcemap.map_instance = new Sourcemap.Map('map', {

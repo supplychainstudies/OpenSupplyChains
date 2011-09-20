@@ -12,17 +12,17 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<td><a href="admin/supplychains/<?php $item->id ?>"><?php $item->id ?></a></td>
-<td><?php Html::chars($item->created) ?></td>
-<td><?php Html::chars($item->owner) ?></td>
-<td><img class="medium" src="static/<?php $item->id ?>.m.png" /></td>
+<td><a href="admin/supplychains/<?= $item->id ?>"><?= $item->id ?></a></td>
+<td><?= Html::chars($item->created) ?></td>
+<td><?= Html::chars($item->owner) ?></td>
+<td><img class="medium" src="static/<?= $item->id ?>.m.png" /></td>
 <td>
     <?php if(isset($item->attributes['title'])): ?>
-        <?php HTML::chars($item->attributes['title']) ?>
+        <?= HTML::chars($item->attributes['title']) ?>
     <?php endif; ?>
 </td>
 
 <td>
-<form name="unfeature-supplychain" method="post" action="admin/featured/<?php $item->id?>/remove">
+<form name="unfeature-supplychain" method="post" action="admin/featured/<?= $item->id?>/remove">
 <input type ="submit" value="unfeature" /></form>
 </td>

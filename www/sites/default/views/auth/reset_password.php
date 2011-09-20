@@ -14,7 +14,7 @@
 
 <div class="container form-page">
     <div class="copy-section">
-        <h1>Reset password for <?php $current_user ?></h1>
+        <h1>Reset password for <?= $current_user ?></h1>
         <p>Enter your new password below.</p>
         <ul>
             <li><a href="/auth">Sign in to Sourcemap</a></li>
@@ -30,7 +30,7 @@
                 
     			<label for="new_confirm">New Password (Repeat):</label>
                 <input type="password" name="new_confirm" class="input text password" />
-                <?php if(isset($ticket) && $ticket): ?><input type="hidden" name="t" value="<?php HTML::chars($ticket) ?>" /><?php endif; ?>
+                <?php if(isset($ticket) && $ticket): ?><input type="hidden" name="t" value="<?= HTML::chars($ticket) ?>" /><?php endif; ?>
                 <input class="button" type="submit" value="Reset" />
             </form>
             </fieldset>

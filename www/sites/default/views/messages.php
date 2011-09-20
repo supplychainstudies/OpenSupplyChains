@@ -13,7 +13,7 @@
 ?>
 
 <?php foreach($messages as $i => $message): ?>
-<div class="flash-message <?php HTML::chars($message->level)?>">
-<?php HTML::chars($message->message) ?>
+<div class="flash-message <?= HTML::chars($message->level)?>">
+<?= HTML::chars($message->message) ?>
 </div>
 <?php endforeach; ?>

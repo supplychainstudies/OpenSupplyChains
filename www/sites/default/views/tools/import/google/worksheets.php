@@ -15,7 +15,7 @@
 <?php if(isset($worksheets, $spreadsheet_key) && $worksheets): ?>
 <div class="container">
 <form class="sourcemap-form" action="/tools/import/google/import" method="post" onsubmit="return beforeSubmit()">
-<input type="hidden" name="k" value="<?php HTML::chars($spreadsheet_key) ?>" />
+<input type="hidden" name="k" value="<?= HTML::chars($spreadsheet_key) ?>" />
 <label for="supplychain_name">Name:</label><br />
 <input name="supplychain_name" type="text" value="A Sourcemap" />
 
@@ -23,21 +23,21 @@
 <select name="stops-wsid"  onblur="DisableOption(this.value);" >
 <option value="0"></option>
 <?php foreach($worksheets as $i => $sheet): ?>
-<option value="<?php HTML::chars($sheet['id']) ?>"><?php HTML::chars($sheet['title']) ?></option>
+<option value="<?= HTML::chars($sheet['id']) ?>"><?= HTML::chars($sheet['title']) ?></option>
 <?php endforeach; ?>
 </select><br />
 <label for="hops-wsid">Hops Worksheet:</label><br />
 <select name="hops-wsid" onblur="DisableOption(this.value);" >
 <option value="0"></option>
 <?php foreach($worksheets as $i => $sheet): ?>
-<option value="<?php HTML::chars($sheet['id']) ?>"><?php HTML::chars($sheet['title']) ?></option>
+<option value="<?= HTML::chars($sheet['id']) ?>"><?= HTML::chars($sheet['title']) ?></option>
 <?php endforeach; ?>
 </select><br />
 <label for="replace-into">Create a New Map or Replace an Existing one?</label><br />
 <select name="replace-into">
 <option value="0">Create a new map</option>
 <?php foreach($user_supplychains as $sc): ?>
-<option value="<?php $sc->id ?>"><?php isset($sc->title) ? HTML::chars($sc->title) : 'Replace map ('.$sc->id.') created on '.date("F j, Y, g:i a", $sc->created) ?></option>
+<option value="<?= $sc->id ?>"><?= isset($sc->title) ? HTML::chars($sc->title) : 'Replace map ('.$sc->id.') created on '.date("F j, Y, g:i a", $sc->created) ?></option>
 <?php endforeach; ?>
 </select><br />
 <input type="checkbox" name="publish" value="yes" checked="yes" /><label for="publish">Public</label><br />

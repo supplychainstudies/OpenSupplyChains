@@ -12,12 +12,12 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<div class="user-details<?php $user->has_flag(Sourcemap::VERIFIED) ? ' verified' : '' ?>">
-<?php HTML::chars($user->username)?> last signed in on <?php $last_login?><br />
+<div class="user-details<?= $user->has_flag(Sourcemap::VERIFIED) ? ' verified' : '' ?>">
+<?= HTML::chars($user->username)?> last signed in on <?= $last_login?><br />
 <fieldset><legend>Flags</legend>
-<form name="user-verification" method="post" action="admin/users/<?php $user->id ?>/flags">
+<form name="user-verification" method="post" action="admin/users/<?= $user->id ?>/flags">
 <label for="verfified">Verified</label>
-<input type="checkbox" name="verified" <?php $user->has_flag(Sourcemap::VERIFIED) ? 'checked' : '' ?> />
+<input type="checkbox" name="verified" <?= $user->has_flag(Sourcemap::VERIFIED) ? 'checked' : '' ?> />
 <input type="submit" value="update" />
 </form>
 </fieldset>
@@ -37,9 +37,9 @@
 <?php if(isset($roles) && $roles):?>
   <strong>User Role</strong><br />
     <?php foreach ($roles as $i => $k): ?>
-     <form name="user-roles" method="post" action="admin/users/<?php $user->id?>/delete_role">
-        <?php HTML::chars($roles[$i]['name'])?> 
-        <input type="hidden" name="role" value="<?php HTML::chars($roles[$i]['name']) ?>">
+     <form name="user-roles" method="post" action="admin/users/<?= $user->id?>/delete_role">
+        <?= HTML::chars($roles[$i]['name'])?> 
+        <input type="hidden" name="role" value="<?= HTML::chars($roles[$i]['name']) ?>">
         <input type="submit" value="delete"/></form> 
     <? endforeach; ?><br />
 <?php endif;?>
@@ -48,7 +48,7 @@
        
 <?php if(count($roles) != count($all_roles)): ?>
     <strong>Change or add the user role:</strong>
-    <form name="change-role" method="post" action="admin/users/<?php $user->id?>/add_role">
+    <form name="change-role" method="post" action="admin/users/<?= $user->id?>/add_role">
     <select name="addrole">
     <?php foreach ($all_roles as $role): ?>
         <?php $has_role = false; ?>
@@ -56,7 +56,7 @@
              <?php if($roler['name'] == $role->name) { $has_role = true; break; } ?>
         <?php endforeach; ?>
         <?php if(!$has_role): ?>
-             <option value="<?php HTML::chars($role->name); ?>"><?php HTML::chars($role->name) ?></option>
+             <option value="<?= HTML::chars($role->name); ?>"><?= HTML::chars($role->name) ?></option>
          <?php endif; ?>
     <?php endforeach; ?>
     </select>
@@ -66,32 +66,32 @@
 <?php if(!empty($members)): ?>
     <strong>Group Membership:</strong>
     <?php foreach ($members as $i => $memberof): ?>
-        <a href="admin/groups/<?php$member['id'];?>">
-            <?phpHTML::chars($memberof['name']) ?>
+        <a href="admin/groups/<?=$member['id'];?>">
+            <?=HTML::chars($memberof['name']) ?>
         </a>
-        <?php $i < (count($memberof)-1) ? ', ' : '' ?>
+        <?= $i < (count($memberof)-1) ? ', ' : '' ?>
      <?php endforeach; ?><br />
  <?php endif; ?>
 
 <?php if($owners): ?>
   <strong>Group Ownership:</strong>
     <?php foreach ($owners as $i => $owned): ?>
-        <a href="admin/groups/<?php$owned['id'];?>">
-            <?phpHTML::chars($owned['name']) ?>
-        </a><?php $i < (count($owned)-1) ? ', ' : '' ?>
+        <a href="admin/groups/<?=$owned['id'];?>">
+            <?=HTML::chars($owned['name']) ?>
+        </a><?= $i < (count($owned)-1) ? ', ' : '' ?>
     <?php endforeach; ?>
 <?php endif; ?>
 
 <?php if($apikeys): ?>
     <strong>API Keys</strong>
     <?php foreach($apikeys as $i => $apikey): ?>
-        <div><?php $i ?></div>
+        <div><?= $i ?></div>
     <?php endforeach; ?>
 <?php endif; ?>
 <fieldset>
-<legend>Add an API Key for <?php HTML::chars($user->username) ?></legend>
+<legend>Add an API Key for <?= HTML::chars($user->username) ?></legend>
 <form method="post" action="admin/apikeys/add">
-<input type="hidden" name="user_id" value="<?php $user->id ?>" />
+<input type="hidden" name="user_id" value="<?= $user->id ?>" />
 <input type="submit" value="Create API Key" />
 </form>
 </fieldset>

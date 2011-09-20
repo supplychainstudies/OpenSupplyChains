@@ -13,5 +13,5 @@
 ?>
 
 <?php echo $pager; ?>
-<?php View::factory('partial/admin/list', array('list' => $comments, 'list_type' => 'comments')) ?>
+<?= View::factory('partial/admin/list', array('list' => $comments, 'list_type' => 'comments')) ?>
 <?php echo $pager; ?>

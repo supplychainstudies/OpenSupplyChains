@@ -10,9 +10,8 @@
  * 
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
-
 <div id="banner-content">
-    <div id="banner-summary">
+    <div id="banner-summary" class="<%if(this.editable){%>editable<%}else{%>noneditable<%}%>">
        <%= _S.ttrunc(_S.htesc(this.getAttr("title", this.getAttr("name", "Untitled Sourcemap"))), 55) %>
     </div>
     <% if(this.editable){ %>

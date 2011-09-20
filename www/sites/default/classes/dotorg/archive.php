@@ -65,6 +65,7 @@ class Dotorg_Archive {
     public function load_sc($oid) {
         $fn = $this->archive_path."$oid.sm.converted.json";
         $sc = @json_decode(file_get_contents($fn));
+        if($sc) $sc = $sc->supplychain;
         return $sc;
     } 
 
@@ -88,5 +89,18 @@ class Dotorg_Archive {
             }
         }
         return $details;
+    }
+
+    public function migrate($old_user_id, $new_user_id) {
+        $scm = ORM::factory('supplychain');
+        $oids = $this->by_userid($old_user_id);
+        foreach($oids as $i => $oid) {
+            $sc = $this->load_sc($oid);
+            if($sc) {
+                $sc->user_id = $new_user_id;
+                $scm->save_raw_supplychain($sc);
+            }
+        }
+        return true;
     }
 }

@@ -76,6 +76,8 @@ and
 <dd>Choose which maps are "featured".</dd>
 <dt><a href="admin/groups">Groups</a></dt>
 <dd>Manage groups.</dd>
+<dt><a href="admin/migrate">Migration</a></dt>
+<dd>Migrate users from sourcemap.org to sourcemap.com.</dd>
 <dt><a href="admin/roles">Roles</a></dt>
 <dd>Manage Roles.</dd>
 <dt><a href="admin/supplychains">Supplychains</a></dt>

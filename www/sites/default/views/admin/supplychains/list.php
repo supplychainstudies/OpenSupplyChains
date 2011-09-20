@@ -12,7 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?php View::factory('partial/admin/list', array('list' => $list, 'list_type' => 'supplychains')) ?>
+<?= View::factory('partial/admin/list', array('list' => $list, 'list_type' => 'supplychains')) ?>
 
 <?php echo $page_links; ?>
     

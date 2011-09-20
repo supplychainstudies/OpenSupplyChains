@@ -17,7 +17,7 @@
 <?php $lastdate = ''; ?>
 <?php foreach($stream as $i => $event): ?>
 <?php if(isset($event['tag'])): ?>
-<div class="user-event <?php $event['tag'] ?>">
+<div class="user-event <?= $event['tag'] ?>">
 <p>
     <?php 
         $thisdate = date('F d, Y', $event['timestamp']);
@@ -30,7 +30,7 @@
     ?> 
 </p>
 <p>
-    <span class="event"><?php View::factory('partial/user/event/'.$event['tag'], (array)$event['data']) ?></span>
+    <span class="event"><?= View::factory('partial/user/event/'.$event['tag'], (array)$event['data']) ?></span>
 </p>
 </div>
 <?php endif; ?>

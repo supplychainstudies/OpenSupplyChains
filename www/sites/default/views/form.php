@@ -14,12 +14,12 @@
 
 <div class="sourcemap-form vertical"> 
     <fieldset>
-    <?php Form::open($form->action(), array(
+    <?= Form::open($form->action(), array(
         'enctype' => $form->enctype(),
         'method' => $form->method()
     )); ?>
     <?php foreach($form->get_fields() as $fnm => $field): ?>
-    <?php $field ?>
+    <?= $field ?>
     <?php endforeach; ?>
     </fieldset>
 </div>

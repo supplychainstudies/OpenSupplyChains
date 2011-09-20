@@ -15,13 +15,13 @@
     <?php if(isset($oids) && $oids): ?>
         <fieldset><legend>Migrate User Maps</legend>
         <form name="migrate_user" action="admin/migrate/" method="POST">
-            <h4>Sourcemap.ORG User ID: <?php HTML::chars($details[$oids[0]]->creator) ?></h4>
-                <?php Form::input('old_user_id', $details[$oids[0]]->creator, array('type' => 'hidden')) ?>
-            <label for="new_user_id">Sourcemap.COM User ID:</label><?php Form::input('new_user_id') ?>
+            <h4>Sourcemap.ORG User ID: <?= HTML::chars($details[$oids[0]]->creator) ?></h4>
+                <?= Form::input('old_user_id', $details[$oids[0]]->creator, array('type' => 'hidden')) ?>
+            <label for="new_user_id">Sourcemap.COM User ID:</label><?= Form::input('new_user_id') ?>
             <input type="submit" value="Migrate Maps" />
         </form>
         </fieldset>
-        <h2><?php count($oids) ?> Map<?php count($oids) > 1 ? 's' : '' ?> Available for Sourcemap.org User "<?php HTML::chars($uid) ?>"</h2>
+        <h2><?= count($oids) ?> Map<?= count($oids) > 1 ? 's' : '' ?> Available for Sourcemap.org User "<?= HTML::chars($uid) ?>"</h2>
         <table>
         <thead>
             <tr><th>OID</th><th>Title</th><th>Slug</th><th>Created</th>
@@ -29,18 +29,18 @@
         <tbody>
         <?php foreach($oids as $i => $oid): ?>
             <tr>
-                <td><?php HTML::chars($oid) ?></td>
+                <td><?= HTML::chars($oid) ?></td>
                 <td>
                 <?php if(isset($details[$oid])): ?>
-                    <?php HTML::chars($details[$oid]->title) ?>
+                    <?= HTML::chars($details[$oid]->title) ?>
                 <?php else: ?>
                     -
                 <?php endif; ?>
                 </td>
                 <td>
-                    <?php HTML::anchor($details[$oid]->oldurl, $details[$oid]->slug, array('target' => '_blank')) ?>
+                    <?= HTML::anchor($details[$oid]->oldurl, $details[$oid]->slug, array('target' => '_blank')) ?>
                 </td>
-                <td><?php HTML::chars($details[$oid]->created) ?></td>
+                <td><?= HTML::chars($details[$oid]->created) ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

@@ -17,8 +17,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <base href="<?php URL::base(true, true) ?>"></base>
-    <title><?php HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
+    <base href="<?= URL::base(true, true) ?>"></base>
+    <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,10 +28,10 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <?php if(isset($styles)): ?>
-        <?php Sourcemap_CSS::link_tags($styles) ?>
+        <?= Sourcemap_CSS::link_tags($styles) ?>
     <?php endif; ?>
 </head>
 <body>
-<?php isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?> 
+<?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?> 
 </body>
 </html>

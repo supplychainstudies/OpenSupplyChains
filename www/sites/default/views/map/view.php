@@ -27,12 +27,12 @@
     		<h3>Map Options</h3>
             <hr/>
     		<div class="impact-box">
-                <input type="checkbox" <?php $supplychain_weight; ?> id="impact-use-weight" /> 
+                <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
     			<label for="impact-use-weight">Show Weight</label>
     			<div class="clear"></div>
     		</div>
     		<div class="impact-box">
-                <input type="checkbox" <?php $supplychain_co2e; ?> id="impact-use-co2e" />
+                <input type="checkbox" <?= $supplychain_co2e; ?> id="impact-use-co2e" />
     			<label for="impact-use-co2e">Show Carbon Footprint (CO2e)</label>   
     			<div class="clear"></div>
     		</div>
@@ -56,39 +56,39 @@
     	<h3>Share this Sourcemap</h3>
         <hr/>
         <div id="qrcode-badge" class="container">
-            <a href="<?php $scaled_qrcode_url ?>"><img class="qrcode" src="<?php $qrcode_url ?>" /></a><br/>
+            <a href="<?= $scaled_qrcode_url ?>"><img class="qrcode" src="<?= $qrcode_url ?>" /></a><br/>
         </div>
         <div class="container links">
             <p>Link to this Sourcemap</p>
             <div>
-                <input value="<?php $short_link; ?>" readonly="readonly" onclick="select()"></input>
+                <input value="<?= $short_link; ?>" readonly="readonly" onclick="select()"></input>
             </div>
             <p>Embed this Sourcemap</p>
             <div>
-                <input value='<iframe width="640px" height="480px" frameborder="0" src="<?php URL::site(NULL, TRUE) ?>embed/<?php $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
+                <input value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
             </div>
         </div>
     	<div class="clear"></div>
         <hr />
                 
-        <?php View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>
+        <?= View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>
     </div>
     
 
     <h1>
-    	<?php HTML::chars($supplychain_name) ?> 
+    	<?= HTML::chars($supplychain_name) ?> 
     	<?php if($can_edit): ?>
-            <a id="map-edit-button" class="button" href="edit/<?php $supplychain_id; ?>">Edit</a>
+            <a id="map-edit-button" class="button" href="edit/<?= $supplychain_id; ?>">Edit</a>
         <?php endif; ?>
     </h1>
-    <p class="description"><?php HTML::chars($supplychain_desc) ?></p>
+    <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
     <hr />
     <p class="author">
-        <img src="<?php HTML::chars($supplychain_avatar) ?>" alt="Avatar"></img>
-        <a class="author-link" href="user/<?php $supplychain_ownerid ?>"><?php $supplychain_owner ?></a>, <?php $supplychain_date ?>
+        <img src="<?= HTML::chars($supplychain_avatar) ?>" alt="Avatar"></img>
+        <a class="author-link" href="user/<?= $supplychain_ownerid ?>"><?= $supplychain_owner ?></a>, <?= $supplychain_date ?>
     	<? $first = true; foreach($supplychain_taxonomy as $cat) { ?>
-    		<? if($first) { ?>in <a href="browse/<?php HTML::chars($cat->name); ?>"><?php HTML::chars($cat->title); ?></a>
-    		<? $first = false; } else { ?>, <a href="browse/<?php $cat->name; ?>"><?php HTML::chars($cat->title); ?></a> <? } ?>
+    		<? if($first) { ?>in <a href="browse/<?= HTML::chars($cat->name); ?>"><?= HTML::chars($cat->title); ?></a>
+    		<? $first = false; } else { ?>, <a href="browse/<?= $cat->name; ?>"><?= HTML::chars($cat->title); ?></a> <? } ?>
     	<? } ?>
     </p>
 
@@ -97,7 +97,7 @@
         <?php if($can_comment): ?>
         <div id="comment-form" class="form">
             <fieldset>
-            <form method="post" action="map/comment/<?php $supplychain_id ?>">
+            <form method="post" action="map/comment/<?= $supplychain_id ?>">
                 <textarea placeholder="Type your comment..." name="body" id="comment-area"></textarea>
  
                 <input class="button" id="comment-submit" type="submit" text="Comment"/>
@@ -112,7 +112,7 @@
         <?php if($comments): ?>
         <ul id="comments">
             <?php foreach($comments as $i => $comment): ?>
-                <?php View::factory('partial/comment', array('comment' => $comment)) ?>
+                <?= View::factory('partial/comment', array('comment' => $comment)) ?>
             <?php endforeach; ?>
         </ul>
         <?php else: ?>

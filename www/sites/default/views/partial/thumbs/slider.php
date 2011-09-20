@@ -21,13 +21,13 @@
                 <img class="featured-preview-map large" src="/map/static/<?php print $item->id; ?>.l.png" alt="" />
             </a>
         </div>
-        <div id="featured-description-<?php $i ?>" class="featured-description">
+        <div id="featured-description-<?= $i ?>" class="featured-description">
             <h2 class="featured-title-leader">The Sourcemap of:</h2>
-            <h1 class="featured-title"><a href="/view/<?php print $item->id; ?>"><?php Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"),35) ?></a></h1>
-            <? if(isset($item->attributes->description)) { ?><h3 class="featured-teaser"><?php Text::limit_chars(HTML::chars($item->attributes->description),70); ?></h3><? } ?>
+            <h1 class="featured-title"><a href="/view/<?php print $item->id; ?>"><?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"),35) ?></a></h1>
+            <? if(isset($item->attributes->description)) { ?><h3 class="featured-teaser"><?= Text::limit_chars(HTML::chars($item->attributes->description),70); ?></h3><? } ?>
             <h4 class="featured-info">
-                 <a href="user/<?php $item->owner->id; ?>">
-                    <?php HTML::chars($item->owner->name) ?></a>,   
+                 <a href="user/<?= $item->owner->id; ?>">
+                    <?= HTML::chars($item->owner->name) ?></a>,   
                 <?php print date("F j, Y",$item->created);?>
             </h4>
         </div>

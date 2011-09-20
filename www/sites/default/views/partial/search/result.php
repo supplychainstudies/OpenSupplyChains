@@ -14,21 +14,21 @@
 
 <?php if(isset($supplychain) && $supplychain): ?>
         <div class="map-item small">
-            <a href="view/<?php $supplychain->id ?>">
-                <img class="user-map-preview small" src="map/static/<?php $supplychain->id ?>.s.png" />
+            <a href="view/<?= $supplychain->id ?>">
+                <img class="user-map-preview small" src="map/static/<?= $supplychain->id ?>.s.png" />
             </a>
         </div>
         <div class="map-description">
-            <a href="view/<?php $supplychain->id ?>">
-                <h2 class="map-title"><?php HTML::chars($supplychain->attributes->title) ?></h2>
+            <a href="view/<?= $supplychain->id ?>">
+                <h2 class="map-title"><?= HTML::chars($supplychain->attributes->title) ?></h2>
             </a>
             <h4 class="map-details">
-                <?php HTML::chars($supplychain->owner->name) ?>, <?php date('F j, Y', $supplychain->created) ?>
+                <?= HTML::chars($supplychain->owner->name) ?>, <?= date('F j, Y', $supplychain->created) ?>
             </h4>
             <div class="clear"></div>
             
             <?php if(isset($supplychain->attributes->description) && $supplychain->attributes->description): ?>
-                <span class="map-teaser"><?php HTML::chars($supplychain->attributes->description) ?></span>
+                <span class="map-teaser"><?= HTML::chars($supplychain->attributes->description) ?></span>
             <?php endif; ?>
         </div>
 

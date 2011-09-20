@@ -19,7 +19,7 @@
 </thead>
 <tbody>
 <?php foreach($list as $i => $sheet): ?>
-<tr class="<?php $i % 2 ? 'odd' : 'even' ?>"><td><a href="tools/import/google/worksheets?k=<?php HTML::chars($sheet['key']) ?>"><?php HTML::chars($sheet['title']) ?></a></td><td><?php HTML::chars($sheet['updated']) ?></td><td><?php HTML::chars($sheet['author_name']) ?></td></tr>
+<tr class="<?= $i % 2 ? 'odd' : 'even' ?>"><td><a href="tools/import/google/worksheets?k=<?= HTML::chars($sheet['key']) ?>"><?= HTML::chars($sheet['title']) ?></a></td><td><?= HTML::chars($sheet['updated']) ?></td><td><?= HTML::chars($sheet['author_name']) ?></td></tr>
 <?php endforeach; ?>
 </tbody>
 </table>

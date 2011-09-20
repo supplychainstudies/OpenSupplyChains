@@ -12,4 +12,4 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?php $url ?>
+<?= $url ?>

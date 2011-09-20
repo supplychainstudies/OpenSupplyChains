@@ -22,13 +22,13 @@
             </div>
             <h3 class="preview-title">
                 <a href="view/<?php print $item->id; ?>">
-                <?php Text::limit_chars(HTML::chars($item->attributes->title), 16) ?>
+                <?= Text::limit_chars(HTML::chars($item->attributes->title), 16) ?>
                 </a>
             </h3>
             <h4>
                 <div class="preview-author">
                     <a href="user/<?php print $item->owner->id; ?>">
-                        <?php Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
+                        <?= Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
                     <?php print date("M j, Y",$item->created);?>
                 </div>
             </h4>

@@ -249,6 +249,7 @@ $newsc->stops = array_values($newstops);
 $newsc->hops = $newhops;
 $user = $oldsc->user->name;
 $cdate = date('F j, Y', strtotime($oldsc->timecreated));
+if($oldsc->visibility != 'public') $newsc->other_perms = 0;
 $newsc->attributes->description = "Created on $cdate by $user on Sourcemap.org";
 if(strlen(strip_tags($oldsc->description)))
     $newsc->attributes->description .= ":\n\n".strip_tags($oldsc->description);

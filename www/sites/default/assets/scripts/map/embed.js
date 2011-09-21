@@ -38,7 +38,8 @@ $(document).ready(function() {
 		        Sourcemap.embed_instance.map.addSupplychain(sc);
 		    	$(window).resize();
 		    	$("#banner").click(function() {
-		    		window.location.href = "view/" + window.location.pathname.split("/")[2];
+		    		//window.location.href = "view/" + window.location.pathname.split("/")[2];
+                    window.open("view/" + window.location.pathname.split("/")[2]);
 		    	});
 		    });
 			break;

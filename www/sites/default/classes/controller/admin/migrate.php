@@ -9,12 +9,17 @@ class Controller_Admin_Migrate extends Controller_Admin {
             ->add('Migration', 'admin/migrate');
         if(strtolower(Request::$method) === 'post') {
             if(isset($_POST['old_user_id']) && isset($_POST['new_user_id'])) {
-                if(isset($_POST['confirm']))  {
+                if(is_numeric($_POST['new_user_id'])) {
                     $new_user = ORM::factory('user', $_POST['new_user_id']);
-                    if(!$new_user->loaded()) {
-                        Message::instance()->set('Invalid new user id.');
-                        $this->request->redirect('admin/migrate');
-                    }
+                } else {
+                    $new_user = ORM::factory('user')->where('username', '=', $_POST['new_user_id'])
+                        ->find();
+                }
+                if(!$new_user || !$new_user->loaded()) {
+                    Message::instance()->set('Invalid new user id.');
+                    $this->request->redirect('admin/migrate');
+                }
+                if(isset($_POST['confirm']))  {
                     if(Dotorg_Archive::instance()->migrate($_POST['old_user_id'], $new_user->id)) {
                         Message::instance()->set('Maps migrated.');
                         $this->request->redirect('admin/supplychains/');
@@ -23,7 +28,8 @@ class Controller_Admin_Migrate extends Controller_Admin {
                     }
                 } else {
                     $this->template->old_user_id = $_POST['old_user_id'];
-                    $this->template->new_user_id = $_POST['new_user_id'];
+                    $this->template->new_user_id = $new_user->id;
+                    $this->template->new_user_username = $new_user->username;
                     return;
                 }
             } else {

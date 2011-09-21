@@ -551,76 +551,80 @@ Sourcemap.Map.Base.prototype.decorateHopFeatures = function(dec_fn) {
     return this.decorateFeatures(dec_fn, h_ftrs);
 }
 
-Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, vtot, smin, smax, active_color) {
+Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, vtot, smin, smax, active_color) {   //Sets size/color of stops relative to impact (e.g. CO2 output etc..) 
+	//vmin is smallest impact on map
+	//vmax is largest impact on map
+	//vtot is sum of all impacts on map
+	//smin is minimum stop size (in area)
+	//smax is maximum stop size  
     var active_color = active_color || this.options.attr_missing_color;
     var smin = smin == undefined ? this.map.options.min_stop_size : parseInt(smin);
     if(!smin) smin = this.map.options.min_stop_size;
     var smax = smax == undefined ? this.map.options.max_stop_size : parseInt(smax);
 
     if(!smax) smax = this.map.options.max_stop_size;
-    var dec_fn = $.proxy(function(f, mb) {
-        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
-        if(f.cluster) {
-            var val = 0;
-            for(var c in f.cluster) {
-                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
-                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
-            }
-            if(!isNaN(val)) {
-                // scale
-                var voff = val - this.vmin;
-                var vrange = this.vmax - this.vmin;
-                var sval = this.smin;
-                sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
-                f.attributes.size = Math.max(sval, smin);
-                f.attributes.size = Math.max(sval, smin);
-                var fsize = 18;
-                f.attributes.fsize = fsize+"px";   
-                f.attributes.fcolor = this.color;   
-                f.attributes.yoffset = -1*(f.attributes.size+fsize);
-                var unit = "kg";
-                if(attr_nm === "water") { unit = "L"; }                
-                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
-                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
-                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
-            } 
-        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
-            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
-            else val = f.attributes[attr_nm];
-            val = parseFloat(val);
-            if(!isNaN(val)) {
-                // scale
-                val = Math.max(val, this.vmin);
-                val = Math.min(val, this.vmax);
-                var voff = val - this.vmin;
-                var vrange = this.vmax - this.vmin;
-                var sval = this.smin;
-                //if(vrange)
-                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
-                sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
-                f.attributes.size = Math.max(sval, smin);
-                var fsize = 18;
-                f.attributes.fsize = fsize+"px";     
-                f.attributes.fcolor = this.color
-                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
+    var dec_fn = $.proxy(
+		function(f, mb) {            
+				//The val variable should be the polution value for this stop
+		        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
+		        if(f.cluster) {    //Why we divide this into two segments is unclear
+		            var val = 0;
+		            for(var c in f.cluster) {
+		                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
+		                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
+		            }
+		            if(!isNaN(val)) {
+		                // scale  
+						fraction = val/this.vtot;
+		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
+		                var fsize = 18;
+		                f.attributes.fsize = fsize+"px";     
+		                f.attributes.fcolor = this.color
+		                f.attributes.yoffset = -1*(f.attributes.size+fsize);
+		                var unit = "kg";
+		                if(attr_nm === "water") { unit = "L"; }                
+		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
+		                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
+		                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
+		            } 
+		        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
+		            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
+		            else val = f.attributes[attr_nm];
+		            val = parseFloat(val);
+		            if(!isNaN(val)) { 
+		                // scale
+		                // val = Math.max(val, this.vmin);
+		                // val = Math.min(val, this.vmax); 
+		                // var voff = val - this.vmin;
+		                // var vrange = this.vmax - this.vmin;
+		                // var sval = this.smin;
+		                //if(vrange)
+		                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+						fraction = val/this.vtot;
+		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
+		                var fsize = 18;
+		                f.attributes.fsize = fsize+"px";     
+		                f.attributes.fcolor = this.color
+		                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
                 
-                var unit = "kg";
-                if(attr_nm === "water") { unit = "L"; }
-                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
-                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
-    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
-    				f.attributes.label = "";
-    			} else {
-    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
-    			}	              
-            } 
-        } 
-        f.attributes.size = f.attributes.size || smin;
-        f.attributes.yoffset = f.attributes.yoffset || 0;
-        f.attributes.label = f.attributes.label || "";
-        f.attributes.color = this.color
-        f.attributes.scolor = this.color
-    }, {"vmin": vmin, "vmax": vmax, "smin": smin, "smax": smax, "attr_nm": attr_nm, "basemap": this, "color": active_color});
+		                var unit = "kg";
+		                if(attr_nm === "water") { unit = "L"; }
+		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
+		                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
+		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
+		    				f.attributes.label = "";
+		    			} else {
+		    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
+		    			}	              
+		            } 
+		        } 
+		        f.attributes.size = f.attributes.size || smin;
+		        f.attributes.yoffset = f.attributes.yoffset || 0;
+		        f.attributes.label = f.attributes.label || "";
+		        f.attributes.color = this.color 
+		        f.attributes.scolor = this.color 
+		    }, 
+	{"vmin": vmin, "vmax": vmax, "vtot": vtot, "smin": smin, "smax": smax, "attr_nm": attr_nm, "basemap": this, "color": active_color});
     return this.decorateStopFeatures(dec_fn) && this.decorateHopFeatures(dec_fn);
 }
 

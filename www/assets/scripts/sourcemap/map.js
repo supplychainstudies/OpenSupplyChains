@@ -241,7 +241,7 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                this.map.zoomToExtent(this.getFeaturesExtent(), false);
+                this.zoomToExtent(this.getFeaturesExtent(), false);
             }
         }
     });
@@ -602,6 +602,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
             }
         }
     }
+
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 
@@ -1017,18 +1018,46 @@ Sourcemap.Map.prototype.getFeaturesExtent = function() {
             if(c) bounds = bounds.extend(c.geometry.bounds);
         }
     }
-    // extend by the height of the banner and the dock
-    var screen = new OpenLayers.Bounds();
-
-    // determine pixel bounds of screen
-    var pixel = new OpenLayers.Pixel(0,20);
-    var topleft = this.map.getLonLatFromPixel(pixel);
-
-    var bottomright = this.map.getLonLatFromPixel(new OpenLayers.Pixel(960,300));
-   
-    bounds.extend(topleft, bottomright);
-
+    for(var scid in this.hop_features) {
+        for(var fromStop in this.hop_features[scid]){
+            for (var toStop in this.hop_features[scid][fromStop]){
+                var h = this.hop_features[scid][fromStop][toStop];
+                h = h.hop ? h.hop : h;
+                bounds.extend(h.geometry.bounds);
+            }
+        }
+    }
     return bounds;
+}
+
+Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
+    var center = bounds.getCenterLonLat();
+    if (this.map.baseLayer.wrapDateLine) {
+        var maxExtent = this.map.getMaxExtent();
+        
+        bounds = bounds.clone();
+        while (bounds.right < bounds.left) {
+            bounds.right += maxExtent.getWidth();
+        }
+        
+        center = bounds.getCenterLonLat().wrapDateLine(maxExtent);
+    }
+    this.map.setCenter(center, this.getZoomForExtent(bounds, closest));
+}
+
+Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {
+    var viewSize = this.map.getSize();
+
+    // add padding around viewport so features don't appear offscreen
+    // TODO: improve the way this works
+    viewSize.h *= .5;
+    viewSize.w *= .5;
+   
+    var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
+                                    extent.getHeight() / viewSize.h );
+
+    return this.map.getZoomForResolution(idealResolution, closest);
+
 }
 
 Sourcemap.Map.prototype.findSupplychain = function(scid) {

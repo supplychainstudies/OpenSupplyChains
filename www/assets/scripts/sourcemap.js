@@ -637,7 +637,7 @@ Sourcemap.Units.to_base_unit = function(value, unit) {
     return base;
 }
 
-Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
+Sourcemap.Units.scale_unit_value = function(value, unit, precision) {       //For showing two significant figures and correct unit
     if(isNaN(value)) return 0;
     var precision = isNaN(parseInt(precision)) ? 2 : parseInt(precision);
     var base = Sourcemap.Units.to_base_unit(value, unit);

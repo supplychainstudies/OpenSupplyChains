@@ -115,7 +115,7 @@ EREIAM;
         $body .= <<<EREIAM
 
 
-If you believe that someone else made this request, please contact supporta@sourcemap.com as soon as possible.
+If you believe that someone else made this request, please contact support@sourcemap.com as soon as possible.
 
 Thank you for using Sourcemap!
 

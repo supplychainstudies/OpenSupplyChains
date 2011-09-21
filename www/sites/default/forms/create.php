@@ -48,7 +48,8 @@ if($is_admin){
     );
     $desc_attributes = array(
         'maxlength' => -1,
-        'placeholder' => 'Admin mode: Maximum 10000 characters.'
+        'placeholder' => 'Admin mode: Maximum 10000 characters.',
+        'id'=>'form-description'
     );
 
 }
@@ -61,7 +62,8 @@ else{
     );
     $desc_attributes = array(
         'maxlength' => 140,
-        'placeholder' => 'Maximum 140 characters.'
+        'placeholder' => 'Maximum 140 characters.',
+        'id'=>'form-description'
     );
 }
 

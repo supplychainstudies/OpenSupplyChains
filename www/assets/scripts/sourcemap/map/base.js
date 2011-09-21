@@ -88,7 +88,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
       	if(this.options.position == '0|0|0') {
     		if(sc.stops.length) {
-                this.map.map.zoomToExtent(this.map.getFeaturesExtent(), true);
+                this.map.zoomToExtent(this.map.getFeaturesExtent(), true);
     		} else {
     			this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
     		}
@@ -118,7 +118,17 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
+    var firstLoad = true;
     Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
+        
+        if (firstLoad){
+            // zoomToExtent upon first load.  this needs to happen here, since 
+            // we don't know the geometry of the hops until they are mapped.
+            this.map.zoomToExtent(this.map.getFeaturesExtent(), true);
+
+            firstLoad = false;
+        }
+
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
         // TODO: do calculations here
@@ -167,6 +177,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
+    
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
@@ -243,14 +254,11 @@ Sourcemap.Map.Base.prototype.loadExternals = function(sc) {
 			var geofeeds = [sc.attributes["sm:ext:geojson"]];
 		} else { var geofeeds = sc.attributes["sm:ext:geojson"]; }
 	
-		console.log(this.map.options.polygons);
-		console.log(this.map.options);
 		for(var i in geofeeds) {
 			var geojson = new OpenLayers.Layer.GML(geofeeds[i], geofeeds[i], {
 		            format: OpenLayers.Format.GeoJSON, 
 		            projection: new OpenLayers.Projection("EPSG:4326")
 			});
-			console.log(geojson);		 
 		}
 		this.map.map.addLayers([geojson]);
 	}

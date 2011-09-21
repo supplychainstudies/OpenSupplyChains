@@ -131,7 +131,21 @@ Sourcemap.Map.Editor.prototype.init = function() {
     				        $(this.dialog).removeClass("called-out");					
     						this.dialog_content.empty(); 
     					}, this));
+                        $(this.dialog_content).find("#newpoint-title").keypress(function(e){
+                            if(e.keyCode==13){$("#newpoint-button").click();};
+                        });
+                        $(this.dialog_content).find("#newpoint-placename").keypress(function(e){
+                            if(e.keyCode==13){$("#newpoint-button").click();};
+                        });
     					$(this.dialog_content).find("#newpoint-button").click($.proxy(function() {
+                            if(!$("#newpoint-placename").val()){
+                                // If no address and title was inputed
+                                if(!$("#newpoint-title").val()){
+                                    $("#dialog").shake();
+                                    return;
+                                }
+                                $("#newpoint-placename").val($("#newpoint-title").val());
+                            }
     						var f = this.dialog_content.find('form');
     			            var vals = f.serializeArray();
     			            var attributes = {};
@@ -162,7 +176,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     		                        stop.attributes.supplychain_instance_id = stop.supplychain_id;
     				                this.map.mapSupplychain(this.sc.instance_id);                									
     		                        this.map.controls.select.select(this.map.stopFeature(this.sc.instance_id, stop.instance_id));
-    		                    } else {
+s    		                    } else {
     								$("#dialog").shake();
     								$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
     					        }
@@ -703,6 +717,9 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                 o.catalog = this.o.catalog;
                 this.editor.updateCatalogListing(o);
             }, {"o": o, "editor": this.editor}));
+            $(this.editor.map_view.dialog).find('#catalog-search').bind("submit",function(event){
+                event.preventDefault();
+            });
         }, {"editor": this, "o": o}), "failure": $.proxy(function() {
             $(this.editor.map_view).find("#edit-catalog").html('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
         }, this)

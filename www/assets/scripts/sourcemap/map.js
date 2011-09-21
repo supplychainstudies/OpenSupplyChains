@@ -1031,18 +1031,36 @@ Sourcemap.Map.prototype.getFeaturesExtent = function() {
 }
 
 Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
-    var center = bounds.getCenterLonLat();
-    if (this.map.baseLayer.wrapDateLine) {
-        var maxExtent = this.map.getMaxExtent();
-        
-        bounds = bounds.clone();
-        while (bounds.right < bounds.left) {
-            bounds.right += maxExtent.getWidth();
+    var oneStop = function(){
+        var numStops = 0;
+        for(var scid in this.stop_features) {
+            for(var k in this.stop_features[scid]) {
+                numStops++;
+                if (numStops == 2){ return false; }
+            }
         }
-        
-        center = bounds.getCenterLonLat().wrapDateLine(maxExtent);
+        return true;
     }
-    this.map.setCenter(center, this.getZoomForExtent(bounds, closest));
+    
+    var center = bounds.getCenterLonLat();
+
+    //if there's only one stop on the map, let's zoom to the minimum level
+    if (oneStop() == true){
+        this.map.setCenter(center, this.map.minZoomLevel);
+    }
+    else{
+        if (this.map.baseLayer.wrapDateLine) {
+            var maxExtent = this.map.getMaxExtent();
+            
+            bounds = bounds.clone();
+            while (bounds.right < bounds.left) {
+                bounds.right += maxExtent.getWidth();
+            }
+            
+            center = bounds.getCenterLonLat().wrapDateLine(maxExtent);
+        }
+        this.map.setCenter(center, this.getZoomForExtent(bounds, closest));
+    }
 }
 
 Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {

@@ -3,7 +3,7 @@
 <form name="migrate_user" action="admin/migrate/" method="POST">
 <h4>Sourcemap.ORG User ID: <?= HTML::chars($old_user_id) ?></h4>
 <?= Form::input('old_user_id', $old_user_id, array('type' => 'hidden')) ?>
-<h4>Sourcemap.COM User ID: <?= HTML::chars($new_user_id) ?> (<?= HTML::chars(ORM::factory('user', $new_user_id)->username) ?>)</h4>
+<h4>Sourcemap.COM User ID: <?= HTML::chars($new_user_id) ?> (<?= isset($new_user_username) ? HTML::chars($new_user_username) : 'n/a' ?>)</h4>
 <?= Form::input('new_user_id', $new_user_id, array('type' => 'hidden')) ?>
 <label for="confirm">Are you sure?</label><input type="checkbox" name="confirm" /><br />
 <input type="submit" value="Migrate Maps" />

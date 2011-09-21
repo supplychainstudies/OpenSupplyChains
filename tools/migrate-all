@@ -1,0 +1,2707 @@
+mkdir -p ./migrate/1316558677/
+echo "Migrating object 4 (1)..."
+./fetch-old-sc "www.sourcemap.org/" 4 > ./migrate/1316558677/4.sm.migrate.json
+echo "...written to ./migrate/1316558677/4.sm.migrate.json"
+echo "Migrating object 9 (2)..."
+./fetch-old-sc "www.sourcemap.org/" 9 > ./migrate/1316558677/9.sm.migrate.json
+echo "...written to ./migrate/1316558677/9.sm.migrate.json"
+echo "Migrating object 12 (3)..."
+./fetch-old-sc "www.sourcemap.org/" 12 > ./migrate/1316558677/12.sm.migrate.json
+echo "...written to ./migrate/1316558677/12.sm.migrate.json"
+echo "Migrating object 21 (4)..."
+./fetch-old-sc "www.sourcemap.org/" 21 > ./migrate/1316558677/21.sm.migrate.json
+echo "...written to ./migrate/1316558677/21.sm.migrate.json"
+echo "Migrating object 24 (5)..."
+./fetch-old-sc "www.sourcemap.org/" 24 > ./migrate/1316558677/24.sm.migrate.json
+echo "...written to ./migrate/1316558677/24.sm.migrate.json"
+echo "Migrating object 25 (6)..."
+./fetch-old-sc "www.sourcemap.org/" 25 > ./migrate/1316558677/25.sm.migrate.json
+echo "...written to ./migrate/1316558677/25.sm.migrate.json"
+echo "Migrating object 27 (7)..."
+./fetch-old-sc "www.sourcemap.org/" 27 > ./migrate/1316558677/27.sm.migrate.json
+echo "...written to ./migrate/1316558677/27.sm.migrate.json"
+echo "Migrating object 34 (8)..."
+./fetch-old-sc "www.sourcemap.org/" 34 > ./migrate/1316558677/34.sm.migrate.json
+echo "...written to ./migrate/1316558677/34.sm.migrate.json"
+echo "Migrating object 41 (9)..."
+./fetch-old-sc "www.sourcemap.org/" 41 > ./migrate/1316558677/41.sm.migrate.json
+echo "...written to ./migrate/1316558677/41.sm.migrate.json"
+echo "Migrating object 46 (10)..."
+./fetch-old-sc "www.sourcemap.org/" 46 > ./migrate/1316558677/46.sm.migrate.json
+echo "...written to ./migrate/1316558677/46.sm.migrate.json"
+echo "Migrating object 48 (11)..."
+./fetch-old-sc "www.sourcemap.org/" 48 > ./migrate/1316558677/48.sm.migrate.json
+echo "...written to ./migrate/1316558677/48.sm.migrate.json"
+echo "Migrating object 53 (12)..."
+./fetch-old-sc "www.sourcemap.org/" 53 > ./migrate/1316558677/53.sm.migrate.json
+echo "...written to ./migrate/1316558677/53.sm.migrate.json"
+echo "Migrating object 61 (13)..."
+./fetch-old-sc "www.sourcemap.org/" 61 > ./migrate/1316558677/61.sm.migrate.json
+echo "...written to ./migrate/1316558677/61.sm.migrate.json"
+echo "Migrating object 63 (14)..."
+./fetch-old-sc "www.sourcemap.org/" 63 > ./migrate/1316558677/63.sm.migrate.json
+echo "...written to ./migrate/1316558677/63.sm.migrate.json"
+echo "Migrating object 64 (15)..."
+./fetch-old-sc "www.sourcemap.org/" 64 > ./migrate/1316558677/64.sm.migrate.json
+echo "...written to ./migrate/1316558677/64.sm.migrate.json"
+echo "Migrating object 79 (16)..."
+./fetch-old-sc "www.sourcemap.org/" 79 > ./migrate/1316558677/79.sm.migrate.json
+echo "...written to ./migrate/1316558677/79.sm.migrate.json"
+echo "Migrating object 82 (17)..."
+./fetch-old-sc "www.sourcemap.org/" 82 > ./migrate/1316558677/82.sm.migrate.json
+echo "...written to ./migrate/1316558677/82.sm.migrate.json"
+echo "Migrating object 84 (18)..."
+./fetch-old-sc "www.sourcemap.org/" 84 > ./migrate/1316558677/84.sm.migrate.json
+echo "...written to ./migrate/1316558677/84.sm.migrate.json"
+echo "Migrating object 88 (19)..."
+./fetch-old-sc "www.sourcemap.org/" 88 > ./migrate/1316558677/88.sm.migrate.json
+echo "...written to ./migrate/1316558677/88.sm.migrate.json"
+echo "Migrating object 90 (20)..."
+./fetch-old-sc "www.sourcemap.org/" 90 > ./migrate/1316558677/90.sm.migrate.json
+echo "...written to ./migrate/1316558677/90.sm.migrate.json"
+echo "Migrating object 96 (21)..."
+./fetch-old-sc "www.sourcemap.org/" 96 > ./migrate/1316558677/96.sm.migrate.json
+echo "...written to ./migrate/1316558677/96.sm.migrate.json"
+echo "Migrating object 97 (22)..."
+./fetch-old-sc "www.sourcemap.org/" 97 > ./migrate/1316558677/97.sm.migrate.json
+echo "...written to ./migrate/1316558677/97.sm.migrate.json"
+echo "Migrating object 100 (23)..."
+./fetch-old-sc "www.sourcemap.org/" 100 > ./migrate/1316558677/100.sm.migrate.json
+echo "...written to ./migrate/1316558677/100.sm.migrate.json"
+echo "Migrating object 102 (24)..."
+./fetch-old-sc "www.sourcemap.org/" 102 > ./migrate/1316558677/102.sm.migrate.json
+echo "...written to ./migrate/1316558677/102.sm.migrate.json"
+echo "Migrating object 104 (25)..."
+./fetch-old-sc "www.sourcemap.org/" 104 > ./migrate/1316558677/104.sm.migrate.json
+echo "...written to ./migrate/1316558677/104.sm.migrate.json"
+echo "Migrating object 105 (26)..."
+./fetch-old-sc "www.sourcemap.org/" 105 > ./migrate/1316558677/105.sm.migrate.json
+echo "...written to ./migrate/1316558677/105.sm.migrate.json"
+echo "Migrating object 110 (27)..."
+./fetch-old-sc "www.sourcemap.org/" 110 > ./migrate/1316558677/110.sm.migrate.json
+echo "...written to ./migrate/1316558677/110.sm.migrate.json"
+echo "Migrating object 112 (28)..."
+./fetch-old-sc "www.sourcemap.org/" 112 > ./migrate/1316558677/112.sm.migrate.json
+echo "...written to ./migrate/1316558677/112.sm.migrate.json"
+echo "Migrating object 113 (29)..."
+./fetch-old-sc "www.sourcemap.org/" 113 > ./migrate/1316558677/113.sm.migrate.json
+echo "...written to ./migrate/1316558677/113.sm.migrate.json"
+echo "Migrating object 114 (30)..."
+./fetch-old-sc "www.sourcemap.org/" 114 > ./migrate/1316558677/114.sm.migrate.json
+echo "...written to ./migrate/1316558677/114.sm.migrate.json"
+echo "Migrating object 115 (31)..."
+./fetch-old-sc "www.sourcemap.org/" 115 > ./migrate/1316558677/115.sm.migrate.json
+echo "...written to ./migrate/1316558677/115.sm.migrate.json"
+echo "Migrating object 130 (32)..."
+./fetch-old-sc "www.sourcemap.org/" 130 > ./migrate/1316558677/130.sm.migrate.json
+echo "...written to ./migrate/1316558677/130.sm.migrate.json"
+echo "Migrating object 134 (33)..."
+./fetch-old-sc "www.sourcemap.org/" 134 > ./migrate/1316558677/134.sm.migrate.json
+echo "...written to ./migrate/1316558677/134.sm.migrate.json"
+echo "Migrating object 137 (34)..."
+./fetch-old-sc "www.sourcemap.org/" 137 > ./migrate/1316558677/137.sm.migrate.json
+echo "...written to ./migrate/1316558677/137.sm.migrate.json"
+echo "Migrating object 141 (35)..."
+./fetch-old-sc "www.sourcemap.org/" 141 > ./migrate/1316558677/141.sm.migrate.json
+echo "...written to ./migrate/1316558677/141.sm.migrate.json"
+echo "Migrating object 143 (36)..."
+./fetch-old-sc "www.sourcemap.org/" 143 > ./migrate/1316558677/143.sm.migrate.json
+echo "...written to ./migrate/1316558677/143.sm.migrate.json"
+echo "Migrating object 146 (37)..."
+./fetch-old-sc "www.sourcemap.org/" 146 > ./migrate/1316558677/146.sm.migrate.json
+echo "...written to ./migrate/1316558677/146.sm.migrate.json"
+echo "Migrating object 148 (38)..."
+./fetch-old-sc "www.sourcemap.org/" 148 > ./migrate/1316558677/148.sm.migrate.json
+echo "...written to ./migrate/1316558677/148.sm.migrate.json"
+echo "Migrating object 149 (39)..."
+./fetch-old-sc "www.sourcemap.org/" 149 > ./migrate/1316558677/149.sm.migrate.json
+echo "...written to ./migrate/1316558677/149.sm.migrate.json"
+echo "Migrating object 150 (40)..."
+./fetch-old-sc "www.sourcemap.org/" 150 > ./migrate/1316558677/150.sm.migrate.json
+echo "...written to ./migrate/1316558677/150.sm.migrate.json"
+echo "Migrating object 152 (41)..."
+./fetch-old-sc "www.sourcemap.org/" 152 > ./migrate/1316558677/152.sm.migrate.json
+echo "...written to ./migrate/1316558677/152.sm.migrate.json"
+echo "Migrating object 153 (42)..."
+./fetch-old-sc "www.sourcemap.org/" 153 > ./migrate/1316558677/153.sm.migrate.json
+echo "...written to ./migrate/1316558677/153.sm.migrate.json"
+echo "Migrating object 162 (43)..."
+./fetch-old-sc "www.sourcemap.org/" 162 > ./migrate/1316558677/162.sm.migrate.json
+echo "...written to ./migrate/1316558677/162.sm.migrate.json"
+echo "Migrating object 164 (44)..."
+./fetch-old-sc "www.sourcemap.org/" 164 > ./migrate/1316558677/164.sm.migrate.json
+echo "...written to ./migrate/1316558677/164.sm.migrate.json"
+echo "Migrating object 166 (45)..."
+./fetch-old-sc "www.sourcemap.org/" 166 > ./migrate/1316558677/166.sm.migrate.json
+echo "...written to ./migrate/1316558677/166.sm.migrate.json"
+echo "Migrating object 167 (46)..."
+./fetch-old-sc "www.sourcemap.org/" 167 > ./migrate/1316558677/167.sm.migrate.json
+echo "...written to ./migrate/1316558677/167.sm.migrate.json"
+echo "Migrating object 169 (47)..."
+./fetch-old-sc "www.sourcemap.org/" 169 > ./migrate/1316558677/169.sm.migrate.json
+echo "...written to ./migrate/1316558677/169.sm.migrate.json"
+echo "Migrating object 171 (48)..."
+./fetch-old-sc "www.sourcemap.org/" 171 > ./migrate/1316558677/171.sm.migrate.json
+echo "...written to ./migrate/1316558677/171.sm.migrate.json"
+echo "Migrating object 172 (49)..."
+./fetch-old-sc "www.sourcemap.org/" 172 > ./migrate/1316558677/172.sm.migrate.json
+echo "...written to ./migrate/1316558677/172.sm.migrate.json"
+echo "Migrating object 173 (50)..."
+./fetch-old-sc "www.sourcemap.org/" 173 > ./migrate/1316558677/173.sm.migrate.json
+echo "...written to ./migrate/1316558677/173.sm.migrate.json"
+echo "Migrating object 179 (51)..."
+./fetch-old-sc "www.sourcemap.org/" 179 > ./migrate/1316558677/179.sm.migrate.json
+echo "...written to ./migrate/1316558677/179.sm.migrate.json"
+echo "Migrating object 181 (52)..."
+./fetch-old-sc "www.sourcemap.org/" 181 > ./migrate/1316558677/181.sm.migrate.json
+echo "...written to ./migrate/1316558677/181.sm.migrate.json"
+echo "Migrating object 182 (53)..."
+./fetch-old-sc "www.sourcemap.org/" 182 > ./migrate/1316558677/182.sm.migrate.json
+echo "...written to ./migrate/1316558677/182.sm.migrate.json"
+echo "Migrating object 183 (54)..."
+./fetch-old-sc "www.sourcemap.org/" 183 > ./migrate/1316558677/183.sm.migrate.json
+echo "...written to ./migrate/1316558677/183.sm.migrate.json"
+echo "Migrating object 186 (55)..."
+./fetch-old-sc "www.sourcemap.org/" 186 > ./migrate/1316558677/186.sm.migrate.json
+echo "...written to ./migrate/1316558677/186.sm.migrate.json"
+echo "Migrating object 187 (56)..."
+./fetch-old-sc "www.sourcemap.org/" 187 > ./migrate/1316558677/187.sm.migrate.json
+echo "...written to ./migrate/1316558677/187.sm.migrate.json"
+echo "Migrating object 188 (57)..."
+./fetch-old-sc "www.sourcemap.org/" 188 > ./migrate/1316558677/188.sm.migrate.json
+echo "...written to ./migrate/1316558677/188.sm.migrate.json"
+echo "Migrating object 189 (58)..."
+./fetch-old-sc "www.sourcemap.org/" 189 > ./migrate/1316558677/189.sm.migrate.json
+echo "...written to ./migrate/1316558677/189.sm.migrate.json"
+echo "Migrating object 190 (59)..."
+./fetch-old-sc "www.sourcemap.org/" 190 > ./migrate/1316558677/190.sm.migrate.json
+echo "...written to ./migrate/1316558677/190.sm.migrate.json"
+echo "Migrating object 195 (60)..."
+./fetch-old-sc "www.sourcemap.org/" 195 > ./migrate/1316558677/195.sm.migrate.json
+echo "...written to ./migrate/1316558677/195.sm.migrate.json"
+echo "Migrating object 197 (61)..."
+./fetch-old-sc "www.sourcemap.org/" 197 > ./migrate/1316558677/197.sm.migrate.json
+echo "...written to ./migrate/1316558677/197.sm.migrate.json"
+echo "Migrating object 198 (62)..."
+./fetch-old-sc "www.sourcemap.org/" 198 > ./migrate/1316558677/198.sm.migrate.json
+echo "...written to ./migrate/1316558677/198.sm.migrate.json"
+echo "Migrating object 199 (63)..."
+./fetch-old-sc "www.sourcemap.org/" 199 > ./migrate/1316558677/199.sm.migrate.json
+echo "...written to ./migrate/1316558677/199.sm.migrate.json"
+echo "Migrating object 200 (64)..."
+./fetch-old-sc "www.sourcemap.org/" 200 > ./migrate/1316558677/200.sm.migrate.json
+echo "...written to ./migrate/1316558677/200.sm.migrate.json"
+echo "Migrating object 202 (65)..."
+./fetch-old-sc "www.sourcemap.org/" 202 > ./migrate/1316558677/202.sm.migrate.json
+echo "...written to ./migrate/1316558677/202.sm.migrate.json"
+echo "Migrating object 205 (66)..."
+./fetch-old-sc "www.sourcemap.org/" 205 > ./migrate/1316558677/205.sm.migrate.json
+echo "...written to ./migrate/1316558677/205.sm.migrate.json"
+echo "Migrating object 207 (67)..."
+./fetch-old-sc "www.sourcemap.org/" 207 > ./migrate/1316558677/207.sm.migrate.json
+echo "...written to ./migrate/1316558677/207.sm.migrate.json"
+echo "Migrating object 213 (68)..."
+./fetch-old-sc "www.sourcemap.org/" 213 > ./migrate/1316558677/213.sm.migrate.json
+echo "...written to ./migrate/1316558677/213.sm.migrate.json"
+echo "Migrating object 222 (69)..."
+./fetch-old-sc "www.sourcemap.org/" 222 > ./migrate/1316558677/222.sm.migrate.json
+echo "...written to ./migrate/1316558677/222.sm.migrate.json"
+echo "Migrating object 223 (70)..."
+./fetch-old-sc "www.sourcemap.org/" 223 > ./migrate/1316558677/223.sm.migrate.json
+echo "...written to ./migrate/1316558677/223.sm.migrate.json"
+echo "Migrating object 225 (71)..."
+./fetch-old-sc "www.sourcemap.org/" 225 > ./migrate/1316558677/225.sm.migrate.json
+echo "...written to ./migrate/1316558677/225.sm.migrate.json"
+echo "Migrating object 226 (72)..."
+./fetch-old-sc "www.sourcemap.org/" 226 > ./migrate/1316558677/226.sm.migrate.json
+echo "...written to ./migrate/1316558677/226.sm.migrate.json"
+echo "Migrating object 228 (73)..."
+./fetch-old-sc "www.sourcemap.org/" 228 > ./migrate/1316558677/228.sm.migrate.json
+echo "...written to ./migrate/1316558677/228.sm.migrate.json"
+echo "Migrating object 231 (74)..."
+./fetch-old-sc "www.sourcemap.org/" 231 > ./migrate/1316558677/231.sm.migrate.json
+echo "...written to ./migrate/1316558677/231.sm.migrate.json"
+echo "Migrating object 237 (75)..."
+./fetch-old-sc "www.sourcemap.org/" 237 > ./migrate/1316558677/237.sm.migrate.json
+echo "...written to ./migrate/1316558677/237.sm.migrate.json"
+echo "Migrating object 249 (76)..."
+./fetch-old-sc "www.sourcemap.org/" 249 > ./migrate/1316558677/249.sm.migrate.json
+echo "...written to ./migrate/1316558677/249.sm.migrate.json"
+echo "Migrating object 251 (77)..."
+./fetch-old-sc "www.sourcemap.org/" 251 > ./migrate/1316558677/251.sm.migrate.json
+echo "...written to ./migrate/1316558677/251.sm.migrate.json"
+echo "Migrating object 253 (78)..."
+./fetch-old-sc "www.sourcemap.org/" 253 > ./migrate/1316558677/253.sm.migrate.json
+echo "...written to ./migrate/1316558677/253.sm.migrate.json"
+echo "Migrating object 255 (79)..."
+./fetch-old-sc "www.sourcemap.org/" 255 > ./migrate/1316558677/255.sm.migrate.json
+echo "...written to ./migrate/1316558677/255.sm.migrate.json"
+echo "Migrating object 258 (80)..."
+./fetch-old-sc "www.sourcemap.org/" 258 > ./migrate/1316558677/258.sm.migrate.json
+echo "...written to ./migrate/1316558677/258.sm.migrate.json"
+echo "Migrating object 259 (81)..."
+./fetch-old-sc "www.sourcemap.org/" 259 > ./migrate/1316558677/259.sm.migrate.json
+echo "...written to ./migrate/1316558677/259.sm.migrate.json"
+echo "Migrating object 260 (82)..."
+./fetch-old-sc "www.sourcemap.org/" 260 > ./migrate/1316558677/260.sm.migrate.json
+echo "...written to ./migrate/1316558677/260.sm.migrate.json"
+echo "Migrating object 261 (83)..."
+./fetch-old-sc "www.sourcemap.org/" 261 > ./migrate/1316558677/261.sm.migrate.json
+echo "...written to ./migrate/1316558677/261.sm.migrate.json"
+echo "Migrating object 265 (84)..."
+./fetch-old-sc "www.sourcemap.org/" 265 > ./migrate/1316558677/265.sm.migrate.json
+echo "...written to ./migrate/1316558677/265.sm.migrate.json"
+echo "Migrating object 266 (85)..."
+./fetch-old-sc "www.sourcemap.org/" 266 > ./migrate/1316558677/266.sm.migrate.json
+echo "...written to ./migrate/1316558677/266.sm.migrate.json"
+echo "Migrating object 270 (86)..."
+./fetch-old-sc "www.sourcemap.org/" 270 > ./migrate/1316558677/270.sm.migrate.json
+echo "...written to ./migrate/1316558677/270.sm.migrate.json"
+echo "Migrating object 271 (87)..."
+./fetch-old-sc "www.sourcemap.org/" 271 > ./migrate/1316558677/271.sm.migrate.json
+echo "...written to ./migrate/1316558677/271.sm.migrate.json"
+echo "Migrating object 275 (88)..."
+./fetch-old-sc "www.sourcemap.org/" 275 > ./migrate/1316558677/275.sm.migrate.json
+echo "...written to ./migrate/1316558677/275.sm.migrate.json"
+echo "Migrating object 276 (89)..."
+./fetch-old-sc "www.sourcemap.org/" 276 > ./migrate/1316558677/276.sm.migrate.json
+echo "...written to ./migrate/1316558677/276.sm.migrate.json"
+echo "Migrating object 277 (90)..."
+./fetch-old-sc "www.sourcemap.org/" 277 > ./migrate/1316558677/277.sm.migrate.json
+echo "...written to ./migrate/1316558677/277.sm.migrate.json"
+echo "Migrating object 280 (91)..."
+./fetch-old-sc "www.sourcemap.org/" 280 > ./migrate/1316558677/280.sm.migrate.json
+echo "...written to ./migrate/1316558677/280.sm.migrate.json"
+echo "Migrating object 281 (92)..."
+./fetch-old-sc "www.sourcemap.org/" 281 > ./migrate/1316558677/281.sm.migrate.json
+echo "...written to ./migrate/1316558677/281.sm.migrate.json"
+echo "Migrating object 282 (93)..."
+./fetch-old-sc "www.sourcemap.org/" 282 > ./migrate/1316558677/282.sm.migrate.json
+echo "...written to ./migrate/1316558677/282.sm.migrate.json"
+echo "Migrating object 283 (94)..."
+./fetch-old-sc "www.sourcemap.org/" 283 > ./migrate/1316558677/283.sm.migrate.json
+echo "...written to ./migrate/1316558677/283.sm.migrate.json"
+echo "Migrating object 284 (95)..."
+./fetch-old-sc "www.sourcemap.org/" 284 > ./migrate/1316558677/284.sm.migrate.json
+echo "...written to ./migrate/1316558677/284.sm.migrate.json"
+echo "Migrating object 285 (96)..."
+./fetch-old-sc "www.sourcemap.org/" 285 > ./migrate/1316558677/285.sm.migrate.json
+echo "...written to ./migrate/1316558677/285.sm.migrate.json"
+echo "Migrating object 286 (97)..."
+./fetch-old-sc "www.sourcemap.org/" 286 > ./migrate/1316558677/286.sm.migrate.json
+echo "...written to ./migrate/1316558677/286.sm.migrate.json"
+echo "Migrating object 287 (98)..."
+./fetch-old-sc "www.sourcemap.org/" 287 > ./migrate/1316558677/287.sm.migrate.json
+echo "...written to ./migrate/1316558677/287.sm.migrate.json"
+echo "Migrating object 296 (99)..."
+./fetch-old-sc "www.sourcemap.org/" 296 > ./migrate/1316558677/296.sm.migrate.json
+echo "...written to ./migrate/1316558677/296.sm.migrate.json"
+echo "Migrating object 311 (100)..."
+./fetch-old-sc "www.sourcemap.org/" 311 > ./migrate/1316558677/311.sm.migrate.json
+echo "...written to ./migrate/1316558677/311.sm.migrate.json"
+echo "Migrating object 320 (101)..."
+./fetch-old-sc "www.sourcemap.org/" 320 > ./migrate/1316558677/320.sm.migrate.json
+echo "...written to ./migrate/1316558677/320.sm.migrate.json"
+echo "Migrating object 327 (102)..."
+./fetch-old-sc "www.sourcemap.org/" 327 > ./migrate/1316558677/327.sm.migrate.json
+echo "...written to ./migrate/1316558677/327.sm.migrate.json"
+echo "Migrating object 330 (103)..."
+./fetch-old-sc "www.sourcemap.org/" 330 > ./migrate/1316558677/330.sm.migrate.json
+echo "...written to ./migrate/1316558677/330.sm.migrate.json"
+echo "Migrating object 333 (104)..."
+./fetch-old-sc "www.sourcemap.org/" 333 > ./migrate/1316558677/333.sm.migrate.json
+echo "...written to ./migrate/1316558677/333.sm.migrate.json"
+echo "Migrating object 342 (105)..."
+./fetch-old-sc "www.sourcemap.org/" 342 > ./migrate/1316558677/342.sm.migrate.json
+echo "...written to ./migrate/1316558677/342.sm.migrate.json"
+echo "Migrating object 348 (106)..."
+./fetch-old-sc "www.sourcemap.org/" 348 > ./migrate/1316558677/348.sm.migrate.json
+echo "...written to ./migrate/1316558677/348.sm.migrate.json"
+echo "Migrating object 364 (107)..."
+./fetch-old-sc "www.sourcemap.org/" 364 > ./migrate/1316558677/364.sm.migrate.json
+echo "...written to ./migrate/1316558677/364.sm.migrate.json"
+echo "Migrating object 370 (108)..."
+./fetch-old-sc "www.sourcemap.org/" 370 > ./migrate/1316558677/370.sm.migrate.json
+echo "...written to ./migrate/1316558677/370.sm.migrate.json"
+echo "Migrating object 371 (109)..."
+./fetch-old-sc "www.sourcemap.org/" 371 > ./migrate/1316558677/371.sm.migrate.json
+echo "...written to ./migrate/1316558677/371.sm.migrate.json"
+echo "Migrating object 372 (110)..."
+./fetch-old-sc "www.sourcemap.org/" 372 > ./migrate/1316558677/372.sm.migrate.json
+echo "...written to ./migrate/1316558677/372.sm.migrate.json"
+echo "Migrating object 373 (111)..."
+./fetch-old-sc "www.sourcemap.org/" 373 > ./migrate/1316558677/373.sm.migrate.json
+echo "...written to ./migrate/1316558677/373.sm.migrate.json"
+echo "Migrating object 383 (112)..."
+./fetch-old-sc "www.sourcemap.org/" 383 > ./migrate/1316558677/383.sm.migrate.json
+echo "...written to ./migrate/1316558677/383.sm.migrate.json"
+echo "Migrating object 389 (113)..."
+./fetch-old-sc "www.sourcemap.org/" 389 > ./migrate/1316558677/389.sm.migrate.json
+echo "...written to ./migrate/1316558677/389.sm.migrate.json"
+echo "Migrating object 392 (114)..."
+./fetch-old-sc "www.sourcemap.org/" 392 > ./migrate/1316558677/392.sm.migrate.json
+echo "...written to ./migrate/1316558677/392.sm.migrate.json"
+echo "Migrating object 394 (115)..."
+./fetch-old-sc "www.sourcemap.org/" 394 > ./migrate/1316558677/394.sm.migrate.json
+echo "...written to ./migrate/1316558677/394.sm.migrate.json"
+echo "Migrating object 397 (116)..."
+./fetch-old-sc "www.sourcemap.org/" 397 > ./migrate/1316558677/397.sm.migrate.json
+echo "...written to ./migrate/1316558677/397.sm.migrate.json"
+echo "Migrating object 403 (117)..."
+./fetch-old-sc "www.sourcemap.org/" 403 > ./migrate/1316558677/403.sm.migrate.json
+echo "...written to ./migrate/1316558677/403.sm.migrate.json"
+echo "Migrating object 414 (118)..."
+./fetch-old-sc "www.sourcemap.org/" 414 > ./migrate/1316558677/414.sm.migrate.json
+echo "...written to ./migrate/1316558677/414.sm.migrate.json"
+echo "Migrating object 419 (119)..."
+./fetch-old-sc "www.sourcemap.org/" 419 > ./migrate/1316558677/419.sm.migrate.json
+echo "...written to ./migrate/1316558677/419.sm.migrate.json"
+echo "Migrating object 423 (120)..."
+./fetch-old-sc "www.sourcemap.org/" 423 > ./migrate/1316558677/423.sm.migrate.json
+echo "...written to ./migrate/1316558677/423.sm.migrate.json"
+echo "Migrating object 432 (121)..."
+./fetch-old-sc "www.sourcemap.org/" 432 > ./migrate/1316558677/432.sm.migrate.json
+echo "...written to ./migrate/1316558677/432.sm.migrate.json"
+echo "Migrating object 437 (122)..."
+./fetch-old-sc "www.sourcemap.org/" 437 > ./migrate/1316558677/437.sm.migrate.json
+echo "...written to ./migrate/1316558677/437.sm.migrate.json"
+echo "Migrating object 438 (123)..."
+./fetch-old-sc "www.sourcemap.org/" 438 > ./migrate/1316558677/438.sm.migrate.json
+echo "...written to ./migrate/1316558677/438.sm.migrate.json"
+echo "Migrating object 439 (124)..."
+./fetch-old-sc "www.sourcemap.org/" 439 > ./migrate/1316558677/439.sm.migrate.json
+echo "...written to ./migrate/1316558677/439.sm.migrate.json"
+echo "Migrating object 440 (125)..."
+./fetch-old-sc "www.sourcemap.org/" 440 > ./migrate/1316558677/440.sm.migrate.json
+echo "...written to ./migrate/1316558677/440.sm.migrate.json"
+echo "Migrating object 451 (126)..."
+./fetch-old-sc "www.sourcemap.org/" 451 > ./migrate/1316558677/451.sm.migrate.json
+echo "...written to ./migrate/1316558677/451.sm.migrate.json"
+echo "Migrating object 455 (127)..."
+./fetch-old-sc "www.sourcemap.org/" 455 > ./migrate/1316558677/455.sm.migrate.json
+echo "...written to ./migrate/1316558677/455.sm.migrate.json"
+echo "Migrating object 456 (128)..."
+./fetch-old-sc "www.sourcemap.org/" 456 > ./migrate/1316558677/456.sm.migrate.json
+echo "...written to ./migrate/1316558677/456.sm.migrate.json"
+echo "Migrating object 462 (129)..."
+./fetch-old-sc "www.sourcemap.org/" 462 > ./migrate/1316558677/462.sm.migrate.json
+echo "...written to ./migrate/1316558677/462.sm.migrate.json"
+echo "Migrating object 464 (130)..."
+./fetch-old-sc "www.sourcemap.org/" 464 > ./migrate/1316558677/464.sm.migrate.json
+echo "...written to ./migrate/1316558677/464.sm.migrate.json"
+echo "Migrating object 465 (131)..."
+./fetch-old-sc "www.sourcemap.org/" 465 > ./migrate/1316558677/465.sm.migrate.json
+echo "...written to ./migrate/1316558677/465.sm.migrate.json"
+echo "Migrating object 466 (132)..."
+./fetch-old-sc "www.sourcemap.org/" 466 > ./migrate/1316558677/466.sm.migrate.json
+echo "...written to ./migrate/1316558677/466.sm.migrate.json"
+echo "Migrating object 471 (133)..."
+./fetch-old-sc "www.sourcemap.org/" 471 > ./migrate/1316558677/471.sm.migrate.json
+echo "...written to ./migrate/1316558677/471.sm.migrate.json"
+echo "Migrating object 472 (134)..."
+./fetch-old-sc "www.sourcemap.org/" 472 > ./migrate/1316558677/472.sm.migrate.json
+echo "...written to ./migrate/1316558677/472.sm.migrate.json"
+echo "Migrating object 477 (135)..."
+./fetch-old-sc "www.sourcemap.org/" 477 > ./migrate/1316558677/477.sm.migrate.json
+echo "...written to ./migrate/1316558677/477.sm.migrate.json"
+echo "Migrating object 478 (136)..."
+./fetch-old-sc "www.sourcemap.org/" 478 > ./migrate/1316558677/478.sm.migrate.json
+echo "...written to ./migrate/1316558677/478.sm.migrate.json"
+echo "Migrating object 480 (137)..."
+./fetch-old-sc "www.sourcemap.org/" 480 > ./migrate/1316558677/480.sm.migrate.json
+echo "...written to ./migrate/1316558677/480.sm.migrate.json"
+echo "Migrating object 482 (138)..."
+./fetch-old-sc "www.sourcemap.org/" 482 > ./migrate/1316558677/482.sm.migrate.json
+echo "...written to ./migrate/1316558677/482.sm.migrate.json"
+echo "Migrating object 487 (139)..."
+./fetch-old-sc "www.sourcemap.org/" 487 > ./migrate/1316558677/487.sm.migrate.json
+echo "...written to ./migrate/1316558677/487.sm.migrate.json"
+echo "Migrating object 488 (140)..."
+./fetch-old-sc "www.sourcemap.org/" 488 > ./migrate/1316558677/488.sm.migrate.json
+echo "...written to ./migrate/1316558677/488.sm.migrate.json"
+echo "Migrating object 503 (141)..."
+./fetch-old-sc "www.sourcemap.org/" 503 > ./migrate/1316558677/503.sm.migrate.json
+echo "...written to ./migrate/1316558677/503.sm.migrate.json"
+echo "Migrating object 506 (142)..."
+./fetch-old-sc "www.sourcemap.org/" 506 > ./migrate/1316558677/506.sm.migrate.json
+echo "...written to ./migrate/1316558677/506.sm.migrate.json"
+echo "Migrating object 507 (143)..."
+./fetch-old-sc "www.sourcemap.org/" 507 > ./migrate/1316558677/507.sm.migrate.json
+echo "...written to ./migrate/1316558677/507.sm.migrate.json"
+echo "Migrating object 510 (144)..."
+./fetch-old-sc "www.sourcemap.org/" 510 > ./migrate/1316558677/510.sm.migrate.json
+echo "...written to ./migrate/1316558677/510.sm.migrate.json"
+echo "Migrating object 516 (145)..."
+./fetch-old-sc "www.sourcemap.org/" 516 > ./migrate/1316558677/516.sm.migrate.json
+echo "...written to ./migrate/1316558677/516.sm.migrate.json"
+echo "Migrating object 518 (146)..."
+./fetch-old-sc "www.sourcemap.org/" 518 > ./migrate/1316558677/518.sm.migrate.json
+echo "...written to ./migrate/1316558677/518.sm.migrate.json"
+echo "Migrating object 521 (147)..."
+./fetch-old-sc "www.sourcemap.org/" 521 > ./migrate/1316558677/521.sm.migrate.json
+echo "...written to ./migrate/1316558677/521.sm.migrate.json"
+echo "Migrating object 524 (148)..."
+./fetch-old-sc "www.sourcemap.org/" 524 > ./migrate/1316558677/524.sm.migrate.json
+echo "...written to ./migrate/1316558677/524.sm.migrate.json"
+echo "Migrating object 525 (149)..."
+./fetch-old-sc "www.sourcemap.org/" 525 > ./migrate/1316558677/525.sm.migrate.json
+echo "...written to ./migrate/1316558677/525.sm.migrate.json"
+echo "Migrating object 526 (150)..."
+./fetch-old-sc "www.sourcemap.org/" 526 > ./migrate/1316558677/526.sm.migrate.json
+echo "...written to ./migrate/1316558677/526.sm.migrate.json"
+echo "Migrating object 533 (151)..."
+./fetch-old-sc "www.sourcemap.org/" 533 > ./migrate/1316558677/533.sm.migrate.json
+echo "...written to ./migrate/1316558677/533.sm.migrate.json"
+echo "Migrating object 534 (152)..."
+./fetch-old-sc "www.sourcemap.org/" 534 > ./migrate/1316558677/534.sm.migrate.json
+echo "...written to ./migrate/1316558677/534.sm.migrate.json"
+echo "Migrating object 539 (153)..."
+./fetch-old-sc "www.sourcemap.org/" 539 > ./migrate/1316558677/539.sm.migrate.json
+echo "...written to ./migrate/1316558677/539.sm.migrate.json"
+echo "Migrating object 543 (154)..."
+./fetch-old-sc "www.sourcemap.org/" 543 > ./migrate/1316558677/543.sm.migrate.json
+echo "...written to ./migrate/1316558677/543.sm.migrate.json"
+echo "Migrating object 549 (155)..."
+./fetch-old-sc "www.sourcemap.org/" 549 > ./migrate/1316558677/549.sm.migrate.json
+echo "...written to ./migrate/1316558677/549.sm.migrate.json"
+echo "Migrating object 551 (156)..."
+./fetch-old-sc "www.sourcemap.org/" 551 > ./migrate/1316558677/551.sm.migrate.json
+echo "...written to ./migrate/1316558677/551.sm.migrate.json"
+echo "Migrating object 552 (157)..."
+./fetch-old-sc "www.sourcemap.org/" 552 > ./migrate/1316558677/552.sm.migrate.json
+echo "...written to ./migrate/1316558677/552.sm.migrate.json"
+echo "Migrating object 554 (158)..."
+./fetch-old-sc "www.sourcemap.org/" 554 > ./migrate/1316558677/554.sm.migrate.json
+echo "...written to ./migrate/1316558677/554.sm.migrate.json"
+echo "Migrating object 557 (159)..."
+./fetch-old-sc "www.sourcemap.org/" 557 > ./migrate/1316558677/557.sm.migrate.json
+echo "...written to ./migrate/1316558677/557.sm.migrate.json"
+echo "Migrating object 560 (160)..."
+./fetch-old-sc "www.sourcemap.org/" 560 > ./migrate/1316558677/560.sm.migrate.json
+echo "...written to ./migrate/1316558677/560.sm.migrate.json"
+echo "Migrating object 561 (161)..."
+./fetch-old-sc "www.sourcemap.org/" 561 > ./migrate/1316558677/561.sm.migrate.json
+echo "...written to ./migrate/1316558677/561.sm.migrate.json"
+echo "Migrating object 562 (162)..."
+./fetch-old-sc "www.sourcemap.org/" 562 > ./migrate/1316558677/562.sm.migrate.json
+echo "...written to ./migrate/1316558677/562.sm.migrate.json"
+echo "Migrating object 563 (163)..."
+./fetch-old-sc "www.sourcemap.org/" 563 > ./migrate/1316558677/563.sm.migrate.json
+echo "...written to ./migrate/1316558677/563.sm.migrate.json"
+echo "Migrating object 564 (164)..."
+./fetch-old-sc "www.sourcemap.org/" 564 > ./migrate/1316558677/564.sm.migrate.json
+echo "...written to ./migrate/1316558677/564.sm.migrate.json"
+echo "Migrating object 566 (165)..."
+./fetch-old-sc "www.sourcemap.org/" 566 > ./migrate/1316558677/566.sm.migrate.json
+echo "...written to ./migrate/1316558677/566.sm.migrate.json"
+echo "Migrating object 568 (166)..."
+./fetch-old-sc "www.sourcemap.org/" 568 > ./migrate/1316558677/568.sm.migrate.json
+echo "...written to ./migrate/1316558677/568.sm.migrate.json"
+echo "Migrating object 570 (167)..."
+./fetch-old-sc "www.sourcemap.org/" 570 > ./migrate/1316558677/570.sm.migrate.json
+echo "...written to ./migrate/1316558677/570.sm.migrate.json"
+echo "Migrating object 572 (168)..."
+./fetch-old-sc "www.sourcemap.org/" 572 > ./migrate/1316558677/572.sm.migrate.json
+echo "...written to ./migrate/1316558677/572.sm.migrate.json"
+echo "Migrating object 576 (169)..."
+./fetch-old-sc "www.sourcemap.org/" 576 > ./migrate/1316558677/576.sm.migrate.json
+echo "...written to ./migrate/1316558677/576.sm.migrate.json"
+echo "Migrating object 586 (170)..."
+./fetch-old-sc "www.sourcemap.org/" 586 > ./migrate/1316558677/586.sm.migrate.json
+echo "...written to ./migrate/1316558677/586.sm.migrate.json"
+echo "Migrating object 587 (171)..."
+./fetch-old-sc "www.sourcemap.org/" 587 > ./migrate/1316558677/587.sm.migrate.json
+echo "...written to ./migrate/1316558677/587.sm.migrate.json"
+echo "Migrating object 590 (172)..."
+./fetch-old-sc "www.sourcemap.org/" 590 > ./migrate/1316558677/590.sm.migrate.json
+echo "...written to ./migrate/1316558677/590.sm.migrate.json"
+echo "Migrating object 591 (173)..."
+./fetch-old-sc "www.sourcemap.org/" 591 > ./migrate/1316558677/591.sm.migrate.json
+echo "...written to ./migrate/1316558677/591.sm.migrate.json"
+echo "Migrating object 596 (174)..."
+./fetch-old-sc "www.sourcemap.org/" 596 > ./migrate/1316558677/596.sm.migrate.json
+echo "...written to ./migrate/1316558677/596.sm.migrate.json"
+echo "Migrating object 601 (175)..."
+./fetch-old-sc "www.sourcemap.org/" 601 > ./migrate/1316558677/601.sm.migrate.json
+echo "...written to ./migrate/1316558677/601.sm.migrate.json"
+echo "Migrating object 604 (176)..."
+./fetch-old-sc "www.sourcemap.org/" 604 > ./migrate/1316558677/604.sm.migrate.json
+echo "...written to ./migrate/1316558677/604.sm.migrate.json"
+echo "Migrating object 605 (177)..."
+./fetch-old-sc "www.sourcemap.org/" 605 > ./migrate/1316558677/605.sm.migrate.json
+echo "...written to ./migrate/1316558677/605.sm.migrate.json"
+echo "Migrating object 608 (178)..."
+./fetch-old-sc "www.sourcemap.org/" 608 > ./migrate/1316558677/608.sm.migrate.json
+echo "...written to ./migrate/1316558677/608.sm.migrate.json"
+echo "Migrating object 609 (179)..."
+./fetch-old-sc "www.sourcemap.org/" 609 > ./migrate/1316558677/609.sm.migrate.json
+echo "...written to ./migrate/1316558677/609.sm.migrate.json"
+echo "Migrating object 615 (180)..."
+./fetch-old-sc "www.sourcemap.org/" 615 > ./migrate/1316558677/615.sm.migrate.json
+echo "...written to ./migrate/1316558677/615.sm.migrate.json"
+echo "Migrating object 617 (181)..."
+./fetch-old-sc "www.sourcemap.org/" 617 > ./migrate/1316558677/617.sm.migrate.json
+echo "...written to ./migrate/1316558677/617.sm.migrate.json"
+echo "Migrating object 621 (182)..."
+./fetch-old-sc "www.sourcemap.org/" 621 > ./migrate/1316558677/621.sm.migrate.json
+echo "...written to ./migrate/1316558677/621.sm.migrate.json"
+echo "Migrating object 632 (183)..."
+./fetch-old-sc "www.sourcemap.org/" 632 > ./migrate/1316558677/632.sm.migrate.json
+echo "...written to ./migrate/1316558677/632.sm.migrate.json"
+echo "Migrating object 638 (184)..."
+./fetch-old-sc "www.sourcemap.org/" 638 > ./migrate/1316558677/638.sm.migrate.json
+echo "...written to ./migrate/1316558677/638.sm.migrate.json"
+echo "Migrating object 639 (185)..."
+./fetch-old-sc "www.sourcemap.org/" 639 > ./migrate/1316558677/639.sm.migrate.json
+echo "...written to ./migrate/1316558677/639.sm.migrate.json"
+echo "Migrating object 640 (186)..."
+./fetch-old-sc "www.sourcemap.org/" 640 > ./migrate/1316558677/640.sm.migrate.json
+echo "...written to ./migrate/1316558677/640.sm.migrate.json"
+echo "Migrating object 643 (187)..."
+./fetch-old-sc "www.sourcemap.org/" 643 > ./migrate/1316558677/643.sm.migrate.json
+echo "...written to ./migrate/1316558677/643.sm.migrate.json"
+echo "Migrating object 648 (188)..."
+./fetch-old-sc "www.sourcemap.org/" 648 > ./migrate/1316558677/648.sm.migrate.json
+echo "...written to ./migrate/1316558677/648.sm.migrate.json"
+echo "Migrating object 650 (189)..."
+./fetch-old-sc "www.sourcemap.org/" 650 > ./migrate/1316558677/650.sm.migrate.json
+echo "...written to ./migrate/1316558677/650.sm.migrate.json"
+echo "Migrating object 653 (190)..."
+./fetch-old-sc "www.sourcemap.org/" 653 > ./migrate/1316558677/653.sm.migrate.json
+echo "...written to ./migrate/1316558677/653.sm.migrate.json"
+echo "Migrating object 656 (191)..."
+./fetch-old-sc "www.sourcemap.org/" 656 > ./migrate/1316558677/656.sm.migrate.json
+echo "...written to ./migrate/1316558677/656.sm.migrate.json"
+echo "Migrating object 657 (192)..."
+./fetch-old-sc "www.sourcemap.org/" 657 > ./migrate/1316558677/657.sm.migrate.json
+echo "...written to ./migrate/1316558677/657.sm.migrate.json"
+echo "Migrating object 659 (193)..."
+./fetch-old-sc "www.sourcemap.org/" 659 > ./migrate/1316558677/659.sm.migrate.json
+echo "...written to ./migrate/1316558677/659.sm.migrate.json"
+echo "Migrating object 670 (194)..."
+./fetch-old-sc "www.sourcemap.org/" 670 > ./migrate/1316558677/670.sm.migrate.json
+echo "...written to ./migrate/1316558677/670.sm.migrate.json"
+echo "Migrating object 671 (195)..."
+./fetch-old-sc "www.sourcemap.org/" 671 > ./migrate/1316558677/671.sm.migrate.json
+echo "...written to ./migrate/1316558677/671.sm.migrate.json"
+echo "Migrating object 684 (196)..."
+./fetch-old-sc "www.sourcemap.org/" 684 > ./migrate/1316558677/684.sm.migrate.json
+echo "...written to ./migrate/1316558677/684.sm.migrate.json"
+echo "Migrating object 690 (197)..."
+./fetch-old-sc "www.sourcemap.org/" 690 > ./migrate/1316558677/690.sm.migrate.json
+echo "...written to ./migrate/1316558677/690.sm.migrate.json"
+echo "Migrating object 700 (198)..."
+./fetch-old-sc "www.sourcemap.org/" 700 > ./migrate/1316558677/700.sm.migrate.json
+echo "...written to ./migrate/1316558677/700.sm.migrate.json"
+echo "Migrating object 724 (199)..."
+./fetch-old-sc "www.sourcemap.org/" 724 > ./migrate/1316558677/724.sm.migrate.json
+echo "...written to ./migrate/1316558677/724.sm.migrate.json"
+echo "Migrating object 732 (200)..."
+./fetch-old-sc "www.sourcemap.org/" 732 > ./migrate/1316558677/732.sm.migrate.json
+echo "...written to ./migrate/1316558677/732.sm.migrate.json"
+echo "Migrating object 740 (201)..."
+./fetch-old-sc "www.sourcemap.org/" 740 > ./migrate/1316558677/740.sm.migrate.json
+echo "...written to ./migrate/1316558677/740.sm.migrate.json"
+echo "Migrating object 743 (202)..."
+./fetch-old-sc "www.sourcemap.org/" 743 > ./migrate/1316558677/743.sm.migrate.json
+echo "...written to ./migrate/1316558677/743.sm.migrate.json"
+echo "Migrating object 744 (203)..."
+./fetch-old-sc "www.sourcemap.org/" 744 > ./migrate/1316558677/744.sm.migrate.json
+echo "...written to ./migrate/1316558677/744.sm.migrate.json"
+echo "Migrating object 747 (204)..."
+./fetch-old-sc "www.sourcemap.org/" 747 > ./migrate/1316558677/747.sm.migrate.json
+echo "...written to ./migrate/1316558677/747.sm.migrate.json"
+echo "Migrating object 749 (205)..."
+./fetch-old-sc "www.sourcemap.org/" 749 > ./migrate/1316558677/749.sm.migrate.json
+echo "...written to ./migrate/1316558677/749.sm.migrate.json"
+echo "Migrating object 751 (206)..."
+./fetch-old-sc "www.sourcemap.org/" 751 > ./migrate/1316558677/751.sm.migrate.json
+echo "...written to ./migrate/1316558677/751.sm.migrate.json"
+echo "Migrating object 756 (207)..."
+./fetch-old-sc "www.sourcemap.org/" 756 > ./migrate/1316558677/756.sm.migrate.json
+echo "...written to ./migrate/1316558677/756.sm.migrate.json"
+echo "Migrating object 757 (208)..."
+./fetch-old-sc "www.sourcemap.org/" 757 > ./migrate/1316558677/757.sm.migrate.json
+echo "...written to ./migrate/1316558677/757.sm.migrate.json"
+echo "Migrating object 758 (209)..."
+./fetch-old-sc "www.sourcemap.org/" 758 > ./migrate/1316558677/758.sm.migrate.json
+echo "...written to ./migrate/1316558677/758.sm.migrate.json"
+echo "Migrating object 759 (210)..."
+./fetch-old-sc "www.sourcemap.org/" 759 > ./migrate/1316558677/759.sm.migrate.json
+echo "...written to ./migrate/1316558677/759.sm.migrate.json"
+echo "Migrating object 760 (211)..."
+./fetch-old-sc "www.sourcemap.org/" 760 > ./migrate/1316558677/760.sm.migrate.json
+echo "...written to ./migrate/1316558677/760.sm.migrate.json"
+echo "Migrating object 761 (212)..."
+./fetch-old-sc "www.sourcemap.org/" 761 > ./migrate/1316558677/761.sm.migrate.json
+echo "...written to ./migrate/1316558677/761.sm.migrate.json"
+echo "Migrating object 763 (213)..."
+./fetch-old-sc "www.sourcemap.org/" 763 > ./migrate/1316558677/763.sm.migrate.json
+echo "...written to ./migrate/1316558677/763.sm.migrate.json"
+echo "Migrating object 765 (214)..."
+./fetch-old-sc "www.sourcemap.org/" 765 > ./migrate/1316558677/765.sm.migrate.json
+echo "...written to ./migrate/1316558677/765.sm.migrate.json"
+echo "Migrating object 769 (215)..."
+./fetch-old-sc "www.sourcemap.org/" 769 > ./migrate/1316558677/769.sm.migrate.json
+echo "...written to ./migrate/1316558677/769.sm.migrate.json"
+echo "Migrating object 771 (216)..."
+./fetch-old-sc "www.sourcemap.org/" 771 > ./migrate/1316558677/771.sm.migrate.json
+echo "...written to ./migrate/1316558677/771.sm.migrate.json"
+echo "Migrating object 776 (217)..."
+./fetch-old-sc "www.sourcemap.org/" 776 > ./migrate/1316558677/776.sm.migrate.json
+echo "...written to ./migrate/1316558677/776.sm.migrate.json"
+echo "Migrating object 777 (218)..."
+./fetch-old-sc "www.sourcemap.org/" 777 > ./migrate/1316558677/777.sm.migrate.json
+echo "...written to ./migrate/1316558677/777.sm.migrate.json"
+echo "Migrating object 780 (219)..."
+./fetch-old-sc "www.sourcemap.org/" 780 > ./migrate/1316558677/780.sm.migrate.json
+echo "...written to ./migrate/1316558677/780.sm.migrate.json"
+echo "Migrating object 781 (220)..."
+./fetch-old-sc "www.sourcemap.org/" 781 > ./migrate/1316558677/781.sm.migrate.json
+echo "...written to ./migrate/1316558677/781.sm.migrate.json"
+echo "Migrating object 782 (221)..."
+./fetch-old-sc "www.sourcemap.org/" 782 > ./migrate/1316558677/782.sm.migrate.json
+echo "...written to ./migrate/1316558677/782.sm.migrate.json"
+echo "Migrating object 784 (222)..."
+./fetch-old-sc "www.sourcemap.org/" 784 > ./migrate/1316558677/784.sm.migrate.json
+echo "...written to ./migrate/1316558677/784.sm.migrate.json"
+echo "Migrating object 785 (223)..."
+./fetch-old-sc "www.sourcemap.org/" 785 > ./migrate/1316558677/785.sm.migrate.json
+echo "...written to ./migrate/1316558677/785.sm.migrate.json"
+echo "Migrating object 786 (224)..."
+./fetch-old-sc "www.sourcemap.org/" 786 > ./migrate/1316558677/786.sm.migrate.json
+echo "...written to ./migrate/1316558677/786.sm.migrate.json"
+echo "Migrating object 787 (225)..."
+./fetch-old-sc "www.sourcemap.org/" 787 > ./migrate/1316558677/787.sm.migrate.json
+echo "...written to ./migrate/1316558677/787.sm.migrate.json"
+echo "Migrating object 796 (226)..."
+./fetch-old-sc "www.sourcemap.org/" 796 > ./migrate/1316558677/796.sm.migrate.json
+echo "...written to ./migrate/1316558677/796.sm.migrate.json"
+echo "Migrating object 797 (227)..."
+./fetch-old-sc "www.sourcemap.org/" 797 > ./migrate/1316558677/797.sm.migrate.json
+echo "...written to ./migrate/1316558677/797.sm.migrate.json"
+echo "Migrating object 799 (228)..."
+./fetch-old-sc "www.sourcemap.org/" 799 > ./migrate/1316558677/799.sm.migrate.json
+echo "...written to ./migrate/1316558677/799.sm.migrate.json"
+echo "Migrating object 800 (229)..."
+./fetch-old-sc "www.sourcemap.org/" 800 > ./migrate/1316558677/800.sm.migrate.json
+echo "...written to ./migrate/1316558677/800.sm.migrate.json"
+echo "Migrating object 815 (230)..."
+./fetch-old-sc "www.sourcemap.org/" 815 > ./migrate/1316558677/815.sm.migrate.json
+echo "...written to ./migrate/1316558677/815.sm.migrate.json"
+echo "Migrating object 823 (231)..."
+./fetch-old-sc "www.sourcemap.org/" 823 > ./migrate/1316558677/823.sm.migrate.json
+echo "...written to ./migrate/1316558677/823.sm.migrate.json"
+echo "Migrating object 835 (232)..."
+./fetch-old-sc "www.sourcemap.org/" 835 > ./migrate/1316558677/835.sm.migrate.json
+echo "...written to ./migrate/1316558677/835.sm.migrate.json"
+echo "Migrating object 837 (233)..."
+./fetch-old-sc "www.sourcemap.org/" 837 > ./migrate/1316558677/837.sm.migrate.json
+echo "...written to ./migrate/1316558677/837.sm.migrate.json"
+echo "Migrating object 838 (234)..."
+./fetch-old-sc "www.sourcemap.org/" 838 > ./migrate/1316558677/838.sm.migrate.json
+echo "...written to ./migrate/1316558677/838.sm.migrate.json"
+echo "Migrating object 840 (235)..."
+./fetch-old-sc "www.sourcemap.org/" 840 > ./migrate/1316558677/840.sm.migrate.json
+echo "...written to ./migrate/1316558677/840.sm.migrate.json"
+echo "Migrating object 847 (236)..."
+./fetch-old-sc "www.sourcemap.org/" 847 > ./migrate/1316558677/847.sm.migrate.json
+echo "...written to ./migrate/1316558677/847.sm.migrate.json"
+echo "Migrating object 849 (237)..."
+./fetch-old-sc "www.sourcemap.org/" 849 > ./migrate/1316558677/849.sm.migrate.json
+echo "...written to ./migrate/1316558677/849.sm.migrate.json"
+echo "Migrating object 850 (238)..."
+./fetch-old-sc "www.sourcemap.org/" 850 > ./migrate/1316558677/850.sm.migrate.json
+echo "...written to ./migrate/1316558677/850.sm.migrate.json"
+echo "Migrating object 853 (239)..."
+./fetch-old-sc "www.sourcemap.org/" 853 > ./migrate/1316558677/853.sm.migrate.json
+echo "...written to ./migrate/1316558677/853.sm.migrate.json"
+echo "Migrating object 855 (240)..."
+./fetch-old-sc "www.sourcemap.org/" 855 > ./migrate/1316558677/855.sm.migrate.json
+echo "...written to ./migrate/1316558677/855.sm.migrate.json"
+echo "Migrating object 856 (241)..."
+./fetch-old-sc "www.sourcemap.org/" 856 > ./migrate/1316558677/856.sm.migrate.json
+echo "...written to ./migrate/1316558677/856.sm.migrate.json"
+echo "Migrating object 889 (242)..."
+./fetch-old-sc "www.sourcemap.org/" 889 > ./migrate/1316558677/889.sm.migrate.json
+echo "...written to ./migrate/1316558677/889.sm.migrate.json"
+echo "Migrating object 891 (243)..."
+./fetch-old-sc "www.sourcemap.org/" 891 > ./migrate/1316558677/891.sm.migrate.json
+echo "...written to ./migrate/1316558677/891.sm.migrate.json"
+echo "Migrating object 892 (244)..."
+./fetch-old-sc "www.sourcemap.org/" 892 > ./migrate/1316558677/892.sm.migrate.json
+echo "...written to ./migrate/1316558677/892.sm.migrate.json"
+echo "Migrating object 893 (245)..."
+./fetch-old-sc "www.sourcemap.org/" 893 > ./migrate/1316558677/893.sm.migrate.json
+echo "...written to ./migrate/1316558677/893.sm.migrate.json"
+echo "Migrating object 894 (246)..."
+./fetch-old-sc "www.sourcemap.org/" 894 > ./migrate/1316558677/894.sm.migrate.json
+echo "...written to ./migrate/1316558677/894.sm.migrate.json"
+echo "Migrating object 896 (247)..."
+./fetch-old-sc "www.sourcemap.org/" 896 > ./migrate/1316558677/896.sm.migrate.json
+echo "...written to ./migrate/1316558677/896.sm.migrate.json"
+echo "Migrating object 898 (248)..."
+./fetch-old-sc "www.sourcemap.org/" 898 > ./migrate/1316558677/898.sm.migrate.json
+echo "...written to ./migrate/1316558677/898.sm.migrate.json"
+echo "Migrating object 900 (249)..."
+./fetch-old-sc "www.sourcemap.org/" 900 > ./migrate/1316558677/900.sm.migrate.json
+echo "...written to ./migrate/1316558677/900.sm.migrate.json"
+echo "Migrating object 901 (250)..."
+./fetch-old-sc "www.sourcemap.org/" 901 > ./migrate/1316558677/901.sm.migrate.json
+echo "...written to ./migrate/1316558677/901.sm.migrate.json"
+echo "Migrating object 902 (251)..."
+./fetch-old-sc "www.sourcemap.org/" 902 > ./migrate/1316558677/902.sm.migrate.json
+echo "...written to ./migrate/1316558677/902.sm.migrate.json"
+echo "Migrating object 903 (252)..."
+./fetch-old-sc "www.sourcemap.org/" 903 > ./migrate/1316558677/903.sm.migrate.json
+echo "...written to ./migrate/1316558677/903.sm.migrate.json"
+echo "Migrating object 904 (253)..."
+./fetch-old-sc "www.sourcemap.org/" 904 > ./migrate/1316558677/904.sm.migrate.json
+echo "...written to ./migrate/1316558677/904.sm.migrate.json"
+echo "Migrating object 905 (254)..."
+./fetch-old-sc "www.sourcemap.org/" 905 > ./migrate/1316558677/905.sm.migrate.json
+echo "...written to ./migrate/1316558677/905.sm.migrate.json"
+echo "Migrating object 906 (255)..."
+./fetch-old-sc "www.sourcemap.org/" 906 > ./migrate/1316558677/906.sm.migrate.json
+echo "...written to ./migrate/1316558677/906.sm.migrate.json"
+echo "Migrating object 911 (256)..."
+./fetch-old-sc "www.sourcemap.org/" 911 > ./migrate/1316558677/911.sm.migrate.json
+echo "...written to ./migrate/1316558677/911.sm.migrate.json"
+echo "Migrating object 912 (257)..."
+./fetch-old-sc "www.sourcemap.org/" 912 > ./migrate/1316558677/912.sm.migrate.json
+echo "...written to ./migrate/1316558677/912.sm.migrate.json"
+echo "Migrating object 913 (258)..."
+./fetch-old-sc "www.sourcemap.org/" 913 > ./migrate/1316558677/913.sm.migrate.json
+echo "...written to ./migrate/1316558677/913.sm.migrate.json"
+echo "Migrating object 915 (259)..."
+./fetch-old-sc "www.sourcemap.org/" 915 > ./migrate/1316558677/915.sm.migrate.json
+echo "...written to ./migrate/1316558677/915.sm.migrate.json"
+echo "Migrating object 921 (260)..."
+./fetch-old-sc "www.sourcemap.org/" 921 > ./migrate/1316558677/921.sm.migrate.json
+echo "...written to ./migrate/1316558677/921.sm.migrate.json"
+echo "Migrating object 922 (261)..."
+./fetch-old-sc "www.sourcemap.org/" 922 > ./migrate/1316558677/922.sm.migrate.json
+echo "...written to ./migrate/1316558677/922.sm.migrate.json"
+echo "Migrating object 923 (262)..."
+./fetch-old-sc "www.sourcemap.org/" 923 > ./migrate/1316558677/923.sm.migrate.json
+echo "...written to ./migrate/1316558677/923.sm.migrate.json"
+echo "Migrating object 924 (263)..."
+./fetch-old-sc "www.sourcemap.org/" 924 > ./migrate/1316558677/924.sm.migrate.json
+echo "...written to ./migrate/1316558677/924.sm.migrate.json"
+echo "Migrating object 925 (264)..."
+./fetch-old-sc "www.sourcemap.org/" 925 > ./migrate/1316558677/925.sm.migrate.json
+echo "...written to ./migrate/1316558677/925.sm.migrate.json"
+echo "Migrating object 927 (265)..."
+./fetch-old-sc "www.sourcemap.org/" 927 > ./migrate/1316558677/927.sm.migrate.json
+echo "...written to ./migrate/1316558677/927.sm.migrate.json"
+echo "Migrating object 928 (266)..."
+./fetch-old-sc "www.sourcemap.org/" 928 > ./migrate/1316558677/928.sm.migrate.json
+echo "...written to ./migrate/1316558677/928.sm.migrate.json"
+echo "Migrating object 929 (267)..."
+./fetch-old-sc "www.sourcemap.org/" 929 > ./migrate/1316558677/929.sm.migrate.json
+echo "...written to ./migrate/1316558677/929.sm.migrate.json"
+echo "Migrating object 930 (268)..."
+./fetch-old-sc "www.sourcemap.org/" 930 > ./migrate/1316558677/930.sm.migrate.json
+echo "...written to ./migrate/1316558677/930.sm.migrate.json"
+echo "Migrating object 932 (269)..."
+./fetch-old-sc "www.sourcemap.org/" 932 > ./migrate/1316558677/932.sm.migrate.json
+echo "...written to ./migrate/1316558677/932.sm.migrate.json"
+echo "Migrating object 933 (270)..."
+./fetch-old-sc "www.sourcemap.org/" 933 > ./migrate/1316558677/933.sm.migrate.json
+echo "...written to ./migrate/1316558677/933.sm.migrate.json"
+echo "Migrating object 934 (271)..."
+./fetch-old-sc "www.sourcemap.org/" 934 > ./migrate/1316558677/934.sm.migrate.json
+echo "...written to ./migrate/1316558677/934.sm.migrate.json"
+echo "Migrating object 935 (272)..."
+./fetch-old-sc "www.sourcemap.org/" 935 > ./migrate/1316558677/935.sm.migrate.json
+echo "...written to ./migrate/1316558677/935.sm.migrate.json"
+echo "Migrating object 936 (273)..."
+./fetch-old-sc "www.sourcemap.org/" 936 > ./migrate/1316558677/936.sm.migrate.json
+echo "...written to ./migrate/1316558677/936.sm.migrate.json"
+echo "Migrating object 937 (274)..."
+./fetch-old-sc "www.sourcemap.org/" 937 > ./migrate/1316558677/937.sm.migrate.json
+echo "...written to ./migrate/1316558677/937.sm.migrate.json"
+echo "Migrating object 938 (275)..."
+./fetch-old-sc "www.sourcemap.org/" 938 > ./migrate/1316558677/938.sm.migrate.json
+echo "...written to ./migrate/1316558677/938.sm.migrate.json"
+echo "Migrating object 940 (276)..."
+./fetch-old-sc "www.sourcemap.org/" 940 > ./migrate/1316558677/940.sm.migrate.json
+echo "...written to ./migrate/1316558677/940.sm.migrate.json"
+echo "Migrating object 941 (277)..."
+./fetch-old-sc "www.sourcemap.org/" 941 > ./migrate/1316558677/941.sm.migrate.json
+echo "...written to ./migrate/1316558677/941.sm.migrate.json"
+echo "Migrating object 944 (278)..."
+./fetch-old-sc "www.sourcemap.org/" 944 > ./migrate/1316558677/944.sm.migrate.json
+echo "...written to ./migrate/1316558677/944.sm.migrate.json"
+echo "Migrating object 947 (279)..."
+./fetch-old-sc "www.sourcemap.org/" 947 > ./migrate/1316558677/947.sm.migrate.json
+echo "...written to ./migrate/1316558677/947.sm.migrate.json"
+echo "Migrating object 950 (280)..."
+./fetch-old-sc "www.sourcemap.org/" 950 > ./migrate/1316558677/950.sm.migrate.json
+echo "...written to ./migrate/1316558677/950.sm.migrate.json"
+echo "Migrating object 951 (281)..."
+./fetch-old-sc "www.sourcemap.org/" 951 > ./migrate/1316558677/951.sm.migrate.json
+echo "...written to ./migrate/1316558677/951.sm.migrate.json"
+echo "Migrating object 955 (282)..."
+./fetch-old-sc "www.sourcemap.org/" 955 > ./migrate/1316558677/955.sm.migrate.json
+echo "...written to ./migrate/1316558677/955.sm.migrate.json"
+echo "Migrating object 956 (283)..."
+./fetch-old-sc "www.sourcemap.org/" 956 > ./migrate/1316558677/956.sm.migrate.json
+echo "...written to ./migrate/1316558677/956.sm.migrate.json"
+echo "Migrating object 957 (284)..."
+./fetch-old-sc "www.sourcemap.org/" 957 > ./migrate/1316558677/957.sm.migrate.json
+echo "...written to ./migrate/1316558677/957.sm.migrate.json"
+echo "Migrating object 959 (285)..."
+./fetch-old-sc "www.sourcemap.org/" 959 > ./migrate/1316558677/959.sm.migrate.json
+echo "...written to ./migrate/1316558677/959.sm.migrate.json"
+echo "Migrating object 962 (286)..."
+./fetch-old-sc "www.sourcemap.org/" 962 > ./migrate/1316558677/962.sm.migrate.json
+echo "...written to ./migrate/1316558677/962.sm.migrate.json"
+echo "Migrating object 963 (287)..."
+./fetch-old-sc "www.sourcemap.org/" 963 > ./migrate/1316558677/963.sm.migrate.json
+echo "...written to ./migrate/1316558677/963.sm.migrate.json"
+echo "Migrating object 964 (288)..."
+./fetch-old-sc "www.sourcemap.org/" 964 > ./migrate/1316558677/964.sm.migrate.json
+echo "...written to ./migrate/1316558677/964.sm.migrate.json"
+echo "Migrating object 967 (289)..."
+./fetch-old-sc "www.sourcemap.org/" 967 > ./migrate/1316558677/967.sm.migrate.json
+echo "...written to ./migrate/1316558677/967.sm.migrate.json"
+echo "Migrating object 968 (290)..."
+./fetch-old-sc "www.sourcemap.org/" 968 > ./migrate/1316558677/968.sm.migrate.json
+echo "...written to ./migrate/1316558677/968.sm.migrate.json"
+echo "Migrating object 969 (291)..."
+./fetch-old-sc "www.sourcemap.org/" 969 > ./migrate/1316558677/969.sm.migrate.json
+echo "...written to ./migrate/1316558677/969.sm.migrate.json"
+echo "Migrating object 971 (292)..."
+./fetch-old-sc "www.sourcemap.org/" 971 > ./migrate/1316558677/971.sm.migrate.json
+echo "...written to ./migrate/1316558677/971.sm.migrate.json"
+echo "Migrating object 972 (293)..."
+./fetch-old-sc "www.sourcemap.org/" 972 > ./migrate/1316558677/972.sm.migrate.json
+echo "...written to ./migrate/1316558677/972.sm.migrate.json"
+echo "Migrating object 973 (294)..."
+./fetch-old-sc "www.sourcemap.org/" 973 > ./migrate/1316558677/973.sm.migrate.json
+echo "...written to ./migrate/1316558677/973.sm.migrate.json"
+echo "Migrating object 974 (295)..."
+./fetch-old-sc "www.sourcemap.org/" 974 > ./migrate/1316558677/974.sm.migrate.json
+echo "...written to ./migrate/1316558677/974.sm.migrate.json"
+echo "Migrating object 975 (296)..."
+./fetch-old-sc "www.sourcemap.org/" 975 > ./migrate/1316558677/975.sm.migrate.json
+echo "...written to ./migrate/1316558677/975.sm.migrate.json"
+echo "Migrating object 976 (297)..."
+./fetch-old-sc "www.sourcemap.org/" 976 > ./migrate/1316558677/976.sm.migrate.json
+echo "...written to ./migrate/1316558677/976.sm.migrate.json"
+echo "Migrating object 977 (298)..."
+./fetch-old-sc "www.sourcemap.org/" 977 > ./migrate/1316558677/977.sm.migrate.json
+echo "...written to ./migrate/1316558677/977.sm.migrate.json"
+echo "Migrating object 978 (299)..."
+./fetch-old-sc "www.sourcemap.org/" 978 > ./migrate/1316558677/978.sm.migrate.json
+echo "...written to ./migrate/1316558677/978.sm.migrate.json"
+echo "Migrating object 981 (300)..."
+./fetch-old-sc "www.sourcemap.org/" 981 > ./migrate/1316558677/981.sm.migrate.json
+echo "...written to ./migrate/1316558677/981.sm.migrate.json"
+echo "Migrating object 983 (301)..."
+./fetch-old-sc "www.sourcemap.org/" 983 > ./migrate/1316558677/983.sm.migrate.json
+echo "...written to ./migrate/1316558677/983.sm.migrate.json"
+echo "Migrating object 986 (302)..."
+./fetch-old-sc "www.sourcemap.org/" 986 > ./migrate/1316558677/986.sm.migrate.json
+echo "...written to ./migrate/1316558677/986.sm.migrate.json"
+echo "Migrating object 987 (303)..."
+./fetch-old-sc "www.sourcemap.org/" 987 > ./migrate/1316558677/987.sm.migrate.json
+echo "...written to ./migrate/1316558677/987.sm.migrate.json"
+echo "Migrating object 992 (304)..."
+./fetch-old-sc "www.sourcemap.org/" 992 > ./migrate/1316558677/992.sm.migrate.json
+echo "...written to ./migrate/1316558677/992.sm.migrate.json"
+echo "Migrating object 993 (305)..."
+./fetch-old-sc "www.sourcemap.org/" 993 > ./migrate/1316558677/993.sm.migrate.json
+echo "...written to ./migrate/1316558677/993.sm.migrate.json"
+echo "Migrating object 994 (306)..."
+./fetch-old-sc "www.sourcemap.org/" 994 > ./migrate/1316558677/994.sm.migrate.json
+echo "...written to ./migrate/1316558677/994.sm.migrate.json"
+echo "Migrating object 995 (307)..."
+./fetch-old-sc "www.sourcemap.org/" 995 > ./migrate/1316558677/995.sm.migrate.json
+echo "...written to ./migrate/1316558677/995.sm.migrate.json"
+echo "Migrating object 996 (308)..."
+./fetch-old-sc "www.sourcemap.org/" 996 > ./migrate/1316558677/996.sm.migrate.json
+echo "...written to ./migrate/1316558677/996.sm.migrate.json"
+echo "Migrating object 998 (309)..."
+./fetch-old-sc "www.sourcemap.org/" 998 > ./migrate/1316558677/998.sm.migrate.json
+echo "...written to ./migrate/1316558677/998.sm.migrate.json"
+echo "Migrating object 999 (310)..."
+./fetch-old-sc "www.sourcemap.org/" 999 > ./migrate/1316558677/999.sm.migrate.json
+echo "...written to ./migrate/1316558677/999.sm.migrate.json"
+echo "Migrating object 1000 (311)..."
+./fetch-old-sc "www.sourcemap.org/" 1000 > ./migrate/1316558677/1000.sm.migrate.json
+echo "...written to ./migrate/1316558677/1000.sm.migrate.json"
+echo "Migrating object 1013 (312)..."
+./fetch-old-sc "www.sourcemap.org/" 1013 > ./migrate/1316558677/1013.sm.migrate.json
+echo "...written to ./migrate/1316558677/1013.sm.migrate.json"
+echo "Migrating object 1017 (313)..."
+./fetch-old-sc "www.sourcemap.org/" 1017 > ./migrate/1316558677/1017.sm.migrate.json
+echo "...written to ./migrate/1316558677/1017.sm.migrate.json"
+echo "Migrating object 1018 (314)..."
+./fetch-old-sc "www.sourcemap.org/" 1018 > ./migrate/1316558677/1018.sm.migrate.json
+echo "...written to ./migrate/1316558677/1018.sm.migrate.json"
+echo "Migrating object 1019 (315)..."
+./fetch-old-sc "www.sourcemap.org/" 1019 > ./migrate/1316558677/1019.sm.migrate.json
+echo "...written to ./migrate/1316558677/1019.sm.migrate.json"
+echo "Migrating object 1021 (316)..."
+./fetch-old-sc "www.sourcemap.org/" 1021 > ./migrate/1316558677/1021.sm.migrate.json
+echo "...written to ./migrate/1316558677/1021.sm.migrate.json"
+echo "Migrating object 1024 (317)..."
+./fetch-old-sc "www.sourcemap.org/" 1024 > ./migrate/1316558677/1024.sm.migrate.json
+echo "...written to ./migrate/1316558677/1024.sm.migrate.json"
+echo "Migrating object 1038 (318)..."
+./fetch-old-sc "www.sourcemap.org/" 1038 > ./migrate/1316558677/1038.sm.migrate.json
+echo "...written to ./migrate/1316558677/1038.sm.migrate.json"
+echo "Migrating object 1040 (319)..."
+./fetch-old-sc "www.sourcemap.org/" 1040 > ./migrate/1316558677/1040.sm.migrate.json
+echo "...written to ./migrate/1316558677/1040.sm.migrate.json"
+echo "Migrating object 1042 (320)..."
+./fetch-old-sc "www.sourcemap.org/" 1042 > ./migrate/1316558677/1042.sm.migrate.json
+echo "...written to ./migrate/1316558677/1042.sm.migrate.json"
+echo "Migrating object 1043 (321)..."
+./fetch-old-sc "www.sourcemap.org/" 1043 > ./migrate/1316558677/1043.sm.migrate.json
+echo "...written to ./migrate/1316558677/1043.sm.migrate.json"
+echo "Migrating object 1055 (322)..."
+./fetch-old-sc "www.sourcemap.org/" 1055 > ./migrate/1316558677/1055.sm.migrate.json
+echo "...written to ./migrate/1316558677/1055.sm.migrate.json"
+echo "Migrating object 1056 (323)..."
+./fetch-old-sc "www.sourcemap.org/" 1056 > ./migrate/1316558677/1056.sm.migrate.json
+echo "...written to ./migrate/1316558677/1056.sm.migrate.json"
+echo "Migrating object 1063 (324)..."
+./fetch-old-sc "www.sourcemap.org/" 1063 > ./migrate/1316558677/1063.sm.migrate.json
+echo "...written to ./migrate/1316558677/1063.sm.migrate.json"
+echo "Migrating object 1064 (325)..."
+./fetch-old-sc "www.sourcemap.org/" 1064 > ./migrate/1316558677/1064.sm.migrate.json
+echo "...written to ./migrate/1316558677/1064.sm.migrate.json"
+echo "Migrating object 1066 (326)..."
+./fetch-old-sc "www.sourcemap.org/" 1066 > ./migrate/1316558677/1066.sm.migrate.json
+echo "...written to ./migrate/1316558677/1066.sm.migrate.json"
+echo "Migrating object 1073 (327)..."
+./fetch-old-sc "www.sourcemap.org/" 1073 > ./migrate/1316558677/1073.sm.migrate.json
+echo "...written to ./migrate/1316558677/1073.sm.migrate.json"
+echo "Migrating object 1074 (328)..."
+./fetch-old-sc "www.sourcemap.org/" 1074 > ./migrate/1316558677/1074.sm.migrate.json
+echo "...written to ./migrate/1316558677/1074.sm.migrate.json"
+echo "Migrating object 1075 (329)..."
+./fetch-old-sc "www.sourcemap.org/" 1075 > ./migrate/1316558677/1075.sm.migrate.json
+echo "...written to ./migrate/1316558677/1075.sm.migrate.json"
+echo "Migrating object 1076 (330)..."
+./fetch-old-sc "www.sourcemap.org/" 1076 > ./migrate/1316558677/1076.sm.migrate.json
+echo "...written to ./migrate/1316558677/1076.sm.migrate.json"
+echo "Migrating object 1082 (331)..."
+./fetch-old-sc "www.sourcemap.org/" 1082 > ./migrate/1316558677/1082.sm.migrate.json
+echo "...written to ./migrate/1316558677/1082.sm.migrate.json"
+echo "Migrating object 1093 (332)..."
+./fetch-old-sc "www.sourcemap.org/" 1093 > ./migrate/1316558677/1093.sm.migrate.json
+echo "...written to ./migrate/1316558677/1093.sm.migrate.json"
+echo "Migrating object 1096 (333)..."
+./fetch-old-sc "www.sourcemap.org/" 1096 > ./migrate/1316558677/1096.sm.migrate.json
+echo "...written to ./migrate/1316558677/1096.sm.migrate.json"
+echo "Migrating object 1111 (334)..."
+./fetch-old-sc "www.sourcemap.org/" 1111 > ./migrate/1316558677/1111.sm.migrate.json
+echo "...written to ./migrate/1316558677/1111.sm.migrate.json"
+echo "Migrating object 1112 (335)..."
+./fetch-old-sc "www.sourcemap.org/" 1112 > ./migrate/1316558677/1112.sm.migrate.json
+echo "...written to ./migrate/1316558677/1112.sm.migrate.json"
+echo "Migrating object 1117 (336)..."
+./fetch-old-sc "www.sourcemap.org/" 1117 > ./migrate/1316558677/1117.sm.migrate.json
+echo "...written to ./migrate/1316558677/1117.sm.migrate.json"
+echo "Migrating object 1131 (337)..."
+./fetch-old-sc "www.sourcemap.org/" 1131 > ./migrate/1316558677/1131.sm.migrate.json
+echo "...written to ./migrate/1316558677/1131.sm.migrate.json"
+echo "Migrating object 1134 (338)..."
+./fetch-old-sc "www.sourcemap.org/" 1134 > ./migrate/1316558677/1134.sm.migrate.json
+echo "...written to ./migrate/1316558677/1134.sm.migrate.json"
+echo "Migrating object 1136 (339)..."
+./fetch-old-sc "www.sourcemap.org/" 1136 > ./migrate/1316558677/1136.sm.migrate.json
+echo "...written to ./migrate/1316558677/1136.sm.migrate.json"
+echo "Migrating object 1144 (340)..."
+./fetch-old-sc "www.sourcemap.org/" 1144 > ./migrate/1316558677/1144.sm.migrate.json
+echo "...written to ./migrate/1316558677/1144.sm.migrate.json"
+echo "Migrating object 1156 (341)..."
+./fetch-old-sc "www.sourcemap.org/" 1156 > ./migrate/1316558677/1156.sm.migrate.json
+echo "...written to ./migrate/1316558677/1156.sm.migrate.json"
+echo "Migrating object 1157 (342)..."
+./fetch-old-sc "www.sourcemap.org/" 1157 > ./migrate/1316558677/1157.sm.migrate.json
+echo "...written to ./migrate/1316558677/1157.sm.migrate.json"
+echo "Migrating object 1160 (343)..."
+./fetch-old-sc "www.sourcemap.org/" 1160 > ./migrate/1316558677/1160.sm.migrate.json
+echo "...written to ./migrate/1316558677/1160.sm.migrate.json"
+echo "Migrating object 1166 (344)..."
+./fetch-old-sc "www.sourcemap.org/" 1166 > ./migrate/1316558677/1166.sm.migrate.json
+echo "...written to ./migrate/1316558677/1166.sm.migrate.json"
+echo "Migrating object 1178 (345)..."
+./fetch-old-sc "www.sourcemap.org/" 1178 > ./migrate/1316558677/1178.sm.migrate.json
+echo "...written to ./migrate/1316558677/1178.sm.migrate.json"
+echo "Migrating object 1187 (346)..."
+./fetch-old-sc "www.sourcemap.org/" 1187 > ./migrate/1316558677/1187.sm.migrate.json
+echo "...written to ./migrate/1316558677/1187.sm.migrate.json"
+echo "Migrating object 1209 (347)..."
+./fetch-old-sc "www.sourcemap.org/" 1209 > ./migrate/1316558677/1209.sm.migrate.json
+echo "...written to ./migrate/1316558677/1209.sm.migrate.json"
+echo "Migrating object 1213 (348)..."
+./fetch-old-sc "www.sourcemap.org/" 1213 > ./migrate/1316558677/1213.sm.migrate.json
+echo "...written to ./migrate/1316558677/1213.sm.migrate.json"
+echo "Migrating object 1218 (349)..."
+./fetch-old-sc "www.sourcemap.org/" 1218 > ./migrate/1316558677/1218.sm.migrate.json
+echo "...written to ./migrate/1316558677/1218.sm.migrate.json"
+echo "Migrating object 1268 (350)..."
+./fetch-old-sc "www.sourcemap.org/" 1268 > ./migrate/1316558677/1268.sm.migrate.json
+echo "...written to ./migrate/1316558677/1268.sm.migrate.json"
+echo "Migrating object 1282 (351)..."
+./fetch-old-sc "www.sourcemap.org/" 1282 > ./migrate/1316558677/1282.sm.migrate.json
+echo "...written to ./migrate/1316558677/1282.sm.migrate.json"
+echo "Migrating object 1297 (352)..."
+./fetch-old-sc "www.sourcemap.org/" 1297 > ./migrate/1316558677/1297.sm.migrate.json
+echo "...written to ./migrate/1316558677/1297.sm.migrate.json"
+echo "Migrating object 1311 (353)..."
+./fetch-old-sc "www.sourcemap.org/" 1311 > ./migrate/1316558677/1311.sm.migrate.json
+echo "...written to ./migrate/1316558677/1311.sm.migrate.json"
+echo "Migrating object 1316 (354)..."
+./fetch-old-sc "www.sourcemap.org/" 1316 > ./migrate/1316558677/1316.sm.migrate.json
+echo "...written to ./migrate/1316558677/1316.sm.migrate.json"
+echo "Migrating object 1319 (355)..."
+./fetch-old-sc "www.sourcemap.org/" 1319 > ./migrate/1316558677/1319.sm.migrate.json
+echo "...written to ./migrate/1316558677/1319.sm.migrate.json"
+echo "Migrating object 1326 (356)..."
+./fetch-old-sc "www.sourcemap.org/" 1326 > ./migrate/1316558677/1326.sm.migrate.json
+echo "...written to ./migrate/1316558677/1326.sm.migrate.json"
+echo "Migrating object 1342 (357)..."
+./fetch-old-sc "www.sourcemap.org/" 1342 > ./migrate/1316558677/1342.sm.migrate.json
+echo "...written to ./migrate/1316558677/1342.sm.migrate.json"
+echo "Migrating object 1350 (358)..."
+./fetch-old-sc "www.sourcemap.org/" 1350 > ./migrate/1316558677/1350.sm.migrate.json
+echo "...written to ./migrate/1316558677/1350.sm.migrate.json"
+echo "Migrating object 1355 (359)..."
+./fetch-old-sc "www.sourcemap.org/" 1355 > ./migrate/1316558677/1355.sm.migrate.json
+echo "...written to ./migrate/1316558677/1355.sm.migrate.json"
+echo "Migrating object 1359 (360)..."
+./fetch-old-sc "www.sourcemap.org/" 1359 > ./migrate/1316558677/1359.sm.migrate.json
+echo "...written to ./migrate/1316558677/1359.sm.migrate.json"
+echo "Migrating object 1360 (361)..."
+./fetch-old-sc "www.sourcemap.org/" 1360 > ./migrate/1316558677/1360.sm.migrate.json
+echo "...written to ./migrate/1316558677/1360.sm.migrate.json"
+echo "Migrating object 1362 (362)..."
+./fetch-old-sc "www.sourcemap.org/" 1362 > ./migrate/1316558677/1362.sm.migrate.json
+echo "...written to ./migrate/1316558677/1362.sm.migrate.json"
+echo "Migrating object 1363 (363)..."
+./fetch-old-sc "www.sourcemap.org/" 1363 > ./migrate/1316558677/1363.sm.migrate.json
+echo "...written to ./migrate/1316558677/1363.sm.migrate.json"
+echo "Migrating object 1366 (364)..."
+./fetch-old-sc "www.sourcemap.org/" 1366 > ./migrate/1316558677/1366.sm.migrate.json
+echo "...written to ./migrate/1316558677/1366.sm.migrate.json"
+echo "Migrating object 1371 (365)..."
+./fetch-old-sc "www.sourcemap.org/" 1371 > ./migrate/1316558677/1371.sm.migrate.json
+echo "...written to ./migrate/1316558677/1371.sm.migrate.json"
+echo "Migrating object 1376 (366)..."
+./fetch-old-sc "www.sourcemap.org/" 1376 > ./migrate/1316558677/1376.sm.migrate.json
+echo "...written to ./migrate/1316558677/1376.sm.migrate.json"
+echo "Migrating object 1377 (367)..."
+./fetch-old-sc "www.sourcemap.org/" 1377 > ./migrate/1316558677/1377.sm.migrate.json
+echo "...written to ./migrate/1316558677/1377.sm.migrate.json"
+echo "Migrating object 1387 (368)..."
+./fetch-old-sc "www.sourcemap.org/" 1387 > ./migrate/1316558677/1387.sm.migrate.json
+echo "...written to ./migrate/1316558677/1387.sm.migrate.json"
+echo "Migrating object 1391 (369)..."
+./fetch-old-sc "www.sourcemap.org/" 1391 > ./migrate/1316558677/1391.sm.migrate.json
+echo "...written to ./migrate/1316558677/1391.sm.migrate.json"
+echo "Migrating object 1397 (370)..."
+./fetch-old-sc "www.sourcemap.org/" 1397 > ./migrate/1316558677/1397.sm.migrate.json
+echo "...written to ./migrate/1316558677/1397.sm.migrate.json"
+echo "Migrating object 1400 (371)..."
+./fetch-old-sc "www.sourcemap.org/" 1400 > ./migrate/1316558677/1400.sm.migrate.json
+echo "...written to ./migrate/1316558677/1400.sm.migrate.json"
+echo "Migrating object 1401 (372)..."
+./fetch-old-sc "www.sourcemap.org/" 1401 > ./migrate/1316558677/1401.sm.migrate.json
+echo "...written to ./migrate/1316558677/1401.sm.migrate.json"
+echo "Migrating object 1402 (373)..."
+./fetch-old-sc "www.sourcemap.org/" 1402 > ./migrate/1316558677/1402.sm.migrate.json
+echo "...written to ./migrate/1316558677/1402.sm.migrate.json"
+echo "Migrating object 1403 (374)..."
+./fetch-old-sc "www.sourcemap.org/" 1403 > ./migrate/1316558677/1403.sm.migrate.json
+echo "...written to ./migrate/1316558677/1403.sm.migrate.json"
+echo "Migrating object 1405 (375)..."
+./fetch-old-sc "www.sourcemap.org/" 1405 > ./migrate/1316558677/1405.sm.migrate.json
+echo "...written to ./migrate/1316558677/1405.sm.migrate.json"
+echo "Migrating object 1408 (376)..."
+./fetch-old-sc "www.sourcemap.org/" 1408 > ./migrate/1316558677/1408.sm.migrate.json
+echo "...written to ./migrate/1316558677/1408.sm.migrate.json"
+echo "Migrating object 1411 (377)..."
+./fetch-old-sc "www.sourcemap.org/" 1411 > ./migrate/1316558677/1411.sm.migrate.json
+echo "...written to ./migrate/1316558677/1411.sm.migrate.json"
+echo "Migrating object 1413 (378)..."
+./fetch-old-sc "www.sourcemap.org/" 1413 > ./migrate/1316558677/1413.sm.migrate.json
+echo "...written to ./migrate/1316558677/1413.sm.migrate.json"
+echo "Migrating object 1418 (379)..."
+./fetch-old-sc "www.sourcemap.org/" 1418 > ./migrate/1316558677/1418.sm.migrate.json
+echo "...written to ./migrate/1316558677/1418.sm.migrate.json"
+echo "Migrating object 1421 (380)..."
+./fetch-old-sc "www.sourcemap.org/" 1421 > ./migrate/1316558677/1421.sm.migrate.json
+echo "...written to ./migrate/1316558677/1421.sm.migrate.json"
+echo "Migrating object 1422 (381)..."
+./fetch-old-sc "www.sourcemap.org/" 1422 > ./migrate/1316558677/1422.sm.migrate.json
+echo "...written to ./migrate/1316558677/1422.sm.migrate.json"
+echo "Migrating object 1424 (382)..."
+./fetch-old-sc "www.sourcemap.org/" 1424 > ./migrate/1316558677/1424.sm.migrate.json
+echo "...written to ./migrate/1316558677/1424.sm.migrate.json"
+echo "Migrating object 1461 (383)..."
+./fetch-old-sc "www.sourcemap.org/" 1461 > ./migrate/1316558677/1461.sm.migrate.json
+echo "...written to ./migrate/1316558677/1461.sm.migrate.json"
+echo "Migrating object 1471 (384)..."
+./fetch-old-sc "www.sourcemap.org/" 1471 > ./migrate/1316558677/1471.sm.migrate.json
+echo "...written to ./migrate/1316558677/1471.sm.migrate.json"
+echo "Migrating object 1472 (385)..."
+./fetch-old-sc "www.sourcemap.org/" 1472 > ./migrate/1316558677/1472.sm.migrate.json
+echo "...written to ./migrate/1316558677/1472.sm.migrate.json"
+echo "Migrating object 1473 (386)..."
+./fetch-old-sc "www.sourcemap.org/" 1473 > ./migrate/1316558677/1473.sm.migrate.json
+echo "...written to ./migrate/1316558677/1473.sm.migrate.json"
+echo "Migrating object 1475 (387)..."
+./fetch-old-sc "www.sourcemap.org/" 1475 > ./migrate/1316558677/1475.sm.migrate.json
+echo "...written to ./migrate/1316558677/1475.sm.migrate.json"
+echo "Migrating object 1485 (388)..."
+./fetch-old-sc "www.sourcemap.org/" 1485 > ./migrate/1316558677/1485.sm.migrate.json
+echo "...written to ./migrate/1316558677/1485.sm.migrate.json"
+echo "Migrating object 1488 (389)..."
+./fetch-old-sc "www.sourcemap.org/" 1488 > ./migrate/1316558677/1488.sm.migrate.json
+echo "...written to ./migrate/1316558677/1488.sm.migrate.json"
+echo "Migrating object 1496 (390)..."
+./fetch-old-sc "www.sourcemap.org/" 1496 > ./migrate/1316558677/1496.sm.migrate.json
+echo "...written to ./migrate/1316558677/1496.sm.migrate.json"
+echo "Migrating object 1519 (391)..."
+./fetch-old-sc "www.sourcemap.org/" 1519 > ./migrate/1316558677/1519.sm.migrate.json
+echo "...written to ./migrate/1316558677/1519.sm.migrate.json"
+echo "Migrating object 1520 (392)..."
+./fetch-old-sc "www.sourcemap.org/" 1520 > ./migrate/1316558677/1520.sm.migrate.json
+echo "...written to ./migrate/1316558677/1520.sm.migrate.json"
+echo "Migrating object 1529 (393)..."
+./fetch-old-sc "www.sourcemap.org/" 1529 > ./migrate/1316558677/1529.sm.migrate.json
+echo "...written to ./migrate/1316558677/1529.sm.migrate.json"
+echo "Migrating object 1534 (394)..."
+./fetch-old-sc "www.sourcemap.org/" 1534 > ./migrate/1316558677/1534.sm.migrate.json
+echo "...written to ./migrate/1316558677/1534.sm.migrate.json"
+echo "Migrating object 1535 (395)..."
+./fetch-old-sc "www.sourcemap.org/" 1535 > ./migrate/1316558677/1535.sm.migrate.json
+echo "...written to ./migrate/1316558677/1535.sm.migrate.json"
+echo "Migrating object 1539 (396)..."
+./fetch-old-sc "www.sourcemap.org/" 1539 > ./migrate/1316558677/1539.sm.migrate.json
+echo "...written to ./migrate/1316558677/1539.sm.migrate.json"
+echo "Migrating object 1542 (397)..."
+./fetch-old-sc "www.sourcemap.org/" 1542 > ./migrate/1316558677/1542.sm.migrate.json
+echo "...written to ./migrate/1316558677/1542.sm.migrate.json"
+echo "Migrating object 1544 (398)..."
+./fetch-old-sc "www.sourcemap.org/" 1544 > ./migrate/1316558677/1544.sm.migrate.json
+echo "...written to ./migrate/1316558677/1544.sm.migrate.json"
+echo "Migrating object 1552 (399)..."
+./fetch-old-sc "www.sourcemap.org/" 1552 > ./migrate/1316558677/1552.sm.migrate.json
+echo "...written to ./migrate/1316558677/1552.sm.migrate.json"
+echo "Migrating object 1553 (400)..."
+./fetch-old-sc "www.sourcemap.org/" 1553 > ./migrate/1316558677/1553.sm.migrate.json
+echo "...written to ./migrate/1316558677/1553.sm.migrate.json"
+echo "Migrating object 1557 (401)..."
+./fetch-old-sc "www.sourcemap.org/" 1557 > ./migrate/1316558677/1557.sm.migrate.json
+echo "...written to ./migrate/1316558677/1557.sm.migrate.json"
+echo "Migrating object 1558 (402)..."
+./fetch-old-sc "www.sourcemap.org/" 1558 > ./migrate/1316558677/1558.sm.migrate.json
+echo "...written to ./migrate/1316558677/1558.sm.migrate.json"
+echo "Migrating object 1565 (403)..."
+./fetch-old-sc "www.sourcemap.org/" 1565 > ./migrate/1316558677/1565.sm.migrate.json
+echo "...written to ./migrate/1316558677/1565.sm.migrate.json"
+echo "Migrating object 1566 (404)..."
+./fetch-old-sc "www.sourcemap.org/" 1566 > ./migrate/1316558677/1566.sm.migrate.json
+echo "...written to ./migrate/1316558677/1566.sm.migrate.json"
+echo "Migrating object 1568 (405)..."
+./fetch-old-sc "www.sourcemap.org/" 1568 > ./migrate/1316558677/1568.sm.migrate.json
+echo "...written to ./migrate/1316558677/1568.sm.migrate.json"
+echo "Migrating object 1576 (406)..."
+./fetch-old-sc "www.sourcemap.org/" 1576 > ./migrate/1316558677/1576.sm.migrate.json
+echo "...written to ./migrate/1316558677/1576.sm.migrate.json"
+echo "Migrating object 1583 (407)..."
+./fetch-old-sc "www.sourcemap.org/" 1583 > ./migrate/1316558677/1583.sm.migrate.json
+echo "...written to ./migrate/1316558677/1583.sm.migrate.json"
+echo "Migrating object 1590 (408)..."
+./fetch-old-sc "www.sourcemap.org/" 1590 > ./migrate/1316558677/1590.sm.migrate.json
+echo "...written to ./migrate/1316558677/1590.sm.migrate.json"
+echo "Migrating object 1592 (409)..."
+./fetch-old-sc "www.sourcemap.org/" 1592 > ./migrate/1316558677/1592.sm.migrate.json
+echo "...written to ./migrate/1316558677/1592.sm.migrate.json"
+echo "Migrating object 1594 (410)..."
+./fetch-old-sc "www.sourcemap.org/" 1594 > ./migrate/1316558677/1594.sm.migrate.json
+echo "...written to ./migrate/1316558677/1594.sm.migrate.json"
+echo "Migrating object 1600 (411)..."
+./fetch-old-sc "www.sourcemap.org/" 1600 > ./migrate/1316558677/1600.sm.migrate.json
+echo "...written to ./migrate/1316558677/1600.sm.migrate.json"
+echo "Migrating object 1608 (412)..."
+./fetch-old-sc "www.sourcemap.org/" 1608 > ./migrate/1316558677/1608.sm.migrate.json
+echo "...written to ./migrate/1316558677/1608.sm.migrate.json"
+echo "Migrating object 1611 (413)..."
+./fetch-old-sc "www.sourcemap.org/" 1611 > ./migrate/1316558677/1611.sm.migrate.json
+echo "...written to ./migrate/1316558677/1611.sm.migrate.json"
+echo "Migrating object 1631 (414)..."
+./fetch-old-sc "www.sourcemap.org/" 1631 > ./migrate/1316558677/1631.sm.migrate.json
+echo "...written to ./migrate/1316558677/1631.sm.migrate.json"
+echo "Migrating object 1635 (415)..."
+./fetch-old-sc "www.sourcemap.org/" 1635 > ./migrate/1316558677/1635.sm.migrate.json
+echo "...written to ./migrate/1316558677/1635.sm.migrate.json"
+echo "Migrating object 1636 (416)..."
+./fetch-old-sc "www.sourcemap.org/" 1636 > ./migrate/1316558677/1636.sm.migrate.json
+echo "...written to ./migrate/1316558677/1636.sm.migrate.json"
+echo "Migrating object 1645 (417)..."
+./fetch-old-sc "www.sourcemap.org/" 1645 > ./migrate/1316558677/1645.sm.migrate.json
+echo "...written to ./migrate/1316558677/1645.sm.migrate.json"
+echo "Migrating object 1647 (418)..."
+./fetch-old-sc "www.sourcemap.org/" 1647 > ./migrate/1316558677/1647.sm.migrate.json
+echo "...written to ./migrate/1316558677/1647.sm.migrate.json"
+echo "Migrating object 1655 (419)..."
+./fetch-old-sc "www.sourcemap.org/" 1655 > ./migrate/1316558677/1655.sm.migrate.json
+echo "...written to ./migrate/1316558677/1655.sm.migrate.json"
+echo "Migrating object 1658 (420)..."
+./fetch-old-sc "www.sourcemap.org/" 1658 > ./migrate/1316558677/1658.sm.migrate.json
+echo "...written to ./migrate/1316558677/1658.sm.migrate.json"
+echo "Migrating object 1695 (421)..."
+./fetch-old-sc "www.sourcemap.org/" 1695 > ./migrate/1316558677/1695.sm.migrate.json
+echo "...written to ./migrate/1316558677/1695.sm.migrate.json"
+echo "Migrating object 1710 (422)..."
+./fetch-old-sc "www.sourcemap.org/" 1710 > ./migrate/1316558677/1710.sm.migrate.json
+echo "...written to ./migrate/1316558677/1710.sm.migrate.json"
+echo "Migrating object 1715 (423)..."
+./fetch-old-sc "www.sourcemap.org/" 1715 > ./migrate/1316558677/1715.sm.migrate.json
+echo "...written to ./migrate/1316558677/1715.sm.migrate.json"
+echo "Migrating object 1717 (424)..."
+./fetch-old-sc "www.sourcemap.org/" 1717 > ./migrate/1316558677/1717.sm.migrate.json
+echo "...written to ./migrate/1316558677/1717.sm.migrate.json"
+echo "Migrating object 1735 (425)..."
+./fetch-old-sc "www.sourcemap.org/" 1735 > ./migrate/1316558677/1735.sm.migrate.json
+echo "...written to ./migrate/1316558677/1735.sm.migrate.json"
+echo "Migrating object 1745 (426)..."
+./fetch-old-sc "www.sourcemap.org/" 1745 > ./migrate/1316558677/1745.sm.migrate.json
+echo "...written to ./migrate/1316558677/1745.sm.migrate.json"
+echo "Migrating object 1749 (427)..."
+./fetch-old-sc "www.sourcemap.org/" 1749 > ./migrate/1316558677/1749.sm.migrate.json
+echo "...written to ./migrate/1316558677/1749.sm.migrate.json"
+echo "Migrating object 1759 (428)..."
+./fetch-old-sc "www.sourcemap.org/" 1759 > ./migrate/1316558677/1759.sm.migrate.json
+echo "...written to ./migrate/1316558677/1759.sm.migrate.json"
+echo "Migrating object 1760 (429)..."
+./fetch-old-sc "www.sourcemap.org/" 1760 > ./migrate/1316558677/1760.sm.migrate.json
+echo "...written to ./migrate/1316558677/1760.sm.migrate.json"
+echo "Migrating object 1776 (430)..."
+./fetch-old-sc "www.sourcemap.org/" 1776 > ./migrate/1316558677/1776.sm.migrate.json
+echo "...written to ./migrate/1316558677/1776.sm.migrate.json"
+echo "Migrating object 1787 (431)..."
+./fetch-old-sc "www.sourcemap.org/" 1787 > ./migrate/1316558677/1787.sm.migrate.json
+echo "...written to ./migrate/1316558677/1787.sm.migrate.json"
+echo "Migrating object 1792 (432)..."
+./fetch-old-sc "www.sourcemap.org/" 1792 > ./migrate/1316558677/1792.sm.migrate.json
+echo "...written to ./migrate/1316558677/1792.sm.migrate.json"
+echo "Migrating object 1794 (433)..."
+./fetch-old-sc "www.sourcemap.org/" 1794 > ./migrate/1316558677/1794.sm.migrate.json
+echo "...written to ./migrate/1316558677/1794.sm.migrate.json"
+echo "Migrating object 1797 (434)..."
+./fetch-old-sc "www.sourcemap.org/" 1797 > ./migrate/1316558677/1797.sm.migrate.json
+echo "...written to ./migrate/1316558677/1797.sm.migrate.json"
+echo "Migrating object 1824 (435)..."
+./fetch-old-sc "www.sourcemap.org/" 1824 > ./migrate/1316558677/1824.sm.migrate.json
+echo "...written to ./migrate/1316558677/1824.sm.migrate.json"
+echo "Migrating object 1843 (436)..."
+./fetch-old-sc "www.sourcemap.org/" 1843 > ./migrate/1316558677/1843.sm.migrate.json
+echo "...written to ./migrate/1316558677/1843.sm.migrate.json"
+echo "Migrating object 1844 (437)..."
+./fetch-old-sc "www.sourcemap.org/" 1844 > ./migrate/1316558677/1844.sm.migrate.json
+echo "...written to ./migrate/1316558677/1844.sm.migrate.json"
+echo "Migrating object 1845 (438)..."
+./fetch-old-sc "www.sourcemap.org/" 1845 > ./migrate/1316558677/1845.sm.migrate.json
+echo "...written to ./migrate/1316558677/1845.sm.migrate.json"
+echo "Migrating object 1852 (439)..."
+./fetch-old-sc "www.sourcemap.org/" 1852 > ./migrate/1316558677/1852.sm.migrate.json
+echo "...written to ./migrate/1316558677/1852.sm.migrate.json"
+echo "Migrating object 1857 (440)..."
+./fetch-old-sc "www.sourcemap.org/" 1857 > ./migrate/1316558677/1857.sm.migrate.json
+echo "...written to ./migrate/1316558677/1857.sm.migrate.json"
+echo "Migrating object 1867 (441)..."
+./fetch-old-sc "www.sourcemap.org/" 1867 > ./migrate/1316558677/1867.sm.migrate.json
+echo "...written to ./migrate/1316558677/1867.sm.migrate.json"
+echo "Migrating object 1874 (442)..."
+./fetch-old-sc "www.sourcemap.org/" 1874 > ./migrate/1316558677/1874.sm.migrate.json
+echo "...written to ./migrate/1316558677/1874.sm.migrate.json"
+echo "Migrating object 1877 (443)..."
+./fetch-old-sc "www.sourcemap.org/" 1877 > ./migrate/1316558677/1877.sm.migrate.json
+echo "...written to ./migrate/1316558677/1877.sm.migrate.json"
+echo "Migrating object 1907 (444)..."
+./fetch-old-sc "www.sourcemap.org/" 1907 > ./migrate/1316558677/1907.sm.migrate.json
+echo "...written to ./migrate/1316558677/1907.sm.migrate.json"
+echo "Migrating object 1908 (445)..."
+./fetch-old-sc "www.sourcemap.org/" 1908 > ./migrate/1316558677/1908.sm.migrate.json
+echo "...written to ./migrate/1316558677/1908.sm.migrate.json"
+echo "Migrating object 1978 (446)..."
+./fetch-old-sc "www.sourcemap.org/" 1978 > ./migrate/1316558677/1978.sm.migrate.json
+echo "...written to ./migrate/1316558677/1978.sm.migrate.json"
+echo "Migrating object 1988 (447)..."
+./fetch-old-sc "www.sourcemap.org/" 1988 > ./migrate/1316558677/1988.sm.migrate.json
+echo "...written to ./migrate/1316558677/1988.sm.migrate.json"
+echo "Migrating object 2006 (448)..."
+./fetch-old-sc "www.sourcemap.org/" 2006 > ./migrate/1316558677/2006.sm.migrate.json
+echo "...written to ./migrate/1316558677/2006.sm.migrate.json"
+echo "Migrating object 2028 (449)..."
+./fetch-old-sc "www.sourcemap.org/" 2028 > ./migrate/1316558677/2028.sm.migrate.json
+echo "...written to ./migrate/1316558677/2028.sm.migrate.json"
+echo "Migrating object 2031 (450)..."
+./fetch-old-sc "www.sourcemap.org/" 2031 > ./migrate/1316558677/2031.sm.migrate.json
+echo "...written to ./migrate/1316558677/2031.sm.migrate.json"
+echo "Migrating object 2051 (451)..."
+./fetch-old-sc "www.sourcemap.org/" 2051 > ./migrate/1316558677/2051.sm.migrate.json
+echo "...written to ./migrate/1316558677/2051.sm.migrate.json"
+echo "Migrating object 2055 (452)..."
+./fetch-old-sc "www.sourcemap.org/" 2055 > ./migrate/1316558677/2055.sm.migrate.json
+echo "...written to ./migrate/1316558677/2055.sm.migrate.json"
+echo "Migrating object 2060 (453)..."
+./fetch-old-sc "www.sourcemap.org/" 2060 > ./migrate/1316558677/2060.sm.migrate.json
+echo "...written to ./migrate/1316558677/2060.sm.migrate.json"
+echo "Migrating object 2063 (454)..."
+./fetch-old-sc "www.sourcemap.org/" 2063 > ./migrate/1316558677/2063.sm.migrate.json
+echo "...written to ./migrate/1316558677/2063.sm.migrate.json"
+echo "Migrating object 2064 (455)..."
+./fetch-old-sc "www.sourcemap.org/" 2064 > ./migrate/1316558677/2064.sm.migrate.json
+echo "...written to ./migrate/1316558677/2064.sm.migrate.json"
+echo "Migrating object 2073 (456)..."
+./fetch-old-sc "www.sourcemap.org/" 2073 > ./migrate/1316558677/2073.sm.migrate.json
+echo "...written to ./migrate/1316558677/2073.sm.migrate.json"
+echo "Migrating object 2079 (457)..."
+./fetch-old-sc "www.sourcemap.org/" 2079 > ./migrate/1316558677/2079.sm.migrate.json
+echo "...written to ./migrate/1316558677/2079.sm.migrate.json"
+echo "Migrating object 2080 (458)..."
+./fetch-old-sc "www.sourcemap.org/" 2080 > ./migrate/1316558677/2080.sm.migrate.json
+echo "...written to ./migrate/1316558677/2080.sm.migrate.json"
+echo "Migrating object 2088 (459)..."
+./fetch-old-sc "www.sourcemap.org/" 2088 > ./migrate/1316558677/2088.sm.migrate.json
+echo "...written to ./migrate/1316558677/2088.sm.migrate.json"
+echo "Migrating object 2089 (460)..."
+./fetch-old-sc "www.sourcemap.org/" 2089 > ./migrate/1316558677/2089.sm.migrate.json
+echo "...written to ./migrate/1316558677/2089.sm.migrate.json"
+echo "Migrating object 2090 (461)..."
+./fetch-old-sc "www.sourcemap.org/" 2090 > ./migrate/1316558677/2090.sm.migrate.json
+echo "...written to ./migrate/1316558677/2090.sm.migrate.json"
+echo "Migrating object 2091 (462)..."
+./fetch-old-sc "www.sourcemap.org/" 2091 > ./migrate/1316558677/2091.sm.migrate.json
+echo "...written to ./migrate/1316558677/2091.sm.migrate.json"
+echo "Migrating object 2092 (463)..."
+./fetch-old-sc "www.sourcemap.org/" 2092 > ./migrate/1316558677/2092.sm.migrate.json
+echo "...written to ./migrate/1316558677/2092.sm.migrate.json"
+echo "Migrating object 2094 (464)..."
+./fetch-old-sc "www.sourcemap.org/" 2094 > ./migrate/1316558677/2094.sm.migrate.json
+echo "...written to ./migrate/1316558677/2094.sm.migrate.json"
+echo "Migrating object 2114 (465)..."
+./fetch-old-sc "www.sourcemap.org/" 2114 > ./migrate/1316558677/2114.sm.migrate.json
+echo "...written to ./migrate/1316558677/2114.sm.migrate.json"
+echo "Migrating object 2119 (466)..."
+./fetch-old-sc "www.sourcemap.org/" 2119 > ./migrate/1316558677/2119.sm.migrate.json
+echo "...written to ./migrate/1316558677/2119.sm.migrate.json"
+echo "Migrating object 2121 (467)..."
+./fetch-old-sc "www.sourcemap.org/" 2121 > ./migrate/1316558677/2121.sm.migrate.json
+echo "...written to ./migrate/1316558677/2121.sm.migrate.json"
+echo "Migrating object 2122 (468)..."
+./fetch-old-sc "www.sourcemap.org/" 2122 > ./migrate/1316558677/2122.sm.migrate.json
+echo "...written to ./migrate/1316558677/2122.sm.migrate.json"
+echo "Migrating object 2147 (469)..."
+./fetch-old-sc "www.sourcemap.org/" 2147 > ./migrate/1316558677/2147.sm.migrate.json
+echo "...written to ./migrate/1316558677/2147.sm.migrate.json"
+echo "Migrating object 2166 (470)..."
+./fetch-old-sc "www.sourcemap.org/" 2166 > ./migrate/1316558677/2166.sm.migrate.json
+echo "...written to ./migrate/1316558677/2166.sm.migrate.json"
+echo "Migrating object 2173 (471)..."
+./fetch-old-sc "www.sourcemap.org/" 2173 > ./migrate/1316558677/2173.sm.migrate.json
+echo "...written to ./migrate/1316558677/2173.sm.migrate.json"
+echo "Migrating object 2174 (472)..."
+./fetch-old-sc "www.sourcemap.org/" 2174 > ./migrate/1316558677/2174.sm.migrate.json
+echo "...written to ./migrate/1316558677/2174.sm.migrate.json"
+echo "Migrating object 2191 (473)..."
+./fetch-old-sc "www.sourcemap.org/" 2191 > ./migrate/1316558677/2191.sm.migrate.json
+echo "...written to ./migrate/1316558677/2191.sm.migrate.json"
+echo "Migrating object 2192 (474)..."
+./fetch-old-sc "www.sourcemap.org/" 2192 > ./migrate/1316558677/2192.sm.migrate.json
+echo "...written to ./migrate/1316558677/2192.sm.migrate.json"
+echo "Migrating object 2203 (475)..."
+./fetch-old-sc "www.sourcemap.org/" 2203 > ./migrate/1316558677/2203.sm.migrate.json
+echo "...written to ./migrate/1316558677/2203.sm.migrate.json"
+echo "Migrating object 2205 (476)..."
+./fetch-old-sc "www.sourcemap.org/" 2205 > ./migrate/1316558677/2205.sm.migrate.json
+echo "...written to ./migrate/1316558677/2205.sm.migrate.json"
+echo "Migrating object 2206 (477)..."
+./fetch-old-sc "www.sourcemap.org/" 2206 > ./migrate/1316558677/2206.sm.migrate.json
+echo "...written to ./migrate/1316558677/2206.sm.migrate.json"
+echo "Migrating object 2231 (478)..."
+./fetch-old-sc "www.sourcemap.org/" 2231 > ./migrate/1316558677/2231.sm.migrate.json
+echo "...written to ./migrate/1316558677/2231.sm.migrate.json"
+echo "Migrating object 2235 (479)..."
+./fetch-old-sc "www.sourcemap.org/" 2235 > ./migrate/1316558677/2235.sm.migrate.json
+echo "...written to ./migrate/1316558677/2235.sm.migrate.json"
+echo "Migrating object 2236 (480)..."
+./fetch-old-sc "www.sourcemap.org/" 2236 > ./migrate/1316558677/2236.sm.migrate.json
+echo "...written to ./migrate/1316558677/2236.sm.migrate.json"
+echo "Migrating object 2237 (481)..."
+./fetch-old-sc "www.sourcemap.org/" 2237 > ./migrate/1316558677/2237.sm.migrate.json
+echo "...written to ./migrate/1316558677/2237.sm.migrate.json"
+echo "Migrating object 2239 (482)..."
+./fetch-old-sc "www.sourcemap.org/" 2239 > ./migrate/1316558677/2239.sm.migrate.json
+echo "...written to ./migrate/1316558677/2239.sm.migrate.json"
+echo "Migrating object 2240 (483)..."
+./fetch-old-sc "www.sourcemap.org/" 2240 > ./migrate/1316558677/2240.sm.migrate.json
+echo "...written to ./migrate/1316558677/2240.sm.migrate.json"
+echo "Migrating object 2241 (484)..."
+./fetch-old-sc "www.sourcemap.org/" 2241 > ./migrate/1316558677/2241.sm.migrate.json
+echo "...written to ./migrate/1316558677/2241.sm.migrate.json"
+echo "Migrating object 2244 (485)..."
+./fetch-old-sc "www.sourcemap.org/" 2244 > ./migrate/1316558677/2244.sm.migrate.json
+echo "...written to ./migrate/1316558677/2244.sm.migrate.json"
+echo "Migrating object 2253 (486)..."
+./fetch-old-sc "www.sourcemap.org/" 2253 > ./migrate/1316558677/2253.sm.migrate.json
+echo "...written to ./migrate/1316558677/2253.sm.migrate.json"
+echo "Migrating object 2270 (487)..."
+./fetch-old-sc "www.sourcemap.org/" 2270 > ./migrate/1316558677/2270.sm.migrate.json
+echo "...written to ./migrate/1316558677/2270.sm.migrate.json"
+echo "Migrating object 2297 (488)..."
+./fetch-old-sc "www.sourcemap.org/" 2297 > ./migrate/1316558677/2297.sm.migrate.json
+echo "...written to ./migrate/1316558677/2297.sm.migrate.json"
+echo "Migrating object 2301 (489)..."
+./fetch-old-sc "www.sourcemap.org/" 2301 > ./migrate/1316558677/2301.sm.migrate.json
+echo "...written to ./migrate/1316558677/2301.sm.migrate.json"
+echo "Migrating object 2313 (490)..."
+./fetch-old-sc "www.sourcemap.org/" 2313 > ./migrate/1316558677/2313.sm.migrate.json
+echo "...written to ./migrate/1316558677/2313.sm.migrate.json"
+echo "Migrating object 2322 (491)..."
+./fetch-old-sc "www.sourcemap.org/" 2322 > ./migrate/1316558677/2322.sm.migrate.json
+echo "...written to ./migrate/1316558677/2322.sm.migrate.json"
+echo "Migrating object 2335 (492)..."
+./fetch-old-sc "www.sourcemap.org/" 2335 > ./migrate/1316558677/2335.sm.migrate.json
+echo "...written to ./migrate/1316558677/2335.sm.migrate.json"
+echo "Migrating object 2337 (493)..."
+./fetch-old-sc "www.sourcemap.org/" 2337 > ./migrate/1316558677/2337.sm.migrate.json
+echo "...written to ./migrate/1316558677/2337.sm.migrate.json"
+echo "Migrating object 2342 (494)..."
+./fetch-old-sc "www.sourcemap.org/" 2342 > ./migrate/1316558677/2342.sm.migrate.json
+echo "...written to ./migrate/1316558677/2342.sm.migrate.json"
+echo "Migrating object 2344 (495)..."
+./fetch-old-sc "www.sourcemap.org/" 2344 > ./migrate/1316558677/2344.sm.migrate.json
+echo "...written to ./migrate/1316558677/2344.sm.migrate.json"
+echo "Migrating object 2348 (496)..."
+./fetch-old-sc "www.sourcemap.org/" 2348 > ./migrate/1316558677/2348.sm.migrate.json
+echo "...written to ./migrate/1316558677/2348.sm.migrate.json"
+echo "Migrating object 2350 (497)..."
+./fetch-old-sc "www.sourcemap.org/" 2350 > ./migrate/1316558677/2350.sm.migrate.json
+echo "...written to ./migrate/1316558677/2350.sm.migrate.json"
+echo "Migrating object 2353 (498)..."
+./fetch-old-sc "www.sourcemap.org/" 2353 > ./migrate/1316558677/2353.sm.migrate.json
+echo "...written to ./migrate/1316558677/2353.sm.migrate.json"
+echo "Migrating object 2354 (499)..."
+./fetch-old-sc "www.sourcemap.org/" 2354 > ./migrate/1316558677/2354.sm.migrate.json
+echo "...written to ./migrate/1316558677/2354.sm.migrate.json"
+echo "Migrating object 2355 (500)..."
+./fetch-old-sc "www.sourcemap.org/" 2355 > ./migrate/1316558677/2355.sm.migrate.json
+echo "...written to ./migrate/1316558677/2355.sm.migrate.json"
+echo "Migrating object 2360 (501)..."
+./fetch-old-sc "www.sourcemap.org/" 2360 > ./migrate/1316558677/2360.sm.migrate.json
+echo "...written to ./migrate/1316558677/2360.sm.migrate.json"
+echo "Migrating object 2369 (502)..."
+./fetch-old-sc "www.sourcemap.org/" 2369 > ./migrate/1316558677/2369.sm.migrate.json
+echo "...written to ./migrate/1316558677/2369.sm.migrate.json"
+echo "Migrating object 2370 (503)..."
+./fetch-old-sc "www.sourcemap.org/" 2370 > ./migrate/1316558677/2370.sm.migrate.json
+echo "...written to ./migrate/1316558677/2370.sm.migrate.json"
+echo "Migrating object 2371 (504)..."
+./fetch-old-sc "www.sourcemap.org/" 2371 > ./migrate/1316558677/2371.sm.migrate.json
+echo "...written to ./migrate/1316558677/2371.sm.migrate.json"
+echo "Migrating object 2379 (505)..."
+./fetch-old-sc "www.sourcemap.org/" 2379 > ./migrate/1316558677/2379.sm.migrate.json
+echo "...written to ./migrate/1316558677/2379.sm.migrate.json"
+echo "Migrating object 2381 (506)..."
+./fetch-old-sc "www.sourcemap.org/" 2381 > ./migrate/1316558677/2381.sm.migrate.json
+echo "...written to ./migrate/1316558677/2381.sm.migrate.json"
+echo "Migrating object 2384 (507)..."
+./fetch-old-sc "www.sourcemap.org/" 2384 > ./migrate/1316558677/2384.sm.migrate.json
+echo "...written to ./migrate/1316558677/2384.sm.migrate.json"
+echo "Migrating object 2385 (508)..."
+./fetch-old-sc "www.sourcemap.org/" 2385 > ./migrate/1316558677/2385.sm.migrate.json
+echo "...written to ./migrate/1316558677/2385.sm.migrate.json"
+echo "Migrating object 2386 (509)..."
+./fetch-old-sc "www.sourcemap.org/" 2386 > ./migrate/1316558677/2386.sm.migrate.json
+echo "...written to ./migrate/1316558677/2386.sm.migrate.json"
+echo "Migrating object 2387 (510)..."
+./fetch-old-sc "www.sourcemap.org/" 2387 > ./migrate/1316558677/2387.sm.migrate.json
+echo "...written to ./migrate/1316558677/2387.sm.migrate.json"
+echo "Migrating object 2388 (511)..."
+./fetch-old-sc "www.sourcemap.org/" 2388 > ./migrate/1316558677/2388.sm.migrate.json
+echo "...written to ./migrate/1316558677/2388.sm.migrate.json"
+echo "Migrating object 2389 (512)..."
+./fetch-old-sc "www.sourcemap.org/" 2389 > ./migrate/1316558677/2389.sm.migrate.json
+echo "...written to ./migrate/1316558677/2389.sm.migrate.json"
+echo "Migrating object 2390 (513)..."
+./fetch-old-sc "www.sourcemap.org/" 2390 > ./migrate/1316558677/2390.sm.migrate.json
+echo "...written to ./migrate/1316558677/2390.sm.migrate.json"
+echo "Migrating object 2391 (514)..."
+./fetch-old-sc "www.sourcemap.org/" 2391 > ./migrate/1316558677/2391.sm.migrate.json
+echo "...written to ./migrate/1316558677/2391.sm.migrate.json"
+echo "Migrating object 2394 (515)..."
+./fetch-old-sc "www.sourcemap.org/" 2394 > ./migrate/1316558677/2394.sm.migrate.json
+echo "...written to ./migrate/1316558677/2394.sm.migrate.json"
+echo "Migrating object 2395 (516)..."
+./fetch-old-sc "www.sourcemap.org/" 2395 > ./migrate/1316558677/2395.sm.migrate.json
+echo "...written to ./migrate/1316558677/2395.sm.migrate.json"
+echo "Migrating object 2398 (517)..."
+./fetch-old-sc "www.sourcemap.org/" 2398 > ./migrate/1316558677/2398.sm.migrate.json
+echo "...written to ./migrate/1316558677/2398.sm.migrate.json"
+echo "Migrating object 2400 (518)..."
+./fetch-old-sc "www.sourcemap.org/" 2400 > ./migrate/1316558677/2400.sm.migrate.json
+echo "...written to ./migrate/1316558677/2400.sm.migrate.json"
+echo "Migrating object 2415 (519)..."
+./fetch-old-sc "www.sourcemap.org/" 2415 > ./migrate/1316558677/2415.sm.migrate.json
+echo "...written to ./migrate/1316558677/2415.sm.migrate.json"
+echo "Migrating object 2430 (520)..."
+./fetch-old-sc "www.sourcemap.org/" 2430 > ./migrate/1316558677/2430.sm.migrate.json
+echo "...written to ./migrate/1316558677/2430.sm.migrate.json"
+echo "Migrating object 2472 (521)..."
+./fetch-old-sc "www.sourcemap.org/" 2472 > ./migrate/1316558677/2472.sm.migrate.json
+echo "...written to ./migrate/1316558677/2472.sm.migrate.json"
+echo "Migrating object 2487 (522)..."
+./fetch-old-sc "www.sourcemap.org/" 2487 > ./migrate/1316558677/2487.sm.migrate.json
+echo "...written to ./migrate/1316558677/2487.sm.migrate.json"
+echo "Migrating object 2519 (523)..."
+./fetch-old-sc "www.sourcemap.org/" 2519 > ./migrate/1316558677/2519.sm.migrate.json
+echo "...written to ./migrate/1316558677/2519.sm.migrate.json"
+echo "Migrating object 2533 (524)..."
+./fetch-old-sc "www.sourcemap.org/" 2533 > ./migrate/1316558677/2533.sm.migrate.json
+echo "...written to ./migrate/1316558677/2533.sm.migrate.json"
+echo "Migrating object 2542 (525)..."
+./fetch-old-sc "www.sourcemap.org/" 2542 > ./migrate/1316558677/2542.sm.migrate.json
+echo "...written to ./migrate/1316558677/2542.sm.migrate.json"
+echo "Migrating object 2546 (526)..."
+./fetch-old-sc "www.sourcemap.org/" 2546 > ./migrate/1316558677/2546.sm.migrate.json
+echo "...written to ./migrate/1316558677/2546.sm.migrate.json"
+echo "Migrating object 2563 (527)..."
+./fetch-old-sc "www.sourcemap.org/" 2563 > ./migrate/1316558677/2563.sm.migrate.json
+echo "...written to ./migrate/1316558677/2563.sm.migrate.json"
+echo "Migrating object 2564 (528)..."
+./fetch-old-sc "www.sourcemap.org/" 2564 > ./migrate/1316558677/2564.sm.migrate.json
+echo "...written to ./migrate/1316558677/2564.sm.migrate.json"
+echo "Migrating object 2572 (529)..."
+./fetch-old-sc "www.sourcemap.org/" 2572 > ./migrate/1316558677/2572.sm.migrate.json
+echo "...written to ./migrate/1316558677/2572.sm.migrate.json"
+echo "Migrating object 2579 (530)..."
+./fetch-old-sc "www.sourcemap.org/" 2579 > ./migrate/1316558677/2579.sm.migrate.json
+echo "...written to ./migrate/1316558677/2579.sm.migrate.json"
+echo "Migrating object 2597 (531)..."
+./fetch-old-sc "www.sourcemap.org/" 2597 > ./migrate/1316558677/2597.sm.migrate.json
+echo "...written to ./migrate/1316558677/2597.sm.migrate.json"
+echo "Migrating object 2599 (532)..."
+./fetch-old-sc "www.sourcemap.org/" 2599 > ./migrate/1316558677/2599.sm.migrate.json
+echo "...written to ./migrate/1316558677/2599.sm.migrate.json"
+echo "Migrating object 2600 (533)..."
+./fetch-old-sc "www.sourcemap.org/" 2600 > ./migrate/1316558677/2600.sm.migrate.json
+echo "...written to ./migrate/1316558677/2600.sm.migrate.json"
+echo "Migrating object 2602 (534)..."
+./fetch-old-sc "www.sourcemap.org/" 2602 > ./migrate/1316558677/2602.sm.migrate.json
+echo "...written to ./migrate/1316558677/2602.sm.migrate.json"
+echo "Migrating object 2605 (535)..."
+./fetch-old-sc "www.sourcemap.org/" 2605 > ./migrate/1316558677/2605.sm.migrate.json
+echo "...written to ./migrate/1316558677/2605.sm.migrate.json"
+echo "Migrating object 2610 (536)..."
+./fetch-old-sc "www.sourcemap.org/" 2610 > ./migrate/1316558677/2610.sm.migrate.json
+echo "...written to ./migrate/1316558677/2610.sm.migrate.json"
+echo "Migrating object 3002 (537)..."
+./fetch-old-sc "www.sourcemap.org/" 3002 > ./migrate/1316558677/3002.sm.migrate.json
+echo "...written to ./migrate/1316558677/3002.sm.migrate.json"
+echo "Migrating object 3004 (538)..."
+./fetch-old-sc "www.sourcemap.org/" 3004 > ./migrate/1316558677/3004.sm.migrate.json
+echo "...written to ./migrate/1316558677/3004.sm.migrate.json"
+echo "Migrating object 3005 (539)..."
+./fetch-old-sc "www.sourcemap.org/" 3005 > ./migrate/1316558677/3005.sm.migrate.json
+echo "...written to ./migrate/1316558677/3005.sm.migrate.json"
+echo "Migrating object 3007 (540)..."
+./fetch-old-sc "www.sourcemap.org/" 3007 > ./migrate/1316558677/3007.sm.migrate.json
+echo "...written to ./migrate/1316558677/3007.sm.migrate.json"
+echo "Migrating object 3009 (541)..."
+./fetch-old-sc "www.sourcemap.org/" 3009 > ./migrate/1316558677/3009.sm.migrate.json
+echo "...written to ./migrate/1316558677/3009.sm.migrate.json"
+echo "Migrating object 3012 (542)..."
+./fetch-old-sc "www.sourcemap.org/" 3012 > ./migrate/1316558677/3012.sm.migrate.json
+echo "...written to ./migrate/1316558677/3012.sm.migrate.json"
+echo "Migrating object 3017 (543)..."
+./fetch-old-sc "www.sourcemap.org/" 3017 > ./migrate/1316558677/3017.sm.migrate.json
+echo "...written to ./migrate/1316558677/3017.sm.migrate.json"
+echo "Migrating object 3022 (544)..."
+./fetch-old-sc "www.sourcemap.org/" 3022 > ./migrate/1316558677/3022.sm.migrate.json
+echo "...written to ./migrate/1316558677/3022.sm.migrate.json"
+echo "Migrating object 3060 (545)..."
+./fetch-old-sc "www.sourcemap.org/" 3060 > ./migrate/1316558677/3060.sm.migrate.json
+echo "...written to ./migrate/1316558677/3060.sm.migrate.json"
+echo "Migrating object 3063 (546)..."
+./fetch-old-sc "www.sourcemap.org/" 3063 > ./migrate/1316558677/3063.sm.migrate.json
+echo "...written to ./migrate/1316558677/3063.sm.migrate.json"
+echo "Migrating object 3064 (547)..."
+./fetch-old-sc "www.sourcemap.org/" 3064 > ./migrate/1316558677/3064.sm.migrate.json
+echo "...written to ./migrate/1316558677/3064.sm.migrate.json"
+echo "Migrating object 3065 (548)..."
+./fetch-old-sc "www.sourcemap.org/" 3065 > ./migrate/1316558677/3065.sm.migrate.json
+echo "...written to ./migrate/1316558677/3065.sm.migrate.json"
+echo "Migrating object 3073 (549)..."
+./fetch-old-sc "www.sourcemap.org/" 3073 > ./migrate/1316558677/3073.sm.migrate.json
+echo "...written to ./migrate/1316558677/3073.sm.migrate.json"
+echo "Migrating object 3075 (550)..."
+./fetch-old-sc "www.sourcemap.org/" 3075 > ./migrate/1316558677/3075.sm.migrate.json
+echo "...written to ./migrate/1316558677/3075.sm.migrate.json"
+echo "Migrating object 3080 (551)..."
+./fetch-old-sc "www.sourcemap.org/" 3080 > ./migrate/1316558677/3080.sm.migrate.json
+echo "...written to ./migrate/1316558677/3080.sm.migrate.json"
+echo "Migrating object 3096 (552)..."
+./fetch-old-sc "www.sourcemap.org/" 3096 > ./migrate/1316558677/3096.sm.migrate.json
+echo "...written to ./migrate/1316558677/3096.sm.migrate.json"
+echo "Migrating object 3098 (553)..."
+./fetch-old-sc "www.sourcemap.org/" 3098 > ./migrate/1316558677/3098.sm.migrate.json
+echo "...written to ./migrate/1316558677/3098.sm.migrate.json"
+echo "Migrating object 3103 (554)..."
+./fetch-old-sc "www.sourcemap.org/" 3103 > ./migrate/1316558677/3103.sm.migrate.json
+echo "...written to ./migrate/1316558677/3103.sm.migrate.json"
+echo "Migrating object 3106 (555)..."
+./fetch-old-sc "www.sourcemap.org/" 3106 > ./migrate/1316558677/3106.sm.migrate.json
+echo "...written to ./migrate/1316558677/3106.sm.migrate.json"
+echo "Migrating object 3109 (556)..."
+./fetch-old-sc "www.sourcemap.org/" 3109 > ./migrate/1316558677/3109.sm.migrate.json
+echo "...written to ./migrate/1316558677/3109.sm.migrate.json"
+echo "Migrating object 3116 (557)..."
+./fetch-old-sc "www.sourcemap.org/" 3116 > ./migrate/1316558677/3116.sm.migrate.json
+echo "...written to ./migrate/1316558677/3116.sm.migrate.json"
+echo "Migrating object 3120 (558)..."
+./fetch-old-sc "www.sourcemap.org/" 3120 > ./migrate/1316558677/3120.sm.migrate.json
+echo "...written to ./migrate/1316558677/3120.sm.migrate.json"
+echo "Migrating object 3122 (559)..."
+./fetch-old-sc "www.sourcemap.org/" 3122 > ./migrate/1316558677/3122.sm.migrate.json
+echo "...written to ./migrate/1316558677/3122.sm.migrate.json"
+echo "Migrating object 3123 (560)..."
+./fetch-old-sc "www.sourcemap.org/" 3123 > ./migrate/1316558677/3123.sm.migrate.json
+echo "...written to ./migrate/1316558677/3123.sm.migrate.json"
+echo "Migrating object 3127 (561)..."
+./fetch-old-sc "www.sourcemap.org/" 3127 > ./migrate/1316558677/3127.sm.migrate.json
+echo "...written to ./migrate/1316558677/3127.sm.migrate.json"
+echo "Migrating object 3129 (562)..."
+./fetch-old-sc "www.sourcemap.org/" 3129 > ./migrate/1316558677/3129.sm.migrate.json
+echo "...written to ./migrate/1316558677/3129.sm.migrate.json"
+echo "Migrating object 3132 (563)..."
+./fetch-old-sc "www.sourcemap.org/" 3132 > ./migrate/1316558677/3132.sm.migrate.json
+echo "...written to ./migrate/1316558677/3132.sm.migrate.json"
+echo "Migrating object 3135 (564)..."
+./fetch-old-sc "www.sourcemap.org/" 3135 > ./migrate/1316558677/3135.sm.migrate.json
+echo "...written to ./migrate/1316558677/3135.sm.migrate.json"
+echo "Migrating object 3139 (565)..."
+./fetch-old-sc "www.sourcemap.org/" 3139 > ./migrate/1316558677/3139.sm.migrate.json
+echo "...written to ./migrate/1316558677/3139.sm.migrate.json"
+echo "Migrating object 3143 (566)..."
+./fetch-old-sc "www.sourcemap.org/" 3143 > ./migrate/1316558677/3143.sm.migrate.json
+echo "...written to ./migrate/1316558677/3143.sm.migrate.json"
+echo "Migrating object 3146 (567)..."
+./fetch-old-sc "www.sourcemap.org/" 3146 > ./migrate/1316558677/3146.sm.migrate.json
+echo "...written to ./migrate/1316558677/3146.sm.migrate.json"
+echo "Migrating object 3148 (568)..."
+./fetch-old-sc "www.sourcemap.org/" 3148 > ./migrate/1316558677/3148.sm.migrate.json
+echo "...written to ./migrate/1316558677/3148.sm.migrate.json"
+echo "Migrating object 3163 (569)..."
+./fetch-old-sc "www.sourcemap.org/" 3163 > ./migrate/1316558677/3163.sm.migrate.json
+echo "...written to ./migrate/1316558677/3163.sm.migrate.json"
+echo "Migrating object 3179 (570)..."
+./fetch-old-sc "www.sourcemap.org/" 3179 > ./migrate/1316558677/3179.sm.migrate.json
+echo "...written to ./migrate/1316558677/3179.sm.migrate.json"
+echo "Migrating object 3212 (571)..."
+./fetch-old-sc "www.sourcemap.org/" 3212 > ./migrate/1316558677/3212.sm.migrate.json
+echo "...written to ./migrate/1316558677/3212.sm.migrate.json"
+echo "Migrating object 3215 (572)..."
+./fetch-old-sc "www.sourcemap.org/" 3215 > ./migrate/1316558677/3215.sm.migrate.json
+echo "...written to ./migrate/1316558677/3215.sm.migrate.json"
+echo "Migrating object 3217 (573)..."
+./fetch-old-sc "www.sourcemap.org/" 3217 > ./migrate/1316558677/3217.sm.migrate.json
+echo "...written to ./migrate/1316558677/3217.sm.migrate.json"
+echo "Migrating object 3220 (574)..."
+./fetch-old-sc "www.sourcemap.org/" 3220 > ./migrate/1316558677/3220.sm.migrate.json
+echo "...written to ./migrate/1316558677/3220.sm.migrate.json"
+echo "Migrating object 3222 (575)..."
+./fetch-old-sc "www.sourcemap.org/" 3222 > ./migrate/1316558677/3222.sm.migrate.json
+echo "...written to ./migrate/1316558677/3222.sm.migrate.json"
+echo "Migrating object 3227 (576)..."
+./fetch-old-sc "www.sourcemap.org/" 3227 > ./migrate/1316558677/3227.sm.migrate.json
+echo "...written to ./migrate/1316558677/3227.sm.migrate.json"
+echo "Migrating object 3231 (577)..."
+./fetch-old-sc "www.sourcemap.org/" 3231 > ./migrate/1316558677/3231.sm.migrate.json
+echo "...written to ./migrate/1316558677/3231.sm.migrate.json"
+echo "Migrating object 3234 (578)..."
+./fetch-old-sc "www.sourcemap.org/" 3234 > ./migrate/1316558677/3234.sm.migrate.json
+echo "...written to ./migrate/1316558677/3234.sm.migrate.json"
+echo "Migrating object 3235 (579)..."
+./fetch-old-sc "www.sourcemap.org/" 3235 > ./migrate/1316558677/3235.sm.migrate.json
+echo "...written to ./migrate/1316558677/3235.sm.migrate.json"
+echo "Migrating object 3236 (580)..."
+./fetch-old-sc "www.sourcemap.org/" 3236 > ./migrate/1316558677/3236.sm.migrate.json
+echo "...written to ./migrate/1316558677/3236.sm.migrate.json"
+echo "Migrating object 3245 (581)..."
+./fetch-old-sc "www.sourcemap.org/" 3245 > ./migrate/1316558677/3245.sm.migrate.json
+echo "...written to ./migrate/1316558677/3245.sm.migrate.json"
+echo "Migrating object 3257 (582)..."
+./fetch-old-sc "www.sourcemap.org/" 3257 > ./migrate/1316558677/3257.sm.migrate.json
+echo "...written to ./migrate/1316558677/3257.sm.migrate.json"
+echo "Migrating object 3258 (583)..."
+./fetch-old-sc "www.sourcemap.org/" 3258 > ./migrate/1316558677/3258.sm.migrate.json
+echo "...written to ./migrate/1316558677/3258.sm.migrate.json"
+echo "Migrating object 3260 (584)..."
+./fetch-old-sc "www.sourcemap.org/" 3260 > ./migrate/1316558677/3260.sm.migrate.json
+echo "...written to ./migrate/1316558677/3260.sm.migrate.json"
+echo "Migrating object 3266 (585)..."
+./fetch-old-sc "www.sourcemap.org/" 3266 > ./migrate/1316558677/3266.sm.migrate.json
+echo "...written to ./migrate/1316558677/3266.sm.migrate.json"
+echo "Migrating object 3267 (586)..."
+./fetch-old-sc "www.sourcemap.org/" 3267 > ./migrate/1316558677/3267.sm.migrate.json
+echo "...written to ./migrate/1316558677/3267.sm.migrate.json"
+echo "Migrating object 3270 (587)..."
+./fetch-old-sc "www.sourcemap.org/" 3270 > ./migrate/1316558677/3270.sm.migrate.json
+echo "...written to ./migrate/1316558677/3270.sm.migrate.json"
+echo "Migrating object 3272 (588)..."
+./fetch-old-sc "www.sourcemap.org/" 3272 > ./migrate/1316558677/3272.sm.migrate.json
+echo "...written to ./migrate/1316558677/3272.sm.migrate.json"
+echo "Migrating object 3273 (589)..."
+./fetch-old-sc "www.sourcemap.org/" 3273 > ./migrate/1316558677/3273.sm.migrate.json
+echo "...written to ./migrate/1316558677/3273.sm.migrate.json"
+echo "Migrating object 3276 (590)..."
+./fetch-old-sc "www.sourcemap.org/" 3276 > ./migrate/1316558677/3276.sm.migrate.json
+echo "...written to ./migrate/1316558677/3276.sm.migrate.json"
+echo "Migrating object 3277 (591)..."
+./fetch-old-sc "www.sourcemap.org/" 3277 > ./migrate/1316558677/3277.sm.migrate.json
+echo "...written to ./migrate/1316558677/3277.sm.migrate.json"
+echo "Migrating object 3282 (592)..."
+./fetch-old-sc "www.sourcemap.org/" 3282 > ./migrate/1316558677/3282.sm.migrate.json
+echo "...written to ./migrate/1316558677/3282.sm.migrate.json"
+echo "Migrating object 3285 (593)..."
+./fetch-old-sc "www.sourcemap.org/" 3285 > ./migrate/1316558677/3285.sm.migrate.json
+echo "...written to ./migrate/1316558677/3285.sm.migrate.json"
+echo "Migrating object 3286 (594)..."
+./fetch-old-sc "www.sourcemap.org/" 3286 > ./migrate/1316558677/3286.sm.migrate.json
+echo "...written to ./migrate/1316558677/3286.sm.migrate.json"
+echo "Migrating object 3287 (595)..."
+./fetch-old-sc "www.sourcemap.org/" 3287 > ./migrate/1316558677/3287.sm.migrate.json
+echo "...written to ./migrate/1316558677/3287.sm.migrate.json"
+echo "Migrating object 3289 (596)..."
+./fetch-old-sc "www.sourcemap.org/" 3289 > ./migrate/1316558677/3289.sm.migrate.json
+echo "...written to ./migrate/1316558677/3289.sm.migrate.json"
+echo "Migrating object 3291 (597)..."
+./fetch-old-sc "www.sourcemap.org/" 3291 > ./migrate/1316558677/3291.sm.migrate.json
+echo "...written to ./migrate/1316558677/3291.sm.migrate.json"
+echo "Migrating object 3292 (598)..."
+./fetch-old-sc "www.sourcemap.org/" 3292 > ./migrate/1316558677/3292.sm.migrate.json
+echo "...written to ./migrate/1316558677/3292.sm.migrate.json"
+echo "Migrating object 3293 (599)..."
+./fetch-old-sc "www.sourcemap.org/" 3293 > ./migrate/1316558677/3293.sm.migrate.json
+echo "...written to ./migrate/1316558677/3293.sm.migrate.json"
+echo "Migrating object 3294 (600)..."
+./fetch-old-sc "www.sourcemap.org/" 3294 > ./migrate/1316558677/3294.sm.migrate.json
+echo "...written to ./migrate/1316558677/3294.sm.migrate.json"
+echo "Migrating object 3297 (601)..."
+./fetch-old-sc "www.sourcemap.org/" 3297 > ./migrate/1316558677/3297.sm.migrate.json
+echo "...written to ./migrate/1316558677/3297.sm.migrate.json"
+echo "Migrating object 3299 (602)..."
+./fetch-old-sc "www.sourcemap.org/" 3299 > ./migrate/1316558677/3299.sm.migrate.json
+echo "...written to ./migrate/1316558677/3299.sm.migrate.json"
+echo "Migrating object 3301 (603)..."
+./fetch-old-sc "www.sourcemap.org/" 3301 > ./migrate/1316558677/3301.sm.migrate.json
+echo "...written to ./migrate/1316558677/3301.sm.migrate.json"
+echo "Migrating object 3302 (604)..."
+./fetch-old-sc "www.sourcemap.org/" 3302 > ./migrate/1316558677/3302.sm.migrate.json
+echo "...written to ./migrate/1316558677/3302.sm.migrate.json"
+echo "Migrating object 3303 (605)..."
+./fetch-old-sc "www.sourcemap.org/" 3303 > ./migrate/1316558677/3303.sm.migrate.json
+echo "...written to ./migrate/1316558677/3303.sm.migrate.json"
+echo "Migrating object 3304 (606)..."
+./fetch-old-sc "www.sourcemap.org/" 3304 > ./migrate/1316558677/3304.sm.migrate.json
+echo "...written to ./migrate/1316558677/3304.sm.migrate.json"
+echo "Migrating object 3307 (607)..."
+./fetch-old-sc "www.sourcemap.org/" 3307 > ./migrate/1316558677/3307.sm.migrate.json
+echo "...written to ./migrate/1316558677/3307.sm.migrate.json"
+echo "Migrating object 3311 (608)..."
+./fetch-old-sc "www.sourcemap.org/" 3311 > ./migrate/1316558677/3311.sm.migrate.json
+echo "...written to ./migrate/1316558677/3311.sm.migrate.json"
+echo "Migrating object 3315 (609)..."
+./fetch-old-sc "www.sourcemap.org/" 3315 > ./migrate/1316558677/3315.sm.migrate.json
+echo "...written to ./migrate/1316558677/3315.sm.migrate.json"
+echo "Migrating object 3316 (610)..."
+./fetch-old-sc "www.sourcemap.org/" 3316 > ./migrate/1316558677/3316.sm.migrate.json
+echo "...written to ./migrate/1316558677/3316.sm.migrate.json"
+echo "Migrating object 3343 (611)..."
+./fetch-old-sc "www.sourcemap.org/" 3343 > ./migrate/1316558677/3343.sm.migrate.json
+echo "...written to ./migrate/1316558677/3343.sm.migrate.json"
+echo "Migrating object 3347 (612)..."
+./fetch-old-sc "www.sourcemap.org/" 3347 > ./migrate/1316558677/3347.sm.migrate.json
+echo "...written to ./migrate/1316558677/3347.sm.migrate.json"
+echo "Migrating object 3349 (613)..."
+./fetch-old-sc "www.sourcemap.org/" 3349 > ./migrate/1316558677/3349.sm.migrate.json
+echo "...written to ./migrate/1316558677/3349.sm.migrate.json"
+echo "Migrating object 3350 (614)..."
+./fetch-old-sc "www.sourcemap.org/" 3350 > ./migrate/1316558677/3350.sm.migrate.json
+echo "...written to ./migrate/1316558677/3350.sm.migrate.json"
+echo "Migrating object 3361 (615)..."
+./fetch-old-sc "www.sourcemap.org/" 3361 > ./migrate/1316558677/3361.sm.migrate.json
+echo "...written to ./migrate/1316558677/3361.sm.migrate.json"
+echo "Migrating object 3364 (616)..."
+./fetch-old-sc "www.sourcemap.org/" 3364 > ./migrate/1316558677/3364.sm.migrate.json
+echo "...written to ./migrate/1316558677/3364.sm.migrate.json"
+echo "Migrating object 3365 (617)..."
+./fetch-old-sc "www.sourcemap.org/" 3365 > ./migrate/1316558677/3365.sm.migrate.json
+echo "...written to ./migrate/1316558677/3365.sm.migrate.json"
+echo "Migrating object 3366 (618)..."
+./fetch-old-sc "www.sourcemap.org/" 3366 > ./migrate/1316558677/3366.sm.migrate.json
+echo "...written to ./migrate/1316558677/3366.sm.migrate.json"
+echo "Migrating object 3369 (619)..."
+./fetch-old-sc "www.sourcemap.org/" 3369 > ./migrate/1316558677/3369.sm.migrate.json
+echo "...written to ./migrate/1316558677/3369.sm.migrate.json"
+echo "Migrating object 3375 (620)..."
+./fetch-old-sc "www.sourcemap.org/" 3375 > ./migrate/1316558677/3375.sm.migrate.json
+echo "...written to ./migrate/1316558677/3375.sm.migrate.json"
+echo "Migrating object 3376 (621)..."
+./fetch-old-sc "www.sourcemap.org/" 3376 > ./migrate/1316558677/3376.sm.migrate.json
+echo "...written to ./migrate/1316558677/3376.sm.migrate.json"
+echo "Migrating object 3377 (622)..."
+./fetch-old-sc "www.sourcemap.org/" 3377 > ./migrate/1316558677/3377.sm.migrate.json
+echo "...written to ./migrate/1316558677/3377.sm.migrate.json"
+echo "Migrating object 3378 (623)..."
+./fetch-old-sc "www.sourcemap.org/" 3378 > ./migrate/1316558677/3378.sm.migrate.json
+echo "...written to ./migrate/1316558677/3378.sm.migrate.json"
+echo "Migrating object 3379 (624)..."
+./fetch-old-sc "www.sourcemap.org/" 3379 > ./migrate/1316558677/3379.sm.migrate.json
+echo "...written to ./migrate/1316558677/3379.sm.migrate.json"
+echo "Migrating object 3384 (625)..."
+./fetch-old-sc "www.sourcemap.org/" 3384 > ./migrate/1316558677/3384.sm.migrate.json
+echo "...written to ./migrate/1316558677/3384.sm.migrate.json"
+echo "Migrating object 3385 (626)..."
+./fetch-old-sc "www.sourcemap.org/" 3385 > ./migrate/1316558677/3385.sm.migrate.json
+echo "...written to ./migrate/1316558677/3385.sm.migrate.json"
+echo "Migrating object 3387 (627)..."
+./fetch-old-sc "www.sourcemap.org/" 3387 > ./migrate/1316558677/3387.sm.migrate.json
+echo "...written to ./migrate/1316558677/3387.sm.migrate.json"
+echo "Migrating object 3394 (628)..."
+./fetch-old-sc "www.sourcemap.org/" 3394 > ./migrate/1316558677/3394.sm.migrate.json
+echo "...written to ./migrate/1316558677/3394.sm.migrate.json"
+echo "Migrating object 3396 (629)..."
+./fetch-old-sc "www.sourcemap.org/" 3396 > ./migrate/1316558677/3396.sm.migrate.json
+echo "...written to ./migrate/1316558677/3396.sm.migrate.json"
+echo "Migrating object 3401 (630)..."
+./fetch-old-sc "www.sourcemap.org/" 3401 > ./migrate/1316558677/3401.sm.migrate.json
+echo "...written to ./migrate/1316558677/3401.sm.migrate.json"
+echo "Migrating object 3402 (631)..."
+./fetch-old-sc "www.sourcemap.org/" 3402 > ./migrate/1316558677/3402.sm.migrate.json
+echo "...written to ./migrate/1316558677/3402.sm.migrate.json"
+echo "Migrating object 3404 (632)..."
+./fetch-old-sc "www.sourcemap.org/" 3404 > ./migrate/1316558677/3404.sm.migrate.json
+echo "...written to ./migrate/1316558677/3404.sm.migrate.json"
+echo "Migrating object 3406 (633)..."
+./fetch-old-sc "www.sourcemap.org/" 3406 > ./migrate/1316558677/3406.sm.migrate.json
+echo "...written to ./migrate/1316558677/3406.sm.migrate.json"
+echo "Migrating object 3410 (634)..."
+./fetch-old-sc "www.sourcemap.org/" 3410 > ./migrate/1316558677/3410.sm.migrate.json
+echo "...written to ./migrate/1316558677/3410.sm.migrate.json"
+echo "Migrating object 3418 (635)..."
+./fetch-old-sc "www.sourcemap.org/" 3418 > ./migrate/1316558677/3418.sm.migrate.json
+echo "...written to ./migrate/1316558677/3418.sm.migrate.json"
+echo "Migrating object 3429 (636)..."
+./fetch-old-sc "www.sourcemap.org/" 3429 > ./migrate/1316558677/3429.sm.migrate.json
+echo "...written to ./migrate/1316558677/3429.sm.migrate.json"
+echo "Migrating object 3430 (637)..."
+./fetch-old-sc "www.sourcemap.org/" 3430 > ./migrate/1316558677/3430.sm.migrate.json
+echo "...written to ./migrate/1316558677/3430.sm.migrate.json"
+echo "Migrating object 3431 (638)..."
+./fetch-old-sc "www.sourcemap.org/" 3431 > ./migrate/1316558677/3431.sm.migrate.json
+echo "...written to ./migrate/1316558677/3431.sm.migrate.json"
+echo "Migrating object 3432 (639)..."
+./fetch-old-sc "www.sourcemap.org/" 3432 > ./migrate/1316558677/3432.sm.migrate.json
+echo "...written to ./migrate/1316558677/3432.sm.migrate.json"
+echo "Migrating object 3433 (640)..."
+./fetch-old-sc "www.sourcemap.org/" 3433 > ./migrate/1316558677/3433.sm.migrate.json
+echo "...written to ./migrate/1316558677/3433.sm.migrate.json"
+echo "Migrating object 3434 (641)..."
+./fetch-old-sc "www.sourcemap.org/" 3434 > ./migrate/1316558677/3434.sm.migrate.json
+echo "...written to ./migrate/1316558677/3434.sm.migrate.json"
+echo "Migrating object 3435 (642)..."
+./fetch-old-sc "www.sourcemap.org/" 3435 > ./migrate/1316558677/3435.sm.migrate.json
+echo "...written to ./migrate/1316558677/3435.sm.migrate.json"
+echo "Migrating object 3436 (643)..."
+./fetch-old-sc "www.sourcemap.org/" 3436 > ./migrate/1316558677/3436.sm.migrate.json
+echo "...written to ./migrate/1316558677/3436.sm.migrate.json"
+echo "Migrating object 3437 (644)..."
+./fetch-old-sc "www.sourcemap.org/" 3437 > ./migrate/1316558677/3437.sm.migrate.json
+echo "...written to ./migrate/1316558677/3437.sm.migrate.json"
+echo "Migrating object 3438 (645)..."
+./fetch-old-sc "www.sourcemap.org/" 3438 > ./migrate/1316558677/3438.sm.migrate.json
+echo "...written to ./migrate/1316558677/3438.sm.migrate.json"
+echo "Migrating object 3439 (646)..."
+./fetch-old-sc "www.sourcemap.org/" 3439 > ./migrate/1316558677/3439.sm.migrate.json
+echo "...written to ./migrate/1316558677/3439.sm.migrate.json"
+echo "Migrating object 3440 (647)..."
+./fetch-old-sc "www.sourcemap.org/" 3440 > ./migrate/1316558677/3440.sm.migrate.json
+echo "...written to ./migrate/1316558677/3440.sm.migrate.json"
+echo "Migrating object 3441 (648)..."
+./fetch-old-sc "www.sourcemap.org/" 3441 > ./migrate/1316558677/3441.sm.migrate.json
+echo "...written to ./migrate/1316558677/3441.sm.migrate.json"
+echo "Migrating object 3442 (649)..."
+./fetch-old-sc "www.sourcemap.org/" 3442 > ./migrate/1316558677/3442.sm.migrate.json
+echo "...written to ./migrate/1316558677/3442.sm.migrate.json"
+echo "Migrating object 3443 (650)..."
+./fetch-old-sc "www.sourcemap.org/" 3443 > ./migrate/1316558677/3443.sm.migrate.json
+echo "...written to ./migrate/1316558677/3443.sm.migrate.json"
+echo "Migrating object 3444 (651)..."
+./fetch-old-sc "www.sourcemap.org/" 3444 > ./migrate/1316558677/3444.sm.migrate.json
+echo "...written to ./migrate/1316558677/3444.sm.migrate.json"
+echo "Migrating object 3450 (652)..."
+./fetch-old-sc "www.sourcemap.org/" 3450 > ./migrate/1316558677/3450.sm.migrate.json
+echo "...written to ./migrate/1316558677/3450.sm.migrate.json"
+echo "Migrating object 3453 (653)..."
+./fetch-old-sc "www.sourcemap.org/" 3453 > ./migrate/1316558677/3453.sm.migrate.json
+echo "...written to ./migrate/1316558677/3453.sm.migrate.json"
+echo "Migrating object 3456 (654)..."
+./fetch-old-sc "www.sourcemap.org/" 3456 > ./migrate/1316558677/3456.sm.migrate.json
+echo "...written to ./migrate/1316558677/3456.sm.migrate.json"
+echo "Migrating object 3462 (655)..."
+./fetch-old-sc "www.sourcemap.org/" 3462 > ./migrate/1316558677/3462.sm.migrate.json
+echo "...written to ./migrate/1316558677/3462.sm.migrate.json"
+echo "Migrating object 3465 (656)..."
+./fetch-old-sc "www.sourcemap.org/" 3465 > ./migrate/1316558677/3465.sm.migrate.json
+echo "...written to ./migrate/1316558677/3465.sm.migrate.json"
+echo "Migrating object 3467 (657)..."
+./fetch-old-sc "www.sourcemap.org/" 3467 > ./migrate/1316558677/3467.sm.migrate.json
+echo "...written to ./migrate/1316558677/3467.sm.migrate.json"
+echo "Migrating object 3473 (658)..."
+./fetch-old-sc "www.sourcemap.org/" 3473 > ./migrate/1316558677/3473.sm.migrate.json
+echo "...written to ./migrate/1316558677/3473.sm.migrate.json"
+echo "Migrating object 3481 (659)..."
+./fetch-old-sc "www.sourcemap.org/" 3481 > ./migrate/1316558677/3481.sm.migrate.json
+echo "...written to ./migrate/1316558677/3481.sm.migrate.json"
+echo "Migrating object 3492 (660)..."
+./fetch-old-sc "www.sourcemap.org/" 3492 > ./migrate/1316558677/3492.sm.migrate.json
+echo "...written to ./migrate/1316558677/3492.sm.migrate.json"
+echo "Migrating object 3493 (661)..."
+./fetch-old-sc "www.sourcemap.org/" 3493 > ./migrate/1316558677/3493.sm.migrate.json
+echo "...written to ./migrate/1316558677/3493.sm.migrate.json"
+echo "Migrating object 3495 (662)..."
+./fetch-old-sc "www.sourcemap.org/" 3495 > ./migrate/1316558677/3495.sm.migrate.json
+echo "...written to ./migrate/1316558677/3495.sm.migrate.json"
+echo "Migrating object 3498 (663)..."
+./fetch-old-sc "www.sourcemap.org/" 3498 > ./migrate/1316558677/3498.sm.migrate.json
+echo "...written to ./migrate/1316558677/3498.sm.migrate.json"
+echo "Migrating object 3501 (664)..."
+./fetch-old-sc "www.sourcemap.org/" 3501 > ./migrate/1316558677/3501.sm.migrate.json
+echo "...written to ./migrate/1316558677/3501.sm.migrate.json"
+echo "Migrating object 3502 (665)..."
+./fetch-old-sc "www.sourcemap.org/" 3502 > ./migrate/1316558677/3502.sm.migrate.json
+echo "...written to ./migrate/1316558677/3502.sm.migrate.json"
+echo "Migrating object 3507 (666)..."
+./fetch-old-sc "www.sourcemap.org/" 3507 > ./migrate/1316558677/3507.sm.migrate.json
+echo "...written to ./migrate/1316558677/3507.sm.migrate.json"
+echo "Migrating object 3508 (667)..."
+./fetch-old-sc "www.sourcemap.org/" 3508 > ./migrate/1316558677/3508.sm.migrate.json
+echo "...written to ./migrate/1316558677/3508.sm.migrate.json"
+echo "Migrating object 3509 (668)..."
+./fetch-old-sc "www.sourcemap.org/" 3509 > ./migrate/1316558677/3509.sm.migrate.json
+echo "...written to ./migrate/1316558677/3509.sm.migrate.json"
+echo "Migrating object 3510 (669)..."
+./fetch-old-sc "www.sourcemap.org/" 3510 > ./migrate/1316558677/3510.sm.migrate.json
+echo "...written to ./migrate/1316558677/3510.sm.migrate.json"
+echo "Migrating object 3511 (670)..."
+./fetch-old-sc "www.sourcemap.org/" 3511 > ./migrate/1316558677/3511.sm.migrate.json
+echo "...written to ./migrate/1316558677/3511.sm.migrate.json"
+echo "Migrating object 3516 (671)..."
+./fetch-old-sc "www.sourcemap.org/" 3516 > ./migrate/1316558677/3516.sm.migrate.json
+echo "...written to ./migrate/1316558677/3516.sm.migrate.json"
+echo "Migrating object 3517 (672)..."
+./fetch-old-sc "www.sourcemap.org/" 3517 > ./migrate/1316558677/3517.sm.migrate.json
+echo "...written to ./migrate/1316558677/3517.sm.migrate.json"
+echo "Migrating object 3520 (673)..."
+./fetch-old-sc "www.sourcemap.org/" 3520 > ./migrate/1316558677/3520.sm.migrate.json
+echo "...written to ./migrate/1316558677/3520.sm.migrate.json"
+echo "Migrating object 3521 (674)..."
+./fetch-old-sc "www.sourcemap.org/" 3521 > ./migrate/1316558677/3521.sm.migrate.json
+echo "...written to ./migrate/1316558677/3521.sm.migrate.json"
+echo "Migrating object 3525 (675)..."
+./fetch-old-sc "www.sourcemap.org/" 3525 > ./migrate/1316558677/3525.sm.migrate.json
+echo "...written to ./migrate/1316558677/3525.sm.migrate.json"
+echo "Migrating object 3526 (676)..."
+./fetch-old-sc "www.sourcemap.org/" 3526 > ./migrate/1316558677/3526.sm.migrate.json
+echo "...written to ./migrate/1316558677/3526.sm.migrate.json"
+echo "Migrating object 3530 (677)..."
+./fetch-old-sc "www.sourcemap.org/" 3530 > ./migrate/1316558677/3530.sm.migrate.json
+echo "...written to ./migrate/1316558677/3530.sm.migrate.json"
+echo "Migrating object 3531 (678)..."
+./fetch-old-sc "www.sourcemap.org/" 3531 > ./migrate/1316558677/3531.sm.migrate.json
+echo "...written to ./migrate/1316558677/3531.sm.migrate.json"
+echo "Migrating object 3533 (679)..."
+./fetch-old-sc "www.sourcemap.org/" 3533 > ./migrate/1316558677/3533.sm.migrate.json
+echo "...written to ./migrate/1316558677/3533.sm.migrate.json"
+echo "Migrating object 3534 (680)..."
+./fetch-old-sc "www.sourcemap.org/" 3534 > ./migrate/1316558677/3534.sm.migrate.json
+echo "...written to ./migrate/1316558677/3534.sm.migrate.json"
+echo "Migrating object 3535 (681)..."
+./fetch-old-sc "www.sourcemap.org/" 3535 > ./migrate/1316558677/3535.sm.migrate.json
+echo "...written to ./migrate/1316558677/3535.sm.migrate.json"
+echo "Migrating object 3536 (682)..."
+./fetch-old-sc "www.sourcemap.org/" 3536 > ./migrate/1316558677/3536.sm.migrate.json
+echo "...written to ./migrate/1316558677/3536.sm.migrate.json"
+echo "Migrating object 3541 (683)..."
+./fetch-old-sc "www.sourcemap.org/" 3541 > ./migrate/1316558677/3541.sm.migrate.json
+echo "...written to ./migrate/1316558677/3541.sm.migrate.json"
+echo "Migrating object 3548 (684)..."
+./fetch-old-sc "www.sourcemap.org/" 3548 > ./migrate/1316558677/3548.sm.migrate.json
+echo "...written to ./migrate/1316558677/3548.sm.migrate.json"
+echo "Migrating object 3549 (685)..."
+./fetch-old-sc "www.sourcemap.org/" 3549 > ./migrate/1316558677/3549.sm.migrate.json
+echo "...written to ./migrate/1316558677/3549.sm.migrate.json"
+echo "Migrating object 3550 (686)..."
+./fetch-old-sc "www.sourcemap.org/" 3550 > ./migrate/1316558677/3550.sm.migrate.json
+echo "...written to ./migrate/1316558677/3550.sm.migrate.json"
+echo "Migrating object 3564 (687)..."
+./fetch-old-sc "www.sourcemap.org/" 3564 > ./migrate/1316558677/3564.sm.migrate.json
+echo "...written to ./migrate/1316558677/3564.sm.migrate.json"
+echo "Migrating object 3565 (688)..."
+./fetch-old-sc "www.sourcemap.org/" 3565 > ./migrate/1316558677/3565.sm.migrate.json
+echo "...written to ./migrate/1316558677/3565.sm.migrate.json"
+echo "Migrating object 3569 (689)..."
+./fetch-old-sc "www.sourcemap.org/" 3569 > ./migrate/1316558677/3569.sm.migrate.json
+echo "...written to ./migrate/1316558677/3569.sm.migrate.json"
+echo "Migrating object 3570 (690)..."
+./fetch-old-sc "www.sourcemap.org/" 3570 > ./migrate/1316558677/3570.sm.migrate.json
+echo "...written to ./migrate/1316558677/3570.sm.migrate.json"
+echo "Migrating object 3571 (691)..."
+./fetch-old-sc "www.sourcemap.org/" 3571 > ./migrate/1316558677/3571.sm.migrate.json
+echo "...written to ./migrate/1316558677/3571.sm.migrate.json"
+echo "Migrating object 3574 (692)..."
+./fetch-old-sc "www.sourcemap.org/" 3574 > ./migrate/1316558677/3574.sm.migrate.json
+echo "...written to ./migrate/1316558677/3574.sm.migrate.json"
+echo "Migrating object 3576 (693)..."
+./fetch-old-sc "www.sourcemap.org/" 3576 > ./migrate/1316558677/3576.sm.migrate.json
+echo "...written to ./migrate/1316558677/3576.sm.migrate.json"
+echo "Migrating object 3579 (694)..."
+./fetch-old-sc "www.sourcemap.org/" 3579 > ./migrate/1316558677/3579.sm.migrate.json
+echo "...written to ./migrate/1316558677/3579.sm.migrate.json"
+echo "Migrating object 3580 (695)..."
+./fetch-old-sc "www.sourcemap.org/" 3580 > ./migrate/1316558677/3580.sm.migrate.json
+echo "...written to ./migrate/1316558677/3580.sm.migrate.json"
+echo "Migrating object 3581 (696)..."
+./fetch-old-sc "www.sourcemap.org/" 3581 > ./migrate/1316558677/3581.sm.migrate.json
+echo "...written to ./migrate/1316558677/3581.sm.migrate.json"
+echo "Migrating object 3584 (697)..."
+./fetch-old-sc "www.sourcemap.org/" 3584 > ./migrate/1316558677/3584.sm.migrate.json
+echo "...written to ./migrate/1316558677/3584.sm.migrate.json"
+echo "Migrating object 3587 (698)..."
+./fetch-old-sc "www.sourcemap.org/" 3587 > ./migrate/1316558677/3587.sm.migrate.json
+echo "...written to ./migrate/1316558677/3587.sm.migrate.json"
+echo "Migrating object 3599 (699)..."
+./fetch-old-sc "www.sourcemap.org/" 3599 > ./migrate/1316558677/3599.sm.migrate.json
+echo "...written to ./migrate/1316558677/3599.sm.migrate.json"
+echo "Migrating object 3601 (700)..."
+./fetch-old-sc "www.sourcemap.org/" 3601 > ./migrate/1316558677/3601.sm.migrate.json
+echo "...written to ./migrate/1316558677/3601.sm.migrate.json"
+echo "Migrating object 3605 (701)..."
+./fetch-old-sc "www.sourcemap.org/" 3605 > ./migrate/1316558677/3605.sm.migrate.json
+echo "...written to ./migrate/1316558677/3605.sm.migrate.json"
+echo "Migrating object 3606 (702)..."
+./fetch-old-sc "www.sourcemap.org/" 3606 > ./migrate/1316558677/3606.sm.migrate.json
+echo "...written to ./migrate/1316558677/3606.sm.migrate.json"
+echo "Migrating object 3608 (703)..."
+./fetch-old-sc "www.sourcemap.org/" 3608 > ./migrate/1316558677/3608.sm.migrate.json
+echo "...written to ./migrate/1316558677/3608.sm.migrate.json"
+echo "Migrating object 3609 (704)..."
+./fetch-old-sc "www.sourcemap.org/" 3609 > ./migrate/1316558677/3609.sm.migrate.json
+echo "...written to ./migrate/1316558677/3609.sm.migrate.json"
+echo "Migrating object 3612 (705)..."
+./fetch-old-sc "www.sourcemap.org/" 3612 > ./migrate/1316558677/3612.sm.migrate.json
+echo "...written to ./migrate/1316558677/3612.sm.migrate.json"
+echo "Migrating object 3613 (706)..."
+./fetch-old-sc "www.sourcemap.org/" 3613 > ./migrate/1316558677/3613.sm.migrate.json
+echo "...written to ./migrate/1316558677/3613.sm.migrate.json"
+echo "Migrating object 3614 (707)..."
+./fetch-old-sc "www.sourcemap.org/" 3614 > ./migrate/1316558677/3614.sm.migrate.json
+echo "...written to ./migrate/1316558677/3614.sm.migrate.json"
+echo "Migrating object 3626 (708)..."
+./fetch-old-sc "www.sourcemap.org/" 3626 > ./migrate/1316558677/3626.sm.migrate.json
+echo "...written to ./migrate/1316558677/3626.sm.migrate.json"
+echo "Migrating object 3627 (709)..."
+./fetch-old-sc "www.sourcemap.org/" 3627 > ./migrate/1316558677/3627.sm.migrate.json
+echo "...written to ./migrate/1316558677/3627.sm.migrate.json"
+echo "Migrating object 3628 (710)..."
+./fetch-old-sc "www.sourcemap.org/" 3628 > ./migrate/1316558677/3628.sm.migrate.json
+echo "...written to ./migrate/1316558677/3628.sm.migrate.json"
+echo "Migrating object 3632 (711)..."
+./fetch-old-sc "www.sourcemap.org/" 3632 > ./migrate/1316558677/3632.sm.migrate.json
+echo "...written to ./migrate/1316558677/3632.sm.migrate.json"
+echo "Migrating object 3633 (712)..."
+./fetch-old-sc "www.sourcemap.org/" 3633 > ./migrate/1316558677/3633.sm.migrate.json
+echo "...written to ./migrate/1316558677/3633.sm.migrate.json"
+echo "Migrating object 3643 (713)..."
+./fetch-old-sc "www.sourcemap.org/" 3643 > ./migrate/1316558677/3643.sm.migrate.json
+echo "...written to ./migrate/1316558677/3643.sm.migrate.json"
+echo "Migrating object 3645 (714)..."
+./fetch-old-sc "www.sourcemap.org/" 3645 > ./migrate/1316558677/3645.sm.migrate.json
+echo "...written to ./migrate/1316558677/3645.sm.migrate.json"
+echo "Migrating object 3652 (715)..."
+./fetch-old-sc "www.sourcemap.org/" 3652 > ./migrate/1316558677/3652.sm.migrate.json
+echo "...written to ./migrate/1316558677/3652.sm.migrate.json"
+echo "Migrating object 3659 (716)..."
+./fetch-old-sc "www.sourcemap.org/" 3659 > ./migrate/1316558677/3659.sm.migrate.json
+echo "...written to ./migrate/1316558677/3659.sm.migrate.json"
+echo "Migrating object 3678 (717)..."
+./fetch-old-sc "www.sourcemap.org/" 3678 > ./migrate/1316558677/3678.sm.migrate.json
+echo "...written to ./migrate/1316558677/3678.sm.migrate.json"
+echo "Migrating object 3681 (718)..."
+./fetch-old-sc "www.sourcemap.org/" 3681 > ./migrate/1316558677/3681.sm.migrate.json
+echo "...written to ./migrate/1316558677/3681.sm.migrate.json"
+echo "Migrating object 3683 (719)..."
+./fetch-old-sc "www.sourcemap.org/" 3683 > ./migrate/1316558677/3683.sm.migrate.json
+echo "...written to ./migrate/1316558677/3683.sm.migrate.json"
+echo "Migrating object 3684 (720)..."
+./fetch-old-sc "www.sourcemap.org/" 3684 > ./migrate/1316558677/3684.sm.migrate.json
+echo "...written to ./migrate/1316558677/3684.sm.migrate.json"
+echo "Migrating object 3687 (721)..."
+./fetch-old-sc "www.sourcemap.org/" 3687 > ./migrate/1316558677/3687.sm.migrate.json
+echo "...written to ./migrate/1316558677/3687.sm.migrate.json"
+echo "Migrating object 3688 (722)..."
+./fetch-old-sc "www.sourcemap.org/" 3688 > ./migrate/1316558677/3688.sm.migrate.json
+echo "...written to ./migrate/1316558677/3688.sm.migrate.json"
+echo "Migrating object 3690 (723)..."
+./fetch-old-sc "www.sourcemap.org/" 3690 > ./migrate/1316558677/3690.sm.migrate.json
+echo "...written to ./migrate/1316558677/3690.sm.migrate.json"
+echo "Migrating object 3691 (724)..."
+./fetch-old-sc "www.sourcemap.org/" 3691 > ./migrate/1316558677/3691.sm.migrate.json
+echo "...written to ./migrate/1316558677/3691.sm.migrate.json"
+echo "Migrating object 3699 (725)..."
+./fetch-old-sc "www.sourcemap.org/" 3699 > ./migrate/1316558677/3699.sm.migrate.json
+echo "...written to ./migrate/1316558677/3699.sm.migrate.json"
+echo "Migrating object 3705 (726)..."
+./fetch-old-sc "www.sourcemap.org/" 3705 > ./migrate/1316558677/3705.sm.migrate.json
+echo "...written to ./migrate/1316558677/3705.sm.migrate.json"
+echo "Migrating object 3710 (727)..."
+./fetch-old-sc "www.sourcemap.org/" 3710 > ./migrate/1316558677/3710.sm.migrate.json
+echo "...written to ./migrate/1316558677/3710.sm.migrate.json"
+echo "Migrating object 3716 (728)..."
+./fetch-old-sc "www.sourcemap.org/" 3716 > ./migrate/1316558677/3716.sm.migrate.json
+echo "...written to ./migrate/1316558677/3716.sm.migrate.json"
+echo "Migrating object 3721 (729)..."
+./fetch-old-sc "www.sourcemap.org/" 3721 > ./migrate/1316558677/3721.sm.migrate.json
+echo "...written to ./migrate/1316558677/3721.sm.migrate.json"
+echo "Migrating object 3728 (730)..."
+./fetch-old-sc "www.sourcemap.org/" 3728 > ./migrate/1316558677/3728.sm.migrate.json
+echo "...written to ./migrate/1316558677/3728.sm.migrate.json"
+echo "Migrating object 3729 (731)..."
+./fetch-old-sc "www.sourcemap.org/" 3729 > ./migrate/1316558677/3729.sm.migrate.json
+echo "...written to ./migrate/1316558677/3729.sm.migrate.json"
+echo "Migrating object 3741 (732)..."
+./fetch-old-sc "www.sourcemap.org/" 3741 > ./migrate/1316558677/3741.sm.migrate.json
+echo "...written to ./migrate/1316558677/3741.sm.migrate.json"
+echo "Migrating object 3744 (733)..."
+./fetch-old-sc "www.sourcemap.org/" 3744 > ./migrate/1316558677/3744.sm.migrate.json
+echo "...written to ./migrate/1316558677/3744.sm.migrate.json"
+echo "Migrating object 3756 (734)..."
+./fetch-old-sc "www.sourcemap.org/" 3756 > ./migrate/1316558677/3756.sm.migrate.json
+echo "...written to ./migrate/1316558677/3756.sm.migrate.json"
+echo "Migrating object 3761 (735)..."
+./fetch-old-sc "www.sourcemap.org/" 3761 > ./migrate/1316558677/3761.sm.migrate.json
+echo "...written to ./migrate/1316558677/3761.sm.migrate.json"
+echo "Migrating object 3762 (736)..."
+./fetch-old-sc "www.sourcemap.org/" 3762 > ./migrate/1316558677/3762.sm.migrate.json
+echo "...written to ./migrate/1316558677/3762.sm.migrate.json"
+echo "Migrating object 3764 (737)..."
+./fetch-old-sc "www.sourcemap.org/" 3764 > ./migrate/1316558677/3764.sm.migrate.json
+echo "...written to ./migrate/1316558677/3764.sm.migrate.json"
+echo "Migrating object 3765 (738)..."
+./fetch-old-sc "www.sourcemap.org/" 3765 > ./migrate/1316558677/3765.sm.migrate.json
+echo "...written to ./migrate/1316558677/3765.sm.migrate.json"
+echo "Migrating object 3766 (739)..."
+./fetch-old-sc "www.sourcemap.org/" 3766 > ./migrate/1316558677/3766.sm.migrate.json
+echo "...written to ./migrate/1316558677/3766.sm.migrate.json"
+echo "Migrating object 3770 (740)..."
+./fetch-old-sc "www.sourcemap.org/" 3770 > ./migrate/1316558677/3770.sm.migrate.json
+echo "...written to ./migrate/1316558677/3770.sm.migrate.json"
+echo "Migrating object 3771 (741)..."
+./fetch-old-sc "www.sourcemap.org/" 3771 > ./migrate/1316558677/3771.sm.migrate.json
+echo "...written to ./migrate/1316558677/3771.sm.migrate.json"
+echo "Migrating object 3772 (742)..."
+./fetch-old-sc "www.sourcemap.org/" 3772 > ./migrate/1316558677/3772.sm.migrate.json
+echo "...written to ./migrate/1316558677/3772.sm.migrate.json"
+echo "Migrating object 3774 (743)..."
+./fetch-old-sc "www.sourcemap.org/" 3774 > ./migrate/1316558677/3774.sm.migrate.json
+echo "...written to ./migrate/1316558677/3774.sm.migrate.json"
+echo "Migrating object 3775 (744)..."
+./fetch-old-sc "www.sourcemap.org/" 3775 > ./migrate/1316558677/3775.sm.migrate.json
+echo "...written to ./migrate/1316558677/3775.sm.migrate.json"
+echo "Migrating object 3784 (745)..."
+./fetch-old-sc "www.sourcemap.org/" 3784 > ./migrate/1316558677/3784.sm.migrate.json
+echo "...written to ./migrate/1316558677/3784.sm.migrate.json"
+echo "Migrating object 3785 (746)..."
+./fetch-old-sc "www.sourcemap.org/" 3785 > ./migrate/1316558677/3785.sm.migrate.json
+echo "...written to ./migrate/1316558677/3785.sm.migrate.json"
+echo "Migrating object 3786 (747)..."
+./fetch-old-sc "www.sourcemap.org/" 3786 > ./migrate/1316558677/3786.sm.migrate.json
+echo "...written to ./migrate/1316558677/3786.sm.migrate.json"
+echo "Migrating object 3788 (748)..."
+./fetch-old-sc "www.sourcemap.org/" 3788 > ./migrate/1316558677/3788.sm.migrate.json
+echo "...written to ./migrate/1316558677/3788.sm.migrate.json"
+echo "Migrating object 3791 (749)..."
+./fetch-old-sc "www.sourcemap.org/" 3791 > ./migrate/1316558677/3791.sm.migrate.json
+echo "...written to ./migrate/1316558677/3791.sm.migrate.json"
+echo "Migrating object 3793 (750)..."
+./fetch-old-sc "www.sourcemap.org/" 3793 > ./migrate/1316558677/3793.sm.migrate.json
+echo "...written to ./migrate/1316558677/3793.sm.migrate.json"
+echo "Migrating object 3798 (751)..."
+./fetch-old-sc "www.sourcemap.org/" 3798 > ./migrate/1316558677/3798.sm.migrate.json
+echo "...written to ./migrate/1316558677/3798.sm.migrate.json"
+echo "Migrating object 3804 (752)..."
+./fetch-old-sc "www.sourcemap.org/" 3804 > ./migrate/1316558677/3804.sm.migrate.json
+echo "...written to ./migrate/1316558677/3804.sm.migrate.json"
+echo "Migrating object 3805 (753)..."
+./fetch-old-sc "www.sourcemap.org/" 3805 > ./migrate/1316558677/3805.sm.migrate.json
+echo "...written to ./migrate/1316558677/3805.sm.migrate.json"
+echo "Migrating object 3809 (754)..."
+./fetch-old-sc "www.sourcemap.org/" 3809 > ./migrate/1316558677/3809.sm.migrate.json
+echo "...written to ./migrate/1316558677/3809.sm.migrate.json"
+echo "Migrating object 3818 (755)..."
+./fetch-old-sc "www.sourcemap.org/" 3818 > ./migrate/1316558677/3818.sm.migrate.json
+echo "...written to ./migrate/1316558677/3818.sm.migrate.json"
+echo "Migrating object 3820 (756)..."
+./fetch-old-sc "www.sourcemap.org/" 3820 > ./migrate/1316558677/3820.sm.migrate.json
+echo "...written to ./migrate/1316558677/3820.sm.migrate.json"
+echo "Migrating object 3829 (757)..."
+./fetch-old-sc "www.sourcemap.org/" 3829 > ./migrate/1316558677/3829.sm.migrate.json
+echo "...written to ./migrate/1316558677/3829.sm.migrate.json"
+echo "Migrating object 3837 (758)..."
+./fetch-old-sc "www.sourcemap.org/" 3837 > ./migrate/1316558677/3837.sm.migrate.json
+echo "...written to ./migrate/1316558677/3837.sm.migrate.json"
+echo "Migrating object 3844 (759)..."
+./fetch-old-sc "www.sourcemap.org/" 3844 > ./migrate/1316558677/3844.sm.migrate.json
+echo "...written to ./migrate/1316558677/3844.sm.migrate.json"
+echo "Migrating object 3855 (760)..."
+./fetch-old-sc "www.sourcemap.org/" 3855 > ./migrate/1316558677/3855.sm.migrate.json
+echo "...written to ./migrate/1316558677/3855.sm.migrate.json"
+echo "Migrating object 3857 (761)..."
+./fetch-old-sc "www.sourcemap.org/" 3857 > ./migrate/1316558677/3857.sm.migrate.json
+echo "...written to ./migrate/1316558677/3857.sm.migrate.json"
+echo "Migrating object 3861 (762)..."
+./fetch-old-sc "www.sourcemap.org/" 3861 > ./migrate/1316558677/3861.sm.migrate.json
+echo "...written to ./migrate/1316558677/3861.sm.migrate.json"
+echo "Migrating object 3862 (763)..."
+./fetch-old-sc "www.sourcemap.org/" 3862 > ./migrate/1316558677/3862.sm.migrate.json
+echo "...written to ./migrate/1316558677/3862.sm.migrate.json"
+echo "Migrating object 3865 (764)..."
+./fetch-old-sc "www.sourcemap.org/" 3865 > ./migrate/1316558677/3865.sm.migrate.json
+echo "...written to ./migrate/1316558677/3865.sm.migrate.json"
+echo "Migrating object 3866 (765)..."
+./fetch-old-sc "www.sourcemap.org/" 3866 > ./migrate/1316558677/3866.sm.migrate.json
+echo "...written to ./migrate/1316558677/3866.sm.migrate.json"
+echo "Migrating object 3870 (766)..."
+./fetch-old-sc "www.sourcemap.org/" 3870 > ./migrate/1316558677/3870.sm.migrate.json
+echo "...written to ./migrate/1316558677/3870.sm.migrate.json"
+echo "Migrating object 3876 (767)..."
+./fetch-old-sc "www.sourcemap.org/" 3876 > ./migrate/1316558677/3876.sm.migrate.json
+echo "...written to ./migrate/1316558677/3876.sm.migrate.json"
+echo "Migrating object 3880 (768)..."
+./fetch-old-sc "www.sourcemap.org/" 3880 > ./migrate/1316558677/3880.sm.migrate.json
+echo "...written to ./migrate/1316558677/3880.sm.migrate.json"
+echo "Migrating object 3882 (769)..."
+./fetch-old-sc "www.sourcemap.org/" 3882 > ./migrate/1316558677/3882.sm.migrate.json
+echo "...written to ./migrate/1316558677/3882.sm.migrate.json"
+echo "Migrating object 3890 (770)..."
+./fetch-old-sc "www.sourcemap.org/" 3890 > ./migrate/1316558677/3890.sm.migrate.json
+echo "...written to ./migrate/1316558677/3890.sm.migrate.json"
+echo "Migrating object 3899 (771)..."
+./fetch-old-sc "www.sourcemap.org/" 3899 > ./migrate/1316558677/3899.sm.migrate.json
+echo "...written to ./migrate/1316558677/3899.sm.migrate.json"
+echo "Migrating object 3912 (772)..."
+./fetch-old-sc "www.sourcemap.org/" 3912 > ./migrate/1316558677/3912.sm.migrate.json
+echo "...written to ./migrate/1316558677/3912.sm.migrate.json"
+echo "Migrating object 3915 (773)..."
+./fetch-old-sc "www.sourcemap.org/" 3915 > ./migrate/1316558677/3915.sm.migrate.json
+echo "...written to ./migrate/1316558677/3915.sm.migrate.json"
+echo "Migrating object 3917 (774)..."
+./fetch-old-sc "www.sourcemap.org/" 3917 > ./migrate/1316558677/3917.sm.migrate.json
+echo "...written to ./migrate/1316558677/3917.sm.migrate.json"
+echo "Migrating object 3918 (775)..."
+./fetch-old-sc "www.sourcemap.org/" 3918 > ./migrate/1316558677/3918.sm.migrate.json
+echo "...written to ./migrate/1316558677/3918.sm.migrate.json"
+echo "Migrating object 3919 (776)..."
+./fetch-old-sc "www.sourcemap.org/" 3919 > ./migrate/1316558677/3919.sm.migrate.json
+echo "...written to ./migrate/1316558677/3919.sm.migrate.json"
+echo "Migrating object 3920 (777)..."
+./fetch-old-sc "www.sourcemap.org/" 3920 > ./migrate/1316558677/3920.sm.migrate.json
+echo "...written to ./migrate/1316558677/3920.sm.migrate.json"
+echo "Migrating object 3923 (778)..."
+./fetch-old-sc "www.sourcemap.org/" 3923 > ./migrate/1316558677/3923.sm.migrate.json
+echo "...written to ./migrate/1316558677/3923.sm.migrate.json"
+echo "Migrating object 3924 (779)..."
+./fetch-old-sc "www.sourcemap.org/" 3924 > ./migrate/1316558677/3924.sm.migrate.json
+echo "...written to ./migrate/1316558677/3924.sm.migrate.json"
+echo "Migrating object 3925 (780)..."
+./fetch-old-sc "www.sourcemap.org/" 3925 > ./migrate/1316558677/3925.sm.migrate.json
+echo "...written to ./migrate/1316558677/3925.sm.migrate.json"
+echo "Migrating object 3926 (781)..."
+./fetch-old-sc "www.sourcemap.org/" 3926 > ./migrate/1316558677/3926.sm.migrate.json
+echo "...written to ./migrate/1316558677/3926.sm.migrate.json"
+echo "Migrating object 3929 (782)..."
+./fetch-old-sc "www.sourcemap.org/" 3929 > ./migrate/1316558677/3929.sm.migrate.json
+echo "...written to ./migrate/1316558677/3929.sm.migrate.json"
+echo "Migrating object 3931 (783)..."
+./fetch-old-sc "www.sourcemap.org/" 3931 > ./migrate/1316558677/3931.sm.migrate.json
+echo "...written to ./migrate/1316558677/3931.sm.migrate.json"
+echo "Migrating object 3932 (784)..."
+./fetch-old-sc "www.sourcemap.org/" 3932 > ./migrate/1316558677/3932.sm.migrate.json
+echo "...written to ./migrate/1316558677/3932.sm.migrate.json"
+echo "Migrating object 3933 (785)..."
+./fetch-old-sc "www.sourcemap.org/" 3933 > ./migrate/1316558677/3933.sm.migrate.json
+echo "...written to ./migrate/1316558677/3933.sm.migrate.json"
+echo "Migrating object 3937 (786)..."
+./fetch-old-sc "www.sourcemap.org/" 3937 > ./migrate/1316558677/3937.sm.migrate.json
+echo "...written to ./migrate/1316558677/3937.sm.migrate.json"
+echo "Migrating object 3940 (787)..."
+./fetch-old-sc "www.sourcemap.org/" 3940 > ./migrate/1316558677/3940.sm.migrate.json
+echo "...written to ./migrate/1316558677/3940.sm.migrate.json"
+echo "Migrating object 3948 (788)..."
+./fetch-old-sc "www.sourcemap.org/" 3948 > ./migrate/1316558677/3948.sm.migrate.json
+echo "...written to ./migrate/1316558677/3948.sm.migrate.json"
+echo "Migrating object 3949 (789)..."
+./fetch-old-sc "www.sourcemap.org/" 3949 > ./migrate/1316558677/3949.sm.migrate.json
+echo "...written to ./migrate/1316558677/3949.sm.migrate.json"
+echo "Migrating object 3953 (790)..."
+./fetch-old-sc "www.sourcemap.org/" 3953 > ./migrate/1316558677/3953.sm.migrate.json
+echo "...written to ./migrate/1316558677/3953.sm.migrate.json"
+echo "Migrating object 3954 (791)..."
+./fetch-old-sc "www.sourcemap.org/" 3954 > ./migrate/1316558677/3954.sm.migrate.json
+echo "...written to ./migrate/1316558677/3954.sm.migrate.json"
+echo "Migrating object 3956 (792)..."
+./fetch-old-sc "www.sourcemap.org/" 3956 > ./migrate/1316558677/3956.sm.migrate.json
+echo "...written to ./migrate/1316558677/3956.sm.migrate.json"
+echo "Migrating object 3957 (793)..."
+./fetch-old-sc "www.sourcemap.org/" 3957 > ./migrate/1316558677/3957.sm.migrate.json
+echo "...written to ./migrate/1316558677/3957.sm.migrate.json"
+echo "Migrating object 3963 (794)..."
+./fetch-old-sc "www.sourcemap.org/" 3963 > ./migrate/1316558677/3963.sm.migrate.json
+echo "...written to ./migrate/1316558677/3963.sm.migrate.json"
+echo "Migrating object 3966 (795)..."
+./fetch-old-sc "www.sourcemap.org/" 3966 > ./migrate/1316558677/3966.sm.migrate.json
+echo "...written to ./migrate/1316558677/3966.sm.migrate.json"
+echo "Migrating object 3978 (796)..."
+./fetch-old-sc "www.sourcemap.org/" 3978 > ./migrate/1316558677/3978.sm.migrate.json
+echo "...written to ./migrate/1316558677/3978.sm.migrate.json"
+echo "Migrating object 3979 (797)..."
+./fetch-old-sc "www.sourcemap.org/" 3979 > ./migrate/1316558677/3979.sm.migrate.json
+echo "...written to ./migrate/1316558677/3979.sm.migrate.json"
+echo "Migrating object 3981 (798)..."
+./fetch-old-sc "www.sourcemap.org/" 3981 > ./migrate/1316558677/3981.sm.migrate.json
+echo "...written to ./migrate/1316558677/3981.sm.migrate.json"
+echo "Migrating object 3984 (799)..."
+./fetch-old-sc "www.sourcemap.org/" 3984 > ./migrate/1316558677/3984.sm.migrate.json
+echo "...written to ./migrate/1316558677/3984.sm.migrate.json"
+echo "Migrating object 4005 (800)..."
+./fetch-old-sc "www.sourcemap.org/" 4005 > ./migrate/1316558677/4005.sm.migrate.json
+echo "...written to ./migrate/1316558677/4005.sm.migrate.json"
+echo "Migrating object 4009 (801)..."
+./fetch-old-sc "www.sourcemap.org/" 4009 > ./migrate/1316558677/4009.sm.migrate.json
+echo "...written to ./migrate/1316558677/4009.sm.migrate.json"
+echo "Migrating object 4012 (802)..."
+./fetch-old-sc "www.sourcemap.org/" 4012 > ./migrate/1316558677/4012.sm.migrate.json
+echo "...written to ./migrate/1316558677/4012.sm.migrate.json"
+echo "Migrating object 4013 (803)..."
+./fetch-old-sc "www.sourcemap.org/" 4013 > ./migrate/1316558677/4013.sm.migrate.json
+echo "...written to ./migrate/1316558677/4013.sm.migrate.json"
+echo "Migrating object 4020 (804)..."
+./fetch-old-sc "www.sourcemap.org/" 4020 > ./migrate/1316558677/4020.sm.migrate.json
+echo "...written to ./migrate/1316558677/4020.sm.migrate.json"
+echo "Migrating object 4021 (805)..."
+./fetch-old-sc "www.sourcemap.org/" 4021 > ./migrate/1316558677/4021.sm.migrate.json
+echo "...written to ./migrate/1316558677/4021.sm.migrate.json"
+echo "Migrating object 4023 (806)..."
+./fetch-old-sc "www.sourcemap.org/" 4023 > ./migrate/1316558677/4023.sm.migrate.json
+echo "...written to ./migrate/1316558677/4023.sm.migrate.json"
+echo "Migrating object 4036 (807)..."
+./fetch-old-sc "www.sourcemap.org/" 4036 > ./migrate/1316558677/4036.sm.migrate.json
+echo "...written to ./migrate/1316558677/4036.sm.migrate.json"
+echo "Migrating object 4037 (808)..."
+./fetch-old-sc "www.sourcemap.org/" 4037 > ./migrate/1316558677/4037.sm.migrate.json
+echo "...written to ./migrate/1316558677/4037.sm.migrate.json"
+echo "Migrating object 4040 (809)..."
+./fetch-old-sc "www.sourcemap.org/" 4040 > ./migrate/1316558677/4040.sm.migrate.json
+echo "...written to ./migrate/1316558677/4040.sm.migrate.json"
+echo "Migrating object 4046 (810)..."
+./fetch-old-sc "www.sourcemap.org/" 4046 > ./migrate/1316558677/4046.sm.migrate.json
+echo "...written to ./migrate/1316558677/4046.sm.migrate.json"
+echo "Migrating object 4048 (811)..."
+./fetch-old-sc "www.sourcemap.org/" 4048 > ./migrate/1316558677/4048.sm.migrate.json
+echo "...written to ./migrate/1316558677/4048.sm.migrate.json"
+echo "Migrating object 4057 (812)..."
+./fetch-old-sc "www.sourcemap.org/" 4057 > ./migrate/1316558677/4057.sm.migrate.json
+echo "...written to ./migrate/1316558677/4057.sm.migrate.json"
+echo "Migrating object 4060 (813)..."
+./fetch-old-sc "www.sourcemap.org/" 4060 > ./migrate/1316558677/4060.sm.migrate.json
+echo "...written to ./migrate/1316558677/4060.sm.migrate.json"
+echo "Migrating object 4064 (814)..."
+./fetch-old-sc "www.sourcemap.org/" 4064 > ./migrate/1316558677/4064.sm.migrate.json
+echo "...written to ./migrate/1316558677/4064.sm.migrate.json"
+echo "Migrating object 4065 (815)..."
+./fetch-old-sc "www.sourcemap.org/" 4065 > ./migrate/1316558677/4065.sm.migrate.json
+echo "...written to ./migrate/1316558677/4065.sm.migrate.json"
+echo "Migrating object 4069 (816)..."
+./fetch-old-sc "www.sourcemap.org/" 4069 > ./migrate/1316558677/4069.sm.migrate.json
+echo "...written to ./migrate/1316558677/4069.sm.migrate.json"
+echo "Migrating object 4076 (817)..."
+./fetch-old-sc "www.sourcemap.org/" 4076 > ./migrate/1316558677/4076.sm.migrate.json
+echo "...written to ./migrate/1316558677/4076.sm.migrate.json"
+echo "Migrating object 4078 (818)..."
+./fetch-old-sc "www.sourcemap.org/" 4078 > ./migrate/1316558677/4078.sm.migrate.json
+echo "...written to ./migrate/1316558677/4078.sm.migrate.json"
+echo "Migrating object 4084 (819)..."
+./fetch-old-sc "www.sourcemap.org/" 4084 > ./migrate/1316558677/4084.sm.migrate.json
+echo "...written to ./migrate/1316558677/4084.sm.migrate.json"
+echo "Migrating object 4085 (820)..."
+./fetch-old-sc "www.sourcemap.org/" 4085 > ./migrate/1316558677/4085.sm.migrate.json
+echo "...written to ./migrate/1316558677/4085.sm.migrate.json"
+echo "Migrating object 4086 (821)..."
+./fetch-old-sc "www.sourcemap.org/" 4086 > ./migrate/1316558677/4086.sm.migrate.json
+echo "...written to ./migrate/1316558677/4086.sm.migrate.json"
+echo "Migrating object 4093 (822)..."
+./fetch-old-sc "www.sourcemap.org/" 4093 > ./migrate/1316558677/4093.sm.migrate.json
+echo "...written to ./migrate/1316558677/4093.sm.migrate.json"
+echo "Migrating object 4097 (823)..."
+./fetch-old-sc "www.sourcemap.org/" 4097 > ./migrate/1316558677/4097.sm.migrate.json
+echo "...written to ./migrate/1316558677/4097.sm.migrate.json"
+echo "Migrating object 4103 (824)..."
+./fetch-old-sc "www.sourcemap.org/" 4103 > ./migrate/1316558677/4103.sm.migrate.json
+echo "...written to ./migrate/1316558677/4103.sm.migrate.json"
+echo "Migrating object 4104 (825)..."
+./fetch-old-sc "www.sourcemap.org/" 4104 > ./migrate/1316558677/4104.sm.migrate.json
+echo "...written to ./migrate/1316558677/4104.sm.migrate.json"
+echo "Migrating object 4120 (826)..."
+./fetch-old-sc "www.sourcemap.org/" 4120 > ./migrate/1316558677/4120.sm.migrate.json
+echo "...written to ./migrate/1316558677/4120.sm.migrate.json"
+echo "Migrating object 4121 (827)..."
+./fetch-old-sc "www.sourcemap.org/" 4121 > ./migrate/1316558677/4121.sm.migrate.json
+echo "...written to ./migrate/1316558677/4121.sm.migrate.json"
+echo "Migrating object 4122 (828)..."
+./fetch-old-sc "www.sourcemap.org/" 4122 > ./migrate/1316558677/4122.sm.migrate.json
+echo "...written to ./migrate/1316558677/4122.sm.migrate.json"
+echo "Migrating object 4126 (829)..."
+./fetch-old-sc "www.sourcemap.org/" 4126 > ./migrate/1316558677/4126.sm.migrate.json
+echo "...written to ./migrate/1316558677/4126.sm.migrate.json"
+echo "Migrating object 4128 (830)..."
+./fetch-old-sc "www.sourcemap.org/" 4128 > ./migrate/1316558677/4128.sm.migrate.json
+echo "...written to ./migrate/1316558677/4128.sm.migrate.json"
+echo "Migrating object 4129 (831)..."
+./fetch-old-sc "www.sourcemap.org/" 4129 > ./migrate/1316558677/4129.sm.migrate.json
+echo "...written to ./migrate/1316558677/4129.sm.migrate.json"
+echo "Migrating object 4137 (832)..."
+./fetch-old-sc "www.sourcemap.org/" 4137 > ./migrate/1316558677/4137.sm.migrate.json
+echo "...written to ./migrate/1316558677/4137.sm.migrate.json"
+echo "Migrating object 4145 (833)..."
+./fetch-old-sc "www.sourcemap.org/" 4145 > ./migrate/1316558677/4145.sm.migrate.json
+echo "...written to ./migrate/1316558677/4145.sm.migrate.json"
+echo "Migrating object 4153 (834)..."
+./fetch-old-sc "www.sourcemap.org/" 4153 > ./migrate/1316558677/4153.sm.migrate.json
+echo "...written to ./migrate/1316558677/4153.sm.migrate.json"
+echo "Migrating object 4154 (835)..."
+./fetch-old-sc "www.sourcemap.org/" 4154 > ./migrate/1316558677/4154.sm.migrate.json
+echo "...written to ./migrate/1316558677/4154.sm.migrate.json"
+echo "Migrating object 4155 (836)..."
+./fetch-old-sc "www.sourcemap.org/" 4155 > ./migrate/1316558677/4155.sm.migrate.json
+echo "...written to ./migrate/1316558677/4155.sm.migrate.json"
+echo "Migrating object 4157 (837)..."
+./fetch-old-sc "www.sourcemap.org/" 4157 > ./migrate/1316558677/4157.sm.migrate.json
+echo "...written to ./migrate/1316558677/4157.sm.migrate.json"
+echo "Migrating object 4158 (838)..."
+./fetch-old-sc "www.sourcemap.org/" 4158 > ./migrate/1316558677/4158.sm.migrate.json
+echo "...written to ./migrate/1316558677/4158.sm.migrate.json"
+echo "Migrating object 4159 (839)..."
+./fetch-old-sc "www.sourcemap.org/" 4159 > ./migrate/1316558677/4159.sm.migrate.json
+echo "...written to ./migrate/1316558677/4159.sm.migrate.json"
+echo "Migrating object 4160 (840)..."
+./fetch-old-sc "www.sourcemap.org/" 4160 > ./migrate/1316558677/4160.sm.migrate.json
+echo "...written to ./migrate/1316558677/4160.sm.migrate.json"
+echo "Migrating object 4168 (841)..."
+./fetch-old-sc "www.sourcemap.org/" 4168 > ./migrate/1316558677/4168.sm.migrate.json
+echo "...written to ./migrate/1316558677/4168.sm.migrate.json"
+echo "Migrating object 4174 (842)..."
+./fetch-old-sc "www.sourcemap.org/" 4174 > ./migrate/1316558677/4174.sm.migrate.json
+echo "...written to ./migrate/1316558677/4174.sm.migrate.json"
+echo "Migrating object 4175 (843)..."
+./fetch-old-sc "www.sourcemap.org/" 4175 > ./migrate/1316558677/4175.sm.migrate.json
+echo "...written to ./migrate/1316558677/4175.sm.migrate.json"
+echo "Migrating object 4176 (844)..."
+./fetch-old-sc "www.sourcemap.org/" 4176 > ./migrate/1316558677/4176.sm.migrate.json
+echo "...written to ./migrate/1316558677/4176.sm.migrate.json"
+echo "Migrating object 4181 (845)..."
+./fetch-old-sc "www.sourcemap.org/" 4181 > ./migrate/1316558677/4181.sm.migrate.json
+echo "...written to ./migrate/1316558677/4181.sm.migrate.json"
+echo "Migrating object 4183 (846)..."
+./fetch-old-sc "www.sourcemap.org/" 4183 > ./migrate/1316558677/4183.sm.migrate.json
+echo "...written to ./migrate/1316558677/4183.sm.migrate.json"
+echo "Migrating object 4185 (847)..."
+./fetch-old-sc "www.sourcemap.org/" 4185 > ./migrate/1316558677/4185.sm.migrate.json
+echo "...written to ./migrate/1316558677/4185.sm.migrate.json"
+echo "Migrating object 4186 (848)..."
+./fetch-old-sc "www.sourcemap.org/" 4186 > ./migrate/1316558677/4186.sm.migrate.json
+echo "...written to ./migrate/1316558677/4186.sm.migrate.json"
+echo "Migrating object 4188 (849)..."
+./fetch-old-sc "www.sourcemap.org/" 4188 > ./migrate/1316558677/4188.sm.migrate.json
+echo "...written to ./migrate/1316558677/4188.sm.migrate.json"
+echo "Migrating object 4200 (850)..."
+./fetch-old-sc "www.sourcemap.org/" 4200 > ./migrate/1316558677/4200.sm.migrate.json
+echo "...written to ./migrate/1316558677/4200.sm.migrate.json"
+echo "Migrating object 4205 (851)..."
+./fetch-old-sc "www.sourcemap.org/" 4205 > ./migrate/1316558677/4205.sm.migrate.json
+echo "...written to ./migrate/1316558677/4205.sm.migrate.json"
+echo "Migrating object 4209 (852)..."
+./fetch-old-sc "www.sourcemap.org/" 4209 > ./migrate/1316558677/4209.sm.migrate.json
+echo "...written to ./migrate/1316558677/4209.sm.migrate.json"
+echo "Migrating object 4216 (853)..."
+./fetch-old-sc "www.sourcemap.org/" 4216 > ./migrate/1316558677/4216.sm.migrate.json
+echo "...written to ./migrate/1316558677/4216.sm.migrate.json"
+echo "Migrating object 4222 (854)..."
+./fetch-old-sc "www.sourcemap.org/" 4222 > ./migrate/1316558677/4222.sm.migrate.json
+echo "...written to ./migrate/1316558677/4222.sm.migrate.json"
+echo "Migrating object 4226 (855)..."
+./fetch-old-sc "www.sourcemap.org/" 4226 > ./migrate/1316558677/4226.sm.migrate.json
+echo "...written to ./migrate/1316558677/4226.sm.migrate.json"
+echo "Migrating object 4229 (856)..."
+./fetch-old-sc "www.sourcemap.org/" 4229 > ./migrate/1316558677/4229.sm.migrate.json
+echo "...written to ./migrate/1316558677/4229.sm.migrate.json"
+echo "Migrating object 4230 (857)..."
+./fetch-old-sc "www.sourcemap.org/" 4230 > ./migrate/1316558677/4230.sm.migrate.json
+echo "...written to ./migrate/1316558677/4230.sm.migrate.json"
+echo "Migrating object 4234 (858)..."
+./fetch-old-sc "www.sourcemap.org/" 4234 > ./migrate/1316558677/4234.sm.migrate.json
+echo "...written to ./migrate/1316558677/4234.sm.migrate.json"
+echo "Migrating object 4235 (859)..."
+./fetch-old-sc "www.sourcemap.org/" 4235 > ./migrate/1316558677/4235.sm.migrate.json
+echo "...written to ./migrate/1316558677/4235.sm.migrate.json"
+echo "Migrating object 4240 (860)..."
+./fetch-old-sc "www.sourcemap.org/" 4240 > ./migrate/1316558677/4240.sm.migrate.json
+echo "...written to ./migrate/1316558677/4240.sm.migrate.json"
+echo "Migrating object 4245 (861)..."
+./fetch-old-sc "www.sourcemap.org/" 4245 > ./migrate/1316558677/4245.sm.migrate.json
+echo "...written to ./migrate/1316558677/4245.sm.migrate.json"
+echo "Migrating object 4247 (862)..."
+./fetch-old-sc "www.sourcemap.org/" 4247 > ./migrate/1316558677/4247.sm.migrate.json
+echo "...written to ./migrate/1316558677/4247.sm.migrate.json"
+echo "Migrating object 4260 (863)..."
+./fetch-old-sc "www.sourcemap.org/" 4260 > ./migrate/1316558677/4260.sm.migrate.json
+echo "...written to ./migrate/1316558677/4260.sm.migrate.json"
+echo "Migrating object 4261 (864)..."
+./fetch-old-sc "www.sourcemap.org/" 4261 > ./migrate/1316558677/4261.sm.migrate.json
+echo "...written to ./migrate/1316558677/4261.sm.migrate.json"
+echo "Migrating object 4262 (865)..."
+./fetch-old-sc "www.sourcemap.org/" 4262 > ./migrate/1316558677/4262.sm.migrate.json
+echo "...written to ./migrate/1316558677/4262.sm.migrate.json"
+echo "Migrating object 4265 (866)..."
+./fetch-old-sc "www.sourcemap.org/" 4265 > ./migrate/1316558677/4265.sm.migrate.json
+echo "...written to ./migrate/1316558677/4265.sm.migrate.json"
+echo "Migrating object 4266 (867)..."
+./fetch-old-sc "www.sourcemap.org/" 4266 > ./migrate/1316558677/4266.sm.migrate.json
+echo "...written to ./migrate/1316558677/4266.sm.migrate.json"
+echo "Migrating object 4275 (868)..."
+./fetch-old-sc "www.sourcemap.org/" 4275 > ./migrate/1316558677/4275.sm.migrate.json
+echo "...written to ./migrate/1316558677/4275.sm.migrate.json"
+echo "Migrating object 4291 (869)..."
+./fetch-old-sc "www.sourcemap.org/" 4291 > ./migrate/1316558677/4291.sm.migrate.json
+echo "...written to ./migrate/1316558677/4291.sm.migrate.json"
+echo "Migrating object 4292 (870)..."
+./fetch-old-sc "www.sourcemap.org/" 4292 > ./migrate/1316558677/4292.sm.migrate.json
+echo "...written to ./migrate/1316558677/4292.sm.migrate.json"
+echo "Migrating object 4295 (871)..."
+./fetch-old-sc "www.sourcemap.org/" 4295 > ./migrate/1316558677/4295.sm.migrate.json
+echo "...written to ./migrate/1316558677/4295.sm.migrate.json"
+echo "Migrating object 4300 (872)..."
+./fetch-old-sc "www.sourcemap.org/" 4300 > ./migrate/1316558677/4300.sm.migrate.json
+echo "...written to ./migrate/1316558677/4300.sm.migrate.json"
+echo "Migrating object 4307 (873)..."
+./fetch-old-sc "www.sourcemap.org/" 4307 > ./migrate/1316558677/4307.sm.migrate.json
+echo "...written to ./migrate/1316558677/4307.sm.migrate.json"
+echo "Migrating object 4313 (874)..."
+./fetch-old-sc "www.sourcemap.org/" 4313 > ./migrate/1316558677/4313.sm.migrate.json
+echo "...written to ./migrate/1316558677/4313.sm.migrate.json"
+echo "Migrating object 4324 (875)..."
+./fetch-old-sc "www.sourcemap.org/" 4324 > ./migrate/1316558677/4324.sm.migrate.json
+echo "...written to ./migrate/1316558677/4324.sm.migrate.json"
+echo "Migrating object 4325 (876)..."
+./fetch-old-sc "www.sourcemap.org/" 4325 > ./migrate/1316558677/4325.sm.migrate.json
+echo "...written to ./migrate/1316558677/4325.sm.migrate.json"
+echo "Migrating object 4326 (877)..."
+./fetch-old-sc "www.sourcemap.org/" 4326 > ./migrate/1316558677/4326.sm.migrate.json
+echo "...written to ./migrate/1316558677/4326.sm.migrate.json"
+echo "Migrating object 4328 (878)..."
+./fetch-old-sc "www.sourcemap.org/" 4328 > ./migrate/1316558677/4328.sm.migrate.json
+echo "...written to ./migrate/1316558677/4328.sm.migrate.json"
+echo "Migrating object 4329 (879)..."
+./fetch-old-sc "www.sourcemap.org/" 4329 > ./migrate/1316558677/4329.sm.migrate.json
+echo "...written to ./migrate/1316558677/4329.sm.migrate.json"
+echo "Migrating object 4330 (880)..."
+./fetch-old-sc "www.sourcemap.org/" 4330 > ./migrate/1316558677/4330.sm.migrate.json
+echo "...written to ./migrate/1316558677/4330.sm.migrate.json"
+echo "Migrating object 4331 (881)..."
+./fetch-old-sc "www.sourcemap.org/" 4331 > ./migrate/1316558677/4331.sm.migrate.json
+echo "...written to ./migrate/1316558677/4331.sm.migrate.json"
+echo "Migrating object 4332 (882)..."
+./fetch-old-sc "www.sourcemap.org/" 4332 > ./migrate/1316558677/4332.sm.migrate.json
+echo "...written to ./migrate/1316558677/4332.sm.migrate.json"
+echo "Migrating object 4333 (883)..."
+./fetch-old-sc "www.sourcemap.org/" 4333 > ./migrate/1316558677/4333.sm.migrate.json
+echo "...written to ./migrate/1316558677/4333.sm.migrate.json"
+echo "Migrating object 4338 (884)..."
+./fetch-old-sc "www.sourcemap.org/" 4338 > ./migrate/1316558677/4338.sm.migrate.json
+echo "...written to ./migrate/1316558677/4338.sm.migrate.json"
+echo "Migrating object 4339 (885)..."
+./fetch-old-sc "www.sourcemap.org/" 4339 > ./migrate/1316558677/4339.sm.migrate.json
+echo "...written to ./migrate/1316558677/4339.sm.migrate.json"
+echo "Migrating object 4342 (886)..."
+./fetch-old-sc "www.sourcemap.org/" 4342 > ./migrate/1316558677/4342.sm.migrate.json
+echo "...written to ./migrate/1316558677/4342.sm.migrate.json"
+echo "Migrating object 4347 (887)..."
+./fetch-old-sc "www.sourcemap.org/" 4347 > ./migrate/1316558677/4347.sm.migrate.json
+echo "...written to ./migrate/1316558677/4347.sm.migrate.json"
+echo "Migrating object 4349 (888)..."
+./fetch-old-sc "www.sourcemap.org/" 4349 > ./migrate/1316558677/4349.sm.migrate.json
+echo "...written to ./migrate/1316558677/4349.sm.migrate.json"
+echo "Migrating object 4351 (889)..."
+./fetch-old-sc "www.sourcemap.org/" 4351 > ./migrate/1316558677/4351.sm.migrate.json
+echo "...written to ./migrate/1316558677/4351.sm.migrate.json"
+echo "Migrating object 4352 (890)..."
+./fetch-old-sc "www.sourcemap.org/" 4352 > ./migrate/1316558677/4352.sm.migrate.json
+echo "...written to ./migrate/1316558677/4352.sm.migrate.json"
+echo "Migrating object 4355 (891)..."
+./fetch-old-sc "www.sourcemap.org/" 4355 > ./migrate/1316558677/4355.sm.migrate.json
+echo "...written to ./migrate/1316558677/4355.sm.migrate.json"
+echo "Migrating object 4357 (892)..."
+./fetch-old-sc "www.sourcemap.org/" 4357 > ./migrate/1316558677/4357.sm.migrate.json
+echo "...written to ./migrate/1316558677/4357.sm.migrate.json"
+echo "Migrating object 4378 (893)..."
+./fetch-old-sc "www.sourcemap.org/" 4378 > ./migrate/1316558677/4378.sm.migrate.json
+echo "...written to ./migrate/1316558677/4378.sm.migrate.json"
+echo "Migrating object 4382 (894)..."
+./fetch-old-sc "www.sourcemap.org/" 4382 > ./migrate/1316558677/4382.sm.migrate.json
+echo "...written to ./migrate/1316558677/4382.sm.migrate.json"
+echo "Migrating object 4383 (895)..."
+./fetch-old-sc "www.sourcemap.org/" 4383 > ./migrate/1316558677/4383.sm.migrate.json
+echo "...written to ./migrate/1316558677/4383.sm.migrate.json"
+echo "Migrating object 4386 (896)..."
+./fetch-old-sc "www.sourcemap.org/" 4386 > ./migrate/1316558677/4386.sm.migrate.json
+echo "...written to ./migrate/1316558677/4386.sm.migrate.json"
+echo "Migrating object 4393 (897)..."
+./fetch-old-sc "www.sourcemap.org/" 4393 > ./migrate/1316558677/4393.sm.migrate.json
+echo "...written to ./migrate/1316558677/4393.sm.migrate.json"
+echo "Migrating object 4397 (898)..."
+./fetch-old-sc "www.sourcemap.org/" 4397 > ./migrate/1316558677/4397.sm.migrate.json
+echo "...written to ./migrate/1316558677/4397.sm.migrate.json"
+echo "Migrating object 4404 (899)..."
+./fetch-old-sc "www.sourcemap.org/" 4404 > ./migrate/1316558677/4404.sm.migrate.json
+echo "...written to ./migrate/1316558677/4404.sm.migrate.json"
+echo "Migrating object 4407 (900)..."
+./fetch-old-sc "www.sourcemap.org/" 4407 > ./migrate/1316558677/4407.sm.migrate.json
+echo "...written to ./migrate/1316558677/4407.sm.migrate.json"
+echo "Migrating object 4408 (901)..."
+./fetch-old-sc "www.sourcemap.org/" 4408 > ./migrate/1316558677/4408.sm.migrate.json
+echo "...written to ./migrate/1316558677/4408.sm.migrate.json"
+echo "Migrating object 4412 (902)..."
+./fetch-old-sc "www.sourcemap.org/" 4412 > ./migrate/1316558677/4412.sm.migrate.json
+echo "...written to ./migrate/1316558677/4412.sm.migrate.json"

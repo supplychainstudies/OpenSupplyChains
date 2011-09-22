@@ -159,7 +159,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     						$(this.dialog_content).find("#newpoint-button").attr("disabled","disabled").addClass("disabled");
     						
     		                var cb = $.proxy(function(data) {
-    		                    if(data && data.results && data.results.length) {
+    		                    if(data && data.results && data.results.length && (data.results[0].lat != 90) && (data.results[0].lat != -90) ) {
     								this.map.controls.select.unselectAll();
     								var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
     			                    new_geom = new_geom.transform(

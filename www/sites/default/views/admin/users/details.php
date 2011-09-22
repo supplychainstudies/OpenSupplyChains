@@ -20,6 +20,12 @@
 <input type="checkbox" name="verified" <?= $user->has_flag(Sourcemap::VERIFIED) ? 'checked' : '' ?> />
 <input type="submit" value="update" />
 </form>
+<? 
+    $h = md5(sprintf('%s-%s', $user->username, $user->email));
+    $lid = strrev(base64_encode($user->username)); 
+    $url = URL::site("register/confirm?t=$lid-$h", true);
+ ?>
+Confirmation link: <a href="<?=$url?>"><?=$url?></a>
 </fieldset>
 
 <form name="user-info" method="post" action="">

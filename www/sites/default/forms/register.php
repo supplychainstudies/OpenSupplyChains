@@ -71,6 +71,9 @@ return array(
         'password_confirm' => array(
             array('matches', array("password"))
         ),
+        'sourcemaporg_account' => array(
+            array('alpha_dash')
+        ),
         'confirm_terms' => array(
             array('not_empty')
         ),

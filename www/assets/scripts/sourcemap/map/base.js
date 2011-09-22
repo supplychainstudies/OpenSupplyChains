@@ -35,6 +35,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water"],
     "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"},
+    "legend": true,
     "viz_attr_map": {
         "weight": function(st) {
             var val = 0;
@@ -504,18 +505,20 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
     }
     if(tileset == "cloudmade") {
     	$.extend(true, this.map.options, cloudmade); 
-    	//$("#watermark").css("display","block"); 				
     }
     else if(tileset == "satellite") { 
     	$.extend(true, this.map.options, satellite); 
-    	//$("#watermark").css("display","none");
     } 
     else if(tileset == "terrain") { 
     	$.extend(true, this.map.options, terrain); 
-    	//$("#watermark").css("display","none"); 
     }
-    $("#watermark").css("display","block");
-    $("#watermark").removeClass("cloudmade satellite terrain").addClass(tileset);
+
+    // handle overlays upon color scheme changes
+    if(this.options.watermark){
+        $("#watermark").css("display","block");
+        $("#watermark").removeClass("cloudmade satellite terrain").addClass(tileset);
+    }
+
     this.map.setBaseLayer(tileset);
     
 }
@@ -629,6 +632,21 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
+    if(this.visualization_mode){
+        if(this.visualization_mode != viz_nm) {
+            this.disableVisualization();
+            this.enableVisualization(viz_nm);
+        }
+        else{
+            this.disableVisualization();
+        }
+    }
+    else{
+        this.enableVisualization(viz_nm);
+    }
+}
+
+Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
     this.map.controls.select.unselectAll();
     
     switch(viz_nm) {
@@ -637,12 +655,6 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
         case "water":
         case "co2e":
         case "weight":
-            if(this.visualization_mode === viz_nm) {
-                this.toggleVisualization();
-                break;
-            } else {
-                this.toggleVisualization();
-            }
             this.visualization_mode = viz_nm;
             
             attr_nm = this.viz_attr_map[viz_nm];
@@ -661,21 +673,44 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
                     }
                 }
             }
-            this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, range.total, null, null, this.options.visualization_colors[viz_nm]);
             
+            // add legend
+            if (this.options.legend){
+                var legend = $(this.map.map.div).find('#sourcemap-legend');
+                if ($(legend).length == 0) {
+                    var legend = $('<div id="sourcemap-legend"></div>');
+                    legend.addClass(viz_nm);
+                    console.log(this)
+                    if (this.map.map.baseLayer.name)
+                        legend.addClass(this.map.map.baseLayer.name);
+                    $(this.map.map.div).append(legend);
+                }
+            }
+
+            this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, range.total, null, null, this.options.visualization_colors[viz_nm]);
             this.map.dockToggleActive(viz_nm);
             this.map.redraw();
             break;
-        default:
-            this.visualization_mode = null;
-            for(var i=0; i<this.options.visualizations.length; i++) {
-                var viz = this.options.visualizations[i];
-                this.map.dockToggleInactive(viz);
-            }
-            for(var k in this.map.supplychains)
-                this.map.mapSupplychain(k);
-            break;
     }
+}
+
+Sourcemap.Map.Base.prototype.disableVisualization = function() {
+    this.visualization_mode = null;
+
+    // disable all dock items
+    for(var i=0; i<this.options.visualizations.length; i++) {
+        var viz = this.options.visualizations[i];
+        this.map.dockToggleInactive(viz);
+    }
+  
+    // remove legend 
+    if (this.options.legend){
+        var legend = $(this.map.map.div).find('#sourcemap-legend');
+        legend.remove();
+    }
+
+    for(var k in this.map.supplychains)
+        this.map.mapSupplychain(k);
 }
 
 Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {

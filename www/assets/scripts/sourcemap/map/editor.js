@@ -447,6 +447,24 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     this.editing = ref;
     $("#editor-tabs").tabs();
 
+    $('#edit-description').append('<div id="dialog-desc-counter"></div>');
+    $("#dialog-description").keyup(function(){
+        var maxlength = $(this).attr('maxlength');
+        if(maxlength != -1) {
+            var val = $(this).val();
+            var lettersleft = maxlength - val.length;
+
+            if(lettersleft>1)
+                $('#dialog-desc-counter').text(lettersleft+' characters remaining');
+            else
+                $('#dialog-desc-counter').text(lettersleft+' character remaining');
+
+            if(val.length>maxlength){
+                $(this).val(val.slice(0, maxlength));
+            }
+         }
+    });
+
     $(this.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
         this.q = '';
         this.params = {"name": ''};

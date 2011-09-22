@@ -391,6 +391,9 @@ Sourcemap.Map.prototype.initControls = function() {
                     f.layer = this.getStopLayer(f.cluster[0].attributes.supplychain_instance_id);
                 }
             }
+            if(!f.layer){
+                f.layer = this.getStopLayer(f.attributes.supplychain_instance_id);
+            }
             if(c.handlers.feature.feature && !c.handlers.feature.feature.layer) {
                 if(c.handlers.feature.feature.attributes.ref) {
                     c.handlers.feature.feature = this.refFeature(c.handlers.feature.feature.attributes.ref);

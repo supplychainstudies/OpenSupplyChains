@@ -618,7 +618,6 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     }
 }
                             
-
 Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, noremap) {
     var geocoding = false;
     var vals = updated_vals || {};

@@ -630,7 +630,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
             geocoding = true;
             Sourcemap.Stop.geocode(ref.getAttr("address"), $.proxy(function(res) {
                 var pl = res && res.results ? res.results[0] : false;
-                if(pl) {
+                if(pl  && (pl.lat != 90) && (pl.lat != -90) ) {
                     this.stop.setAttr("address", pl.placename);
                     var new_geom = new OpenLayers.Geometry.Point(pl.lon, pl.lat);
                     new_geom = new_geom.transform(

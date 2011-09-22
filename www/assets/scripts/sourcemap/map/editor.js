@@ -160,6 +160,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     						
     		                var cb = $.proxy(function(data) {
     		                    if(data && data.results && data.results.length) {
+                                    // point successfully added to field!
     								this.map.controls.select.unselectAll();
     								var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
     			                    new_geom = new_geom.transform(
@@ -176,7 +177,12 @@ Sourcemap.Map.Editor.prototype.init = function() {
     		                        stop.attributes.supplychain_instance_id = stop.supplychain_id;
     				                this.map.mapSupplychain(this.sc.instance_id);                									
     		                        this.map.controls.select.select(this.map.stopFeature(this.sc.instance_id, stop.instance_id));
-s    		                    } else {
+                                    var dest = Sourcemap.Stop.toLonLat(stop, 'EPSG:4326');
+                                    
+                                    var lonlat = new OpenLayers.LonLat(dest.lon, dest.lat);
+                                    this.map.map.panTo(new OpenLayers.LonLat(dest.lon, dest.lat);
+    		                    } else {
+                                    // unsuccessful
     								$("#dialog").shake();
     								$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
     					        }

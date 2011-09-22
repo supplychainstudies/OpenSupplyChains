@@ -44,6 +44,13 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             }    
              if( $validate ) {  
                 $p = $f->values();
+
+                if(!preg_match("/^[a-zA-Z]/",$p['username']))
+                {
+                    Message::instance()->set('Please use alphabetical character as first letter of your Username.');
+                    return;
+                }
+                
                 // check for username in use
                 $exists = ORM::factory('user')->where('username', '=', $p['username'])->find()->loaded();
                 if($exists) {

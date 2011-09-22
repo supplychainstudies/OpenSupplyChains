@@ -15,7 +15,6 @@ Sourcemap.Map = function(element_id, o) {
     this.layers = {};
     this.controls = {};
     this.dock_controls = {};
-    this.dock_el = null;
     var o = o || {};
     o.element_id = element_id;
     Sourcemap.Configurable.call(this, o);

@@ -617,6 +617,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         //TODO: maybe move this down and add a spinner or disable the map/editor?
     }
 }
+                            
 
 Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, noremap) {
     var geocoding = false;

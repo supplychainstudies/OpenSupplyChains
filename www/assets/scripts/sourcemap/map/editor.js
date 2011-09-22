@@ -180,7 +180,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                                     var dest = Sourcemap.Stop.toLonLat(stop, 'EPSG:4326');
                                     
                                     var lonlat = new OpenLayers.LonLat(dest.lon, dest.lat);
-                                    this.map.map.panTo(new OpenLayers.LonLat(dest.lon, dest.lat);
+                                    this.map.map.panTo(new OpenLayers.LonLat(dest.lon, dest.lat));
     		                    } else {
                                     // unsuccessful
     								$("#dialog").shake();

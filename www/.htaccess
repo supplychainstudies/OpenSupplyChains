@@ -8,7 +8,8 @@ SetEnv SOURCEMAP_ENV development
 	Order Deny,Allow
 	Deny From All
 </Files>
-
+           
+RedirectMatch /(.*)/$ /$1
 # Ignore assets dir
 RewriteRule ^assets - [L,NC]
 

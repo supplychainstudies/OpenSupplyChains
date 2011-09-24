@@ -79,4 +79,3 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->template->recent = Sourcemap_Search_Simple::find($params+array('recent' => 'yes'));
     }
 }
-

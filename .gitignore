@@ -7,3 +7,4 @@ www/application/cache/
 tools/env/dev
 
 .DS_Store
+*.swp

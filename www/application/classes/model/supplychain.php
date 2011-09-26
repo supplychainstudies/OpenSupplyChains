@@ -76,10 +76,19 @@ class Model_Supplychain extends ORM {
             $rev->data = json_encode($this->kitchen_sink($this->pk()));
             $rev->rev_hash = md5($rev->data.microtime());
             $rev->save();
+            //print_r($this);
+            $this->updateCache(); 
         }
         return $this;
     }
-    
+   
+    public function updateCache()
+    {
+        if(Cache::instance()->delete_all())
+        {
+        }
+    }
+
     public function kitchen_sink($scid) {
         $scid = (int)$scid;
         if(($sc = ORM::factory('supplychain', $scid)) && $sc->loaded()) {

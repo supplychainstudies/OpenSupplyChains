@@ -21,26 +21,6 @@
     border: 1px solid #d4d4d4;
     .rounded(12px);
     .box_shadow(3px, 1px, 10px);
-    .map-status {
-        position:absolute;
-        top:70px;
-        right:20px;
-        height:40px;
-        width:400px;
-        text-align:right;
-        font-size:1em;
-        color:rgba(0,0,0,0.4);
-        pointer-events:none;
-        .msg{
-			padding-top:10px;
-			height:26px;
-            background: url("../images/throbber.gif") right center no-repeat transparent;
-            padding-right: 32px;
-            &.good-news {
-                background: none;
-            }
-        }
-    }
 }
 
 #map {
@@ -360,10 +340,10 @@
             font-size: 22px;
             overflow:hidden;
             &.editable{
-                width:435px;
+                max-width:300px;
             }
             &.noneditable{
-                width:560px;
+                max-width:330px;
             }
         }
         #banner-favorite {
@@ -409,6 +389,23 @@
         #banner-owner, #banner-favorite, #banner-share {
             padding-left: 40px;
             float: right;
+        }
+        .map-status {
+            float:right;
+            text-align:right;
+            font-size:1em;
+            color:rgba(0,0,0,0.4);
+            pointer-events:none;
+            padding-top: 4px;
+            .msg{
+                height:26px;
+                background: url("../images/throbber.gif") right top no-repeat transparent;
+                padding: 10px 32px 0 0;
+                &.good-news {
+                    padding: 10px 22px 0 0;
+                    background: none;
+                }
+            }
         }
          div {
             float:left;

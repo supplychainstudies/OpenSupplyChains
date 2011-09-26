@@ -32,5 +32,7 @@
         <% var d = new Date(this.created*1000); %>
         <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.
     </div>
+    <div class="map-status">
+    </div>
     <div class="clear"></div>
 </div>    

@@ -263,9 +263,14 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     var scid = k;
 
+    var dragControl = new OpenLayers.Control.DragFeature();
+    
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
-            if(ftr.cluster) this.map.controls.stopdrag.cancel();
+            if(ftr.cluster) {
+                this.map.controls.stopdrag.cancel();
+                clearTimeout(this.map.controls.stopdrag.handlers.drag.pressTimer);
+            }
             return false;
         }, this),
         "onDrag": $.proxy(function(ftr, px) {
@@ -279,9 +284,110 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 this.editor.moveStopToFeatureLoc(ftr, true, true);
                 //this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
             }
+            ftr.attributes.size -= 2;
             //this.editor.map.controls.select.select(ftr);
+            this.editor.map.controls.stopdrag.cancel();
         }, {"editor": this})
     }));
+
+    // Extend the stopdrag handlers in order to allow click + hold
+    // mousedown
+    
+    this.map.controls.stopdrag.handlers.drag.mousedown = function (evt, ftr) {
+        var propagate = true;
+        this.dragging = false;
+        if (this.checkModifiers(evt) && OpenLayers.Event.isLeftClick(evt)) {
+            this.pressTimer = window.setTimeout($.proxy(function() {
+                // timer finished
+                this.stopUp = true;
+                this.started = true;
+                this.start = evt.xy;
+                this.last = evt.xy;
+                var ftr = this.control.feature;
+                ftr.attributes.size += 2;
+                ftr.layer.redraw();
+                OpenLayers.Element.addClass(
+                    this.map.viewPortDiv, "olDragDown"
+                );
+                return true;
+            }, this),500);
+            this.down(evt);
+            this.callback("down", [evt.xy]);
+            OpenLayers.Event.stop(evt);
+          
+            if(!this.oldOnselectstart) {
+                this.oldOnselectstart = (document.onselectstart) ? document.onselectstart : OpenLayers.Function.True;
+            }
+            document.onselectstart = OpenLayers.Function.False;
+          
+            propagate = !this.stopDown;
+        } else {
+            this.started = false;
+            this.start = null;
+            this.last = null;
+        }
+        return propagate;
+    }  
+
+    // mouseup
+    this.map.controls.stopdrag.handlers.drag.mouseup = function (evt) {
+        if (this.started) {
+            if(this.documentDrag === true && this.documentEvents) {
+                this.adjustXY(evt);
+                this.removeDocumentEvents();
+            }
+            var dragged = (this.start != this.last);
+            this.started = false;
+            this.dragging = false;
+            OpenLayers.Element.removeClass(
+                this.map.viewPortDiv, "olDragDown"
+            );
+            this.up(evt);
+            this.callback("up", [evt.xy]);
+            if(dragged) {
+                this.callback("done", [evt.xy]);
+            }
+            else {
+                clearTimeout(this.pressTimer);
+                return false;
+            }
+            document.onselectstart = this.oldOnselectstart;
+        }
+        else {
+            clearTimeout(this.pressTimer);
+            return true;
+        }
+        return true;
+    } 
+    
+    // mouseout
+    this.map.controls.stopdrag.handlers.drag.mouseout = function(evt){
+        if (this.started && OpenLayers.Util.mouseLeft(evt, this.map.viewPortDiv)) {
+            if(this.documentDrag === true) {
+                this.addDocumentEvents();
+            } else {
+                var dragged = (this.start != this.last);
+                this.started = false; 
+                this.dragging = false;
+                OpenLayers.Element.removeClass(
+                    this.map.viewPortDiv, "olDragDown"
+                );
+                this.out(evt);
+                this.callback("out", []);
+                if(dragged) {
+                    this.callback("done", [evt.xy]);
+                }
+                if(document.onselectstart) {
+                    document.onselectstart = this.oldOnselectstart;
+                }
+            }
+        }
+        else{
+            clearTimeout(this.pressTimer);
+            return false;
+        }
+        return true;
+    }
 
     this.map.controls.stopdrag.handlers.drag.stopDown = false;
     this.map.controls.stopdrag.handlers.drag.stopUp = false;

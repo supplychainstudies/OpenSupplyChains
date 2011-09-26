@@ -319,7 +319,8 @@
                     &.addstop{padding-left: 40px; background: url(../images/dock-icon-addpoint.png) 10px 12px no-repeat;}
 
                     &.toggle {  &.active { color: #333; background-color:rgba(200,200,200,0.85); } }
-                    &:last-child{  border:none; }
+                    &:last-child { border-radius: 0 12px 12px 0; border: none; }
+                    &:first-child { border-radius: 12px 0 0 12px; }
                 }
             }
         }
@@ -359,7 +360,7 @@
             font-size: 22px;
             overflow:hidden;
             &.editable{
-                width:440px;
+                width:435px;
             }
             &.noneditable{
                 width:560px;

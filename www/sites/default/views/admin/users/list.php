@@ -23,4 +23,6 @@
 <?= View::factory('partial/admin/list', array('list' => $users, 'list_type' => 'users')) ?>
 <?php echo $page_links; ?>
 
-    
+<div class="export">
+    <a href="admin/users/csv">Export this to CSV</a>
+</div>

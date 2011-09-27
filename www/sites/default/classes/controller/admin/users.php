@@ -44,8 +44,57 @@ class Controller_Admin_Users extends Controller_Admin {
         Breadcrumbs::instance()->add('Management', 'admin/')
         ->add('Users', 'admin/users');
     }
-    
-    
+
+    public function action_csv(){
+        // export full user list to CSV
+        $user = ORM::factory('user');
+
+        $userlist = $user->find_all()->as_array(null, array('id', 'username', 'email', 'logins', 'last_login', 'created', 'flags'));
+
+        // convert timestamp dates to human-readable
+        foreach($userlist as &$user){
+            if ($user['last_login'] != null){
+                $user['last_login'] = date("Y-m-d H:i:s",$user['last_login']);
+            }
+            $user['created'] = date("Y-m-d H:i:s",$user['created']);
+        }
+
+        $this->auto_render = FALSE;
+
+        $scv = $this->array_to_csv($userlist);
+        $this->request->response = $scv;
+        $this->request->send_file(TRUE, "users.csv");
+   } 
+   
+   public function array_to_csv($arraydata, $delim = ",", $newline = "\n", $enclosure = '"'){
+            if ( ! is_array($arraydata))
+            {
+                    die('You must submit a valid array of csv data');
+            }       
+            $out = '';
+
+            // Build header row from array keys
+            foreach ($arraydata[0] as $key=>$item){
+                $out .= $enclosure.str_replace($enclosure, $enclosure.$enclosure, $key).$enclosure.$delim;
+            }
+            $out = substr($out, 0, -1);
+            $out = rtrim($out);
+            $out .= $newline;
+            
+            // Next blast through the result array and build out the rows
+            foreach ($arraydata as $row)
+            {
+                    foreach ($row as $item)
+                    {
+                            $out .= $enclosure.str_replace($enclosure, $enclosure.$enclosure, $item).$enclosure.$delim;
+                    }
+                    $out = substr($out, 0, -1);
+                    $out = rtrim($out);
+                    $out .= $newline;
+            }
+            return $out;
+    }
+ 
     public function action_details($id) {    
     
         $this->template = View::factory('admin/users/details');

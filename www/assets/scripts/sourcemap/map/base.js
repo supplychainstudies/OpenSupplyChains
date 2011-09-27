@@ -187,7 +187,6 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     if(!this.banner_div) {
         this.banner_div = $('<div id="banner"></div>');
         $(this.map.map.div).append(this.banner_div);
-        $(this.map.map.div).append('<div class="map-status"></div>');
     }
     if(!sc) {
         // TODO: this is bad, but it's worst case

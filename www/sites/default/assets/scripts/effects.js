@@ -17,9 +17,10 @@ if ($('.status-message').length > 0) {
     $('.status-messages').fadeIn(400);
 }
 
-/* modal window fxn courtesy http://www.sohtanaka.com/web-design/examples/modal-window/ */
 
 $(document).ready(function(){
+    
+    /* modal window fxn courtesy http://www.sohtanaka.com/web-design/examples/modal-window/ */
     $('a.modal').click(function(e) {
         e.preventDefault();
         var popURL = $(this).attr('href'); 

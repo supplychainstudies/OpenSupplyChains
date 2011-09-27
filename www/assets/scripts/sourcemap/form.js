@@ -343,11 +343,14 @@ $(document).ready(function() {
             var val = $(this).val();
             var lettersleft = maxlength - val.length;
 
-            if(lettersleft>1)
+            if (lettersleft == maxlength)
+                $('#desc-counter').html('&nbsp;')
+            else if(lettersleft>1)
                 $('#desc-counter').text(lettersleft+' characters remaining');
-            else
+            else if(lettersleft == 1)
                 $('#desc-counter').text(lettersleft+' character remaining');
-
+            else
+                $('#desc-counter').text('No characters remaining');
 
             if (val.length > maxlength) {
               $(this).val(val.slice(0, maxlength));

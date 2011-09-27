@@ -214,7 +214,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             "success": $.proxy(function(resp) {
                for(var k in resp) {
                    if(resp[k].id == sc.remote_id) {
-                       $(".banner-favorite-link").parent().addClass("marked");
+                       $("#banner-favorite").addClass("marked");
                    }
                }                   
             }, this),
@@ -792,11 +792,11 @@ Sourcemap.Map.Base.prototype.favorite = function() {
         var sc = this.map.supplychains[k]; break;
     }
 // check for delete
-     if($(".banner-favorite-link").parent().hasClass("marked")) {
+     if($("#banner-favorite").hasClass("marked")) {
          $.ajax({"url": 'services/favorites/'+sc.remote_id, "type": "DELETE",
                 "success": $.proxy(function(resp) {
                     if(resp) {
-                        $(".banner-favorite-link").parent().removeClass("marked");
+                        $("#banner-favorite").removeClass("marked");
                     } 
                 }, this)
             });
@@ -804,7 +804,7 @@ Sourcemap.Map.Base.prototype.favorite = function() {
          $.ajax({"url": 'services/favorites', "type": "POST",
                 "success": $.proxy(function(resp) {
                     if(resp) {
-                        $(".banner-favorite-link").parent().addClass("marked");
+                        $("#banner-favorite").addClass("marked");
                     } else { }
                 }, this),
                 "error": function(resp) {

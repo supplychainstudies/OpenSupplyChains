@@ -15,19 +15,27 @@
        <%= _S.ttrunc(_S.htesc(this.getAttr("title", this.getAttr("name", "Untitled Sourcemap"))), 55) %>
     </div>
     <% if(this.editable){ %>
+    <a class="banner-preview-link" href="javascript:void(0);">
     <div id="banner-preview" <% if(window.location.href.split("?")[1]!="edit"){ %> class="active" <% } %> >
-        <a class="banner-preview-link" href="javascript:void(0);">Preview</a>
+        Preview
     </div>
+    </a>
+    <a class="banner-edit-link" href="javascript:void(0);">
     <div id="banner-edit"  <% if(window.location.href.split("?")[1]=="edit"){  %> class="active" <% }  %> >
-        <a class="banner-edit-link" href="javascript:void(0);">Edit</a>
+        Edit
     </div>
+    </a>
     <% } %>
+    <a class="banner-share-link" href="javascript:void(0);">
     <div id="banner-share">
-        <a class="banner-share-link" href="javascript:void(0);">Share</a>
+        Share
     </div>
+    </a>
+    <a class="banner-favorite-link" href="javascript:void(0);">
     <div id="banner-favorite">
-        <a class="banner-favorite-link" href="javascript:void(0);">Favorite</a> 
+        Favorite 
     </div>
+    </a>
     <div id="banner-owner">
         <% var d = new Date(this.created*1000); %>
         <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.

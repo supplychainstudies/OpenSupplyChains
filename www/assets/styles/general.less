@@ -102,8 +102,17 @@ a {
             color: #fff;
             padding: 8px 0 10px 20px;
             text-shadow: -1px 0px 1px #255a76;
+            line-height: 1.5em;
             .gradient(#3884ab,#4f9fc9);
             .rounded(10px);
+            &.browser{
+                h1 { color: #333 }
+                font-size: 20px;
+                color: #999;
+                text-shadow: none;
+                padding: 20px 20px 40px 20px;
+                .gradient(#eee, #fff);
+            }
         }
 
         .status-wrap {
@@ -496,6 +505,7 @@ input[type=checkbox]{
             background:#eee;
             margin-bottom:10px;
             padding:10px 10px 10px 50px;
+            overflow:hidden;
             .user-avatar {
 				width:32px; height:32px;
                 position:absolute; 

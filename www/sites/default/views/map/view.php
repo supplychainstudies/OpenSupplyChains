@@ -95,10 +95,11 @@
     <div id="discussion-section">
         <h2>Discussion</h2>
         <?php if($can_comment): ?>
-        <div id="comment-form" class="form">
+        <div id="comment-form" class="sourcemap-form">
             <fieldset>
             <form method="post" action="map/comment/<?= $supplychain_id ?>">
-                <textarea placeholder="Type your comment..." name="body" id="comment-area"></textarea>
+                <div id="desc-counter">&nbsp;</div>
+                <textarea placeholder="Type your comment..." name="body" id="comment-area" maxlength="255"></textarea>
  
                 <input class="button" id="comment-submit" type="submit" text="Comment"/>
                 <div class="clear"></div>

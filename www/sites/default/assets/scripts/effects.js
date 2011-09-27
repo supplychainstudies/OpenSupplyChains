@@ -8,18 +8,38 @@
  * See the GNU Affero General Public License for more details.
  * 
  * You should have received a copy of the GNU Affero General Public License along with this
- * program. If not, see <http://www.gnu.org/licenses/>.*/
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-if ($('.status-message').length > 0) {
-    $('.status-messages').click(function(){
-        $(this).fadeOut(0);
-    });
-    $('.status-messages').fadeIn(400);
-}
 
 
 $(document).ready(function(){
-    
+
+    /* unsupported browser detection */
+    if (($.browser.msie)) {
+        $("<div />", {
+            class : 'status-messages'
+        }).appendTo('.messages');
+        $("<div />", {
+            class : 'status-message browser',
+            html  : " <h1>Dear IE user,</h1>"
+                  + " You're currently using a browser that is unsupported by Sourcemap." 
+                  + " While we won't stop you from experimenting, we highly recommend using"
+                  + " a recent version of "
+                  + " <a href=\"http://www.google.com/chrome\">Chrome</a>,"
+                  + " <a href=\"http://www.apple.com/safari/\">Safari</a>, or "
+                  + " <a href=\"http://www.mozilla.org/en-US/firefox/new/\">Firefox</a>."
+        }).appendTo('.status-messages');
+    }
+
+    /* status message fade */
+    if ($('.status-message').length > 0) {
+        $('.status-messages').click(function(){
+            $(this).fadeOut(0);
+        });
+        $('.status-messages').fadeIn(400);
+    }
+
     /* modal window fxn courtesy http://www.sohtanaka.com/web-design/examples/modal-window/ */
     $('a.modal').click(function(e) {
         e.preventDefault();

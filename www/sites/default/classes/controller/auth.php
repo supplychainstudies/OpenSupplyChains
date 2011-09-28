@@ -131,7 +131,7 @@ EREIAM;
             $sent = mail($email, $subject, $body, $addlheaders);
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
-            Message::instance()->set('Sorry, could not send an email.');
+            Message::instance()->set('Sorry, could not send an email.', Message::ERROR);
         }
         return $sent;
     }

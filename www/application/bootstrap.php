@@ -143,6 +143,16 @@ if(!defined('SUPPRESS_DEFAULT_ROUTES')) {
         ));
 }
 
+$base_url =  URL::base(true, true);
+$styles = array(
+    'assets/styles/general.less',
+    'sites/default/assets/styles/reset.css'
+    );
+$header_style = isset($styles) ? Sourcemap_CSS::link_tags($styles) : '';
+$header = View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM));
+$footer = View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM));
+$scripts = Sourcemap_JS::script_tags('less', 'sourcemap-core');
+
 if (!defined('SUPPRESS_REQUEST')) {
     /**
      * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
@@ -167,33 +177,45 @@ if (!defined('SUPPRESS_REQUEST')) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Page Not Found</title>
-    <style>
-    	body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
-    	#wrapper{width:516px;margin:0 auto;}
-    	h1{text-align:center;font-size:300%;}
-    	img{position:absolute;top:0;left:0;right:0;margin:0 auto;}
-    	.article-content{position:relative;padding-top:340px;}
-    	.article-content p{text-align:center;line-height:1.5em;
-    	margin:.25em;margin-bottom:.5em;clear:both;}
-    	.article-content div.gigantic{position:absolute;top:0;left:0;right:0;
-    	margin:0 auto;color:#ddd;font-size:1800%;font-weight:bold;}
-    </style>
+<title>Page Not Found</title>
+<base href="$base_url" />
+<style>
+    body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+    h1{text-align:center;font-size:300%;}
+    .article-content{padding-top:160px;position:relative}
+    .article-content p{text-align:center;line-height:1.5em;
+    margin:.25em;margin-bottom:.5em;clear:both;}
+    .article-content div.gigantic{text-align:center;color:#bbb;font-size:1800%;font-weight:bold;margin:0 auto;position:relative}
+    .article-content img{position:absolute;top:0;left:0;right:0;margin:0 auto;}
+    .article-content div.article-img{height:170px;}
+</style>
+$header_style
 </head>
 <body>
 <div id="wrapper">
+    $header
+    <div class="push"></div>
     <h1>You've Strayed into Uncharted Waters</h1>
     <div class="article-content">
-    	<div class="gigantic">404</div>
-    	<img src="http://www.sourcemap.com/assets/images/monsters.png" />
+        <div class="article-img">
+    	    <div class="gigantic">404</div>
+    	    <img src="http://www.sourcemap.com/assets/images/monsters.png" />
+        </div>
     	<p>This is the part of the map where it says, "Here be monsters." Please, <a href="javascript:history.go(-1)">go back</a>, and if you have questions or concerns, <a href="mailto:support@sourcemap.com">contact us</a>.</p>
     </div>
+    <div class="push"></div>
+</div><!-- #wrapper -->
+<div id="footer">
+    $footer
 </div>
+$scripts
 <script type="text/javascript"> if (window.console) { var error = "$e"; console.log(error); } </script>
 </body>
 </html>
 HTML;
     }
+
+
     echo $response;
     exit;
 }

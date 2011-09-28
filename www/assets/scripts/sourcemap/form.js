@@ -336,10 +336,21 @@ $(document).ready(function() {
         (new Sourcemap.Form(this));
     });
 
+   $('#form-description').before('<div id="desc-counter"></div>');
    $('.sourcemap-form textarea').keyup(function() {
         var maxlength = $(this).attr('maxlength');
         if(maxlength != -1) {
             var val = $(this).val();
+            var lettersleft = maxlength - val.length;
+
+            if (lettersleft == maxlength)
+                $('#desc-counter').html('&nbsp;')
+            else if(lettersleft>1)
+                $('#desc-counter').text(lettersleft+' characters remaining');
+            else if(lettersleft == 1)
+                $('#desc-counter').text(lettersleft+' character remaining');
+            else
+                $('#desc-counter').text('No characters remaining');
 
             if (val.length > maxlength) {
               $(this).val(val.slice(0, maxlength));

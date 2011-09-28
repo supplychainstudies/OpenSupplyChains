@@ -21,26 +21,6 @@
     border: 1px solid #d4d4d4;
     .rounded(12px);
     .box_shadow(3px, 1px, 10px);
-    .map-status {
-        position:absolute;
-        top:70px;
-        right:20px;
-        height:40px;
-        width:400px;
-        text-align:right;
-        font-size:1em;
-        color:rgba(0,0,0,0.4);
-        pointer-events:none;
-        .msg{
-			padding-top:10px;
-			height:26px;
-            background: url("../images/throbber.gif") right center no-repeat transparent;
-            padding-right: 32px;
-            &.good-news {
-                background: none;
-            }
-        }
-    }
 }
 
 #map {
@@ -319,12 +299,28 @@
                     &.addstop{padding-left: 40px; background: url(../images/dock-icon-addpoint.png) 10px 12px no-repeat;}
 
                     &.toggle {  &.active { color: #333; background-color:rgba(200,200,200,0.85); } }
-                    &:last-child{  border:none; }
+                    &:last-child { border-radius: 0 12px 12px 0; border: none; }
+                    &:first-child { border-radius: 12px 0 0 12px; }
                 }
             }
         }
     }
 }
+
+/* Legend --------------------------------------------------------------- */
+
+#sourcemap-legend {
+    position: absolute;
+    bottom: 60px; left: 10px; 
+    height: 100px; width: 74px;
+    display: block;
+    background: url(../images/legend.png) center center no-repeat;
+
+    &.cloudmade{ background: url(../images/legend.png) center center no-repeat; }
+    &.satellite{ background: url(../images/legend-light.png) center center no-repeat;}    
+    &.terrain{   background: url(../images/legend.png) center center no-repeat;}
+}
+
 
 /* Banner  -------------------------------------------------------------- */
 #banner { 
@@ -344,10 +340,10 @@
             font-size: 22px;
             overflow:hidden;
             &.editable{
-                width:440px;
+                max-width:300px;
             }
             &.noneditable{
-                width:560px;
+                max-width:330px;
             }
         }
         #banner-favorite {
@@ -373,19 +369,20 @@
             border-left:1px solid rgba(140,140,140,0.25);
             &.active {
                 color: #333; background-color:rgba(200,200,200,0.85);
-                a{color:#333;font-weight:bold;}
-                a:hover{text-decoration:none;}
+                font-weight:bold;
+                :hover{text-decoration:none;}
             }
         }
+        
         #banner-preview {
             //background: url(../images/icon-owner.png) 10px center no-repeat;
             border-left:1px solid rgba(140,140,140,0.25);
             &.active {
                 background-color:rgba(200,200,200,0.85);
                 border-radius: 0 12px 12px 0;
-                a{color:#333;font-weight:bold;}
-                a:hover{text-decoration:none;}
-            }
+                color:#333;font-weight:bold;
+                :hover{text-decoration:none;}
+            }               
         }
         #banner-edit ,#banner-preview {
             float:right;
@@ -393,6 +390,23 @@
         #banner-owner, #banner-favorite, #banner-share {
             padding-left: 40px;
             float: right;
+        }
+        .map-status {
+            float:right;
+            text-align:right;
+            font-size:1em;
+            color:rgba(0,0,0,0.4);
+            pointer-events:none;
+            padding-top: 4px;
+            .msg{
+                height:26px;
+                background: url("../images/throbber.gif") right top no-repeat transparent;
+                padding: 10px 32px 0 0;
+                &.good-news {
+                    padding: 10px 22px 0 0;
+                    background: none;
+                }
+            }
         }
          div {
             float:left;
@@ -472,14 +486,18 @@
         overflow:auto;
     }
     #edit-description {
+        overflow:hidden;
         textarea {
-            height:175px;
+            height:165px;
             width:320px;
 			.box_shadow_inset(0px,0px,4px,rgba(0,0,0,.2));
 			padding:10px;
 			font-size:inherit;
 			color:#999;
 	        border:none;
+        }
+        #dialog-desc-counter{
+            float:right;
         }
     }
 	#edit-stop-footprint, #edit-hop-footprint {
@@ -693,14 +711,15 @@
         display:inline;
     }
     #catalog-search {
-        fieldset{  
+        fieldset{
+            width:300px;
             margin:0;
             background: url(../images/shadow.png) top repeat-x; 
             border: 1px solid #c9c9c9;
              .rounded;
 
              input#catalog-search-field{
-                  width: 300px;
+                  width: 264px;
                   padding: 10px 0 10px 36px;
                   border: 0;
                   outline: none;

@@ -5,5 +5,6 @@ www/application/config/sourcemap.php
 www/application/config/recaptcha.php
 www/application/cache/
 tools/env/dev
-
+*._*
 .DS_Store
+*.swp

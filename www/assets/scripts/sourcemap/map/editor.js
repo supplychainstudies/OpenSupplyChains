@@ -119,7 +119,11 @@ Sourcemap.Map.Editor.prototype.init = function() {
     		    var cb = function(p, tx, th) {
     				if(this.dialog) {
     					if(!this.dialog) {
+                            if(!$.browser.msie){ 
     				        this.dialog = $('<div id="dialog"></div>');
+                            }else{
+                                this.dialog = $('<div id="dialog" style="background:white"></div>');
+                            }
     				        $(this.map.map.div).append(this.dialog);
     				    } else this.hideDialog();
 
@@ -131,7 +135,21 @@ Sourcemap.Map.Editor.prototype.init = function() {
     				        $(this.dialog).removeClass("called-out");					
     						this.dialog_content.empty(); 
     					}, this));
+                        $(this.dialog_content).find("#newpoint-title").keypress(function(e){
+                            if(e.keyCode==13){$("#newpoint-button").click();};
+                        });
+                        $(this.dialog_content).find("#newpoint-placename").keypress(function(e){
+                            if(e.keyCode==13){$("#newpoint-button").click();};
+                        });
     					$(this.dialog_content).find("#newpoint-button").click($.proxy(function() {
+                            if(!$("#newpoint-placename").val()){
+                                // If no address and title was inputed
+                                if(!$("#newpoint-title").val()){
+                                    $("#dialog").shake();
+                                    return;
+                                }
+                                $("#newpoint-placename").val($("#newpoint-title").val());
+                            }
     						var f = this.dialog_content.find('form');
     			            var vals = f.serializeArray();
     			            var attributes = {};
@@ -145,7 +163,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
     						$(this.dialog_content).find("#newpoint-button").attr("disabled","disabled").addClass("disabled");
     						
     		                var cb = $.proxy(function(data) {
-    		                    if(data && data.results && data.results.length) {
+    		                    if(data && data.results && data.results.length && (data.results[0].lat != 90) && (data.results[0].lat != -90) ) {
+                                    // point successfully added to field!
     								this.map.controls.select.unselectAll();
     								var new_geom = new OpenLayers.Geometry.Point(data.results[0].lon, data.results[0].lat);
     			                    new_geom = new_geom.transform(
@@ -162,7 +181,12 @@ Sourcemap.Map.Editor.prototype.init = function() {
     		                        stop.attributes.supplychain_instance_id = stop.supplychain_id;
     				                this.map.mapSupplychain(this.sc.instance_id);                									
     		                        this.map.controls.select.select(this.map.stopFeature(this.sc.instance_id, stop.instance_id));
+                                    var dest = Sourcemap.Stop.toLonLat(stop, 'EPSG:4326');
+                                    
+                                    var lonlat = new OpenLayers.LonLat(dest.lon, dest.lat);
+                                    this.map.map.panTo(new OpenLayers.LonLat(dest.lon, dest.lat));
     		                    } else {
+                                    // unsuccessful
     								$("#dialog").shake();
     								$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
     					        }
@@ -243,9 +267,14 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     var scid = k;
 
+    var dragControl = new OpenLayers.Control.DragFeature();
+    
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
-            if(ftr.cluster) this.map.controls.stopdrag.cancel();
+            if(ftr.cluster) {
+                this.map.controls.stopdrag.cancel();
+                clearTimeout(this.map.controls.stopdrag.handlers.drag.pressTimer);
+            }
             return false;
         }, this),
         "onDrag": $.proxy(function(ftr, px) {
@@ -259,9 +288,110 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 this.editor.moveStopToFeatureLoc(ftr, true, true);
                 //this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
             }
+            ftr.attributes.size -= 2;
             //this.editor.map.controls.select.select(ftr);
+            this.editor.map.controls.stopdrag.cancel();
         }, {"editor": this})
     }));
+
+    // Extend the stopdrag handlers in order to allow click + hold
+    // mousedown
+    
+    this.map.controls.stopdrag.handlers.drag.mousedown = function (evt, ftr) {
+        var propagate = true;
+        this.dragging = false;
+        if (this.checkModifiers(evt) && OpenLayers.Event.isLeftClick(evt)) {
+            this.pressTimer = window.setTimeout($.proxy(function() {
+                // timer finished
+                this.stopUp = true;
+                this.started = true;
+                this.start = evt.xy;
+                this.last = evt.xy;
+                var ftr = this.control.feature;
+                ftr.attributes.size += 2;
+                ftr.layer.redraw();
+                OpenLayers.Element.addClass(
+                    this.map.viewPortDiv, "olDragDown"
+                );
+                return true;
+            }, this),500);
+            this.down(evt);
+            this.callback("down", [evt.xy]);
+            OpenLayers.Event.stop(evt);
+          
+            if(!this.oldOnselectstart) {
+                this.oldOnselectstart = (document.onselectstart) ? document.onselectstart : OpenLayers.Function.True;
+            }
+            document.onselectstart = OpenLayers.Function.False;
+          
+            propagate = !this.stopDown;
+        } else {
+            this.started = false;
+            this.start = null;
+            this.last = null;
+        }
+        return propagate;
+    }  
+
+    // mouseup
+    this.map.controls.stopdrag.handlers.drag.mouseup = function (evt) {
+        if (this.started) {
+            if(this.documentDrag === true && this.documentEvents) {
+                this.adjustXY(evt);
+                this.removeDocumentEvents();
+            }
+            var dragged = (this.start != this.last);
+            this.started = false;
+            this.dragging = false;
+            OpenLayers.Element.removeClass(
+                this.map.viewPortDiv, "olDragDown"
+            );
+            this.up(evt);
+            this.callback("up", [evt.xy]);
+            if(dragged) {
+                this.callback("done", [evt.xy]);
+            }
+            else {
+                clearTimeout(this.pressTimer);
+                return false;
+            }
+            document.onselectstart = this.oldOnselectstart;
+        }
+        else {
+            clearTimeout(this.pressTimer);
+            return true;
+        }
+        return true;
+    } 
+    
+    // mouseout
+    this.map.controls.stopdrag.handlers.drag.mouseout = function(evt){
+        if (this.started && OpenLayers.Util.mouseLeft(evt, this.map.viewPortDiv)) {
+            if(this.documentDrag === true) {
+                this.addDocumentEvents();
+            } else {
+                var dragged = (this.start != this.last);
+                this.started = false; 
+                this.dragging = false;
+                OpenLayers.Element.removeClass(
+                    this.map.viewPortDiv, "olDragDown"
+                );
+                this.out(evt);
+                this.callback("out", []);
+                if(dragged) {
+                    this.callback("done", [evt.xy]);
+                }
+                if(document.onselectstart) {
+                    document.onselectstart = this.oldOnselectstart;
+                }
+            }
+        }
+        else{
+            clearTimeout(this.pressTimer);
+            return false;
+        }
+        return true;
+    }
 
     this.map.controls.stopdrag.handlers.drag.stopDown = false;
     this.map.controls.stopdrag.handlers.drag.stopUp = false;
@@ -433,6 +563,24 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     this.editing = ref;
     $("#editor-tabs").tabs();
 
+    $('#edit-description').append('<div id="dialog-desc-counter"></div>');
+    $("#dialog-description").keyup(function(){
+        var maxlength = $(this).attr('maxlength');
+        if(maxlength != -1) {
+            var val = $(this).val();
+            var lettersleft = maxlength - val.length;
+
+            if(lettersleft>1)
+                $('#dialog-desc-counter').text(lettersleft+' characters remaining');
+            else
+                $('#dialog-desc-counter').text(lettersleft+' character remaining');
+
+            if(val.length>maxlength){
+                $(this).val(val.slice(0, maxlength));
+            }
+         }
+    });
+
     $(this.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
         this.q = '';
         this.params = {"name": ''};
@@ -585,7 +733,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         //TODO: maybe move this down and add a spinner or disable the map/editor?
     }
 }
-
+                            
 Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, noremap) {
     var geocoding = false;
     var vals = updated_vals || {};
@@ -598,7 +746,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
             geocoding = true;
             Sourcemap.Stop.geocode(ref.getAttr("address"), $.proxy(function(res) {
                 var pl = res && res.results ? res.results[0] : false;
-                if(pl) {
+                if(pl  && (pl.lat != 90) && (pl.lat != -90) ) {
                     this.stop.setAttr("address", pl.placename);
                     var new_geom = new OpenLayers.Geometry.Point(pl.lon, pl.lat);
                     new_geom = new_geom.transform(
@@ -703,6 +851,9 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                 o.catalog = this.o.catalog;
                 this.editor.updateCatalogListing(o);
             }, {"o": o, "editor": this.editor}));
+            $(this.editor.map_view.dialog).find('#catalog-search').bind("submit",function(event){
+                event.preventDefault();
+            });
         }, {"editor": this, "o": o}), "failure": $.proxy(function() {
             $(this.editor.map_view).find("#edit-catalog").html('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
         }, this)

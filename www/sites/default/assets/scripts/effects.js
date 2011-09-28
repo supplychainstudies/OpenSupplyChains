@@ -17,19 +17,23 @@ $(document).ready(function(){
 
     /* unsupported browser detection */
     if (($.browser.msie)) {
-        $("<div />", {
-            class : 'status-messages'
-        }).appendTo('.messages');
-        $("<div />", {
-            class : 'status-message browser',
-            html  : " <h1>Dear IE user,</h1>"
-                  + " You're currently using a browser that is unsupported by Sourcemap." 
-                  + " While we won't stop you from experimenting, we highly recommend using"
-                  + " a recent version of "
-                  + " <a href=\"http://www.google.com/chrome\">Chrome</a>,"
-                  + " <a href=\"http://www.apple.com/safari/\">Safari</a>, or "
-                  + " <a href=\"http://www.mozilla.org/en-US/firefox/new/\">Firefox</a>."
-        }).appendTo('.status-messages');
+        
+        //document.getElementById("status-message").className = "status-message browser";
+        $(".messages").html(
+            "<div class=\"status-message\" "
+            +" style=\"padding:8px 0 10px 20px;background:#3884ab;line-height:1.5em;\">"
+            +"<div class=\"browser\" "
+            +" style=\"font-size:20px;color:#999;padding:20px 20px 40px 20px;background:#eee;\"></div></div>"        
+        );
+        $(".browser").html(
+            " <h1><font color=\"#333\">Dear IE user,</font></h1>"
+          + " You're currently using a browser that is unsupported by Sourcemap." 
+          + " While we won't stop you from experimenting, we highly recommend using"
+          + " a recent version of "
+          + " <a href=\"http://www.google.com/chrome\">Chrome</a>,"
+          + " <a href=\"http://www.apple.com/safari/\">Safari</a>, or "
+          + " <a href=\"http://www.mozilla.org/en-US/firefox/new/\">Firefox</a>."
+        );
     }
 
     /* status message fade */

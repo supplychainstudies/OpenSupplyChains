@@ -244,7 +244,11 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 Sourcemap.Map.Base.prototype.initDialog = function() {   
     // set up dialog
     if(!this.dialog) {
+        if(!$.browser.msie){ 
         this.dialog = $('<div id="dialog"></div>');
+        }else{
+            this.dialog = $('<div id="dialog" style="background:white"></div>');
+        }        
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
     $(this.dialog).removeClass("called-out");

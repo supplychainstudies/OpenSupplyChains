@@ -141,7 +141,7 @@ if(!defined('SUPPRESS_DEFAULT_ROUTES')) {
         ));
 }
 
-isset(Kohana::config('sourcemap')->base_url) ? $base_url = isset(Kohana::config('sourcemap')->base_url) : $base_url = NULL;
+isset(Kohana::config('sourcemap')->base_url) ? $base_url = Kohana::config('sourcemap')->base_url : $base_url = NULL;
 
 $styles = array(
     'assets/styles/general.less',
@@ -193,7 +193,6 @@ $header_style
 <body>
 <div id="wrapper">
     $header
-    <div class="push"></div>
     <h1>You've Strayed into Uncharted Waters</h1>
     <div class="article-content">
         <div class="article-img">

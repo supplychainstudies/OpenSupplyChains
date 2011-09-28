@@ -138,7 +138,6 @@ EREIAM;
     
 
     public function action_reset() {
-
         $this->template = View::factory('auth/reset_password');
 
         $current_user = Auth::instance()->get_user();
@@ -150,7 +149,6 @@ EREIAM;
             ->filter(true, 'trim');
 
         if(strtolower(Request::$method) === 'post') {
- 
             // make sure the user has a valid reset ticket or is logged in.
             $tregex = '/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/';
             if(!$current_user && isset($_POST['t']) && preg_match($tregex, $_POST['t'])) {
@@ -163,6 +161,7 @@ EREIAM;
                         $tgth = md5(sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password));
                         if($tgth === $h) {
                             $current_user = $user;
+							$this->template->current_user = $user->username;
                             if($post->check()) {
                                 $user->password = $post['new'];
                                 $user->save();
@@ -206,7 +205,10 @@ EREIAM;
                 }
             }
 
-        } else {
+        } else { 
+			if($current_user) {
+            	$this->template->current_user = $current_user->username;
+			}
             $get = Validate::factory($_GET);
             $get->rule('t', 'not_empty')
                 ->rule('t', 'regex', array('/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/'));

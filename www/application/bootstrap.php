@@ -111,8 +111,6 @@ Kohana::modules(array(
 
 Kohana::add_include_path(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/');
 
-
-    
 if(is_file(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/bootstrap'.EXT)) {
     require SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/bootstrap'.EXT;
 }
@@ -143,7 +141,8 @@ if(!defined('SUPPRESS_DEFAULT_ROUTES')) {
         ));
 }
 
-$base_url =  URL::base(true, true);
+isset(Kohana::config('sourcemap')->base_url) ? $base_url = isset(Kohana::config('sourcemap')->base_url) : $base_url = NULL;
+
 $styles = array(
     'assets/styles/general.less',
     'sites/default/assets/styles/reset.css'

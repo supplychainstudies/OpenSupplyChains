@@ -253,8 +253,10 @@ Sourcemap.loadSupplychain = function(remote_id, callback) {
 
 Sourcemap.saveSupplychain = function(supplychain, o) {
     window.onbeforeunload = function() {
-      window.onbeforeunload = null;	
-      return "Your map is being saved, are you sure you want to navigate away?";
+      window.onbeforeunload = null;
+      if(!($.browser.msie)){
+          return "Your map is being saved, are you sure you want to navigate away?";
+      }
     };
     var o = o || {};
     var scid = o.supplychain_id ? o.supplychain_id : null;
@@ -269,7 +271,8 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
         "url": 'services/supplychains/'+(scid ? scid : ''),
         "type": scid ? 'PUT' : 'POST', // put to update, post to create
         "contentType": 'json', "data": payload,
-        "dataType": "json", "success": $.proxy(function(data) {
+        "dataType": "json",        
+        "success": $.proxy(function(data) {
     		window.onbeforeunload = null;
             var new_uri = null; // indicates 'created'
             if(data && data.created) {

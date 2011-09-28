@@ -119,7 +119,11 @@ Sourcemap.Map.Editor.prototype.init = function() {
     		    var cb = function(p, tx, th) {
     				if(this.dialog) {
     					if(!this.dialog) {
+                            if(!$.browser.msie){ 
     				        this.dialog = $('<div id="dialog"></div>');
+                            }else{
+                                this.dialog = $('<div id="dialog" style="background:white"></div>');
+                            }
     				        $(this.map.map.div).append(this.dialog);
     				    } else this.hideDialog();
 

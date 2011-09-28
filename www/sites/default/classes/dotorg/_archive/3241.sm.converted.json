@@ -1,0 +1,2 @@
+
+ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]

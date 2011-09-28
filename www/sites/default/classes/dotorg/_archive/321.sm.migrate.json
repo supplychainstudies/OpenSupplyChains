@@ -1,0 +1,28 @@
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Undefined offset:  0</p>
+<p>Filename: models/objectsmodel.php</p>
+<p>Line Number: 616</p>
+
+</div><div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: models/objectsmodel.php</p>
+<p>Line Number: 618</p>
+
+</div><div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: models/objectsmodel.php</p>
+<p>Line Number: 619</p>
+
+</div>{"321":{"oid":"321","type":"food","flag":"","creator":"0","name":"Breakfast","upc":"","imagelink":"","description":"From Wikipedia","slug":"Breakfast","category":"","weight":"0","emissions":"0","embodied":"0","transport":"0","process":null,"endoflife":null,"shipping":"0","lifetime":null,"usagetype":"","usageenergy":null,"usageemissions":null,"timecreated":"2011-01-21 13:54:14","timemodified":"2011-01-21 13:54:14","visibility":"public","showfootprint":"on","showembodied":"on","showtransport":"on","showprocess":"on","showendoflife":"on","showlastleg":"on","showuse":"on","showstats":"on","stops":{"origin":{"related_to":"321","part_or_object":"o","notes":null,"placename":"Belmont, MA, USA","id":"9829","category":"1","lat":"42.3959296","lon":"-71.1786654","name":"origin","hops":{"incoming":[],"outgoing":[]}}},"user":{"name":null,"id":null}}}

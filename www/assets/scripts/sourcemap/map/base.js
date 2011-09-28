@@ -185,7 +185,12 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     this.banner_div = $(this.map.map.div).find('#banner').length ? 
         $(this.map.map.div).find('#banner') : false;
     if(!this.banner_div) {
+        if(!$.browser.msie){
         this.banner_div = $('<div id="banner"></div>');
+        }
+        else{
+            this.banner_div = $('<div id="banner" style="background:#f0f0f0"></div>');
+        }
         $(this.map.map.div).append(this.banner_div);
     }
     if(!sc) {
@@ -239,7 +244,11 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 Sourcemap.Map.Base.prototype.initDialog = function() {   
     // set up dialog
     if(!this.dialog) {
+        if(!$.browser.msie){ 
         this.dialog = $('<div id="dialog"></div>');
+        }else{
+            this.dialog = $('<div id="dialog" style="background:white"></div>');
+        }        
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
     $(this.dialog).removeClass("called-out");
@@ -679,7 +688,8 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
                 if ($(legend).length == 0) {
                     var legend = $('<div id="sourcemap-legend"></div>');
                     legend.addClass(viz_nm);
-                    console.log(this)
+                    // This actually crash IE
+                    //console.log(this)
                     if (this.map.map.baseLayer.name)
                         legend.addClass(this.map.map.baseLayer.name);
                     $(this.map.map.div).append(legend);

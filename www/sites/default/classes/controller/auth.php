@@ -17,7 +17,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public $template = 'auth';
 
     public function action_index() {
-
+        Fire::log('In Auth');
         $this->layout->page_title = Auth::instance()->get_user() ? 'Signed in to Sourcemap' : 'Sign in to Sourcemap';
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
@@ -67,7 +67,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
 
     public function action_forgot() {
-   
+        Fire::log('In action forgot');
         $this->template = View::factory('auth/forgot_password');
         $this->layout->page_title = "Forgot password on Sourcemap";
         $post = Validate::factory($_POST);
@@ -75,7 +75,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             ->rule('email', 'validate::email')
             ->filter(true, 'trim');
        
-        if(strtolower(Request::$method) === 'post' && $post->check()){
+        if(strtolower(Request::$method) === 'post' && $post->check()){ 
+			Fire::log('Made it inside validate for forgot');
             $post = (object)$post->as_array();
             $email = $post->email;
             $user = ORM::factory('user')->where('email', '=', $email)->find();
@@ -86,14 +87,16 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                 $em = strrev(base64_encode($user->email));
                 $t = sprintf('%s-%s-%s', $un, $h, $em);
                 if($this->email_reset_ticket($user->username, $user->email, $t)) {
-                    $this->template->email_sent = true;
+                    $this->template->email_sent = true; 
+					Fire::log('Called email function');
                 }
                 $this->request->redirect('auth');
             } else {
                 Message::instance()->set('We don\'t recognize that address.');
                 $this->request->redirect('auth/forgot');
             }
-        } else {
+        } else {  
+			Fire::log('In empty else'); 
             // pass
         }
     }

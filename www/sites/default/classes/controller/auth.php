@@ -128,7 +128,8 @@ EREIAM;
         $sent = false;
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);
-            $sent = mail($email, $subject, $body, $addlheaders);
+            $sent = mail($email, $subject, $body, $addlheaders); 
+			Fire::log("Mail should be sent.  Return Value: " . $sent );
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
             Message::instance()->set('Sorry, could not send an email.', Message::ERROR);

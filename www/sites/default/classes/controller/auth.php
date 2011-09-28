@@ -131,7 +131,7 @@ EREIAM;
             $sent = mail($email, $subject, $body, $addlheaders);
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
-            Message::instance()->set('Sorry, could not send an email.');
+            Message::instance()->set('Sorry, could not send an email.', Message::ERROR);
         }
         return $sent;
     }
@@ -207,22 +207,21 @@ EREIAM;
             }
 
         } else {
-            
             $get = Validate::factory($_GET);
             $get->rule('t', 'not_empty')
                 ->rule('t', 'regex', array('/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/'));
 
-            if(!$current_user && isset($_GET['t'])) {
-                if($get->check()) {
+            if(!$current_user && isset($_GET['t'])) {  
+                if($get->check()) {       
                     list($un, $h, $em) = explode('-', $get['t']);
                     $un = base64_decode(strrev($un));
-                    $em = base64_decode(strrev($em));
+                    $em = base64_decode(strrev($em));  
                     $user = ORM::factory('user')->where('email', '=', $em)->find();
                     if($user->loaded()) {
-                        if($user->username == $un) {
+                        if($user->username == $un) {    
                             $tgth = md5(sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password));
-                            if($tgth === $h) {
-                                $current_user = $user;
+                            if($tgth === $h) { 
+                                $this->template->current_user = $user->username;
                                 $this->template->ticket = $get['t'];
                             } else {
                                 Message::instance()->set('That token has expired.');

@@ -67,7 +67,6 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
 
     public function action_forgot() {
-        Fire::log('In action forgot');
         $this->template = View::factory('auth/forgot_password');
         $this->layout->page_title = "Forgot password on Sourcemap";
         $post = Validate::factory($_POST);
@@ -104,9 +103,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public function email_reset_ticket($username, $email, $ticket) {
         //$email_vars = array('username' => $username, 'password' => $temp_password); 
 		$mail = new Mail;
-		// $mail_object = $mail->factory('sendmail', array("sendmail_path" => '/usr/sbin/sendmail', "sendmail_args" => "-t -i")); 
-		$mail_object = $mail->factory('smtp', array()); 
-		Fire::log('In email Function');   
+		$mail_object = $mail->factory('sendmail', array("sendmail_path" => '/usr/sbin/sendmail', "sendmail_args" => "-i")); 
+		// $mail_object = $mail->factory('smtp', array()); 
 		$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Password Reset Request on Sourcemap.com');
 
         $body = "\n";
@@ -134,7 +132,6 @@ EREIAM;
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);
             $sent = $mail_object->send($email, $headers, $body); 
-			Fire::log("Mail should be sent.  Return Value: " . $sent );
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
             Message::instance()->set('Sorry, could not send an email.', Message::ERROR);

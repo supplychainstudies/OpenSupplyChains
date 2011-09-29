@@ -112,20 +112,14 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         $body .= "Dear {$username},\n";
         $body .= <<<EREIAM
 
-If you asked us to reset the password associated with your user account on Sourcemap.com, please visit the URL below:
-
+If you would like to reset the password associated with your account on Sourcemap, please click the link below:
 
 EREIAM;
         $body .= URL::site('auth/reset?t='.$ticket, true);
         $body .= <<<EREIAM
+If you believe that this email was sent in error, please email support@sourcemap.com
 
-
-If you believe that someone else made this request, please contact support@sourcemap.com as soon as possible.
-
-Thank you for using Sourcemap!
-
-Sincerely,
-The Sourcemap Team
+-The Sourcemap Team
 EREIAM;
 
         $sent = false; 

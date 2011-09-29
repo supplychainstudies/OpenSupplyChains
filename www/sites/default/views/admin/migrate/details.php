@@ -14,7 +14,7 @@
 <?php if(isset($uid) && $uid): ?>
     <?php if(isset($oids) && $oids): ?>
         <fieldset><legend>Migrate User Maps</legend>
-        <form name="migrate_user" action="admin/migrate/" method="post">
+        <form name="migrate_user" action="admin/migrate" method="post">
             <h4>Sourcemap.ORG User ID: <?= HTML::chars($details[$oids[0]]->creator) ?></h4>
                 <?= Form::input('old_user_id', $details[$oids[0]]->creator, array('type' => 'hidden')) ?>
             <label for="new_user_id">Sourcemap.COM User ID:</label><?= Form::input('new_user_id') ?>

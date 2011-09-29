@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"hershey","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"hershey","legacy:creator":"9702","legacy:oid":"3757","sm:ui:co2e":1,"sm:ui:weight":1,"description":"Created on May 24, 2010 by jennibear on Sourcemap.org.","sm:migrated:time":1317317326},"other_perms":1,"stops":[{"geometry":"POINT(0.000000 -0.000000)","attributes":{"name":"hershey","1":"","address":"","category":"1","title":"hershey","qty":"0","co2e":0,"weight":"0","unit":"kg","description":""},"local_stop_id":"1510"}],"hops":[]}}

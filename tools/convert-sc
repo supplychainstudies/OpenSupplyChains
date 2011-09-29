@@ -125,6 +125,7 @@ function get_old_sc_stops($oldsc) {
         $newstop->local_stop_id = $oldst->id;
         $newstops[$oldst->id] = $newstop;
     }
+    if(!isset($olds->parts)) $oldsc->parts = array();
     foreach($oldsc->parts as $pi => $oldpart) {
         foreach($oldpart->stops as $oldstname => $oldst) {
             $newstop = new stdClass();
@@ -185,6 +186,7 @@ function get_old_sc_hops($oldsc, $newstops) { // outbound hops.
             $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq, $oldsc->weight);
         }
     }
+    if(!isset($oldsc->parts)) $oldsc->parts = array();
     foreach($oldsc->parts as $pi => $oldpart) {
         foreach($oldpart->stops as $i => $oldstop) {
             foreach($oldstop->hops->outgoing as $hi => $oldhop) {

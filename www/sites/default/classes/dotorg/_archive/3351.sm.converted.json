@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"Jeans","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"jeans-1","legacy:creator":"9257","legacy:oid":"3351","description":"Created on March 10, 2010 by Geo on Sourcemap.org:\n\ndesigner jeans","sm:migrated:time":1317317284},"other_perms":1,"stops":[{"geometry":"POINT(246433.411424 5816903.713427)","attributes":{"name":"Jeans","1":"France","address":"France","category":"1","title":"Jeans","qty":"0","co2e":0,"weight":"0","unit":"kg","description":"designer jeans"},"local_stop_id":"1031"}],"hops":[]}}

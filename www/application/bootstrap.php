@@ -119,7 +119,9 @@ if(is_file(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/bootstrap'.EXT)) {
 if(is_dir(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/config/')) {
     $site_config_dir = SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/config/';
     Kohana::$config->attach(new Kohana_Config_File($site_config_dir));
-}
+} 
+
+require_once "Mail.php"; 
 
 Sourcemap::init();
 

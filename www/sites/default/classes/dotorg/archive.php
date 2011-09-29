@@ -43,6 +43,9 @@ class Dotorg_Archive {
         foreach($fl as $i => $f) {
             $ob = json_decode(file_get_contents($f));
             $oid = null;
+            if(!$ob) {
+                continue;
+            }
             foreach($ob as $oid => $obj) {
                 break;
             }

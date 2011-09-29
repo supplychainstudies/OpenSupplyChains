@@ -128,6 +128,7 @@ The Sourcemap Team
 EREIAM;
 
         $addlheaders = "From: The Sourcemap Team <noreply@sourcemap.com>\r\n";
+		$addlheaders .= "X-Time-Sent: " . date('l jS \of F Y h:i:s A') . "\r\n";
 
         $sent = false;
         try {

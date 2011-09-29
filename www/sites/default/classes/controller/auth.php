@@ -103,10 +103,11 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
     public function email_reset_ticket($username, $email, $ticket) {
         //$email_vars = array('username' => $username, 'password' => $temp_password); 
-		Fire::log('In email Function'); 
-        $to = $email;
+		$mail = new Mail;
+		$mail_object = $mail->factory('sendmail', array("sendmail_path" => '/usr/sbin/sendmail', "sendmail_args" => "-t -i"));
+		Fire::log('In email Function');   
+		$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Password Reset Request on Sourcemap.com');
 
-        $subject = 'Password Reset Request on Sourcemap.com';
         $body = "\n";
         $body .= "Dear {$username},\n";
         $body .= <<<EREIAM
@@ -127,13 +128,11 @@ Sincerely,
 The Sourcemap Team
 EREIAM;
 
-        $addlheaders = "From: The Sourcemap Team <noreply@sourcemap.com>\r\n";
-		$addlheaders .= "X-Time-Sent: " . date('l jS \of F Y h:i:s A') . "\r\n";
-
-        $sent = false;
+        $sent = false; 
+		
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);
-            $sent = mail($email, $subject, $body, $addlheaders); 
+            $sent = $mail_object->send($email, $headers, $body); 
 			Fire::log("Mail should be sent.  Return Value: " . $sent );
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {

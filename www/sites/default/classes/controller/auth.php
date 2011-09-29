@@ -104,7 +104,8 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     public function email_reset_ticket($username, $email, $ticket) {
         //$email_vars = array('username' => $username, 'password' => $temp_password); 
 		$mail = new Mail;
-		$mail_object = $mail->factory('sendmail', array("sendmail_path" => '/usr/sbin/sendmail', "sendmail_args" => "-t -i"));
+		// $mail_object = $mail->factory('sendmail', array("sendmail_path" => '/usr/sbin/sendmail', "sendmail_args" => "-t -i")); 
+		$mail_object = $mail->factory('smtp', array()); 
 		Fire::log('In email Function');   
 		$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Password Reset Request on Sourcemap.com');
 

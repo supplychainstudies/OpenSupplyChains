@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"Palm Oil","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"palm-oil-1","legacy:creator":"10378","legacy:oid":"3973","description":"Created on August 16, 2010 by curranm on Sourcemap.org.","sm:migrated:time":1317317348},"other_perms":1,"stops":[{"geometry":"POINT(0.000000 -0.000000)","attributes":{"name":"Palm Oil","1":"","address":"","category":"1","title":"Palm Oil","qty":"0","co2e":0,"weight":"0","unit":"kg","description":""},"local_stop_id":"1748"}],"hops":[]}}

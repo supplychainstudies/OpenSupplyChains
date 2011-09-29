@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"rillette","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"rillette","legacy:creator":"9990","legacy:oid":"3858","sm:ui:co2e":1,"sm:ui:weight":1,"description":"Created on June 29, 2010 by SAULAY on Sourcemap.org.","sm:migrated:time":1317317337},"other_perms":1,"stops":[{"geometry":"POINT(246433.411424 5816903.713427)","attributes":{"name":"rillette","1":"France","address":"France","category":"1","title":"rillette","qty":"0","co2e":0,"weight":"0","unit":"kg","description":""},"local_stop_id":"1613"}],"hops":[]}}

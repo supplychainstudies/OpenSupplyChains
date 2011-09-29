@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"Alluminum","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"alluminum","legacy:creator":"9081","legacy:oid":"3105","sm:ui:co2e":1,"sm:ui:weight":1,"description":"Created on March 4, 2010 by farah on Sourcemap.org.","sm:migrated:time":1317317258},"other_perms":1,"stops":[{"geometry":"POINT(11598978.537043 4281602.659627)","attributes":{"name":"Alluminum","1":"China","address":"China","category":"1","title":"Alluminum","qty":"0","co2e":0,"weight":"0","unit":"kg","description":""},"local_stop_id":"831"}],"hops":[]}}

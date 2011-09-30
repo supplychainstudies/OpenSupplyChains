@@ -253,8 +253,10 @@ Sourcemap.loadSupplychain = function(remote_id, callback) {
 
 Sourcemap.saveSupplychain = function(supplychain, o) {
     window.onbeforeunload = function() {
-      window.onbeforeunload = null;	
-      return "Your map is being saved, are you sure you want to navigate away?";
+      window.onbeforeunload = null;
+      if(!($.browser.msie)){
+          return "Your map is being saved, are you sure you want to navigate away?";
+      }
     };
     var o = o || {};
     var scid = o.supplychain_id ? o.supplychain_id : null;
@@ -264,11 +266,13 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
     var payload = null;
     if(typeof supplychain === "string") payload = supplychain;
     else payload = JSON.stringify({"supplychain": supplychain});
+    
     $.ajax({
         "url": 'services/supplychains/'+(scid ? scid : ''),
         "type": scid ? 'PUT' : 'POST', // put to update, post to create
-        "contentType": 'application/json', "data": payload,
-        "dataType": "json", "success": $.proxy(function(data) {
+        "contentType": 'json', "data": payload,
+        "dataType": "json",        
+        "success": $.proxy(function(data) {
     		window.onbeforeunload = null;
             var new_uri = null; // indicates 'created'
             if(data && data.created) {
@@ -277,6 +281,7 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
             } else if(data && data.success) {
                 var scid = this.supplychain_id;
             }
+            
             if(this.success && ((typeof this.success) === "function")) {
                 this.success(this.supplychain, scid, new_uri);
             }
@@ -297,6 +302,13 @@ Sourcemap.saveSupplychain = function(supplychain, o) {
     });
     return;
 }
+
+/*
+ * Sourcemap.humanDate
+ *  
+ * now  : Current local time millisecond
+ * then : Previous time in millisecond
+ */
 
 Sourcemap.humanDate = function(then, now) {
     var now = Math.floor((now ? now.getTime() : (new Date()).getTime())/1000);
@@ -480,7 +492,8 @@ Sourcemap.Color.graduate = function(colors, ticks) {
     return colors;
 }
 
-Sourcemap.R = 6371 //km
+
+Sourcemap.R = 6371 //km = 3959 miles
 
 Sourcemap.radians = function(deg) {
     return deg*Math.PI/180;
@@ -498,7 +511,7 @@ Sourcemap.dms2decdeg = function(d, m, s) {
 }
 
 Sourcemap.haversine = function(pt1, pt2) {
-    // Calculate great circle distance between points on a spheriod.
+    // Calculate great circle distance between points on a spheriod
     var R = Sourcemap.R;
     var lat1 = pt1.y;
     var lon1 = pt1.x;
@@ -627,7 +640,7 @@ Sourcemap.Units.to_base_unit = function(value, unit) {
     return base;
 }
 
-Sourcemap.Units.scale_unit_value = function(value, unit, precision) {
+Sourcemap.Units.scale_unit_value = function(value, unit, precision) {       //For showing two significant figures and correct unit
     if(isNaN(value)) return 0;
     var precision = isNaN(parseInt(precision)) ? 2 : parseInt(precision);
     var base = Sourcemap.Units.to_base_unit(value, unit);

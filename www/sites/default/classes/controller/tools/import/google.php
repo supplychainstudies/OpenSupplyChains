@@ -70,7 +70,7 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             );
         } else {
             Message::instance()->set('Invalid OAuth token or identifier. Try again.');
-            $this->redirect('/tools/import/google/');
+            $this->request->redirect('/tools/import/google/');
         }
         $oauth = Google_Oauth::factory(Google_Oauth::SPREADSHEETS);
         $acc_token = $oauth->get_acc_token($auth_tok);
@@ -102,6 +102,10 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             Message::instance()->set('Spreadsheet key and worksheet id required.');
             $this->request->redirect('/tools/import/google/list');
         }
+        if(!$_POST['stops-wsid']) {
+            Message::instance()->set('Worksheet for stops should not be empty.');
+            $this->request->redirect('/tools/import/google/list');
+        }
         $csv = Sourcemap_Csv::arr2csv(
             Google_Spreadsheets::get_worksheet_cells(
                 $acc_token, $_POST['k'], $_POST['stops-wsid']
@@ -114,7 +118,14 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
                 )
             );
         } else $hops_csv = null;
-        $new_sc = Sourcemap_Import_Csv::csv2sc($csv, $hops_csv, array('headers' => true));
+        try{
+            $new_sc = Sourcemap_Import_Csv::csv2sc($csv, $hops_csv, array('headers' => true));
+        }
+        catch(Exception $e){
+            //die($e);
+            Message::instance()->set('Problem with import: '.$e->getMessage());
+            $this->request->redirect('tools/import/google/list');
+        }
         if(isset($_POST['replace-into']) && $_POST['replace-into']) {
             $exists = ORM::factory('supplychain')->where('id', '=', $_POST['replace-into'])->find();
             if($exists && $exists->user_id == Auth::instance()->get_user()->id) {
@@ -136,7 +147,15 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             $new_sc->attributes = (object)array('title' => $title ? $title : 'Imported Sourcemap');
             $scid = ORM::factory('supplychain')->save_raw_supplychain($new_sc, $replace_into);
             $new_sc = ORM::factory('supplychain', $scid);
-            $new_sc->other_perms |= Sourcemap::READ;
+            
+            //$new_sc->other_perms |= Sourcemap::READ;
+            $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
+            $new_sc->other_perms = 0;
+            if($public)
+                $new_sc->other_perms |= $public;
+            else
+                $new_sc->other_perms &= ~Sourcemap::READ;
+
             $new_sc->save();
             Message::instance()->set('Your spreadsheet was imported.', Message::SUCCESS);
             $this->request->redirect('view/'.$scid);

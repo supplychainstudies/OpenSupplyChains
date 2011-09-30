@@ -35,6 +35,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water"],
     "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"},
+    "legend": true,
     "viz_attr_map": {
         "weight": function(st) {
             var val = 0;
@@ -88,7 +89,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
       	if(this.options.position == '0|0|0') {
     		if(sc.stops.length) {
-                this.map.map.zoomToExtent(this.map.getFeaturesExtent(), true);
+                this.map.zoomToExtent(this.map.getFeaturesExtent(), true);
     		} else {
     			this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
     		}
@@ -118,7 +119,17 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
+    var firstLoad = true;
     Sourcemap.listen('map:supplychain_mapped', $.proxy(function(evt, map, sc) {
+        
+        if (firstLoad){
+            // zoomToExtent upon first load.  this needs to happen here, since 
+            // we don't know the geometry of the hops until they are mapped.
+            this.map.zoomToExtent(this.map.getFeaturesExtent(), true);
+
+            firstLoad = false;
+        }
+
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
         // TODO: do calculations here
@@ -167,15 +178,20 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
+    
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     this.banner_div = $(this.map.map.div).find('#banner').length ? 
         $(this.map.map.div).find('#banner') : false;
     if(!this.banner_div) {
+        if(!$.browser.msie){
         this.banner_div = $('<div id="banner"></div>');
+        }
+        else{
+            this.banner_div = $('<div id="banner" style="background:#f0f0f0"></div>');
+        }
         $(this.map.map.div).append(this.banner_div);
-        $(this.map.map.div).append('<div class="map-status"></div>');
     }
     if(!sc) {
         // TODO: this is bad, but it's worst case
@@ -190,6 +206,12 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find('.banner-share-link').click(function(){
             $.scrollTo('#sidebar', 600);
         });
+        $(this.banner_div).find('.banner-edit-link').click(function(){
+            window.location.replace(window.location.pathname +"?edit");
+        });
+        $(this.banner_div).find('.banner-preview-link').click(function(){
+            window.location.replace(window.location.pathname);
+        });
         $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
             this.favorite();
         }, this));
@@ -197,7 +219,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             "success": $.proxy(function(resp) {
                for(var k in resp) {
                    if(resp[k].id == sc.remote_id) {
-                       $(".banner-favorite-link").parent().addClass("marked");
+                       $("#banner-favorite").addClass("marked");
                    }
                }                   
             }, this),
@@ -222,7 +244,11 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 Sourcemap.Map.Base.prototype.initDialog = function() {   
     // set up dialog
     if(!this.dialog) {
+        if(!$.browser.msie){ 
         this.dialog = $('<div id="dialog"></div>');
+        }else{
+            this.dialog = $('<div id="dialog" style="background:white"></div>');
+        }        
         $(this.map.map.div).append(this.dialog);
     } else $(this.dialog).empty();
     $(this.dialog).removeClass("called-out");
@@ -237,14 +263,11 @@ Sourcemap.Map.Base.prototype.loadExternals = function(sc) {
 			var geofeeds = [sc.attributes["sm:ext:geojson"]];
 		} else { var geofeeds = sc.attributes["sm:ext:geojson"]; }
 	
-		console.log(this.map.options.polygons);
-		console.log(this.map.options);
 		for(var i in geofeeds) {
 			var geojson = new OpenLayers.Layer.GML(geofeeds[i], geofeeds[i], {
 		            format: OpenLayers.Format.GeoJSON, 
 		            projection: new OpenLayers.Projection("EPSG:4326")
 			});
-			console.log(geojson);		 
 		}
 		this.map.map.addLayers([geojson]);
 	}
@@ -490,16 +513,20 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
     }
     if(tileset == "cloudmade") {
     	$.extend(true, this.map.options, cloudmade); 
-    	$("#watermark").css("display","block"); 				
     }
     else if(tileset == "satellite") { 
     	$.extend(true, this.map.options, satellite); 
-    	$("#watermark").css("display","none"); 
     } 
     else if(tileset == "terrain") { 
     	$.extend(true, this.map.options, terrain); 
-    	$("#watermark").css("display","none"); 
-    }	
+    }
+
+    // handle overlays upon color scheme changes
+    if(this.options.watermark){
+        $("#watermark").css("display","block");
+        $("#watermark").removeClass("cloudmade satellite terrain").addClass(tileset);
+    }
+
     this.map.setBaseLayer(tileset);
     
 }
@@ -535,80 +562,99 @@ Sourcemap.Map.Base.prototype.decorateHopFeatures = function(dec_fn) {
     return this.decorateFeatures(dec_fn, h_ftrs);
 }
 
-Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, vtot, smin, smax, active_color) {
+Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, vtot, smin, smax, active_color) {   //Sets size/color of stops relative to impact (e.g. CO2 output etc..) 
+	//vmin is smallest impact on map
+	//vmax is largest impact on map
+	//vtot is sum of all impacts on map
+	//smin is minimum stop size (in area)
+	//smax is maximum stop size  
     var active_color = active_color || this.options.attr_missing_color;
     var smin = smin == undefined ? this.map.options.min_stop_size : parseInt(smin);
     if(!smin) smin = this.map.options.min_stop_size;
     var smax = smax == undefined ? this.map.options.max_stop_size : parseInt(smax);
 
     if(!smax) smax = this.map.options.max_stop_size;
-    var dec_fn = $.proxy(function(f, mb) {
-        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
-        if(f.cluster) {
-            var val = 0;
-            for(var c in f.cluster) {
-                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
-                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
-            }
-            if(!isNaN(val)) {
-                // scale
-                var voff = val - this.vmin;
-                var vrange = this.vmax - this.vmin;
-                var sval = this.smin;
-                sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
-                f.attributes.size = Math.max(sval, smin);
-                f.attributes.size = Math.max(sval, smin);
-                var fsize = 18;
-                f.attributes.fsize = fsize+"px";   
-                f.attributes.fcolor = this.color;   
-                f.attributes.yoffset = -1*(f.attributes.size+fsize);
-                var unit = "kg";
-                if(attr_nm === "water") { unit = "L"; }                
-                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
-                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
-                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
-            } 
-        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
-            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
-            else val = f.attributes[attr_nm];
-            val = parseFloat(val);
-            if(!isNaN(val)) {
-                // scale
-                val = Math.max(val, this.vmin);
-                val = Math.min(val, this.vmax);
-                var voff = val - this.vmin;
-                var vrange = this.vmax - this.vmin;
-                var sval = this.smin;
-                //if(vrange)
-                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
-                sval = Math.sqrt((val/this.vmax)*(Math.pow(this.smax,2)*Math.PI));
-                f.attributes.size = Math.max(sval, smin);
-                var fsize = 18;
-                f.attributes.fsize = fsize+"px";     
-                f.attributes.fcolor = this.color
-                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
+    var dec_fn = $.proxy(
+		function(f, mb) {            
+				//The val variable should be the polution value for this stop
+		        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
+		        if(f.cluster) {    //Why we divide this into two segments is unclear
+		            var val = 0;
+		            for(var c in f.cluster) {
+		                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
+		                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
+		            }
+		            if(!isNaN(val)) {
+		                // scale  
+						fraction = val/this.vtot;
+		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
+		                var fsize = 18;
+		                f.attributes.fsize = fsize+"px";     
+		                f.attributes.fcolor = this.color
+		                f.attributes.yoffset = -1*(f.attributes.size+fsize);
+		                var unit = "kg";
+		                if(attr_nm === "water") { unit = "L"; }                
+		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
+		                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
+		                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
+		            } 
+		        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
+		            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
+		            else val = f.attributes[attr_nm];
+		            val = parseFloat(val);
+		            if(!isNaN(val)) { 
+		                // scale
+		                // val = Math.max(val, this.vmin);
+		                // val = Math.min(val, this.vmax); 
+		                // var voff = val - this.vmin;
+		                // var vrange = this.vmax - this.vmin;
+		                // var sval = this.smin;
+		                //if(vrange)
+		                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+						fraction = val/this.vtot;
+		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
+		                var fsize = 18;
+		                f.attributes.fsize = fsize+"px";     
+		                f.attributes.fcolor = this.color
+		                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
                 
-                var unit = "kg";
-                if(attr_nm === "water") { unit = "L"; }
-                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
-                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
-    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
-    				f.attributes.label = "";
-    			} else {
-    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
-    			}	              
-            } 
-        } 
-        f.attributes.size = f.attributes.size || smin;
-        f.attributes.yoffset = f.attributes.yoffset || 0;
-        f.attributes.label = f.attributes.label || "";
-        f.attributes.color = this.color
-        f.attributes.scolor = this.color
-    }, {"vmin": vmin, "vmax": vmax, "smin": smin, "smax": smax, "attr_nm": attr_nm, "basemap": this, "color": active_color});
+		                var unit = "kg";
+		                if(attr_nm === "water") { unit = "L"; }
+		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
+		                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
+		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
+		    				f.attributes.label = "";
+		    			} else {
+		    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
+		    			}	              
+		            } 
+		        } 
+		        f.attributes.size = f.attributes.size || smin;
+		        f.attributes.yoffset = f.attributes.yoffset || 0;
+		        f.attributes.label = f.attributes.label || "";
+		        f.attributes.color = this.color 
+		        f.attributes.scolor = this.color 
+		    }, 
+	{"vmin": vmin, "vmax": vmax, "vtot": vtot, "smin": smin, "smax": smax, "attr_nm": attr_nm, "basemap": this, "color": active_color});
     return this.decorateStopFeatures(dec_fn) && this.decorateHopFeatures(dec_fn);
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
+    if(this.visualization_mode){
+        if(this.visualization_mode != viz_nm) {
+            this.disableVisualization();
+            this.enableVisualization(viz_nm);
+        }
+        else{
+            this.disableVisualization();
+        }
+    }
+    else{
+        this.enableVisualization(viz_nm);
+    }
+}
+
+Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
     this.map.controls.select.unselectAll();
     
     switch(viz_nm) {
@@ -617,12 +663,6 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
         case "water":
         case "co2e":
         case "weight":
-            if(this.visualization_mode === viz_nm) {
-                this.toggleVisualization();
-                break;
-            } else {
-                this.toggleVisualization();
-            }
             this.visualization_mode = viz_nm;
             
             attr_nm = this.viz_attr_map[viz_nm];
@@ -641,21 +681,45 @@ Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
                     }
                 }
             }
-            this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, range.total, null, null, this.options.visualization_colors[viz_nm]);
             
+            // add legend
+            if (this.options.legend){
+                var legend = $(this.map.map.div).find('#sourcemap-legend');
+                if ($(legend).length == 0) {
+                    var legend = $('<div id="sourcemap-legend"></div>');
+                    legend.addClass(viz_nm);
+                    // This actually crash IE
+                    //console.log(this)
+                    if (this.map.map.baseLayer.name)
+                        legend.addClass(this.map.map.baseLayer.name);
+                    $(this.map.map.div).append(legend);
+                }
+            }
+
+            this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, range.total, null, null, this.options.visualization_colors[viz_nm]);
             this.map.dockToggleActive(viz_nm);
             this.map.redraw();
             break;
-        default:
-            this.visualization_mode = null;
-            for(var i=0; i<this.options.visualizations.length; i++) {
-                var viz = this.options.visualizations[i];
-                this.map.dockToggleInactive(viz);
-            }
-            for(var k in this.map.supplychains)
-                this.map.mapSupplychain(k);
-            break;
     }
+}
+
+Sourcemap.Map.Base.prototype.disableVisualization = function() {
+    this.visualization_mode = null;
+
+    // disable all dock items
+    for(var i=0; i<this.options.visualizations.length; i++) {
+        var viz = this.options.visualizations[i];
+        this.map.dockToggleInactive(viz);
+    }
+  
+    // remove legend 
+    if (this.options.legend){
+        var legend = $(this.map.map.div).find('#sourcemap-legend');
+        legend.remove();
+    }
+
+    for(var k in this.map.supplychains)
+        this.map.mapSupplychain(k);
 }
 
 Sourcemap.Map.Base.prototype.calcMetricRange = function(metric) {
@@ -738,11 +802,11 @@ Sourcemap.Map.Base.prototype.favorite = function() {
         var sc = this.map.supplychains[k]; break;
     }
 // check for delete
-     if($(".banner-favorite-link").parent().hasClass("marked")) {
+     if($("#banner-favorite").hasClass("marked")) {
          $.ajax({"url": 'services/favorites/'+sc.remote_id, "type": "DELETE",
                 "success": $.proxy(function(resp) {
                     if(resp) {
-                        $(".banner-favorite-link").parent().removeClass("marked");
+                        $("#banner-favorite").removeClass("marked");
                     } 
                 }, this)
             });
@@ -750,7 +814,7 @@ Sourcemap.Map.Base.prototype.favorite = function() {
          $.ajax({"url": 'services/favorites', "type": "POST",
                 "success": $.proxy(function(resp) {
                     if(resp) {
-                        $(".banner-favorite-link").parent().addClass("marked");
+                        $("#banner-favorite").addClass("marked");
                     } else { }
                 }, this),
                 "error": function(resp) {

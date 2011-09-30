@@ -30,7 +30,7 @@
     
         <div id="edit-description" class="sourcemap-form">        
             <%= $("<div></div>").append(
-                    $("<textarea></textarea>").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 140 characters.").html(this.ref.getAttr("description",""))
+                    $("<textarea></textarea>").attr("id","dialog-description").attr("maxlength","140").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 140 characters.").html(this.ref.getAttr("description",""))
                 ).html()
             %>
         </div>

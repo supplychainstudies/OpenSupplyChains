@@ -72,6 +72,14 @@ Route::set('admin/collection/id/action', 'admin/<controller>/<id>(/<action>)', a
     'action' => 'details'
 ));
 
+Route::set('admin/migrate/id/action', 'admin/migrate/<id>(/<action>)', array()
+)->defaults(array(
+    'directory' => 'admin', 
+    'controller' => 'migrate', 
+    'action' => 'details'
+));
+
+
 Route::set('admin/collection/action', 'admin/<controller>/<action>', array())
     ->defaults(array(
         'directory' => 'admin',

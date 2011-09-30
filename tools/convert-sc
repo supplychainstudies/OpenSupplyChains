@@ -1,0 +1,266 @@
+#!/usr/bin/env php
+<?php
+# Copyright (C) Sourcemap 2011
+# This program is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Affero General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License along with this
+# program. If not, see <http://www.gnu.org/licenses/>.
+
+// fetches and converts sourcemap data from
+// original sourcemap web services and generates
+// json suitable for posting to the new SM api
+if(php_sapi_name() !== 'cli') die('cli only');
+
+// sourcemap-specific bootstrap
+define('SOURCEMAP_DIR', getenv('SOURCEMAP_DIR') ? 
+    rtrim(getenv('SOURCEMAP_DIR'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR : 
+    realpath(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR
+);
+define('SUPPRESS_REQUEST', true);
+
+require_once(SOURCEMAP_DIR.'/www/index.php');
+
+// true means keep old key, false means use parent key (e.g. part, not stop)
+// a string means change to the given key
+// an array means copy to all the keys in the array
+$migrate_sc_attrs = array(
+    'name' => 'title',
+    'emissions' => 'emissions:total',
+    'weight' => true, //kg
+    'embodied' => array('legacy:emissions', 'emissions:embodied'),
+    'transport' => array('legacy:emissions', 'emissions:transport'),
+    'shipping' => array('legacy:distance', 'distance:transport'),
+    'slug' => 'alias:preferred',
+    'creator' => 'legacy:creator',
+    'oid' => 'legacy:oid'
+);
+
+$migrate_st_attrs = array(
+    'name' => false,
+    'title' => true,
+    'placename' => array(true, 'address'),
+    'category' => true,
+    'emissions' => 'emissions:total',
+    'rawemissions' => 'co2e',
+    'weight' => true, //kg
+    'embodied' => array('legacy:emissions', 'emissions:embodied'),
+    'transport' => array('legacy:emissions', 'emissions:transport'),
+    'shipping' => array('legacy:distance', 'distance:transport')
+);
+
+$banned_slugs = array(
+'Brasiliansk-k%C3%B6ttproduktion-1',
+'LAC',
+'LAC-1',
+'deezhuevosrancheros',
+'Mac-n-Cheese',
+'Cheeseburger',
+'Brasiliansk-k%C3%B6ttproduktion-3',
+'Brasiliansk-k%C3%B6ttproduktion-4',
+'Brasiliansk-k%C3%B6ttproduktion',
+'haiku-handbags',
+'maternity',
+'a-sample-test-map-1',
+'another-sample-test-map',
+'a-sample-test-map-3',
+'a-sample-test-map-4',
+'separate-sourcemap-name-lets-see-what-happens',
+'sandpit-carbon-footprint-test',
+'separate-sourcemap-name-lets-see-what-happens-2',
+'sandpit-carbon-footprint-test-4',
+'ldpe-plastic-wrap',
+'schlage-lock-company',
+'schlage-brass-key',
+'crest-natures-expressions-toothpaste',
+'konnect-mobile',
+'ken-webster',
+'ken-webster-1',
+'typical-silicon-solar-module',
+);
+foreach($banned_slugs as $i => $s) $banned_slugs[$i] = urldecode($s);
+
+function fetch_sc($url) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    $resp = curl_exec($ch);
+    $scdata = @json_decode($resp);
+    return $scdata;
+}
+
+function get_old_sc_attributes($oldsc) {
+    global $migrate_sc_attrs;
+    $mattrs = $migrate_sc_attrs;
+    $attrs = new stdClass();
+    foreach($mattrs as $oldkey => $mv) {
+        if(isset($oldsc->{$oldkey})) {
+            if($mv === true) {
+                $attrs->{$oldkey} = $oldsc->{$oldkey};
+            } elseif(is_array($mv)) {
+                foreach($mv as $mvi => $mvk) {
+                    $attrs->{$mvk} = $oldsc->{$oldkey};
+                }
+            } elseif(is_string($mv)) {
+                $attrs->{$mv} = $oldsc->{$oldkey};
+            }
+        }
+    }
+    return $attrs;
+}
+
+function get_old_sc_stops($oldsc) {
+    $newstops = array();
+    foreach($oldsc->stops as $oldstname => $oldst) {
+        $newstop = new stdClass();
+        $pt = new Sourcemap_Proj_Point($oldst->lon, $oldst->lat);
+        $pt = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $pt);
+        $newstop->geometry = Sourcemap_Wkt::write(Sourcemap_Wkt::POINT, $pt);
+        $newstop->attributes = get_old_pt_stop_attributes($oldsc, $oldst);
+        $newstop->local_stop_id = $oldst->id;
+        $newstops[$oldst->id] = $newstop;
+    }
+    if(!isset($olds->parts)) $oldsc->parts = array();
+    foreach($oldsc->parts as $pi => $oldpart) {
+        foreach($oldpart->stops as $oldstname => $oldst) {
+            $newstop = new stdClass();
+            $pt = new Sourcemap_Proj_Point($oldst->lon, $oldst->lat);
+            $pt = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $pt);
+            $newstop->geometry = Sourcemap_Wkt::write(Sourcemap_Wkt::POINT, $pt);
+            $newstop->attributes = get_old_pt_stop_attributes($oldpart, $oldst);
+            $newstop->local_stop_id = $oldst->id;
+            $newstops[$oldst->id] = $newstop;
+        }
+    }
+    return $newstops;
+}
+
+function get_old_sc_stop_attributes($oldsc, $oldst) {
+    $attrs = new stdClass();
+    return $attrs;
+}
+
+function get_old_pt_stop_attributes($oldpart, $oldst) {
+    global $migrate_st_attrs;
+    $mattrs = $migrate_st_attrs;
+    $attrs = new stdClass();
+    foreach($mattrs as $oldkey => $mv) {
+        if($mv === false) { // get value from parent part
+            $attrs->{$oldkey} = $oldpart->{$oldkey};
+            continue;
+        }
+        if(isset($oldst->{$oldkey})) {
+            if($mv === true) {
+                $attrs->{$oldkey} = $oldst->{$oldkey};
+            } elseif(is_array($mv)) {
+                foreach($mv as $mvi => $mvk) {
+                    $attrs->{$mvk} = $oldst->{$oldkey};
+                }
+            } elseif(is_string($mv)) {
+                $attrs->{$mv} = $oldst->{$oldkey};
+            }
+        }
+    }
+    $attrs->title = $oldpart->name;
+    $attrs->qty = $oldpart->weight;
+    $attrs->co2e = isset($oldpart->rawemissions) ? $oldpart->rawemissions : 0;
+    $attrs->weight = $oldpart->weight;
+    $attrs->unit = 'kg';
+    if($yt = extract_youtube_link($oldpart->description)) {
+        $attrs->{'youtube:link'} = $yt;
+    }
+    $attrs->description = strip_tags($oldpart->description);
+    return $attrs;
+
+}
+
+function get_old_sc_hops($oldsc, $newstops) { // outbound hops.
+    $newhops = array();
+    foreach($oldsc->stops as $i => $oldstop) {
+        foreach($oldstop->hops->outgoing as $hi => $oldhop) {
+            $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq, $oldsc->weight);
+        }
+    }
+    if(!isset($oldsc->parts)) $oldsc->parts = array();
+    foreach($oldsc->parts as $pi => $oldpart) {
+        foreach($oldpart->stops as $i => $oldstop) {
+            foreach($oldstop->hops->outgoing as $hi => $oldhop) {
+                $newhops[] = array($oldhop->from_stop_id, $oldhop->to_stop_id, $oldhop->transport_co2_eq, $oldpart->weight);
+            }
+        }
+    }
+    $hops = array();
+    foreach($newhops as $i => $hoparr) {
+        list($oldfrom, $oldto, $co2e, $wt) = $hoparr;
+        $newhop = new stdClass();
+        $frompt = Sourcemap_Wkt::read($newstops[$oldfrom]->geometry);
+        $frompt = new Sourcemap_Proj_Point($frompt[1][0], $frompt[1][1]);
+        $topt = Sourcemap_Wkt::read($newstops[$oldto]->geometry);
+        $topt = new Sourcemap_Proj_Point($topt[1][0], $topt[1][1]);
+        $newhop->geometry = Sourcemap_Wkt::write(Sourcemap_Wkt::MULTILINESTRING, array($frompt, $topt));
+        $newhop->from_stop_id = $oldfrom;
+        $newhop->to_stop_id = $oldto;
+        $newhop->attributes = get_old_sc_hop_attributes();
+        $newhop->attributes->{'co2e'} = $co2e;
+        $newhop->attributes->{'qty'} = 1;
+        $newhop->attributes->{'weight'} = $wt;
+        $hops[] = $newhop;
+    }
+    return $hops;
+}
+
+function get_old_sc_hop_attributes() {
+    return new stdClass();
+}
+
+function extract_youtube_link($desc) {
+    $m = preg_match('/http:\/\/(www\.)?youtube\.com\/embed\/([A-Za-z0-9-]+)/', $desc, $ms);
+    if($m) {
+        $m = $ms[0];
+        $m = "http://www.youtube.com/?v={$ms[2]}";
+    } else $m = false;
+    return $m;
+}
+
+$oldsc = @json_decode(file_get_contents("php://stdin"));
+if(!$oldsc) die('Invalid sourcemap.org object.');
+if(!isset($oldsc) || !isset($oldsc->stops)) {
+    foreach($oldsc as $oid => $sc) {
+        break;
+    }
+    $oldsc = $sc;
+}
+if(in_array($oldsc->slug, $banned_slugs)) die('Slug is banned.');
+$newstops = get_old_sc_stops($oldsc);
+$newhops = get_old_sc_hops($oldsc, $newstops);
+$newsc = new stdClass();
+$newsc->attributes = get_old_sc_attributes($oldsc);
+$newsc->other_perms = 1;
+if(isset($oldsc->type) && $oldsc->type == 'trace') {
+    // pass
+} else {
+    $newsc->attributes->{'sm:ui:co2e'} = 1;
+    $newsc->attributes->{'sm:ui:weight'} = 1;
+}
+$newsc->stops = array_values($newstops);
+$newsc->hops = $newhops;
+$user = $oldsc->user->name;
+$cdate = date('F j, Y', strtotime($oldsc->timecreated));
+if($oldsc->visibility != 'public') $newsc->other_perms = 0;
+$newsc->attributes->description = "Created on $cdate by $user on Sourcemap.org";
+if(strlen(strip_tags($oldsc->description)))
+    $newsc->attributes->description .= ":\n\n".strip_tags($oldsc->description);
+else $newsc->attributes->description .= '.';
+$newsc->attributes->{"sm:migrated:time"} = time();
+if(!ORM::factory('supplychain')->validate_raw_supplychain($newsc)) {
+    die('Invalid supplychain generated. Reed really blew it.'."\n");
+} else {
+    $wrapper = new stdClass();
+    $wrapper->supplychain = $newsc;
+    print json_encode($wrapper);
+}

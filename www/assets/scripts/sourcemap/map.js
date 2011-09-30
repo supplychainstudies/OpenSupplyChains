@@ -15,7 +15,6 @@ Sourcemap.Map = function(element_id, o) {
     this.layers = {};
     this.controls = {};
     this.dock_controls = {};
-    this.dock_el = null;
     var o = o || {};
     o.element_id = element_id;
     Sourcemap.Configurable.call(this, o);
@@ -241,7 +240,7 @@ Sourcemap.Map.prototype.initDock = function() {
         "panel": 'zoom',
         "callbacks": {
             "click": function() {
-                this.map.zoomToExtent(this.getFeaturesExtent(), false);
+                this.zoomToExtent(this.getFeaturesExtent(), false);
             }
         }
     });
@@ -390,6 +389,9 @@ Sourcemap.Map.prototype.initControls = function() {
                 if(f && !f.layer) {
                     f.layer = this.getStopLayer(f.cluster[0].attributes.supplychain_instance_id);
                 }
+            }
+            if(!f.layer){
+                f.layer = this.getStopLayer(f.attributes.supplychain_instance_id);
             }
             if(c.handlers.feature.feature && !c.handlers.feature.feature.layer) {
                 if(c.handlers.feature.feature.attributes.ref) {
@@ -602,6 +604,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
             }
         }
     }
+
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 
@@ -1017,18 +1020,64 @@ Sourcemap.Map.prototype.getFeaturesExtent = function() {
             if(c) bounds = bounds.extend(c.geometry.bounds);
         }
     }
-    // extend by the height of the banner and the dock
-    var screen = new OpenLayers.Bounds();
-
-    // determine pixel bounds of screen
-    var pixel = new OpenLayers.Pixel(0,20);
-    var topleft = this.map.getLonLatFromPixel(pixel);
-
-    var bottomright = this.map.getLonLatFromPixel(new OpenLayers.Pixel(960,300));
-   
-    bounds.extend(topleft, bottomright);
-
+    for(var scid in this.hop_features) {
+        for(var fromStop in this.hop_features[scid]){
+            for (var toStop in this.hop_features[scid][fromStop]){
+                var h = this.hop_features[scid][fromStop][toStop];
+                h = h.hop ? h.hop : h;
+                bounds.extend(h.geometry.bounds);
+            }
+        }
+    }
     return bounds;
+}
+
+Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
+    var oneStop = function(){
+        var numStops = 0;
+        for(var scid in this.stop_features) {
+            for(var k in this.stop_features[scid]) {
+                numStops++;
+                if (numStops == 2){ return false; }
+            }
+        }
+        return true;
+    }
+    
+    var center = bounds.getCenterLonLat();
+
+    //if there's only one stop on the map, let's zoom to the minimum level
+    if (oneStop() == true){
+        this.map.setCenter(center, this.map.minZoomLevel);
+    }
+    else{
+        if (this.map.baseLayer.wrapDateLine) {
+            var maxExtent = this.map.getMaxExtent();
+            
+            bounds = bounds.clone();
+            while (bounds.right < bounds.left) {
+                bounds.right += maxExtent.getWidth();
+            }
+            
+            center = bounds.getCenterLonLat().wrapDateLine(maxExtent);
+        }
+        this.map.setCenter(center, this.getZoomForExtent(bounds, closest));
+    }
+}
+
+Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {
+    var viewSize = this.map.getSize();
+
+    // add padding around viewport so features don't appear offscreen
+    // TODO: improve the way this works
+    viewSize.h *= .5;
+    viewSize.w *= .5;
+   
+    var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
+                                    extent.getHeight() / viewSize.h );
+
+    return this.map.getZoomForResolution(idealResolution, closest);
+
 }
 
 Sourcemap.Map.prototype.findSupplychain = function(scid) {

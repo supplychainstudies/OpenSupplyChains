@@ -1,0 +1,28 @@
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Undefined offset:  0</p>
+<p>Filename: models/objectsmodel.php</p>
+<p>Line Number: 616</p>
+
+</div><div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: models/objectsmodel.php</p>
+<p>Line Number: 618</p>
+
+</div><div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: models/objectsmodel.php</p>
+<p>Line Number: 619</p>
+
+</div>{"196":{"oid":"196","type":"trace","flag":"","creator":"0","name":"Oxford Saloon Hamburger","upc":"","imagelink":"","description":"Where the ingredients in an Oxford hamburger originate. ","slug":"Oxford-Saloon-Hamburger","category":"","weight":"0","emissions":"0","embodied":"0","transport":"0","process":null,"endoflife":null,"shipping":"0","lifetime":null,"usagetype":"","usageenergy":null,"usageemissions":null,"timecreated":"2010-12-12 17:07:44","timemodified":"2010-12-12 17:07:44","visibility":"public","showfootprint":"on","showembodied":"on","showtransport":"on","showprocess":"on","showendoflife":"on","showlastleg":"on","showuse":"on","showstats":"on","stops":{"origin":{"related_to":"196","part_or_object":"o","notes":null,"placename":"Missoula, Mt, USA","id":"8871","category":"1","lat":"46.872146","lon":"-113.9939982","name":"origin","hops":{"incoming":[],"outgoing":[]}}},"user":{"name":null,"id":null}}}

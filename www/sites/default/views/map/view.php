@@ -12,6 +12,9 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<?
+    $edit_mode = isset($_GET["edit"])&&$can_edit ? isset($_GET["edit"]) : 0;
+?>
 <div id="map-container">    
     <div id="map">
         <div id="sourcemap-map-view"></div>
@@ -20,9 +23,9 @@
 
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
-        <?php if($can_edit): ?>
+        <?php if($edit_mode): ?>
     		<h3>Map Options</h3>
-    		<hr/>
+            <hr/>
     		<div class="impact-box">
                 <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
     			<label for="impact-use-weight">Show Weight</label>
@@ -92,10 +95,11 @@
     <div id="discussion-section">
         <h2>Discussion</h2>
         <?php if($can_comment): ?>
-        <div id="comment-form" class="form">
+        <div id="comment-form" class="sourcemap-form">
             <fieldset>
             <form method="post" action="map/comment/<?= $supplychain_id ?>">
-                <textarea placeholder="Type your comment..." name="body" id="comment-area"></textarea>
+                <div id="desc-counter">&nbsp;</div>
+                <textarea placeholder="Type your comment..." name="body" id="comment-area" maxlength="255"></textarea>
  
                 <input class="button" id="comment-submit" type="submit" text="Comment"/>
                 <div class="clear"></div>

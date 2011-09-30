@@ -17,7 +17,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     public $template = 'create';
     
     public function action_index() {
-    	$this->layout->page_title = 'Create a map on Sourcemap';
+    	$this->layout->page_title = 'Create a Sourcemap';
     	
         $f = Sourcemap_Form::load('/create');
         $f->action('create')->method('post');
@@ -27,7 +27,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         }
         
         $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template'
+            'sourcemap-template'
         );
 
         $import_role = ORM::factory('role')->where('name', '=', 'import')->find();
@@ -65,7 +65,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                     $raw_sc->other_perms &= ~Sourcemap::READ;
                 try {
                     $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
-                    return $this->request->redirect('view/'.$new_scid);
+                    return $this->request->redirect('view/'.$new_scid.'?edit');
                 } catch(Exception $e) {
                     $this->request->status = 500;
                     Message::instance()->set('Couldn\t create your supplychain. Please contact support.');

@@ -21,26 +21,6 @@
     border: 1px solid #d4d4d4;
     .rounded(12px);
     .box_shadow(3px, 1px, 10px);
-    .map-status {
-        position:absolute;
-        top:70px;
-        right:20px;
-        height:40px;
-        width:400px;
-        text-align:right;
-        font-size:1em;
-        color:rgba(0,0,0,0.4);
-        pointer-events:none;
-        .msg{
-			padding-top:10px;
-			height:26px;
-            background: url("../images/throbber.gif") right center no-repeat transparent;
-            padding-right: 32px;
-            &.good-news {
-                background: none;
-            }
-        }
-    }
 }
 
 #map {
@@ -319,12 +299,28 @@
                     &.addstop{padding-left: 40px; background: url(../images/dock-icon-addpoint.png) 10px 12px no-repeat;}
 
                     &.toggle {  &.active { color: #333; background-color:rgba(200,200,200,0.85); } }
-                    &:last-child{  border:none; }
+                    &:last-child { border-radius: 0 12px 12px 0; border: none; }
+                    &:first-child { border-radius: 12px 0 0 12px; }
                 }
             }
         }
     }
 }
+
+/* Legend --------------------------------------------------------------- */
+
+#sourcemap-legend {
+    position: absolute;
+    bottom: 60px; left: 10px; 
+    height: 100px; width: 74px;
+    display: block;
+    background: url(../images/legend.png) center center no-repeat;
+
+    &.cloudmade{ background: url(../images/legend.png) center center no-repeat; }
+    &.satellite{ background: url(../images/legend-light.png) center center no-repeat;}    
+    &.terrain{   background: url(../images/legend.png) center center no-repeat;}
+}
+
 
 /* Banner  -------------------------------------------------------------- */
 #banner { 
@@ -343,6 +339,14 @@
             font-weight:bold;
             font-size: 22px;
             overflow:hidden;
+            line-height: 20px;
+            height: 9px;
+            &.editable{
+                max-width:300px;
+            }
+            &.noneditable{
+                max-width:330px;
+            }
         }
         #banner-favorite {
             background: url(../images/icon-favorite.png) 10px -19px no-repeat;
@@ -362,9 +366,49 @@
             background: url(../images/icon-share.png) 10px center no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);    
         }
+        #banner-edit {
+            //background: url(../images/icon-share.png) 10px center no-repeat;
+            border-left:1px solid rgba(140,140,140,0.25);
+            &.active {
+                color: #333; background-color:rgba(200,200,200,0.85);
+                font-weight:bold;
+                :hover{text-decoration:none;}
+            }
+        }
+        
+        #banner-preview {
+            //background: url(../images/icon-owner.png) 10px center no-repeat;
+            border-left:1px solid rgba(140,140,140,0.25);
+            &.active {
+                background-color:rgba(200,200,200,0.85);
+                border-radius: 0 12px 12px 0;
+                color:#333;font-weight:bold;
+                :hover{text-decoration:none;}
+            }               
+        }
+        #banner-edit ,#banner-preview {
+            float:right;
+        }
         #banner-owner, #banner-favorite, #banner-share {
             padding-left: 40px;
             float: right;
+        }
+        .map-status {
+            float:right;
+            text-align:right;
+            font-size:1em;
+            color:rgba(0,0,0,0.4);
+            pointer-events:none;
+            padding-top: 4px;
+            .msg{
+                height:26px;
+                background: url("../images/throbber.gif") right top no-repeat transparent;
+                padding: 10px 32px 0 0;
+                &.good-news {
+                    padding: 10px 22px 0 0;
+                    background: none;
+                }
+            }
         }
          div {
             float:left;
@@ -379,11 +423,27 @@
     display:block;
     width: 75px;
     height: 25px;
-    background: url("../images/watermark.png") center center no-repeat;
     text-align:center;
     position:absolute;
     bottom:1em; left:10px;
     z-index:1010;
+    &.cloudmade{
+        background: url("../images/watermark.png") center center no-repeat;
+    }
+
+    // Postioning with Google watermark
+    &.satellite{
+        background: url("../images/watermark-white.png") center center no-repeat;
+        left:68px;
+        bottom:0.45em;
+    }    
+    &.terrain{
+        background: url("../images/watermark.png") center center no-repeat;
+        left:68px;        
+        bottom:0.45em;
+    }
+        
+
 }
 
 /* Editor   -------------------------------------------------------------- */
@@ -428,14 +488,18 @@
         overflow:auto;
     }
     #edit-description {
+        overflow:hidden;
         textarea {
-            height:175px;
+            height:165px;
             width:320px;
 			.box_shadow_inset(0px,0px,4px,rgba(0,0,0,.2));
 			padding:10px;
 			font-size:inherit;
 			color:#999;
 	        border:none;
+        }
+        #dialog-desc-counter{
+            float:right;
         }
     }
 	#edit-stop-footprint, #edit-hop-footprint {
@@ -649,14 +713,15 @@
         display:inline;
     }
     #catalog-search {
-        fieldset{  
+        fieldset{
+            width:300px;
             margin:0;
             background: url(../images/shadow.png) top repeat-x; 
             border: 1px solid #c9c9c9;
              .rounded;
 
              input#catalog-search-field{
-                  width: 300px;
+                  width: 264px;
                   padding: 10px 0 10px 36px;
                   border: 0;
                   outline: none;
@@ -675,6 +740,26 @@
             cursor:pointer;
         }
     }    
+}
+
+#color-picker-holder {
+    position:absolute;
+    overflow:hidden;
+    white-space:nowrap;
+    color:white;
+    width:0px;
+    background-color:gray;
+    border: 1px solid rgb(162,162,162);
+    background: rgba(255,255,255,0.9);
+    
+    border-radius: 5px 0 0 12px;
+    height:275px;
+    right:400px;
+
+}
+#color-selector
+{
+    padding-left:10px;
 }
 
 /* Openlayers  ------------------------------------------------- */

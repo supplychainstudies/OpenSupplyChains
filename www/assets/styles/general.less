@@ -63,6 +63,7 @@ a {
     min-height: 100%;
     height: auto !important;
     height: 100%;
+    margin-bottom: -72px; // needed to stick footer to bottom of screen
 }
 #footer, .push {
     height: 62px;
@@ -87,6 +88,7 @@ a {
 		margin-bottom:20px;
     }
 }
+
 .messages{
     margin: 20px 0;
     .status-messages {
@@ -101,9 +103,19 @@ a {
             color: #fff;
             padding: 8px 0 10px 20px;
             text-shadow: -1px 0px 1px #255a76;
+            line-height: 1.5em;
             .gradient(#3884ab,#4f9fc9);
             .rounded(10px);
+            &.browser{
+                h1 { color: #333 }
+                font-size: 20px;
+                color: #999;
+                text-shadow: none;
+                padding: 20px 20px 40px 20px;
+                .gradient(#eee, #fff);
+            }
         }
+
         .status-wrap {
             background: url('../images/close.png') top right transparent no-repeat;
             margin: 0 20px 0 0;  padding: 5px 0;
@@ -157,6 +169,10 @@ a {
             }
         }
     }
+}
+
+#body-content, .article-content{
+    padding-bottom: 80px;
 }
 
 #footer {
@@ -351,9 +367,18 @@ select {
 input[type=file] { width:100%; }
 input[type=checkbox]{
 	width: auto;
-	margin: 1.3em 0.5em 0 0.5em;
+    margin: 12px 12px 0;
 }
-  
+ 
+#desc-counter {
+
+    float:right;
+    padding: 10px 5px 5px 0;
+    display: block;
+    color:#888;
+ 
+}
+
 /* register.php specific stuff */
 
 #recaptcha_response_field {
@@ -422,6 +447,9 @@ input[type=checkbox]{
 		input {
 			float:left;
 		}
+        input[type=checkbox]{
+            margin: 14px 5px 10px 10px;
+        }
 		label {
 			border-left:1px solid #dfdfdf;
 			line-height:2.4;
@@ -429,6 +457,7 @@ input[type=checkbox]{
 			margin-left:5px;
 			float: left;
 		}
+
 	}
 	#tileset-select {
 		margin:0 10px;
@@ -481,6 +510,7 @@ input[type=checkbox]{
             background:#eee;
             margin-bottom:10px;
             padding:10px 10px 10px 50px;
+            overflow:hidden;
             .user-avatar {
 				width:32px; height:32px;
                 position:absolute; 
@@ -1044,4 +1074,7 @@ body.admin {
 	    a { color:#f7f7f7; text-decoration: none; }
 		&:hover { color: #f7f7f7; }
 	}
+    .export{
+        float: right;
+    }
 }

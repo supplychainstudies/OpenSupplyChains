@@ -30,6 +30,13 @@
                     </a></h3>
                 <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>"><?= HTML::chars($supplychain->owner->name) ?></a>,
                 <?= date("F j, Y", $supplychain->created) ?></h4>
+                <div class="user-map-list">
+                    <div class="map-controls">
+                        <div class="map-controls-delete">
+                            <a class="red" href="delete/<?= $supplychain->id ?>">Delete</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

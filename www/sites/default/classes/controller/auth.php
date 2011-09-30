@@ -102,14 +102,9 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     }
 
     public function email_reset_ticket($username, $email, $ticket) {
-        //$email_vars = array('username' => $username, 'password' => $temp_password); 
-		$mail = new Mail;
-		//$mail_object = $mail->factory('smtp', array()); 
-		//$mail_object = $mail->factory('sendmail', array("sendmail_path" => '/usr/sbin/sendmail', "sendmail_args" => "-t -i")); 
-		$mail_object = $mail->factory('smtp', array('username' => 'sourcemap', 'password' => 'm0nkeybrains', 'host' => 'smtp.sendgrid.net')); 
-		$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Password Reset Request on Sourcemap.com');
-
-        $subject = 'Password Reset Request on Sourcemap.com';
+        $mailer = email::connect(); 
+		$swift_msg = Swift_Message::newInstance();
+		 
         $body = "\n";
         $body .= "Dear {$username},\n";
         $body .= <<<EREIAM
@@ -122,12 +117,15 @@ EREIAM;
 If you believe that this email was sent in error, please email support@sourcemap.com
 
 -The Sourcemap Team
-EREIAM;
+EREIAM; 
+		$swift_msg->setSubject('Password Reset Request on Sourcemap.com')
+				  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
+				  ->setTo(array($email => ''))
+				  ->setBody($body); 
 
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);
-            $sent = $mail_object->send($email, $headers, $body); 
-            Fire::log("Mail should be sent.  Return Value: " . $sent );
+            $sent = $mailer->send($swift_msg);
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
             Message::instance()->set('Sorry, could not send an email.', Message::ERROR);

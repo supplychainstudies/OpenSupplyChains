@@ -117,7 +117,7 @@ EREIAM;
 If you believe that this email was sent in error, please email support@sourcemap.com
 
 -The Sourcemap Team
-EREIAM; 
+EREIAM;
 		$swift_msg->setSubject('Password Reset Request on Sourcemap.com');
 		$swift_msg->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'));
 		$swift_msg->setTo(array($email => ''));
@@ -131,7 +131,7 @@ EREIAM;
             Message::instance()->set('Sorry, could not send an email.', Message::ERROR);
         }
         return $sent;
-    }
+}
 
 
     public function action_reset() {

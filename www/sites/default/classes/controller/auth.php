@@ -211,7 +211,8 @@ EREIAM;
             $get->rule('t', 'not_empty')
                 ->rule('t', 'regex', array('/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/'));
 
-            if(!$current_user && isset($_GET['t'])) {  
+            if(!$current_user && isset($_GET['t'])) {   
+ 				Fire::log('Inside get part');
                 if($get->check()) {       
                     list($un, $h, $em) = explode('-', $get['t']);
                     $un = base64_decode(strrev($un));
@@ -220,7 +221,8 @@ EREIAM;
                     if($user->loaded()) {
                         if($user->username == $un) {    
                             $tgth = md5(sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password));
-                            if($tgth === $h) { 
+                            if($tgth === $h) {
+	 							Auth::instance()->force_login($user->username);
                                 $this->template->current_user = $user->username;
                                 $this->template->ticket = $get['t'];
                             } else {

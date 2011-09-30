@@ -76,7 +76,10 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 }
 
                 //send a notification 
-				$mailer = email::connect(); 
+				$transport = Swift_SmtpTransport::newInstance('smtp.sendgrid.net', 587);
+				$transport->setUsername('sourcemap');
+				$transport->setPassword('m0nkeybrains');
+				$mailer = Swift_Mailer::newInstance($transport); 
 				$swift_msg = Swift_Message::newInstance();
 
 				$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your New Sourcemap Account');

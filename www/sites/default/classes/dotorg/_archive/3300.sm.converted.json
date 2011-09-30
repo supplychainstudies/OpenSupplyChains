@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"A Dinner","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"a-dinner","legacy:creator":"9238","legacy:oid":"3300","sm:ui:co2e":1,"sm:ui:weight":1,"description":"Created on March 9, 2010 by zacko on Sourcemap.org:\n\nfood stuff","sm:migrated:time":1317317279},"other_perms":1,"stops":[{"geometry":"POINT(0.000000 -0.000000)","attributes":{"name":"A Dinner","1":"","address":"","category":"1","title":"A Dinner","qty":"0","co2e":0,"weight":"0","unit":"kg","description":"food stuff"},"local_stop_id":"1026"}],"hops":[]}}

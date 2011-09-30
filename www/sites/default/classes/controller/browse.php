@@ -20,7 +20,14 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-core',
         );
-        
+
+
+       // $log =& Swift_LogContainer::getLog();
+        //$log->setLogLevel(4);;
+       
+        //$log =& Swift_LogContainer::getLog();
+        //echo $log->dump(true);
+
         $this->layout->page_title = 'Browsing maps on Sourcemap';
 
         $cats = Sourcemap_Taxonomy::arr();

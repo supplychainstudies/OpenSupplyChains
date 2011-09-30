@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"aaab","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"aaab","legacy:creator":"9859","legacy:oid":"3872","description":"Created on June 29, 2010 by tamasat on Sourcemap.org.","sm:migrated:time":1317317338},"other_perms":1,"stops":[{"geometry":"POINT(0.000000 -0.000000)","attributes":{"name":"aaab","1":"","address":"","category":"1","title":"aaab","qty":"0","co2e":0,"weight":"0","unit":"kg","description":""},"local_stop_id":"1632"}],"hops":[]}}

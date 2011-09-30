@@ -107,6 +107,7 @@ Kohana::modules(array(
   // 'unittest'   => MODPATH.'unittest',   // Unit testing
   // 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
   'sitemap' => MODPATH.'sitemap',
+  'swiftmailer' => MODPATH.'swiftmailer',
   'recaptcha' => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
   ));  
 
@@ -119,7 +120,7 @@ if(is_file(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/bootstrap'.EXT)) {
 if(is_dir(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/config/')) {
     $site_config_dir = SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/config/';
     Kohana::$config->attach(new Kohana_Config_File($site_config_dir));
-}
+} 
 
 Sourcemap::init();
 

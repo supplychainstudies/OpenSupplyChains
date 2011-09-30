@@ -1,2 +1,1 @@
-
-ErrorException [ 8 ]: Undefined property: stdClass::$parts ~ /home/reed/devel/mit/sourcemap/sourcemap.git/sourcemap/tools/convert-sc [ 128 ]
+{"supplychain":{"attributes":{"title":"t shirt","emissions:total":"0","weight":"0","legacy:emissions":"0","emissions:embodied":"0","emissions:transport":"0","alias:preferred":"t-shirt-2","legacy:creator":"10945","legacy:oid":"4268","description":"Created on October 17, 2010 by telpsych on Sourcemap.org.","sm:migrated:time":1317317379},"other_perms":1,"stops":[{"geometry":"POINT(0.000000 -0.000000)","attributes":{"name":"t shirt","1":"","address":"","category":"1","title":"t shirt","qty":"0","co2e":0,"weight":"0","unit":"kg","description":""},"local_stop_id":"2024"}],"hops":[]}}

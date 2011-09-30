@@ -12,7 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 class Controller_Auth extends Sourcemap_Controller_Layout {
-    
+
     public $layout = 'base';
     public $template = 'auth';
 
@@ -30,7 +30,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             $f->action('auth')->method('post');
             $this->template->login_form = $f;
         }
-        
+
         if(strtolower(Request::$method) === 'post') {
             if($f->validate($_POST)) {
                 // Login
@@ -39,18 +39,18 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                     Message::instance()->set('Invalid username or password.', Message::ERROR);
                     $this->request->redirect('auth');
                 }
-                
+
                 if (!empty($_POST->next)) {
                     $this->request->redirect($_POST->next);
                 } else {
                     $this->request->redirect('home/');
                 }
-       
+
             } else {
                 Message::instance()->set('Correct the errors below.');
             }
         }
-    
+
         $this->layout->scripts = array(
             'sourcemap-core'
         );
@@ -74,9 +74,9 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         $post ->rule('email', 'not_empty')
             ->rule('email', 'validate::email')
             ->filter(true, 'trim');
-       
+
         if(strtolower(Request::$method) === 'post' && $post->check()){ 
-			Fire::log('Made it inside validate for forgot');
+            Fire::log('Made it inside validate for forgot');
             $post = (object)$post->as_array();
             $email = $post->email;
             $user = ORM::factory('user')->where('email', '=', $email)->find();
@@ -88,7 +88,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                 $t = sprintf('%s-%s-%s', $un, $h, $em);
                 if($this->email_reset_ticket($user->username, $user->email, $t)) {
                     $this->template->email_sent = true; 
-					Fire::log('Called email function');
+                    Fire::log('Called email function');
                 }
                 $this->request->redirect('auth');
             } else {
@@ -96,51 +96,53 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                 $this->request->redirect('auth/forgot');
             }
         } else {  
-			Fire::log('In empty else'); 
+            Fire::log('In empty else'); 
             // pass
         }
     }
 
     public function email_reset_ticket($username, $email, $ticket) {
-        //$email_vars = array('username' => $username, 'password' => $temp_password); 
-		Fire::log('In email Function');
-        $to = $email;
-
-        $subject = 'Password Reset Request on Sourcemap.com';
-
-        $body = "Dear {$username},\n";
+        if ( ! class_exists('Swift_Mailer', FALSE))
+		{
+			// Load SwiftMailer
+			 require Kohana::find_file('vendor', 'swift/swift_required'); 
+		}
+	   
+		$transport = Swift_SmtpTransport::newInstance('smtp.sendgrid.net', 587);
+		$transport->setUsername('sourcemap');
+		$transport->setPassword('m0nkeybrains');
+		$mailer = Swift_Mailer::newInstance($transport); 
+		$swift_msg = Swift_Message::newInstance();
+		 
+        $body = "\n";
+        $body .= "Dear {$username},\n";
         $body .= <<<EREIAM
 
-If you asked us to reset the password associated with your user account on Sourcemap.com, please visit the URL below:
-
+If you would like to reset the password associated with your account on Sourcemap, please click the link below:
 
 EREIAM;
         $body .= URL::site('auth/reset?t='.$ticket, true);
         $body .= <<<EREIAM
 
+If you believe that this email was sent in error, please email support@sourcemap.com
 
-If you believe that someone else made this request, please contact support@sourcemap.com as soon as possible.
-
-Thank you for using Sourcemap!
-
-Sincerely,
-The Sourcemap Team
+-The Sourcemap Team
 EREIAM;
+		$swift_msg->setSubject('Password Reset Request on Sourcemap.com');
+		$swift_msg->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'));
+		$swift_msg->setTo(array($email => ''));
+		$swift_msg->setBody($body); 
 
-        $addlheaders = "From: The Sourcemap Team <noreply@sourcemap.com>\r\n";
-
-        $sent = false;
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);
-            $sent = mail($email, $subject, $body, $addlheaders); 
-			Fire::log("Mail should be sent.  Return Value: " . $sent );
+            $sent = $mailer->send($swift_msg);
             Message::instance()->set('Please check your email for further instructions.', Message::INFO);
         } catch (Exception $e) {
             Message::instance()->set('Sorry, could not send an email.', Message::ERROR);
         }
         return $sent;
-    }
-    
+}
+
 
     public function action_reset() {
         $this->template = View::factory('auth/reset_password');
@@ -156,7 +158,7 @@ EREIAM;
         if(strtolower(Request::$method) === 'post') {
             // make sure the user has a valid reset ticket or is logged in.
             $tregex = '/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/';
-            if(!$current_user && isset($_POST['t']) && preg_match($tregex, $_POST['t'])) {
+			if(!$current_user && isset($_POST['t']) && preg_match($tregex, $_POST['t'])) {
                 list($un, $h, $em) = explode('-', $_POST['t']);
                 $un = base64_decode(strrev($un));
                 $em = base64_decode(strrev($em));
@@ -166,7 +168,7 @@ EREIAM;
                         $tgth = md5(sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password));
                         if($tgth === $h) {
                             $current_user = $user;
-							$this->template->current_user = $user->username;
+                            $this->template->current_user = $user->username;
                             if($post->check()) {
                                 $user->password = $post['new'];
                                 $user->save();
@@ -190,7 +192,7 @@ EREIAM;
                     return $this->request->redirect('auth');
                 }
             } 
-            
+
             if(!$current_user) {
                 Message::instance()->set('You can\'t do that.');
                 $this->request->redirect('auth');
@@ -211,14 +213,15 @@ EREIAM;
             }
 
         } else { 
-			if($current_user) {
-            	$this->template->current_user = $current_user->username;
-			}
+            if($current_user) {
+                $this->template->current_user = $current_user->username;
+            }
             $get = Validate::factory($_GET);
             $get->rule('t', 'not_empty')
                 ->rule('t', 'regex', array('/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/'));
 
-            if(!$current_user && isset($_GET['t'])) {  
+            if(!$current_user && isset($_GET['t'])) {   
+ 				Fire::log('Inside get part');
                 if($get->check()) {       
                     list($un, $h, $em) = explode('-', $get['t']);
                     $un = base64_decode(strrev($un));
@@ -227,7 +230,8 @@ EREIAM;
                     if($user->loaded()) {
                         if($user->username == $un) {    
                             $tgth = md5(sprintf('%s-%s-%s-%s-%s', $user->id, $user->username, $user->email, $user->last_login, $user->password));
-                            if($tgth === $h) { 
+                            if($tgth === $h) {
+	 							Auth::instance()->force_login($user->username);
                                 $this->template->current_user = $user->username;
                                 $this->template->ticket = $get['t'];
                             } else {
@@ -250,12 +254,12 @@ EREIAM;
                 $this->request->redirect('auth');
             }
 
-           
+
 
         }
     }
 
 
-   
+
 
   }

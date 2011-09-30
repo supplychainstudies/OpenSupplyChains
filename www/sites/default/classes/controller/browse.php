@@ -20,7 +20,22 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-core',
         );
-        
+
+        $mailer = email::connect(); 
+		$swift_msg = Swift_Message::newInstance();
+		$swift_msg->setSubject('testing?');
+        $swift_msg->setFrom(array('alex@sourcemap.com' => 'Alex'));
+		$swift_msg->setTo(array('alex@alexose.com' => 'Alex'));
+		$swift_msg->setBody('Hi There');
+        $to = "alex@alexose.com";
+        $mailer->send($swift_msg);
+
+       // $log =& Swift_LogContainer::getLog();
+        //$log->setLogLevel(4);;
+       
+        //$log =& Swift_LogContainer::getLog();
+        //echo $log->dump(true);
+
         $this->layout->page_title = 'Browsing maps on Sourcemap';
 
         $cats = Sourcemap_Taxonomy::arr();

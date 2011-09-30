@@ -21,7 +21,7 @@ $(document).ready(function(){
         //document.getElementById("status-message").className = "status-message browser";
         $(".messages").html(
             "<div class=\"status-message\" "
-            +" style=\"padding:8px 0 10px 20px;background:#3884ab;line-height:1.5em;\">"
+            +" style=\"padding:10px 20px 10px 20px;background:#3884ab;line-height:1.5em;\">"
             +"<div class=\"browser\" "
             +" style=\"font-size:20px;color:#999;padding:20px 20px 40px 20px;background:#eee;\"></div></div>"        
         );

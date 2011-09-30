@@ -118,10 +118,10 @@ If you believe that this email was sent in error, please email support@sourcemap
 
 -The Sourcemap Team
 EREIAM; 
-		$swift_msg->setSubject('Password Reset Request on Sourcemap.com')
-				  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
-				  ->setTo(array($email => ''))
-				  ->setBody($body); 
+		$swift_msg->setSubject('Password Reset Request on Sourcemap.com');
+		$swift_msg->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'));
+		$swift_msg->setTo(array($email => ''));
+		$swift_msg->setBody($body); 
 
         try {
             //Sourcemap_Email_Template::send_email($to, $subject, $body);

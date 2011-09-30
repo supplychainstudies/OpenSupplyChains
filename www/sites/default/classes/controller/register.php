@@ -76,8 +76,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 }
 
                 //send a notification 
-				$mail = new Mail;
-				$mail_object = $mail->factory('smtp', array());
+				$mail_object = Mailer::connect();
 				$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your New Account on Sourcemap.com');
 				
                 $h = md5(sprintf('%s-%s', $new_user->username, $new_user->email));
@@ -93,7 +92,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $msgbody .= "The Sourcemap Team\n";
 
 
-                try { 
+                try {
 					$sent = $mail_object->send($new_user->email, $headers, $msgbody);
                     Message::instance()->set('Activation email sent.');
                     return $this->request->redirect('register/thankyou');

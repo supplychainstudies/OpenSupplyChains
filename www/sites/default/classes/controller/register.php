@@ -76,6 +76,12 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 }
 
                 //send a notification 
+				if ( ! class_exists('Swift_Mailer', FALSE))
+				{
+					// Load SwiftMailer
+					 require Kohana::find_file('vendor', 'swift/swift_required'); 
+				}
+			   
 				$transport = Swift_SmtpTransport::newInstance('smtp.sendgrid.net', 587);
 				$transport->setUsername('sourcemap');
 				$transport->setPassword('m0nkeybrains');

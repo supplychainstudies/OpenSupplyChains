@@ -21,19 +21,20 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             'sourcemap-core',
         );
 
-        $mailer = Email::connect();
-        
+        $mailer = email::connect(); 
+		$swift_msg = Swift_Message::newInstance();
+		$swift_msg->setSubject('testing?');
+        $swift_msg->setFrom(array('alex@sourcemap.com' => 'Alex'));
+		$swift_msg->setTo(array('alex@alexose.com' => 'Alex'));
+		$swift_msg->setBody('Hi There');
         $to = "alex@alexose.com";
-        $from = "alex@sourcemap.com";
-        $subject = "testing?";
-        $message = "body";
+        $mailer->send($swift_msg);
 
-        $log =& Swift_LogContainer::getLog();
-        $log->setLogLevel(4);
-        Email::send($to, $from, $subject, $message, $html = false);
+       // $log =& Swift_LogContainer::getLog();
+        //$log->setLogLevel(4);;
        
-        $log =& Swift_LogContainer::getLog();
-        echo $log->dump(true);
+        //$log =& Swift_LogContainer::getLog();
+        //echo $log->dump(true);
 
         $this->layout->page_title = 'Browsing maps on Sourcemap';
 

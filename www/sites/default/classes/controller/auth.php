@@ -114,6 +114,7 @@ If you would like to reset the password associated with your account on Sourcema
 EREIAM;
         $body .= URL::site('auth/reset?t='.$ticket, true);
         $body .= <<<EREIAM
+
 If you believe that this email was sent in error, please email support@sourcemap.com
 
 -The Sourcemap Team

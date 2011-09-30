@@ -148,7 +148,7 @@ EREIAM;
         if(strtolower(Request::$method) === 'post') {
             // make sure the user has a valid reset ticket or is logged in.
             $tregex = '/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/';
-            if(!$current_user && isset($_POST['t']) && preg_match($tregex, $_POST['t'])) {
+            if( (! $current_user) && isset($_POST['t']) && preg_match($tregex, $_POST['t'])) {
                 list($un, $h, $em) = explode('-', $_POST['t']);
                 $un = base64_decode(strrev($un));
                 $em = base64_decode(strrev($em));

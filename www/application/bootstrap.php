@@ -95,7 +95,7 @@ if(isset(Kohana::config('sourcemap')->cache_dir)) {
  */  
 
 Kohana::modules(array(  
-  'firephp'   => MODPATH.'firephp', //FIREphp debug extension 
+  // 'firephp'   => MODPATH.'firephp', //FIREphp debug extension 
   'auth'       => MODPATH.'auth',       // Basic authentication
   'cache'      => MODPATH.'cache',      // Caching with multiple backends
   // 'codebench'  => MODPATH.'codebench',  // Benchmarking tool

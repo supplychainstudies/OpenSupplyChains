@@ -175,20 +175,23 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
             'sphericalMercator': true,
             "type": google.maps.MapTypeId.TERRAIN,
             "animationEnabled": false,
-            "minZoomLevel": 2, "maxZoomLevel": 17
+            "minZoomLevel": 1, "maxZoomLevel": 17,
+            //"wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
         "satellite", {
             'sphericalMercator': true,
             "type": google.maps.MapTypeId.SATELLITE,
             "animationEnabled": false,
-            "minZoomLevel": 2, "maxZoomLevel": 17
+            "minZoomLevel": 1, "maxZoomLevel": 17,
+            //"wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 44909,
-        "minZoomLevel": 2, "maxZoomLevel": 12
+        "maxResolution":39135.758475,
+        "minZoomLevel": 1, "maxZoomLevel": 12
     }));
     
     this.broadcast('map:base_layer_initialized', this);
@@ -1034,9 +1037,10 @@ Sourcemap.Map.prototype.getFeaturesExtent = function() {
 
 Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
     var oneStop = function(){
+        var stop_features = this.Sourcemap.view_instance.map.stop_features;
         var numStops = 0;
-        for(var scid in this.stop_features) {
-            for(var k in this.stop_features[scid]) {
+        for(var stops in stop_features) {           
+            for(var k in stop_features[stops]) {
                 numStops++;
                 if (numStops == 2){ return false; }
             }
@@ -1048,20 +1052,24 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
 
     //if there's only one stop on the map, let's zoom to the minimum level
     if (oneStop() == true){
-        this.map.setCenter(center, this.map.minZoomLevel);
+        console.log("oneStop");
+        this.map.setCenter(center, this.map.minZoomLevel+1);
     }
     else{
         if (this.map.baseLayer.wrapDateLine) {
             var maxExtent = this.map.getMaxExtent();
             
-            bounds = bounds.clone();
-            while (bounds.right < bounds.left) {
-                bounds.right += maxExtent.getWidth();
+            bounds_c = bounds.clone();
+            while (bounds_c.right < bounds_c.left) {
+                bounds_c.right += maxExtent.getWidth();
             }
             
-            center = bounds.getCenterLonLat().wrapDateLine(maxExtent);
+            center = bounds_c.getCenterLonLat();
+            //center = bounds_c.getCenterLonLat().wrapDateLine(maxExtent);
         }
+        
         this.map.setCenter(center, this.getZoomForExtent(bounds, closest));
+        //this.map.setCenter(center, 2);
     }
 }
 
@@ -1076,9 +1084,76 @@ Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {
     var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
                                     extent.getHeight() / viewSize.h );
 
-    return this.map.getZoomForResolution(idealResolution, closest);
+
+    var zoomForExtent = this.getZoomForResolution(idealResolution,closest);
+    //console.log("ZFE:"+zoomForExtent+",viewSize:"+viewSize.w+"/"+viewSize.h+",extent:"+extent.getWidth()+"/"+extent.getHeight());
+    return zoomForExtent;
+    //return this.getZoomForResolution(idealResolution, closest);
 
 }
+
+Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
+    var zoom;
+    if(this.map.fractionalZoom) {
+        var lowZoom = 0;
+        var highZoom = this.resolutions.length - 1;
+        var highRes = this.resolutions[lowZoom];
+        var lowRes = this.resolutions[highZoom];
+        var res;
+        for(var i=0, len=this.map.baseLayer.resolutions.length; i<len; ++i) {
+            res = this.map.baseLayer.resolutions.resolutions[i];
+            if(res >= resolution) {
+                highRes = res;
+                lowZoom = i;
+            }
+            if(res <= resolution) {
+                lowRes = res;
+                highZoom = i;
+                break;
+            }
+        }
+        var dRes = highRes - lowRes;
+        if(dRes > 0) {
+            zoom = lowZoom + ((highRes - resolution) / dRes);
+        } else {
+            zoom = lowZoom;
+        }
+        } else {
+            var diff;
+            var minDiff = Number.POSITIVE_INFINITY;
+
+            var init_i = 0;
+            if(this.map.baseLayer.name=="default")
+                init_i += 2;
+                
+            for(var i=0, len=this.map.baseLayer.resolutions.length; i<len; i++) {
+                if (closest) {
+                    // use false all the time
+                    if(this.map.baseLayer.name!="default")
+                        diff = Math.abs(this.map.baseLayer.resolutions[i+2] - resolution);
+                    else
+                        diff = Math.abs(this.map.baseLayer.resolutions[i] - resolution);
+                    if (diff > minDiff) {
+                        break;
+                    }
+                    minDiff = diff;
+                } else {
+                    if (this.map.baseLayer.resolutions[i] < resolution) {
+                        i += init_i;
+                        break;
+                    }
+                }
+            }
+            zoom = Math.max(0, i);
+        }
+
+
+        var zoomFromReso = Math.max(this.map.minZoomLevel, zoom);
+        //console.log("zoom:"+zoom+"/minZoom:"+this.map.minZoomLevel+"/zoomFromReso:"+zoomFromReso);
+        return zoomFromReso;
+        //return Math.max(this.map.minZoomLevel, zoom);
+}
+
 
 Sourcemap.Map.prototype.findSupplychain = function(scid) {
     if(scid instanceof Sourcemap.Supplychain)

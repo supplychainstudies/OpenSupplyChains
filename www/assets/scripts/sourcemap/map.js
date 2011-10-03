@@ -1052,7 +1052,6 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
 
     //if there's only one stop on the map, let's zoom to the minimum level
     if (oneStop() == true){
-        console.log("oneStop");
         this.map.setCenter(center, this.map.minZoomLevel+1);
     }
     else{

@@ -22,16 +22,15 @@ class Email {
 	 * @param   string  DSN connection string
 	 * @return  object  Swift object
 	 */
-	public static function connect($config = NULL)
+	public static function connect($instance='default')
 	{
 		if ( ! class_exists('Swift_Mailer', FALSE))
 		{
 			// Load SwiftMailer
 			require Kohana::find_file('vendor', 'swift/swift_required');
 		}
-
+      $config = Kohana::config('swiftmailer.'.$instance);
 		// Load default configuration
-		
 		switch ($config['driver'])
 		{
 			case 'smtp':
@@ -66,7 +65,7 @@ class Email {
 		}
 
 		// Create the SwiftMailer instance
-		return Email::$mail = Swift_Mailer::newInstance($transport);
+		return Swift_Mailer::newInstance($transport);
 	}
 
 	/**

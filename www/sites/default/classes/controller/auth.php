@@ -97,16 +97,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
     }
 
     public function email_reset_ticket($username, $email, $ticket) {
-        if ( ! class_exists('Swift_Mailer', FALSE))
-		{
-			// Load SwiftMailer
-			 require Kohana::find_file('vendor', 'swift/swift_required'); 
-		}
-	   
-		$transport = Swift_SmtpTransport::newInstance('smtp.sendgrid.net', 587);
-		$transport->setUsername('sourcemap');
-		$transport->setPassword('m0nkeybrains');
-		$mailer = Swift_Mailer::newInstance($transport); 
+		$mailer = Email::connect();
 		$swift_msg = Swift_Message::newInstance();
 		 
         $body = "\n";

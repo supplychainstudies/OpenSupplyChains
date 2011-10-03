@@ -39,7 +39,7 @@
     <?php if(isset($supplychains) && $supplychains): ?><br/>
         <h2><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
         <div class="container pager">
-            <?= $pager->render() ?>
+            <!-- ?= $pager->render() ?> -->
         </div>
         <?php foreach($supplychains as $i => $sc): ?>
             <div class="user-map-list">
@@ -47,7 +47,7 @@
             </div>
         <?php endforeach; ?>
         <div class="container pager">
-            <?= $pager->render() ?>
+            <!--?= $pager->render() ?>-->
         </div>
     <?php else: ?>
         <h2 class="bad-news">No maps yet!</h2>

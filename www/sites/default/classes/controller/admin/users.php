@@ -170,7 +170,7 @@ class Controller_Admin_Users extends Controller_Admin {
         
         Breadcrumbs::instance()->add('Management', 'admin/')
             ->add('Users', 'admin/users')
-            ->add(ucwords($user->username), 'admin/users/'.$user->id);
+            ->add($user->username, 'admin/users/'.$user->id);
     
     }
 

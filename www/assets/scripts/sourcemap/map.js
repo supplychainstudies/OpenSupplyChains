@@ -591,10 +591,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     if(this.options.draw_hops) {
         for(var i=0; i<supplychain.hops.length; i++) {
             var h = supplychain.hops[i];
-            //var fc = palette[tiers[h.from_stop_id]];
-            //var tc = palette[tiers[h.to_stop_id]];
-            var fc = (new Sourcemap.Color()).fromHex(supplychain.findStop(h.from_stop_id).attributes.color);
-            var tc = (new Sourcemap.Color()).fromHex(supplychain.findStop(h.to_stop_id).attributes.color);
+            var fc = palette[tiers[h.from_stop_id]];
+            var tc = palette[tiers[h.to_stop_id]];
             var new_ftr = this.mapHop(supplychain.hops[i], scid);
             var hc = h.getAttr("color", fc.midpoint(tc).toString());
             new_ftr.hop.attributes.color = hc;

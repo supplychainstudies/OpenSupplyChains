@@ -51,7 +51,6 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
         $params = array_merge($defaults, $params);
 
-        $params['recent'] = 'yes';
         $params['l'] = 20;
 
         if($category && isset($nms[$category])) {
@@ -66,7 +65,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         } else {
             $this->template->category = false;
         }
-        $r = Sourcemap_Search::find($params);
+        $r = Sourcemap_Search::find($params+array('recent' => 'yes'));
         $p = Pagination::factory(array(
             'current_page' => array(
                 'source' => 'query_string',
@@ -82,7 +81,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
     	$params['l'] = 1;
         $this->template->favorited = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));
         $this->template->discussed = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
-        $this->template->interesting = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes','comments' => 'yes'));
+        $this->template->interesting = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
         $this->template->recent = Sourcemap_Search_Simple::find($params+array('recent' => 'yes'));
     }
 }

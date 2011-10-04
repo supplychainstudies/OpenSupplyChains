@@ -104,7 +104,7 @@ Sourcemap responds expeditiously to clear notices of alleged copyright infringem
 Sourcemap's Designated Agent to receive notification of alleged infringement under the DMCA is:
 Leonardo Bonanni<br/>
 Email: dmca@sourcemap.com<br/>
-Mail: 167 Erie St, Cambridge MA 02139
+Mail: 614 Massachusetts Ave #201, Cambridge, MA 02139
 
 <br/><br/>Upon receipt of proper notification of claimed infringement, Sourcemap will follow the procedures outlined herein and in the DMCA.</p>
 

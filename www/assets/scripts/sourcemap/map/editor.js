@@ -603,9 +603,6 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.editor.updateMedia(ref, this);
     }, {"ref": ref, "editor": this}));
 
-   $('#color-pick').bind('change',function(){
-       changeColor();       
-   });
 
     // impact calculator for stops
     if(ref instanceof Sourcemap.Stop) {
@@ -722,12 +719,6 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.editor.map_view.hideDialog(true);
         Sourcemap.broadcast('supplychain-updated', supplychain);
     }, s));
-
-    var widt = false;
-    $(this.map_view.dialog).find('#color-picker').bind('click',function(){
-        $("#color-picker-holder").stop().animate({width:widt ? 0 :250}, 500);
-        widt = !widt;
-    });
 
     var cb = function(e) {
         //TODO: maybe move this down and add a spinner or disable the map/editor?
@@ -930,59 +921,9 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
     		}
         }
     }
-    //var ftr = this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop;
-    //var ref = ftr.stop.attributes.ref;
-    //attr = Sourcemap.deep_clone(attr);
-    //for(var k in ref.attributes) {
-      //  if(attr[k] == undefined) attr[k] = ref.getAttr(k);
-    //}
-    	//	 var kvpairs = $(this.editor.map_view.dialog).find('form').serializeArray();
-    	  //   var vals = {};
-    	  //   for(var i=0; i<kvpairs.length; i++) vals[kvpairs[i].name] = kvpairs[i].value;
-
-
-
 
     this.updateFeature(this.editing, vals);
     this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);     
     $("#editor-tabs").tabs('select', 2);
     //$("#editor-tabs").tabs('select', 3);
-    
 }
-
-
-function mouseOverColor(hex)
-{
-
-}
-
-function mouseOutMap()
-{
-
-}
-
-function clickColor(hex,seltop,selleft)
-{
-    document.getElementById("color-pick").value = hex;
-    if (seltop>-1 && selleft>-1)
-    {
-        document.getElementById("selectedColor").style.top=seltop + "px";
-        document.getElementById("selectedColor").style.left=selleft + "px";
-        document.getElementById("selectedColor").style.visibility="visible";
-    }
-    else
-    {
-        document.getElementById("divpreview").style.backgroundColor=colorhex;
-        document.getElementById("divpreviewtxt").innerHTML=colorhex;
-        document.getElementById("selectedColor").style.visibility="hidden";
-    }
-    changeColor();
-    
-}
-
-function changeColor()
-{
-   var color = document.getElementById("color-pick").value;
-   document.getElementById("color-picker").style.background = color;
-}
-

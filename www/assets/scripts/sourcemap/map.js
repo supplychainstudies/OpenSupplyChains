@@ -591,8 +591,12 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     if(this.options.draw_hops) {
         for(var i=0; i<supplychain.hops.length; i++) {
             var h = supplychain.hops[i];
-            var fc = palette[tiers[h.from_stop_id]];
-            var tc = palette[tiers[h.to_stop_id]];
+            //var fc = palette[tiers[h.from_stop_id]];
+            //var tc = palette[tiers[h.to_stop_id]];
+            var fc_color = supplychain.findStop(h.from_stop_id).attributes.color;
+            var tc_color = supplychain.findStop(h.to_stop_id).attributes.color;
+            var fc = fc_color ? (new Sourcemap.Color()).fromHex(fc_color) : palette[tiers[h.from_stop_id]];
+            var tc = tc_color ? (new Sourcemap.Color()).fromHex(tc_color) : palette[tiers[h.to_stop_id]];
             var new_ftr = this.mapHop(supplychain.hops[i], scid);
             var hc = h.getAttr("color", fc.midpoint(tc).toString());
             new_ftr.hop.attributes.color = hc;
@@ -1137,7 +1141,8 @@ Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
                     }
                     minDiff = diff;
                 } else {
-                    if (this.map.baseLayer.resolutions[i] < resolution) {
+                    if (this.map.baseLayer.resolutions[i] < resolution*1.38) {
+                        // *1.38 : magic number to extent view for banner
                         i += init_i;
                         break;
                     }

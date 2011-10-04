@@ -1141,7 +1141,8 @@ Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
                     }
                     minDiff = diff;
                 } else {
-                    if (this.map.baseLayer.resolutions[i] < resolution) {
+                    if (this.map.baseLayer.resolutions[i] < resolution*1.38) {
+                        // *1.38 : magic number to extent view for banner
                         i += init_i;
                         break;
                     }

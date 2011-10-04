@@ -26,7 +26,7 @@ return array(
             'label' => 'Username',
             'attributes' => array(
                 'maxlength' => 32,
-    			'placeholder' => 'Please choose a unique username.'
+    			'placeholder' => 'That username is taken.'
             )
         ),
         'password' => array(

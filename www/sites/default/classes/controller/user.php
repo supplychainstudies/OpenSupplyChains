@@ -29,6 +29,45 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $user = ORM::factory('user')->where('username', '=', $identifier)->find();
         }
         if($user->loaded()) {
+
+           // Additional functions for "channel" user
+           $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+           if($user->has('roles', $channel_role)) {
+               $banner_url="";
+               $featured = Array();
+
+               // Load slider functionality
+               $this->layout->scripts = array(
+                   'sourcemap-core',
+                   'sourcemap-channel'
+               );
+               $this->layout->styles = $this->default_styles;
+               $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
+
+               // HACK: Office Depot branding info
+               // This information needs to come from the database.
+               if ($user->username == "officedepot"){
+                   $banner_url="sites/default/assets/images/officedepot-logo.png";
+                   $featured_ids = Array(34,36,37);
+               }
+
+               // HACK: Stonyfield branding info
+               if ($user->username == "stonyfield"){
+                   $banner_url="sites/default/assets/images/stonyfield-logo.png";
+                   $featured_ids = Array(34,36,37);
+               }
+               $this->template = new View('channel/profile');
+               $this->template->banner_url = $banner_url;
+
+               // Grab supplychains from IDs
+               $featured = Array();
+               foreach($featured_ids as $id){
+                   $featured[] = ORM::factory('supplychain', $id);
+               }
+
+               $this->template->featured = $featured;
+           }
+
             $user = (object)$user->as_array();
             unset($user->password);
             $user->avatar = Gravatar::avatar($user->email, 128);

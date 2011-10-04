@@ -21,7 +21,7 @@
                     <img src="<?= $user->avatar ?>" />
                 </div>
                 <ul class="user-details">
-                    <li><h2 class="user-name"><?= ucwords(HTML::chars($user->username)) ?></h2><li>
+                    <li><h2 class="user-name"><?= HTML::chars($user->username) ?></h2><li>
                     <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
             </div>

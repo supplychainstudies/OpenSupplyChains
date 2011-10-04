@@ -109,7 +109,6 @@ class Controller_User extends Sourcemap_Controller_Layout {
             else
             {
 
-            $user = (object)$user->as_array();
             unset($user->password);
             $user->avatar = Gravatar::avatar($user->email, 128);
             unset($user->email);

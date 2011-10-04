@@ -873,8 +873,7 @@ Sourcemap.Map.Editor.prototype.updateMedia = function(ref, editor) {
                 var message = '<img src="http://img.youtube.com/vi/'+ref.getAttr("youtube:link","").substr(31)+'/0.jpg" />';
             }
             else{
-                var message = '<p>You can insert a Youtube movie or a Flickr slide show.<br/>' 
-    					+'A Youtube link looks like this: http://www.youtube.com/watch?v=wqeDfKY37Gk</p>';				
+                var message = '<p>A Youtube link looks like this: <br/>http://www.youtube.com/watch?v=wqeDfKY37Gk</p>';				
             }
     	} 
         if(mediatype == "flickr:setid") {
@@ -885,8 +884,7 @@ Sourcemap.Map.Editor.prototype.updateMedia = function(ref, editor) {
                 '&" frameBorder="0" width="500" scrolling="no" height="500"></iframe>';
             }
             else{
-                var message = '<p>You can insert a Youtube movie or a Flickr slide show.<br/>' 
-    					+'A Flickr set ID is the sequence of numbers at the end of a set URL.</p>';
+                var message = '<p>Flickr set ID is the sequence of numbers at the end of a set URL.</p>';
             }
     	}
     	

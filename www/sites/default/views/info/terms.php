@@ -134,3 +134,4 @@ In accordance with Section 512(i)(1)(a) of the DMCA, Sourcemap will, in appropri
 It is Sourcemap's policy to accommodate and not interfere with standard technical measures used by copyright owners to identify or protect copyrighted works that Sourcemap determines are reasonable under the circumstances. </p>
 
 </div>
+<div class="push"></div>

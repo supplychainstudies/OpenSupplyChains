@@ -20,7 +20,7 @@
                 <img class="preview-map small" src="static/<?php print $item->id; ?>.s.png" alt="" />
             </a>
             </div>
-            <h3 class="preview-title">
+            <h3 class="preview-title vertical">
                 <a href="view/<?php print $item->id; ?>">
                 <?= Text::limit_chars(HTML::chars($item->attributes->title), 16) ?>
                 </a>

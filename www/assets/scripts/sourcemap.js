@@ -367,6 +367,19 @@ Sourcemap.ttrunc = function(str, lim, dots) {
     return tstr;
 }
 
+Sourcemap.truncate_string = function (target,width)
+{
+    $(target).each(function(){        
+        while($(this)[0].scrollWidth>width)
+        {   
+            var new_string = jQuery.trim($(this).text());
+            $(this).find("a").text(new_string.substr(0, new_string.length - 4)+"...");
+        }   
+        
+    });
+}
+
+
 Sourcemap.tlinkify = function(str) {
     var txt = _S.htesc(str);
     var regex = /((((http|https):\/\/([\w\d]+\.){1,2})|www\.[\w\d-]+\.)([\w\d]{2,3})((\/[\d\w%\.]+)+)?(\?([\d\w%]+=[\d\w%]+&?)+)?)/g;

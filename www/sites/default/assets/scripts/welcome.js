@@ -36,4 +36,9 @@ $(function () {
             $('#featured-description-' + (slider.currentPage - 1)).contents().clone().appendTo($('#featured-slider-description'));
         }
     });
+    Sourcemap.truncate_string(".preview-title",236);
+    Sourcemap.truncate_string(".preview-title.vertical",176);
 });
+
+
+

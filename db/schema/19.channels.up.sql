@@ -1,5 +1,5 @@
 -- Channel Functionality
-create table channels (
+create table channel (
     id serial,
     name varchar(128) default null,
 	alias varchar(128) default null,
@@ -11,6 +11,15 @@ create table channels (
 );   
 
 alter table supplychain add column enable_comments BOOLEAN not null default TRUE;
+
+create table channel_featured (
+	channel_id integer not null,
+	index integer not null,
+	supplychain_id integer not null,
+	constraint channel_id_index_pkey PRIMARY KEY (channel_id, index),
+	foreign key (channel_id) references "channel" (id) on delete cascade, 
+	foreign key (supplychain_id) references "supplychain" (id) on delete cascade 
+); 
 
 insert into sourcemap_schema_version ("key", extra) values (
     '19.channels', 'Channels table and comments switch'

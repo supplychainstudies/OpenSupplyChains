@@ -21,7 +21,7 @@
                     <img src="<?= $user->avatar ?>" />
                 </div>
                 <ul class="user-details">
-                    <li><h2 class="user-name"><?= ucwords(HTML::chars($user->username)) ?></h2><li>
+                    <li><h2 class="user-name"><?= HTML::chars($user->username) ?></h2><li>
                     <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li>
                 </ul>
             </div>
@@ -39,7 +39,7 @@
     <?php if(isset($supplychains) && $supplychains): ?><br/>
         <h2><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
         <div class="container pager">
-            <?= $pager->render() ?>
+            <!-- ?= $pager->render() ?> -->
         </div>
         <?php foreach($supplychains as $i => $sc): ?>
             <div class="user-map-list">
@@ -47,7 +47,7 @@
             </div>
         <?php endforeach; ?>
         <div class="container pager">
-            <?= $pager->render() ?>
+            <!--?= $pager->render() ?>-->
         </div>
     <?php else: ?>
         <h2 class="bad-news">No maps yet!</h2>

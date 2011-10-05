@@ -1,0 +1,13 @@
+<?php  
+return array(
+	'default'	=> array(
+		'driver'		=>	'smtp',
+		'options'   => array(
+			'hostname'=>'localhost',
+			// 'username'=>'user',
+			// 'password'=>'pass'
+		)
+	)
+);
+
+?>   

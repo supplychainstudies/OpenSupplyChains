@@ -591,12 +591,13 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     if(this.options.draw_hops) {
         for(var i=0; i<supplychain.hops.length; i++) {
             var h = supplychain.hops[i];
-            //var fc = palette[tiers[h.from_stop_id]];
-            //var tc = palette[tiers[h.to_stop_id]];
-            var fc_color = supplychain.findStop(h.from_stop_id).attributes.color;
-            var tc_color = supplychain.findStop(h.to_stop_id).attributes.color;
-            var fc = fc_color ? (new Sourcemap.Color()).fromHex(fc_color) : palette[tiers[h.from_stop_id]];
-            var tc = tc_color ? (new Sourcemap.Color()).fromHex(tc_color) : palette[tiers[h.to_stop_id]];
+            var fc = palette[tiers[h.from_stop_id]];
+            var tc = palette[tiers[h.to_stop_id]];
+            //var fc_color = supplychain.findStop(h.from_stop_id).attributes.color ? supplychain.findStop(h.from_stop_id).attributes.color : null;
+            //var tc_color = supplychain.findStop(h.to_stop_id).attributes.color ? supplychain.findStop(h.to_stop_id).attributes.color : null;
+            // problem occur when user define custom color in string ex: red
+            //var fc = fc_color ? (new Sourcemap.Color()).fromHex(fc_color) : palette[tiers[h.from_stop_id]];
+            //var tc = tc_color ? (new Sourcemap.Color()).fromHex(tc_color) : palette[tiers[h.to_stop_id]];
             var new_ftr = this.mapHop(supplychain.hops[i], scid);
             var hc = h.getAttr("color", fc.midpoint(tc).toString());
             new_ftr.hop.attributes.color = hc;
@@ -1040,25 +1041,15 @@ Sourcemap.Map.prototype.getFeaturesExtent = function() {
 }
 
 Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
-    var oneStop = function(){
-        var stop_features = this.Sourcemap.view_instance.map.stop_features;
-        var numStops = 0;
-        for(var stops in stop_features) {           
-            for(var k in stop_features[stops]) {
-                numStops++;
-                if (numStops == 2){ return false; }
-            }
-        }
-        return true;
-    }
     
     var center = bounds.getCenterLonLat();
 
     //if there's only one stop on the map, let's zoom to the minimum level
-    if (oneStop() == true){
-        this.map.setCenter(center, this.map.minZoomLevel+1);
-    }
-    else{
+    //if (oneStop() == true){
+    //    this.map.setCenter(center, this.map.minZoomLevel+1);
+    //    console.log("One stop");
+    //}
+    //else{
         if (this.map.baseLayer.wrapDateLine) {
             var maxExtent = this.map.getMaxExtent();
             
@@ -1073,7 +1064,7 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
         
         this.map.setCenter(center, this.getZoomForExtent(bounds, closest));
         //this.map.setCenter(center, 2);
-    }
+    //}
 }
 
 Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {

@@ -173,6 +173,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     			                    );
     			                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
     								var stop = new Sourcemap.Stop(geometry, this.attr);
+                                    // set address by resolution level
     		                        stop.setAttr("address", data.results[0].placename);
     								this.sc.addStop(stop);
     				                Sourcemap.broadcast('supplychain-updated', sc);			
@@ -242,6 +243,47 @@ Sourcemap.Map.Editor.prototype.init = function() {
             }, this)
         }
     });
+    
+   
+    // Click-add function
+    //this.map.map.addControl(new OpenLayers.Control.MousePosition());
+    this.map.map.events.register("click",this.map.map,function(e){
+        // If Ctrl+click
+        if(e.ctrlKey){
+        var position = this.events.getMousePosition(e);
+        var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
+        var lonlat = this.getLonLatFromPixel(pixel);
+        var new_geom = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
+        var thismap = Sourcemap.view_instance.map;
+        thismap.controls.select.unselectAll();
+        
+        new_geom = new_geom.transform(
+           new OpenLayers.Projection('EPSG:900913'),
+           new OpenLayers.Projection('EPSG:4326')
+        );
+        var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+        var geom = (new OpenLayers.Format.WKT()).read(new_geom);
+        var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y);
+        
+        $(".control.addstop").click();
+        if($("#newpoint-placename").val()==undefined){
+            // After first time
+            // TODO: need a better solution to load latlon into dialog
+            setTimeout(function(){
+                $("#newpoint-placename").val(ll.lat+","+ll.lon);
+                $("#newpoint-title").focus();
+            },100);
+        } else {
+            // After secone time
+            $("#newpoint-placename").val(ll.lat+","+ll.lon);
+            $("#newpoint-title").focus();
+        }
+        thismap.map.panTo(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
+    };
+
+    }); // End click-add function
+
+
 
     // save contents of editor ui on dialog close
     Sourcemap.listen('sourcemap-base-dialog-close', $.proxy(function(b, vs) {

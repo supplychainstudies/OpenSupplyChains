@@ -72,8 +72,14 @@ Sourcemap.Map.Editor.prototype.init = function() {
     }, this);
 
     // listen for select clickout events, for connect-to, etc.
-    Sourcemap.listen('map:feature_clickout', $.proxy(function(evt, map, ftr) {
-        this.connect_from = false;
+    Sourcemap.listen('map:feature_clickout', $.proxy(function(evt) {
+        if(this.connect_from){
+            this.connect_from = false;
+            var sc = false;
+            for(var k in this.map.supplychains) { sc = this.map.supplychains[k]; break; };
+            this.map.mapSupplychain(sc.instance_id, true);
+        }
+
     }, this));
 
     Sourcemap.listen('map:feature_unselected', $.proxy(function() {
@@ -91,7 +97,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
             var new_hop = fromst.makeHopTo(tost);
             sc.addHop(new_hop);
             this.map.mapHop(new_hop, sc.instance_id);
-            this.connect_from = false;
             // TODO: review if the selection of the hop is ideal
             this.connect_from = false;
             // if you want to uncomment this, figure out why it breaks things.
@@ -248,6 +253,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // Click-add function
     //this.map.map.addControl(new OpenLayers.Control.MousePosition());
     this.map.map.events.register("click",this.map.map,function(e){
+        thismap.broadcast('map:feature_clickout');
         // If Ctrl+click
         if(e.ctrlKey){
         var position = this.events.getMousePosition(e);

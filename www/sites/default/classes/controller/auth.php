@@ -33,7 +33,13 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
         if(strtolower(Request::$method) === 'post') {
             if($f->validate($_POST)) {
                 // Login
-                if(Auth::instance()->login($_POST['username'], $_POST['password'])) {
+				$user = ORM::factory('user')->where('username', 'ILIKE', $_POST['username'])->find();
+				if(!($user->loaded())) {
+					Message::instance()->set('Invalid username.', Message::ERROR);
+					$this->request->redirect('auth');
+				} 
+				
+                if(Auth::instance()->login($user->username, $_POST['password'])) {
                 } else {
                     Message::instance()->set('Invalid username or password.', Message::ERROR);
                     $this->request->redirect('auth');

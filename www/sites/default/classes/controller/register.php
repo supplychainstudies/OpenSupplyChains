@@ -52,7 +52,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 }
                 
                 // check for username in use
-                $exists = ORM::factory('user')->where('username', '=', $p['username'])->find()->loaded();
+                $exists = ORM::factory('user')->where('username', 'ILIKE', $p['username'])->find()->loaded();
                 if($exists) {
                     Message::instance()->set('That username is taken.');
                     return;
@@ -152,7 +152,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             list($uh, $h) = explode('-', $get['t']);
             // check token
             $username = base64_decode(strrev($uh));
-            $user = ORM::factory('user')->where('username', '=', $username)
+            $user = ORM::factory('user')->where('username', 'ILIKE', $username)
                 ->find();
             $login = ORM::factory('role')->where('name', '=', 'login')
                 ->find();

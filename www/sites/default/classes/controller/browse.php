@@ -21,8 +21,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             'sourcemap-core',
         );
 
-
-       // $log =& Swift_LogContainer::getLog();
+        //$log =& Swift_LogContainer::getLog();
         //$log->setLogLevel(4);;
        
         //$log =& Swift_LogContainer::getLog();
@@ -53,6 +52,10 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
         $params['l'] = 20;
 
+        // for general site browse
+        $this->template->categories = $cats;
+
+        // for browsing a specific category
         if($category && isset($nms[$category])) {
             $slug = $category;
             $category = $nms[$category];

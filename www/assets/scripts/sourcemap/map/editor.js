@@ -83,8 +83,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     // listen for select clickout events, for connect-to, etc.
     Sourcemap.listen('map:feature_clickout', $.proxy(function(evt) {
-        console.log('clickout');
-        console.log(this);
         if(this.connect_from){
             this.connect_from = false;
             var sc = false;

@@ -34,6 +34,7 @@
     }
 }
 .olMap > div {  z-index:0 !important; }
+.editable-options { display:none; }
 
 /* Detail Pane ---------------------------------------------------------- */
 #dialog {
@@ -296,7 +297,7 @@
                     &.weight{padding-left: 30px; background: url(../images/dock-icon-mass.png) 10px 12px no-repeat;}
                     &.co2e{padding-left: 40px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
                     &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
-                    &.addstop{padding-left: 40px; background: url(../images/dock-icon-addpoint.png) 10px 12px no-repeat;}
+                    &.addstop{padding-left: 40px; display:none; background: url(../images/dock-icon-addpoint.png) 10px 12px no-repeat;}
 
                     &.toggle {  &.active { color: #333; background-color:rgba(200,200,200,0.85); } }
                     &:last-child { border-radius: 0 12px 12px 0; border: none; }
@@ -341,12 +342,7 @@
             overflow:hidden;
             line-height: 20px;
             height: 9px;
-            &.editable{
-                max-width:300px;
-            }
-            &.noneditable{
-                max-width:330px;
-            }
+            max-width:370px;
         }
         #banner-favorite {
             background: url(../images/icon-favorite.png) 10px -19px no-repeat;
@@ -366,30 +362,16 @@
             background: url(../images/icon-share.png) 10px center no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);    
         }
-        #banner-edit {
-            //background: url(../images/icon-share.png) 10px center no-repeat;
+        #banner-lock {
             border-left:1px solid rgba(140,140,140,0.25);
-            &.active {
-                color: #333; background-color:rgba(200,200,200,0.85);
-                font-weight:bold;
+			background: url(../images/icon-lock.png) 10px -41px no-repeat;            
+
+            &.locked {
+				background-position: 10px 8px;            
                 :hover{text-decoration:none;}
             }
         }
-        
-        #banner-preview {
-            //background: url(../images/icon-owner.png) 10px center no-repeat;
-            border-left:1px solid rgba(140,140,140,0.25);
-            &.active {
-                background-color:rgba(200,200,200,0.85);
-                border-radius: 0 12px 12px 0;
-                color:#333;font-weight:bold;
-                :hover{text-decoration:none;}
-            }               
-        }
-        #banner-edit ,#banner-preview {
-            float:right;
-        }
-        #banner-owner, #banner-favorite, #banner-share {
+        #banner-owner, #banner-favorite, #banner-share, #banner-lock {
             padding-left: 40px;
             float: right;
         }

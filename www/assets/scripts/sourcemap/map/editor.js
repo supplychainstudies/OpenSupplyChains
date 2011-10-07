@@ -87,30 +87,33 @@ Sourcemap.Map.Editor.prototype.init = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        if(this.connect_from) {
-            var fromstid = this.connect_from.attributes.stop_instance_id;
-            var tostid = ftr.attributes.stop_instance_id;
-            if(fromstid == tostid) return;
-            var sc = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-            var fromst = sc.findStop(fromstid);
-            var tost = sc.findStop(tostid);
-            var new_hop = fromst.makeHopTo(tost);
-            sc.addHop(new_hop);
-            this.map.mapHop(new_hop, sc.instance_id);
-            // TODO: review if the selection of the hop is ideal
-            this.connect_from = false;
-            // if you want to uncomment this, figure out why it breaks things.
-            //this.map.controls.select.select(this.map.hopFeature(new_hop));
-            Sourcemap.broadcast('supplychain-updated', sc);
-        } else if(ftr.attributes.hop_instance_id) {
-            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
-            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-            this.showEdit(ftr);
-        } else if(ftr.attributes.stop_instance_id) {
-            var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
-            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-            this.showEdit(ftr);
-        }
+		if(!(this.map_view.options.locked)) {
+	        if(this.connect_from) {
+	            var fromstid = this.connect_from.attributes.stop_instance_id;
+	            var tostid = ftr.attributes.stop_instance_id;
+	            if(fromstid == tostid) return;
+	            var sc = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+	            var fromst = sc.findStop(fromstid);
+	            var tost = sc.findStop(tostid);
+	            var new_hop = fromst.makeHopTo(tost);
+	            sc.addHop(new_hop);
+	            this.map.mapHop(new_hop, sc.instance_id);
+	            this.connect_from = false;
+	            // TODO: review if the selection of the hop is ideal
+	            this.connect_from = false;
+	            // if you want to uncomment this, figure out why it breaks things.
+	            //this.map.controls.select.select(this.map.hopFeature(new_hop));
+	            Sourcemap.broadcast('supplychain-updated', sc);
+	        } else if(ftr.attributes.hop_instance_id) {
+	            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
+	            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+	            this.showEdit(ftr);
+	        } else if(ftr.attributes.stop_instance_id) {
+	            var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
+	            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+	            this.showEdit(ftr);
+	        }
+		}
     }, this));
 
     this.map.dockAdd('addstop', {

@@ -10,22 +10,18 @@
  * 
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
+
 <div id="banner-content">
-    <div id="banner-summary" class="<%if(this.editable){%>editable<%}else{%>noneditable<%}%>">
-       <%= _S.ttrunc(_S.htesc(this.getAttr("title", this.getAttr("name", "Untitled Sourcemap"))), 55) %>
+    <div id="banner-summary">
+       <%= _S.ttrunc(_S.htesc(this.sc.getAttr("title", this.sc.getAttr("name", "Untitled Sourcemap"))), 75) %>
     </div>
-    <% if(this.editable){ %>
-    <a class="banner-preview-link" href="javascript:void(0);">
-    <div id="banner-preview" <% if(window.location.href.split("?")[1]!="edit"){ %> class="active" <% } %> >
-        Preview
-    </div>
-    </a>
-    <a class="banner-edit-link" href="javascript:void(0);">
-    <div id="banner-edit"  <% if(window.location.href.split("?")[1]=="edit"){  %> class="active" <% }  %> >
-        Edit
-    </div>
-    </a>
-    <% } %>
+    <% if(this.sc.editable){ %> 
+		<a class="banner-lock-link" href="javascript:void(0);">
+		<div id="banner-lock" <% if(this.lock == true){ %>class="locked"<% } %>>
+	        Edit
+	    </div>
+		</a> 
+	<% } %>
     <a class="banner-share-link" href="javascript:void(0);">
     <div id="banner-share">
         Share
@@ -37,8 +33,8 @@
     </div>
     </a>
     <div id="banner-owner">
-        <% var d = new Date(this.created*1000); %>
-        <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.
+        <% var d = new Date(this.sc.created*1000); %>
+        <a href="user/<%= this.sc.owner.name %>"><%= this.sc.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.
     </div>
     <div class="map-status">
     </div>

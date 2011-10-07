@@ -164,7 +164,6 @@ Sourcemap.Map.prototype.initMap = function() {
         "controls": controls
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
-
     this.broadcast('map:openlayers_map_initialized', this);
     return this;
 }

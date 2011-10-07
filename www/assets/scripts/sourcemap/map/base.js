@@ -35,7 +35,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water"],
     "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"},
-    "legend": true,
+    "legend": true, "locked":true,
     "viz_attr_map": {
         "weight": function(st) {
             var val = 0;
@@ -82,20 +82,20 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
     
     Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
-    	
     	this.toggleTileset(sc);
     	var initpos = this.options.position.split("|");
     	var p = new OpenLayers.LonLat(initpos[1], initpos[0]);
         p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
       	if(this.options.position == '0|0|0') {
-    		if(sc.stops.length) {
+    		if(sc.stops.length) {	
                 this.map.zoomToExtent(this.map.getFeaturesExtent(), false);
-    		} else {
-    			this.map.map.setCenter(p, this.map.map.minZoomLevel);			    
+    		} else {	
+    			this.map.map.setCenter(p, this.map.map.minZoomLevel);		
     		}
         } else {
      		this.map.map.setCenter(p, initpos[2]);
         }
+		if(!(sc.stops.length) && sc.editable) {	this.showEditor(); }
 		this.loadExternals(sc);
         
     }, this));
@@ -129,7 +129,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 
             firstLoad = false;
         }
-
+		if(!(sc.stops.length) && sc.editable) {	this.showEditor(); }
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
         // TODO: do calculations here
@@ -160,11 +160,11 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(ftr.cluster) {
             this.showClusterDetails(ftr);
-        } else if(ftr.attributes.stop_instance_id && !(map.editor)) {
+        } else if(ftr.attributes.stop_instance_id && (!(map.editor) || this.options.locked)) {
             this.showStopDetails(
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
-        } else if (ftr.attributes.hop_instance_id && !(map.editor)) {
+        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );
@@ -201,17 +201,20 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             break;
         }
     }
-    var cb = function(p, tx, th) {
+    var cb = $.proxy(function(p, tx, th) {
         $(this.banner_div).html(th);
         $(this.banner_div).find('.banner-share-link').click(function(){
             $.scrollTo('#sidebar', 600);
         });
-        $(this.banner_div).find('.banner-edit-link').click(function(){
-            window.location.replace(window.location.pathname +"?edit");
-        });
-        $(this.banner_div).find('.banner-preview-link').click(function(){
-            window.location.replace(window.location.pathname);
-        });
+
+        $(this.banner_div).find('.banner-lock-link').click($.proxy(function(){
+	    	if(this.options.locked) {
+				this.showEditor();
+			} else {
+				this.hideEditor();
+			}
+        }, this));
+
         $(this.banner_div).find('.banner-favorite-link').click($.proxy(function() { 
             this.favorite();
         }, this));
@@ -230,9 +233,10 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
                 }
             },this)
         });
-    }
+    }, this);
 
-    Sourcemap.tpl('map/banner', sc, $.proxy(cb, this));
+	var s = {"sc":sc, "lock":this.options.locked};
+    Sourcemap.template('map/banner', cb, s, s);
 
     if(this.options.watermark) {
         this.watermark = $('<div id="watermark"></div>');
@@ -283,6 +287,24 @@ Sourcemap.Map.Base.prototype.updateStatus = function(msg, cls) {
     return this;
 }
 
+Sourcemap.Map.Base.prototype.showEditor = function() {
+	this.options.locked = false;
+	$('#banner-lock').removeClass('locked');
+	$('.editable-options').css('display','block');
+	$('.addstop').css("display","block");	
+	if(this.dialog) {
+		this.hideDialog();
+	}
+}
+Sourcemap.Map.Base.prototype.hideEditor = function() {
+	this.options.locked = true;
+	$('#banner-lock').addClass('locked');
+	$('.editable-options').css('display','none');
+	$('.addstop').css("display","none");	
+	if(this.dialog) {
+		this.hideDialog();
+	}
+}
 Sourcemap.Map.Base.prototype.showDialog = function(mkup) {
     if(this.dialog) {
         this.initDialog();

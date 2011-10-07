@@ -65,7 +65,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                     $raw_sc->other_perms &= ~Sourcemap::READ;
                 try {
                     $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
-                    return $this->request->redirect('view/'.$new_scid.'?edit');
+                    return $this->request->redirect('view/'.$new_scid);
                 } catch(Exception $e) {
                     $this->request->status = 500;
                     Message::instance()->set('Couldn\t create your supplychain. Please contact support.');

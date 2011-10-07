@@ -106,8 +106,8 @@ $(document).ready(function(){
         return false;
     });
 
-    Sourcemap.truncate_string(".preview-title",236);
-    Sourcemap.truncate_string(".preview-title.vertical",176);
+    Sourcemap.truncate_string(".preview-title");
+
 }); // end of document ready
 
 

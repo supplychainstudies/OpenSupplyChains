@@ -22,7 +22,7 @@
             </div>
             <h3 class="preview-title vertical">
                 <a href="view/<?php print $item->id; ?>">
-                <?= Text::limit_chars(HTML::chars($item->attributes->title), 16) ?>
+                <?= HTML::chars($item->attributes->title) ?>
                 </a>
             </h3>
             <h4>

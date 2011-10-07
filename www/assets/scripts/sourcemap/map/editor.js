@@ -253,14 +253,16 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // Click-add function
     //this.map.map.addControl(new OpenLayers.Control.MousePosition());
     this.map.map.events.register("click",this.map.map,function(e){
+        
+        var thismap = Sourcemap.view_instance.map;
         thismap.broadcast('map:feature_clickout');
+
         // If Ctrl+click
         if(e.ctrlKey){
         var position = this.events.getMousePosition(e);
         var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
         var lonlat = this.getLonLatFromPixel(pixel);
         var new_geom = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
-        var thismap = Sourcemap.view_instance.map;
         thismap.controls.select.unselectAll();
         
         new_geom = new_geom.transform(

@@ -550,6 +550,7 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
     if(geocode) {
         this.map_view.updateStatus("Moved stop '"+st.getLabel()+'"..."');
         Sourcemap.Stop.geocode(ll, $.proxy(function(data) {
+            // TODO : sometimes 400 Bad request or blank place name
             if(data && data.results && data.results.length) {
                 this.editor.map_view.updateStatus("Updated address...");
                 this.stop.setAttr("address", data.results[0].placename);
@@ -560,7 +561,13 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
                 //this.editor.map.controls.select.select(ftr);
             } else {
                 var geom = (new OpenLayers.Format.WKT()).read(this.stop.geometry);
-                var ll = new OpenLayers.LonLat(geom.geometry.x, geom.geometry.y)
+                var new_geom = new OpenLayers.Geometry.Point(geom.geometry.x, geom.geometry.y); 
+                new_geom = new_geom.transform(
+                    new OpenLayers.Projection('EPSG:900913'),
+                    new OpenLayers.Projection('EPSG:4326') 
+                );
+                geom = (new OpenLayers.Format.WKT()).read(new_geom); 
+                var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y); 
                 this.stop.setAttr('address', ll.lat+','+ll.lon);
             }
         }, {"stop": st, "editor": this, "trigger_events": trigger_events}));

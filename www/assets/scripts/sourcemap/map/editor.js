@@ -71,8 +71,20 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     }, this);
 
+    // When map is zoom
+    Sourcemap.listen('map:zoomend',$.proxy(function(){
+        // When in connect mode
+        if(this.connect_from){
+            var sl = this.map.getStopLayer(this.connect_from.attributes.supplychain_instance_id);
+            sl.drawFeature(this.connect_from);
+        }
+    },this));
+    
+
     // listen for select clickout events, for connect-to, etc.
     Sourcemap.listen('map:feature_clickout', $.proxy(function(evt) {
+        console.log('clickout');
+        console.log(this);
         if(this.connect_from){
             this.connect_from = false;
             var sc = false;
@@ -252,12 +264,16 @@ Sourcemap.Map.Editor.prototype.init = function() {
         }
     });
     
-   
+  
+    this.map.map.events.register("zoomend",this.map.map,function(e){
+       Sourcemap.broadcast('map:zoomend'); 
+    });
+    
     // Click-add function
     //this.map.map.addControl(new OpenLayers.Control.MousePosition());
     this.map.map.events.register("click",this.map.map,function(e){
         var thismap = Sourcemap.view_instance.map;
-        thismap.broadcast('map:feature_clickout');
+        Sourcemap.broadcast('map:feature_clickout');
 
         // If Ctrl+click
         if(e.ctrlKey){

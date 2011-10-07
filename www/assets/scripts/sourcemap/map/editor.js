@@ -256,7 +256,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // Click-add function
     //this.map.map.addControl(new OpenLayers.Control.MousePosition());
     this.map.map.events.register("click",this.map.map,function(e){
-        
         var thismap = Sourcemap.view_instance.map;
         thismap.broadcast('map:feature_clickout');
 
@@ -324,7 +323,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
-            if(ftr.cluster) {
+            if(ftr.cluster || this.map_view.options.locked) {
                 this.map.controls.stopdrag.cancel();
                 clearTimeout(this.map.controls.stopdrag.handlers.drag.pressTimer);
             }
@@ -353,6 +352,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.handlers.drag.mousedown = function (evt, ftr) {
         var propagate = true;
         this.dragging = false;
+		
         if (this.checkModifiers(evt) && OpenLayers.Event.isLeftClick(evt)) {
             this.pressTimer = window.setTimeout($.proxy(function() {
                 // timer finished

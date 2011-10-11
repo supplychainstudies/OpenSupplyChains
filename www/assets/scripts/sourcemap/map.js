@@ -175,7 +175,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
             "type": google.maps.MapTypeId.TERRAIN,
             "animationEnabled": false,
             "minZoomLevel": 1, "maxZoomLevel": 17,
-            //"wrapDateLine":false,
+            "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
         "satellite", {
@@ -183,7 +183,9 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
             "type": google.maps.MapTypeId.SATELLITE,
             "animationEnabled": false,
             "minZoomLevel": 1, "maxZoomLevel": 17,
-            //"wrapDateLine":false,
+            //"displayOutsideMaxExtent": false,
+            //"maxExtent": new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
+            "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {

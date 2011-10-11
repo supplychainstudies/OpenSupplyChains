@@ -34,14 +34,54 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             if($f->validate($_POST)) {
                 // Login
 				$user = ORM::factory('user')->where('username', 'ILIKE', $_POST['username'])->find();
+                // User name check
 				if(!($user->loaded())) {
-					Message::instance()->set('Invalid username.', Message::ERROR);
+					Message::instance()->set('Invalid username or password.', Message::ERROR);
 					$this->request->redirect('auth');
 				} 
 				
                 if(Auth::instance()->login($user->username, $_POST['password'])) {
+                    // pass
                 } else {
-                    Message::instance()->set('Invalid username or password.', Message::ERROR);
+                    // Wrong password or without login role
+                    $loginrole = ORM::factory('role')->where('name', '=', 'login')->find();
+                    if(!$user->has('roles', $loginrole))
+                    {
+                        // without login role
+                        // Resend email notification
+                        $mailer = Email::connect();
+                        $swift_msg = Swift_Message::newInstance();
+
+                        $headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your New Sourcemap Account');
+
+                        $h = md5(sprintf('%s-%s', $user->username, $user->email));
+                        $lid = strrev(base64_encode($user->username));
+                        $url = URL::site("register/confirm?t=$lid-$h", true);
+                        $msgbody = "\n";
+                        $msgbody .= "Dear {$user->username},\n\n";
+                        $msgbody .= "Welcome to Sourcemap!\n";
+                        $msgbody .= " Please click the link below to active your account:\n\n";
+                        $msgbody .= $url."\n\n";
+                        $msgbody .= "If you have any questions, please email support@sourcemap.com.\n\n";
+                        $msgbody .= "-The Sourcemap Team\n";
+                        $swift_msg->setSubject('Re: Your New Sourcemap Account')
+                                  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
+                                  ->setTo(array($user->email => ''))
+                                  ->setBody($msgbody);
+
+                        try{
+                            $sent = $mailer->send($swift_msg);
+                            Message::instance()->set('Resend activation mail, please check your email again.');
+                            $this->request->redirect('register/thankyou');
+                        } catch (Exception $e) {
+                            // email resend failed
+                            Message::instance()->set('Sorry, could not complete login. Please contact support.');
+                        }
+
+                    } else {                        
+                        // wrong password
+                        Message::instance()->set('Invalid username or password.', Message::ERROR);
+                    }
                     $this->request->redirect('auth');
                 }
 

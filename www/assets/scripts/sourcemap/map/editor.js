@@ -192,7 +192,11 @@ Sourcemap.Map.Editor.prototype.init = function() {
     			                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
     								var stop = new Sourcemap.Stop(geometry, this.attr);
                                     // set address by resolution level
-    		                        stop.setAttr("address", data.results[0].placename);
+                                    if(data.results[0].placename!=""){
+        		                        stop.setAttr("address", data.results[0].placename);
+                                    } else {
+                                        stop.setAttr("address", data.results[0].lat+","+data.results[0].lon); 
+                                    }
     								this.sc.addStop(stop);
     				                Sourcemap.broadcast('supplychain-updated', sc);			
     								
@@ -567,7 +571,11 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
             // TODO : sometimes 400 Bad request or blank place name
             if(data && data.results && data.results.length) {
                 this.editor.map_view.updateStatus("Updated address...");
-                this.stop.setAttr("address", data.results[0].placename);
+                if(data.results[0].placename!=""){
+                    this.stop.setAttr("address", data.results[0].placename);
+                } else {
+                    this.stop.setAttr("address", data.results[0].lat+","+data.results[0].lon);
+                }
                 Sourcemap.broadcast('supplychain-updated', 
                     this.editor.map.findSupplychain(this.stop.supplychain_id), true
                 );

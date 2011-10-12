@@ -36,47 +36,59 @@
 <?php endif; ?>
 <div class="clear"></div>
 
-<?php $counter = 0; ?>
-<?php foreach($categories as $category){?>
-<?php // first 3 categoies get to be big ?>
-<?php if ($counter<2): ?>
-<div class="category-view medium">
-    <h2><?= $category->title ?>: <span class="category-quantity"><?= $category ?></span></h2>
-    <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $primary->results)) ?>
-</div>
-<?php // remaining are small ?>
-<?php else: ?>
-<div class="category-view small">
-    <? print_r($taxonomy); ?>
-    <h3><?= $category->title ?>: <span class="category-quantity">99</span></h3>
-    <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $primary->results)) ?>
-</div>
-<?php endif ?>
-<?php $counter++; ?>
-<?php }?>
-<div id="sidebar">
-    <ul>
-        <li>
-            <h2>Interesting Sourcemaps</h2>
-            <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $interesting->results)) ?>
-        </li>
-       
-        <!--
-        <li>
-            <h2>New:</h2>
-            <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent->results)) ?>
-        </li>
+<?php // If we're at the top level, display a list of all categories ?>
+<?php if (count($searches) > 1){ ?>
+    <?php $counter = 0; ?>
+    <?php foreach($searches as $search){?>
         
-        <li>
-            <h2>Starred:</h2>
-            <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $favorited)) ?>
-        </li>
-        
-        <li>
-            <h2>Discussed:</h2>
-            <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $discussed)) ?>
-        </li>
-        -->
-    </ul>
-</div>
+        <?php // first 3 categories get to be big ?>
+        <?php if ($counter<2): ?>
+        <div class="category-view medium">
+            <h2><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
+            <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $search->results)) ?>
+        </div>
+
+        <?php // remaining categories are small ?>
+        <?php else: ?>
+        <div class="container">
+            <div class="category-view small">
+                <div class="left">
+                    <h3><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
+                    <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results)) ?>
+                </div>
+            </div>
+        </div>
+        <?php endif ?>
+
+        <?php $counter++; ?>
+    <?php }?>
+    <div id="sidebar">
+        <ul>
+            <li>
+                <h2>Interesting Sourcemaps</h2>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $interesting->results)) ?>
+            </li>
+           
+            <!--
+            <li>
+                <h2>New:</h2>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent->results)) ?>
+            </li>
+            
+            <li>
+                <h2>Starred:</h2>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $favorited)) ?>
+            </li>
+            
+            <li>
+                <h2>Discussed:</h2>
+                <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $discussed)) ?>
+            </li>
+            -->
+        </ul>
+    </div>
+
+<?php } else { ?>
+    <div>Sup?</div>
+<?php } ?>
 <div class="clear"></div>

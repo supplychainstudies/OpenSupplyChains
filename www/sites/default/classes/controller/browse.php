@@ -20,24 +20,22 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-core',
         );
-
         $this->layout->page_title = 'Browse maps by Category';
 
         $cats = Sourcemap_Taxonomy::arr();
         
-        // grab slugified names for each category
-        $names = array();
-        foreach($cats as $i => $cat) {
-            $names[Sourcemap_Taxonomy::slugify($cat->name)] = $cat;
-        }
-
-        $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
-
+        $nms = array();
         $defaults = array(
             'q' => false,
             'p' => 1,
             'l' => 20
         );
+
+        foreach($cats as $i => $cat) {
+            $nms[Sourcemap_Taxonomy::slugify($cat->name)] = $cat;
+        }
+
+        $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
 
         $params = $_GET;
         if(strtolower(Request::$method) == 'post')
@@ -45,36 +43,39 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
         $params = array_merge($defaults, $params);
 
-        $params['l'] = 20;
-
-        // for general site browse
-        $this->template->categories = $cats;
-
-        // for browsing a specific category
-        if($category && isset($names[$category])) {
+        if($category && isset($nms[$category])) {
+            // if a specific category is set, use the category view 
+            // this should be cleverly recursive, but it's not
             $slug = $category;
-            $category = $names[$category];
-            $this->template->category = $category;
+            $category = $nms[$category];
             $params['c'] = $category->name;
             $this->layout->page_title .= ' - '.$category->title;
+            $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
         } elseif($category) {
-            Message::instance()->set('"'.$category.'" is not a valid category slug.');
+            Message::instance()->set('"'.$category.'" is not a valid category.');
             return $this->request->redirect('browse');
         } else {
+            // Top-level category view
             $this->template->category = false;
+            
+            // Create an array of all top-level categories
+            $toplevels = array();
+            $tree = Sourcemap_Taxonomy::load_tree();
+            foreach($tree->children as $subtree){
+                array_push($toplevels, $subtree->data->name);
+            }
+            
+            // Do a general search for every top-level category
+            // Note that this will just return everything in the category
+            $searches = array();
+            foreach ($toplevels as $i => $cat){
+                $params['c'] = $cat;
+                $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
+                array_push($searches, $search);
+            }
         }
-        $r = Sourcemap_Search::find($params+array('recent' => 'yes'));
-        $p = Pagination::factory(array(
-            'current_page' => array(
-                'source' => 'query_string',
-                'key' => 'p'
-            ),
-            'total_items' => $r->hits_tot,
-            'items_per_page' => $r->limit,
-            'view' => 'pagination/basic'
-        ));
-        $this->template->primary = $r;
-        $this->template->pager = $p;
+        
+        $this->template->searches = $searches;
 
     	$params['l'] = 1;
         $this->template->favorited = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));

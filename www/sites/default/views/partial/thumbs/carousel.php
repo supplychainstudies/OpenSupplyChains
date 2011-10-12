@@ -12,12 +12,12 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<ul class="category-map-view carousel jcarousel-skin-sourcemap">
+<ul class="category-map-view <?= count($supplychains) > 4 ? "carousel jcarousel-skin-sourcemap" : "nocarousel"; ?>">
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item):?>
         <li class="preview-map-item medium">
             <div class="preview-badge">
-            <a href="view/<?php print $item->id; ?>"><img class="preview-map medium" src="static/<?= $item->id ?>.m.png" alt="" /></a>
+                <a href="view/<?php print $item->id; ?>"><img class="preview-map medium" src="static/<?= $item->id ?>.m.png" alt="" /></a>
             </div>
             <h3 class="preview-title">
                 <a href="view/<?= $item->id; ?>">
@@ -29,4 +29,5 @@
     <?php endforeach; ?>
 <?php else: ?>
 <?php endif; ?>
+<div class="clear"></div>
 </ul>

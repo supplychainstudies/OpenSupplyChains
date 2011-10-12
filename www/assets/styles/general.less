@@ -661,8 +661,84 @@ h2.section-title{
     width: 1020px;
     margin-left: auto;
     margin-right: auto;
+    ul{
+        list-style:none;
+        margin-left: 0;
+        &.nocarousel{
+            width: 940px;
+            padding: 20px 40px;
+        }
+    }
     h2{
         margin-left: 40px;
+    }
+    &.small{ 
+        width: 580px;
+        margin: 0;
+        .left{
+            .jcarousel-container-horizontal{
+                width:540px;
+                overflow: hidden;
+            }
+            .jcarousel-next-horizontal,
+            .jcarousel-prev-horizontal {
+                top: 30px;
+            }
+            .jcarousel-next-horizontal { right: 0px; }
+            .jcarousel-prev-horizontal { left: -10px; }
+        }
+    }
+
+
+    .jcarousel-skin-sourcemap{
+
+        .jcarousel-container-horizontal {
+            width: 940px;
+            padding: 20px 40px;
+        }
+
+        .jcarousel-clip {
+            overflow: hidden;
+        }
+
+        .jcarousel-item{
+            // These need to be set explicitly, otherwise jcarousel won't start
+            height: 180px;
+            width: 235px;
+        }
+        
+        .jcarousel-item.small{
+            height: 160px;
+            width: 180px;
+        }
+
+        .jcarousel-next-horizontal,
+        .jcarousel-prev-horizontal {
+            position: absolute;
+            top: 43px;
+            width: 62px;
+            height: 89px;
+            cursor: pointer;
+            opacity: .1;
+        }
+        
+        .jcarousel-next-horizontal {
+            right: -20px;
+            background: transparent url(../images/carousel-right.png) no-repeat 0 0;
+         } 
+
+        .jcarousel-prev-horizontal {
+            left: -20px;
+            background: transparent url(../images/carousel-left.png) no-repeat 0 0;
+        }
+
+        .jcarousel-next-horizontal:hover,
+        .jcarousel-next-horizontal:focus,
+        .jcarousel-prev-horizontal:hover,
+        .jcarousel-prev-horizontal:focus {
+            opacity: .2;
+        }
+
     }
 }
 
@@ -676,43 +752,6 @@ ul#browse-list {
 	}
 }
 
-.jcarousel-skin-sourcemap{
-    .jcarousel-container-horizontal {
-        padding: 20px 40px;
-    }
-
-    .jcarousel-clip {
-        overflow: hidden;
-    }
-
-    .jcarousel-next-horizontal,
-    .jcarousel-prev-horizontal {
-        position: absolute;
-        top: 43px;
-        width: 62px;
-        height: 89px;
-        cursor: pointer;
-        opacity: .1;
-    }
-    
-    .jcarousel-next-horizontal {
-        right: -20px;
-        background: transparent url(../images/carousel-right.png) no-repeat 0 0;
-     } 
-
-    .jcarousel-prev-horizontal {
-        left: -20px;
-        background: transparent url(../images/carousel-left.png) no-repeat 0 0;
-    }
-
-    .jcarousel-next-horizontal:hover,
-    .jcarousel-next-horizontal:focus,
-    .jcarousel-prev-horizontal:hover,
-    .jcarousel-prev-horizontal:focus {
-        opacity: .2;
-    }
-
-}
 
 /* Document pages -------------- */
 #document-content {

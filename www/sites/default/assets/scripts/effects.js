@@ -131,7 +131,7 @@ function beforeSubmit()
 
 jQuery(document).ready(function() {
     jQuery('.carousel').jcarousel({
-        auto: 2,
+        scroll: 1,
     });
 });
 

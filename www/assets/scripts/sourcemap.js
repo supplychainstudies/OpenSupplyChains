@@ -169,6 +169,7 @@ Sourcemap.factory = function(type, data) {
             instance.owner = data.owner;
             instance.remote_id = sc.id;
             instance.created = sc.created;
+            instance.modified = sc.modified;
             instance.attributes = sc.attributes;
             instance.usergroup_perms = sc.usergroup_perms;
             instance.other_perms = sc.other_perms;

@@ -33,7 +33,7 @@
     </div>
     </a>
     <div id="banner-owner">
-        <% var d = new Date(this.sc.created*1000); %>
+        <% var d = new Date(this.sc.modified*1000); %>
         <a href="user/<%= this.sc.owner.name %>"><%= this.sc.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.
     </div>
     <div class="map-status">

@@ -21,22 +21,17 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             'sourcemap-core',
         );
 
-        //$log =& Swift_LogContainer::getLog();
-        //$log->setLogLevel(4);;
-       
-        //$log =& Swift_LogContainer::getLog();
-        //echo $log->dump(true);
-
-        $this->layout->page_title = 'Browsing maps on Sourcemap';
+        $this->layout->page_title = 'Browse maps by Category';
 
         $cats = Sourcemap_Taxonomy::arr();
-        $nms = array();
+        
+        // grab slugified names for each category
+        $names = array();
         foreach($cats as $i => $cat) {
-            $nms[Sourcemap_Taxonomy::slugify($cat->name)] = $cat;
+            $names[Sourcemap_Taxonomy::slugify($cat->name)] = $cat;
         }
 
         $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
-
 
         $defaults = array(
             'q' => false,
@@ -56,9 +51,9 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->template->categories = $cats;
 
         // for browsing a specific category
-        if($category && isset($nms[$category])) {
+        if($category && isset($names[$category])) {
             $slug = $category;
-            $category = $nms[$category];
+            $category = $names[$category];
             $this->template->category = $category;
             $params['c'] = $category->name;
             $this->layout->page_title .= ' - '.$category->title;

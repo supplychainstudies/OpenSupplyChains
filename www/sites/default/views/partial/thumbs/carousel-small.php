@@ -12,7 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<ul class="category-map-view carousel">
+<ul class="category-map-view jcarousel-skin-sourcemap carousel">
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item):?>
         <li class="preview-map-item small">

@@ -12,6 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+
 <div class="container">
     <h1 class="dashboard-title">Your sourcemap profile</h1>
     <div class="dashboard-top">
@@ -50,7 +51,14 @@
         <div class="clear"></div>
     </div>
 </div>
-<div class="clear"></div>
+<div class="container">
+    <div class="account-alert">
+        <p>
+            If you tried to migrate your Sourcemap.org account and your maps don't appear below, you may need to contact <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a>.
+        </p>
+    </div>
+</div>
+<div class="push"></div>
 
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>

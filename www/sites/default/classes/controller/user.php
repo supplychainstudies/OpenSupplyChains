@@ -47,8 +47,14 @@ class Controller_User extends Sourcemap_Controller_Layout {
                // HACK: Office Depot branding info
                // This information needs to come from the database.
                if ($user->username == "officedepot"){
-                   $banner_url="sites/default/assets/images/officedepot-logo.png";
-                   $featured_ids = Array(34,36,37);
+                   $banner_url="sites/default/assets/images/officedepot-logo.png";                   
+                   $q = array(
+                    'user' => $user->id,
+                    'l' => 4,'recent' => 'yes'
+                   );
+                   $r = Sourcemap_Search::find($q);
+
+                   $featured_ids = $r;
                }
 
                // HACK: Stonyfield branding info
@@ -60,13 +66,13 @@ class Controller_User extends Sourcemap_Controller_Layout {
                $this->template->banner_url = $banner_url;
 
                // Grab supplychains from IDs
-               $featured = Array();
-               foreach($featured_ids as $id){
-                   $featured[] = ORM::factory('supplychain', $id);
-               }
+               //$featured = Array();
+               //foreach($featured_ids as $id){
+               //    $featured[] = ORM::factory('supplychain', $id);
+               // }
 
-               $this->template->featured = $featured;
-           }
+               $this->template->featured = $featured_ids;
+           } // channel role end           
 
             $user = (object)$user->as_array();
             $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
@@ -111,9 +117,10 @@ class Controller_User extends Sourcemap_Controller_Layout {
             }
             // If user is an admin
             else if(Auth::instance()->get_user() && Auth::instance()->get_user()->has('roles', $admin)){                
+            // If enter numeric user id
             if(is_numeric($identifier)) {
                  $user = ORM::factory('user', $identifier);
-            } else {
+            } else {    // If enter string user id
                  $user = ORM::factory('user')->where('username', '=', $identifier)->find();
             }
                         
@@ -144,10 +151,8 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
 
 
-            }
-            else
-            {
-
+            } else {
+            // User not login
             unset($user->password);
             $user->avatar = Gravatar::avatar($user->email, 128);
             unset($user->email);
@@ -178,13 +183,11 @@ class Controller_User extends Sourcemap_Controller_Layout {
             ));
 
             $this->template->pager = $p;
-
             $this->template->supplychains = $r->results;
             
             }
-
-
         } else {
+            // User not loaded
             Message::instance()->set('That user doesn\'t exist.');
             return $this->request->redirect('');
         }

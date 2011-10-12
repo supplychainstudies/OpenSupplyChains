@@ -21,6 +21,7 @@
     <div class="channel-featured-maps">
         <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
         <div class="clear"></div>
+        <div id="channel-featured-teaser"></div>
     </div>
 
     <div class="channel-other-maps">

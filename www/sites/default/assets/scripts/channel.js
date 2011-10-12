@@ -32,10 +32,16 @@ $(function () {
             $('#featured-slider-description').empty();
             $('#featured-slider-text').empty();
             $('#featured-description-0').contents().clone().appendTo($('#featured-slider-description'));
+
+            $('#channel-featured-teaser').text( $('#featured-description-0').find('.featured-teaser').text() );
+            $('#channel-featured-teaser').css('overflow','hidden');
+            $('.featured-teaser').css('display','none');
+
         },
         onSlideComplete : function(slider) {
             $('#featured-slider-description').empty();
             $('#featured-description-' + (slider.currentPage - 1)).contents().clone().appendTo($('#featured-slider-description'));
+            $('#channel-featured-teaser').text( $('#featured-description-' + (slider.currentPage - 1)).find('.featured-teaser').text() );
         }
     });
 });

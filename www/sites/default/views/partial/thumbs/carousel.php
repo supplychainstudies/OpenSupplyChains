@@ -19,7 +19,7 @@
             <div class="preview-badge">
                 <a href="view/<?php print $item->id; ?>"><img class="preview-map medium" src="static/<?= $item->id ?>.m.png" alt="" /></a>
             </div>
-            <h3 class="preview-title">
+            <h3 class="preview-title carousel">
                 <a href="view/<?= $item->id; ?>">
                     <?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"), 23) ?>                   
                 </a></h3>

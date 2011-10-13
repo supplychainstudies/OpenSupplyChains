@@ -33,6 +33,7 @@
     </div>
     </a>
     <div id="banner-owner">
+<<<<<<< .merge_file_g7C5PW
 <<<<<<< .merge_file_FkcELa
         <% var d = new Date(this.modified*1000); %>
         <a href="user/<%= this.owner.name %>"><%= this.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.
@@ -40,6 +41,10 @@
         <% var d = new Date(this.sc.modified*1000); %>
         <a href="user/<%= this.sc.owner.name %>"><%= this.sc.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.
 >>>>>>> .merge_file_mQFYd9
+=======
+        <% var d = new Date(this.sc.modified*1000); %>
+        <a href="user/<%= this.sc.owner.name %>"><%= this.sc.owner.name %></a>&mdash;<%= _S.ttrunc(_S.fmt_date(d),14) %>.
+>>>>>>> .merge_file_0WqIAX
     </div>
     <div class="map-status">
     </div>

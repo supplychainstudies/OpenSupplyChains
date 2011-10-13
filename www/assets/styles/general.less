@@ -57,7 +57,6 @@ a {
     &:hover{ text-decoration: underline; }
 }
 
-
 /* Structure -------------------------------- */
 #wrapper {
     min-height: 100%;
@@ -87,7 +86,19 @@ a {
         padding: 0 20px;
 		margin-bottom:20px;
     }
+    ul{ list-style: none; }
+    &.nomargin{
+        margin: 51px 16px 0 0;
+    }
+    &.skinny{
+        width: 300px;
+    }
 }
+#sidebar-left{   // for "split sidebar" views
+    float: left;
+    width: 500px;
+}
+
 
 .messages{
     margin: 20px 0;
@@ -567,13 +578,13 @@ h2.section-title{
 .preview-map-item{
     float:left;
     .preview-map {
-        padding: 4px;
-        margin-right: 10px;
+        padding: 4px 4px 4px 3px;
+        margin-right: 8px;
         background: #fff;
         border: 1px solid #d9d9d9;
         .rounded(3px);
         &:hover {
-            border-color:#bbb;   
+            border-color:#bbb; 
         }
 
     }
@@ -650,8 +661,92 @@ h2.section-title{
         }
     }
     #category-list-content{
-        float:left;
         padding: 0 10px;
+    }
+    .category-current{
+        padding-top: 6px;
+        float:left;
+    }
+    .category-dropdown{
+        float: right;
+        width: 285px;
+    }
+}
+
+.category-view {
+    margin-bottom: 20px;
+    width: 1020px;
+    margin-left: auto;
+    margin-right: auto;
+    ul{
+        list-style:none;
+        margin-left: 0;
+        &.nocarousel{
+            width: 940px;
+            padding: 20px 40px;
+        }
+    }
+    h2{ margin-left: 40px; }
+    .jcarousel-skin-sourcemap{
+        -moz-user-select: -moz-none;  // prevent annoying selections
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        .jcarousel-container-horizontal {
+            width: 940px;
+            padding: 20px 40px;
+        }
+        .jcarousel-clip {
+            overflow: hidden;
+        }
+        .jcarousel-item{
+            // These need to be set explicitly, otherwise jcarousel won't start
+            height: 180px;
+            width: 235px;
+        }
+        .jcarousel-item.small{
+            height: 160px;
+            width: 180px;
+        }
+        .jcarousel-next-horizontal,
+        .jcarousel-prev-horizontal {
+            position: absolute;
+            top: 43px;
+            width: 62px;
+            height: 89px;
+            cursor: pointer;
+            opacity: .1;
+        }
+        .jcarousel-next-horizontal {
+            right: -20px;
+            background: transparent url(../images/carousel-right.png) no-repeat 0 0;
+         } 
+        .jcarousel-prev-horizontal {
+            left: -20px;
+            background: transparent url(../images/carousel-left.png) no-repeat 0 0;
+        }
+        .jcarousel-next-horizontal:hover,
+        .jcarousel-next-horizontal:focus,
+        .jcarousel-prev-horizontal:hover,
+        .jcarousel-prev-horizontal:focus {
+            opacity: .2;
+        }
+    }
+    &.small{   // Special styles for "small" categories, next to the sidebar
+        .jcarousel-skin-sourcemap{
+            width: 540px;
+            margin: 0;
+            .jcarousel-container-horizontal{
+                width:540px;
+                overflow: hidden;
+            }
+            .jcarousel-next-horizontal,
+            .jcarousel-prev-horizontal {
+                top: 30px;
+            }
+            .jcarousel-next-horizontal { right: 0px; }
+            .jcarousel-prev-horizontal { left: -10px; }
+        }
     }
 }
 
@@ -664,6 +759,7 @@ ul#browse-list {
 		width:25%;
 	}
 }
+
 
 /* Document pages -------------- */
 #document-content {
@@ -686,6 +782,19 @@ ul#browse-list {
 }
 
 /* Dashboard ----------------------------------------------------- */
+.account-alert{
+    .rounded(14px);
+    .gradient(#f9f0a9,#faf6da);
+    padding:5px;
+    border: 1px solid #ecebdf;
+    p{
+        .rounded(14px);
+        border: 1px solid #ecebdf;
+        background: url(../images/alert-triangle.png) 6px 10px transparent no-repeat;
+        padding: 5px 5px 5px 50px;
+    }
+}
+
 .dashboard-title { margin-bottom: 30px; }
 .dashboard-top{
     padding: 0px 0 10px;

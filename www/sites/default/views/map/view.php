@@ -75,7 +75,7 @@
     <h1>
     	<?= HTML::chars($supplychain_name) ?> 
     	<?php if($can_edit): ?>
-            <a id="map-edit-button" class="button" href="edit/<?= $supplychain_id; ?>">Edit</a>
+            <a id="map-edit-button" class="button" href="edit/<?= $supplychain_id; ?>">Edit Description</a>
         <?php endif; ?>
     </h1>
     <p class="description"><?= HTML::chars($supplychain_desc) ?></p>

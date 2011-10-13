@@ -45,12 +45,12 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
         if($category && isset($nms[$category])) {
             // if a specific category is set, use the category view 
-            // this should be cleverly recursive, but it's not
             $slug = $category;
             $category = $nms[$category];
             $params['c'] = $category->name;
             $this->layout->page_title .= ' - '.$category->title;
-            $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
+            $this->template->category = $category->title;
+            $searches = Sourcemap_Search::find($params+array('recent' => 'yes'));
         } elseif($category) {
             Message::instance()->set('"'.$category.'" is not a valid category.');
             return $this->request->redirect('browse');
@@ -66,13 +66,18 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             }
             
             // Do a general search for every top-level category
-            // Note that this will just return everything in the category
             $searches = array();
             foreach ($toplevels as $i => $cat){
                 $params['c'] = $cat;
                 $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
                 array_push($searches, $search);
             }
+
+            // Sort array by number of result
+            function sort_searches($a, $b){
+                return count($b->results) - count($a->results);
+            }
+            usort($searches, "sort_searches");
         }
         
         $this->template->searches = $searches;
@@ -82,6 +87,10 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->template->discussed = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
         $this->template->interesting = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
         $this->template->recent = Sourcemap_Search_Simple::find($params+array('recent' => 'yes'));
+        
     }
+
+
 }
+
 

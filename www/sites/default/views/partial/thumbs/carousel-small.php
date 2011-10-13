@@ -13,7 +13,7 @@
 ?>
 
 
-<ul class="category-map-view <?= count($supplychains) > 4 ? "carousel jcarousel-skin-sourcemap" : "nocarousel"; ?>">
+<ul class="category-map-view <?= count($supplychains) > 3 ? "carousel jcarousel-skin-sourcemap" : "nocarousel"; ?>">
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item):?>
         <li class="preview-map-item small">

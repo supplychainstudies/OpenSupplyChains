@@ -68,7 +68,12 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $new_user->username = $p['username'];
                 $new_user->email = $p['email'];
                 $new_user->password = $p['password'];
-                $new_user->save();
+				$new_user->save();
+				if (isset($p['email_subscribe']) == true) {
+					$emailsubscriber_role = ORM::factory('role', array('name' => 'emailsubscriber'));
+					$new_user->add('roles', $emailsubscriber_role)->save();					
+				}
+				
 
                 if(!$new_user->id) {
                     Message::instance()->set('Could not complete registration. Please contact support.');

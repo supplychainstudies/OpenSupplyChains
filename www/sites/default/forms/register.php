@@ -52,7 +52,7 @@ return array(
         ),
 	    'email_subscribe' => array(
 	        'type' => 'checkbox',
-	        'label' => 'I would like to receive email updates about Sourcemap.',
+	        'label' => 'I would like to receive email updates about <br />Sourcemap.',
 	        'default' => 0
 	    ),
         'register' => array(

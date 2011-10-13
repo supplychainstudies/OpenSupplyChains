@@ -27,17 +27,11 @@
     <div class="channel-other-maps">
         <div class="search-results">
             <?php if(isset($supplychains) && $supplychains): ?><br/>
-                <div class="container pager">
-                    <?= $pager->render() ?>
-                </div>
                 <?php foreach($supplychains as $i => $sc): ?>
                     <div class="user-map-list">
                         <?= View::factory('partial/user/map', array('supplychain' => $sc)) ?>
                     </div>
                 <?php endforeach; ?>
-                <div class="container pager">
-                    <?= $pager->render() ?>
-                </div>
             <?php else: ?>
                 <h2 class="bad-news">No maps yet!</h2>
             <?php endif; ?>

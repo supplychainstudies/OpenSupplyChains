@@ -57,20 +57,8 @@ class Controller_User extends Sourcemap_Controller_Layout {
                    $featured_ids = $r;
                }
 
-               // HACK: Stonyfield branding info
-               if ($user->username == "stonyfield"){
-                   $banner_url="sites/default/assets/images/stonyfield-logo.png";
-                   $featured_ids = Array(34,36,37);
-               }
                $this->template = new View('channel/profile');
                $this->template->banner_url = $banner_url;
-
-               // Grab supplychains from IDs
-               //$featured = Array();
-               //foreach($featured_ids as $id){
-               //    $featured[] = ORM::factory('supplychain', $id);
-               // }
-
                $this->template->featured = $featured_ids;
            } // channel role end           
 

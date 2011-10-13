@@ -90,6 +90,10 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 }
 
 

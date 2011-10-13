@@ -368,6 +368,30 @@ Sourcemap.ttrunc = function(str, lim, dots) {
     return tstr;
 }
 
+Sourcemap.truncate_string = function (target)
+{
+    // 1 line;
+    // in general.less : white-space is set to nowrap
+    $(target).each(function(){       
+        var new_string;
+        var width_diff;
+        var word_count;
+        var chat_diff=18;
+        // 18 : Chinese char width , 5 : dot width
+
+        var width = $(this).parent().width();
+        while($(this)[0].scrollWidth>width)
+        {
+             width_diff = $(this)[0].scrollWidth - width;
+             word_count = Math.ceil(width_diff/chat_diff);
+             if(word_count<5) word_count = 5;
+             new_string = jQuery.trim($(this).text()); 
+             $(this).find("a").text(new_string.substr(0, new_string.length - word_count) +"...");
+        }   
+    });
+}
+
+
 Sourcemap.tlinkify = function(str) {
     var txt = _S.htesc(str);
     var regex = /((((http|https):\/\/([\w\d]+\.){1,2})|www\.[\w\d-]+\.)([\w\d]{2,3})((\/[\d\w%\.]+)+)?(\?([\d\w%]+=[\d\w%]+&?)+)?)/g;

@@ -52,7 +52,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 }
                 
                 // check for username in use
-                $exists = ORM::factory('user')->where('username', '=', $p['username'])->find()->loaded();
+                $exists = ORM::factory('user')->where('username', 'ILIKE', $p['username'])->find()->loaded();
                 if($exists) {
                     Message::instance()->set('That username is taken.');
                     return;
@@ -68,7 +68,12 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $new_user->username = $p['username'];
                 $new_user->email = $p['email'];
                 $new_user->password = $p['password'];
-                $new_user->save();
+				$new_user->save();
+				if (isset($p['email_subscribe']) == true) {
+					$emailsubscriber_role = ORM::factory('role', array('name' => 'emailsubscriber'));
+					$new_user->add('roles', $emailsubscriber_role)->save();					
+				}
+				
 
                 if(!$new_user->id) {
                     Message::instance()->set('Could not complete registration. Please contact support.');
@@ -152,7 +157,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             list($uh, $h) = explode('-', $get['t']);
             // check token
             $username = base64_decode(strrev($uh));
-            $user = ORM::factory('user')->where('username', '=', $username)
+            $user = ORM::factory('user')->where('username', 'ILIKE', $username)
                 ->find();
             $login = ORM::factory('role')->where('name', '=', 'login')
                 ->find();

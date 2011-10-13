@@ -15,53 +15,74 @@
 <?php if($taxonomy): ?>
 <div id="category-list">
     <div class="container">
-            <div id="category-list-content">
-                <a href="browse/">Everything &nbsp;</a>
+        <div id="category-list-content">
+            <div class="category-current">
+                Currently browsing&nbsp; 
+                <a href="browse/">
+                    <?= $category ? $category : "Everything"; ?>
+                </a>&nbsp;
+            </div> 
+            <?php //Build category list ?>
+            <div class="category-dropdown">
+                <select>
+                <option>Select a <?= $category ? "different " : ""; ?> category:</option>
                 <?php for($i=0; $i<count($taxonomy->children); $i++): ?>
-                <?php $t = $taxonomy->children[$i]; ?>
-                <a href="browse/<?= Sourcemap_Taxonomy::slugify($t->data->name) ?>"<?php if(count($taxonomy->children)-1 == $i): ?> class="last"<?php endif;?>><?= HTML::chars($t->data->title) ?></a>
+                    <?php $t = $taxonomy->children[$i]; ?>
+                    <option value="<?= $t->data->name ?>"><?= HTML::chars($t->data->title) ?></a>
                 <?php endfor; ?>
+                </select>
             </div>
-            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
     </div>
 </div>
 <?php endif; ?>
 <div class="clear"></div>
 
-<div id="browse-featured" class="container">
-    <div>
-        <?php if($category): ?>
-           <h2>Browsing category "<?= HTML::chars($category->title) ?>"</h2>
+<?php // TODO: split the following into two separate files ?>
+<?php // If we're at the top level, display a list of all categories ?>
+<?php if (count($searches) > 1){ ?>
+    <?php foreach($searches as $i=> $search){?>
+        
+        <?php // first 3 categories get to be big ?>
+        <?php if ($i<2): ?>
+        <div class="category-view medium">
+            <h2><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
+            <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $search->results)) ?>
+        </div>
+
+        <?php // remaining categories are small ?>
         <?php else: ?>
-            <h2>Viewing all categories</h2>
-        <?php endif; ?>
-    </div>
-    <div>
-    <?= $pager ?><br />
-    </div>
-    <?= View::factory('partial/thumbs/featured', array('supplychains' => $primary->results)) ?>
-</div><!-- .container -->
+            <?php if ($i == 2): ?>
+        <div class="container">
+            <div id="sidebar-left"> 
+            <?php endif; ?>
+                <div class="category-view small">
+                    <h3><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
+                    <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results)) ?>
+                </div>
+        <?php endif ?>
+    <?php }?>
+            </div><!-- .left -->
+            <div id="sidebar" class="nomargin skinny">
+                <ul>
+                    <li>
+                        <h2>Interesting Sourcemaps</h2>
+                        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $interesting->results)) ?>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div><!-- .container -->
+
+<?php } else { ?>
+        <div class="container">
+            <h2>There are <?= count($searches->results);?> Sourcemaps in this category:</h2>
+            <div class="category-view medium">
+                <?php // TODO: improve the names of partial views ?>
+                <?php echo View::factory('partial/thumbs/featured', array('supplychains' => $searches->results)) ?>
+            </div>
+        </div>
 
 <div class="clear"></div>
-<ul id="browse-list" class="container">
-    <li>
-        <h2>Interesting:</h2>
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $interesting->results)) ?>
-    </li>
-    
-    <li>
-        <h2>New:</h2>
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent->results)) ?>
-    </li>
-    
-    <li>
-        <h2>Starred:</h2>
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $favorited)) ?>
-    </li>
-    
-    <li>
-        <h2>Discussed:</h2>
-        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $discussed)) ?>
-    </li>
-    <div class="clear"></div>
-</ul><!-- .container -->
+<?php } ?>

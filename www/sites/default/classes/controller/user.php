@@ -26,7 +26,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
             // pass
             $user = ORM::factory('user', $identifier);
         } else {
-            $user = ORM::factory('user')->where('username', '=', $identifier)->find();
+            $user = ORM::factory('user')->where('username', 'ILIKE', $identifier)->find();
         }        
         if($user->loaded()) {
 
@@ -120,8 +120,8 @@ class Controller_User extends Sourcemap_Controller_Layout {
             // If enter numeric user id
             if(is_numeric($identifier)) {
                  $user = ORM::factory('user', $identifier);
-            } else {    // If enter string user id
-                 $user = ORM::factory('user')->where('username', '=', $identifier)->find();
+            } else {
+                 $user = ORM::factory('user')->where('username', 'ILIKE', $identifier)->find();
             }
                         
             $p = false;            

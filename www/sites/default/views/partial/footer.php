@@ -27,17 +27,38 @@
     	<li><a href="info/terms">Terms of Service</a></li>
     </ul>   
     <p>&copy; 2011 Sourcemap Inc. 
-    <?
-        // print verison information
-            $subdomain = str_replace(".sourcemap.com", "", $_SERVER["HTTP_HOST"]);
-            if( $subdomain != "www" ) {
-                try{
-                $commit_hash = exec('git log -1 --pretty=format:%h --abbrev=10');
-                $commit_date = exec('git log -1 --pretty=format:%cd');
-                $codebase_url = "https://sourcemap.codebasehq.com/projects/sourcemap/repositories/sourcemap/commit/";
+    <?php
+        // version information
+        
+        // don't print version information to production
+        if( getenv('SOURCEMAP_ENV') != "production" ) {
+            $codebase_url = "https://sourcemap.codebasehq.com/projects/sourcemap/repositories/sourcemap/commit/";
+            $changelog_url = "https://sourcemap.codebasehq.com/changelog/sourcemap/sourcemap";
+            $date = "";
+            $age = "";
+            $commit = "";
+
+            // if we have a www/version.php file, use it
+            if (file_exists('version.php')){
+                include_once('version.php');
+                $date = str_replace( "Date: ", "", $date );
+                $age = Kohana_date::span(strtotime($date), time(), 'days,hours,minutes,seconds');
+                echo "| ";
+                echo "Commit ";
+                echo "<a href=\"". $codebase_url . $commit . "\">" . substr($commit, 0, 5) . "</a> ";
+                echo "| ";
+                echo "Released ";
+                echo $age['days'] . " days, " . $age['hours'] . " hours, " . $age['minutes'] . " minutes,";
+                echo " and " . $age['seconds'] . " seconds ago. ";
+                echo "| ";
+                echo "<a href=\"". $changelog_url . "\">Changelog</a>";
+            }
+            
+            // otherwise, do nothing 
+            else{
+            }
+        }
     ?>
-    <a href="<?=$codebase_url.$commit_hash?>"> <?=$commit_date?> </a>
-    <?}catch(Exception $e){}}?>
     </p>
 </div>
 <div class="clear"></div>

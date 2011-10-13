@@ -12,28 +12,24 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+
+<ul class="category-map-view <?= count($supplychains) > 3 ? "carousel jcarousel-skin-sourcemap" : "nocarousel"; ?>">
 <?php if(isset($supplychains) && $supplychains): ?>
-    <?php foreach($supplychains as $i => $item): ?>
-        <div class="preview-map-item">
+    <?php foreach($supplychains as $i => $item):?>
+        <li class="preview-map-item small">
             <div class="preview-badge">
-            <a href="view/<?php print $item->id; ?>">
-                <img class="preview-map small" src="static/<?php print $item->id; ?>.s.png" alt="" />
-            </a>
+                <a href="view/<?php print $item->id; ?>"><img class="preview-map small" src="static/<?= $item->id ?>.s.png" alt="" /></a>
             </div>
-            <h3 class="preview-title vertical">
-                <a href="view/<?php print $item->id; ?>">
-                <?= HTML::chars($item->attributes->title) ?>
-                </a>
-            </h3>
-            <h4>
-                <div class="preview-author">
-                    <a href="user/<?php print $item->owner->id; ?>">
-                        <?= Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
-                    <?php print date("M j, Y",$item->created);?>
-                </div>
-            </h4>
-        </div>
+            <h3 class="preview-title">
+                <a href="view/<?= $item->id; ?>">
+                    <?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"), 23) ?>
+                </a></h3>
+            <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?=  Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
+            <?= date("M j, Y", $item->created) ?></h4>
+        </li>
     <?php endforeach; ?>
 <?php else: ?>
-    --
 <?php endif; ?>
+<div class="clear"></div>
+</ul>
+

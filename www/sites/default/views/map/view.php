@@ -12,9 +12,6 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?
-    $edit_mode = isset($_GET["edit"])&&$can_edit ? isset($_GET["edit"]) : 0;
-?>
 <div id="map-container">    
     <div id="map">
         <div id="sourcemap-map-view"></div>
@@ -23,7 +20,7 @@
 
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
-        <?php if($edit_mode): ?>
+		<div class="editable-options">
     		<h3>Map Options</h3>
             <hr/>
     		<div class="impact-box">
@@ -51,7 +48,7 @@
     		</div>
     		<br/>
             <hr />
-        <?php endif; ?>
+		</div>
 
     	<h3>Share this Sourcemap</h3>
         <hr/>

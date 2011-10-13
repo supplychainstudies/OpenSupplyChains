@@ -40,7 +40,7 @@
 <option value="<?= $sc->id ?>"><?= isset($sc->title) ? HTML::chars($sc->title) : 'Replace map ('.$sc->id.') created on '.date("F j, Y, g:i a", $sc->created) ?></option>
 <?php endforeach; ?>
 </select><br />
-<input type="checkbox" name="publish" value="yes" checked="yes" /><label for="publish">Public</label><br />
+<input type="checkbox" name="publish" value="yes" /><label for="publish">Public</label><br />
 <input class="button" type="submit" value="Import" />
 </form>
 <?php else: ?>

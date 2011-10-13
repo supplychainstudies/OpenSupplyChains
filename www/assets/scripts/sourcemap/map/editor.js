@@ -71,9 +71,25 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     }, this);
 
+    // When map is zoom
+    Sourcemap.listen('map:zoomend',$.proxy(function(){
+        // When in connect mode
+        if(this.connect_from){
+            var sl = this.map.getStopLayer(this.connect_from.attributes.supplychain_instance_id);
+            sl.drawFeature(this.connect_from);
+        }
+    },this));
+    
+
     // listen for select clickout events, for connect-to, etc.
-    Sourcemap.listen('map:feature_clickout', $.proxy(function(evt, map, ftr) {
-        this.connect_from = false;
+    Sourcemap.listen('map:feature_clickout', $.proxy(function(evt) {
+        if(this.connect_from){
+            this.connect_from = false;
+            var sc = false;
+            for(var k in this.map.supplychains) { sc = this.map.supplychains[k]; break; };
+            this.map.mapSupplychain(sc.instance_id, true);
+        }
+
     }, this));
 
     Sourcemap.listen('map:feature_unselected', $.proxy(function() {
@@ -81,31 +97,33 @@ Sourcemap.Map.Editor.prototype.init = function() {
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        if(this.connect_from) {
-            var fromstid = this.connect_from.attributes.stop_instance_id;
-            var tostid = ftr.attributes.stop_instance_id;
-            if(fromstid == tostid) return;
-            var sc = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-            var fromst = sc.findStop(fromstid);
-            var tost = sc.findStop(tostid);
-            var new_hop = fromst.makeHopTo(tost);
-            sc.addHop(new_hop);
-            this.map.mapHop(new_hop, sc.instance_id);
-            this.connect_from = false;
-            // TODO: review if the selection of the hop is ideal
-            this.connect_from = false;
-            // if you want to uncomment this, figure out why it breaks things.
-            //this.map.controls.select.select(this.map.hopFeature(new_hop));
-            Sourcemap.broadcast('supplychain-updated', sc);
-        } else if(ftr.attributes.hop_instance_id) {
-            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
-            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-            this.showEdit(ftr);
-        } else if(ftr.attributes.stop_instance_id) {
-            var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
-            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-            this.showEdit(ftr);
-        }
+		if(!(this.map_view.options.locked)) {
+	        if(this.connect_from) {
+	            var fromstid = this.connect_from.attributes.stop_instance_id;
+	            var tostid = ftr.attributes.stop_instance_id;
+	            if(fromstid == tostid) return;
+	            var sc = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+	            var fromst = sc.findStop(fromstid);
+	            var tost = sc.findStop(tostid);
+	            var new_hop = fromst.makeHopTo(tost);
+	            sc.addHop(new_hop);
+	            this.map.mapHop(new_hop, sc.instance_id);
+	            this.connect_from = false;
+	            // TODO: review if the selection of the hop is ideal
+	            this.connect_from = false;
+	            // if you want to uncomment this, figure out why it breaks things.
+	            //this.map.controls.select.select(this.map.hopFeature(new_hop));
+	            Sourcemap.broadcast('supplychain-updated', sc);
+	        } else if(ftr.attributes.hop_instance_id) {
+	            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
+	            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+	            this.showEdit(ftr);
+	        } else if(ftr.attributes.stop_instance_id) {
+	            var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
+	            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+	            this.showEdit(ftr);
+	        }
+		}
     }, this));
 
     this.map.dockAdd('addstop', {
@@ -173,7 +191,12 @@ Sourcemap.Map.Editor.prototype.init = function() {
     			                    );
     			                    var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
     								var stop = new Sourcemap.Stop(geometry, this.attr);
-    		                        stop.setAttr("address", data.results[0].placename);
+                                    // set address by resolution level
+                                    if(data.results[0].placename!=""){
+        		                        stop.setAttr("address", data.results[0].placename);
+                                    } else {
+                                        stop.setAttr("address", data.results[0].lat+","+data.results[0].lon); 
+                                    }
     								this.sc.addStop(stop);
     				                Sourcemap.broadcast('supplychain-updated', sc);			
     								
@@ -242,6 +265,53 @@ Sourcemap.Map.Editor.prototype.init = function() {
             }, this)
         }
     });
+    
+  
+    this.map.map.events.register("zoomend",this.map.map,function(e){
+       Sourcemap.broadcast('map:zoomend'); 
+    });
+    
+    // Click-add function
+    //this.map.map.addControl(new OpenLayers.Control.MousePosition());
+    this.map.map.events.register("click",this.map.map,function(e){
+        var thismap = Sourcemap.view_instance.map;
+        Sourcemap.broadcast('map:feature_clickout');
+
+        // If Ctrl+click
+        if(e.ctrlKey){
+        var position = this.events.getMousePosition(e);
+        var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
+        var lonlat = this.getLonLatFromPixel(pixel);
+        var new_geom = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
+        thismap.controls.select.unselectAll();
+        
+        new_geom = new_geom.transform(
+           new OpenLayers.Projection('EPSG:900913'),
+           new OpenLayers.Projection('EPSG:4326')
+        );
+        var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+        var geom = (new OpenLayers.Format.WKT()).read(new_geom);
+        var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y);
+        
+        $(".control.addstop").click();
+        if($("#newpoint-placename").val()==undefined){
+            // After first time
+            // TODO: need a better solution to load latlon into dialog
+            setTimeout(function(){
+                $("#newpoint-placename").val(ll.lat+","+ll.lon);
+                $("#newpoint-title").focus();
+            },100);
+        } else {
+            // After secone time
+            $("#newpoint-placename").val(ll.lat+","+ll.lon);
+            $("#newpoint-title").focus();
+        }
+        thismap.map.panTo(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
+    };
+
+    }); // End click-add function
+
+
 
     // save contents of editor ui on dialog close
     Sourcemap.listen('sourcemap-base-dialog-close', $.proxy(function(b, vs) {
@@ -271,7 +341,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     
     this.map.addControl('stopdrag', new OpenLayers.Control.DragFeature(stopl, {
         "onStart": $.proxy(function(ftr, px) {
-            if(ftr.cluster) {
+            if(ftr.cluster || this.map_view.options.locked) {
                 this.map.controls.stopdrag.cancel();
                 clearTimeout(this.map.controls.stopdrag.handlers.drag.pressTimer);
             }
@@ -300,6 +370,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     this.map.controls.stopdrag.handlers.drag.mousedown = function (evt, ftr) {
         var propagate = true;
         this.dragging = false;
+		
         if (this.checkModifiers(evt) && OpenLayers.Event.isLeftClick(evt)) {
             this.pressTimer = window.setTimeout($.proxy(function() {
                 // timer finished
@@ -497,9 +568,14 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
     if(geocode) {
         this.map_view.updateStatus("Moved stop '"+st.getLabel()+'"..."');
         Sourcemap.Stop.geocode(ll, $.proxy(function(data) {
+            // TODO : sometimes 400 Bad request or blank place name
             if(data && data.results && data.results.length) {
                 this.editor.map_view.updateStatus("Updated address...");
-                this.stop.setAttr("address", data.results[0].placename);
+                if(data.results[0].placename!=""){
+                    this.stop.setAttr("address", data.results[0].placename);
+                } else {
+                    this.stop.setAttr("address", data.results[0].lat+","+data.results[0].lon);
+                }
                 Sourcemap.broadcast('supplychain-updated', 
                     this.editor.map.findSupplychain(this.stop.supplychain_id), true
                 );
@@ -507,7 +583,13 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
                 //this.editor.map.controls.select.select(ftr);
             } else {
                 var geom = (new OpenLayers.Format.WKT()).read(this.stop.geometry);
-                var ll = new OpenLayers.LonLat(geom.geometry.x, geom.geometry.y)
+                var new_geom = new OpenLayers.Geometry.Point(geom.geometry.x, geom.geometry.y); 
+                new_geom = new_geom.transform(
+                    new OpenLayers.Projection('EPSG:900913'),
+                    new OpenLayers.Projection('EPSG:4326') 
+                );
+                geom = (new OpenLayers.Format.WKT()).read(new_geom); 
+                var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y); 
                 this.stop.setAttr('address', ll.lat+','+ll.lon);
             }
         }, {"stop": st, "editor": this, "trigger_events": trigger_events}));

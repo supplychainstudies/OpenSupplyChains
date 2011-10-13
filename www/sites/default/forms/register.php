@@ -50,6 +50,11 @@ return array(
             'label' => 'I have read and agree to the <a href="/info/terms/#document-content?w=500" target="_blank" class="modal">terms of service</a>.',
             'default' => 0
         ),
+	    'email_subscribe' => array(
+	        'type' => 'checkbox',
+	        'label' => 'I would like to receive email updates about <br />Sourcemap.',
+	        'default' => 0
+	    ),
         'register' => array(
             'type' => 'submit',
             'label' => 'Register'

@@ -37,10 +37,6 @@ return array(
             'type' => 'password',
             'label' => 'Password (Repeat)'
         ),
-    	'recaptcha' => array(
-    		'type' => 'recaptcha',
-    		'label' => 'recaptcha_form'
-    	),
     	'sourcemaporg_account' => array(
             'type' => 'text',
             'label' => 'If you had a Sourcemap.org user account, enter your old username here:'
@@ -55,6 +51,10 @@ return array(
 	        'label' => 'I would like to receive email updates about <br />Sourcemap.',
 	        'default' => 0
 	    ),
+    	'recaptcha' => array(
+    		'type' => 'recaptcha',
+    		'label' => 'recaptcha_form'
+    	),
         'register' => array(
             'type' => 'submit',
             'label' => 'Register'

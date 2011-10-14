@@ -12,9 +12,15 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+
+<div id="page-title">
+    <div class="container">
+        <h1>Reset password for <?= $current_user ?></h1>
+    </div>
+</div>
+
 <div class="container form-page">
     <div class="copy-section">
-        <h1>Reset password for <?= $current_user ?></h1>
         <p>Enter your new password below.</p>
         <ul>
             <li><a href="/auth">Sign in to Sourcemap</a></li>

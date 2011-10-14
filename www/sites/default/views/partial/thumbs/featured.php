@@ -15,7 +15,7 @@
 <div id="popular-maps">
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item):?>
-        <div class="preview-map-item medium">
+        <div class="preview-map-item medium <?= $i % 2 ? "last" : ""; ?>">
             <div class="preview-badge">
             <a href="view/<?php print $item->id; ?>"><img class="preview-map medium" src="static/<?= $item->id ?>.m.png" alt="" /></a>
             </div>

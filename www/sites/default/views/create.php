@@ -12,9 +12,14 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<div id="page-title">
+    <div class="container">
+        <h1>Create a new map</h1>
+    </div>
+</div>
+
 <div class="container form-page">
     <div class="copy-section">
-        <h1>Create a new map</h1>
     	<p>Tell the story behind a product or a service: map the locations of suppliers, add descriptions, photos and videos, calculate the carbon footprint, and embed or link to the map to share it with the world!</p>
     	<? if($can_import) { ?>
     	<ul>

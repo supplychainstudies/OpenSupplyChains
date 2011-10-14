@@ -71,6 +71,13 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $search->and_where(DB::expr('featured'), 'and', DB::expr('TRUE'));
         }
 
+        // user geatured filter
+        if(isset($this->parameters['user_featured']) && strtolower($this->parameters['user_featured']) == 'yes') {
+            //$search->and_where(DB::expr('user_featured'), 'and', DB::expr('TRUE'));
+            $search->and_where('user_featured','=','true');
+        }
+        
+
         // recent filter
         if(isset($this->parameters['recent']) && strtolower($this->parameters['recent']) == 'yes') {
             $search->order_by('created', 'desc');

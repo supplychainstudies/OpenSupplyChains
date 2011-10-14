@@ -38,10 +38,10 @@
                 $channel = ORM::factory('role')
                     ->where('name', '=', 'channel')->find();
                 if($user->has('roles', $channel)) $is_channel = true;
-                $user_featured = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
+                $user_featured = ($supplychain->user_featured) ; ?>
             <?php if($is_channel) { ?>
             <div class="map-controls-publish">
-                <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $user_featured ? "no" : "yes"?>'; return true;"<?= $user_featured ? "checked" : "" ?>/>
+                <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/featured/<?= $supplychain->id ?>?featured=<?= $user_featured ? "no" : "yes"?>'; return true;"<?= $user_featured ? "checked" : "" ?>/>
                 <a id="map-publish-link">Featured</a>
             </div> <? } ?>
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>

@@ -173,6 +173,7 @@ Sourcemap.factory = function(type, data) {
             instance.attributes = sc.attributes;
             instance.usergroup_perms = sc.usergroup_perms;
             instance.other_perms = sc.other_perms;
+            instance.user_featured = sc.user_featured;
             instance.editable = data.editable;
             break;
         default:

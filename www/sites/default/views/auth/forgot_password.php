@@ -12,9 +12,14 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<div id="page-title">
+    <div class="container">
+        <h1>Password Request</h1>
+    </div>
+</div>
+
 <div class="container form-page">
     <div class="copy-section">
-        <h1>Password Request</h1>
         <p>Forgot your password? Enter the email address you used to register for Sourcemap and we'll send you a link to reset your password.</p>
         <ul>
             <li><a href="/auth">Sign in to Sourcemap</a></li>

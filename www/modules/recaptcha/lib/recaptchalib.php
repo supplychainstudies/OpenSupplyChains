@@ -125,7 +125,7 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
         $javaScriptEmbed = file_get_contents($server . '/challenge?k=' . $pubkey . $errorpart);
         return '<script type="text/javascript">
 	 var RecaptchaOptions = {
-	    theme : "white"
+	    theme : "clean"
 	 };
 	 </script> <script type="text/javascript">' . $javaScriptEmbed . '</script>
 
@@ -139,7 +139,7 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
      
         return '<script type="text/javascript">
 	 var RecaptchaOptions = {
-	    theme : "white"
+	    theme : "clean"
 	 };
 	 </script><script type="text/javascript" src="'. $server . '/challenge?k=' . $pubkey . $errorpart . '"></script>
 

@@ -65,7 +65,7 @@ a {
     margin-bottom: -72px; // needed to stick footer to bottom of screen
 }
 #footer, .push {
-    height: 62px;
+    height: 125px;
 }
 .container{
     width:960px;
@@ -87,6 +87,9 @@ a {
 		margin-bottom:20px;
     }
     ul{ list-style: none; }
+    h2{
+        margin: 12px 0;
+    }
     &.nomargin{
         margin: 51px 16px 0 0;
     }
@@ -182,10 +185,6 @@ a {
     }
 }
 
-#body-content, .article-content{
-    padding-bottom: 80px;
-}
-
 #footer {
 	height: 60px;
 	background-color: #454647;
@@ -221,6 +220,18 @@ a {
 img.small { width:160px; height:98px; }
 img.medium { width:220px; height:128px; }
 img.large { width: 710px; height: 320px; }
+
+#page-title {
+    margin-bottom:2em;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+    color: #4fa2cd; 
+	line-height:1.4em;
+	background-color:#fff;
+    background-image: -moz-linear-gradient(top,white,#EFEFEF);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(white),to(#EFEFEF));
+}
 
 /* Live Search ------------- */
 #search-div{
@@ -327,6 +338,7 @@ input[type=text],input[type=password], textarea {
 	background: #fff;
 	border: 1px inset #ccc;	
 	color: #333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	.box_shadow_inset(0, 3px, 12px, #eee);
 	.rounded(4px);
 	&:focus, &:hover { background-color:#FBF7D5; }
@@ -396,8 +408,9 @@ input[type=checkbox]{
 	height: 15px;
 }   
 
-#recaptcha_area { 
-	margin: 10px auto 0 auto;
+#recaptcha_area {
+    margin: 15px 0;
+    width:440px;
 }
 
 
@@ -503,7 +516,7 @@ input[type=checkbox]{
 
 #discussion-section {
     width:505px;
-    padding: 20px 20px 20px 0;
+    padding: 20px 20px 0 0;
     background: url("../images/news_background.png") top left no-repeat;
     h3 {
         font-size:1.2em;
@@ -572,14 +585,16 @@ h2.section-title{
     font-weight:bold;
     font-size: 22px;
 	color:#328CBB;
-	margin:40px 0 0 0;
+	margin:40px 0 12px 0;
 }
 
 .preview-map-item{
     float:left;
+    margin-right: 20px;
+    &.last{margin-right: 0;}
+    &.browse{margin: 10px 5px 10px 0;}
     .preview-map {
         padding: 4px 4px 4px 3px;
-        margin-right: 8px;
         background: #fff;
         border: 1px solid #d9d9d9;
         .rounded(3px);
@@ -593,24 +608,22 @@ h2.section-title{
         font-weight: normal;
         white-space:nowrap;
         &.vertical{
-            width:176px;
+            width:165px;
         }
-        &.featured{
-            width:236px;
-        }
+        &.featured,
         &.carousel{
-            width:236px;
+            width:230px;
         }
     }
     .preview-title {
-        line-height:1.2em;
+        line-height:1em;
         margin-bottom:0;
     }
     .preview-author {
-        margin-top: 0;
         font-size:0.7em;
         font-style: italic;
         color:#888;
+        margin: 5px 5px 10px;
         a {
             color:#888;
             text-decoration:underline;
@@ -650,7 +663,7 @@ h2.section-title{
     margin-bottom:2em;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
-    padding: 15px; 
+    padding: 5px; 
 	line-height:1.4em;
 	background-color:#fff;
     background-image: -moz-linear-gradient(top,white,#EFEFEF);
@@ -676,6 +689,10 @@ h2.section-title{
     }
 }
 
+h2.browse-header{
+    margin-bottom: 20px;
+}
+
 .category-view {
     margin-bottom: 20px;
     width: 1020px;
@@ -686,7 +703,7 @@ h2.section-title{
         margin-left: 0;
         &.nocarousel{
             width: 940px;
-            padding: 20px 40px;
+            padding: 15px 40px;
         }
     }
     h2{ margin-left: 40px; }
@@ -695,9 +712,13 @@ h2.section-title{
         -khtml-user-select: none;
         -webkit-user-select: none;
         user-select: none;
+        .preview-map-item{
+            margin-right:7px;
+        }
+
         .jcarousel-container-horizontal {
             width: 940px;
-            padding: 20px 40px;
+            padding: 15px 40px;
         }
         .jcarousel-clip {
             overflow: hidden;
@@ -705,11 +726,11 @@ h2.section-title{
         .jcarousel-item{
             // These need to be set explicitly, otherwise jcarousel won't start
             height: 180px;
-            width: 235px;
+            width: 230px;
         }
         .jcarousel-item.small{
             height: 160px;
-            width: 180px;
+            width: 173px;
         }
         .jcarousel-next-horizontal,
         .jcarousel-prev-horizontal {
@@ -804,14 +825,16 @@ ul#browse-list {
     border: 1px solid #d4d4d4;
     .rounded(12px);
     .box_shadow(3px, 1px, 10px);
+    h2{
+        margin: 12px 0;
+    }
     .dashboard-top-left{
         width: 470px;
         margin-right: 30px;
         float: left;
         > div { margin: 0 20px; }
         .user-name{
-            margin-top: 10px;
-            color: #595959;
+            margin-left: 20px;
         }
         #user-profile {
             float:left;
@@ -876,14 +899,17 @@ ul#browse-list {
     .dashboard-top-right{
         float: right;
         width: 445px;
-        h2 { margin-top: 10px; }
         #user-stream {
-            margin-top: 25px;
-            .date { font-size:0.8em; }
-            .event {
-                line-height:1.2em;
+            .date { 
                 font-size:0.8em;
                 font-style: italic;
+                color: #999;
+            }
+            .user-event {
+                p{
+                    margin-left: 15px;
+                    font-size: 0.8em;
+                }
             }
         }
     }
@@ -975,7 +1001,6 @@ ul#browse-list {
     } 
 }
 
-
 /* Form pages ---------------- */
 div.form-page {
 	margin-top:20px;
@@ -987,21 +1012,28 @@ div.form-page {
 			margin:20px;
 			li { margin:0 0 10px 0;	}
 		}
+        &.register{width: 435px;}
 	}
 	div.box-section {
 	    float:left;
 		width:405px;
-	    margin: 20px 0 0 40px;
+	    margin: -58px 0 0 40px;
 		padding: 4px;
 	    background: #fefefe;
 	    border: 1px solid #d4d4d4;
-	    .box_shadow(3px, 1px, 10px);
+	    .box_shadow(1px, 3px, 10px);
 	    .rounded(12px);
+        &.register{
+            width: 460px;
+            input[type="checkbox"]{
+                margin: 13px 40px 4px 12px; 
+            }
+        }
 	}
 }
 
 
-/* Api Docs */
+/* API Docs ---------------- */
 .classic-list {
     li {
         list-style-position: inside;

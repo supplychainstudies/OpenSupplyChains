@@ -14,13 +14,9 @@
 
 
 <div class="container">
-    <h1 class="dashboard-title">Your sourcemap profile</h1>
     <div class="dashboard-top">
         <div class="dashboard-top-left">
-            <div>
-                <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
-            </div>
-            <hr />
+            <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
             <div id="user-profile">
                 <div class="user-gravatar">
                     <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
@@ -37,10 +33,7 @@
             </div>
         </div>
         <div class="dashboard-top-right">
-            <div>
-                <h2>Recent Activity</h2>
-            </div>
-            <hr />
+            <h2>Recent Activity</h2>
             <div id="user-stream">
                 <?php if(isset($user_event_stream)): ?>
                 <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>

@@ -52,7 +52,7 @@ Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@
 </p> 
 </div> 
 </div> 
-<div class="push"></div> 
+<div class="clear">&nbsp;</div> 
 
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>

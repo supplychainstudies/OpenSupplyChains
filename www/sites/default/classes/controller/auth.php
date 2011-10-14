@@ -245,6 +245,7 @@ EREIAM;
             }
 
         } else { 
+            // When its get
             if($current_user) {
                 $this->template->current_user = $current_user->username;
             }
@@ -265,6 +266,14 @@ EREIAM;
 	 							Auth::instance()->force_login($user->username);
                                 $this->template->current_user = $user->username;
                                 $this->template->ticket = $get['t'];
+                                // check has login role or not
+                                $login = ORM::factory('role')->where('name', '=', 'login')
+                                         ->find();
+                                if($user->has('roles', $login)) {
+                                    // Great, do nothing
+                                } else {
+                                    $user->add('roles',$login);
+                                }
                             } else {
                                 Message::instance()->set('That token has expired.');
                                 return $this->request->redirect('auth');

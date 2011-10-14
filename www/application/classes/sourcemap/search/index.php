@@ -34,6 +34,7 @@ class Sourcemap_Search_Index {
             $scidx->modified = $sc->modified;
             $scidx->category = $sc->category;
             $scidx->user_id = $sc->user_id;
+            $scidx->user_featured = $sc->user_featured;
             $rawsc = $sc->kitchen_sink($sc->id);
             $body = "";
             foreach($rawsc->attributes as $k => $v) $body .= "$k $v\n";

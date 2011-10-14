@@ -18,6 +18,7 @@ Sourcemap.Supplychain = function() {
     this.attributes = {};
     this.usergroup_perms = 0;
     this.other_perms = 0;
+    this.user_featured = false;
     this.editable = true;
     this.broadcast('supplychain:instantiated', this);
 }

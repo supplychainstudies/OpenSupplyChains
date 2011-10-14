@@ -6,7 +6,8 @@ alter table "user" add column banner_url text default null;
 
 -- Additional supplychain fields
 alter table supplychain add column enable_comments BOOLEAN not null default TRUE;
-alter table supplychain add column user_featured integer not null default 0;
+alter table supplychain add column user_featured BOOLEAN not null default FALSE;
+alter table supplychain_search add column user_featured BOOLEAN not null default FALSE;
 
 insert into sourcemap_schema_version ("key", extra) values (
     '19.userfields', 'Added additional user fields, additional properties for supplychains'

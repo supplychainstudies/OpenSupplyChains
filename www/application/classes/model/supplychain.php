@@ -66,6 +66,8 @@ class Model_Supplychain extends ORM {
         )
     );
 
+    
+
     public function save() {
         $this->modified = time();
         if(parent::save() && $this->pk()) {
@@ -282,6 +284,19 @@ class Model_Supplychain extends ORM {
                 );
                 $this->_db->query(Database::UPDATE, $sql, true);
             }
+            // channel user featured
+            if(isset($sc->user_featured)) {
+                if($sc->user_featured)
+                    $user_featured = "TRUE";
+                else
+                    $user_featured = "FALSE";
+                $sql = sprintf(
+                    'update supplychain set user_featured = %s where id = %d', 
+                    $user_featured, $scid
+                );
+                $this->_db->query(Database::UPDATE, $sql, true);
+            }
+
             if(isset($sc->category)) {
                 if(ORM::factory('category', $sc->category)->loaded()) {
                     $sql = sprintf(
@@ -345,6 +360,7 @@ class Model_Supplychain extends ORM {
             if(!$can && $this->other_perms & $mode) {
                 $can = true;
             }
+
             // admin?
             if(!$can && $user) {
                 $admin = ORM::factory('role')

@@ -50,7 +50,9 @@ class Controller_User extends Sourcemap_Controller_Layout {
                    $banner_url="sites/default/assets/images/officedepot-logo.png";                   
                    $q = array(
                     'user' => $user->id,
-                    'l' => 4,'recent' => 'yes'
+                    'user_featured'=> 'yes',
+                    //'l' => 4,
+                    'recent' => 'yes'
                    );
                    $r = Sourcemap_Search::find($q);
 

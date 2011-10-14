@@ -165,6 +165,7 @@ Content-Type: application/json
         "category":null,"created":1298652652,
         "flags":32,"id":1,"modified":1306106036,
         "other_perms":1,"usergroup_id":null,
+        "user_featured":false,
         "usergroup_perms":0,"user_id":234,
         "owner":{
             "id":444,"name":"somefakeuserguy",
@@ -260,6 +261,7 @@ Content-Type: application/json
             "category":null,"created":1300738955,"flags":0,
             "id":26,"modified":1300738995,
             "other_perms":1,"usergroup_id":null,
+            "user_featured":false,
             "usergroup_perms":0,"user_id":1,
             "attributes":{
                 "name":"BSR2010"

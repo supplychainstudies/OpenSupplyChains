@@ -6,6 +6,8 @@ alter table "user" drop column banner_url;
 
 -- Additional supplychain fields (to be accessed by Channel Users)
 alter table supplychain add column enable_comments BOOLEAN not null default TRUE;
-alter table supplychain add column user_featured integer not null;
+alter table supplychain drop column user_featured;
+alter table supplychain_search drop column user_featured;
+
 
 delete from sourcemap_schema_version where "key" = '19.userfields', 'Added additional user fields, additional properties for supplychains';

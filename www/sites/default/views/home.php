@@ -51,14 +51,15 @@
         <div class="clear"></div>
     </div>
 </div>
-<div class="container">
-    <div class="account-alert">
-        <p>
-            If you tried to migrate your Sourcemap.org account and your maps don't appear below, you may need to contact <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a>.
-        </p>
-    </div>
-</div>
-<div class="push"></div>
+<div class="clear" style="height: 20px"></div>
+<div class="container"> 
+<div class="account-alert"> 
+<p> 
+Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
+</p> 
+</div> 
+</div> 
+<div class="push"></div> 
 
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>

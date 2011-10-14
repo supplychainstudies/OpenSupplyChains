@@ -14,13 +14,9 @@
 
 
 <div class="container">
-    <h1 class="dashboard-title">Your sourcemap profile</h1>
     <div class="dashboard-top">
         <div class="dashboard-top-left">
-            <div>
-                <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
-            </div>
-            <hr />
+            <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
             <div id="user-profile">
                 <div class="user-gravatar">
                     <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
@@ -37,10 +33,7 @@
             </div>
         </div>
         <div class="dashboard-top-right">
-            <div>
-                <h2>Recent Activity</h2>
-            </div>
-            <hr />
+            <h2>Recent Activity</h2>
             <div id="user-stream">
                 <?php if(isset($user_event_stream)): ?>
                 <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
@@ -51,14 +44,15 @@
         <div class="clear"></div>
     </div>
 </div>
-<div class="container">
-    <div class="account-alert">
-        <p>
-            If you tried to migrate your Sourcemap.org account and your maps don't appear below, you may need to contact <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a>.
-        </p>
-    </div>
-</div>
-<div class="push"></div>
+<div class="clear" style="height: 20px"></div>
+<div class="container"> 
+<div class="account-alert"> 
+<p> 
+Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
+</p> 
+</div> 
+</div> 
+<div class="push"></div> 
 
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>

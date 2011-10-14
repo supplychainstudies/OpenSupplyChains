@@ -12,16 +12,21 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<div class="container form-page">
-    <div class="copy-section">
+<div id="page-title">
+    <div class="container">
         <h1>Join Us</h1>
+    </div>
+</div>
+
+<div class="container form-page">
+    <div class="copy-section register">
         <p>Register to create sourcemaps, leave comments, save favorites, and stay informed about our work.</p>
         <p class="promise">We promise not to use your e-mail address for anything besides registering an account.</p>
         <ul>
             <li>Already have an account? <a href="/auth">Sign in here</a>.</li>
         </ul>
     </div>
-    <div class="box-section">
+    <div class="box-section register">
         <div class="sourcemap-form">
             <?= $form ?>
         </div>

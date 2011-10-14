@@ -77,11 +77,12 @@
 
 <?php } else { ?>
         <div class="container">
-            <h2>There are <?= count($searches->results);?> Sourcemaps in this category:</h2>
+            <h2 class="browse-header">There are <?= count($searches->results);?> Sourcemaps in this category:</h2>
             <div class="category-view medium">
                 <?php // TODO: improve the names of partial views ?>
-                <?php echo View::factory('partial/thumbs/featured', array('supplychains' => $searches->results)) ?>
+                <?php echo View::factory('partial/thumbs/browse', array('supplychains' => $searches->results)) ?>
             </div>
+            <div class="clear"></div>
         </div>
 
 <div class="clear"></div>

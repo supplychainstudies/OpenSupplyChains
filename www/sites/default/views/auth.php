@@ -12,9 +12,14 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<div id="page-title">
+    <div class="container">
+        <h1>Sign in to Sourcemap</h1>
+    </div>
+</div>
+
 <div class="container form-page">
     <div class="copy-section">
-        <h1>Sign in to Sourcemap</h1>
         <p>Sign in to create sourcemaps, leave comments, save favorites, and stay informed about our work.</p>
         <ul>
             <li><a href="/auth/forgot">Forgot your username or password?</a></li>

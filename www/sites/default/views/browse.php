@@ -57,7 +57,7 @@
         <div class="container">
             <div id="sidebar-left"> 
             <?php endif; ?>
-                <?php if(count($search->results)<1): ?>
+                <?php if(count($search->results)>0): ?>
                 <div class="category-view small">
                     <h3><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
                     <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results)) ?>

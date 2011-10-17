@@ -605,8 +605,14 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		        if(f.cluster) {    //Why we divide this into two segments is unclear
 		            var val = 0;
 		            for(var c in f.cluster) {
-		                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
-		                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
+                        if (c != "filter" && c != "indexOf"){
+                            if(attr_nm instanceof Function){
+                                var ref = f.cluster[c].attributes.ref;
+                                val += attr_nm(ref);
+                            }
+                            else 
+                                val += parseFloat(f.cluster[c].attributes[attr_nm]);
+                        }
 		            }
 		            if(!isNaN(val)) {
 		                // scale  

@@ -373,6 +373,8 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
             var chtml = $("<div id='"+cluster_id+"' class='cluster'></div>");
 
             for(var i in cluster.cluster) {
+                if(cluster.cluster[i].attributes==undefined)
+                    break;
                 var title = cluster.cluster[i].attributes.title ?
                     cluster.cluster[i].attributes.title.substring(0,36) : "";
                 title += title.length == 36 ? "..." : "";

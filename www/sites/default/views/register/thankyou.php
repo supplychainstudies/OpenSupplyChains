@@ -14,13 +14,13 @@
 
 <div id="page-title">
     <div class="container">
-        <h1>Thank you!</h1>
+        <h1>Thank you for registering!</h1>
     </div>
 </div>
 
 <div class="container form-page">
     <div class="copy-section">
-        <p>You should see a message in your inbox within the next few minutes.  Please follow the instructions in order to activate your new account.</p>
+        <p>You should see a message in your inbox within the next few minutes.  Follow the instructions to activate your new account.</p>
     </div>
     <div class="clear"></div>
 </div>

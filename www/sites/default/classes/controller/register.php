@@ -91,8 +91,8 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $url = URL::site("register/confirm?t=$lid-$h", true);
                 $msgbody = "\n";
                 $msgbody .= "Dear {$new_user->username},\n\n";
-                $msgbody .= "Welcome to Sourcemap!\n";
-                $msgbody .= " Please click the link below to active your account:\n\n";
+                $msgbody .= "Welcome to Sourcemap!";
+                $msgbody .= " Click the link below to active your account:\n\n";
                 $msgbody .= $url."\n\n";
                 $msgbody .= "If you have any questions, please email support@sourcemap.com.\n\n";
                 $msgbody .= "-The Sourcemap Team\n";

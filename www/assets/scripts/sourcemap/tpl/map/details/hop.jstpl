@@ -42,6 +42,12 @@
         <% if(this.hop.magic["vimeo:link"]) { %>
             <%= Sourcemap.MagicWords.content.vimeo.link(this.hop.magic["vimeo:link"]) %>
         <% } %>
+        <% if(this.hop.magic["soundcloud:id"]) { %>
+            <%= Sourcemap.MagicWords.content.soundcloud.id(this.hop.magic["soundcloud:id"]) %>
+        <% } %>
+        <% if(this.hop.magic["twitter:search"]) { %>
+            <%= Sourcemap.MagicWords.content.twitter.search(this.hop.magic["twitter:search"]) %>
+        <% } %>
         <% if(this.hop.magic["flickr:setid"]) {  %>
             <div id="flickr-photoset-<%= this.hop.magic["flickr:setid"] %>">
                 <%= Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.hop.magic["flickr:setid"]) %>

@@ -11,7 +11,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 Sourcemap.MagicWords = {};
-Sourcemap.MagicWords.sequence = ["description", "youtube:link", "vimeo:link", "flickr:setid"];
+Sourcemap.MagicWords.sequence = ["description", "youtube:link", "vimeo:link", "soundcloud:id", "twitter:search", "flickr:setid"];
 
 // callbacks for magic attributes
 
@@ -71,6 +71,22 @@ Sourcemap.MagicWords.content = {
                 return;
             }, this));
             return '<div class="flickr-setid" id="flickr-photoset-'+setid+'"></div>';
+        }
+    },
+    "twitter": {
+        "search": function(term) {
+            var mkup = '<div id="twtr-widget"></div><script>new TWTR.Widget({'+
+			  'version: 2, id: "twtr-widget", type: "search", search: "'+term+'", interval: 30000, title: "Twitter", subject: "'+term+'", width: "auto", height: 240,'+
+			  'theme: { shell: { background: "#C8C8C8", color: "#ffffff" }, tweets: { background: "#C8C8C8", color: "#444444", } },'+
+			  'features: { scrollbar: true, loop: true, live: false, hashtags: true, timestamp: true, avatars: true, toptweets: true, behavior: "default" } }).render().start();</script>';
+            return mkup;
+        }
+    },
+    "soundcloud": {
+        "id": function(id) {
+			id = "25545600";
+            var mkup = '<object class="soundcloud-id" height="81" width="100%"> <param name="movie" value="http://player.soundcloud.com/player.swf?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F'+id+'"></param> <param name="allowscriptaccess" value="always"></param> <embed allowscriptaccess="always" class="soundcloud-id" height="81" src="http://player.soundcloud.com/player.swf?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F'+id+'" type="application/x-shockwave-flash" width="100%"></embed> </object>';
+            return mkup;
         }
     }
 }    

@@ -17,6 +17,6 @@ $(document).ready(function() {
 
     // fetch supplychain
     Sourcemap.loadSupplychain(scid, function(sc) {
-        new Sourcemap.Map.Blog(sc);
+        new Sourcemap.Map.List(sc);
     });
 });

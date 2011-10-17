@@ -1106,17 +1106,27 @@ div.form-page {
     margin-bottom: 2em;
 }
 
-/* Blog styles ------------------- */
-#blog-overview {
+/* List (blog) styles ------------------- */
+#list-overview {
     width: 1008px; 
     margin: 0 auto;
-    padding: 0 20px 10px 20px;
+    padding: 20px 20px 10px 20px;
     background: #fefefe;
     border: 1px solid #d4d4d4;
     .rounded(12px);
     .box_shadow(3px, 1px, 10px);
+	h1 {
+		padding: 0 0 0 0;
+	}
+	.overview {
+		float:right;
+		width:850px;
+	}
+	.author {
+		float:left;
+	}
 }
-#blog-container {
+#list-container {
     width: 960px; 
     margin: 20px auto;
     .stop, .hop {
@@ -1126,16 +1136,28 @@ div.form-page {
            font-size:16px;
            font-weight: normal;
            color: #666;
-           padding-left: 15px;
        }
     }
+	ul li {
+		padding:10px 0 0 0;
+	}
     .stop {
-        h2 {            
-            padding-left:28px;
+		.dot {
+			height:12px;
+			width:12px;
+			.rounded(40px);
+			border:4px solid #fff;
+			position:absolute;
+			top:5px; left:0;
+		}
+        h2 {    
+	        position:relative;
+			padding-left:25px;
             min-height:28px;
         }
     }
 }
+
 
 /* Goolge Import styles ------------------- */
 table.google-spreadsheets-list {

@@ -28,7 +28,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "auto_init": true,
     "map_element_id": 'sourcemap-map-view',
     "banner": true, "watermark": true, "magic_word_list": [
-        "youtube:link", "vimeo:link", "flickr:setid"
+        "youtube:link", "vimeo:link", "soundcloud:id", "twitter:search", "flickr:setid"
     ], "tpl_base_path": Sourcemap.TPL_PATH, "tileset":"cloudmade",
     "tour_order_strategy": "upstream", "position": "0|0|0", "error_color": '#ff0000',
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 

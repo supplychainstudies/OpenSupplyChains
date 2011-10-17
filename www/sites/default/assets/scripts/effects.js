@@ -14,6 +14,12 @@
 
 
 $(document).ready(function(){
+    /* carousel launch */
+    $('.carousel').each(function(){
+        $(this).jcarousel({
+            scroll: 1,
+        });
+    });
 
     /* unsupported browser detection */
     if (($.browser.msie)) {
@@ -124,14 +130,6 @@ function beforeSubmit()
     $("OPTION").removeAttr("disabled");    
     return true;
 }
-
-
-
-jQuery(document).ready(function() {
-    jQuery('.carousel').jcarousel({
-        scroll: 1,
-    });
-});
 
 
 /*!

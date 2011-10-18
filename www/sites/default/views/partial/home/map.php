@@ -33,6 +33,7 @@
         </div>
         <div class="map-controls">
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
+            <?php if($supplychain->user_id==$user_id): ?>
             <div class="map-controls-publish">
                 <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/>
                 <a id="map-publish-link">Public</a>
@@ -43,6 +44,7 @@
             <div class="map-controls-delete">
                 <a class="red" href="delete/<?= $supplychain->id ?>">Delete</a>
             </div>
+            <?php endif; ?>
         </div>
         <div class="clear"></div>
 <?php endif; ?>

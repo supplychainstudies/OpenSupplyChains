@@ -59,10 +59,18 @@ Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@
         <h2>Your Sourcemaps</h2>
         <?php foreach($supplychains as $i => $sc): ?>
             <div class="user-map-list">
-                <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>
+                <?= View::factory('partial/home/map', array('supplychain' => $sc , 'user_id'=> $user_profile )) ?>
             </div>
         <?php endforeach; ?>
     <?php else: ?>
         <h2 class="bad-news">You haven't made any maps yet. <a href="create">Get started</a></h2>
+    <?php endif; ?>
+    <?php if(isset($favorites) && $favorites): ?>
+        <h2>Favorite</h2>
+        <?php foreach($favorites as $i => $sc): ?>
+            <div class="user-map-list">
+                <?= View::factory('partial/home/map', array('supplychain' => $sc , 'user_id'=> $user_profile )) ?>
+            </div>
+        <?php endforeach; ?>
     <?php endif; ?>
 </div>

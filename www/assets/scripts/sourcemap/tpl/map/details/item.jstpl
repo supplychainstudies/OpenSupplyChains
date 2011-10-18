@@ -14,28 +14,45 @@
 <% if(this.item.attributes.kind) { %>
 <div class="<%= this.item.attributes.kind %>">
 
-    <h2 id="detail-title"><%= _S.htesc(this.item.getAttr("title", "an unnamed "+this.item.attributes.kind)) %></h2>
+    <h2 class="title"><%= _S.htesc(this.item.getAttr("title", "An unnamed "+this.item.attributes.kind)) %><div class="dot" style="background:<%= this.item.attributes.color %>"></div></h2>
     <% if(this.item.attributes.placename != undefined) { %><h3 class="placename"><%= _S.htesc(this.item.attributes.placename) %></h3><% } %>
     <% if(this.item.getAttr("description", false) && this.item.getAttr("description").length > 1) { %>
         <div class="description"><%= _S.htesc(this.item.getAttr("description")) %></div>
     <% } %>
-
+	
+	<ul>
     <% if(this.item.getAttr("url:moreinfo", false)) { %>
-        <div class="url moreinfo"> 
+        <li class="url moreinfo"> 
             <%= $("<a></a>").attr("href", this.item.getAttr("url:moreinfo"))
                 .text(this.item.getAttr("urltitle:moreinfo", "Learn More")).attr("target", "blank")
-                .wrap("<div></div>").parent().html() %>
-        </div>
+                .wrap("<li></li>").parent().html() %>
+        </li>
     <% } %>
-    <% if(this.item.getAttr("youtube:link", false)) { %><%= Sourcemap.MagicWords.content.youtube.link(this.item.getAttr("youtube:link")) %>
+    <% if(this.item.getAttr("youtube:link", false)) { %>
+		<li>
+		<%= $("<a></a>").text("Youtube Link").attr("href", this.item.getAttr("youtube:link")).attr("target", "blank").wrap("<li></li>").parent().html() %>
+		</li>
     <% } %>
-    <% if(this.item.getAttr("vimeo:link", false)) { %><%= Sourcemap.MagicWords.content.vimeo.link(this.item.getAttr("vimeo:link")) %>
+    <% if(this.item.getAttr("vimeo:link", false)) { %>
+		<li>
+		<%= $("<a></a>").text("Vimeo Link").attr("href", this.item.getAttr("vimeo:link")).attr("target", "blank").wrap("<li></li>").parent().html() %>
+		</li>
+    <% } %>
+    <% if(this.item.getAttr("soundcloud:id", false)) { %>
+		<li>
+		<%= $("<a></a>").text("Soundcloud Link").attr("href", "http://player.soundcloud.com/player.swf?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+this.item.getAttr("soundcloud:id")).attr("target", "blank").wrap("<li></li>").parent().html() %>
+		</li>
+    <% } %>
+    <% if(this.item.getAttr("twitter:search", false)) { %>
+		<li>
+		<%= $("<a></a>").text("Twitter Link").attr("href", this.item.getAttr("twitter:search")).attr("target", "blank").wrap("<li></li>").parent().html() %>
+		</li>
     <% } %>
     <% if(this.item.getAttr("flickr:setid", false)) {  %>
-        <div id="flickr-photoset-<%= this.item.getAttr("flickr:setid") %>">
-        <%= Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.item.getAttr("flickr:setid")) %>
-        </div>
+		<li>
+        <%= $("<a></a>").text("Flickr Link").attr("href", "http://www.flickr.com/slideShow/index.gne?set_id="+this.item.getAttr("flickr:setid")).attr("target", "blank").wrap("<li></li>").parent().html() %>
+		</li>
     <% } %>
-
+	</ul>
 </div>
 <% } %>

@@ -12,16 +12,18 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<div id="blog-overview">
+<div id="list-overview">
+	<div class="overview">
     <h1><?= HTML::chars($supplychain_name) ?></h1>
     <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
+	</div>
 
-    <p class="author">
-        <img src="<?= $supplychain_avatar ?>" alt="Avatar"></img>
-        <?= HTML::chars($supplychain_date) ?>, <a href="user/<?= HTML::chars($supplychain_ownerid) ?>"><?= HTML::chars($supplychain_owner) ?></a>
-    </p>
+    <div class="author">
+         <a href="user/<?= HTML::chars($supplychain_ownerid) ?>"><img src="<?= $supplychain_avatar ?>" alt="Avatar"></img></a>
+    </div>
+	<div class="clear"></div>
 </div>
-<div id="blog-container">    
+<div id="list-container">    
 
 </div>
 

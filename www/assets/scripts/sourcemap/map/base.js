@@ -28,7 +28,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "auto_init": true,
     "map_element_id": 'sourcemap-map-view',
     "banner": true, "watermark": true, "magic_word_list": [
-        "youtube:link", "vimeo:link", "flickr:setid"
+        "youtube:link", "vimeo:link", "soundcloud:id", "twitter:search", "flickr:setid"
     ], "tpl_base_path": Sourcemap.TPL_PATH, "tileset":"cloudmade",
     "tour_order_strategy": "upstream", "position": "0|0|0", "error_color": '#ff0000',
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 
@@ -373,6 +373,8 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
             var chtml = $("<div id='"+cluster_id+"' class='cluster'></div>");
 
             for(var i in cluster.cluster) {
+                if(cluster.cluster[i].attributes==undefined)
+                    break;
                 var title = cluster.cluster[i].attributes.title ?
                     cluster.cluster[i].attributes.title.substring(0,36) : "";
                 title += title.length == 36 ? "..." : "";
@@ -603,8 +605,14 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		        if(f.cluster) {    //Why we divide this into two segments is unclear
 		            var val = 0;
 		            for(var c in f.cluster) {
-		                if(attr_nm instanceof Function) val += attr_nm(f.cluster[c].attributes.ref);
-		                else val += parseFloat(f.cluster[c].attributes[attr_nm]);
+                        if (c != "filter" && c != "indexOf"){
+                            if(attr_nm instanceof Function){
+                                var ref = f.cluster[c].attributes.ref;
+                                val += attr_nm(ref);
+                            }
+                            else 
+                                val += parseFloat(f.cluster[c].attributes[attr_nm]);
+                        }
 		            }
 		            if(!isNaN(val)) {
 		                // scale  

@@ -74,7 +74,7 @@ return array(
             ),
             'requires' => array(
                 'sourcemap-template', 'sourcemap-core', 
-                'google-maps', 'openlayers-cloudmade'
+                'google-maps', 'twitter', 'openlayers-cloudmade'
             )
         ),
         'sourcemap-tabbed-edit' => array(
@@ -111,6 +111,11 @@ return array(
                 'http://maps.google.com/maps/api/js?sensor=false&v=3.2'
             )
         ),
+	    'twitter' => array(
+	        'scripts' => array(
+	            'http://widgets.twimg.com/j/2/widget.js'
+	        )
+	    ),
         'less' => array(
             'scripts' => array(
                 'assets/scripts/libs/less/less.js'

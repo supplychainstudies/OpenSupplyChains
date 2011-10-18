@@ -11,10 +11,10 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-class Controller_Blog extends Sourcemap_Controller_Layout {
+class Controller_List extends Sourcemap_Controller_Layout {
     
     public $layout = 'base';
-    public $template = 'blog';
+    public $template = 'list';
 
     protected function _match_alias($alias) {
         $found = ORM::factory('supplychain_alias')
@@ -40,13 +40,13 @@ class Controller_Blog extends Sourcemap_Controller_Layout {
                 // pass supplychain metadeta to template 
                 $this->template->supplychain_id = $supplychain_id;
                 $this->template->supplychain_date = date('F j, Y', $sc->created );
-                $this->template->supplychain_name = isset($sc->attributes->name) ? $sc->attributes->name : "";
+                $this->template->supplychain_name = isset($sc->attributes->title) ? $sc->attributes->title : "";
                 $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
                 $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
                 $this->template->supplychain_desc = isset($sc->attributes->description) ? $sc->attributes->description : "" ;
 
-                $this->layout->scripts = array('blog-view');
+                $this->layout->scripts = array('list-view');
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css', 
                     'assets/styles/base.less',

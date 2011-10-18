@@ -14,20 +14,24 @@
 
 
 $(document).ready(function(){
+    /* carousel launch */
+    $('.carousel').each(function(){
+        $(this).jcarousel({
+            scroll: 1,
+        });
+    });
 
     /* unsupported browser detection */
     if (($.browser.msie)) {
         
         //document.getElementById("status-message").className = "status-message browser";
         $(".messages").html(
-            "<div class=\"status-message\" "
-            +" style=\"padding:10px 20px 10px 20px;background:#3884ab;line-height:1.5em;\">"
+            "<div class=\"status-message\" style=\"line-height: 1.8em\">"
             +"<div class=\"browser\" "
-            +" style=\"font-size:20px;color:#999;padding:20px 20px 40px 20px;background:#eee;\"></div></div>"        
+            +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; \"></div></div>"        
         );
         $(".browser").html(
-            " <h1><font color=\"#333\">Dear IE user,</font></h1>"
-          + " You're currently using a browser that is unsupported by Sourcemap." 
+            " You're using Internet Explorer, which unsupported by Sourcemap."
           + " While we won't stop you from experimenting, we highly recommend using"
           + " a recent version of "
           + " <a href=\"http://www.google.com/chrome\">Chrome</a>,"
@@ -126,14 +130,6 @@ function beforeSubmit()
     $("OPTION").removeAttr("disabled");    
     return true;
 }
-
-
-
-jQuery(document).ready(function() {
-    jQuery('.carousel').jcarousel({
-        scroll: 1,
-    });
-});
 
 
 /*!

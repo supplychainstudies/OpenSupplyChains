@@ -10,43 +10,43 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-Sourcemap.Map.Blog = function(o) {    
-    this.broadcast('map_blog:instantiated', this);
+Sourcemap.Map.List = function(o) {    
+    this.broadcast('map_list:instantiated', this);
     var o = o || {};
     Sourcemap.Configurable.call(this, o);
-    this.instance_id = Sourcemap.instance_id("sourcemap-blog");
+    this.instance_id = Sourcemap.instance_id("sourcemap-list");
 }
 
-Sourcemap.Map.Blog.prototype = new Sourcemap.Configurable();
+Sourcemap.Map.List.prototype = new Sourcemap.Configurable();
 
-Sourcemap.Map.Blog.prototype.broadcast = function() {
+Sourcemap.Map.List.prototype.broadcast = function() {
     Sourcemap.broadcast.apply(Sourcemap, arguments);
     return this;
 }
 
-Sourcemap.Map.Blog.prototype.defaults = {
+Sourcemap.Map.List.prototype.defaults = {
     "auto_init": true
 }
 
-Sourcemap.Map.Blog.prototype.init = function() {
-    console.log(this);
+Sourcemap.Map.List.prototype.init = function() {
     this.render();
 }
-Sourcemap.Map.Blog.prototype.render = function() {
-
-
+Sourcemap.Map.List.prototype.render = function() {
     for(var i in this.options.stops) {
-        this.options.stops[i].attributes.kind = "stop";
-        console.log(this.options.stops[i]);
-        Sourcemap.template('map/details/item', function(p, tx, th) {
-            $("#blog-container").append(th);
-        }, {"base": this, "item": this.options.stops[i]} );
+		if(this.options.stops[i].attributes) {
+	        this.options.stops[i].attributes.kind = "stop";
+	        Sourcemap.template('map/details/item', function(p, tx, th) {
+	            $("#list-container").append(th);
+	        }, {"base": this, "item": this.options.stops[i]} );
+		}
     }
     for(var i in this.options.hops) {
-        this.options.hops[i].attributes.kind = "hop";        
-        Sourcemap.template('map/details/item', function(p, tx, th) {
-            $("#blog-container").append(th);
-        }, {"base": this, "item": this.options.hops[i]} );
+		if(this.options.hops[i].attributes) {	
+	        this.options.hops[i].attributes.kind = "hop";        
+	        Sourcemap.template('map/details/item', function(p, tx, th) {
+	            $("#list-container").append(th);
+	        }, {"base": this, "item": this.options.hops[i]} );
+		}
     }
 
 }

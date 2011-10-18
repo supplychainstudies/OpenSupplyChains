@@ -52,10 +52,10 @@ return array(
                 'less', 'sourcemap-map'
             )
         ),
-        'blog-view' => array(
+        'list-view' => array(
             'scripts' => array(
-                'sites/default/assets/scripts/map/blog.js',
-                'assets/scripts/sourcemap/map/blog.js'
+                'sites/default/assets/scripts/map/list.js',
+                'assets/scripts/sourcemap/map/list.js'
             ),
             'requires' => array(
                 'sourcemap-map'

@@ -44,7 +44,7 @@ $(document).ready(function(){
             + '<div class="submit-status" hidden></div>'
             + '<input type="submit"></input>'
             + '</form>'
-            + '<div class="hidden" hidden>'   // put existing content into a hidden div
+            + '<div class="hidden" hidden>'  // put existing content into a hidden div
             + oldData
             + '</div>'
             + '<div class="clear"></div>'

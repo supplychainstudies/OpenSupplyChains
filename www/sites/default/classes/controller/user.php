@@ -34,8 +34,15 @@ class Controller_User extends Sourcemap_Controller_Layout {
            $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
            if($user->has('roles', $channel_role)) {
                $banner_url="";
-               $featured = Array();
-
+               $featured_scs = Array();
+               $supplychains = $user->supplychains->order_by('modified', 'desc')->find_all(); // this search should simply return all user_favorited supplychains
+               foreach ($supplychains as $i=>$supplychain){
+                   $current = $supplychain->kitchen_sink($supplychain->id);
+                   if ($current->user_featured){
+                       $featured_scs[] = $supplychain;
+                   }
+               }
+               
                // Load slider functionality
                $this->layout->scripts = array(
                    'sourcemap-core',
@@ -45,8 +52,9 @@ class Controller_User extends Sourcemap_Controller_Layout {
                $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
 
                $this->template = new View('channel/profile');
-               $this->template->banner_url = $banner_url;
-               $this->template->featured = $featured_ids;
+
+               $this->template->banner_url = $user->banner_url; 
+               $this->template->featured = $featured_scs;
            } // channel role end           
 
             $user = (object)$user->as_array();
@@ -113,13 +121,8 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $scs_t =array();
             foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {            
                 $scs[] = $sc->kitchen_sink($sc->id);
-                //$scs_t[] = ($sc->id);
-                //Message::instance()->set($scs_t[i]);
                 
             }
-             //Message::instance()->set($scs_t[0]);
-             //Message::instance()->set($scs_t[1]);
-             
 
             $this->template->user_profile = $p;
             $this->template->supplychains = $scs;

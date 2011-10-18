@@ -238,37 +238,17 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 {    $sc->user_featured = "TRUE";}
                 else
                 {    $sc->user_featured = "FALSE";}
-                //$sc->user_featured |= $set_to;            
             } else {
                 $sc->user_featured = "false";
             }
-            
             try {
                 $sc->save();
-            
-                $scid = $supplychain_id;
-                $evt = Sourcemap_User_Event::UPDATEDSC;
-                try {
-                    Sourcemap_User_Event::factory($evt, $sc->user_id, $scid)->trigger();
-                } catch(Exception $e) {            
-                }
-                Cache::instance()->delete('supplychain-'.$scid);
-                if(Sourcemap_Search_Index::should_index($scid)) {
-                Sourcemap_Search_Index::update($scid);
-                } else {
-                    Sourcemap_Search_Index::delete($scid);
-                }
-                $szs = Sourcemap_Map_Static::$image_sizes;
-                foreach($szs as $snm => $sz) {
-                    $ckey = Sourcemap_Map_Static::cache_key($scid, $snm);
-                    Cache::instance()->delete($ckey);
-                }
-                
                 Message::instance()->set('Map updated.', Message::SUCCESS);
                 return $this->request->redirect('/home');
             } catch(Exception $e) {
                 $this->request->status = 500;
-                Message::instance()->set('Couldn\t update your supplychain. Please contact support.');
+                Message::instance()->set('Couldn\t update your supplychain. Please contact support.' . $e);
+                return $this->request->redirect('/home');
             }
         }
     }

@@ -17,6 +17,7 @@ class Controller_Home extends Sourcemap_Controller_Layout {
     public $template = 'home';
 
     public function action_index() {
+
         $this->layout->scripts = array(
             'sourcemap-core',
         );
@@ -38,10 +39,54 @@ class Controller_Home extends Sourcemap_Controller_Layout {
             $scs[] = $sc->kitchen_sink($sc->id);
         }
 
+        $isChannel = false;
+        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        if($user->has('roles', $channel_role))
+            $isChannel = true;
+
+        $this->template->isChannel = $isChannel;
         $this->template->user = (object)$user_arr;
         $this->layout->page_title = "Dashboard for ".$this->template->user->username." on Sourcemap";
         $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user->id, 6);
         $this->template->user_profile = $p;
         $this->template->supplychains = $scs;
+    }
+
+    public function action_update(){
+        // This is an example of how we should do AJAX validation in Kohana
+        $this->auto_render = FALSE;
+        $this->template = null;
+        
+        $user = Auth::instance()->get_user();
+        $set_to = null;
+        if(Request::$method === 'POST') {
+            if(!($user = Auth::instance()->get_user())) {
+                echo "not logged in";
+                $this->request->redirect('/auth');
+            } else {
+                // user logged in, now let's validate the content
+                $p = Kohana::sanitize($_POST);
+                $p = Validate::factory($p);
+                $p->rule('description', 'max_length', array('10000'));
+                $p->rule('url', 'url');
+                $p->rule('banner_url', 'url');
+                $p->rule('display_name', 'max_length', array('127'));
+                if($p->check()) {
+                    // update db
+                    foreach ($p as $i=>$field){
+                        if(!($p[$i] == "")){
+                            $user->$i = $p[$i];
+                        }
+                    }
+                    $user->save();
+                    echo "success";
+                } else {
+                    echo "failure";
+                }
+            }
+        }
+        else{
+            echo "none";
+        }
     }
 }

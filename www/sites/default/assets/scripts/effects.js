@@ -14,6 +14,66 @@
 
 
 $(document).ready(function(){
+
+    /* user edit */
+    $('a.edit-button').click(function(evt){
+        $('a.edit-button enabled').each(function(){
+            $(this).toggleClass('enabled');
+            removeForm($(this),$(this).attr('title'));
+        });
+        evt.preventDefault();
+        if (!$(this).hasClass('enabled')){
+            // Add form element to field
+            addForm($(this), $(this).attr('title'));
+        }
+        else{
+            // Remove form element from field without saving
+            removeForm($(this), $(this).attr('title'));
+        }
+    });
+    
+    var addForm = function(context, field){
+        context.toggleClass('enabled');
+        var input = 'input';
+        if ( field === 'description' )
+            input = 'textarea';  // description field gets a textarea
+        var oldData =  $('#' + field).html();
+        $('#' + field).html(''
+            + '<form action="/home/update" method="post" class="edit-field">'
+            + '<' + input + ' type="text" name="' + field + '" placeholder="Enter description here"></' + input + '>'
+            + '<div class="submit-status" hidden></div>'
+            + '<input type="submit"></input>'
+            + '</form>'
+            + '<div class="hidden" hidden>'   // put existing content into a hidden div
+            + oldData
+            + '</div>'
+            + '<div class="clear"></div>'
+        );
+        $('form.edit-field').submit(function(evt){
+            evt.preventDefault();
+            postData = $('#' + field).find(input + "[name='" + field + "']").val();
+            $('#' + field).find('.submit-status').show().removeClass('failed');
+            $.post('/home/update', $('#' + field).find('form').serialize(), function(data){
+                if (data === 'success'){
+                     $('#' + field).find('div.hidden').html(''
+                        + postData
+                     );
+                     removeForm(context, field);
+                } else {
+                    $('#' + field).find('.submit-status').addClass('failed');
+                }
+            }); 
+        });
+    }
+
+    var removeForm = function(context, field){
+        context.toggleClass('enabled');
+        oldData = $('#' + field).find('div.hidden').html(); // pull the data out of the hidden div and put it back
+        $('#' + field).html(''
+            + oldData
+        );
+    }
+
     /* carousel launch */
     $('.carousel').each(function(){
         $(this).jcarousel({
@@ -82,8 +142,6 @@ $(document).ready(function(){
                     'margin-top' : -popMargTop,
                     'margin-left' : -popMargLeft
                 });
-
-                console.log($('#' + popID));
 
                 $('#' + popID).width(popWidth); 
                 $('#' + popID).fadeIn();

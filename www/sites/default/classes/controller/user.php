@@ -44,21 +44,6 @@ class Controller_User extends Sourcemap_Controller_Layout {
                $this->layout->styles = $this->default_styles;
                $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
 
-               // HACK: Office Depot branding info
-               // This information needs to come from the database.
-               if ($user->username == "officedepot"){
-                   $banner_url="sites/default/assets/images/officedepot-logo.png";                   
-                   $q = array(
-                    'user' => $user->id,
-                    'user_featured'=> 'yes',
-                    //'l' => 4,
-                    'recent' => 'yes'
-                   );
-                   $r = Sourcemap_Search::find($q);
-
-                   $featured_ids = $r;
-               }
-
                $this->template = new View('channel/profile');
                $this->template->banner_url = $banner_url;
                $this->template->featured = $featured_ids;

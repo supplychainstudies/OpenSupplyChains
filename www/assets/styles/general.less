@@ -101,6 +101,12 @@ a {
     float: left;
     width: 500px;
 }
+#sidebar-left{   // for "split sidebar" views
+    float: left;
+    width: 500px;
+}
+
+
 
 
 .messages{
@@ -346,6 +352,8 @@ input[type=text],input[type=password], textarea {
 input::-webkit-input-placeholder, input:-moz-placeholder { color:#999 }
 textarea { height: 55px; }
 
+
+
 &.sourcemap-form-button{
 	width: 100%;
 	border: none;
@@ -372,6 +380,16 @@ input[type=submit] {
 	border: none;
 	float: right;
 }
+div.submit-status{
+    float: left;
+    height: 40px;
+    width: 40px;
+    background: url("../images/throbber.gif") 8px 8px no-repeat;
+    &.failed{
+        background: url("../images/warning-triangle.png") 12px 13px no-repeat;
+    }
+}
+
 select {
 	border: 1px solid #999;
 	padding: 2%;
@@ -854,48 +872,53 @@ ul#browse-list {
                 padding: 4px;
 				width:128px;
 				height:128px;
-                .box_shadow(0, 1px, 5px);
                 .rounded(4px);
             }
             .user-details {
                 float:left;
-                margin: 0;
                 padding: 20px;
                 list-style:none;
-				line-height:1.4em;
                 font-size: 14px;
                 color: #949494;
-				span {
-					color:#328cbb;
-				}
+                li{
+                    width: 220px; // explicit width needed for form elements
+                    margin: 0 0 8px 0;
+                    p{
+                        font-size: 1em;
+                        width: 220px;
+                        overflow: hidden;
+                        span {
+                            color:#328cbb;
+                            &.empty{ color: #ccc; }
+                        }
+                    }
+                    a.edit-button{
+                        float: right;
+                        margin-right: -24px;
+                        height:24px;
+                        width: 24px;
+                        background: url('../images/edit-info.png') 0 -24px no-repeat;
+                        &.enabled{
+                            background: url('../images/edit-info.png') 0 0 no-repeat;
+                        }
+                    }
+                }
             }
         }
-        .upload-photo.button{
-            float: left;
-            width: 106px;
-            font-size: 14px;
-            text-align:center;
-            border: 1px solid #d4d4d4;
-            color: #328cbb;
-            margin: 10px;
-            .gradient();
-            a{
+        .change-info{
+            .button{
+                float: left;
+                font-size: 14px;
+                text-align:center;
+                border: 1px solid #d4d4d4;
                 color: #328cbb;
+                margin: 10px;
+                .gradient();
+                a{
+                    color: #328cbb;
+                }
             }
         }  
-        .reset-password.button{
-            float: left;
-            width: 136px;
-            font-size: 14px;
-            text-align:center;
-            border: 1px solid #d4d4d4;
-            color: #328cbb;
-            margin: 10px;
-            .gradient();
-            a{
-                color: #328cbb;
-            }
-        }      
     }
     .dashboard-top-right{
         float: right;
@@ -912,6 +935,73 @@ ul#browse-list {
                     font-size: 0.8em;
                 }
             }
+        }
+    }
+}
+/* Channel ---------------------------------- */
+
+.channel-banner{
+    width: 100%;
+    .rounded(14px);
+    .box_shadow(3px, 1px, 10px);
+    background: #fff;
+    text-align: center;
+    img{
+        padding: 30px 20px;
+        .rounded(14px);
+        width: 900px;
+        height: auto;
+    }
+}
+
+.channel-featured-maps{
+    float: left;
+    margin: 20px 20px 20px 0;
+    width: 500px;
+    #featured-slider-description{
+        position: absolute;
+        padding: 20px;
+        right:44px; top: 35px;
+        width: 190px; height: 136px;
+        border-top: 3px #549ec5 solid;
+        .rounded(5px);
+        .box_shadow(2px, 2px, 4px); 
+        h1{
+            font-size: 20px;
+        }
+        h2{
+            font-size: 16px;
+        }
+        h4{
+            font-size: 12px;
+            &.featured-info a{ font-size: 12px; }
+        }
+    }
+    .anythingSlider .anythingControls {
+        position: absolute;
+        bottom: 12px;
+        left: 300px;
+        z-index: 100;
+    }
+    ul{
+        list-style: none;
+        img {
+            width: auto;
+            height: auto;
+        }
+    } 
+}
+
+.channel-other-maps{
+    float:left;
+    width:400px;
+    li{
+        float:left;
+    }
+    .user-map-list {
+        margin-top: 5px;
+        .map-description {
+            width: 200px;
         }
     }
 }
@@ -956,7 +1046,7 @@ ul#browse-list {
             &.map-controls-publish {
                 background: #f8f8f8;
                 border: 1px solid #bfbfbf;
-                width: 135px;
+                width: 120px;
                 input,a { float:left; }
                 input { margin: 12px 9px 0; }
                 a { 

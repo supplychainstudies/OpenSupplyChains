@@ -59,6 +59,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 $raw_sc->hops = array();
                 $raw_sc->user_id = Auth::instance()->get_user()->id;
                 $raw_sc->other_perms = 0;
+                $raw_sc->user_featured = false;
                 if($public)
                     $raw_sc->other_perms |= $public;
                 else

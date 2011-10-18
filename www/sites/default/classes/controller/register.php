@@ -50,7 +50,30 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                     Message::instance()->set('Please use alphabetical character as first letter of your Username.');
                     return;
                 }
-                
+                // check for restricted username
+                $restricted = FALSE;
+                $restricted_names = array(
+                    "browse",
+                    "view",
+                    "embed",
+                    "admin",
+                    "auth",
+                    "info",
+                    "list",
+                    "blog",
+                    "api"
+                );
+                foreach ($restricted_names as $restricted_name){
+                    if ($p['username'] == $restricted_name){
+                        Message::instance()->set('That username is restricted.  Please try a different username.');
+                        $restricted = TRUE;
+                        break;
+                    }
+                }
+
+                if ($restricted)
+                    return;
+
                 // check for username in use
                 $exists = ORM::factory('user')->where('username', 'ILIKE', $p['username'])->find()->loaded();
                 if($exists) {

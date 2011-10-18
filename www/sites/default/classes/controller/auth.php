@@ -190,6 +190,7 @@ EREIAM;
         if(strtolower(Request::$method) === 'post') {
             // make sure the user has a valid reset ticket or is logged in.
             $tregex = '/[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}-[A-Za-z0-9\+\/=]+/';
+
 			if(!$current_user && isset($_POST['t']) && preg_match($tregex, $_POST['t'])) {
                 list($un, $h, $em) = explode('-', $_POST['t']);
                 $un = base64_decode(strrev($un));
@@ -226,7 +227,7 @@ EREIAM;
             } 
 
             if(!$current_user) {
-                Message::instance()->set('You can\'t do that.');
+                Message::instance()->set('You\'re not logged in as the correct user.  Please log out and try again.');
                 $this->request->redirect('auth');
             } elseif($post->check()) { // && $tgth === $current_user->password) {
                 // user is logged in...reset password...
@@ -299,7 +300,25 @@ EREIAM;
         }
     }
 
+    public function action_change_info() {
+        $this->template = View::factory('auth/change_info');
 
+        $current_user = Auth::instance()->get_user();
 
+        $post = Validate::factory($_POST);
+        $post->rule('new', 'not_empty')
+            ->rule('new_confirm', 'not_empty')
+            ->rule('new_confirm', 'matches', array('new'))
+            ->filter(true, 'trim');
 
-  }
+        if(strtolower(Request::$method) == 'post') {
+            // make sure the user has a valid reset ticket or is logged in.
+			if(!$current_user && isset($_POST['t'])) {
+                $desc = Kohana::sanitize($_POST['t']);
+            }
+
+            else{
+            }
+        }
+    }
+}

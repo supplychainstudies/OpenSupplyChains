@@ -44,6 +44,16 @@ class Controller_User extends Sourcemap_Controller_Layout {
                $this->layout->styles = $this->default_styles;
                $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
 
+               $banner_url = $user->banner_url;
+               $q = array(
+                'user' => $user->id,
+                'user_featured' => 'yes',
+                'recent' => 'yes'
+                );
+               $featured_ids = Sourcemap_Search::find($q);
+
+
+
                $this->template = new View('channel/profile');
                $this->template->banner_url = $banner_url;
                $this->template->featured = $featured_ids;

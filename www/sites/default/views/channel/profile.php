@@ -13,9 +13,11 @@
 ?>
 
 <div class="container">
+    <?php if(isset($banner_url)): ?>
     <div class="channel-banner">
         <img src="<?= $banner_url?>"/>
     </div>
+    <?php endif; ?>
     <div class="clear"></div>
     
     <div class="channel-featured-maps">

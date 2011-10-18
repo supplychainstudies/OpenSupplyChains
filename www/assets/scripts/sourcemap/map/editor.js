@@ -412,7 +412,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
                 this.adjustXY(evt);
                 this.removeDocumentEvents();
             }
-            var dragged = (this.start != this.last);
+            //var dragged = (this.start != this.last);
+            var dragged = true;
             this.started = false;
             this.dragging = false;
             OpenLayers.Element.removeClass(
@@ -421,6 +422,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
             this.up(evt);
             this.callback("up", [evt.xy]);
             if(dragged) {
+                // set dragged to true for prevent presswithout dragging
                 this.callback("done", [evt.xy]);
             }
             else {

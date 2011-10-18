@@ -108,15 +108,17 @@ Sourcemap.Map.Editor.prototype.init = function() {
 	            var new_hop = fromst.makeHopTo(tost);
 	            sc.addHop(new_hop);
 	            this.map.mapHop(new_hop, sc.instance_id);
-	            this.connect_from = false;
 	            // TODO: review if the selection of the hop is ideal
 	            this.connect_from = false;
 	            // if you want to uncomment this, figure out why it breaks things.
 	            //this.map.controls.select.select(this.map.hopFeature(new_hop));
-	            Sourcemap.broadcast('supplychain-updated', sc);
+                //show ftr window
+	            this.showEdit(this.map.findFeaturesForHop(sc.instance_id,fromstid,tostid).arrow);
+                Sourcemap.broadcast('supplychain-updated', sc);
 	        } else if(ftr.attributes.hop_instance_id) {
 	            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
 	            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
+                console.log(ftr);
 	            this.showEdit(ftr);
 	        } else if(ftr.attributes.stop_instance_id) {
 	            var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);

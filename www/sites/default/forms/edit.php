@@ -43,11 +43,11 @@ if($is_admin){
     $title_max_length = array('max_length', array(10000));
     $desc_max_length = array('max_length', array(10000));
     $title_attributes = array(
-            'maxlength' => -1,
+            'maxlength' => 10000,
             'placeholder' => 'Admin mode: Maximum 10000 characters.'
         );
     $desc_attributes = array(
-            'maxlength' => -1,
+            'maxlength' => 10000,
             'placeholder' => 'Admin mode: Maximum 10000 characters.',
             'id' => 'form-description'
         );

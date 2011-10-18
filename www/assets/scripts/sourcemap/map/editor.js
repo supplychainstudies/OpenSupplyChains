@@ -118,7 +118,6 @@ Sourcemap.Map.Editor.prototype.init = function() {
 	        } else if(ftr.attributes.hop_instance_id) {
 	            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
 	            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
-                console.log(ftr);
 	            this.showEdit(ftr);
 	        } else if(ftr.attributes.stop_instance_id) {
 	            var ref = this.map.stopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);

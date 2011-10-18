@@ -31,9 +31,9 @@ $(document).ready(function(){
             +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; \"></div></div>"        
         );
         $(".browser").html(
-            " You're using Internet Explorer, which unsupported by Sourcemap."
+            " You're using Internet Explorer, which is not supported by Sourcemap."
           + " While we won't stop you from experimenting, we highly recommend using"
-          + " a recent version of "
+          + " the latest version of "
           + " <a href=\"http://www.google.com/chrome\">Chrome</a>,"
           + " <a href=\"http://www.apple.com/safari/\">Safari</a>, or "
           + " <a href=\"http://www.mozilla.org/en-US/firefox/new/\">Firefox</a>."

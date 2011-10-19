@@ -66,9 +66,6 @@ class Controller_User extends Sourcemap_Controller_Layout {
                 );
                $featured_ids = Sourcemap_Search::find($q);
 
-               print_r($featured_ids);
-
-
                $this->template = new View('channel/profile');
 
                $this->template->user_profile = $user;

@@ -11,6 +11,14 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
+    <?php if (isset($supplychain_banner_url) && $supplychain_banner_url): ?>
+        <div class="container">
+            <div class="channel-banner">
+               <img src="<?= $supplychain_banner_url?>"/>
+            </div>
+            <div class="clear" style="height: 20px"></div>
+        </div>
+    <?php endif; ?>
 
 <div id="map-container">    
     <div id="map">

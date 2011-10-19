@@ -37,5 +37,4 @@
     </li>
     <?php endforeach; ?>
 </ul>
-<?php else: ?>
 <?php endif; ?>

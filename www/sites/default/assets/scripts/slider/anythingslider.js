@@ -391,6 +391,10 @@
                     $(this).css('height', h);
                 }
                 base.panelSize[i] = [w,h,leftEdge];
+                if(base.$items.length==1)
+                {
+                    base.panelSize[1] = [w,h,leftEdge+w];
+                }
                 leftEdge += w;
             });
             // Set total width of slider, but don't go beyond the set max overall width (limited by Opera)

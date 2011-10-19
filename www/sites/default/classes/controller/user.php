@@ -46,10 +46,10 @@ class Controller_User extends Sourcemap_Controller_Layout {
                
                // if user only has a single featured map, just forward directly to the map page
                // TODO: don't use 301s for this.
-               if (count($featured_scs) == 1){
-                    $url = '/view/' . $featured_scs[0]->id;
-                    $this->request->redirect($url,301);
-               }
+               //if (count($featured_scs) == 1){
+               //     $url = '/view/' . $featured_scs[0]->id;
+               //     $this->request->redirect($url,301);
+               //}
 
                // Load slider functionality
                $this->layout->scripts = array(

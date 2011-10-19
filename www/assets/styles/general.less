@@ -386,7 +386,7 @@ div.submit-status{
     width: 40px;
     background: url("../images/throbber.gif") 8px 8px no-repeat;
     &.failed{
-        background: url("../images/warning-triangle.png") 12px 13px no-repeat;
+        background: url("../images/account-alert.png") 12px 13px no-repeat;
     }
 }
 
@@ -828,13 +828,24 @@ ul#browse-list {
 .account-alert{ 
     .rounded(14px); 
     .gradient(#f9f0a9,#faf6da); 
-    padding:5px; 
+    padding:5px;
+    margin-bottom: 10px;
     border: 1px solid #ecebdf; 
     p{ 
         .rounded(14px); 
-        background: url(../images/alert-triangle.png) 6px 5px transparent no-repeat; 
-        padding: 5px 5px 5px 40px; 
+        background: url(../images/account-alert.png) 6px 5px transparent no-repeat; 
+        padding: 5px 10px 5px 45px; 
     } 
+    &.question{
+        p{ 
+            background: url(../images/account-question.png) 6px 5px transparent no-repeat; 
+        } 
+    }
+    &.notice{
+        p{ 
+            background: url(../images/account-notice.png) 6px 5px transparent no-repeat; 
+        } 
+    }
 } 
 
 .dashboard-title { margin-bottom: 30px; }
@@ -854,6 +865,11 @@ ul#browse-list {
         > div { margin: 0 20px; }
         .user-name{
             margin-left: 20px;
+            span.account-status{
+                margin-left: 15px;
+                font-size: .8em;
+                color: #ccc;
+            }
         }
         #user-profile {
             float:left;

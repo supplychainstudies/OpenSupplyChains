@@ -30,7 +30,6 @@ class Controller_Upload extends Sourcemap_Controller_Layout {
         );
     }
 
-    
     public function action_auth() {
 
     $this->layout->scripts = array(

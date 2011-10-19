@@ -15,7 +15,10 @@
 <div class="container">
     <div class="dashboard-top">
         <div class="dashboard-top-left">
-            <h2 class="user-name"><?= isset($user->display_name) ? HTML::chars($user->display_name) : HTML::chars($user->username) ?></h2>       
+            <h2 class="user-name">
+                <?= isset($user->display_name) ? HTML::chars($user->display_name) : HTML::chars($user->username) ?>
+                <?= $isChannel ? '<span class="account-status">Channel Account</span>' : '' ?>
+            </h2>       
             <div id="user-profile">
                 <div class="user-gravatar">
                     <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
@@ -68,10 +71,16 @@
 </div>
 <div class="clear" style="height: 20px"></div>
 <div class="container"> 
-<div class="account-alert"> 
-<p> 
-Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
-</p> 
+<div class="account-alert question"> 
+    <p> 
+        Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
+    </p> 
+</div> 
+<div class="account-alert notice"> 
+    <p> 
+        Congratulations!  You're one of our first Channel Accounts.  You now have access to new modes, options, and features.
+        <br />We're working to improve our premium services.   Please email <a href="mailto:channels@sourcemap.com">channels@sourcemap.com</a> if you have any questions or feedback.
+    </p> 
 </div> 
 </div> 
 <div class="clear">&nbsp;</div> 

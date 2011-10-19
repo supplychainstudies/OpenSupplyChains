@@ -67,6 +67,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
                 );
                $featured_ids = Sourcemap_Search::find($q);
 
+               print_r($featured_ids);
 
 
                $this->template = new View('channel/profile');
@@ -112,7 +113,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
             $this->template->supplychains = $r->results;
             }
-            //  If user id match login in
+            //  If user id matches login id, redirect to dashboard
             else if($user->id==Auth::instance()->get_user()->id){
                 $this->request->redirect('home/');
             }
@@ -139,16 +140,14 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $scs_t =array();
             foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {            
                 $scs[] = $sc->kitchen_sink($sc->id);
-                
             }
-
+            
             $this->template->user_profile = $p;
             $this->template->supplychains = $scs;
 
 
-
             } else {
-            // User not login
+            // User not logged in
             unset($user->password);
             $user->avatar = Gravatar::avatar($user->email, 128);
             unset($user->email);
@@ -183,7 +182,6 @@ class Controller_User extends Sourcemap_Controller_Layout {
             
             }
         } else {
-            // User not loaded
             Message::instance()->set('That user doesn\'t exist.');
             return $this->request->redirect('');
         }

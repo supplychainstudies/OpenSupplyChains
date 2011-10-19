@@ -40,7 +40,21 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
                 $this->layout->supplychain_id = $supplychain_id;
+               
+                $supplychain_desc = "";
                 
+                // check description for shortcodes
+                // only youtube ID is supported for now...
+                if (isset($sc->attributes->description)) {
+                    $supplychain_desc = $sc->attributes->description;
+                    $regex = "/\\[youtube:([^]]+)]/";
+                    if (preg_match($regex, $supplychain_desc, $regs)) {
+                        $supplychain_youtube_id = $regs[1];
+                        $supplychain_desc = str_replace($regs[0], '', $supplychain_desc);
+                    }
+
+                }
+
                 // pass supplychain metadeta to template 
                 $this->template->supplychain_id = $supplychain_id;
                 $this->template->supplychain_date = date('F j, Y', $sc->created );
@@ -49,7 +63,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
                 $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
-                $this->template->supplychain_desc = isset($sc->attributes->description) ? $sc->attributes->description : "" ;
+                $this->template->supplychain_desc = isset($supplychain_desc) ? $supplychain_desc : "" ;
+                $this->template->supplychain_youtube_id = isset($supplychain_youtube_id) ? $supplychain_youtube_id : "" ;
 
     			$this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();
                 

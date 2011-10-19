@@ -87,6 +87,11 @@
         <?php endif; ?>
     </h1>
     <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
+    <?php if (isset($supplychain_youtube_id)): ?>
+    <div class="description-video">
+        <iframe class="youtube-player" type="text/html" width="480" height="280" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>" frameborder="0"></iframe> 
+    </div>
+    <?php endif; ?>
     <hr />
     <p class="author">
         <img src="<?= HTML::chars($supplychain_avatar) ?>" alt="Avatar"></img>

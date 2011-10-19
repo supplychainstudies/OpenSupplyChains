@@ -451,6 +451,13 @@ input[type=checkbox]{
         line-height:1.2em;
 		margin-bottom:10px;
 	}
+    .description-video{
+        width: 480px;
+        padding: 10px;
+        .rounded(8px);
+        .box_shadow(3px, 1px, 10px);
+        margin-bottom: 20px;
+    }
 }
 #sidebar #qrcode-badge {
 	float:left;
@@ -977,6 +984,10 @@ ul#browse-list {
     margin: 20px 20px 20px 0;
     width: 500px;
     overflow:hidden;
+    background: #fff;
+    .rounded(8px);
+    .box_shadow(2px, 2px, 4px);
+
     #featured-slider-description{
         position: absolute;
         padding: 20px;
@@ -995,6 +1006,10 @@ ul#browse-list {
             font-size: 12px;
             &.featured-info a{ font-size: 12px; }
         }
+    }
+
+    #channel-featured-teaser{
+        padding: 20px;
     }
     .anythingSlider .anythingControls {
         position: absolute;

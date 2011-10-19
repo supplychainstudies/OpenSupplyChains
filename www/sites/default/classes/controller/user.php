@@ -71,7 +71,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
                $this->template = new View('channel/profile');
 
-               $this->template->banner_url = $user->banner_url; 
+               $this->template->user_profile = $user;
                $this->template->featured = $featured_scs;
            } // channel role end           
 

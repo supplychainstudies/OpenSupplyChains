@@ -44,7 +44,7 @@
                         <a href="#" title="description" class="edit-button"></a>
                         <p id="description"><?= isset($user->description) ? HTML::chars($user->description) : "<span class=\"empty\">No description yet!</span>"; ?></p> 
                     </li>
-                    <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span></li>
+                    <!-- <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span></li>-->
                 </ul>
             </div>
             <div class="clear"></div>

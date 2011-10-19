@@ -236,7 +236,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
-    Sourcemap.template('map/banner', cb, s, s);
+    Sourcemap.template('map/banner', cb, s);
 
     if(this.options.watermark) {
         this.watermark = $('<div id="watermark"></div>');

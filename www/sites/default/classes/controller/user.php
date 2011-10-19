@@ -59,7 +59,6 @@ class Controller_User extends Sourcemap_Controller_Layout {
                $this->layout->styles = $this->default_styles;
                $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
 
-               $banner_url = $user->banner_url;
                $q = array(
                 'user' => $user->id,
                 'user_featured' => 'yes',
@@ -72,7 +71,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
                $this->template = new View('channel/profile');
 
-               $this->template->banner_url = $user->banner_url; 
+               $this->template->user_profile = $user;
                $this->template->featured = $featured_scs;
            } // channel role end           
 

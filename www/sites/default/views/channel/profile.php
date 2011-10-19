@@ -13,9 +13,11 @@
 ?>
 
 <div class="container">
-    <?php if(isset($banner_url)): ?>
-    <div class="channel-banner">
-        <img src="<?= $banner_url?>"/>
+    <?php if(isset($user_profile->banner_url)): ?>
+    <div class="channel-banner">        
+        <a class="channel-banner-url" <?= isset($user_profile->url)?'href="'.$user_profile->url.'"':null ?> >
+        <img src="<?= $user_profile->banner_url ?>"/>
+        </a>
     </div>
     <?php endif; ?>
     <div class="clear"></div>

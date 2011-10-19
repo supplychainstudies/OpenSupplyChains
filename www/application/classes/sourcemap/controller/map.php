@@ -39,6 +39,16 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
+
+                //redirect mobile users to mobile template
+                if (Request::user_agent('mobile')){
+                    $this->layout = new View('layout/mobile');
+                    $this->layout->styles = array(
+                        'assets/styles/mobile.less'
+                    );
+                    $this->template = new View('map/mobile');
+                }
+
                 $this->layout->supplychain_id = $supplychain_id;
                
                 $supplychain_desc = "";

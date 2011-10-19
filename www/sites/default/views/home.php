@@ -50,7 +50,7 @@
                     <a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>
                 </div> 
                 <div class="button">
-                    <a href="auth/change_info">Change Information</a>
+                    <a href="auth/reset">Change Password</a>
                 </div>
             </div>
         </div>

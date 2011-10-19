@@ -30,7 +30,7 @@
                     <h3 class="featured-teaser"><?= HTML::chars($item->attributes->description); ?></h3><? } ?>
             <h4 class="featured-info">
                  <a href="user/<?= isset($item->owner->id) ? $item->owner->id : "" ?>">
-                    <?= isset($item->owner->username) ? HTML::chars($item->owner->username) : "" ?></a>,   
+                    <?= isset($item->owner->display_name) ? HTML::chars($item->owner->display_name) : HTML::chars($item->owner->username)  ?></a>,   
                 <?php isset($item->created) ? print date("F j, Y",$item->created) : "" ?>
             </h4>
         </div>

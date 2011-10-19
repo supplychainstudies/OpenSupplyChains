@@ -158,7 +158,8 @@ class Model_Supplychain extends ORM {
             $sc->owner = (object)array(
                 'id' => $owner->id, 'name' => $owner->username,
                 'avatar' => Gravatar::avatar($owner->email),
-                'banner_url' => $owner->banner_url
+                'banner_url' => $owner->banner_url,
+                'display_name' => $owner->display_name
             );
             $sc->user_id = $owner->id;
             $sc->taxonomy = 

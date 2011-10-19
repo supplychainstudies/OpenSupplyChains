@@ -243,6 +243,25 @@ class Controller_Edit extends Sourcemap_Controller_Map {
             }
             try {
                 $sc->save();
+            
+                $scid = $supplychain_id;
+                $evt = Sourcemap_User_Event::UPDATEDSC;
+                try {
+                    Sourcemap_User_Event::factory($evt, $sc->user_id, $scid)->trigger();
+                } catch(Exception $e) {            
+                }
+                Cache::instance()->delete('supplychain-'.$scid);
+                if(Sourcemap_Search_Index::should_index($scid)) {
+                Sourcemap_Search_Index::update($scid);
+                } else {
+                    Sourcemap_Search_Index::delete($scid);
+                }
+                $szs = Sourcemap_Map_Static::$image_sizes;
+                foreach($szs as $snm => $sz) {
+                    $ckey = Sourcemap_Map_Static::cache_key($scid, $snm);
+                    Cache::instance()->delete($ckey);
+                }
+                
                 Message::instance()->set('Map updated.', Message::SUCCESS);
                 return $this->request->redirect('/home');
             } catch(Exception $e) {

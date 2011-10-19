@@ -69,7 +69,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
                $this->template = new View('channel/profile');
 
                $this->template->user_profile = $user;
-               $this->template->featured = $featured_scs;
+               $this->template->featured = $featured_ids;
            } // channel role end           
 
             $user = (object)$user->as_array();

@@ -38,10 +38,16 @@ class SrcClient {
 	public function available() {
 		return json_decode($this->_get(array('')));
 	}
-	public function supplychain($id) {
+	public function get_supplychain($id) {
 		return json_decode($this->_get(array('supplychains',$id)));
+	}	
+	public function create_supplychain($data) {
+		return $this->_post('supplychains', $data);
 	}
-	public function supplychains() {
+	public function update_supplychain($infile, $id) {
+		return $this->_put(array('supplychains',$id), $infile);
+	}
+	public function get_supplychains() {
 		$args = func_get_args();
 		if(isset($args[0]) && is_numeric($args[0])) {
 			$l = $args[0];
@@ -58,6 +64,27 @@ class SrcClient {
 	    $hdrs = $this->_sourcemap_api_auth_headers($this->apikey, $this->apisecret);
 	    curl_setopt($ch, CURLOPT_HTTPHEADER, $hdrs);
 	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	     return curl_exec($ch);
+	}
+	private function _post($service, $data=array()) {		
+	    $ch = curl_init(self::API_ENDPOINT."/".$service);
+	    $hdrs = $this->_sourcemap_api_auth_headers($this->apikey, $this->apisecret);
+		$hdrs[] = "Content-Type: application/json";
+	    curl_setopt($ch, CURLOPT_HTTPHEADER, $hdrs);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	     return curl_exec($ch);
+	}
+	private function _put($service, $infile) {		
+	    $ch = curl_init(self::API_ENDPOINT.join("/", $service));	
+	    $hdrs = $this->_sourcemap_api_auth_headers($this->apikey, $this->apisecret);
+		$hdrs[] = "Accept: application/json";
+	    curl_setopt($ch, CURLOPT_HTTPHEADER, $hdrs);
+		curl_setopt($ch, CURLOPT_PUT, 1);
+		curl_setopt($ch, CURLOPT_INFILE, fopen($infile, "r"));
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	
 	     return curl_exec($ch);
 	}
 	private function _sourcemap_api_auth_headers($apikey, $apisecret) {

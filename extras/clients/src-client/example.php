@@ -27,20 +27,38 @@
 
 	<h3>Get supplychain id 744</h3>
 	<blockquote>
-		<code>$src->supplychain(744);</code>
-		<?php krumo($src->supplychain(744)); ?>
+		<code>$src->get_supplychain(744);</code>
+		<?php krumo($src->get_supplychain(744)); ?>
 	</blockquote>
 
 	<h3>Get a list of supplychains</h3>
 	<blockquote>
-		<code>$src->supplychains(25);</code>
-		<?php krumo($src->supplychains(25)); ?>
+		<code>$src->get_supplychains(25);</code>
+		<?php krumo($src->get_supplychains(25)); ?>
 	</blockquote>
 
 	<h3>Get supplychains that match a search</h3>
 	<blockquote>
-		<code>$src->supplychains("laptop");</code>
-		<?php krumo($src->supplychains("laptop")); ?>
+		<code>$src->get_supplychains("laptop");</code>
+		<?php krumo($src->get_supplychains("laptop")); ?>
+	</blockquote>
+	
+	<h3>Create a Supplychain</h3>
+	<blockquote>
+		<code>$data = '{"supplychain":{"attributes":{"title": "API Test"}, "stops":[{"local_stop_id":1,"id":1,"geometry": "POINT(-9349165.430522 4044184.943345)", "attributes":{ "title":"Facility #1"}}], "hops":[]}}'</code><br/><br/>
+			
+		<code>$src->create_supplychain($data);</code>
+		<?php $data = '{ "supplychain":{ "attributes":{"title": "API Test"}, "stops":[ { "local_stop_id":1,"id":1,"geometry": "POINT(-9349165.430522 4044184.943345)", "attributes":{ "title":"Facility #1" } } ], "hops":[] } }'; ?>
+		<?php krumo($src->create_supplychain($data)); ?>
+	</blockquote>
+	
+	<h3>Update a Supplychain</h3>
+	<blockquote>
+		<code>$id = 795; $supplychain_json_file = 'sample.json';<code><br/><br/>
+			
+		<code>$src->update_supplychain($supplychain_json_file, $id);</code>
+		<?php $id = 795; $supplychain_json_file = "sample.json"; ?>
+		<?php krumo($src->update_supplychain($supplychain_json_file, $id)); ?>
 	</blockquote>
 </body>
 </html>

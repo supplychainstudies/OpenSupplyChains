@@ -730,6 +730,14 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
                 }
             }
 
+            // remove gradient
+            var gradient = $(this.map.map.div).find('#sourcemap-gradient');
+            if ($(gradient).length == 0) { // if gradient legend not exist
+                //great, nothing happend
+            } else {
+                gradient.remove();
+            }
+
             this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, range.total, null, null, this.options.visualization_colors[viz_nm]);
             this.map.dockToggleActive(viz_nm);
             this.map.redraw();

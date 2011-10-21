@@ -330,7 +330,16 @@
     bottom:20px;left:125px;
     z-index:1012;
     display: block;
-    background: url(../images/legend-gradient.png) center center no-repeat;
+
+    &.cloudmade{ background: url(../images/legend-gradient.png) center center no-repeat;}
+    &.satellite{ 
+        background: url(../images/legend-gradient-light.png) center center no-repeat;
+        bottom:12px;left:147px;
+    }
+    &.terrain{   
+        background: url(../images/legend-gradient.png) center center no-repeat;
+        bottom:12px;left:147px;     
+    }
 }
 
 /* Banner  -------------------------------------------------------------- */

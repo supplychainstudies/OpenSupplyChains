@@ -616,16 +616,22 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
 
     //Add or remove gradient to map 
     var gradient = $(this.map.div).find('#sourcemap-gradient');
-    if ($(gradient).length == 0) { // if gradient legend exist
+    if ($(gradient).length == 0) { // if gradient legend not exist
         if(!supplychain.hops.length){
             //console.log('both empty do nothing');
         }else{                      // add gradient to map
             var gradient = $('<div id="sourcemap-gradient"></div>');
+            if(this.map.baseLayer.name)
+                gradient.addClass(this.map.baseLayer.name);
             $(this.map.div).append(gradient);
         }
     } else {
-        if(supplychain.hops.length){ // if not exist
-            //console.log('both occur do nothing');
+        if(supplychain.hops.length){ // if exist
+            //console.log('both occur check baseLayer name');
+            if(!gradient.hasClass(this.map.baseLayer.name)) {// if map tileset is different
+                gradient.removeClass(gradient.attr("class"));
+                gradient.addClass(this.map.baseLayer.name);
+            }
         } else {
             gradient.remove();      // remove gradient from map
         }

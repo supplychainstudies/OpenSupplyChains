@@ -24,7 +24,7 @@
             </div> 
             <?php //Build category list ?>
             <div class="category-dropdown">
-                <select>
+                <select name="BrowseSelect" onChange="location.href='browse/'+this.value;">
                 <option>Select a <?= $category ? "different " : ""; ?> category:</option>
                 <?php for($i=0; $i<count($taxonomy->children); $i++): ?>
                     <?php $t = $taxonomy->children[$i]; ?>

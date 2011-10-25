@@ -64,6 +64,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     }
 
                 }
+                //passcode for the map          
+                $this->template->exist_passcode = isset($sc->attributes->passcode);
 
                 // pass supplychain metadeta to template 
                 $this->template->supplychain_id = $supplychain_id;

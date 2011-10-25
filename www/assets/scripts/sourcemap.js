@@ -239,11 +239,11 @@ Sourcemap.validate = function(type, data) {
 }
 
 
-Sourcemap.loadSupplychain = function(remote_id, callback) {
+Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
     // fetch and initialize supplychain
     var _that = this;
     var _remote_id = remote_id;
-    $.get('services/supplychains/'+remote_id, {},  function(data) {
+    $.get('services/supplychains/'+remote_id, { passcode : passcode },  function(data) {
             var sc = Sourcemap.factory('supplychain', data.supplychain);
             sc.editable = data.editable;
             callback.apply(this, [sc]);

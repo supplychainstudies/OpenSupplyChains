@@ -22,11 +22,18 @@ $(document).ready(function() {
         }
     });
 
+    // get passcode exist or not
+    var passcode = "";   
+    if($('#exist-passcode').attr("value")){   
+        // if passcode exist
+        // pops up passcode enter window
+        passcode = prompt("Please enter the passcode for this map","Enter you Passcode here");
+    }
     // get scid from inline script
     var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
 
     // fetch supplychain
-    Sourcemap.loadSupplychain(scid, function(sc) {
+    Sourcemap.loadSupplychain(scid, passcode, function(sc) {
         var m = Sourcemap.view_instance.map;
         m.addSupplychain(sc);
         new Sourcemap.Map.Editor(Sourcemap.view_instance);

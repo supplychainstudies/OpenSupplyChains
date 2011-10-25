@@ -48,6 +48,9 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 $taxonomy = Sourcemap_Taxonomy::load_tree();
     
                 $form->field('category')->value($supplychain->category);
+                
+                if(isset($supplychain->attributes->passcode))
+                    $form->field('passcode')->value($supplychain->attributes->passcode);
 
                 $form->field('publish')->value($supplychain->other_perms & Sourcemap::READ);
 
@@ -63,6 +66,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         $supplychain->attributes->title = $title;
                         $supplychain->attributes->description = $description;
                         $supplychain->attributes->tags = $tags;
+                        $supplychain->attributes->passcode = $form->get_field('passcode')->value();
                         if($public)
                             $supplychain->other_perms |= $public;
                         else

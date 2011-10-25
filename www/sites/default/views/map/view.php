@@ -20,6 +20,7 @@
         </div>
     <?php endif; ?>
 
+<div id="exist-passcode" style="display:none" value="<?= $exist_passcode ?>"></div>
 <div id="map-container">    
     <div id="map">
         <div id="sourcemap-map-view"></div>

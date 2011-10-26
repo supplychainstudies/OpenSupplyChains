@@ -44,7 +44,7 @@
                 {
                     $user_passcode = $_GET['passcode'];
                     if($cached->attributes->passcode!=$user_passcode)
-                        return $this->_forbidden('Your enter the wrong passcode.');
+                        return $this->_bad_request('Your enter the wrong passcode.');
                 }
 
                 $this->_cache_hit = true;
@@ -67,7 +67,7 @@
                 {
                     $user_passcode = $_GET['passcode'];
                     if($fetched->attributes->passcode!=$user_passcode)
-                        return $this->_forbidden('Your enter the wrong passcode');
+                        return $this->_bad_request('Your enter the wrong passcode');
                 }
                 $this->response = array(
                     'supplychain' => $fetched

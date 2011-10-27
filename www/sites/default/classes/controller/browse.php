@@ -20,6 +20,10 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-core',
         );
+        
+        $this->layout->styles = $this->default_styles;
+        $this->layout->styles[] = 'sites/default/assets/styles/carousel.less';
+
         $this->layout->page_title = 'Browse maps by Category';
 
         $cats = Sourcemap_Taxonomy::arr();

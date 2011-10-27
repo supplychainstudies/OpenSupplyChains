@@ -10,9 +10,12 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-/* Sourcemap Stylesheet --------------------------------------------- */
+/*
+ * This is where our mixins live.
+ */
 
-/* Style Variables */
+
+/* Variables ---------------------- */
 @brand-color: #328cbb;
 @highlight-color: #F36B21;
 @background: #FFF;
@@ -20,12 +23,77 @@
 @link-color: #2d78af;
 @link-hover-color: #444;
 
-/* Style Functions */
+/* Mixins --------------------------*/
+
+.plain_list{
+    list-style: none;
+    margin-left: 0;
+    li{
+        padding: 0 0 20px;
+        img{
+            width:40px;
+            float: left;
+            padding: 10px 15px 10px 0;
+        }
+        p{
+            color:#909090;
+            font-size: 0.8em;
+            font-style: italic;
+        }
+    }
+}
+
+.editable_list{
+    font-size: 14px;
+    color: #949494;
+    li{
+        margin: 0 0 8px 0;
+        p{
+            font-size: 1em;
+            width: 220px;
+            overflow: hidden;
+            span {
+                color:#328cbb;
+                &.empty{ color: #ccc; }
+            }
+        }
+        a.edit-button{
+            float: right;
+            margin-right: -24px;
+            height:24px;
+            width: 24px;
+            background: url('../images/edit-info.png') 0 -24px no-repeat;
+            &.enabled{
+                background: url('../images/edit-info.png') 0 0 no-repeat;
+            }
+        }
+    }
+}
+
+.box{
+    background: #fefefe;
+    border:1px solid #d4d4d4;
+    .rounded(8px);
+    .box_shadow(0, 1px, 12px);
+    &.small{
+       .rounded(4px);
+       .box_shadow(0, 1px, 6px);
+    }
+}
+
+/* Functions ---------------------- */
 .gradient(@start: rgba(245,245,245,0.85), @stop: rgba(255,255,255,0.85)) {
 	background-color: #fff;
 	background-color: @start;
     background-image: -moz-linear-gradient(center bottom,@start 0%,@stop 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,@start),color-stop(1,@stop));
+}
+
+.noselect(){
+    -moz-user-select: -moz-none;  // prevent annoying selections when clicking on arrows
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .transparent(@opacity: .8){

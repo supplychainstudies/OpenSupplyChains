@@ -13,25 +13,7 @@
 ?>
 
 <div class="container">
-    <div class="dashboard-top">
-        <div class="dashboard-top-left">
-    		<br/>
-            <div id="user-profile">
-                <div class="user-gravatar">
-                    <img src="<?= $user->avatar ?>" />
-                </div>
-                <ul class="user-details">
-                    <li><h2 class="user-name"><?= HTML::chars($user->username) ?></h2><li>
-                    <!-- <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li> -->
-                </ul>
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div class="dashboard-top-right">
-            
-        </div>
-        <div class="clear"></div>
-    </div>
+    <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => false, 'canEdit' => false)) ?>
 </div>
 <div class="clear"></div>
 <div class="user-profile-view">

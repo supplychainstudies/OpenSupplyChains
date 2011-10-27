@@ -12,11 +12,21 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<div id="page-title">
+    <div class="container">
+        <h1><?= isset($user->display_name) ? $user->display_name : $user->username; ?></h1>
+    </div>
+</div>
+
 <div class="container">
-    <?php if(isset($user_profile->banner_url)): ?>
+
+    <?php if(count($supplychains) == 0): ?>
+    <?php else: ?>
+
+    <?php if(isset($user->banner_url)): ?>
     <div class="channel-banner">        
-        <a class="channel-banner-url" <?= isset($user_profile->url)?'href="'.$user_profile->url.'"':null ?> >
-        <img src="<?= $user_profile->banner_url ?>"/>
+        <a class="channel-banner-url" <?= isset($user->url)?'href="'.$user->url.'"':null ?> >
+        <img src="<?= $user->banner_url ?>"/>
         </a>
     </div>
     <?php endif; ?>
@@ -42,5 +52,7 @@
         </div>
     </div>
     <div class="clear"></div>
+    
+    <?php endif; ?>
 
 </div>

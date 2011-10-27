@@ -35,7 +35,7 @@ $(document).ready(function() {
             '<div id="passcode-input">'+
             '<form class="passcode-input">'+
             '<label for="passcode"> This map is protected. Please enter the password:</label>'+
-            '<input name="passcode" type="text"></input>'+
+            '<input name="passcode" type="text" autocomplete="off"></input>'+
             '<input id="passcode-submit" type="submit"/>'+
             '</form>'
             +'</div>'
@@ -45,6 +45,8 @@ $(document).ready(function() {
         $(element).prepend('<a href="#" class="close"></a>');
         $('body').append($(element));
 
+        //Autofocus on password 
+        $(element).find("input[name='passcode']").focus();
         // submit passcode to fetch supplychain
         $('form.passcode-input').submit(function(evt){
             evt.preventDefault();

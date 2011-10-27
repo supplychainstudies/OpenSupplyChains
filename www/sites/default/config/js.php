@@ -34,6 +34,16 @@ return array(
                 'sourcemap-jquery'
             )
         ),
+        'sourcemap-channel' => array(
+            'scripts' => array(
+                'sites/default/assets/scripts/slider/anythingslider.js',
+                'sites/default/assets/scripts/slider/easing.1.2.js',
+                'sites/default/assets/scripts/channel.js'
+            ),
+            'requires' => array(
+                'sourcemap-jquery'
+            )
+        ),
         'map-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/view.js'

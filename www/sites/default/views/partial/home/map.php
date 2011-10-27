@@ -32,7 +32,20 @@
             <?php endif; ?>
         </div>
         <div class="map-controls">
+            <?php
+                $is_channel=false;
+                $user = ORM::factory('user', Auth::instance()->get_user());
+                $channel = ORM::factory('role')
+                    ->where('name', '=', 'channel')->find();
+                if($user->has('roles', $channel)) $is_channel = true;
+                $user_featured = ($supplychain->user_featured) ; ?>
+            <?php if($is_channel) { ?>
+            <div class="map-controls-publish">
+                <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/featured/<?= $supplychain->id ?>?featured=<?= $user_featured ? "no" : "yes"?>'; return true;"<?= $user_featured ? "checked" : "" ?>/>
+                <a id="map-publish-link">Featured</a>
+            </div> <? } ?>
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
+            <?php if($supplychain->user_id==$user_id): ?>
             <div class="map-controls-publish">
                 <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/>
                 <a id="map-publish-link">Public</a>
@@ -43,6 +56,9 @@
             <div class="map-controls-delete">
                 <a class="red" href="delete/<?= $supplychain->id ?>">Delete</a>
             </div>
+            <?php endif; ?>
         </div>
         <div class="clear"></div>
+        
+
 <?php endif; ?>

@@ -614,6 +614,29 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
         }
     }
 
+    //Add or remove gradient to map 
+    var gradient = $(this.map.div).find('#sourcemap-gradient');
+    if ($(gradient).length == 0) { // if gradient legend not exist
+        if(!max_plen){
+            //console.log('both empty do nothing');
+        }else{                      // add gradient to map
+            var gradient = $('<div id="sourcemap-gradient"></div>');
+            if(this.map.baseLayer.name)
+                gradient.addClass(this.map.baseLayer.name);
+            $(this.map.div).append(gradient);
+        }
+    } else {
+        if(max_plen){ // if exist
+            //console.log('both occur check baseLayer name');
+            if(!gradient.hasClass(this.map.baseLayer.name)) {// if map tileset is different
+                gradient.removeClass(gradient.attr("class"));
+                gradient.addClass(this.map.baseLayer.name);
+            }
+        } else {
+            gradient.remove();      // remove gradient from map
+        }
+    }
+
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 

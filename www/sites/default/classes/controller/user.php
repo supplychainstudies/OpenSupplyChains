@@ -29,6 +29,45 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $user = ORM::factory('user')->where('username', 'ILIKE', $identifier)->find();
         }        
         if($user->loaded()) {
+
+            $user_arr = $user->as_array();
+            unset($user_arr['password']);
+
+           // Additional functions for "channel" user
+           $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+           if($user->has('roles', $channel_role)) {
+
+               $banner_url="";
+               $featured_scs = Array();
+               $supplychains = $user->supplychains->order_by('modified', 'desc')->find_all(); // this search should simply return all user_favorited supplychains
+               foreach ($supplychains as $i=>$supplychain){
+                   $current = $supplychain->kitchen_sink($supplychain->id);
+                   if ($current->user_featured){
+                       $featured_scs[] = $supplychain;
+                   }
+               }
+
+               // Load slider functionality
+               $this->layout->scripts = array(
+                   'sourcemap-core',
+                   'sourcemap-channel'
+               );
+               $this->layout->styles = $this->default_styles;
+               $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
+
+               $q = array(
+                'user' => $user->id,
+                'user_featured' => 'yes',
+                'recent' => 'yes'
+                );
+               $featured_ids = Sourcemap_Search::find($q);
+
+               $this->template = new View('channel/profile');
+
+               $this->template->user_profile = $user;
+               $this->template->featured = $featured_ids;
+           } // channel role end           
+
             $user = (object)$user->as_array();
             $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
             
@@ -36,7 +75,8 @@ class Controller_User extends Sourcemap_Controller_Layout {
             unset($user->password);
             $user->avatar = Gravatar::avatar($user->email, 128);
             unset($user->email);
-            $this->template->user = $user;
+            
+             $this->template->user = (object)$user;
 
             $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
             $pg = max($pg,1);
@@ -66,12 +106,13 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
             $this->template->supplychains = $r->results;
             }
-            //  If user id match login in
+            //  If user id matches login id, redirect to dashboard
             else if($user->id==Auth::instance()->get_user()->id){
                 $this->request->redirect('home/');
             }
             // If user is an admin
             else if(Auth::instance()->get_user() && Auth::instance()->get_user()->has('roles', $admin)){                
+            // If enter numeric user id
             if(is_numeric($identifier)) {
                  $user = ORM::factory('user', $identifier);
             } else {
@@ -92,23 +133,14 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $scs_t =array();
             foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {            
                 $scs[] = $sc->kitchen_sink($sc->id);
-                //$scs_t[] = ($sc->id);
-                //Message::instance()->set($scs_t[i]);
-                
             }
-             //Message::instance()->set($scs_t[0]);
-             //Message::instance()->set($scs_t[1]);
-             
-
+            
             $this->template->user_profile = $p;
             $this->template->supplychains = $scs;
 
 
-
-            }
-            else
-            {
-
+            } else {
+            // User not logged in
             unset($user->password);
             $user->avatar = Gravatar::avatar($user->email, 128);
             unset($user->email);
@@ -139,12 +171,9 @@ class Controller_User extends Sourcemap_Controller_Layout {
             ));
 
             $this->template->pager = $p;
-
             $this->template->supplychains = $r->results;
             
             }
-
-
         } else {
             Message::instance()->set('That user doesn\'t exist.');
             return $this->request->redirect('');

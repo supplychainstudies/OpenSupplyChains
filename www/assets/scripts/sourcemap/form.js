@@ -339,7 +339,7 @@ $(document).ready(function() {
    $('#form-description').before('<div id="desc-counter"></div>');
    $('.sourcemap-form textarea').keyup(function() {
         var maxlength = $(this).attr('maxlength');
-        if(maxlength != -1) {
+        if(maxlength > 1) {
             var val = $(this).val();
             var lettersleft = maxlength - val.length;
 

@@ -38,16 +38,20 @@ $user = ORM::factory('user', Auth::instance()->get_user());
 $admin = ORM::factory('role')
         ->where('name', '=', 'admin')->find();
         if($user->has('roles', $admin)) $is_admin = true;
+$is_channel=false;
+$channel = ORM::factory('role')
+        ->where('name', '=', 'channel')->find();
+        if($user->has('roles', $channel)) $is_channel = true;
 
 if($is_admin){
     $title_max_length = array('max_length', array(10000));
     $desc_max_length = array('max_length', array(10000));
     $title_attributes = array(
-            'maxlength' => -1,
+            'maxlength' => 10000,
             'placeholder' => 'Admin mode: Maximum 10000 characters.'
         );
     $desc_attributes = array(
-            'maxlength' => -1,
+            'maxlength' => 10000,
             'placeholder' => 'Admin mode: Maximum 10000 characters.',
             'id' => 'form-description'
         );
@@ -68,6 +72,64 @@ else{
 }
 
 
+if($is_channel){
+return array(
+    'fields' => array(
+        'title' => array(
+            'type' => 'text',
+            'label' => 'Title',
+    		'attributes' => $title_attributes
+        ),
+        'description' => array(
+            'type' => 'textarea',
+            'label' => 'Description',
+            'css_class' => array(
+                'preview'
+            ),
+    		'attributes' => $desc_attributes
+        ),
+        'tags' => array(
+            'type' => 'text',
+            'label' => 'Tags',
+            'attributes' => array(
+    			'placeholder' => 'Separated by spaces.'
+            )
+        ),
+        'category' => array(
+            'type' => 'select',
+            'label' => 'Category',
+            'options' => $cat_opts,
+            'default' => 0
+        ),        
+        'passcode'=> array(
+            'type' => 'text',
+            'label' => 'Passcode',
+        ),
+        'publish' => array(
+            'type' => 'checkbox',
+            'label' => 'Public',
+    		'default' => 0
+        ),
+        'save' => array(
+            'type' => 'submit',
+            'label' => 'Save'
+        )
+    ),
+    'messages_file' => 'forms/create',
+    'rules' => array(
+        'title' => array(
+            array('not_empty'),$title_max_length
+        ),
+        'category' => array(
+            array('in_array', array($valid_cats))
+        ),
+        'description' => array(
+            $desc_max_length
+        )
+    ),
+    'filters' => array()
+);
+}
 
 return array(
     'fields' => array(
@@ -96,7 +158,7 @@ return array(
             'label' => 'Category',
             'options' => $cat_opts,
             'default' => 0
-        ),
+        ),        
         'publish' => array(
             'type' => 'checkbox',
             'label' => 'Public',

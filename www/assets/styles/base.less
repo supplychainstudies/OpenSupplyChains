@@ -324,6 +324,23 @@
     &.terrain{   background: url(../images/legend.png) center center no-repeat;}
 }
 
+#sourcemap-gradient{
+    position: absolute;
+    width:161px;height:20px;
+    bottom:20px;left:125px;
+    z-index:1012;
+    display: block;
+
+    &.cloudmade{ background: url(../images/legend-gradient.png) center center no-repeat;}
+    &.satellite{ 
+        background: url(../images/legend-gradient-light.png) center center no-repeat;
+        bottom:12px;left:147px;
+    }
+    &.terrain{   
+        background: url(../images/legend-gradient.png) center center no-repeat;
+        bottom:12px;left:147px;     
+    }
+}
 
 /* Banner  -------------------------------------------------------------- */
 #banner { 
@@ -342,7 +359,7 @@
             font-weight:bold;
             font-size: 22px;
             overflow:hidden;
-            line-height: 20px;
+            line-height: 16px;
             height: 9px;
             max-width:370px;
         }

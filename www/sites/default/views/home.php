@@ -12,28 +12,21 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-
 <div class="container">
     <div class="dashboard-top">
-        <div class="dashboard-top-left">
-            <h2 class="user-name"><?= HTML::chars($user->username) ?></h2>       
-            <div id="user-profile">
-                <div class="user-gravatar">
-                    <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
-                </div>
-                <ul class="user-details">
-                    <li>Username: <span><?= HTML::chars($user->username) ?></span><li>
-                    <li>Email: <span><?= HTML::chars($user->email) ?></span><li>    
-                    <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span><li>
-                </ul>
+        <div class="left">
+            <div class="container">
+                <h2 class="user-name section-title">
+                    <?= isset($user->display_name) ? HTML::chars($user->display_name) : HTML::chars($user->username) ?>
+                    <?= $isChannel ? '<span class="secondary">Channel Account</span>' : '' ?>
+                </h2>       
+                <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => $isChannel, 'canEdit' => true)) ?>
+                <hr class="spacer" />
             </div>
             <div class="clear"></div>
-            <div>
-                <div class="upload-photo button"><a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a></div> <div class="reset-password button"><a href="auth/reset">Change Password</a></div>
-            </div>
         </div>
-        <div class="dashboard-top-right">
-            <h2>Recent Activity</h2>
+        <div class="right">
+            <h2 class="section-title">Recent Activity</h2>
             <div id="user-stream">
                 <?php if(isset($user_event_stream)): ?>
                 <?= View::factory('partial/user/event/stream', array('stream' => $user_event_stream)) ?>
@@ -46,23 +39,41 @@
 </div>
 <div class="clear" style="height: 20px"></div>
 <div class="container"> 
-<div class="account-alert"> 
-<p> 
-Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
-</p> 
+<div class="account-alert question"> 
+    <p> 
+        Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
+    </p> 
 </div> 
+
+<?php if ($isChannel){ ?>
+<div class="account-alert notice"> 
+    <p> 
+        Congratulations!  You're one of our first Channel Accounts.  You now have access to new modes, options, and features.
+        <br />We're working to improve our premium services.   Please email <a href="mailto:channels@sourcemap.com">channels@sourcemap.com</a> if you have any questions or feedback.
+    </p> 
+</div> 
+<?php } ?>
+
 </div> 
 <div class="clear">&nbsp;</div> 
 
 <div class="search-results container">
     <?php if(isset($supplychains) && $supplychains): ?>
-        <h2>Your Sourcemaps</h2>
+        <h2 class="section-title">Your Sourcemaps</h2>
         <?php foreach($supplychains as $i => $sc): ?>
             <div class="user-map-list">
-                <?= View::factory('partial/home/map', array('supplychain' => $sc)) ?>
+                <?= View::factory('partial/home/map', array('supplychain' => $sc , 'user_id'=> $user->id )) ?>
             </div>
         <?php endforeach; ?>
     <?php else: ?>
         <h2 class="bad-news">You haven't made any maps yet. <a href="create">Get started</a></h2>
+    <?php endif; ?>
+    <?php if(isset($favorites) && $favorites): ?>
+        <h2 class="section-title">Favorite</h2>
+        <?php foreach($favorites as $i => $sc): ?>
+            <div class="user-map-list">
+                <?= View::factory('partial/home/map', array('supplychain' => $sc , 'user_id'=> $user->id )) ?>
+            </div>
+        <?php endforeach; ?>
     <?php endif; ?>
 </div>

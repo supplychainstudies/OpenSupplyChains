@@ -48,6 +48,9 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 $taxonomy = Sourcemap_Taxonomy::load_tree();
     
                 $form->field('category')->value($supplychain->category);
+                
+                if(isset($supplychain->attributes->passcode))
+                    $form->field('passcode')->value($supplychain->attributes->passcode);
 
                 $form->field('publish')->value($supplychain->other_perms & Sourcemap::READ);
 
@@ -63,6 +66,8 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         $supplychain->attributes->title = $title;
                         $supplychain->attributes->description = $description;
                         $supplychain->attributes->tags = $tags;
+                        if($form->get_field('passcode'))
+                            $supplychain->attributes->passcode =  $form->get_field('passcode')->value();
                         if($public)
                             $supplychain->other_perms |= $public;
                         else
@@ -178,4 +183,98 @@ class Controller_Edit extends Sourcemap_Controller_Map {
             }
         }
     }
+
+    // For user_featured
+    public function action_featured($supplychain_id=false) {
+        $set_to = false;
+        if($supplychain_id && (Request::$method === 'POST')) {
+            $sc = ORM::factory('supplychain', $supplychain_id);
+            if($sc->loaded()) {
+                $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+                $owner_id = (int)$supplychain->user_id;
+                if($current_user_id && $supplychain->user_can($current_user_id, Sourcemap::WRITE)) {
+                    $p = Validate::factory($_POST);
+                    $p->rule('featured', 'regex', array('/(yes|no)/i'))
+                        ->rule('featured', 'not_empty');
+                    if($p->check()) {
+                        $set_to = strtolower($p['featured']) == 'yes';
+                    } else {
+                        Message::instance()->set('Missing required "featured" parameter.');
+                        $this->request->redirect('/home');
+                    }
+                } else {
+                    Message::instance()->set('You don\'t have permission to do that.');
+                    $this->request->redirect('/home');
+                }
+            } else {
+                Message::instance()->set('That map doesn\'t exist.');
+                $this->request->redirect('/home');
+            }
+        } elseif(Request::$method === 'GET') {
+            $sc = ORM::factory('supplychain', $supplychain_id);
+            if($sc->loaded()) {
+                $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+                $owner_id = (int)$sc->user_id;
+                if($current_user_id && $sc->user_can($current_user_id, Sourcemap::WRITE)) {
+                    $g = Validate::factory($_GET);
+                    $g->rule('featured', 'regex', array('/(yes|no)/i'))
+                        ->rule('featured', 'not_empty');
+                    if($g->check()) {
+                        $set_to = strtolower($g['featured']) == 'yes';
+                    } else {
+                        Message::instance()->set('Missing required "featured" parameter.');
+                        $this->request->redirect('/home');
+                    }
+                } else {
+                    Message::instance()->set('You don\'t have permission to do that.');
+                    $this->request->redirect('/home');
+                }
+            } else {
+                Message::instance()->set('That map does not exist.');
+                $this->request->redirect('/home');
+            }
+        } else {
+            Message::instance()->set('Bad request.');
+            $this->request->redirect('/home');
+        }
+        if($set_to !== null) {
+            if($set_to === true) {
+                if($set_to)
+                {    $sc->user_featured = "TRUE";}
+                else
+                {    $sc->user_featured = "FALSE";}
+            } else {
+                $sc->user_featured = "false";
+            }
+            try {
+                $sc->save();
+            
+                $scid = $supplychain_id;
+                $evt = Sourcemap_User_Event::UPDATEDSC;
+                try {
+                    Sourcemap_User_Event::factory($evt, $sc->user_id, $scid)->trigger();
+                } catch(Exception $e) {            
+                }
+                Cache::instance()->delete('supplychain-'.$scid);
+                if(Sourcemap_Search_Index::should_index($scid)) {
+                Sourcemap_Search_Index::update($scid);
+                } else {
+                    Sourcemap_Search_Index::delete($scid);
+                }
+                $szs = Sourcemap_Map_Static::$image_sizes;
+                foreach($szs as $snm => $sz) {
+                    $ckey = Sourcemap_Map_Static::cache_key($scid, $snm);
+                    Cache::instance()->delete($ckey);
+                }
+                
+                Message::instance()->set('Map updated.', Message::SUCCESS);
+                return $this->request->redirect('/home');
+            } catch(Exception $e) {
+                $this->request->status = 500;
+                Message::instance()->set('Couldn\t update your supplychain. Please contact support.' . $e);
+                return $this->request->redirect('/home');
+            }
+        }
+    }
+
 }

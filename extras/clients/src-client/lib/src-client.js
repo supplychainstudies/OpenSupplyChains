@@ -33,11 +33,11 @@ function SrcClient() {
 		this._get('', cbname);
 	}
 
-	this.supplychain = function(id, cbname) {
+	this.get_supplychain = function(id, cbname) {
 		this._get('supplychains/'+id, cbname);
 	}
 
-	this.supplychains = function(args, cbname) {
+	this.get_supplychains = function(args, cbname) {
 		if(args[0] && typeof(args[0]) == 'number') {
 			var l = args[0];
 			if(args[1]) { var o = args[1]; } else { var o = 0; }

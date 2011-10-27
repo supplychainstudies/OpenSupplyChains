@@ -115,46 +115,51 @@ jQuery.fn.liveSearch = function (conf) {
                     this.timer = setTimeout(function () {
                         jQuery.getJSON(config.url+'?q='+q, function (json) {
                             input.removeClass(config.loadingClass);
-
                             // Show live-search if results and search-term aren't empty
                             if (json.results.length && q.length) {
-                                
+                                // Empty div
+                                $('#live-search-results li').remove();
                                 // Build output
-                                var html = "<ul id=\"live-search-results\">";
-                                for (var i = 0; i < json.results.length; i++) { 
 
-                                    // TODO:  turn this into a JSTPL template
-                                    html += "<li class=\"search-result\">";
-                                    html += "<a class=\"search-link\" href=\"view/"+ json.results[i].id + "\">";
-                                    html += "</a>";
-                                    html += "<div class=\"search-details\">";
-                                    html += "<span class=\"search-title\">";
-                                    html += json.results[i].attributes.title || "An Unnamed Sourcemap";
-                                    html += "</span>";
-                                    html += "<span class=\"search-author\">";
-                                    html += " ";
-                                    html += json.results[i].owner.name;
-                                    html += "</span> ";
-                                    html += "<span class=\"search-date\" href=\"\">";
-                                    var d = new Date(json.results[i].created*1000);
-                                    html += _S.ttrunc(_S.fmt_date(d),14);
-                                    html += "</span>";
-                                    html += "</div>";
-                                    html += "<div class=\"clear\"></div>";
-                                    html += "</li>";
+                                $('<li class="search-category"><h2 class="section-title">' + json.results.length + ' Sourcemaps:</h2></li>')
+                                    .appendTo('#live-search-results');
+                                
+                                for (var i = 0; i < json.results.length; i++) {
+                                    // format date
+                                    var date = new Date(json.results[i].created * 1000);
+                                    var y = date.getFullYear();
+                                    var m = date.getMonth();
+                                    var d = date.getDay();
+                                    var months = {
+                                          0 : 'Jan',
+                                          1 : 'Feb',
+                                          2 : 'Mar',
+                                          3 : 'Apr',
+                                          4 : 'May',
+                                          5 : 'Jun',
+                                          6 : 'Jul',
+                                          7 : 'Aug',
+                                          8 : 'Sep',
+                                          9 : 'Oct',
+                                          10 : 'Nov',
+                                          11 : 'Dec'
+                                    };
+                                    date = months[m] + " " + d + ", " + y; 
                                     
+                                    // jqote template can be found in view/partial/header.php
+                                    $('#search-result-template').jqote({ 
+                                        title : json.results[i].attributes.title, 
+                                        author : json.results[i].owner.name, 
+                                        date : date, 
+                                        id : json.results[i].id })
+                                        .appendTo('#live-search-results');
+
                                     if (i == 2){
-                                        html += $('<div></div>').append($('<li></li>').addClass("more").append(
-                                                $('<a>More Results...</a>').attr("href", "search?q="+escape(q))
-                                            ).append('<div class="clear"></div>')
-                                        ).html();
+                                        $('<li class="more"><a href="search?q+' + escape(q) + '">More Results...</a></li>')
+                                            .appendTo('#live-search-results');
                                         break;
                                     }
- 
-                                
                                 }
-                                html += "</ul>";
-                                liveSearch.html(html);
                                 showLiveSearch();
                             }
                             else {

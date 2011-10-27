@@ -14,13 +14,13 @@
 
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item): ?>
-        <div class="preview-map-item <?= $i % 2 ? "last" : ""; ?>">
+        <div class="preview-map-item small<?= $i % 2 ? " last" : ""; ?>">
             <div class="preview-badge">
             <a href="view/<?php print $item->id; ?>">
-                <img class="preview-map small" src="static/<?php print $item->id; ?>.s.png" alt="" />
+                <img class="preview-map" src="static/<?php print $item->id; ?>.s.png" alt="" />
             </a>
             </div>
-            <h3 class="preview-title vertical">
+            <h3 class="preview-title truncate vertical">
                 <a href="view/<?php print $item->id; ?>">
                 <?= HTML::chars($item->attributes->title) ?>
                 </a>
@@ -28,7 +28,7 @@
             <div>
                 <h4 class="preview-author">
                     <a href="user/<?php print $item->owner->id; ?>">
-                        <?= Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
+                        <?= isset($item->owner->display_name)? Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
                     <?php print date("M j, Y",$item->created);?>
                 </h4>
             </div>

@@ -173,6 +173,7 @@ Sourcemap.factory = function(type, data) {
             instance.attributes = sc.attributes;
             instance.usergroup_perms = sc.usergroup_perms;
             instance.other_perms = sc.other_perms;
+            instance.user_featured = sc.user_featured;
             instance.editable = data.editable;
             break;
         default:
@@ -238,11 +239,12 @@ Sourcemap.validate = function(type, data) {
 }
 
 
-Sourcemap.loadSupplychain = function(remote_id, callback) {
+Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
     // fetch and initialize supplychain
     var _that = this;
     var _remote_id = remote_id;
-    $.get('services/supplychains/'+remote_id, {},  function(data) {
+    /*
+    $.get('services/supplychains/'+remote_id, { passcode : passcode },  function(data) {
             var sc = Sourcemap.factory('supplychain', data.supplychain);
             sc.editable = data.editable;
             callback.apply(this, [sc]);
@@ -250,6 +252,20 @@ Sourcemap.loadSupplychain = function(remote_id, callback) {
             _that.broadcast('supplychain:loaded', this, sc);
         }
     );
+    */
+    $.ajax({
+        url:'services/supplychains/'+remote_id,
+        data:{ passcode : passcode },
+        success : function(data) {
+            var sc = Sourcemap.factory('supplychain', data.supplychain);
+            sc.editable = data.editable;
+            callback.apply(this, [sc]);
+            _that.broadcast('supplychain:loaded', this, sc);
+        },
+        error : function(data){
+            //console.log(data.response);
+        }
+    });
 }
 
 Sourcemap.saveSupplychain = function(supplychain, o) {
@@ -516,7 +532,6 @@ Sourcemap.Color.graduate = function(colors, ticks) {
     }
     return colors;
 }
-
 
 Sourcemap.R = 6371 //km = 3959 miles
 

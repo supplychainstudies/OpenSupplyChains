@@ -97,7 +97,26 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         }
 		if(!(sc.stops.length) && sc.editable) {	this.showEditor(); }
 		this.loadExternals(sc);
-        
+		
+		// Process Hash
+		var type = window.location.hash.substring(1).split('-')[0];
+		if(type != '') {
+			if(type == 'stop') {
+				var sid = window.location.hash.substring(1);				
+				var targetftr = this.map.findFeaturesForStop(sc.instance_id, sid).stop;
+			} else if(type == 'hop') {
+				var fid = 'stop-'+window.location.hash.substring(1).split('-')[1];
+				var tid = 'stop-'+window.location.hash.substring(1).split('-')[2];
+				var targetftr = this.map.findFeaturesForHop(sc.instance_id, fid, tid).hop; 	
+			}
+			if(typeof(targetftr) != 'undefined' && targetftr != false) {
+				this.map.broadcast('map:feature_selected', this.map, targetftr); 
+			}
+    	}
+        // TODO : Load twice for legend-gradient @map.js , make it for effeciency
+        for(var k in this.map.supplychains)
+            this.map.mapSupplychain(k);
+            
     }, this));
     $(this.map.map.div).css("position", "relative");
 
@@ -236,7 +255,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
-    Sourcemap.template('map/banner', cb, s, s);
+    Sourcemap.template('map/banner', cb, s);
 
     if(this.options.watermark) {
         this.watermark = $('<div id="watermark"></div>');
@@ -724,6 +743,14 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
                         legend.addClass(this.map.map.baseLayer.name);
                     $(this.map.map.div).append(legend);
                 }
+            }
+
+            // remove gradient
+            var gradient = $(this.map.map.div).find('#sourcemap-gradient');
+            if ($(gradient).length == 0) { // if gradient legend not exist
+                //great, nothing happend
+            } else {
+                gradient.remove();
             }
 
             this.sizeFeaturesOnAttr(viz_nm, range.min, range.max, range.total, null, null, this.options.visualization_colors[viz_nm]);

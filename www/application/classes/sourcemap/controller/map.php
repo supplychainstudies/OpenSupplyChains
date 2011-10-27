@@ -39,16 +39,46 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
+
+                //redirect mobile users to mobile template
+                if (Request::user_agent('mobile')){
+                    $this->layout = new View('layout/mobile');
+                    $this->layout->styles = array(
+                        'assets/styles/mobile.less'
+                    );
+                    $this->template = new View('map/mobile');
+                }
+
                 $this->layout->supplychain_id = $supplychain_id;
                
+                $supplychain_desc = "";
+                
+                // check description for shortcodes
+                // only youtube ID is supported for now...
+                if (isset($sc->attributes->description)) {
+                    $supplychain_desc = $sc->attributes->description;
+                    $regex = "/\\[youtube:([^]]+)]/";
+                    if (preg_match($regex, $supplychain_desc, $regs)) {
+                        $supplychain_youtube_id = $regs[1];
+                        $supplychain_desc = str_replace($regs[0], '', $supplychain_desc);
+                    }
+
+                }
+                //passcode for the map          
+                $this->template->exist_passcode = isset($sc->attributes->passcode);
+
                 // pass supplychain metadeta to template 
                 $this->template->supplychain_id = $supplychain_id;
                 $this->template->supplychain_date = date('F j, Y', $sc->created );
                 $this->template->supplychain_name = isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "");
                 $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
+                isset($sc->owner->display_name) ? $this->template->supplychain_display_name = $sc->owner->display_name : "";
+                $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
                 $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
-                $this->template->supplychain_desc = isset($sc->attributes->description) ? $sc->attributes->description : "" ;
+                $this->template->supplychain_desc = isset($supplychain_desc) ? $supplychain_desc : "" ;
+                //$this->template->supplychain_youtube_id = isset($supplychain_youtube_id) ? $supplychain_youtube_id : "" ;
+                isset($supplychain_youtube_id) ? $this->template->supplychain_youtube_id = $supplychain_youtube_id : "" ;
 
     			$this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();
                 

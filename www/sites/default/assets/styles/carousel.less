@@ -1,0 +1,65 @@
+.jcarousel-skin-sourcemap{
+    .preview-map-item{
+        margin-right:7px;
+    }
+
+    .jcarousel-container-horizontal {
+        width: 940px;
+        padding: 15px 40px;
+    }
+    .jcarousel-clip {
+        overflow: hidden;
+    }
+    .jcarousel-item{
+        // These need to be set explicitly, otherwise jcarousel won't start
+        height: 180px;
+        width: 230px;
+    }
+    .jcarousel-item.small{
+        height: 160px;
+        width: 173px;
+    }
+    .jcarousel-next-horizontal,
+    .jcarousel-prev-horizontal {
+        position: absolute;
+        top: 43px;
+        width: 62px;
+        height: 89px;
+        cursor: pointer;
+        opacity: .1;
+    }
+    .jcarousel-next-horizontal {
+        right: -20px;
+        background: transparent url(../images/carousel-right.png) no-repeat 0 0;
+     }
+    .jcarousel-prev-horizontal {
+        left: -20px;
+        background: transparent url(../images/carousel-left.png) no-repeat 0 0;
+    }
+    .jcarousel-next-horizontal:hover,
+    .jcarousel-next-horizontal:focus,
+    .jcarousel-prev-horizontal:hover,
+    .jcarousel-prev-horizontal:focus {
+        opacity: .2;
+    }
+}
+
+.small{   // Special styles for "small" categories, next to the sidebar
+    .jcarousel-skin-sourcemap{
+        margin: 0;
+        .preview-map-item{
+            margin-right:28px;
+        }
+        .jcarousel-container-horizontal{
+            width: 590px;
+            overflow: hidden;
+        }
+        .jcarousel-next-horizontal,
+        .jcarousel-prev-horizontal {
+            top: 30px;
+        }
+        .jcarousel-next-horizontal { right: 0px; }
+        .jcarousel-prev-horizontal { left: -10px; }
+    }
+}
+

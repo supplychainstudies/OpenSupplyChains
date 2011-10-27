@@ -39,11 +39,19 @@
                     'to view that supplychain.');
             $cached = Cache::instance()->get('supplychain-'.$id);
             if($cached) {
+                // check passcode
+                if(isset($cached->attributes->passcode))
+                {
+                    $user_passcode = $_GET['passcode'];
+                    if($cached->attributes->passcode!=$user_passcode)
+                        return $this->_bad_request('Your enter the wrong passcode.');
+                }
+
                 $this->_cache_hit = true;
                 $this->response = array(
                     'supplychain' => $cached
                 );
-            } else {
+            } else {                
                 $fetched = false;
                 try {
                     $fetched = ORM::factory('supplychain')->kitchen_sink($id);
@@ -54,6 +62,13 @@
                     return $this->_not_found('Error retrieving supplychain.');
                 }
                 Cache::instance()->set('supplychain-'.$id, $fetched);
+                // check passcode                
+                if(isset($fetched->attributes->passcode))
+                {
+                    $user_passcode = $_GET['passcode'];
+                    if($fetched->attributes->passcode!=$user_passcode)
+                        return $this->_bad_request('Your enter the wrong passcode');
+                }
                 $this->response = array(
                     'supplychain' => $fetched
                 );

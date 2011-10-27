@@ -66,7 +66,8 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         $supplychain->attributes->title = $title;
                         $supplychain->attributes->description = $description;
                         $supplychain->attributes->tags = $tags;
-                        $supplychain->attributes->passcode = $form->get_field('passcode')->value();
+                        if($form->get_field('passcode'))
+                            $supplychain->attributes->passcode =  $form->get_field('passcode')->value();
                         if($public)
                             $supplychain->other_perms |= $public;
                         else

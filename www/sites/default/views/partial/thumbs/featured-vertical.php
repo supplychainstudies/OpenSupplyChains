@@ -14,13 +14,13 @@
 
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item): ?>
-        <div class="preview-map-item <?= $i % 2 ? "last" : ""; ?>">
+        <div class="preview-map-item small<?= $i % 2 ? " last" : ""; ?>">
             <div class="preview-badge">
             <a href="view/<?php print $item->id; ?>">
-                <img class="preview-map small" src="static/<?php print $item->id; ?>.s.png" alt="" />
+                <img class="preview-map" src="static/<?php print $item->id; ?>.s.png" alt="" />
             </a>
             </div>
-            <h3 class="preview-title vertical">
+            <h3 class="preview-title truncate vertical">
                 <a href="view/<?php print $item->id; ?>">
                 <?= HTML::chars($item->attributes->title) ?>
                 </a>

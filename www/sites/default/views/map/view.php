@@ -30,7 +30,6 @@
     <div id="sidebar" class="map-view">
 		<div class="editable-options">
     		<h3>Map Options</h3>
-            <hr/>
     		<div class="impact-box">
                 <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
     			<label for="impact-use-weight">Show Weight</label>
@@ -55,27 +54,21 @@
     		</select>
     		</div>
     		<br/>
-            <hr />
 		</div>
 
-    	<h3>Share this Sourcemap</h3>
-        <hr/>
-        <div id="qrcode-badge" class="container">
-            <a href="<?= $scaled_qrcode_url ?>"><img class="qrcode" src="<?= $qrcode_url ?>" /></a><br/>
-        </div>
-        <div class="container links">
-            <p>Link to this Sourcemap</p>
-            <div>
-                <input value="<?= $short_link; ?>" readonly="readonly" onclick="select()"></input>
+        <div class="container">
+            <h2 class="section-title">Share this Sourcemap</h2>
+            <div id="qrcode-badge">
+                <a href="<?= $scaled_qrcode_url ?>"><img class="qrcode" src="<?= $qrcode_url ?>" /></a><br/>
             </div>
-            <p>Embed this Sourcemap</p>
-            <div>
-                <input value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
+            <div class="pseudo-form">
+                <input class="link" value="<?= $short_link; ?>" readonly="readonly" onclick="select()"></input>
+            </div>
+            <div class="pseudo-form">
+                <input class="embed" value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
             </div>
         </div>
     	<div class="clear"></div>
-        <hr />
-                
         <?= View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>
     </div>
     
@@ -92,7 +85,6 @@
         <iframe class="youtube-player" type="text/html" width="480" height="280" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>" frameborder="0"></iframe> 
     </div>
     <?php endif; ?>
-    <hr />
     <p class="author">
         <img src="<?= HTML::chars($supplychain_avatar) ?>" alt="Avatar"></img>
         <a class="author-link" href="user/<?= $supplychain_ownerid ?>"><?= isset($supplychain_display_name)? $supplychain_display_name : $supplychain_owner ?></a>, <?= $supplychain_date ?>

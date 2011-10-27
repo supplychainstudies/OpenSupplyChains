@@ -46,40 +46,43 @@
         
         <?php // first 3 categories get to be big ?>
         <?php if ($i<2): ?>
-        <div class="category-view medium">
-            <h2><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
+        <div class="category-view medium container wide">
+            <h2 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
             <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $search->results)) ?>
         </div>
+        <hr class="spacer" />
 
         <?php // remaining categories are small ?>
         <?php else: ?>
             <?php if ($i == 2): ?>
-        <div class="container">
+        <div class="container wide">
             <div id="sidebar-left"> 
             <?php endif; ?>
                 <?php if(count($search->results)>0): ?>
                 <div class="category-view small">
-                    <h3><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
+                    <h3 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
                     <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results)) ?>
                 </div>
                 <?php endif ?>
         <?php endif ?>
     <?php }?>
             </div><!-- .left -->
-            <div id="sidebar" class="nomargin skinny">
-                <ul>
-                    <li>
-                        <h2>Interesting Sourcemaps</h2>
-                        <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $interesting->results)) ?>
-                    </li>
-                </ul>
+            <div id="sidebar" class="browse skinny">
+                <div class="container">
+                    <ul>
+                        <li>
+                            <h2 class="section-title">Interesting Sourcemaps</h2>
+                            <?= View::factory('partial/thumbs/featured', array('supplychains' => $interesting->results)) ?>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="clear"></div>
         </div><!-- .container -->
 
 <?php } else { ?>
         <div class="container">
-            <h2 class="browse-header">There are <?= count($searches->results);?> Sourcemaps in this category:</h2>
+            <h2 class="browse-header section-title">There are <?= count($searches->results);?> Sourcemaps in this category:</h2>
             <div class="category-view medium">
                 <?php // TODO: improve the names of partial views ?>
                 <?php echo View::factory('partial/thumbs/browse', array('supplychains' => $searches->results)) ?>

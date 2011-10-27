@@ -30,6 +30,9 @@ class Controller_User extends Sourcemap_Controller_Layout {
         }        
         if($user->loaded()) {
 
+            $user_arr = $user->as_array();
+            unset($user_arr['password']);
+
            // Additional functions for "channel" user
            $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
            if($user->has('roles', $channel_role)) {
@@ -43,13 +46,6 @@ class Controller_User extends Sourcemap_Controller_Layout {
                        $featured_scs[] = $supplychain;
                    }
                }
-               
-               // if user only has a single featured map, just forward directly to the map page
-               // TODO: don't use 301s for this.
-               //if (count($featured_scs) == 1){
-               //     $url = '/view/' . $featured_scs[0]->id;
-               //     $this->request->redirect($url,301);
-               //}
 
                // Load slider functionality
                $this->layout->scripts = array(
@@ -79,7 +75,8 @@ class Controller_User extends Sourcemap_Controller_Layout {
             unset($user->password);
             $user->avatar = Gravatar::avatar($user->email, 128);
             unset($user->email);
-            $this->template->user = $user;
+            
+             $this->template->user = (object)$user;
 
             $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
             $pg = max($pg,1);

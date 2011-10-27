@@ -39,7 +39,7 @@
 </head>
 <body class="main">
     <div id="wrapper">
-        <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <?= View::factory('partial/header', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         <div class="container">
             <div class="messages">
                 <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>

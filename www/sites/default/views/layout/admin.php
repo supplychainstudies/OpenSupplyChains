@@ -37,7 +37,7 @@
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>
 <body class="main admin">
-    <?= View::factory('partial/branding', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+    <?= View::factory('partial/header', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     <div class="container">
         <div class="messages">
             <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>

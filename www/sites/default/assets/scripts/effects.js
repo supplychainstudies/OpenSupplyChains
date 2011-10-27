@@ -14,6 +14,9 @@
 
 
 $(document).ready(function(){
+    
+    /* truncation */
+    Sourcemap.truncate_string(".truncate");
 
     /* user edit */
     $('a.edit-button').click(function(evt){
@@ -77,7 +80,7 @@ $(document).ready(function(){
     /* carousel launch */
     $('.carousel').each(function(){
         $(this).jcarousel({
-            scroll: 1,
+            scroll: 4,
         });
     });
 
@@ -168,7 +171,6 @@ $(document).ready(function(){
         return false;
     });
 
-    Sourcemap.truncate_string(".preview-title");
 
 }); // end of document ready
 

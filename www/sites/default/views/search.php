@@ -12,10 +12,14 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<div id="search-page">
+<div id="page-title">
     <div class="container">
         <h1>Results for "<?= isset($search_result->parameters['q']) ? HTML::chars($search_result->parameters['q']) : ''; ?>"</h1>
+    </div>
+</div>
 
+<div id="search-page">
+    <div class="container">
     <?php if(isset($search_result->results) && $search_result && $search_result->results): ?>
         <?= $pager->render() ?>
         <?php $count = 0; ?>

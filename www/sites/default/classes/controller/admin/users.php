@@ -66,6 +66,18 @@ class Controller_Admin_Users extends Controller_Admin {
         $this->request->send_file(TRUE, "users.csv");
    } 
    
+   public function action_xls(){
+        
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Hello')
+            ->setCellValue('B1', 'world!');
+         
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('MyExcel.xlsx');
+
+   } 
+   
    public function array_to_csv($arraydata, $delim = ",", $newline = "\n", $enclosure = '"'){
             if ( ! is_array($arraydata))
             {

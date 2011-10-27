@@ -144,6 +144,17 @@ a {
     
     &.skinny { width: 272px; }
     &.browse { margin-right: 40px; }
+    &.profile{
+        .box_shadow(0,0,0,0);
+        border: none;
+        background: none;
+        padding-left: 20px;
+        p{
+            margin: 10px 0 ;
+            font-size: 2em;
+            color: #ccc;
+        }
+    }
 }
 
 
@@ -256,7 +267,7 @@ a {
 
 /* Live Search ------------- */
 #search-div{ 
-    margin-left: 48px; 
+    margin: 10px 0 0 48px;
     input{ background: url("../images/search.png") 12px center no-repeat;  } 
 }
 
@@ -769,16 +780,6 @@ h2.browse-header{
         .user-name{
             margin-left: 20px;
         }
-        #user-profile {
-            padding: 10px;
-            .box.small();
-            .user-avatar{ float:left; }
-            .user-details {
-                float:right;
-                padding: 20px 30px 0 0;
-                .editable_list;
-            }
-        }
     }
     .right{
         float: right;
@@ -798,6 +799,19 @@ h2.browse-header{
         }
     }
 }
+
+#user-profile {
+    background:#fff;
+    padding: 10px;
+    .box.small();
+    .user-avatar{ float:left; }
+    .user-details {
+        float:right;
+        padding: 20px 30px 0 0;
+        .editable_list;
+    }
+}
+
 /* Channel ---------------------------------- */
 
 .channel-banner{

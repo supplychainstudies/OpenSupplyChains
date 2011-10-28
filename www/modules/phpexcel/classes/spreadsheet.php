@@ -56,6 +56,17 @@ class Spreadsheet
     {
         $this->_spreadsheet->setActiveSheetIndex($index);
     }
+
+    /**
+     * Set active sheet index
+     * 
+     * @param int $index Active sheet index
+     * @return void
+     */
+    public function create_active_sheet()
+    {
+		$this->_spreadsheet->setActiveSheetIndex($this->_spreadsheet->getIndex($this->_spreadsheet->createSheet()));
+    }
     
     /**
      * Get the currently active sheet
@@ -106,6 +117,70 @@ class Spreadsheet
             foreach ($columns as $column=>$value)
                 $sheet->setCellValueByColumnAndRow($column, $row, $value);
     }
+
+	public function set_column_validation($col, $formula, $type, $prompttitle ="", $promptmessage="",$errortitle ="", $errormessage="") {
+		//We cant set the validation for a whole column (as far as I know. if you know better, reimplement this) so, we'll iterate through the rows till $depth 
+		$depth = 300;
+		$i = 1;
+		$objValidation = $this->_spreadsheet->getActiveSheet()->getCell($col.$i)
+		->getDataValidation();
+		switch ($type) {
+			case "DECIMAL":
+				$objValidation->setType( PHPExcel_Cell_DataValidation::TYPE_DECIMAL );
+			break;
+			case "LIST":
+				$objValidation->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
+			break;
+			case "CUSTOM":
+				$objValidation->setType( PHPExcel_Cell_DataValidation::TYPE_CUSTOM );
+			break;			
+			case "WHOLE":
+				$objValidation->setType( PHPExcel_Cell_DataValidation::TYPE_WHOLE );
+			break;
+		}
+		$objValidation->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_STOP );
+		$objValidation->setAllowBlank(true);
+		$objValidation->setShowInputMessage(true);
+		$objValidation->setShowErrorMessage(true);
+		if ($type == "LIST")
+			$objValidation->setShowDropDown(true);
+		$objValidation->setErrorTitle($errortitle);
+		$objValidation->setError($errormessage);
+		$objValidation->setPromptTitle($prompttitle);
+		$objValidation->setPrompt($promptmessage);
+		while ($i < $depth) {
+			if (is_array($formula) == false) {
+				$use_formula = str_replace("cell", $col.$i, $formula);
+				$objValidation->setFormula1($use_formula);
+			} else {
+				$objValidation->setFormula1($formula[0]);
+				$objValidation->setFormula2($formula[1]);
+			}
+			$this->_spreadsheet->getActiveSheet()->getCell($col.$i)
+			->setDataValidation(clone $objValidation);
+			$i++;		
+		}		
+	}
+		
+	public function protectCells($cells) {
+		$this->_spreadsheet->getActiveSheet()->protectCells($cells);
+	}
+	
+	public function freezeTopRow() {
+		$this->_spreadsheet->getActiveSheet()->freezePane('A2');
+	}
+	
+	public function set_column_formula($col, $formula) {
+		//We cant set the validation for a whole column (as far as I know. if you know better, reimplement this) so, we'll iterate through the rows till $depth 
+		$depth = 300;
+		$i = 2;
+		//str_replace("counter", $i, $formula)
+		while ($i < $depth) {
+			$this->_spreadsheet->getActiveSheet()->setCellValue($col.$i,"=IF(A2=='beep', TRUE, FALSE)");
+			//$this->_spreadsheet->getActiveSheet()->getCell($col.$i)->getCalculatedValue();
+			$i++;		
+		}		
+	}
     
     /**
      * Writes spreadsheet to file

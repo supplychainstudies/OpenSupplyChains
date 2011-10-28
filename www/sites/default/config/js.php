@@ -52,6 +52,14 @@ return array(
                 'less', 'sourcemap-map'
             )
         ),
+        'tree-view' => array(
+            'scripts' => array(
+                'sites/default/assets/scripts/tree/view.js'
+            ),
+            'requires' => array(
+                'less', 'sourcemap-core'
+            )
+        ),
         'list-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/list.js',

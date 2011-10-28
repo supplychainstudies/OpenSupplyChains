@@ -180,7 +180,7 @@ class Google_Oauth {
         $pkeys = array_keys($params);
         sort($pkeys);
         $norm = array();
-        for($i=0; $i<count($pkeys); $i++) {
+        for($i=0,$size = count($pkeys); $i<$size; $i++) {
             $v = $params[$pkeys[$i]];
             if($pkeys[$i] === 'oauth_callback') $v = urlencode($v);
             elseif($pkeys[$i] === 'scope') $v = urlencode($v);

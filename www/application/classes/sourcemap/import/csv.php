@@ -46,7 +46,7 @@ class Sourcemap_Import_Csv {
             $raw_headers = array_shift($csv);
             $headers = array();
         }
-        for($i=0; $i<count($raw_headers); $i++) 
+        for($i=0,$size_raw_headers = count($raw_headers); $i<$size_raw_headers; $i++) 
             if(strlen(trim($raw_headers[$i])))
                 $headers[] = strtolower($raw_headers[$i]);
         foreach($csv as $ri => $row) {
@@ -163,7 +163,7 @@ class Sourcemap_Import_Csv {
         if($headers) {
             $raw_headers = array_shift($csv);
             $headers = array();
-            for($i=0; $i<count($raw_headers); $i++)
+            for($i=0,$size_raw_headers = count($raw_headers); $i<$size_raw_headers; $i++)
                 if(strlen(trim($raw_headers[$i])))
                     $headers[] = strtolower($raw_headers[$i]);
             foreach($headers as $i => $h) {

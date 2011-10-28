@@ -124,7 +124,7 @@ class Sourcemap_Csv {
 
     public static function arr2csv($arr, $delim=',', $encap='"') {
         $csv = '';
-        for($i=0; $i<count($arr); $i++)
+        for($i=0,$size = count($arr); $i<$size; $i++)
             $csv .= self::make_csv_row($arr[$i], $delim, $encap)."\n";
         return $csv;
     }

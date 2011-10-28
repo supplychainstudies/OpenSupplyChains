@@ -128,7 +128,7 @@ class Sourcemap_Proj_Projection {
         if(!$def) return $def;
         $params = explode('+', $def);
         $parsed = array();
-        for($pi=0; $pi<count($params); $pi++) {
+        for($pi=0,$size = count($params); $pi<$size; $pi++) {
             if(!$params[$pi]) continue;
             if(strstr($params[$pi], '=')) {
                 list($pkey, $pval) = explode('=', $params[$pi]);

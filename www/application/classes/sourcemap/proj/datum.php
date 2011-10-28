@@ -8,7 +8,7 @@ class Sourcemap_Proj_Datum {
             $this->datum_type = Sourcemap_Proj::PJD_NODATUM;
         }
         if(isset($proj->datum_params) && $proj->datum_params) {
-            for($i=0; $i<count($proj->datum_params); $i++) {
+            for($i=0,$size = count($proj->datum_params); $i<$size; $i++) {
                 $proj->datum_params[$i] = (float)$proj->datum_params[$i];
             }
             if(count($proj->datum_params) <= 3 && (

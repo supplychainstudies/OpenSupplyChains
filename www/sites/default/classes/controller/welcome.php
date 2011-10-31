@@ -23,7 +23,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         );
         $this->layout->styles = $this->default_styles;
         $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
-        
+
         $this->layout->page_title = 'Sourcemap: where things come from';
         $recent = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 4));
         $popular = Sourcemap_Search::find(array('comments' => 'yes', 'favorited' => 'yes', 'l' => 4));

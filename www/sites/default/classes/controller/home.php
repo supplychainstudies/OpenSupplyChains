@@ -40,11 +40,12 @@ class Controller_Home extends Sourcemap_Controller_Layout {
             $scs_favorite[] = $sc->kitchen_sink($sc->id);
         }
 
-
         $isChannel = false;
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if($user->has('roles', $channel_role))
             $isChannel = true;
+
+        $user_arr['avatar'] = Gravatar::avatar($user->email, 128);
 
         $this->template->isChannel = $isChannel;
         $this->template->user = (object)$user_arr;

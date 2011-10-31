@@ -76,7 +76,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $user->avatar = Gravatar::avatar($user->email, 128);
             unset($user->email);
             
-             $this->template->user = (object)$user;
+            $this->template->user = (object)$user;
 
             $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
             $pg = max($pg,1);

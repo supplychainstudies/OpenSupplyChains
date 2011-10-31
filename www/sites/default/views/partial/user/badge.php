@@ -14,7 +14,7 @@
 
 <div id="user-profile">
     <div class="user-avatar">
-        <img src="<?= Gravatar::avatar($user->email, 128) ?>" />
+        <img src="<?= $user->avatar; ?>" />
         <?php if ($canEdit): ?>
         <div class="button alternate">
             <a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>

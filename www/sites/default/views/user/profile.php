@@ -18,16 +18,18 @@
     </div>
     <div id="sidebar" class="profile">
         <div class="container">
-            <p>
-                <?= isset($user->display_name) ? $user->display_name : $user->username; ?> has <?= count($supplychains); ?> maps
+            <p><!--
+                <?= isset($user->display_name) ? $user->display_name : $user->username; ?> has <?= $totals->supplychains; ?> maps 
                 <br />
+                with <?= $totals->stops ?> points and <?= $totals->hops ?> lines.
+                -->
             </p> 
         </div>
     </div>
     <div class="clear"></div>
     <div class="search-results container">
         <?php if(isset($supplychains) && $supplychains): ?><br/>
-            <h2><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
+            <h2 class="section-title"><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
             <div class="container pager">
                 <!-- ?= $pager->render() ?> -->
             </div>

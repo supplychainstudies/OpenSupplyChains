@@ -18,11 +18,8 @@
     </div>
     <div id="sidebar" class="profile">
         <div class="container">
-            <p><!--
-                <?= isset($user->display_name) ? $user->display_name : $user->username; ?> has <?= $totals->supplychains; ?> maps 
-                <br />
-                with <?= $totals->stops ?> points and <?= $totals->hops ?> lines.
-                -->
+            <p>
+                <?= isset($user->display_name) ? $user->display_name : $user->username; ?> has <?= count($supplychains); ?> maps 
             </p> 
         </div>
     </div>

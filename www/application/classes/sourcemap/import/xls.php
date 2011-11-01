@@ -29,7 +29,7 @@ class Sourcemap_Import_Xls {
 		$contentReader = new PHPExcel_Reader_Excel5Contents();
 		$contentReader->setReadDataOnly(true);
 		$contentReader->setLoadSheetsOnly("Stops");
-		$contentPHPExcel = $contentReader->load($xls);
+		$contentPHPExcel = $contentReader->loadContents($xls);
 		$objWriter = new PHPExcel_Writer_CSV($objPHPExcel);
 		$objWriter->save('/home/sourcemap/sourcemap/www/assets/downloads/stops.csv');
 		

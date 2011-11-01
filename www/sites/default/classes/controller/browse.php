@@ -32,7 +32,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $defaults = array(
             'q' => false,
             'p' => 1,
-            'l' => 20
+            'l' => 999
         );
 
         foreach($cats as $i => $cat) {
@@ -69,21 +69,29 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             foreach($tree->children as $subtree){
                 array_push($toplevels, $subtree->data->name);
             }
-            
+           
             // Do a general search for every top-level category
-            $searches = array();
-            foreach ($toplevels as $i => $cat){
-                $params['c'] = $cat;
-                $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
-                $search->cat_title = $nms[$cat]->title; 
-                array_push($searches, $search);
+            $cache_key = 'sourcemap-browse-searches';
+            $ttl = 60;
+            if($cached = Cache::instance()->get($cache_key)) {
+                $searches = $cached;
+            } else {
+                $searches = array();
+                foreach ($toplevels as $i => $cat){
+                    $params['c'] = $cat;
+                    $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
+                    $search->cat_title = $nms[$cat]->title; 
+                    array_push($searches, $search);
+                }
+
+                // Sort array by number of result
+                function sort_searches($a, $b){
+                    return count($b->results) - count($a->results);
+                }
+                usort($searches, "sort_searches");
+                Cache::instance()->set($cache_key, $searches, $ttl);
             }
 
-            // Sort array by number of result
-            function sort_searches($a, $b){
-                return count($b->results) - count($a->results);
-            }
-            usort($searches, "sort_searches");
         }
         
         $this->template->searches = $searches;

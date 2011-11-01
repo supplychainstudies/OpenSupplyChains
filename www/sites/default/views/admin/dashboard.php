@@ -84,4 +84,6 @@ and
 <dd>Browse and manage supplychains.</dd>
 <dt><a href="admin/users">Users</a></dt>
 <dd>Manage users.</dd>
+<dt><a href="admin/supplychains/clearcache">Clear Cache</a></dt>
+<dd>Manually clear the cache.</dd>
 </dl>

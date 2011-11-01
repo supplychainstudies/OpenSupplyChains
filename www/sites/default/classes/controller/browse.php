@@ -54,6 +54,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             $params['c'] = $category->name;
             $this->layout->page_title .= ' - '.$category->title;
             $this->template->category = $category->title;
+            $this->template->category_name = $category->name;
             $searches = Sourcemap_Search::find($params+array('recent' => 'yes'));
         } elseif($category) {
             Message::instance()->set('"'.$category.'" is not a valid category.');
@@ -74,6 +75,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             foreach ($toplevels as $i => $cat){
                 $params['c'] = $cat;
                 $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
+                $search->cat_title = $nms[$cat]->title; 
                 array_push($searches, $search);
             }
 

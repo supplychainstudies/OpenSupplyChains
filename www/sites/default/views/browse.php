@@ -18,7 +18,7 @@
         <div id="category-list-content">
             <div class="category-current">
                 Currently browsing&nbsp; 
-                <a href="browse/">
+                <a href="browse/<?= isset($category_name) ? $category_name : ""; ?>">
                     <?= $category ? $category : "Everything"; ?>
                 </a>&nbsp;
             </div> 
@@ -47,7 +47,7 @@
         <?php // first 3 categories get to be big ?>
         <?php if ($i<2): ?>
         <div class="category-view medium container wide">
-            <h2 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
+            <h2 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->cat_title ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
             <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $search->results)) ?>
         </div>
         <hr class="spacer" />
@@ -60,7 +60,7 @@
             <?php endif; ?>
                 <?php if(count($search->results)>0): ?>
                 <div class="category-view small">
-                    <h3 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
+                    <h3 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->cat_title ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
                     <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results)) ?>
                 </div>
                 <?php endif ?>

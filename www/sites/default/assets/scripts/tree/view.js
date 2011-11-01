@@ -38,7 +38,7 @@ $(document).ready(function() {
 
             // fetch from supplychain
             Sourcemap.loadSupplychainToTree(scid, passcode, function(sc) {
-                console.log(sc);
+                Sourcemap.buildTree(tree_element_id,sc);
             });
             $('#fade , .popup_block').fadeOut(function() {
                 $('#fade, a.close').remove();

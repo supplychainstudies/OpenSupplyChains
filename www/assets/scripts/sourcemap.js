@@ -176,6 +176,73 @@ Sourcemap.factory = function(type, data) {
             instance.user_featured = sc.user_featured;
             instance.editable = data.editable;
             break;
+        case 'tree':
+            instance = new Sourcemap.Supplychain();
+            var sc = data;
+            var stop_ids = {};
+            sc.attributes = Sourcemap.deep_clone(sc.attributes);
+            //stops
+            for(var i=0; i<sc.stops.length; i++) {
+                var new_stop = new Sourcemap.Stop(
+                    sc.stops[i].geometry, sc.stops[i].attributes
+                );
+                stop_ids[sc.stops[i].local_stop_id] = new_stop.instance_id;
+                new_stop.local_stop_id = sc.stops[i].local_stop_id;
+                instance.addStop(new_stop);
+            }
+            //hops
+            for(var i=0; i<sc.hops.length; i++) {
+                var from_instance = stop_ids[sc.hops[i].from_stop_id];
+                var to_instance = stop_ids[sc.hops[i].to_stop_id];
+                var new_hop = new Sourcemap.Hop(
+                    sc.hops[i].geometry, from_instance, to_instance,
+                    sc.hops[i].attributes
+                );
+                instance.addHop(new_hop);
+            }
+            instance.owner = data.owner;
+            instance.remote_id = sc.id;
+            instance.created = sc.created;
+            instance.modified = sc.modified;
+            instance.attributes = sc.attributes;
+            instance.usergroup_perms = sc.usergroup_perms;
+            instance.other_perms = sc.other_perms;
+            instance.user_featured = sc.user_featured;
+            instance.editable = data.editable;
+            // make instance tree
+            var g = new Sourcemap.Supplychain.Graph2(instance);
+            var stids = g.nids.slice(0);
+            var tiers = {};
+            for(var i=0; i<stids.length; i++) {
+                tiers[stids[i]] = 0;
+            }
+            var max_plen = 0;
+            for(var i=0; i<g.paths.length; i++) {
+                var p = g.paths[i];
+                max_plen = p.length > max_plen ? p.length : max_plen;
+                for(var j=0; j<p.length; j++) {
+                    if(j > tiers[p[j]]) tiers[p[j]] = j;
+                }
+            }
+            //default_feature_colors
+            var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
+            i//var dfc = this.options.default_feature_colors.slice(0);
+            for(var i=0; i<dfc.length; i++) {
+                    dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
+            }
+            var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
+            for(var i=0,length=instance.stops.length;i<length;i++)
+            {
+                var st = instance.stops[i];
+                var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+                st.attributes.tier = tiers[st.instance_id];
+                st.attributes.color = scolor;
+            }
+
+            instance.tiers = tiers;
+            instance.max_plen = max_plen;
+
+            break;
         default:
             instance = false;
             break;
@@ -266,6 +333,154 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             //console.log(data.response);
         }
     });
+}
+
+
+Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
+    // fetch and initialize supplychain
+    var _that = this;
+    var _remote_id = remote_id;
+
+    $.ajax({
+        url:'services/supplychains/'+remote_id,
+        data:{ passcode : passcode },
+        success : function(data) {
+            var sc = Sourcemap.factory('tree', data.supplychain);
+            sc.editable = data.editable;
+            callback.apply(this, [sc]);
+            //_that.broadcast('supplychain:loaded', this, sc);
+        },
+        error : function(data){
+        }
+    });
+}
+
+Sourcemap.buildTree = function(tree_id,sc) {
+
+    var tiers = [],tier_list = [],hop_list = [];
+    var max_plen = sc.max_plen;
+    var max_length=(max_plen)?sc.max_plen:1,max_x=0,max_y=0;    
+    // palette stuff
+    var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
+    for(var i=0; i<dfc.length; i++) {
+        dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
+    }
+    var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
+    //tier for palette
+    var g = new Sourcemap.Supplychain.Graph2(sc);
+    var stids = g.nids.slice(0);
+    var p_tiers = {};
+    for(var i=0; i<stids.length; i++) {
+        p_tiers[stids[i]] = 0;
+    }
+    for(var i=0; i<g.paths.length; i++) {
+        var p = g.paths[i];
+        for(var j=0; j<p.length; j++) {
+            if(j > p_tiers[p[j]]) p_tiers[p[j]] = j;
+        }
+    }
+    // Tiers for tree
+    for(var i=0;i<max_length;i++)
+    {   tiers[i] = new Array();  }
+    // Create stop points
+    for(var i=0,length=sc.stops.length;i<length;i++)
+    {
+        tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
+        
+        tier_list[i] = { 
+            title:sc.stops[i].attributes.title,
+            instance:sc.stops[i].instance_id,
+            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+350,
+            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
+            color:sc.stops[i].attributes.color
+        }
+        /*
+        if(tier_list[i].x > max_x)
+            max_x = tier_list[i].x;
+        if(tier_list[i].y > max_y)
+            max_y = tier_list[i].y;
+        */
+    }
+    // Set stop points for arc diagram    
+    for(var i=0,order=0;i<tiers.length;i++)
+    {
+        for(var j=0;j<tiers[i].length;j++){            
+            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
+                if(tier_list[k].instance==tiers[i][j].instance_id){
+                    tier_list[k].y = 430;
+                    tier_list[k].x = order*105+50;
+                    order+=1;
+                    break;
+                }                                
+            }            
+        }
+    }
+    // Create hop points
+    for(var i=0, length=sc.hops.length;i<length;i++)
+    {
+        var h = sc.hops[i];
+        var fc = palette[p_tiers[h.from_stop_id]];
+        var tc = palette[p_tiers[h.to_stop_id]];
+        var hc = h.getAttr("color", fc.midpoint(tc).toString());
+        hop_list[i] = {            
+            x1:tier_list[sc.hops[i].from_local_stop_id-1].x,
+            x2:tier_list[sc.hops[i].to_local_stop_id-1].x,
+            y1:tier_list[sc.hops[i].from_local_stop_id-1].y,
+            y2:tier_list[sc.hops[i].to_local_stop_id-1].y,
+            color:hc
+        }
+    }
+
+    var w = $(tree_id).width(),
+    h = $(tree_id).height();
+    //x = d3.scale.ordinal().domain(tier_x).rangePoints([0, w], 1),
+    //y = d3.scale.ordinal().domain(tier_y).rangePoints([0, h], 3);    
+    var svg = d3.select(tree_id).append("svg:svg")
+        .attr("width", w)
+        .attr("height", h);
+
+
+    svg.selectAll("text")
+    .data(tier_list)
+    .enter().append("svg:text")
+    .attr("x",function(d){return d.x})
+    .attr("y",function(d){return d.y})
+    .attr("dx",".1em") // padding
+    .attr("dy","1.8em")
+    .attr("text-anchor","middle")
+    .text(function(d){return d.title});
+    
+    svg.append("svg:g")
+    .selectAll("path")
+    .data(hop_list)
+    .enter().append("svg:path")    
+    .style("fill","none")
+    .style("stroke",function(d){return d.color})
+    //.attr("d","M20,400 l 90,-25 a25,25 -30 0,1 50,-25 l 50,-25 a25,50 -30 0,1 50,-25 l 50,-25 a25,75 -30 0,1 50,-25 l 50,-25 a25,100 -30 0,1 50,-25 l 50,-25");
+    .attr("d",function(d){
+        var diff_x = d.x2-d.x1
+        var diff_y = d.y2-d.y1
+        return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
+    
+    
+    svg.selectAll("circle")
+        .data(tier_list)
+        .enter().append("svg:circle")
+        .attr("class", "little")
+        .attr("cx", function(d){return d.x})
+        .attr("cy", function(d){return d.y})
+        .style("fill", function(d){return d.color})
+        .attr("r", 12);
+    /*
+    svg.selectAll("line")
+    .data(hop_list)
+    .enter().append("svg:line")
+    .attr("x1",function(d){return d.x1})
+    .attr("x2",function(d){return d.x2})
+    .attr("y1",function(d){return d.y1})
+    .attr("y2",function(d){return d.y2})
+    .attr("stroke",function(d){return d.color});
+    */
 }
 
 Sourcemap.saveSupplychain = function(supplychain, o) {

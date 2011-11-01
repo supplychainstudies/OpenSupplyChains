@@ -54,7 +54,8 @@ return array(
         ),
         'tree-view' => array(
             'scripts' => array(
-                'sites/default/assets/scripts/tree/view.js'
+                'sites/default/assets/scripts/tree/view.js',
+                'assets/scripts/libs/d3/d3.js'
             ),
             'requires' => array(
                 'less', 'sourcemap-core'

@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-class Sourcemap_Import_Xls {
+class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
     public static $default_options = array(
         'headers' => true, 'latcol' => null,
         'loncol' => null, 'addresscol' => null,
@@ -30,17 +30,19 @@ class Sourcemap_Import_Xls {
 		$contentReader->setReadDataOnly(true);
 		$contentReader->setLoadSheetsOnly("Stops");
 		$contentPHPExcel = $contentReader->loadContents($xls);
-		$objWriter = new PHPExcel_Writer_CSV($objPHPExcel);
-		$objWriter->save('/home/sourcemap/sourcemap/www/assets/downloads/stops.csv');
-		
+		$objWriter = new PHPExcel_Writer_CSVContents($contentPHPExcel);
+		$stop_csv = $objWriter->returnContents();
+		$contentReader->setLoadSheetsOnly("Hops");
+		$contentPHPExcel = $contentReader->loadContents($xls);
+		$objWriter = new PHPExcel_Writer_CSVContents($contentPHPExcel);
+		$hop_csv = $objWriter->returnContents();
 		//$objReader->setLoadSheetsOnly("Hops");
-		
 		//$objReader->setLoadSheetsOnly("Stops");
 		//$writer->save('/home/sourcemap/sourcemap/www/assets/downloads/stops.csv');
 		
-        //$sc->stops = self::csv2stops($stop_csv, $options);
-        //$sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
-        //$sc->attributes = array();
+        $sc->stops = self::csv2stops($stop_csv, $options);
+        $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
+        $sc->attributes = array();
         return $sc;
     }
 

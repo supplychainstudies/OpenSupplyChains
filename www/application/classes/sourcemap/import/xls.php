@@ -26,23 +26,15 @@ class Sourcemap_Import_Xls {
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;
         extract($options);
         $sc = new stdClass();
-		$contentReader = new PHPExcelSourcemap();
-		$objPHPExcel = $contentReader->load($xls);
-		// Get summary information data
-		//$this->_summaryInformation = $ole->getStream($ole->summaryInformation);
-
-		// Get additional document summary information data
-		//$this->_documentSummaryInformation = $ole->getStream($ole->documentSummaryInformation);
-		/*
-		$objReader = new PHPExcel_Reader_Excel5();
-		$objReader->setReadDataOnly(true);
-		$objReader->setLoadSheetsOnly("Stops");
-		$objPHPExcel = $objReader->load("/home/sourcemap/sourcemap/www/assets/downloads/boogieboard.xls");
+		$contentReader = new PHPExcel_Reader_Excel5Contents();
+		$contentReader->setReadDataOnly(true);
+		$contentReader->setLoadSheetsOnly("Stops");
+		$contentPHPExcel = $contentReader->load($xls);
 		$objWriter = new PHPExcel_Writer_CSV($objPHPExcel);
-		var_dump($objWriter);
-		*/
+		$objWriter->save('/home/sourcemap/sourcemap/www/assets/downloads/stops.csv');
+		
 		//$objReader->setLoadSheetsOnly("Hops");
-		//$objWriter->save('/home/sourcemap/sourcemap/www/assets/downloads/stops.csv');
+		
 		//$objReader->setLoadSheetsOnly("Stops");
 		//$writer->save('/home/sourcemap/sourcemap/www/assets/downloads/stops.csv');
 		

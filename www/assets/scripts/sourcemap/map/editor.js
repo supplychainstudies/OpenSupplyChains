@@ -99,6 +99,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
 		if(!(this.map_view.options.locked)) {
 	        if(this.connect_from) {
+                if(ftr.attributes.hop_instance_id) return;
 	            var fromstid = this.connect_from.attributes.stop_instance_id;
 	            var tostid = ftr.attributes.stop_instance_id;
 	            if(fromstid == tostid) return;
@@ -110,11 +111,13 @@ Sourcemap.Map.Editor.prototype.init = function() {
 	            this.map.mapHop(new_hop, sc.instance_id);
 	            // TODO: review if the selection of the hop is ideal
 	            this.connect_from = false;
-	            // if you want to uncomment this, figure out why it breaks things.
-	            //this.map.controls.select.select(this.map.hopFeature(new_hop));
-                //show ftr window
-	            this.showEdit(this.map.findFeaturesForHop(sc.instance_id,fromstid,tostid).arrow);
+                //show ftr window                              
+	            //this.showEdit(this.map.findFeaturesForHop(sc.instance_id,fromstid,tostid).arrow);                                
                 Sourcemap.broadcast('supplychain-updated', sc);
+                // select the feature
+                //this.map.controls.select.select(this.map.findFeaturesForHop(sc.instance_id,fromstid,tostid).arrow);                
+	            this.map.controls.select.select(this.map.hopFeature(new_hop));
+
 	        } else if(ftr.attributes.hop_instance_id) {
 	            var ref = this.map.hopFeature(ftr.attributes.supplychain_instance_id, ftr.attributes.hop_instance_id);
 	            var supplychain = this.map.findSupplychain(ftr.attributes.supplychain_instance_id);
@@ -280,35 +283,35 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
         // If Ctrl+click
         if(e.ctrlKey){
-        var position = this.events.getMousePosition(e);
-        var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
-        var lonlat = this.getLonLatFromPixel(pixel);
-        var new_geom = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
-        thismap.controls.select.unselectAll();
-        
-        new_geom = new_geom.transform(
-           new OpenLayers.Projection('EPSG:900913'),
-           new OpenLayers.Projection('EPSG:4326')
-        );
-        var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
-        var geom = (new OpenLayers.Format.WKT()).read(new_geom);
-        var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y);
-        
-        $(".control.addstop").click();
-        if($("#newpoint-placename").val()==undefined){
-            // After first time
-            // TODO: need a better solution to load latlon into dialog
-            setTimeout(function(){
+            var position = this.events.getMousePosition(e);
+            var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
+            var lonlat = this.getLonLatFromPixel(pixel);
+            var new_geom = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
+            thismap.controls.select.unselectAll();
+            
+            new_geom = new_geom.transform(
+               new OpenLayers.Projection('EPSG:900913'),
+               new OpenLayers.Projection('EPSG:4326')
+            );
+            var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+            var geom = (new OpenLayers.Format.WKT()).read(new_geom);
+            var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y);
+            
+            $(".control.addstop").click();
+            if($("#newpoint-placename").val()==undefined){
+                // After first time
+                // TODO: need a better solution to load latlon into dialog
+                setTimeout(function(){
+                    $("#newpoint-placename").val(ll.lat+","+ll.lon);
+                    $("#newpoint-title").focus();
+                },100);
+            } else {
+                // After secone time
                 $("#newpoint-placename").val(ll.lat+","+ll.lon);
                 $("#newpoint-title").focus();
-            },100);
-        } else {
-            // After secone time
-            $("#newpoint-placename").val(ll.lat+","+ll.lon);
-            $("#newpoint-title").focus();
-        }
-        thismap.map.panTo(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
-    };
+            }
+            thismap.map.panTo(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
+        };// End ctrl
 
     }); // End click-add function
 

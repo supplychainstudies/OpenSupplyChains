@@ -33,7 +33,6 @@ class Sourcemap_Import_Csv {
     }
 
     public static function csv2stops($csv, $o=array()) {
-        
         $options = array();
         foreach(self::$default_options as $k => $v)
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;

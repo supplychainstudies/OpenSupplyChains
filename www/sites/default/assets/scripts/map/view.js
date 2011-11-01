@@ -25,9 +25,9 @@ $(document).ready(function() {
     // get passcode exist or not
     var passcode = "";   
     if($('#exist-passcode').attr("value")){   
-        // TODO: If admin views: skip passcode enter
+        // TODO: If admin, skip passcode screen
 
-        // if passcode exist
+        // if passcode exists
         // Create pop up window html
         var popID = 'popup';
         var element = document.createElement('div');
@@ -44,24 +44,32 @@ $(document).ready(function() {
         $(element).addClass("popup_block");
         $(element).prepend('<a href="#" class="close"></a>');
         $('body').append($(element));
+        
+        var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
+        
+        // Error behavior
+        var onError = function(){ window.location = "/view/" + scid + "?private"; }
 
         //Autofocus on password 
         $(element).find("input[name='passcode']").focus();
+        
+        
         // submit passcode to fetch supplychain
         $('form.passcode-input').submit(function(evt){
             evt.preventDefault();
             passcode = $(element).find("input[name='passcode']").val();
 
             // get scid from inline script 
-            var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
             // fetch from supplychain
-            Sourcemap.loadSupplychain(scid, passcode, function(sc) {
+            var cb = function(sc) {
                 var m = Sourcemap.view_instance.map;
                 m.addSupplychain(sc);
                 new Sourcemap.Map.Editor(Sourcemap.view_instance);
-            });
+            }
+            Sourcemap.loadSupplychain(scid, passcode, cb);
+           
             $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
+            $('#fade, a.close').remove();
             }); //fade them both out
         });
 

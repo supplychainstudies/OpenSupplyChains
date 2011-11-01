@@ -263,7 +263,6 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             _that.broadcast('supplychain:loaded', this, sc);
         },
         error : function(data){
-            //console.log(data.response);
         }
     });
 }

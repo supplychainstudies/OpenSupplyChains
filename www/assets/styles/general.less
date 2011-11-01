@@ -165,10 +165,11 @@ a {
         font-size: 1.4em;
         font-weight: bold;
         cursor: pointer;
+        margin-left: 0;
         display:none;
         .status-message {
             color: #fff;
-            padding: 8px 0 10px 20px;
+            padding: 8px 0 10px;
             text-shadow: -1px 0px 1px #255a76;
             line-height: 1.5em;
             .gradient(#3884ab,#4f9fc9);
@@ -178,13 +179,13 @@ a {
                 font-size: 20px;
                 color: #999;
                 text-shadow: none;
-                padding: 20px 20px 40px 20px;
+                padding: 20px 30px 40px 30px;
                 .gradient(#eee, #fff);
             }
         }
         .status-wrap {
             background: url('../images/close.png') right 4px transparent no-repeat;
-            margin: 0 20px 0 0;  
+            margin: 0 20px 0 20px;  
         }
     }
 }
@@ -207,7 +208,7 @@ a {
             font-weight: bold;
             float:left;
             text-align: center;
-            margin: 12px 24px 12px 5px;
+            margin: 12px 28px 12px 5px;
             a {
                 text-shadow: #d1d1d1 1px 1px 1px;
                 color:#444;
@@ -226,6 +227,7 @@ a {
                 text-decoration:none;
                 color:#3d3d3d;
             }
+            &.last{ margin-right: 0; }
         }
     }
 }

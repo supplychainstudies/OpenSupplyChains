@@ -278,41 +278,42 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // Click-add function
     //this.map.map.addControl(new OpenLayers.Control.MousePosition());
     this.map.map.events.register("click",this.map.map,function(e){
-        var thismap = Sourcemap.view_instance.map;
-        Sourcemap.broadcast('map:feature_clickout');
+        if(!(Sourcemap.view_instance.options.locked)) {
+            var thismap = Sourcemap.view_instance.map;
+            Sourcemap.broadcast('map:feature_clickout');
 
-        // If Ctrl+click
-        if(e.ctrlKey){
-            var position = this.events.getMousePosition(e);
-            var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
-            var lonlat = this.getLonLatFromPixel(pixel);
-            var new_geom = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
-            thismap.controls.select.unselectAll();
-            
-            new_geom = new_geom.transform(
-               new OpenLayers.Projection('EPSG:900913'),
-               new OpenLayers.Projection('EPSG:4326')
-            );
-            var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
-            var geom = (new OpenLayers.Format.WKT()).read(new_geom);
-            var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y);
-            
-            $(".control.addstop").click();
-            if($("#newpoint-placename").val()==undefined){
-                // After first time
-                // TODO: need a better solution to load latlon into dialog
-                setTimeout(function(){
+            // If Ctrl+click
+            if(e.ctrlKey){
+                var position = this.events.getMousePosition(e);
+                var pixel = new OpenLayers.Pixel(e.xy.x,e.xy.y);
+                var lonlat = this.getLonLatFromPixel(pixel);
+                var new_geom = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
+                thismap.controls.select.unselectAll();
+                
+                new_geom = new_geom.transform(
+                   new OpenLayers.Projection('EPSG:900913'),
+                   new OpenLayers.Projection('EPSG:4326')
+                );
+                var geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
+                var geom = (new OpenLayers.Format.WKT()).read(new_geom);
+                var ll = new OpenLayers.LonLat(geom.geometry.x,geom.geometry.y);
+                
+                $(".control.addstop").click();
+                if($("#newpoint-placename").val()==undefined){
+                    // After first time
+                    // TODO: need a better solution to load latlon into dialog
+                    setTimeout(function(){
+                        $("#newpoint-placename").val(ll.lat+","+ll.lon);
+                        $("#newpoint-title").focus();
+                    },100);
+                } else {
+                    // After secone time
                     $("#newpoint-placename").val(ll.lat+","+ll.lon);
                     $("#newpoint-title").focus();
-                },100);
-            } else {
-                // After secone time
-                $("#newpoint-placename").val(ll.lat+","+ll.lon);
-                $("#newpoint-title").focus();
-            }
-            thismap.map.panTo(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
-        };// End ctrl
-
+                }
+                thismap.map.panTo(new OpenLayers.LonLat(lonlat.lon, lonlat.lat));
+            };// End ctrl
+        }
     }); // End click-add function
 
 

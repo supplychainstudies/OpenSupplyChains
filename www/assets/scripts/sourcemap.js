@@ -390,8 +390,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         tier_list[i] = { 
             title:sc.stops[i].attributes.title,
             instance:sc.stops[i].instance_id,
-            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+350,
-            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
+            y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
+            x:sc.tiers[sc.stops[i].instance_id]*150+100,
             color:sc.stops[i].attributes.color
         }
         /*
@@ -401,7 +401,32 @@ Sourcemap.buildTree = function(tree_id,sc) {
             max_y = tier_list[i].y;
         */
     }
-    // Set stop points for arc diagram    
+    // get max_stack
+    var max_stack = 0;
+    var mid_y =  $(tree_id).height()/2;
+    var mid_n = 0;
+    /*
+    for(var i=0;i<tiers.length;i++)
+    {        
+        max_stack = tiers[i].length > max_stack ? tiers[i].length : max_stack;
+    }
+    */
+    // Set middle stack in mid
+    for(var i=0,order=0;i<tiers.length;i++)
+    {
+        for(var j=0;j<tiers[i].length;j++){            
+            // divide y from max_stack into portion 
+            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
+                if(tier_list[k].instance==tiers[i][j].instance_id){
+                    mid_n = tiers[i].length/2;                    
+                    tier_list[k].y = mid_y+(j-mid_n)*90;
+                    break;
+                }
+            }            
+        }
+    }
+    // Set stop points for Arc diagram    
+    /*
     for(var i=0,order=0;i<tiers.length;i++)
     {
         for(var j=0;j<tiers[i].length;j++){            
@@ -415,6 +440,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             }            
         }
     }
+    */
     // Create hop points
     for(var i=0, length=sc.hops.length;i<length;i++)
     {
@@ -423,6 +449,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var tc = palette[p_tiers[h.to_stop_id]];
         var hc = h.getAttr("color", fc.midpoint(tc).toString());
         hop_list[i] = {            
+            //id:h.instance_id,
+            id:"hop"+i,
             x1:tier_list[sc.hops[i].from_local_stop_id-1].x,
             x2:tier_list[sc.hops[i].to_local_stop_id-1].x,
             y1:tier_list[sc.hops[i].from_local_stop_id-1].y,
@@ -439,6 +467,23 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("width", w)
         .attr("height", h);
 
+    //def marker
+    svg.append("svg:defs").selectAll("marker")
+        .data(hop_list)
+    .enter().append("svg:marker")
+        .attr("id", function(d){return d.id;})
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 5)
+        .attr("refY", 5)
+        .attr("markerUnits","strokeWidth")
+        .attr("markerWidth", 3)
+        .attr("markerHeight", 3)
+        .attr("orient", "auto")
+        .attr("stroke-width",2)
+        .attr("stroke",function(d){return d.color;})
+    .append("svg:path")
+        .attr("d", "M 0 0 L 10 10 M 0 10 L 10 0");
+        //.attr("d", "M0,-5 L10,0 L0,5");
 
     svg.selectAll("text")
     .data(tier_list)
@@ -450,6 +495,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
     .attr("text-anchor","middle")
     .text(function(d){return d.title});
     
+    // Arc
+    /*
     svg.append("svg:g")
     .selectAll("path")
     .data(hop_list)
@@ -461,6 +508,37 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var diff_x = d.x2-d.x1
         var diff_y = d.y2-d.y1
         return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
+
+
+
+    // Simple line    
+    svg.selectAll("line")
+        .data(hop_list)
+        .enter().append("svg:line")
+            .attr("x1",function(d){return d.x1})
+            .attr("x2",function(d){return d.x2})
+            .attr("y1",function(d){return d.y1})
+            .attr("y2",function(d){return d.y2})
+            .attr("stroke-width",3)
+            .attr("marker-mid",function(d){ return "url(#"+d.id+")";})
+            .attr("stroke",function(d){return d.color});
+    
+    */                        
+   
+    // path > line
+    var path = svg.append("svg:g").selectAll("path")
+    .data(hop_list)
+    .enter().append("svg:path")    
+        .style("fill",function(d){ return d.color})
+        .style("stroke",function(d){return d.color})
+        .attr("stroke-width", "3px")
+        .attr("marker-end",function(d){ 
+            return "url(#"+d.id+")";})        
+        .attr("d",function(d){
+            var diff_x = d.x2-d.x1
+            var diff_y = d.y2-d.y1
+            return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
+
     
     
     svg.selectAll("circle")
@@ -471,16 +549,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("cy", function(d){return d.y})
         .style("fill", function(d){return d.color})
         .attr("r", 12);
-    /*
-    svg.selectAll("line")
-    .data(hop_list)
-    .enter().append("svg:line")
-    .attr("x1",function(d){return d.x1})
-    .attr("x2",function(d){return d.x2})
-    .attr("y1",function(d){return d.y1})
-    .attr("y2",function(d){return d.y2})
-    .attr("stroke",function(d){return d.color});
-    */
+    
 }
 
 Sourcemap.saveSupplychain = function(supplychain, o) {

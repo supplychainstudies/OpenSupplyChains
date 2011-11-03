@@ -20,9 +20,13 @@
             <a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>
         </div>
         <div class="button alternate">
-            <a href="auth/reset">Change Password</a>
+            <a href="auth/reset">Change password</a>
         </div>
-
+            <?php if (!$isChannel): ?>
+            <div class="button alternate">
+                <a href="/upgrade">Upgrade account</a>
+            </div>
+            <?php endif; ?>
             <?php if ($isChannel): ?>
         <div class="button alternate">
             <a href="auth/reset">Payments</a>

@@ -47,7 +47,11 @@ h4 { font-size: 14px; }
 
 p { font-size: 16px; line-height: 26px; }
 
-ul{ list-style: none; margin-left: 1em; }
+ul{ 
+    list-style: none; 
+    margin-left: 1em; 
+    &.bulleted{ list-style: square }
+}
 
 textarea:focus, input:focus { outline: none; }
 
@@ -490,7 +494,7 @@ input[type=checkbox]{
 }
 #sidebar #qrcode-badge {
 	float:left;
-    margin:0 12px 5px 15px;
+    margin-right: 18px;
     .box.small();
 }
 #map-edit-button {
@@ -981,7 +985,7 @@ div.form-page {
 	    width: 505px;
 		p { font-size:20px; }
 		ul {
-			margin:20px;
+			margin:20px 20px 20px 30px;
 			li { margin:0 0 10px 0;	}
 		}
         &.register{width: 435px;}

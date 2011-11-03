@@ -107,6 +107,7 @@ Kohana::modules(array(
   // 'unittest'   => MODPATH.'unittest',   // Unit testing
   // 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
   'sitemap' => MODPATH.'sitemap',
+  'stripe' => MODPATH.'stripe',
   'swiftmailer' => MODPATH.'swiftmailer',
   'recaptcha' => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
   ));  

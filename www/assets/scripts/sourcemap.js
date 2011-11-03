@@ -387,6 +387,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
     {
         tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
         
+        // default status
         tier_list[i] = { 
             title:sc.stops[i].attributes.title,
             instance:sc.stops[i].instance_id,
@@ -394,17 +395,11 @@ Sourcemap.buildTree = function(tree_id,sc) {
             x:sc.tiers[sc.stops[i].instance_id]*150+100,
             color:sc.stops[i].attributes.color
         }
-        /*
-        if(tier_list[i].x > max_x)
-            max_x = tier_list[i].x;
-        if(tier_list[i].y > max_y)
-            max_y = tier_list[i].y;
-        */
     }
     // get max_stack
     var max_stack = 0;
-    var mid_y =  $(tree_id).height()/2;
-    var mid_n = 0;
+    var max_height =  $(tree_id).height();
+    var max_width = $(tree_id).width();
     /*
     for(var i=0;i<tiers.length;i++)
     {        
@@ -418,8 +413,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
             // divide y from max_stack into portion 
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
-                    mid_n = tiers[i].length/2;                    
-                    tier_list[k].y = mid_y+(j-mid_n)*90;
+                    tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+                    tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
                 }
             }            
@@ -449,8 +444,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var tc = palette[p_tiers[h.to_stop_id]];
         var hc = h.getAttr("color", fc.midpoint(tc).toString());
         hop_list[i] = {            
-            //id:h.instance_id,
-            id:"hop"+i,
+            id:h.instance_id,
+            //id:"hop"+i,
             x1:tier_list[sc.hops[i].from_local_stop_id-1].x,
             x2:tier_list[sc.hops[i].to_local_stop_id-1].x,
             y1:tier_list[sc.hops[i].from_local_stop_id-1].y,
@@ -473,19 +468,19 @@ Sourcemap.buildTree = function(tree_id,sc) {
     .enter().append("svg:marker")
         .attr("id", function(d){return d.id;})
         .attr("viewBox", "0 0 10 10")
-        .attr("refX", 5)
-        .attr("refY", 5)
-        .attr("markerUnits","strokeWidth")
-        .attr("markerWidth", 3)
-        .attr("markerHeight", 3)
+        .attr("refX", 0)
+        .attr("refY", 0)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
         .attr("orient", "auto")
         .attr("stroke-width",2)
-        .attr("stroke",function(d){return d.color;})
-    .append("svg:path")
-        .attr("d", "M 0 0 L 10 10 M 0 10 L 10 0");
-        //.attr("d", "M0,-5 L10,0 L0,5");
+    .append("svg:polyline")
+        .attr("points","0,0 10,5 0,10 1,5")
+        .attr("fill",function(d){return d.color;})
+    //.append("svg:path")
+    //    .attr("d", "M0,-5 L10,0 L0,5");
 
-    svg.selectAll("text")
+    svg.append("svg:g").selectAll("text")
     .data(tier_list)
     .enter().append("svg:text")
     .attr("x",function(d){return d.x})
@@ -510,9 +505,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
         return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
 
 
-
+    */
     // Simple line    
-    svg.selectAll("line")
+    svg.append("svg:g").selectAll("line")
         .data(hop_list)
         .enter().append("svg:line")
             .attr("x1",function(d){return d.x1})
@@ -520,11 +515,12 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("y1",function(d){return d.y1})
             .attr("y2",function(d){return d.y2})
             .attr("stroke-width",3)
-            .attr("marker-mid",function(d){ return "url(#"+d.id+")";})
+            .attr("marker-end",function(d){ return "url(#"+d.id+")";})
             .attr("stroke",function(d){return d.color});
     
-    */                        
+                            
    
+    /*
     // path > line
     var path = svg.append("svg:g").selectAll("path")
     .data(hop_list)
@@ -538,10 +534,10 @@ Sourcemap.buildTree = function(tree_id,sc) {
             var diff_x = d.x2-d.x1
             var diff_y = d.y2-d.y1
             return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
-
+    */
     
     
-    svg.selectAll("circle")
+    svg.append("svg:g").selectAll("circle")
         .data(tier_list)
         .enter().append("svg:circle")
         .attr("class", "little")

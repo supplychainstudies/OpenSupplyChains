@@ -65,6 +65,10 @@ $(document).ready(function() {
                 var m = Sourcemap.view_instance.map;
                 m.addSupplychain(sc);
                 new Sourcemap.Map.Editor(Sourcemap.view_instance);
+                console.log(sc);
+                jQuery('title').html(sc.attributes.title+" on Sourcemap");
+                $(".supplychain_name").html(sc.attributes.title);
+                $(".description").html(sc.attributes.description);
             }
             Sourcemap.loadSupplychain(scid, passcode, cb);
            

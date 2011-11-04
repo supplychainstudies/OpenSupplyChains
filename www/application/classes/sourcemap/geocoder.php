@@ -67,6 +67,11 @@ class Sourcemap_Geocoder {
                     }
                     foreach($components as $plk => $pln) $loc->$plk = $pln;
                 }
+				$loc->{'EPSG:900913'} = Sourcemap_Proj::transform(
+					'WGS84', 'EPSG:900913', 
+					new Sourcemap_Proj_Point($loc->lon, $loc->lat)
+				);
+				
                 $ret[] = $loc;
             }
         } else {

@@ -66,6 +66,8 @@ and
 <dd>Manage Aliases.</dd>
 <dt><a href="admin/analytics">Analytics</a></dt>
 <dd>Sourcemap Analytics.</dd>
+<dt><a href="admin/apikeys">API Overview</a></dt>
+<dd>Sourcemap API Key assignment and usage.</dd>
 <dt><a href="admin/announcements">Announcements</a></dt>
 <dd>System-wide announcements.</dd>
 <dt><a href="admin/taxonomy">Categories</a></dt>

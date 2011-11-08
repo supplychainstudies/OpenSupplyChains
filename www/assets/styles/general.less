@@ -701,24 +701,30 @@ h1#site-tagline { font-size:30px; }
     padding: 5px; 
 	line-height:1.4em;
 	.gradient(#efefef,#ffffff);
-    a{
-        padding-left: 10px;
-        border-left: 1px solid #ccc;
-        &.last{
-            padding-right: 10px;
-            border-right: 1px solid #ccc;
-        }
-    }
     #category-list-content{
         padding: 0 10px;
-    }
-    .category-current{
-        padding-top: 6px;
-        float:left;
-    }
-    .category-dropdown{
-        float: right;
-        width: 285px;
+        .category-current{
+            padding-top: 6px;
+            float:left;
+            a{
+                padding-left: 10px;
+                border-left: 1px solid #ccc;
+                &.last{
+                    padding-right: 10px;
+                    border-right: 1px solid #ccc;
+                }
+            }
+        }
+        .category-pager{
+            text-align: center;
+            padding-top: 6px;
+            a { border-left: none; }
+            p { line-height: 1.4em; }
+        }
+        .category-dropdown{
+            float: right;
+            width: 285px;
+        }
     }
 }
 

@@ -27,7 +27,9 @@
             <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?=  Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
             <?= date("M j, Y", $item->created) ?></h4>
         </li>
+        <?php if ($i > $limit){ break; } ?>
     <?php endforeach; ?>
+        <li><h2 class="section-title"><a href="/browse/<?= $category ?>">See more...</a></h2></li>
 <?php else: ?>
 <?php endif; ?>
 <div class="clear"></div>

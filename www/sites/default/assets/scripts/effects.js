@@ -12,7 +12,6 @@
  */
 
 
-
 $(document).ready(function(){
     
     /* truncation */
@@ -77,12 +76,6 @@ $(document).ready(function(){
         );
     }
 
-    /* carousel launch */
-    $('.carousel').each(function(){
-        $(this).jcarousel({
-            scroll: 4,
-        });
-    });
 
     /* unsupported browser detection */
     if (($.browser.msie) && $('.browser').length == 0) {
@@ -170,6 +163,13 @@ $(document).ready(function(){
             $('#fade, a.close').remove();  
     }); //fade them both out
         return false;
+    });
+    
+    /* carousel launch */
+    $('.carousel').each(function(){
+        $(this).jcarousel({
+            scroll: 4,
+        });
     });
 
 

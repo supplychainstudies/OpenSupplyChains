@@ -28,6 +28,7 @@
         </li>
         <?php if ($i > $limit){ break; } ?>
     <?php endforeach; ?>
+        <li><h2 class="section-title"><a href="/browse/<?= $category ?>">See more...</a></h2></li>
 <?php else: ?>
 <?php endif; ?>
 <div class="clear"></div>

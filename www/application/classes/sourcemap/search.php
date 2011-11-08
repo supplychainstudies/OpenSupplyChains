@@ -19,7 +19,7 @@ class Sourcemap_Search {
     const SPHINX = 1;
 
     public $default_limit = 25;
-    public $max_limit = 500;
+    public $max_limit = 9999;
     public $min_limit = 1;
 
 

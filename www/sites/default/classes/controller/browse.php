@@ -32,13 +32,13 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $defaults = array(
             'q' => false,
             'p' => 1,
-            'l' => 999 
+            'l' => 9999 
         );
 
         foreach($cats as $i => $cat) {
             $nms[Sourcemap_Taxonomy::slugify($cat->name)] = $cat;
         }
-
+        
         $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
 
         $params = $_GET;
@@ -52,10 +52,11 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             $slug = $category;
             $category = $nms[$category];
             $params['c'] = $category->name;
+            $params['l'] = 48;
             $this->layout->page_title .= ' - '.$category->title;
             $this->template->category = $category->title;
             $this->template->category_name = $category->name;
-            $searches = Sourcemap_Search::find($params+array('recent' => 'yes', 'l' => '50'));
+            $searches = Sourcemap_Search::find($params+array('recent' => 'yes'));
             
             $p = Pagination::factory(array(
                 'current_page' => array(
@@ -74,7 +75,8 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
                 $this->layout->page_title .= ' - Uncategorized';
                 $this->template->category = 'Uncategorized';
                 $this->template->category_name = 'uncategorized';
-                $searches = Sourcemap_Search::find($params+array('c' => '', 'l' => '50'));
+                $params['l'] = 48;
+                $searches = Sourcemap_Search::find($params+array('c' => ''));
             
                 $p = Pagination::factory(array(
                     'current_page' => array(
@@ -106,7 +108,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
            
             // Do a general search for every top-level category
             $cache_key = 'sourcemap-browse-searches';
-            $ttl = 3600;
+            $ttl = 60 * 60 * 24;
             if($cached = Cache::instance()->get($cache_key)) {
                 $searches = $cached;
             } else {
@@ -130,7 +132,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
     	// Other searches
         $cache_key = 'sourcemap-browse-alternates';
-        $ttl = 60;
+        $ttl = 60 * 60 * 24;
         if($cached = Cache::instance()->get($cache_key)) {
             $alternates = $cached;
         } else {

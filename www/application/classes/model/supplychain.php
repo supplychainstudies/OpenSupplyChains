@@ -66,8 +66,6 @@ class Model_Supplychain extends ORM {
         )
     );
 
-    
-
     public function save() {
         $this->modified = time();
         if(parent::save() && $this->pk()) {

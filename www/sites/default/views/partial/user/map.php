@@ -28,7 +28,15 @@
             <div class="clear"></div>
             
             <?php if(isset($supplychain->attributes->description) && $supplychain->attributes->description): ?>
-                <span class="map-teaser"><?= HTML::chars($supplychain->attributes->description) ?></span>
+                <?php
+                    $supplychain_desc = $supplychain->attributes->description;
+                    $regex = "/\\[youtube:([^]]+)]/";
+                    if (preg_match($regex, $supplychain_desc, $regs)) {
+                        $supplychain_youtube_id = $regs[1];
+                        $supplychain_desc = str_replace($regs[0], '', $supplychain_desc);
+                    }
+                ?>
+                <span class="map-teaser"><?= HTML::chars($supplychain_desc) ?></span>
             <?php endif; ?>
         </div>
         <div class="clear"></div>

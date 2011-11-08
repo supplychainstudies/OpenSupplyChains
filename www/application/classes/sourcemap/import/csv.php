@@ -143,7 +143,8 @@ class Sourcemap_Import_Csv {
                         if(!isset($record['placename']))
                             $new_stop['attributes']['placename'] = $result->placename;
                     } else {
-                        throw new Exception('Could not geocode: "'.$v.'".');
+						$error_list[] = 'Could not geocode: "'.$v.'".';
+                        //throw new Exception('Could not geocode: "'.$v.'".');
                     }
                 }
                 $new_stop['attributes'][$k] = $v;
@@ -177,19 +178,18 @@ class Sourcemap_Import_Csv {
 			
 			//Request::instance()->redirect('view/'.$new_sc_id);
 		}
-        //return $stops;
+        return $stops;
 
     }
 
     public static function csv2hops($csv, $stops, $o=array()) {
-        
+        $error_list = array();
         $options = array();
         foreach(self::$default_options as $k => $v)
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;
         extract($options);
 
         $csv = Sourcemap_Csv::parse($csv);
-
         $raw_headers = array();
         if($headers) {
             $raw_headers = array_shift($csv);
@@ -206,9 +206,10 @@ class Sourcemap_Import_Csv {
             }
         }
 
-        if(!$fromcol || !$tocol) 
-            throw new Exception('To and from columns required.');
-
+        if(!$fromcol || !$tocol) {
+			$error_list[] = 'To and from columns required.';
+            //throw new Exception('To and from columns required.');
+		}
         $data = array();
 
         foreach($csv as $ri => $row) {
@@ -230,16 +231,25 @@ class Sourcemap_Import_Csv {
 
         $hops = array();
         foreach($data as $i => $record) {
-            if(!isset($record[$fromcol]) || !is_numeric($record[$fromcol]))
-                throw new Exception('Missing or invalid from field at record #'.($i+1).'.');
-            if(!isset($record[$tocol]) || !is_numeric($record[$tocol]))
-                throw new Exception('Missing or invalid to field at record #'.($i+1).'.');
+            if(!isset($record[$fromcol]) || !is_numeric($record[$fromcol])) {
+				
+				//throw new Exception('Missing or invalid from field at record #'.($i+1).'.');
+			}
+                
+            if(!isset($record[$tocol]) || !is_numeric($record[$tocol])) {
+				$error_list[] = 'Missing or invalid to field at record #'.($i+1).'.';
+                //throw new Exception('Missing or invalid to field at record #'.($i+1).'.');
+			}
             $from = $record[$fromcol];
             $to = $record[$tocol];
-            if(!isset($stops_by_id[(integer)$from]))
-                throw new Exception('From stop in hop does not exist in record #'.($i+1).'.');
-            if(!isset($stops_by_id[(integer)$to]))
-                throw new Exception('To stop in hop does not exist in record #'.($i+1).'.');
+            if(!isset($stops_by_id[(integer)$from])) {
+				$error_list[] = 'From stop in hop does not exist in record #'.($i+1).'.';
+                //throw new Exception('From stop in hop does not exist in record #'.($i+1).'.');
+			}
+            if(!isset($stops_by_id[(integer)$to])) {
+				$error_list[] = 'To stop in hop does not exist in record #'.($i+1).'.';
+                //throw new Exception('To stop in hop does not exist in record #'.($i+1).'.');
+			}
             list($type, $fromcoords) = Sourcemap_Wkt::read($stops_by_id[$from]->geometry);
             list($type, $tocoords) = Sourcemap_Wkt::read($stops_by_id[$to]->geometry);
             $frompt = new Sourcemap_Proj_Point($fromcoords);
@@ -258,7 +268,10 @@ class Sourcemap_Import_Csv {
             $hops[] = $new_hop;
         }
 
-
-        return $hops;
+		if (count($error_list) == 0) {			 
+        	return $hops;
+		} else {
+			var_dump($error_list);
+		}
     }
 }

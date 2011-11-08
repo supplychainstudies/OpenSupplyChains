@@ -15,7 +15,6 @@ class Sourcemap_xls {
 	//public static function parse($kml) { }
 	//git@codebasehq.com:sourcemap/sourcemap/sourcemap.git
 	public static function make($supplychain) {
-		$data = json_decode(Sourcemap_Geojson::make($supplychain));
         $points = array(
         1 => array( 
 			"Name",
@@ -46,9 +45,7 @@ class Sourcemap_xls {
 				"CO2e"	
 				)
 		);
-		//var_dump($data);
-		foreach($data->features as $num=>$ftr) {
-			if($ftr->geometry->type == "Point" && isset($ftr->properties) == true) {
+		foreach($supplychain->stops as $stop) {
 				$vals = array(
 					"title" => "",
 					"placename" => "",
@@ -65,45 +62,48 @@ class Sourcemap_xls {
 					"size" => "0",
 					"unit" => ""
 				);	
-				if (isset($ftr->properties->title) == true) {
-					$vals['title'] = $ftr->properties->title;
-					$vals['placename'] = $ftr->properties->title;
+				if (isset($stop->attributes->title) == true) {
+					$vals['title'] = $stop->attributes->title;
+					$vals['placename'] = $stop->attributes->title;
 				}
-				if (isset($ftr->properties->placename) == true) {
-					$vals['placename'] = $ftr->properties->placename;
+				if (isset($stop->attributes->name) == true) {
+					$vals['title'] = $stop->attributes->name;
+				}				
+				if (isset($stop->attributes->placename) == true) {
+					$vals['placename'] = $stop->attributes->placename;
 				}
-				if (is_array($ftr->geometry->coordinates) == true) {
-					$vals['address'] = $ftr->geometry->coordinates[0].", ".$ftr->geometry->coordinates[1];
+				if (is_array($stop->geometry) == true) {
+					$vals['address'] = $stop->geometry;
 				}
-				if (isset($ftr->properties->address) == true) {
-					$vals['address'] = $ftr->properties->address;
+				if (isset($stop->attributes->address) == true) {
+					$vals['address'] = $stop->attributes->address;
 				}
-				if (isset($ftr->properties->description) == true) {
-					$vals['description'] = $ftr->properties->description;
+				if (isset($stop->attributes->description) == true) {
+					$vals['description'] = $stop->attributes->description;
 				}
-				if (isset($ftr->properties->{"youtube-url"}) == true) {
-					$vals['youtube:link'] = $ftr->properties->{"youtube-url"};
+				if (isset($stop->attributes->{"youtube-url"}) == true) {
+					$vals['youtube:link'] = $stop->attributes->{"youtube-url"};
 				}
-				if (isset($ftr->properties->{"youtube-title"}) == true) {
-					$vals['youtube:title'] = $ftr->properties->{"youtube-title"};
+				if (isset($stop->attributes->{"youtube-title"}) == true) {
+					$vals['youtube:title'] = $stop->attributes->{"youtube-title"};
 				}
-				if (isset($ftr->properties->{"flickr-setid"}) == true) {
-					$vals['flickr:setid'] = $ftr->properties->{"flickr-setid"};
+				if (isset($stop->attributes->{"flickr-setid"}) == true) {
+					$vals['flickr:setid'] = $stop->attributes->{"flickr-setid"};
 				}		
-				if (isset($ftr->properties->qty) == true) {
-					$vals['qty'] = $ftr->properties->qty;
+				if (isset($stop->attributes->qty) == true) {
+					$vals['qty'] = $stop->attributes->qty;
 				}
-				if (isset($ftr->properties->co2e) == true) {
-					$vals['co2e'] = $ftr->properties->co2e;
+				if (isset($stop->attributes->co2e) == true) {
+					$vals['co2e'] = $stop->attributes->co2e;
 				}
-				if (isset($ftr->properties->color) == true) {
-					$vals['color'] = $ftr->properties->color;
+				if (isset($stop->attributes->color) == true) {
+					$vals['color'] = $stop->attributes->color;
 				}
-				if (isset($ftr->properties->{"pct:vol"}) == true) {
-					$vals['percentage'] = $ftr->properties->{"pct:vol"};
+				if (isset($stop->attributes->{"pct:vol"}) == true) {
+					$vals['percentage'] = $stop->attributes->{"pct:vol"};
 				}
-				if (isset($ftr->properties->unit) == true) {
-					$vals['unit'] = $ftr->properties->unit;
+				if (isset($stop->attributes->unit) == true) {
+					$vals['unit'] = $stop->attributes->unit;
 				}
 				$points[] = array(
 						$vals['title'],
@@ -119,7 +119,7 @@ class Sourcemap_xls {
 						$vals['color']
 					);
 			}
-			else {	
+			foreach($supplychain->hops as $hop) {
 				$vals = array(
 					"from" => "",
 					"to" => "",	
@@ -130,36 +130,39 @@ class Sourcemap_xls {
 					"unit" => "",	
 					"co2e" => ""
 				);
-				if (is_array($ftr->geometry->coordinates) == true) {
-					$vals['from'] = $ftr->geometry->coordinates[0][0].", ".$ftr->geometry->coordinates[0][1];
-					$vals['to'] = $ftr->geometry->coordinates[1][0].", ".$ftr->geometry->coordinates[1][1];
+		
+				if (isset($hop->from_stop_id) == true && isset($hop->to_stop_id) == true) {
+					$vals['from'] = $hop->from_stop_id;
+					$vals['to'] = $hop->to_stop_id;
+					//$vals['from'] = $ftr->geometry->coordinates[0][0].", ".$ftr->geometry->coordinates[0][1];
+					//$vals['to'] = $ftr->geometry->coordinates[1][0].", ".$ftr->geometry->coordinates[1][1];
 				}
-				if (isset($ftr->properties->description) == true) {
-					$vals['description'] = $ftr->properties->description;
-					if ($ftr->properties->description != "") {
+				if (isset($hop->attributes->description) == true) {
+					$vals['description'] = $hop->attributes->description;
+					if ($hop->attributes->description != "") {
 						// Lotus thinks that this should look like "From - To" if its blank
 					}
 				} 
-				if (isset($ftr->properties->color) == true) {
-					$vals['color'] = $ftr->properties->color;
+				if (isset($hop->attributes->color) == true) {
+					$vals['color'] = $hop->attributes->color;
 				}
-				if (isset($ftr->properties->qty) == true) {
-					$vals['qty'] = $ftr->properties->qty;
+				if (isset($hop->attributes->qty) == true) {
+					$vals['qty'] = $hop->attributes->qty;
 				}
-				if (isset($ftr->properties->unit) == true) {
-					$vals['unit'] = $ftr->properties->unit;
+				if (isset($hop->attributes->unit) == true) {
+					$vals['unit'] = $hop->attributes->unit;
 				}		
-				if (isset($ftr->properties->co2e) == true) {
-					$vals['co2e'] = $ftr->properties->co2e;
+				if (isset($hop->attributes->co2e) == true) {
+					$vals['co2e'] = $hop->attributes->co2e;
 				}		
-				if (isset($ftr->properties->{"youtube-url"}) == true) {
-					$vals['youtube:link'] = $ftr->properties->{"youtube-url"};
+				if (isset($hop->attributes->{"youtube-url"}) == true) {
+					$vals['youtube:link'] = $hop->attributes->{"youtube-url"};
 				}
-				if (isset($ftr->properties->{"youtube-title"}) == true) {
-					$vals['youtube:title'] = $ftr->properties->{"youtube-title"};
+				if (isset($hop->attributes->{"youtube-title"}) == true) {
+					$vals['youtube:title'] = $hop->attributes->{"youtube-title"};
 				}
-				if (isset($ftr->properties->{"flickr-setid"}) == true) {
-					$vals['flickr:setid'] = $ftr->properties->{"flickr-setid"};
+				if (isset($hop->attributes->{"flickr-setid"}) == true) {
+					$vals['flickr:setid'] = $hop->attributes->{"flickr-setid"};
 				}
 			    $hops[] = array(
 						$vals['from'],
@@ -172,8 +175,6 @@ class Sourcemap_xls {
 						$vals['co2e']
 					);
 			}
-		}
-		
 		
 		$transport = array (
 			1 => array ("Air (Long Distance)", 0.115558),
@@ -205,9 +206,9 @@ class Sourcemap_xls {
 		
 		$ws = new Spreadsheet(array(
         'author'       => 'Sourcemap Incorporated',
-        'title'        => $data->properties->title,
-        'subject'      => $data->properties->title,
-        'description'  => $data->properties->description,
+        'title'        => $supplychain->attributes->title,
+        'subject'      => $supplychain->attributes->title,
+        'description'  => $supplychain->attributes->description,
         ));
 
         $ws->set_active_sheet(0);
@@ -297,8 +298,8 @@ class Sourcemap_xls {
 		// Set the Workbook to the first sheet
 		$ws->set_active_sheet(0);
 		$title = "A Sourcemap";
-		if (isset($data->properties->title) == true) {
-			$title = $data->properties->title;
+		if (isset($supplychain->attributes->title) == true) {
+			$title = $supplychain->attributes->title;
 		}
 		// Done! Open on the Client side			
         $ws->send(array('name'=> $title, 'format'=>'Excel5'));

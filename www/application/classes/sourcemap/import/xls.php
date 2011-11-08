@@ -36,9 +36,6 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		$contentPHPExcel = $contentReader->loadContents($xls);
 		$objWriter = new PHPExcel_Writer_CSVContents($contentPHPExcel);
 		$hop_csv = $objWriter->returnContents();
-		//$objReader->setLoadSheetsOnly("Hops");
-		//$objReader->setLoadSheetsOnly("Stops");
-		//$writer->save('/home/sourcemap/sourcemap/www/assets/downloads/stops.csv');
 		
         $sc->stops = self::csv2stops($stop_csv, $options);
         $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();

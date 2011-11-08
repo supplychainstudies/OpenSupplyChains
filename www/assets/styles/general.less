@@ -637,6 +637,7 @@ h1#site-tagline { font-size:30px; }
     float:left;
     margin-right: 20px;
     overflow: hidden;
+    position: relative;
 
     &.last{margin-right: 0;}
     &.browse{margin: 10px 5px 10px 0;}
@@ -668,6 +669,7 @@ h1#site-tagline { font-size:30px; }
         margin-bottom:0;
     }
     .preview-author {
+        float: left;
         font-size:0.7em;
         font-style: italic;
         color:#888;
@@ -680,7 +682,19 @@ h1#site-tagline { font-size:30px; }
     .preview-teaser {
         margin-top: 0;
         font-size:0.8em;
-    }       
+    }
+    .preview-icons{
+        position: absolute;
+        right: 0;
+        font-size: 12px;
+        color: #ccc;
+        div{
+            padding: 3px 4px 0 16px; 
+            float: right; 
+            &.favorited{ background: #fff url(../images/icon-preview-favorited.png) 2px 4px no-repeat }
+            &.discussed{ background: #fff url(../images/icon-preview-discussed.png) 0 5px no-repeat }
+        }
+    }
     img.thumb { width:80px; height:44px; }
     img.small { width:160px; height:98px; }
     img.medium { width:220px; height:128px; }

@@ -125,6 +125,9 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $sca->attributes = (object)$sc->attributes->find_all()->as_array("key", "value");
         $sca->owner = (object)$sc->owner->as_array();
         $sca->owner->name = $sca->owner->username;
+        $sca->comments_tot = ORM::factory('supplychain_comment')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
+        $sca->favorites_tot = ORM::factory('user_favorite')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
+ 
         unset($sca->owner->password);
         unset($sca->owner->flags);
         unset($sca->owner->email); # !!!

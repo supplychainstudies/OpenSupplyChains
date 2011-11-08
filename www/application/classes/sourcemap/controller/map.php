@@ -49,31 +49,29 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     $this->template = new View('map/mobile');
                 }
 
-               
-
                 // passcode for the map          
                 $exist_passcode = isset($sc->attributes->passcode);
                 $this->template->exist_passcode = $exist_passcode;;
 
                 // Necessary for every map
-                    $this->layout->supplychain_id = $supplychain_id;
-                    $this->template->supplychain_id = $supplychain_id;
-                    $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
-                    $this->template->can_comment = (bool)$current_user_id;
-                    $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
-                    $this->template->supplychain_date = date('F j, Y', $sc->created );
-                    $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
-                    isset($sc->owner->display_name) ? $this->template->supplychain_display_name = $sc->owner->display_name : "";
-                    $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
-                    $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
+                $this->layout->supplychain_id = $supplychain_id;
+                $this->template->supplychain_id = $supplychain_id;
+                $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
+                $this->template->can_comment = (bool)$current_user_id;
+                $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
+                $this->template->supplychain_date = date('F j, Y', $sc->created );
+                $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
+                isset($sc->owner->display_name) ? $this->template->supplychain_display_name = $sc->owner->display_name : "";
+                $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
+                $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
 
-                    $this->layout->scripts = array('map-view');
-                    $this->layout->styles = array(
-                        'sites/default/assets/styles/reset.css', 
-                        'assets/styles/base.less',
-                        'assets/styles/general.less',
-                        'sites/default/assets/styles/modal.less'                    
-                    );
+                $this->layout->scripts = array('map-view');
+                $this->layout->styles = array(
+                    'sites/default/assets/styles/reset.css', 
+                    'assets/styles/base.less',
+                    'assets/styles/general.less',
+                    'sites/default/assets/styles/modal.less'                    
+                );
 
                 if(!$exist_passcode){
 
@@ -114,7 +112,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     $this->template->supplychain_taxonomy = array();
                 }
                 
-                // Necessary for everymap
+                // Necessary for every map
                 $this->template->comments = $comment_data;
                 $this->template->supplychain_weight = isset($sc->attributes->{'sm:ui:weight'}) ? "checked" : "";
                 $this->template->supplychain_co2e = isset($sc->attributes->{"sm:ui:co2e"}) ? "checked" : "";

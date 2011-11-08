@@ -25,6 +25,7 @@
                 </a></h3>
             <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?= isset($item->owner->display_name)? Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
             <?= date("M j, Y", $item->created) ?></h4>
+            <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
         </li>
         <?php if ($i > $limit){ break; } ?>
     <?php endforeach; ?>

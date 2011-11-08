@@ -41,6 +41,7 @@
                     <?= isset($item->owner->display_name) ? HTML::chars($item->owner->display_name) : HTML::chars($item->owner->username)  ?></a>,   
                 <?php isset($item->created) ? print date("F j, Y",$item->created) : "" ?>
             </h4>
+            <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
         </div>
     </li>
     <?php endforeach; ?>

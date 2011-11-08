@@ -31,6 +31,7 @@
                         <?= isset($item->owner->display_name)? Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
                     <?php print date("M j, Y",$item->created);?>
                 </h4>
+               <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
             </div>
         </div>
     <?php endforeach; ?>

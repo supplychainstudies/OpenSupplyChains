@@ -13,7 +13,7 @@ class Spreadsheet
         'CSV'       => 'csv',
         'PDF'       => 'pdf',
         'Excel5'    => 'xls',
-        'Excel2007' => 'xlsx',
+        'Excel2007' => 'xls',
     );
     private $mimes = array(
         'CSV'       => 'text/csv',
@@ -174,10 +174,12 @@ class Spreadsheet
 		//We cant set the validation for a whole column (as far as I know. if you know better, reimplement this) so, we'll iterate through the rows till $depth 
 		$depth = 300;
 		$i = 2;
-		//str_replace("counter", $i, $formula)
 		while ($i < $depth) {
-			$this->_spreadsheet->getActiveSheet()->setCellValue($col.$i,"=IF(A2=='beep', TRUE, FALSE)");
-			//$this->_spreadsheet->getActiveSheet()->getCell($col.$i)->getCalculatedValue();
+			$this_formula = str_replace("counter", $i, $formula);
+			$this_cell = $col.$i;
+			//$this->_spreadsheet->getActiveSheet()->setCellValue($this_cell,'=IF(A2<>"beep", TRUE, FALSE)');
+			$this->_spreadsheet->getActiveSheet()->setCellValue($this_cell, $this_formula);
+			$this->_spreadsheet->getActiveSheet()->getCell($this_cell)->getCalculatedValue();
 			$i++;		
 		}		
 	}
@@ -224,7 +226,7 @@ class Spreadsheet
         ), $settings);
         
         $writer = PHPExcel_IOFactory::createWriter($this->_spreadsheet, $settings['format']);
-        
+        $writer->setPreCalculateFormulas(true);
         $ext = $this->exts[$settings['format']];
         $mime = $this->mimes[$settings['format']];
         
@@ -238,7 +240,6 @@ class Spreadsheet
         {
             $writer->setUseBOM(true);
         }
-        
         $writer->save('php://output');
         exit;
     }

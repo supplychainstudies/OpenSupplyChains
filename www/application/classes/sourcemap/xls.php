@@ -49,39 +49,135 @@ class Sourcemap_xls {
 		);
 		//var_dump($data);
 		foreach($data->features as $num=>$ftr) {
-			if($ftr->geometry->type == "Point") {
+			if($ftr->geometry->type == "Point" && isset($ftr->properties) == true) {
+				$vals = array(
+					"title" => "",
+					"placename" => "",
+					"address" => "",
+					"coordinates" => "",
+					"description" => "",
+					"percentage" => "",
+					"youtube:title" => "",
+					"youtube:link" => "",
+					"flickr:setid" => "",
+					"qty" => "",
+					"co2e" => "",
+					"color" => "",
+					"size" => "0",
+					"unit" => "",
+					"category" => ""
+				);	
+				if (isset($ftr->properties->title) == true) {
+					$vals['title'] = $ftr->properties->title;
+					$vals['placename'] = $ftr->properties->title;
+				}
+				if (isset($ftr->properties->placename) == true) {
+					$vals['placename'] = $ftr->properties->placename;
+				}
+				if (is_array($ftr->geometry->coordinates) == true) {
+					$vals['address'] = $ftr->geometry->coordinates[0].", ".$ftr->geometry->coordinates[1];
+				}
+				if (isset($ftr->properties->address) == true) {
+					$vals['address'] = $ftr->properties->address;
+				}
+				if (isset($ftr->properties->description) == true) {
+					$vals['description'] = $ftr->properties->description;
+				}
+				if (isset($ftr->properties->{"youtube-url"}) == true) {
+					$vals['youtube:link'] = $ftr->properties->{"youtube-url"};
+				}
+				if (isset($ftr->properties->{"youtube-title"}) == true) {
+					$vals['youtube:title'] = $ftr->properties->{"youtube-title"};
+				}
+				if (isset($ftr->properties->{"flickr-setid"}) == true) {
+					$vals['flickr:setid'] = $ftr->properties->{"flickr-setid"};
+				}		
+				if (isset($ftr->properties->qty) == true) {
+					$vals['qty'] = $ftr->properties->qty;
+				}
+				if (isset($ftr->properties->co2e) == true) {
+					$vals['co2e'] = $ftr->properties->co2e;
+				}
+				if (isset($ftr->properties->color) == true) {
+					$vals['color'] = $ftr->properties->color;
+				}
+				if (isset($ftr->properties->{"pct:vol"}) == true) {
+					$vals['percentage'] = $ftr->properties->{"pct:vol"};
+				}
+				if (isset($ftr->properties->unit) == true) {
+					$vals['unit'] = $ftr->properties->unit;
+				}
 				$points[] = array(
-						$ftr->properties->title,
-						$ftr->properties->address,
-						$ftr->geometry->coordinates[0].", ".$ftr->geometry->coordinates[1],
-						"",
-						"",
-						$ftr->properties->description,
-						"",
-						"",
-						"",
-						"",
-						$ftr->properties->qty,
-						$ftr->properties->co2e,
+						$vals['title'],
+						$vals['placename'],
+						$vals['address'],
+						$vals['description'],
+						$vals['percentage'],
+						$vals['youtube:title'],
+						$vals['youtube:link'],
+						$vals['flickr:setid'],
+						$vals['qty'],
+						$vals['co2e'],
+						$vals['color'],
 						"",
 						""
 					);
 			}
 			else {	
-				if ($ftr->properties->description != "") {
-					// Lotus thinks that this should look like "From - To" if its blank
+				$vals = array(
+					"from" => "",
+					"to" => "",	
+					"Origin Point" => "",
+					"Destination Point" => "",
+					"description" => "",	
+					"color" => "",	
+					"transport" => "",	
+					"qty" => "",	
+					"unit" => "",	
+					"co2e" => ""
+				);
+				if (is_array($ftr->geometry->coordinates) == true) {
+					$vals['from'] = $ftr->geometry->coordinates[0][0].", ".$ftr->geometry->coordinates[0][1];
+					$vals['to'] = $ftr->geometry->coordinates[1][0].", ".$ftr->geometry->coordinates[1][1];
+				}
+				if (isset($ftr->properties->description) == true) {
+					$vals['description'] = $ftr->properties->description;
+					if ($ftr->properties->description != "") {
+						// Lotus thinks that this should look like "From - To" if its blank
+					}
+				} 
+				if (isset($ftr->properties->color) == true) {
+					$vals['color'] = $ftr->properties->color;
+				}
+				if (isset($ftr->properties->qty) == true) {
+					$vals['qty'] = $ftr->properties->qty;
+				}
+				if (isset($ftr->properties->unit) == true) {
+					$vals['unit'] = $ftr->properties->unit;
+				}		
+				if (isset($ftr->properties->co2e) == true) {
+					$vals['co2e'] = $ftr->properties->co2e;
+				}		
+				if (isset($ftr->properties->{"youtube-url"}) == true) {
+					$vals['youtube:link'] = $ftr->properties->{"youtube-url"};
+				}
+				if (isset($ftr->properties->{"youtube-title"}) == true) {
+					$vals['youtube:title'] = $ftr->properties->{"youtube-title"};
+				}
+				if (isset($ftr->properties->{"flickr-setid"}) == true) {
+					$vals['flickr:setid'] = $ftr->properties->{"flickr-setid"};
 				}
 			    $hops[] = array(
-						$ftr->geometry->coordinates[0][0].", ".$ftr->geometry->coordinates[0][1],
-						$ftr->geometry->coordinates[1][0].", ".$ftr->geometry->coordinates[1][1],
+						$vals['from'],
+						$vals['to'],
 						"",
 						"",	
-						$ftr->properties->description,	
-						"Color",	
-						"Transport",	
-						$ftr->properties->qty,
-						$ftr->properties->qty,
-						$ftr->properties->co2e
+						$vals["description"],	
+						$vals['color'],	
+						"",	
+						$vals['qty'],
+						$vals['unit'],
+						$vals['co2e']
 					);
 			}
 		}
@@ -149,13 +245,12 @@ class Sourcemap_xls {
 		// lock I (Size)		
 	$ws->set_column_validation('K','=IF(LEN(cell)=7,IF(MID(cell,1,1)="#",IF(ISERROR(HEX2DEC(MID(cell,2,6)))=FALSE,TRUE,FALSE),FALSE),FALSE)',"CUSTOM","Here you must put a hexadecimal color value preceded by the pound sign (for example, '#DFDFDF'). You can use a color picker like (http://www.colorpicker.com/) to get these values.", "Incorrect Input","That is not a hexadecimal color value. Refer to a tool like (http://www.colorpicker.com/) to get a value in the form '#DFDFDF'");
 	
-	
 		$ws->set_data($points, false);
  		$ws->set_column_formula('M', '=IF(Acounter<>"","#"&Acounter& " - "&Acounter&" ("&Bcounter&")","")');
-		//$ws->set_column_formula('L', '=IF(Ecounter<>"",IF((Ecounter*100)<10, SQRT((10)/3.14), IF((Ecounter*100)>100, SQRT((100)/3.14), (SQRT((Ecounter*100)/3.14)))),"")');
+		$ws->set_column_formula('L', '=IF(isNumber(Ecounter)=TRUE,SQRT((MIN(100,MAX(10,Ecounter)))/3.14),"")');
 		// set M to apply formula
 		$ws->freezeTopRow();
-		
+
 		// HOPS       
 		$ws->create_active_sheet();
         $as = $ws->get_active_sheet();
@@ -174,6 +269,7 @@ class Sourcemap_xls {
         $as->getColumnDimension('E')->setWidth(20); // Unit
         $as->getColumnDimension('F')->setWidth(20); // CO2e
 		$ws->set_data($hops, false);
+		$ws->set_column_formula('C', '=Stops!$M$(Acounter-1)');
 		$ws->freezeTopRow();	
 		
 		//Now we set some sheets that contain data, which will be hidden
@@ -194,9 +290,12 @@ class Sourcemap_xls {
 		
 		// Set the Workbook to the first sheet
 		$ws->set_active_sheet(0);
-		
+		$title = "A Sourcemap";
+		if (isset($data->properties->title) == true) {
+			$title = $data->properties->title;
+		}
 		// Done! Open on the Client side			
-        $ws->send(array('name'=>$data->properties->title, 'format'=>'Excel5'));		
+        $ws->send(array('name'=> $title, 'format'=>'Excel2007'));
 	}
 	
 }

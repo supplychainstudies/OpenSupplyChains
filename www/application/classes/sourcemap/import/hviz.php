@@ -30,30 +30,88 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		//get upstream sheet
 		$contentReader = new PHPExcel_Reader_Excel5Contents();
 		$contentReader->setReadDataOnly(true);
-		$contentReader->setLoadSheetsOnly("Upstream");
+		$contentReader->setLoadSheetsOnly("Template 1- Upstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
 		$stops = array();
 		$hops = array();
 		$rows = $contentPHPExcel->getActiveSheet();
+		
+		// Figure out where all the columns are
+		$h = array(
+			"BOM-Level" => "",
+			"Part-Name"	=> "",
+			"Description" => "",	
+			"Qty" => "",	
+			"Unit" => "",	
+			"Source-Name" => "",	
+			"Source-Split" => "",	
+			"City" => "",	
+			"Country" => "",	
+			"Postal-Code" => "",	
+			"Latitude" => "",	
+			"Longitude" => "",	
+			"Risk" => ""		
+		);
+
+		for ($i = 0; $rows->cellExistsByColumnAndRow($i,2) == true; $i++) {
+			$value = strtolower($rows->getCellByColumnAndRow($i,2)->getValue());
+			$column = $rows->getCellByColumnAndRow($i,2)->getColumn();
+			if (strpos($value,"part-name") !== false)
+				$h["Part-Name"] = $column;
+			elseif (strpos($value,"bom-level") !== false)
+				$h["BOM-Level"] = $column;
+			elseif (strpos($value,"descr") !== false)
+				$h["Description"] = $column;
+			elseif (strpos($value,"qty") !== false)	
+				$h["Qty"] = $column;
+			elseif (strpos($value,"unit") !== false)
+				$h["Unit"] = $column;
+			elseif (strpos($value,"source-name") !== false)
+				$h["Source-Name"] = $column;
+			elseif (strpos($value,"source split") !== false)
+				$h["Source-Split"] = $column;
+			elseif (strpos($value,"city") !== false)	
+				$h["City"] = $column;
+			elseif (strpos($value,"country") !== false)	
+				$h["Country"] = $column;
+			elseif (strpos($value,"postal") !== false || strpos($value,"zip") !== false)
+				$h["Postal-Code"] = $column;
+			elseif (strpos($value,"lat") !== false)	
+				$h["Latitude"] = $column;
+			elseif (strpos($value,"lon") !== false)	
+				$h["Longitude"] = $column;
+			elseif (strpos($value,"recovery-time") !== false)
+				$h["Risk"] = $column;			
+		}
+		
 		$count = 1;
 		$boms = array();
 		foreach ($rows->getRowIterator() as $row) {
 			$rowIndex = $row->getRowIndex();
-			if ($rows->getCell("C" . $rowIndex)->getValue() != NULL && $rows->getCell("C" . $rowIndex)->getValue() != "Part-Number" && $rows->getCell("C" . $rowIndex)->getValue() != "Note:") {
-				$uuid = $rows->getCell("C" . $rowIndex)->getValue() . " - " . $rows->getCell("N" . $rowIndex)->getValue() . " (" . $rows->getCell("P" . $rowIndex)->getValue() . ")";
+			if ($rows->getCell($h["Part-Name"] . $rowIndex)->getValue() != NULL && $rows->getCell($h["Part-Name"] . $rowIndex)->getValue() != "Part-Number" && $rows->getCell($h["Part-Name"] . $rowIndex)->getValue() != "Part-Name" && $rows->getCell($h["Part-Name"] . $rowIndex)->getValue() != "Note:") {
+				$uuid = $rows->getCell($h["Part-Name"] . $rowIndex)->getValue() . " - " . $rows->getCell($h["City"] . $rowIndex)->getValue() . " (" . $rows->getCell($h["Source-Name"] . $rowIndex)->getValue() . ")";
 
 				if (isset($stops[$uuid]) == false) {
 					$stops[$uuid] = array (
 							'num' => $count,
-							'Name' => $rows->getCell("C" . $rowIndex)->getValue() + " (" + $rows->getCell("N" . $rowIndex)->getValue() + ")",	
-							'Location' => $rows->getCell("P" . $rowIndex)->getValue(), 
-							'Address' => $rows->getCell("P" . $rowIndex)->getValue() + ", " + $rows->getCell("R" . $rowIndex)->getValue() + " " + $rows->getCell("S" . $rowIndex)->getValue(),	
-							'Description' => $rows->getCell("D" . $rowIndex)->getValue(),
-							'Percentage' =>	$rows->getCell("O" . $rowIndex)->getValue(),	
-							'qty' => $rows->getCell("L" . $rowIndex)->getValue(),	
+							'Name' => $rows->getCell($h["Part-Name"] . $rowIndex)->getValue() . " (" . $rows->getCell($h["Source-Name"] . $rowIndex)->getValue() . ")",	
+							'Location' => $rows->getCell($h["City"] . $rowIndex)->getValue(), 
+							'Address' => $rows->getCell($h["City"] . $rowIndex)->getValue() . " " . $rows->getCell($h["Country"] . $rowIndex)->getValue() . " " . $rows->getCell($h["Postal-Code"] . $rowIndex)->getValue(),	
+							'Description' => str_replace("  "," ", str_replace(",", " - ", $rows->getCell($h["Description"] . $rowIndex)->getValue())),
+							'Percentage' =>	$rows->getCell($h["Risk"] . $rowIndex)->getValue(),	
+							'qty' => $rows->getCell($h["Source-Split"] . $rowIndex)->getValue(),	
 							'color' => "#30ac9c",
-							'size' => sqrt((min(array(max(array($rows->getCell("L" . $rowIndex)->getValue(), 10)), 100)))/3.14)
+							'size' => sqrt((min(array(max(array($rows->getCell($h["Risk"] . $rowIndex)->getValue(), 10)), 100)))/3.14)
 						);
+						if (trim($stops[$uuid]['Address']) == "") {
+							$stops[$uuid]['Address'] = "Antarctica";
+						}
+						if (trim($stops[$uuid]['Description']) == "") {
+							$stops[$uuid]['Description'] = "INCOMPLETE";
+						}
+						if (trim($stops[$uuid]['Percentage']) == "") {
+							$stops[$uuid]['Percentage'] = "100";
+						}
 						$hops_to = $count;
 						$count++;
 				} else {
@@ -61,34 +119,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 				}
 				$hops_from = "";
 				// Hops
-				if ($rows->getCell("E" . $rowIndex)->getCalculatedValue() != "-") {
-					$boms[0] = $hops_to;
+				$boms[$rows->getCell($h['BOM-Level'] . $rowIndex)->getCalculatedValue()] = $hops_to;
+				if ($rows->getCell($h['BOM-Level'] . $rowIndex)->getCalculatedValue() != 0) {
+				$hops_from = $boms[$rows->getCell($h['BOM-Level'] . $rowIndex)->getCalculatedValue() -1];
 				}
-				if ($rows->getCell("F" . $rowIndex)->getCalculatedValue() != "-") {
-					$boms[1] = $hops_to;
-					$hops_from = $boms[0];
-				}
-				if ($rows->getCell("G" . $rowIndex)->getCalculatedValue() != "-") {
-					$boms[2] = $hops_to;
-					$hops_from = $boms[1];
-				}
-				if ($rows->getCell("H" . $rowIndex)->getCalculatedValue() != "-") {
-					$boms[3] = $hops_to;
-					$hops_from = $boms[2];
-				}
-				if ($rows->getCell("I" . $rowIndex)->getCalculatedValue() != "-") {
-					$boms[4] = $hops_to;
-					$hops_from = $boms[3];
-				}
-				if ($rows->getCell("J" . $rowIndex)->getCalculatedValue() != "-") {
-					$boms[5] = $hops_to;
-					$hops_from = $boms[4];
-				}
-				if ($rows->getCell("K" . $rowIndex)->getCalculatedValue() != "-") {
-					$boms[6] = $hops_to;
-					$hops_from = $boms[5];
-				}
-				if ($hops_from != "" && $hops_to != "" and isset($hops[$hops_from."-".$hops_to]) == false && $hops_from != $hops_to) {
+					if ($hops_from != "" && $hops_to != "" and isset($hops[$hops_from."-".$hops_to]) == false && $hops_from != $hops_to) {
 					$description = "";
 					foreach ($stops as $stop) {
 						if ($stop["num"] == $hops_from) { 
@@ -125,27 +160,78 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		
 		*/
 		
-			$contentReader->setLoadSheetsOnly("Downstream");
+			$contentReader->setLoadSheetsOnly("Template 2 - Downstream");
 			$contentPHPExcel = $contentReader->loadContents($xls);
 			$rows = $contentPHPExcel->getActiveSheet();
-			$count = 1;
+			// Figure out where all the columns are
+			$h = array(
+				"Part-Name" => "",
+				"O-Name" => "",
+				"O-City" => "",	
+				"O-Country" => "",	
+				"O-Postal-Code" => "",	
+				"O-Latitude" => "",	
+				"O-Longitude" => "",	
+				"D-Name" => "",	
+				"D-City" => "",	
+				"D-Country" => "",	
+				"D-Postal-Code" => "",	
+				"D-Latitude" => "",	
+				"D-Longitude" => "",	
+				"flow" => "",		
+			);
+
+			for ($i = 0; $rows->cellExistsByColumnAndRow($i,3) == true; $i++) {
+				$value = strtolower($rows->getCellByColumnAndRow($i,3)->getValue());
+				$column = $rows->getCellByColumnAndRow($i,3)->getColumn();
+				if (strpos($value,"part-name") !== false || strpos($value,"part name") !== false)
+					$h["Part-Name"] = $column;
+				elseif (strpos($value,"origin") !== false && strpos($value,"name") !== false)
+					$h["O-Name"] = $column;
+				elseif (strpos($value,"origin") !== false && strpos($value,"city") !== false)
+					$h["O-City"] = $column;
+				elseif (strpos($value,"origin") !== false && strpos($value,"country") !== false)
+					$h["O-Country"] = $column;
+				elseif (strpos($value,"origin") !== false && (strpos($value,"postal") !== false || strpos($value,"zip") !== false))
+					$h["O-Postal-Code"] = $column;
+				elseif (strpos($value,"origin") !== false && strpos($value,"lat") !== false)
+					$h["O-Latitude"] = $column;
+				elseif (strpos($value,"origin") !== false && strpos($value,"lon") !== false)
+					$h["O-Longitude"] = $column;
+				elseif (strpos($value,"dest") !== false && strpos($value,"name") !== false)
+					$h["D-Name"] = $column;
+				elseif (strpos($value,"dest") !== false && strpos($value,"city") !== false)
+					$h["D-City"] = $column;
+				elseif (strpos($value,"dest") !== false && strpos($value,"country") !== false)
+					$h["D-Country"] = $column;
+				elseif (strpos($value,"dest") !== false && (strpos($value,"postal") !== false || strpos($value,"zip") !== false))
+					$h["D-Postal-Code"] = $column;
+				elseif (strpos($value,"dest") !== false && strpos($value,"lat") !== false)
+					$h["D-Latitude"] = $column;
+				elseif (strpos($value,"dest") !== false && strpos($value,"lon") !== false)
+					$h["D-Longitude"] = $column;
+				elseif (strpos($value,"flow") !== false)
+					$h["flow"] = $column;	
+				//elseif (strpos($value,"recovery-time") !== false)
+				//	$h["Risk"] = $column;			
+			}
 			$boms = array();
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rows->getCell("A" . $rowIndex)->getValue() != NULL && $rows->getCell("A" . $rowIndex)->getValue() != "Part-Number" && $rows->getCell("A" . $rowIndex)->getValue() != "Note:") {
-					$uuid = $rows->getCell("A" . $rowIndex)->getValue() . " - " . $rows->getCell("B" . $rowIndex)->getValue() . " (" . $rows->getCell("C" . $rowIndex)->getValue() . ")";
+				if ($rows->getCell("A" . $rowIndex)->getValue() != NULL && $rows->getCell("A" . $rowIndex)->getValue() != "Part-Number" && $rows->getCell("A" . $rowIndex)->getValue() != "Part name" && $rows->getCell("A" . $rowIndex)->getValue() != "Note:") {
+					$uuid = $rows->getCell($h['Part-Name'] . $rowIndex)->getValue() . " - " . $rows->getCell($h['O-City'] . $rowIndex)->getValue() . " (" . $rows->getCell($h['O-Name'] . $rowIndex)->getValue() . ")";
 
 					if (isset($stops[$uuid]) == false) {
 						$stops[$uuid] = array (
 								'num' => $count,
-								'Name' => $rows->getCell("A" . $rowIndex)->getValue() + " (" + $rows->getCell("N" . $rowIndex)->getValue() + ")",	
-								'Location' => $rows->getCell("C" . $rowIndex)->getValue(), 
-								'Address' => $rows->getCell("C" . $rowIndex)->getValue() + ", " + $rows->getCell("D" . $rowIndex)->getValue() + " " + $rows->getCell("E" . $rowIndex)->getValue(),	
+								'Name' => $rows->getCell($h['Part-Name'] . $rowIndex)->getValue() . " (" . $rows->getCell($h['O-City'] . $rowIndex)->getValue() . ")",	
+								'Location' => $rows->getCell($h['O-Name'] . $rowIndex)->getValue() . " - " . $rows->getCell($h['O-City'] . $rowIndex)->getValue(), 
+								'Address' => $rows->getCell($h['O-City'] . $rowIndex)->getValue() + " " + $rows->getCell($h['O-Country'] . $rowIndex)->getValue() + " " + $rows->getCell($h['O-Postal-Code'] . $rowIndex)->getValue(),	
 								'Description' => $uuid,
-								'Percentage' =>	$rows->getCell("N" . $rowIndex)->getValue(),	
-								'qty' => $rows->getCell("N" . $rowIndex)->getValue(),	
+								'Percentage' =>	$rows->getCell($h['flow'] . $rowIndex)->getValue(),	
+								'qty' => "0",	
 								'color' => "#e2a919",
-								'size' => sqrt((min(array(max(array($rows->getCell("N" . $rowIndex)->getValue(), 10)), 100)))/3.14)
+								'size' => sqrt((min(array(max(array($rows->getCell($h['flow'] . $rowIndex)->getValue(), 10)), 100)))/3.14)
 							);
 							$hops_from = $count;
 							$count++;
@@ -155,19 +241,19 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 					
 					
 					
-					$uuid = $rows->getCell("A" . $rowIndex)->getValue() . " - " . $rows->getCell("H" . $rowIndex)->getValue() . " (" . $rows->getCell("I" . $rowIndex)->getValue() . ")";
+					$uuid = $rows->getCell($h['Part-Name'] . $rowIndex)->getValue() . " - " . $rows->getCell($h['D-City'] . $rowIndex)->getValue() . " (" . $rows->getCell($h['D-Name'] . $rowIndex)->getValue() . ")";
 
 					if (isset($stops[$uuid]) == false) {
 						$stops[$uuid] = array (
 								'num' => $count,
-								'Name' => $rows->getCell("A" . $rowIndex)->getValue() + " (" + $rows->getCell("H" . $rowIndex)->getValue() + ")",	
+								'Name' => $rows->getCell($h['Part-Name'] . $rowIndex)->getValue() + " (" + $rows->getCell($h['D-Name'] . $rowIndex)->getValue() + ")",	
 								'Location' => $rows->getCell("I" . $rowIndex)->getValue(), 
-								'Address' => $rows->getCell("I" . $rowIndex)->getValue() + ", " + $rows->getCell("J" . $rowIndex)->getValue() + " " + $rows->getCell("K" . $rowIndex)->getValue(),	
+								'Address' => $rows->getCell($h['D-City'] . $rowIndex)->getValue() . " " . $rows->getCell($h['D-Country'] . $rowIndex)->getValue() . " " . $rows->getCell($h['D-Postal-Code'] . $rowIndex)->getValue(),	
 								'Description' => $uuid,
-								'Percentage' =>	$rows->getCell("N" . $rowIndex)->getValue(),	
-								'qty' => $rows->getCell("N" . $rowIndex)->getValue(),	
+								'Percentage' =>	$rows->getCell($h['flow'] . $rowIndex)->getValue(),	
+								'qty' => "0",	
 								'color' => "#e2a919",
-								'size' => sqrt((min(array(max(array($rows->getCell("N" . $rowIndex)->getValue(), 10)), 100)))/3.14)
+								'size' => sqrt((min(array(max(array($rows->getCell($h['flow'] . $rowIndex)->getValue(), 10)), 100)))/3.14)
 							);
 							$hops_to = $count;
 							$count++;
@@ -206,14 +292,14 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		Now we convert the array to a phpexcel object and then to a csv output
 		
 		
-		
+
 		*/
 		
 		
 		
 		
-		var_dump($stops);
-		var_dump($hops);
+		//var_dump($stops);
+		//var_dump($hops);
 		// new PHPExcel Object
 		$stopswriter = new PHPExcel();
 		$stopswriter->createSheet();
@@ -261,8 +347,9 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		$stop_csv = $sWriter->returnContents();
 		$hWriter = new PHPExcel_Writer_CSVContents($hopswriter);
 		$hop_csv = $hWriter->returnContents();
-		//var_dump($stop_csv);
-		//var_dump($hop_csv);
+		var_dump($stop_csv);
+		var_dump($hop_csv);
+
         $sc->stops = self::csv2stops($stop_csv, $options);
         $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
         $sc->attributes = array();

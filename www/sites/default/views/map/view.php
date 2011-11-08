@@ -75,11 +75,11 @@
     
 
     <h1>
-        <div class="supplychain_name" style="float:left;">
+        <span class="supplychain_name">
         <?php if(!$exist_passcode):?>
         	<?= HTML::chars($supplychain_name) ?> 
         <?php endif; ?>
-        </div>
+        </span>
     	<?php if($can_edit): ?>
             <a id="map-edit-button" class="button" href="edit/<?= $supplychain_id; ?>">Edit Description</a>
         <?php endif; ?>

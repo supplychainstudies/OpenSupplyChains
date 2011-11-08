@@ -29,16 +29,15 @@ class Sourcemap_xls {
 			"qty",
 			"CO2e",
 			"color",
-			"size",
-			"Unique Code"
+			"size"
 			)
         );
 		$hops = array( 
 			1 => array(
 				"From",
 				"To",	
-				"Origin Point (From)",
-				"Destination Point (To)",
+				//"Origin Point (From)",
+				//"Destination Point (To)",
 				"Description",	
 				"Color",	
 				"Transport",	
@@ -64,8 +63,7 @@ class Sourcemap_xls {
 					"co2e" => "",
 					"color" => "",
 					"size" => "0",
-					"unit" => "",
-					"category" => ""
+					"unit" => ""
 				);	
 				if (isset($ftr->properties->title) == true) {
 					$vals['title'] = $ftr->properties->title;
@@ -118,17 +116,13 @@ class Sourcemap_xls {
 						$vals['flickr:setid'],
 						$vals['qty'],
 						$vals['co2e'],
-						$vals['color'],
-						"",
-						""
+						$vals['color']
 					);
 			}
 			else {	
 				$vals = array(
 					"from" => "",
 					"to" => "",	
-					"Origin Point" => "",
-					"Destination Point" => "",
 					"description" => "",	
 					"color" => "",	
 					"transport" => "",	
@@ -170,8 +164,6 @@ class Sourcemap_xls {
 			    $hops[] = array(
 						$vals['from'],
 						$vals['to'],
-						"",
-						"",	
 						$vals["description"],	
 						$vals['color'],	
 						"",	
@@ -235,21 +227,24 @@ class Sourcemap_xls {
         $as->getColumnDimension('K')->setWidth(10); // Color
         $as->getColumnDimension('L')->setWidth(10); // Size
         $as->getColumnDimension('M')->setWidth(20); // Code
+		// Working Validator - Leo doesnt want anymore //$as->getColumnDimension('M')->setVisible(false); // Make To invisible
 		// Percentage
-		//$ws->set_column_validation('F',"", $type, $prompttitle ="", $promptmessage="",$errortitle ="", $errormessage="");
-		$ws->set_column_validation('E',array(0,100), "DECIMAL", "Entry", "Enter a number between 0 and 100","Invalid Entry", "Enter a number between 0 and 100");
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('E',array(0,100), "DECIMAL", "Entry", "Enter a number between 0 and 100","Invalid Entry", "Enter a number between 0 and 100");
 		// Change E so that its in between 0 and 100	
-		$ws->set_column_validation('G','IF(MID(cell,1,7)="http://", TRUE, FALSE)', "CUSTOM", "Enter a URL", "Enter a valid website address in a similar format to 'http://www.example.com'.", "Enter a URL", "Enter a valid website address in a similar format to 'http://www.example.com'.");
-		$ws->set_column_validation('I',"", "DECIMAL", "Entry", "Enter a number","Invalid Entry", "Enter a number");		
-		$ws->set_column_validation('J',"", "DECIMAL", "Entry", "Enter a number","Invalid Entry", "Enter a number");
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('G','IF(MID(cell,1,7)="http://", TRUE, FALSE)', "CUSTOM", "Enter a URL", "Enter a valid website address in a similar format to 'http://www.example.com'.", "Enter a URL", "Enter a valid website address in a similar format to 'http://www.example.com'.");
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('I',"", "DECIMAL", "Entry", "Enter a number","Invalid Entry", "Enter a number");		
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('J',"", "DECIMAL", "Entry", "Enter a number","Invalid Entry", "Enter a number");
 		// lock I (Size)		
-	$ws->set_column_validation('K','=IF(LEN(cell)=7,IF(MID(cell,1,1)="#",IF(ISERROR(HEX2DEC(MID(cell,2,6)))=FALSE,TRUE,FALSE),FALSE),FALSE)',"CUSTOM","Here you must put a hexadecimal color value preceded by the pound sign (for example, '#DFDFDF'). You can use a color picker like (http://www.colorpicker.com/) to get these values.", "Incorrect Input","That is not a hexadecimal color value. Refer to a tool like (http://www.colorpicker.com/) to get a value in the form '#DFDFDF'");
-	
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('K','=IF(LEN(cell)=7,IF(MID(cell,1,1)="#",IF(ISERROR(HEX2DEC(MID(cell,2,6)))=FALSE,TRUE,FALSE),FALSE),FALSE)',"CUSTOM","Here you must put a hexadecimal color value preceded by the pound sign (for example, '#DFDFDF'). You can use a color picker like (http://www.colorpicker.com/) to get these values.", "Incorrect Input","That is not a hexadecimal color value. Refer to a tool like (http://www.colorpicker.com/) to get a value in the form '#DFDFDF'");
+		// Add All the points to the Sheet
 		$ws->set_data($points, false);
- 		$ws->set_column_formula('M', '=IF(Acounter<>"","#"&Acounter& " - "&Acounter&" ("&Bcounter&")","")');
-		$ws->set_column_formula('L', '=IF(isNumber(Ecounter)=TRUE,SQRT((MIN(100,MAX(10,Ecounter)))/3.14),"")');
+		// Add a unique name row
+ 		// Working Validator - Leo doesnt want anymore //$ws->set_column_formula('M', '=IF(Acounter<>"","#"&Acounter& " - "&Bcounter&"","")');
+
+		// Calculate the size column
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_formula('L', '=IF(isNumber(Ecounter)=TRUE,SQRT((MIN(100,MAX(10,Ecounter)))/3.14),"")');
 		// set M to apply formula
-		$ws->freezeTopRow();
+		//$ws->freezeTopRow();
 
 		// HOPS       
 		$ws->create_active_sheet();
@@ -258,35 +253,46 @@ class Sourcemap_xls {
         $as->getDefaultStyle()->getFont()->setSize(12);
         $as->getColumnDimension('A')->setWidth(20); // From
         $as->getColumnDimension('B')->setWidth(20); // To
-        $as->getColumnDimension('C')->setWidth(20); // Origin Point (From)
-        $as->getColumnDimension('D')->setWidth(20); // Destination Point (To)
-        $as->getColumnDimension('A')->setVisible(false); // Make From invisible
-        $as->getColumnDimension('B')->setVisible(false); // Make To invisible
-        $as->getColumnDimension('E')->setWidth(20); // Description
-        $as->getColumnDimension('F')->setWidth(20); // Color
-        $as->getColumnDimension('G')->setWidth(20); // Transport
-        $as->getColumnDimension('H')->setWidth(20); // Qty
-        $as->getColumnDimension('E')->setWidth(20); // Unit
-        $as->getColumnDimension('F')->setWidth(20); // CO2e
+        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('C')->setWidth(20); // Origin Point (From)
+        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('D')->setWidth(20); // Destination Point (To)
+       	// Working Validator - Leo doesnt want anymore //$as->getColumnDimension('A')->setVisible(false); // Make From invisible
+        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('B')->setVisible(false); // Make To invisible
+        $as->getColumnDimension('C')->setWidth(20); // Description
+        $as->getColumnDimension('D')->setWidth(20); // Color
+        $as->getColumnDimension('E')->setWidth(20); // Transport
+        $as->getColumnDimension('F')->setWidth(20); // Qty
+        $as->getColumnDimension('G')->setWidth(20); // Unit
+        $as->getColumnDimension('H')->setWidth(20); // CO2e
 		$ws->set_data($hops, false);
-		$ws->set_column_formula('C', '=Stops!$M$(Acounter-1)');
-		$ws->freezeTopRow();	
+		// Set a dropdown for From
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('C',"=Stops!M:M", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
+		// Set a dropdown for To
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('D',"=Stops!M:M", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
+		// Working Validator - Leo doesnt want anymore //$ws->freezeTopRow();	
 		
 		//Now we set some sheets that contain data, which will be hidden
 		
 		// Create the transport Co2e Sheet
-		$ws->create_active_sheet();
-        $as = $ws->get_active_sheet();
-        $as->setTitle('Transport CO2e');
-		$ws->set_data($transport, false);
-		$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
+		// Working Validator - Leo doesnt want anymore //$ws->create_active_sheet();
+        // Working Validator - Leo doesnt want anymore //$as = $ws->get_active_sheet();
+        // Working Validator - Leo doesnt want anymore //$as->setTitle('Transport CO2e');
+		// Working Validator - Leo doesnt want anymore //$ws->set_data($transport, false);
+		// Working Validator - Leo doesnt want anymore //$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
 
 		// Create the transport Co2e Sheet
-		$ws->create_active_sheet();
-        $as = $ws->get_active_sheet();
-        $as->setTitle('Units');
-		$ws->set_data($units, false);
-		$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
+		// Working Validator - Leo doesnt want anymore //$ws->create_active_sheet();
+        // Working Validator - Leo doesnt want anymore //$as = $ws->get_active_sheet();
+        // Working Validator - Leo doesnt want anymore //$as->setTitle('Units');
+		// Working Validator - Leo doesnt want anymore //$ws->set_data($units, false);
+		// Working Validator - Leo doesnt want anymore //$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
+		
+		
+		// Working Validator - Leo doesnt want anymore //$ws->set_active_sheet(1);
+		// Set a dropdown for To
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('G',"='Transport CO2e'!A:A", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
+		// Set a dropdown for To
+		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('I',"=Units!A:A", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
+	
 		
 		// Set the Workbook to the first sheet
 		$ws->set_active_sheet(0);
@@ -295,7 +301,7 @@ class Sourcemap_xls {
 			$title = $data->properties->title;
 		}
 		// Done! Open on the Client side			
-        $ws->send(array('name'=> $title, 'format'=>'Excel2007'));
+        $ws->send(array('name'=> $title, 'format'=>'Excel5'));
 	}
 	
 }

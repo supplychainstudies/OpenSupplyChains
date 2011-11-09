@@ -19,7 +19,7 @@
 <div class="container">
     <div id="sidebar" class="welcome">
         <div class="container"> 
-    		<h2 class="section-title">Popular Sourcemaps</h2>  
+    		<h2 class="section-title">Popular</h2>  
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
             </div>
@@ -28,7 +28,7 @@
 
         <hr class="spacer" />
         <div class="container"> 
-    		<h2 class="section-title">Recent Sourcemaps</h2> 
+    		<h2 class="section-title">Recent</h2> 
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
             </div>
@@ -42,7 +42,7 @@
 
             <hr class="spacer" />
             
-            <h2 class="section-title">Featured Sourcemaps</h2>
+            <h2 class="section-title">Featured</h2>
             <?= View::factory('partial/thumbs/featured', array('supplychains' => $morefeatured)) ?>
             <div class="clear"></div>
             <hr class="spacer" />

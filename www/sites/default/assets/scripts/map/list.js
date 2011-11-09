@@ -16,7 +16,8 @@ $(document).ready(function() {
     var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
 
     // fetch supplychain
-    Sourcemap.loadSupplychain(scid, function(sc) {
+    var passcode = "";
+    Sourcemap.loadSupplychain(scid, passcode, function(sc) {
         new Sourcemap.Map.List(sc);
     });
 });

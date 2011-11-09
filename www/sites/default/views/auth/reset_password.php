@@ -21,7 +21,7 @@
 
 <div class="container form-page">
     <div class="copy-section">
-        <p>Enter your new password below.</p>
+        <p>Enter your new password to the right:</p>
         <ul>
             <li><a href="/auth">Sign in to Sourcemap</a></li>
             <li><a href="/register">Register a new account</a></li>

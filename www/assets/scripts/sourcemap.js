@@ -261,9 +261,10 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             sc.editable = data.editable;
             callback.apply(this, [sc]);
             _that.broadcast('supplychain:loaded', this, sc);
+            // unlock the supply chain
         },
         error : function(data){
-            //console.log(data.response);
+            // do nothing
         }
     });
 }

@@ -13,28 +13,34 @@
 ?>
 
 <div class="container">
-    <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => false, 'canEdit' => false)) ?>
-</div>
-<div class="clear"></div>
-<div class="user-profile-view">
-<div class="search-results container">
-    <?php if(isset($supplychains) && $supplychains): ?><br/>
-        <h2><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
-        <div class="container pager">
-            <!-- ?= $pager->render() ?> -->
+    <div id="main" class="sidebar">
+        <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => false, 'canEdit' => false)) ?>
+    </div>
+    <div id="sidebar" class="profile">
+        <div class="container">
+            <p>
+                <?= isset($user->display_name) ? $user->display_name : $user->username; ?> has <?= count($supplychains); ?> maps 
+            </p> 
         </div>
-        <?php foreach($supplychains as $i => $sc): ?>
-            <div class="user-map-list">
-                <?= View::factory('partial/user/map', array('supplychain' => $sc)) ?>
+    </div>
+    <div class="clear"></div>
+    <div class="search-results container">
+        <?php if(isset($supplychains) && $supplychains): ?><br/>
+            <h2 class="section-title"><?= ucwords(HTML::chars($user->username)) ?>'s Sourcemaps</h2>
+            <div class="container pager">
+                <!-- ?= $pager->render() ?> -->
             </div>
-        <?php endforeach; ?>
-        <div class="container pager">
-            <!--?= $pager->render() ?>-->
-        </div>
-    <?php else: ?>
-        <h2 class="bad-news">No maps yet!</h2>
-    <?php endif; ?>
-
-</div>
+            <?php foreach($supplychains as $i => $sc): ?>
+                <div class="user-map-list">
+                    <?= View::factory('partial/user/map', array('supplychain' => $sc)) ?>
+                </div>
+            <?php endforeach; ?>
+            <div class="container pager">
+                <!--?= $pager->render() ?>-->
+            </div>
+        <?php else: ?>
+            <h2 class="section-title">No maps yet!</h2>
+        <?php endif; ?>
+    </div>
 </div>
 

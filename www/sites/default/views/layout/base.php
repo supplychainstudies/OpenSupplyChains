@@ -22,7 +22,7 @@
     <base href="<?= URL::base(true, true) ?>" />
     <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
-    <meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
+    <meta name="description" content="The open directory of supply chains and carbon footprints"/> 
     <meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
     <meta name="author" content="The Sourcemap Team">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 

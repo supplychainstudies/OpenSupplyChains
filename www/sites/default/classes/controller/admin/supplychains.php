@@ -42,7 +42,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             $scid = $supplychain->id;
             $supplychains_array[$scid] = (array)$supplychains_array[$scid];
             $supplychains_array[$scid]['owner'] = $supplychain->owner->username;
-            $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychains_array[$scid]['created']);
+            $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", (int)$supplychains_array[$scid]['created']);
             $supplychains_array[$scid]['attributes'] = $supplychain->attributes->find_all()->as_array('key', 'value');
         }
 
@@ -97,7 +97,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         $owner_group = $supplychain->owner_group->find()->as_array(null, array('id', 'name'));
         $owner = $supplychain->owner->as_array(null, 'username');
         
-        
         $this->template->stop_count = $stop_count;
         $this->template->hop_count = $hop_count;
         $this->template->attributes = $attributes;
@@ -126,7 +125,6 @@ class Controller_Admin_Supplychains extends Controller_Admin {
             
             $site_added = $post->site;
             $alias_added = $post->alias;
-            
                     
             $supplychain_alias = ORM::factory('supplychain_alias');
             $supplychain_alias->supplychain_id = $id;
@@ -214,6 +212,7 @@ class Controller_Admin_Supplychains extends Controller_Admin {
                             $sc->user_id = $new_owner->id;
                             try {
                                 $sc->save();
+                                
                                 Message::instance()->set('Changed owner to "'.$post["new_owner"].'".');
                             } catch(Exception $e) {
                                 Message::instance()->set('Could not update owner.');
@@ -229,7 +228,16 @@ class Controller_Admin_Supplychains extends Controller_Admin {
         }
         $this->request->redirect('admin/supplychains/'.$id);
     }
-    
+  
+    public function action_clearcache()
+    {
+        if(Cache::instance()->delete_all())
+        {
+            Message::instance()->set('Cache deleted.  Please reload the front page.');
+            $this->request->redirect('admin/supplychains/');
+        }
+    }
+
     public function action_delete_supplychain($id) {
     
         $supplychain = ORM::factory('supplychain', $id);

@@ -44,6 +44,15 @@ return array(
                 'sourcemap-jquery'
             )
         ),
+        'sourcemap-payments' => array(
+            'scripts' => array(
+                'https://js.stripe.com/v1/',
+                'sites/default/assets/scripts/payment/payment.js'
+            ),
+            'requires' => array(
+                'less', 'sourcemap-core'
+            )
+        ),
         'map-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/view.js'

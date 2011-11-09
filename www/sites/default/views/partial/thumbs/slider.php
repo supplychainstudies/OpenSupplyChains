@@ -27,12 +27,21 @@
                 <a href="/view/<?php print $item->id; ?>"><?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"),35) ?></a>
             </h1>
                 <? if(isset($item->attributes->description)) { ?>
-                    <h3 class="featured-teaser"><?= HTML::chars($item->attributes->description); ?></h3><? } ?>
+                    <?php
+                    $supplychain_desc = $item->attributes->description;
+                    $regex = "/\\[youtube:([^]]+)]/";
+                    if (preg_match($regex, $supplychain_desc, $regs)) {
+                        $supplychain_youtube_id = $regs[1];
+                        $supplychain_desc = str_replace($regs[0], '', $supplychain_desc);
+                    }                                                                                                                                                        
+                    ?>
+                    <h3 class="featured-teaser"><?= HTML::chars($supplychain_desc); ?></h3><? } ?>
             <h4 class="featured-info">
-                 <a href="user/<?= isset($item->owner->id) ? $item->owner->id : "" ?>">
-                    <?= isset($item->owner->display_name) ? HTML::chars($item->owner->display_name) : HTML::chars($item->owner->username)  ?></a>,   
-                <?php isset($item->created) ? print date("F j, Y",$item->created) : "" ?>
+                <a href="user/<?= isset($item->owner->id) ? $item->owner->id : "" ?>">
+                <?= isset($item->owner->display_name) ? HTML::chars($item->owner->display_name) : HTML::chars($item->owner->username)  ?></a>,   
+                <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
             </h4>
+            <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
         </div>
     </li>
     <?php endforeach; ?>

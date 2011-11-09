@@ -23,9 +23,16 @@
                 <a href="view/<?= $item->id; ?>">
                     <?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"), 23) ?>                   
                 </a></h3>
-            <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?= isset($item->owner->display_name)? Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
-            <?= date("M j, Y", $item->created) ?></h4>
+            <h4 class="preview-author">
+                <a href="user/<?= $item->owner->id; ?>"><?= isset($item->owner->display_name)? Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
+                <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
+            </h4>
+            <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
         </li>
+        <?php if ($i > $limit): ?> 
+            <li><h2 class="section-title"><a href="/browse/<?= $category ?>">See more...</a></h2></li>
+            <?php break; ?> 
+        <?php endif; ?>
     <?php endforeach; ?>
 <?php else: ?>
 <?php endif; ?>

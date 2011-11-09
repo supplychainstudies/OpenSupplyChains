@@ -71,7 +71,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
                         try{
                             $sent = $mailer->send($swift_msg);
-                            Message::instance()->set('Resend activation mail, please check your email again.');
+                            Message::instance()->set('Registration email has been re-sent.  Please check your inbox.');
                             $this->request->redirect('register/thankyou');
                         } catch (Exception $e) {
                             // email resend failed

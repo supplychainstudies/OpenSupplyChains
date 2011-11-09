@@ -66,8 +66,6 @@ class Model_Supplychain extends ORM {
         )
     );
 
-    
-
     public function save() {
         $this->modified = time();
         if(parent::save() && $this->pk()) {
@@ -78,17 +76,10 @@ class Model_Supplychain extends ORM {
             $rev->data = json_encode($this->kitchen_sink($this->pk()));
             $rev->rev_hash = md5($rev->data.microtime());
             $rev->save();
-            //print_r($this);
-            $this->updateCache(); 
+            $scid = $this->id;
+            Cache::instance()->delete('supplychain-'.$scid);
         }
         return $this;
-    }
-   
-    public function updateCache()
-    {
-        if(Cache::instance()->delete_all())
-        {
-        }
     }
 
     public function kitchen_sink($scid) {

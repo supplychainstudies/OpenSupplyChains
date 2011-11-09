@@ -34,7 +34,9 @@ $(document).ready(function() {
 		    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
 
 		    });
-		    Sourcemap.loadSupplychain(scid, function(sc) {
+            // TODO : make password input window
+            var passcode = "";
+		    Sourcemap.loadSupplychain(scid, passcode, function(sc) {
 		        Sourcemap.embed_instance.map.addSupplychain(sc);
 		    	$(window).resize();
 		    	$("#banner").click(function() {

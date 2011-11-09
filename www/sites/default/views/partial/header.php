@@ -28,7 +28,7 @@
             <a id="existing-login" href="auth/logout">Sign out</a>
         </li>
         <?php else: ?>
-        <li class="register">
+        <li class="register last">
             <div class="button"> <a href="/register">Register</a> </div>
             <a id="existing-login" href="auth">Sign in</a>
         </li>

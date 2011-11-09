@@ -51,11 +51,13 @@ class Sourcemap_Import_Csv {
             $raw_headers = array_shift($csv);
             $headers = array();
         }
-        for($i=0; $i<count($raw_headers); $i++) 
+		//for($i=0,$size_raw_headers = count($raw_headers); $i<$size_raw_headers; $i++) 
+        for($i=0; $i<count($raw_headers); $i++) {
             if(strlen(trim($raw_headers[$i]))) {
                 $headers[] = strtolower($raw_headers[$i]);
 				//$ex->getActiveSheet()->setCellValuebyColumnAndRow($i,1,$raw_headers[$i]);
 			}
+		}
         foreach($csv as $ri => $row) {
             if($headers && is_array($headers)) {
                 $record = array();
@@ -75,7 +77,7 @@ class Sourcemap_Import_Csv {
                         $latcol = $h;
                     } elseif(is_null($loncol) && preg_match('/^(lng)|(lon(g(itude)?)?)$/i', $h)) {
                         $loncol = $h;
-                    } elseif((is_null($addresscol) &&  preg_match('/place ?name/i', $h)) || preg_match('/address/i', $h)) {
+                    } elseif((is_null($addresscol) &&  preg_match('/place ?name/i', $h)) || preg_match('/address/i', $h) || preg_match('/location/i', $h)) {
                         $addresscol = $h;
                     }
                 }
@@ -84,7 +86,7 @@ class Sourcemap_Import_Csv {
                     if(is_null($addresscol))
                         if(!isset($this)) {
                             //throw new Exception('Missing lat/lon or address column index.');
-							$error_list[] = 'Missing lat/lon or address column index.';
+							$error_list[] = 'Missing lat/lon or address/location column index.';
                         }
                         else{
                             Message::instance()->set('The worksheet you choose may have wrong format, please try again.');
@@ -108,11 +110,15 @@ class Sourcemap_Import_Csv {
             if(is_null($addresscol)) {
                 if(!isset($record[$latcol], $record[$loncol])) {
 					$error_list[] = 'Missing lat/lon field (record #'.($i+1).')';
+					$ex->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+					$ex->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('FFFF0000');
+					
                     //throw new Exception('Missing lat/lon field (record #'.($i+1).').');
 				}
             } else {
                 if(!isset($record[$addresscol])) {
 					$error_list[] = 'Missing address field (record #'.($i+1).').';
+					$ex->getActiveSheet()->getStyle('A'.$i)->getBorders()->getTop()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
                     //throw new Exception('Missing address field (record #'.($i+1).').');
 				}
             }
@@ -164,22 +170,25 @@ class Sourcemap_Import_Csv {
             $new_stop['geometry'] = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $from_pt)->toGeometry();
             $stops[] = (object)$new_stop;
         }
-
-		if (count($error_list) != 0) {
+		var_dump($ex);
+		if (count($error_list) > 0) {
+			var_dump($error_list);
 			$err_html = "";
 			$errordump = new PHPExcel_Writer_HTML($ex);
-			$errordump->setUseInlineCSS(true);
-			//echo $errordump->generateHTMLHeader(true);
+			echo $errordump->generateHTMLHeader(true);
+			echo $errordump->generateStyles(true);
+			//$errordump->setUseInlineCSS(true);
+			
 			foreach ($error_list as $err) {
 				$err_html .= $err."<br />\n";
 			}
 			$err_html .= $errordump->generateSheetData();
 			$quack = new View('error');
-			
+			echo $err_html;
 			//Request::instance()->redirect('view/'.$new_sc_id);
+		} else {
+        	return $stops;
 		}
-        return $stops;
-
     }
 
     public static function csv2hops($csv, $stops, $o=array()) {
@@ -194,7 +203,7 @@ class Sourcemap_Import_Csv {
         if($headers) {
             $raw_headers = array_shift($csv);
             $headers = array();
-            for($i=0; $i<count($raw_headers); $i++)
+            for($i=0,$size_raw_headers = count($raw_headers); $i<$size_raw_headers; $i++)
                 if(strlen(trim($raw_headers[$i])))
                     $headers[] = strtolower($raw_headers[$i]);
             foreach($headers as $i => $h) {

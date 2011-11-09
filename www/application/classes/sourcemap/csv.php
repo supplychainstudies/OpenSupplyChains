@@ -129,7 +129,6 @@ class Sourcemap_csv {
 	        return $csv;
 	    }
 	
-	
 	public static function make($supplychain) {
 		$data = json_decode(Sourcemap_Geojson::make($supplychain));
 		$points  = 'Name,Location,Address,Description,Percentage,vimeo:title,vimeo:link,youtube:title,youtube:link,flickr:setid,qty,CO2e,color,size';
@@ -151,3 +150,4 @@ class Sourcemap_csv {
 	}
 	
 } // End Class
+

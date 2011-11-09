@@ -50,7 +50,7 @@ class Sourcemap_Proj_Point {
     public static function parse_coords($str) {
         $coords = split(',', $str);
         $ks = array('x', 'y', 'z');
-        for($ci=0; $ci<count($ks); $ci++)
+        for($ci=0,$size = count($ks); $ci<$size; $ci++)
             if(isset($coords[$ci]) && preg_match('/^\s*'.$ks[$ci].'=\s*/', $coords[$ci]))
                 $coords[$ci] = preg_replace('/^\s*'.$ks[$ci].'\s*=/', '', $coords[$ci]);
             $coords[$ci] = isset($coords[$ci]) ? (float)trim($coords[$ci]) : 0.0;

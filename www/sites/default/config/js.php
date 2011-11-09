@@ -52,6 +52,17 @@ return array(
                 'less', 'sourcemap-map'
             )
         ),
+        'tree-view' => array(
+            'scripts' => array(
+                'sites/default/assets/scripts/tree/view.js',
+                'assets/scripts/libs/d3/d3.js',
+                'assets/scripts/libs/d3/d3.geom.js',
+                'assets/scripts/libs/d3/d3.layout.js'
+            ),
+            'requires' => array(
+                'less', 'sourcemap-core'
+            )
+        ),
         'list-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/list.js',

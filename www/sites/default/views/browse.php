@@ -26,7 +26,7 @@
             <div class="category-dropdown">
                 <select name="BrowseSelect" onChange="location.href='browse/'+this.value;">
                 <option>Select a <?= $category ? "different " : ""; ?> category:</option>
-                <?php for($i=0; $i<count($taxonomy->children); $i++): ?>
+                <?php for($i=0,$size=count($taxonomy->children); $i<$size; $i++): ?>
                     <?php $t = $taxonomy->children[$i]; ?>
                     <option value="<?= $t->data->name ?>"><?= HTML::chars($t->data->title) ?></a>
                 <?php endfor; ?>

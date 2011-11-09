@@ -50,7 +50,7 @@ class Sourcemap_Http_Response {
         $headers = array();
         $headers['_status_code'] = $code;
         $headers['_status_msg'] = $msg;
-        for($i=0; $i<count($lines); $i++) {
+        for($i=0,$size_lines = count($lines); $i<$size_lines; $i++) {
             $line = $lines[$i];
             if($parsed = self::raw_parse_header($line)) {
                 list($k, $v) = $parsed;

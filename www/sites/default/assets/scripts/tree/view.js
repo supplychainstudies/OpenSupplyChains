@@ -11,24 +11,11 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 $(document).ready(function() {
-    Sourcemap.view_params = Sourcemap.view_params || {};
-    Sourcemap.view_instance = new Sourcemap.Map.Base(Sourcemap.view_params);
+    var tree_element_id = '#sourcemap-tree-view';
+    var passcode = ""; 
+    var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();    
 
-    Sourcemap.listen("map:supplychain_mapped", function(evt, map, sc) {
-        var view = Sourcemap.view_instance;
-        view.user_loc = Sourcemap.view_params.iploc ? Sourcemap.view_params.iploc[0] : false;
-        if(view.options.locate_user) {
-            view.showLocationDialog();
-        }
-    });
-
-    // get passcode exist or not
-    var passcode = "";   
-    if($('#exist-passcode').attr("value")){   
-        // TODO: If admin views: skip passcode enter
-
-        // if passcode exist
-        // Create pop up window html
+    if($('#exist-passcode').attr("value")){
         var popID = 'popup';
         var element = document.createElement('div');
         $(element).html(
@@ -45,25 +32,20 @@ $(document).ready(function() {
         $(element).prepend('<a href="#" class="close"></a>');
         $('body').append($(element));
 
-        // submit passcode to fetch supplychain
         $('form.passcode-input').submit(function(evt){
             evt.preventDefault();
             passcode = $(element).find("input[name='passcode']").val();
 
-            // get scid from inline script 
-            var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
             // fetch from supplychain
-            Sourcemap.loadSupplychain(scid, passcode, function(sc) {
-                var m = Sourcemap.view_instance.map;
-                m.addSupplychain(sc);
-                new Sourcemap.Map.Editor(Sourcemap.view_instance);
+            Sourcemap.loadSupplychainToTree(scid, passcode, function(sc) {
+                Sourcemap.buildTree(tree_element_id,sc);
             });
             $('#fade , .popup_block').fadeOut(function() {
                 $('#fade, a.close').remove();
             }); //fade them both out
         });
 
-        // CSS setting of pop up window
+        //css
         $('#' + popID).height(110);
         $('#' + popID).width(600);
         var popMargTop = ($('#' + popID).height() + 80) / 2;
@@ -76,7 +58,7 @@ $(document).ready(function() {
         });
 
         $('#' + popID).fadeIn();
-            
+
         $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
         $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
         $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
@@ -85,14 +67,10 @@ $(document).ready(function() {
             }); //fade them both out
             return false;
         });
+
     } else {
-        // get scid from inline script
-        var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
-        // fetch from supplychain
-        Sourcemap.loadSupplychain(scid, passcode, function(sc) {
-            var m = Sourcemap.view_instance.map;
-            m.addSupplychain(sc);
-            new Sourcemap.Map.Editor(Sourcemap.view_instance);
+        Sourcemap.loadSupplychainToTree(scid, passcode, function(sc) {
+            Sourcemap.buildTree(tree_element_id,sc);
         });
     }
 

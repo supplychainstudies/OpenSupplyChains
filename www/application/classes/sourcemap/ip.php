@@ -56,7 +56,7 @@ class Sourcemap_Ip {
 
     public static function find_ip($ip) {
         $results = Model::factory('iploc')->find($ip);
-        for($i=0; $i<count($results); $i++) {
+        for($i=0,$size = count($results); $i<$size; $i++) {
             $r = $results[$i];
             $results[$i]->placename = sprintf("%s, %s, %s",
                 $r->city, $r->region, $r->country

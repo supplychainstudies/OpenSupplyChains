@@ -12,9 +12,6 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 ?>
 
-<?php if(isset($item->favorites_tot) && isset($item->comments_tot)): ?>
-<div class="preview-icons">
-    <?php if($item->favorites_tot > 0){ print '<div class="favorited color-' .  min(3, $item->favorites_tot) . '">' . $item->favorites_tot . '</div>'; } ?>
-    <?php if($item->comments_tot > 0){ print '<div class="discussed color-' . min(3, $item->comments_tot) . '">' . $item->comments_tot . '</div>'; } ?>
-</div>
+<?php if(isset($date)): ?>
+    <?= date("M j, Y", $date) ?>
 <?php endif; ?>

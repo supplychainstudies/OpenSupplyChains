@@ -37,9 +37,9 @@
                     ?>
                     <h3 class="featured-teaser"><?= HTML::chars($supplychain_desc); ?></h3><? } ?>
             <h4 class="featured-info">
-                 <a href="user/<?= isset($item->owner->id) ? $item->owner->id : "" ?>">
-                    <?= isset($item->owner->display_name) ? HTML::chars($item->owner->display_name) : HTML::chars($item->owner->username)  ?></a>,   
-                <?php isset($item->created) ? print date("F j, Y",$item->created) : "" ?>
+                <a href="user/<?= isset($item->owner->id) ? $item->owner->id : "" ?>">
+                <?= isset($item->owner->display_name) ? HTML::chars($item->owner->display_name) : HTML::chars($item->owner->username)  ?></a>,   
+                <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
             </h4>
             <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
         </div>

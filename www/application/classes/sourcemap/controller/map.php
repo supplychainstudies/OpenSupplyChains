@@ -104,6 +104,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                         $arr['avatar'] = Gravatar::avatar($comment->user->email, 32);
                         $comment_data[] = (object)$arr;
                     }
+                    $comment_data = array_reverse($comment_data);
 
                 } else {
                     $comment_data = array();

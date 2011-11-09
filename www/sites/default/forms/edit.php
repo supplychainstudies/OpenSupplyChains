@@ -59,14 +59,14 @@ if($is_admin){
 }
 else{
     $title_max_length = array('max_length', array(55));
-    $desc_max_length = array('max_length', array(140));
+    $desc_max_length = array('max_length', array(1000));
     $title_attributes = array(
             'maxlength' => 55,
             'placeholder' => 'Maximum 55 characters.'
         );
         $desc_attributes = array(
-            'maxlength' => 140,
-            'placeholder' => 'Maximum 140 characters.',
+            'maxlength' => 1000,
+            'placeholder' => 'Maximum 1000 characters.',
             'id' =>'form-description'
         );
 }

@@ -69,7 +69,7 @@ return array(
                 'assets/scripts/libs/d3/d3.layout.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-core'
+                'less', 'sourcemap-core','openlayers'
             )
         ),
         'list-view' => array(

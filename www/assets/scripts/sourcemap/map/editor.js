@@ -320,7 +320,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     // save contents of editor ui on dialog close
     Sourcemap.listen('sourcemap-base-dialog-close', $.proxy(function(b, vs) {
-        if(this.editing) {
+        //if(this.editing) {
+        if(false) {
             // save updated attributes
             var f = this.map_view.dialog_content.find('form');
             var valsa = f.serializeArray();

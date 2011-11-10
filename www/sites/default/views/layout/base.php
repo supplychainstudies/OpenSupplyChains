@@ -40,12 +40,14 @@
 <body class="main">
     <div id="wrapper">
         <?= View::factory('partial/header', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <?php if(Message::instance()->get() || Breadcrumbs::instance()->get()){ ?>
         <div class="container">
             <div class="messages">
                 <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
                 <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
             </div>
         </div>
+        <?php } ?>
         <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
         <div class="push"></div>
     </div><!-- #wrapper -->

@@ -26,7 +26,6 @@
             <div class="clear"></div>
         </div>           
 
-        <hr class="spacer" />
         <div class="container"> 
     		<h2 class="section-title">Recent</h2> 
             <div class="preview-map-section">

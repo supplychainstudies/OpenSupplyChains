@@ -13,14 +13,6 @@
 
 return array(
     'fields' => array(
-        'username' => array(
-            'type' => 'text',
-            'label' => 'Username',
-            'attributes' => array(
-                'maxlength' => 32,
-    			'placeholder' => 'Confirm the user you wish to upgrade'
-            )
-        ),
         'card-number' => array(
             'type' => 'text',
             'label' => 'Card Number',
@@ -58,10 +50,6 @@ return array(
     ),
     'messages_file' => 'forms/upgrade',
     'rules' => array(
-        'username' => array(
-            array('not_empty'), 
-    		array('alpha_dash')
-        ),
     ),
     'filters' => array()
 );

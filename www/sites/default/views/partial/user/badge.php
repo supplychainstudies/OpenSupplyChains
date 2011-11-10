@@ -29,7 +29,7 @@
             <?php endif; ?>
             <?php if ($isChannel): ?>
         <div class="button alternate">
-            <a href="auth/reset">Payments</a>
+            <a href="/upgrade/payments">Payments</a>
         </div>
             <?php endif; ?>
         <?php endif; ?>

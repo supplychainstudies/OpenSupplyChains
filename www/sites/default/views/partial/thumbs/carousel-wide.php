@@ -30,9 +30,11 @@
             </h4>
             <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
         </li>
-        <?php if ($i > $limit){ break; } ?>
+        <?php if ($i > $limit): ?>
+            <li><h2 class="section-title"><a href="/browse/<?= $category ?>">See more...</a></h2></li>
+            <?php break; ?>
+        <?php endif; ?>
     <?php endforeach; ?>
-        <li><h2 class="section-title"><a href="/browse/<?= $category ?>">See more...</a></h2></li>
 <?php else: ?>
 <?php endif; ?>
 <div class="clear"></div>

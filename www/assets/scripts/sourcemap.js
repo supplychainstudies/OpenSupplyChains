@@ -349,7 +349,6 @@ Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
             var sc = Sourcemap.factory('tree', data.supplychain);
             sc.editable = data.editable;
             callback.apply(this, [sc]);
-            //_that.broadcast('supplychain:loaded', this, sc);
         },
         error : function(data){
         }

@@ -14,21 +14,20 @@
 
 /* Map styles  -------------------------------------------------------------- */
 #map-container{
-    width: 1040px; 
+    width: 1090px;
+    height: 615px;
     margin: 0 auto;
-    padding: 4px;
-    background: #fefefe;
-    border: 1px solid #d4d4d4;
-    .rounded(12px);
-    .box_shadow(3px, 1px, 10px);
+    background: url('../images/map-bg.png') no-repeat;
 }
 
 #map {
+    padding: 15px 21px 24px;
     overflow:hidden;
     #sourcemap-map-view {
         position:relative;        
         border:4px solid #fff;
-        height:560px;
+        width: 1040px;
+        height: 570px;
         .rounded(8px);
         overflow:hidden;
     }
@@ -203,8 +202,13 @@
             -webkit-border-bottom-right-radius:4px;
 			iframe, object, embed, div.media-object {
 				position:absolute;
-				top:0; bottom:0; left:-1000px; right:0;
+				top:0; bottom:0; 
+                //left:-1000px; 
+                left:0px;
+                right:0;
 				margin:auto;
+                width:83%;
+                height:83%;
 			}
 			iframe:first-child, object:first-child, embed:first-child, div.media-object:first-child {
 				top:0; left:0; right:0;

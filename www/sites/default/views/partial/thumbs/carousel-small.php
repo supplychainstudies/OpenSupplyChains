@@ -16,11 +16,11 @@
 <ul class="category-map-view <?= count($supplychains) > 3 ? "carousel jcarousel-skin-sourcemap" : "nocarousel"; ?>">
 <?php if(isset($supplychains) && $supplychains): ?>
     <?php foreach($supplychains as $i => $item):?>
-        <li class="preview-map-item small">
+        <li class="preview-map-item small wide">
             <div class="preview-badge">
-                <a href="view/<?php print $item->id; ?>"><img class="preview-map small" src="static/<?= $item->id ?>.s.png" alt="" /></a>
+                <a href="view/<?php print $item->id; ?>"><img class="preview-map small wide" src="static/<?= $item->id ?>.s.png" alt="" /></a>
             </div>
-            <h3 class="preview-title">
+            <h4 class="preview-title">
                 <a href="view/<?= $item->id; ?>">
                     <?= Text::limit_chars(HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap"), 23) ?>
                 </a></h3>

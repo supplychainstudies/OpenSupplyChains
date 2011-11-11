@@ -20,11 +20,11 @@
                 <img class="preview-map" src="static/<?php print $item->id; ?>.s.png" alt="" />
             </a>
             </div>
-            <h3 class="preview-title truncate vertical">
+            <h4 class="preview-title truncate vertical">
                 <a href="view/<?php print $item->id; ?>">
                 <?= HTML::chars($item->attributes->title) ?>
                 </a>
-            </h3>
+            </h4>
             <div>
                 <h4 class="preview-author">
                     <a href="user/<?php print $item->owner->id; ?>">

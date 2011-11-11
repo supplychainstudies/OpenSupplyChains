@@ -389,10 +389,10 @@ Sourcemap.buildTree = function(tree_id,sc) {
         
         // default status
 		var letitle  = sc.stops[i].attributes.title;
-		//if (letitle == undefined)
-		//	letitle = sc.stops[i].attributes.name;
 		if (letitle == undefined)
 			letitle = sc.stops[i].attributes.location;		
+		//	letitle = sc.stops[i].attributes.name;
+
         tier_list[i] = { 
             title:letitle,
             index:i,
@@ -570,10 +570,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .on("mouseover",hover_circle(.1))
         .on("mouseout",hover_circle(1))
         .style("fill", function(d){return d.color})
-<<<<<<< HEAD
         .attr("r", function(d){return d.size*7});
-=======
-        .attr("r", 12);        
     
     function hover_circle(opacity){
         return function(g,i){

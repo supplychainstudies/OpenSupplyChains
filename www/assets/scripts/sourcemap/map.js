@@ -1344,7 +1344,8 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
     // add
     cluster.cluster.push(feature);
     
-    // calulate avg color
+    // calulate most upstream color
+	var new_c = "";
     var c = new Sourcemap.Color();
     for(var i=0; i<cluster.cluster.length; i++) {
         var f = cluster.cluster[i];
@@ -1352,12 +1353,19 @@ Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {
         if(f.attributes.color) {
             fc = (new Sourcemap.Color()).fromHex(f.attributes.color);
         } else continue;
-        c.r += fc.r; c.g += fc.g; c.b += fc.b;
-    }
-    
-    c.r /= cluster.cluster.length;
-    c.g /= cluster.cluster.length;
-    c.b /= cluster.cluster.length;
+        //c.r += fc.r; c.g += fc.g; c.b += fc.b;
+		// figure out whether the map is using the upstream-downstream colour range
+		// figure out whether it is in the blue-pink range or pink-yellow range
+		// if there is one value in each, use the value in the pink-yellow range
+		// 
+		if (fc.r > c.r || i == 0) {
+			c = fc;
+		}
+    } 
+
+    //c.r /= cluster.cluster.length;
+    //c.g /= cluster.cluster.length;
+    //c.b /= cluster.cluster.length;
 
     cluster.attributes.color = c.toString();
     cluster.attributes.scolor = c.toString();

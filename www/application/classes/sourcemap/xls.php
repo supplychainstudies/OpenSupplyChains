@@ -1,4 +1,4 @@
-<?php
+sourcema<?php
 /* Copyright (C) Sourcemap 2011
  * This program is free software: you can redistribute it and/or modify it under the terms
  * of the GNU Affero General Public License as published by the Free Software Foundation,
@@ -203,13 +203,16 @@ class Sourcemap_xls {
 			2 => array("lbs"),
 			3 => array("pax")
 			);
+		$spreadsheet_attributes = array(
+	        'author'       => 'Sourcemap Incorporated',
+	        'title'        => $supplychain->attributes->title,
+	        'subject'      => $supplychain->attributes->title,			
+		);
+		if (isset($supplychain->attributes->description) == true) {
+			$spreadsheet_attributes['description'] = $supplychain->attributes->description;
+		}
 		
-		$ws = new Spreadsheet(array(
-        'author'       => 'Sourcemap Incorporated',
-        'title'        => $supplychain->attributes->title,
-        'subject'      => $supplychain->attributes->title,
-        'description'  => $supplychain->attributes->description,
-        ));
+		$ws = new Spreadsheet($spreadsheet_attributes);
 
         $ws->set_active_sheet(0);
         $as = $ws->get_active_sheet();

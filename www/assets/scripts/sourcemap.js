@@ -395,6 +395,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
 			letitle = sc.stops[i].attributes.location;		
         tier_list[i] = { 
             title:letitle,
+            index:i,
+            tiers:sc.tiers[sc.stops[i].instance_id],
             instance:sc.stops[i].instance_id,
             //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
             //x:sc.tiers[sc.stops[i].instance_id]*150+100,
@@ -452,6 +454,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var hc = h.getAttr("color", fc.midpoint(tc).toString());
         hop_list[i] = {            
             id:h.instance_id,
+            from:h.from_stop_id,
+            to:h.to_stop_id,
             //id:"hop"+i,
             x1:tier_list[sc.hops[i].from_local_stop_id-1].x,
             x2:tier_list[sc.hops[i].to_local_stop_id-1].x,
@@ -514,7 +518,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
     */
     // Simple line    
-    svg.append("svg:g").selectAll("line")
+    svg.append("svg:g").attr("class","line").selectAll("line")
         .data(hop_list)
         .enter().append("svg:line")
             .attr("x1",function(d){return d.x1})
@@ -523,6 +527,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("y2",function(d){return d.y2})
             .attr("stroke-width",3)
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
+            //.on("click",function(d){alert(d.from+" to "+d.to);})
             .attr("stroke",function(d){return d.color});
 	//svg.append("svg:g").selectAll("circle").data(hop_list).enter()
 	//.append("svg:image") .attr("class", "circle") .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png") .attr("x", function(d){return ((d.x1+d.x2)/2)}) .attr("y", function(d){return ((d.y1+d.y2)/2)}) .attr("width", "16px") .attr("height", "16px");
@@ -555,14 +560,105 @@ Sourcemap.buildTree = function(tree_id,sc) {
     */
     
     
-    svg.append("svg:g").selectAll("circle")
+    svg.append("svg:g").attr("class","circle").selectAll("circle")
         .data(tier_list)
         .enter().append("svg:circle")
         .attr("class", "little")
         .attr("cx", function(d){return d.x})
         .attr("cy", function(d){return d.y})
+        .attr("opacity",1)
+        .on("mouseover",hover_circle(.1))
+        .on("mouseout",hover_circle(1))
         .style("fill", function(d){return d.color})
+<<<<<<< HEAD
         .attr("r", function(d){return d.size*7});
+=======
+        .attr("r", 12);        
+    
+    function hover_circle(opacity){
+        return function(g,i){
+            svg.selectAll("g.circle circle")
+            .filter(function(d){
+                    //console.log(d.index);   //this will scan by order 1~end
+                    //console.log(i);       //this is the id you pick
+                    update_updown(i);
+                    return check_stops(d.index,i);                        
+                })
+            .transition()
+                .style("opacity",opacity);
+
+           svg.selectAll("g.line line")
+           .filter(function(d){
+                    return check_hops(d,i);
+               })
+           .transition()
+                .style("opacity",opacity);
+       }
+    }
+
+    var upstream = [];
+    var downstream = [];
+    
+    function update_updown(select)
+    {        
+        upstream = [];
+        downstream = [];
+        upstream.push(tier_list[select].instance);
+        downstream.push(tier_list[select].instance);
+        //downstream ~max
+        for(var j=0,down_max=downstream.length;j<down_max;j++){
+            for(var h=0,max=hop_list.length;h<max;h++){                        
+                if(hop_list[h].from==downstream[j]){
+                    downstream.push(hop_list[h].to);
+                    down_max = downstream.length; 
+                }
+            }
+        }
+        //upstream
+        for(var j=0,up_max=upstream.length;j<up_max;j++){
+            for(var h=0,max=hop_list.length;h<max;h++){                        
+                if(hop_list[h].to==upstream[j]){
+                    upstream.push(hop_list[h].from);
+                    up_max = upstream.length; 
+                }
+            }
+        }
+    }
+
+    function check_hops(hop,select)
+    {
+        if(hop.from==tier_list[select].instance||hop.to==tier_list[select].instance)
+            return false;
+
+        if(jQuery.inArray(hop.from,upstream)>0){    
+            if(jQuery.inArray(hop.to,upstream)>0)
+                return false;
+        }
+        if(jQuery.inArray(hop.from,downstream)>0){    
+            if(jQuery.inArray(hop.to,downstream)>0)
+                return false;
+        }
+        
+        return true;    
+    }
+
+    function check_stops(i,select)
+    {
+        if(i==select){
+            return false;
+        }
+        if(jQuery.inArray(tier_list[i].instance,downstream)>0){    
+            return false;
+        }
+        if(jQuery.inArray(tier_list[i].instance,upstream)>0){    
+            return false;
+        }        
+
+        //else return true
+        return true;         
+    }
+
+>>>>>>> 6c4681b... Hover shoon stop will show the stops/hops that related to it[In progress:456]
     
 }
 

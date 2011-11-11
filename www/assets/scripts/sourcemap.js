@@ -393,6 +393,11 @@ Sourcemap.buildTree = function(tree_id,sc) {
 			letitle = sc.stops[i].attributes.location;		
 		//	letitle = sc.stops[i].attributes.name;
 
+        if(sc.stops[i].attributes.size == undefined)
+            size = 2;
+        else
+            size = sc.stops[i].attributes.size;
+
         tier_list[i] = { 
             title:letitle,
             index:i,
@@ -400,7 +405,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             instance:sc.stops[i].instance_id,
             //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
             //x:sc.tiers[sc.stops[i].instance_id]*150+100,
-			size:sc.stops[i].attributes.size,
+			size:size,
             color:sc.stops[i].attributes.color
         }
     }
@@ -655,7 +660,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
         return true;         
     }
 
->>>>>>> 6c4681b... Hover shoon stop will show the stops/hops that related to it[In progress:456]
     
 }
 

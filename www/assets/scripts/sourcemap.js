@@ -389,14 +389,20 @@ Sourcemap.buildTree = function(tree_id,sc) {
         tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
         
         // default status
+		var letitle  = sc.stops[i].attributes.title;
+		//if (letitle == undefined)
+		//	letitle = sc.stops[i].attributes.name;
+		if (letitle == undefined)
+			letitle = sc.stops[i].attributes.location;		
         tier_list[i] = { 
-            title:sc.stops[i].attributes.title,
+            title:letitle,
             instance:sc.stops[i].instance_id,
-            y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
-            x:sc.tiers[sc.stops[i].instance_id]*150+100,
+            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
+            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
             color:sc.stops[i].attributes.color
         }
     }
+	console.log(tiers);
     // get max_stack
     var max_stack = 0;
     var max_height =  $(tree_id).height();
@@ -414,6 +420,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             // divide y from max_stack into portion 
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
+					//tier_list[k].title = tiers[].
                     tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
                     tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
@@ -518,8 +525,19 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("stroke-width",3)
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
             .attr("stroke",function(d){return d.color});
-    
-                            
+	//svg.append("svg:g").selectAll("circle").data(hop_list).enter()
+	//.append("svg:image") .attr("class", "circle") .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png") .attr("x", function(d){return ((d.x1+d.x2)/2)}) .attr("y", function(d){return ((d.y1+d.y2)/2)}) .attr("width", "16px") .attr("height", "16px");
+    /*
+	svg.append("svg:g").selectAll("circle").data(hop_list).enter()
+	.append("svg:arc") 
+		.attr("class", "circle") 
+		.attr("x", function(d){return ((d.x1+d.x2)/2)}) 
+		.attr("y", function(d){return ((d.y1+d.y2)/2)}) 
+		.startAngle(40) 
+	    .endAngle(60) 
+	    .innerRadius(12) 
+	    .outerRadius(15);
+	 */                       
    
     /*
     // path > line

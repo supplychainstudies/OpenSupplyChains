@@ -19,7 +19,7 @@ class Controller_Tools_Import_Hviz extends Controller_Tools_Import_Xls {
     public function action_index() {
         if(!Auth::instance()->get_user())  {
             Message::instance()->set('You must be signed in to use the importer.');
-            $this->request->redirect('/auth?next=/tools/import/xls');
+            $this->request->redirect('/auth?next=/tools/import/hviz');
         }
         $current_user = Auth::instance()->get_user();
         $import_role = ORM::factory('role')->where('name', '=', 'import')->find();
@@ -68,12 +68,12 @@ class Controller_Tools_Import_Hviz extends Controller_Tools_Import_Xls {
                     $attr = ORM::factory('supplychain_attribute');
                     $attr->supplychain_id = $new_sc_id;
                     $attr->key = 'title';
-                    $attr->value = substr($posted->supplychain_name, 0, 64);
+                    $attr->value = substr($posted->supplychain_name . " - Risk Recovery Days per Site", 0, 64);
                     $attr->save();
                     $attr = ORM::factory('supplychain_attribute');
                     $attr->supplychain_id = $new_sc_id;
                     $attr->key = 'name';
-                    $attr->value = substr($posted->supplychain_name, 0, 64);
+                    $attr->value = substr($posted->supplychain_name . " - Risk Recovery Days per Site", 0, 64);
                     $attr->save();
                 }
                 if($new_sc_id)

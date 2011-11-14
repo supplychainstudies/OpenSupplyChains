@@ -409,21 +409,12 @@ Sourcemap.buildTree = function(tree_id,sc) {
             color:sc.stops[i].attributes.color
         }
     }
-    // get max_stack
-    var max_stack = 0;
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
-    /*
-    for(var i=0;i<tiers.length;i++)
-    {        
-        max_stack = tiers[i].length > max_stack ? tiers[i].length : max_stack;
-    }
-    */
     // Set middle stack in mid
     for(var i=0,order=0;i<tiers.length;i++)
     {
         for(var j=0;j<tiers[i].length;j++){            
-            // divide y from max_stack into portion 
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
 					//tier_list[k].title = tiers[].
@@ -478,7 +469,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("width", w)
         .attr("height", h);
 
-    //def marker
+    //def marker // TODO:make it work
     svg.append("svg:defs").selectAll("marker")
         .data(hop_list)
     .enter().append("svg:marker")
@@ -522,8 +513,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var diff_x = d.x2-d.x1
         var diff_y = d.y2-d.y1
         return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
-
-
     */
     // Simple line    
     svg.append("svg:g").attr("class","line").selectAll("line")
@@ -539,17 +528,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("stroke",function(d){return d.color});
 	//svg.append("svg:g").selectAll("circle").data(hop_list).enter()
 	//.append("svg:image") .attr("class", "circle") .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png") .attr("x", function(d){return ((d.x1+d.x2)/2)}) .attr("y", function(d){return ((d.y1+d.y2)/2)}) .attr("width", "16px") .attr("height", "16px");
-    /*
-	svg.append("svg:g").selectAll("circle").data(hop_list).enter()
-	.append("svg:arc") 
-		.attr("class", "circle") 
-		.attr("x", function(d){return ((d.x1+d.x2)/2)}) 
-		.attr("y", function(d){return ((d.y1+d.y2)/2)}) 
-		.startAngle(40) 
-	    .endAngle(60) 
-	    .innerRadius(12) 
-	    .outerRadius(15);
-	 */                       
    
     /*
     // path > line
@@ -585,7 +563,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             svg.selectAll("g.circle circle")
             .filter(function(d){
                     //console.log(d.index);   //this will scan by order 1~end
-                    //console.log(i);       //this is the id you pick
+                    //console.log(i);         //this is the id you pick
                     update_updown(i);
                     return check_stops(d.index,i);                        
                 })
@@ -603,7 +581,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
     var upstream = [];
     var downstream = [];
-    
     function update_updown(select)
     {        
         upstream = [];
@@ -614,6 +591,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
         for(var j=0,down_max=downstream.length;j<down_max;j++){
             for(var h=0,max=hop_list.length;h<max;h++){                        
                 if(hop_list[h].from==downstream[j]){
+                    //prevent circular supplychain
+                    if(jQuery.inArray(hop_list[h].to,downstream)>0)
+                        return;
                     downstream.push(hop_list[h].to);
                     down_max = downstream.length; 
                 }
@@ -623,6 +603,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
         for(var j=0,up_max=upstream.length;j<up_max;j++){
             for(var h=0,max=hop_list.length;h<max;h++){                        
                 if(hop_list[h].to==upstream[j]){
+                    //prevent circular supplychain
+                    if(jQuery.inArray(hop_list[h].from,upstream)>0)
+                        return;
                     upstream.push(hop_list[h].from);
                     up_max = upstream.length; 
                 }
@@ -632,9 +615,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
     function check_hops(hop,select)
     {
+        // hops that connect to select stop
         if(hop.from==tier_list[select].instance||hop.to==tier_list[select].instance)
             return false;
-
         if(jQuery.inArray(hop.from,upstream)>0){    
             if(jQuery.inArray(hop.to,upstream)>0)
                 return false;
@@ -643,26 +626,31 @@ Sourcemap.buildTree = function(tree_id,sc) {
             if(jQuery.inArray(hop.to,downstream)>0)
                 return false;
         }
-        
         return true;    
     }
 
     function check_stops(i,select)
     {
-        if(i==select){
+        if(i==select)
             return false;
-        }
-        if(jQuery.inArray(tier_list[i].instance,downstream)>0){    
+        if(jQuery.inArray(tier_list[i].instance,downstream)>0)
             return false;
-        }
-        if(jQuery.inArray(tier_list[i].instance,upstream)>0){    
+        if(jQuery.inArray(tier_list[i].instance,upstream)>0) 
             return false;
-        }        
-
         //else return true
         return true;         
     }
 
+    // Tree-text
+    svg.append("svg:g").selectAll("text")
+        .data(tier_list)
+        .enter().append("svg:text")
+        .attr("x",function(d){return d.x})
+        .attr("y",function(d){return d.y})
+        .attr("dx",".1em") // padding
+        .attr("dy","1.8em")
+        .attr("text-anchor","middle")
+        .text(function(d){return d.title});
     
 }
 

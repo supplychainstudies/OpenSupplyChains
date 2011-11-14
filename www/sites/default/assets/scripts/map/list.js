@@ -17,7 +17,24 @@ $(document).ready(function() {
 
     // fetch supplychain
     var passcode = "";
-    Sourcemap.loadSupplychain(scid, passcode, function(sc) {
-        new Sourcemap.Map.List(sc);
-    });
+    if(!Sourcemap.passcode_exist){
+        Sourcemap.loadSupplychain(scid, passcode, function(sc) {
+            new Sourcemap.Map.List(sc);
+        });
+    } else {
+        var popID = "popup";
+        Sourcemap.initPasscodeInput(popID);
+        $('form.passcode-input').submit(function(evt){
+            evt.preventDefault();
+            passcode = $('#' + popID).find("input[name='passcode']").val();
+            var cb = function(sc){
+                new Sourcemap.Map.List(sc);                
+            };
+            Sourcemap.loadSupplychain(scid, passcode,cb);
+            $('#fade , .popup_block').fadeOut(function() {
+                $('#fade, a.close').remove();
+            });
+                    
+        }); //end submit  
+    }
 });

@@ -263,7 +263,6 @@ Sourcemap.initPasscodeInput = function(popID){
     $(element).find("input[name='passcode']").focus(); 
     
     // CSS setting of pop up window
-    console.log($('body').width());
     $('#' + popID).height(110);
     $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
     //$('#' + popID).width(600);

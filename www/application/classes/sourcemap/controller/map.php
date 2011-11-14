@@ -51,7 +51,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
 
                 // passcode for the map          
                 $exist_passcode = isset($sc->attributes->passcode);
-                $this->template->exist_passcode = $exist_passcode;;
+                $this->template->exist_passcode = $exist_passcode;
 
                 // Necessary for every map
                 $this->layout->supplychain_id = $supplychain_id;
@@ -363,7 +363,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     }*/
                     $this->layout->embed_params = $params;
                     $exist_passcode = isset($sc->attributes->passcode);
-                    $this->layout->exist_passcode = $exist_passcode;;
+                    $this->layout->exist_passcode = $exist_passcode;
                 } else {
                     $this->request->status = 400;
                     $this->layout = View::factory('layout/embed');

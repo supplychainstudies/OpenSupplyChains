@@ -302,7 +302,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     'sites/default/assets/styles/reset.css',
                     'assets/styles/base.less',
                     'assets/styles/embed.less',
-                    'assets/styles/general.less'
+                    'assets/styles/general.less',
+                    'sites/default/assets/styles/modal.less'
                 );
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
@@ -361,6 +362,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                         }
                     }*/
                     $this->layout->embed_params = $params;
+                    $exist_passcode = isset($sc->attributes->passcode);
+                    $this->layout->exist_passcode = $exist_passcode;;
                 } else {
                     $this->request->status = 400;
                     $this->layout = View::factory('layout/embed');

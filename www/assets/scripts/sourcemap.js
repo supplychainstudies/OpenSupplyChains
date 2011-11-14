@@ -504,6 +504,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
     .attr("dx",".1em") // padding
     .attr("dy","1.8em")
     .attr("text-anchor","middle")
+	.style("color",function(d){return d.color})
+	.style("font-size","12px")
+	.style("font-weight", "bold")
     .text(function(d){return d.title});
     
     // Arc
@@ -575,7 +578,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .on("mouseover",hover_circle(.1))
         .on("mouseout",hover_circle(1))
         .style("fill", function(d){return d.color})
-        .attr("r", function(d){return d.size*7});
+        .attr("r", "8");
     
     function hover_circle(opacity){
         return function(g,i){

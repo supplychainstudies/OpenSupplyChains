@@ -164,13 +164,13 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								$stops[$uuid]['Description'] .= ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue())."% of part ".$rows->getCell($h["Description"] . $rowIndex)->getCalculatedValue()."<br />";
 							}	
 						}
-						$hops_to = $stops[$uuid]["num"];
+						$hops_from = $stops[$uuid]["num"];
 					}
-					$hops_from = "";
+					$hops_to = "";
 					// Hops
 					$boms[$rows->getCell($h['BOM-Level'] . $rowIndex)->getCalculatedValue()] = $hops_to;
 					if ($rows->getCell($h['BOM-Level'] . $rowIndex)->getCalculatedValue() != 0) {
-					$hops_from = $boms[$rows->getCell($h['BOM-Level'] . $rowIndex)->getCalculatedValue() -1];
+					$hops_to = $boms[$rows->getCell($h['BOM-Level'] . $rowIndex)->getCalculatedValue() -1];
 					}
 						if ($hops_from != "" && $hops_to != "" and isset($hops[$hops_from."-".$hops_to]) == false && $hops_from != $hops_to) {
 						$description = "";
@@ -374,8 +374,8 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		
 		
 		
-		//var_dump($stops);
-		//var_dump($hops);
+		var_dump($stops);
+		var_dump($hops);
 		// new PHPExcel Object
 		$stopswriter = new PHPExcel();
 		$stopswriter->createSheet();
@@ -411,14 +411,14 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		$hopswriter = new PHPExcel();
 		$hopswriter->createSheet();
 		$hopswriter->setActiveSheetIndex(0);
-		$hopswriter->getActiveSheet()->setCellValue("A1", 'To');
-		$hopswriter->getActiveSheet()->setCellValue("B1", 'From');
+		$hopswriter->getActiveSheet()->setCellValue("A1", 'From');
+		$hopswriter->getActiveSheet()->setCellValue("B1", 'To');
 		$hopswriter->getActiveSheet()->setCellValue("C1", 'Description');
 		//$hopswriter->getActiveSheet()->setCellValue("D1", 'Color');
 		$count = 2;
 		foreach ($hops as $num=>$hop) {
-			$hopswriter->getActiveSheet()->setCellValue("A".($count), trim($hop['To']));
-			$hopswriter->getActiveSheet()->setCellValue("B".($count), trim($hop['From']));
+			$hopswriter->getActiveSheet()->setCellValue("A".($count), trim($hop['From']));
+			$hopswriter->getActiveSheet()->setCellValue("B".($count), trim($hop['To']));
 			$hopswriter->getActiveSheet()->setCellValue("C".($count), trim($hop['Description']));
 			//$hopswriter->getActiveSheet()->setCellValue("D".($count), trim($hop['Color']));
 			$count++;
@@ -427,9 +427,9 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		$stop_csv = $sWriter->returnContents();
 		$hWriter = new PHPExcel_Writer_CSVContents($hopswriter);
 		$hop_csv = $hWriter->returnContents();
-		var_dump($stop_csv);
-		var_dump($hop_csv);
-
+		//var_dump($stop_csv);
+		//var_dump($hop_csv);
+		
         $sc->stops = self::csv2stops($stop_csv, $options);
         $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
         $sc->attributes = array();

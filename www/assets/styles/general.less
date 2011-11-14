@@ -23,6 +23,7 @@ body {
     color: #3c3c3c;
 }
 
+
 h1,h2,h3,h4,h5,h6{
     font-weight: bold;
     margin: .25em 0;
@@ -208,15 +209,24 @@ a {
         float:right;
         list-style:none;
         max-width: 335px;
+        margin-right: 35px;
         li{
             font-size: 17px;
             font-weight: bold;
             float:left;
             text-align: center;
             margin: 12px 24px 12px 5px;
+            position: relative;
             a {
                 text-shadow: #d1d1d1 1px 1px 1px;
                 color:#444;
+                &.upgrade-text{
+                    position:absolute;
+                    top: -9px;
+                    right: -38px;
+                    color: @brand-color;
+                    font-size: .5em;
+                }
             }
             &.register{
                 margin: -5px 15px;
@@ -275,7 +285,7 @@ a {
 #search-div{ 
     margin: 10px 0 0 48px;
     input{ 
-        width: 310px;
+        width: 280px;
         background: url("../images/search.png") 12px center no-repeat;  
     } 
 }

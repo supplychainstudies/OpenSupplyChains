@@ -23,8 +23,14 @@
         <li> <a href="browse">Browse</a> </li>
         <li> <a href="create">Create</a> </li>
         <?php if($current_user = Auth::instance()->get_user()): ?>
+        <?php // logic belongs elsewhere
+            $isChannel = false;
+            $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+            if($current_user->has('roles', $channel_role))
+                $isChannel = true;
+        ?> 
         <li>
-            <div> <a href="/home">Dashboard</a> </div>
+            <div> <a href="/home">Dashboard</a><?php if(!($isChannel)){ ?><a class="upgrade-text" href="/upgrade">Go&nbsp;Pro!</a><?php } ?></div>
             <a id="existing-login" href="auth/logout">Sign out</a>
         </li>
         <?php else: ?>

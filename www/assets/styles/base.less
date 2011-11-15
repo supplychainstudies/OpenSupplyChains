@@ -58,6 +58,7 @@
 }
 /* Detail Pane ---------------------------------------------------------- */
 #dialog {
+	overflow: hidden;
     position: absolute;
     top: 72px; 
     right: 37px;
@@ -234,6 +235,19 @@
             }
         }     
         div.close{
+            background: url("../images/close-grey.png") right center no-repeat;
+            height: 27px; width: 27px;
+            position: absolute;
+            top: 10px;
+            right: 9px;
+            a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+            }
+        }
+		div.falseclose{
             background: url("../images/close-grey.png") right center no-repeat;
             height: 27px; width: 27px;
             position: absolute;
@@ -683,18 +697,62 @@
 	margin:20px 32px 10px 28px;
 }
 #catalog {
+	.catalog-title {
+		font-size: 15px;
+		font-weight: bold;
+		clear: both;
+		text-align:center;
+		border-bottom: 1px solid #c9c9c9;
+		padding: 10px;
+	}
+	.catalog-footprint-types {
+		float: right;
+		clear: none;
+	    .symbol-co2e {
+			width:20px; float:left; height: 20px;
+			margin-left: 80px;
+	        background: url(../images/dock-icon-co2.png) 0 0 no-repeat;
+			background-size: 100%;
+	    }
+	    .symbol-energy {
+			width:20px; float:left;  height: 20px;
+			margin-left: 80px;
+	        background: url(../images/dock-icon-mass.png) 0 0 no-repeat;
+			background-size: 100%;
+	    }
+	    .symbol-waste {
+			width:20px; float:left; height: 20px; 
+			margin-left: 80px;
+	        background: url(../images/dock-icon-distance.png) 0 0 no-repeat;
+			background-size: 100%;
+	    }
+	    .symbol-water {
+			width:20px; float:left; height: 20px;
+			margin-left: 80px;
+	        background: url(../images/dock-icon-h2o.png) 0 0 no-repeat;
+			background-size: 100%;
+	    }	
+	}
     .catalog-content {
         padding:0 !important;   
         ul.catalog-items {
             margin:0;
             li.catalog-item {
+				width: 888px;
+				height: 33px;
                 font-size:0.8em;
                 cursor: pointer;
-                padding: 0.8em 0;
-                color:#777;
+                padding: 5px;
+                color:#313131;
                 list-style:none;
                 display:block;
-                border-bottom:1px solid #999;
+			    font-size:0.8em;
+				margin-bottom: 5px;
+				background-color: rgba(210,210,210,0.7);
+			    background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(240,240,240,0.7) 100%);
+			    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(216,216,216,0.5)),color-stop(1,rgba(204,204,204,0.5)));
+			    .rounded(12px);
+			    .box_shadow(0, 1px, 3px);
                 &:hover {
                     background:rgba(255,255,255,0.6);
                     color:#000;
@@ -702,33 +760,34 @@
                 .cat-item-name {
                     font-weight:bold;
 					float:left;
+					padding: 5px;
 					span.cat-value { font-weight:normal; }
                 }
                 .cat-item-footprints { 
-					float:left;
+					float:right;
+					font-weight: bold;
                     .cat-item-co2e {
-						width:20px;
-						height:20px;
-						margin-right:5px;
-                        float:left;
-                        background: url(../images/dock-icon-co2.png) 0 0 no-repeat;
-						background-size: 100%;
+						width:100px; float:left;
+						border-right: 1px solid #eeeeee;
                     }
                     .cat-item-energy {
-						width:40px; float:left; padding-top:30px; 
-                        background: url(../images/dock-icon-energy.png) 0 0 no-repeat;
-						background-size: 40%;
+						width:100px; float:left; 
+						border-right: 1px solid #eeeeee;
                     }
                     .cat-item-waste {
-						width:40px; float:left; padding-top:30px; 
-                        background: url(../images/dock-icon-waste.png) 0 0 no-repeat;
-						background-size: 40%;
+						width:100px; float:left;
                     }
                     .cat-item-water {
-						width:40px; float:left; padding-top:30px; 
-                        background: url(../images/dock-icon-h20.png) 0 0 no-repeat;
-						background-size: 40%;
+						width:100px; float:left; 
                     }
+					.add-map-button {
+					width: 89px; height: 32px; float:left; 
+                    background: url(../images/button-add-to-map.png) 0 0 no-repeat;				
+					}
+					.reference-button {
+					width: 50px; height: 32px; float:left; 
+                    background: url(../images/button-reference.png) 0 0 no-repeat;				
+					}
                 }
             }
         }
@@ -758,6 +817,9 @@
          }
     }
     .catalog-pager {
+		clear: none;
+		float: right;
+		width: 180px;
         text-align:center;
         font-size:0.8em;
         margin:0.25em 0;

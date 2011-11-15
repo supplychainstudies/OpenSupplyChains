@@ -700,13 +700,24 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             var quantity = editor.find('input[name="qty"]').val(); 
             var unit     = editor.find('.footprint-unit').val(); 
             var weight   = (unit == "kg") ? 1 : Math.max(editor.find('input[name="weight"]').val(), 0); 
-            var factor   = editor.find('input[name="co2e"]').val(); 
-
-            if (!isNaN(quantity * factor * weight)){ 
-                var output = quantity * weight * factor;
+            var co2e_factor   = editor.find('input[name="co2e"]').val(); 
+			var energy_factor   = editor.find('input[name="energy"]').val();
+			var water_factor   = editor.find('input[name="water"]').val();
+            if (!isNaN(quantity * co2e_factor * weight)){ 
+                var output = quantity * weight * co2e_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
-                editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
-            } else { editor.find('.result').text("-"); }
+                editor.find('#c02e-impact-result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+            } else { editor.find('#c02e-impact-result').text("-"); }
+			if (!isNaN(quantity * energy_factor * weight)){ 
+                var output = quantity * weight * energy_factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'kwh', 2);
+                editor.find('#energy-impact-result').text(scaled.value + " " + scaled.unit + " Energy"); 
+            } else { editor.find('#energy-impact-result').text("-"); }
+			if (!isNaN(quantity * water_factor * weight)){ 
+                var output = quantity * weight * water_factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'L', 2);
+                editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit + " Water"); 
+            } else { editor.find('#water-impact-result').text("-"); }
         }, this)); 
             	
     	$(".footprint-unit").change($.proxy(function(e){
@@ -719,13 +730,24 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             var quantity = editor.find('input[name="qty"]').val(); 
             var unit     = editor.find('.footprint-unit').val(); 
             var weight   = (unit == "kg") ? 1 : Math.max(editor.find('input[name="weight"]').val(), 0); 
-            var factor   = editor.find('input[name="co2e"]').val(); 
-
-            if (!isNaN(quantity * factor * weight)){ 
-                var output = quantity * weight * factor;
+            var co2e_factor   = editor.find('input[name="co2e"]').val(); 
+			var energy_factor   = editor.find('input[name="energy"]').val();
+			var water_factor   = editor.find('input[name="water"]').val();
+            if (!isNaN(quantity * co2e_factor * weight)){ 
+                var output = quantity * weight * co2e_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
-                editor.find('.result').text(scaled.value + " " + scaled.unit + " CO2e"); 
-            } else { editor.find('.result').text("-"); }            
+                editor.find('#c02e-impact-result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+            } else { editor.find('#c02e-impact-result').text("-"); }
+			if (!isNaN(quantity * energy_factor * weight)){ 
+                var output = quantity * weight * energy_factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'kwh', 2);
+                editor.find('#energy-impact-result').text(scaled.value + " " + scaled.unit + " Energy"); 
+            } else { editor.find('#energy-impact-result').text("-"); }
+			if (!isNaN(quantity * water_factor * weight)){ 
+                var output = quantity * weight * water_factor;
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'L', 2);
+                editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit + " Water"); 
+            } else { editor.find('#water-impact-result').text("-"); }            
     	}, this));
         // trigger event on load
         $("#edit-stop-footprint input").trigger('keyup');
@@ -861,6 +883,116 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
 Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
     if(!this.catalog_search_xhr) this.catalog_search_xhr = {};
     if(this.catalog_search_xhr[o.catalog]) this.catalog_search_xhr[o.catalog].abort();
+	console.log(o.params);
+    this.catalog_search_xhr[o.catalog] = $.ajax({"url": "services/catalogs/"+o.catalog, "data": o.params || {}, 
+        "success": $.proxy(function(json) {
+            var cat_html = $('<ul class="catalog-items"></ul>');
+            var alt = "";
+            for(var i=0; i<json.results.length; i++) {
+    			if(!(json.results[i].co2e)) { continue;}
+                // Todo: Template this                
+                var cat_content = '';                    
+                cat_content += '<div class="clear"></div></div>'; 
+                cat_content += '<span class="cat-item-name">'+_S.ttrunc(json.results[i].name, 50)+'</span>';
+				cat_content += '<span class="cat-item-footprints">';
+				cat_content +=  '<span class="cat-item-co2e">';
+				cat_content +=  json.results[i].co2e ? '<input type="checkbox" id="co2e-factor" />'+ Math.round(100*json.results[i].co2e)/100+' kg' : '&nbsp;';
+				cat_content +=  '</span>';
+				cat_content +=  '<span class="cat-item-energy">';
+				cat_content +=  json.results[i].energy ? '<input type="checkbox" id="energy-factor" />'+ Math.round(100*json.results[i].energy)/100+' kwh' : '&nbsp;';
+				cat_content +=  '</span>';
+				cat_content +=  '<span class="cat-item-water">';
+				cat_content +=  json.results[i].water ? '<input type="checkbox" id="water-factor" />'+Math.round(100*json.results[i].water)/100+' L ' : '&nbsp;';
+				cat_content +=  '</span>';
+				cat_content +=  '<a class="add-map-button">&nbsp;</a>';
+				cat_content +=  '<a class="reference-button" target="_blank" href="http://www.footprinted.org/' + json.results[i].uri + '">&nbsp;</a>';
+				cat_content += '</span>';
+    			cat_content += '<div class="clear"></div>';                    
+                
+                var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
+                $(new_li).find('#co2e-factor').click($.proxy(function(evt) {
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
+                $(new_li).find('#energy-factor').click($.proxy(function(evt) {
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
+                $(new_li).find('#water-factor').click($.proxy(function(evt) {
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));                
+				/*
+                $(new_li).click($.proxy(function(evt) {
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
+   				*/
+				cat_html.append(new_li);
+				$(this.editor.map_view.dialog).find('.falseclose').click($.proxy(function() {
+                    $(this).parent().parent().parent().parent().width(411);
+					$(this).parent().parent().parent().parent().find('#newcatalog').hide();
+					$(this).parent().parent().parent().parent().find('#stop-editor').show();
+					}));
+            }
+            o.results = json.results;
+            o.params = json.parameters;
+            $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
+
+            $(this.editor.map_view.dialog).find('.catalog-pager').empty();
+            // pager prev
+            if(o.params.o > 0) {
+                var prev_link = $('<span class="catalog-pager-prev">&laquo; prev</span>').click($.proxy(function() {
+                    var o = {};
+                    o.editor = this;
+                    o.ref = this.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.o = (parseInt(o.params.o) || 0);
+                    if(o.params.o >= o.params.l) o.params.o -= o.params.l;
+                    o.params.l = o.params.l;
+                    o.catalog = this.o.catalog;
+                    this.editor.updateCatalogListing(o);
+                }, {"o": o, "editor": this}));
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(prev_link);
+            }
+
+            // pager next
+            if(o.results.length == o.params.l) {
+                var next_link = $('<span class="catalog-pager-next">next &raquo;</span>').click($.proxy(function() {
+                    var o = {};
+                    o.editor = this.editor;
+                    o.ref = this.o.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.o = (parseInt(o.params.o) || 0) + o.params.l;
+                    o.catalog = this.o.catalog;
+                    this.editor.updateCatalogListing(o);
+                }, {"o": o, "editor": this.editor}));
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
+            }
+
+            // search bar
+            $(this.editor.map_view.dialog).find('#catalog-search-field').keyup($.proxy(function(evt) {
+                if($(evt.target).val().length < 3) return;
+                var q = $(evt.target).val();
+                var o = {};
+                o.editor = this.editor;
+                o.ref = this.o.ref;
+                o.params = Sourcemap.deep_clone(this.o.params);
+                o.params.o = 0;
+                o.params.q = q;
+                o.catalog = this.o.catalog;
+                this.editor.updateCatalogListing(o);
+            }, {"o": o, "editor": this.editor}));
+            $(this.editor.map_view.dialog).find('#catalog-search').bind("submit",function(event){
+                event.preventDefault();
+            });
+        }, {"editor": this, "o": o}), "failure": $.proxy(function() {
+            $(this.editor.map_view).find("#edit-catalog").html('<h3 class="bad-news">The catalog is currently unavailable.</h3>');
+        }, this)
+    });
+}
+
+
+/*
+Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
+    if(!this.catalog_search_xhr) this.catalog_search_xhr = {};
+    if(this.catalog_search_xhr[o.catalog]) this.catalog_search_xhr[o.catalog].abort();
     this.catalog_search_xhr[o.catalog] = $.ajax({"url": "services/catalogs/"+o.catalog, "data": o.params || {}, 
         "success": $.proxy(function(json) {
             var cat_html = $('<ul class="catalog-items"></ul>');
@@ -939,7 +1071,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
         }, this)
     });
 }
-
+*/
 Sourcemap.Map.Editor.prototype.updateMedia = function(ref, editor) {
     	var mediatype = $("#media-content-type").val();
         var message = "";
@@ -978,7 +1110,11 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     o.catalog = o.catalog ? o.catalog : "osi";
     var tscope = {"editor": this, "o": o, "ref": o.ref};
     Sourcemap.template('map/edit/catalog', function(p, txt, th) {  
-        $("#edit-catalog").html(th);  
+	 	//$("#edit-catalog").html(th); //Bianca
+		$("#stop-editor").hide();
+		$("#dialog").width(920);
+		$("#newcatalog").show();
+        $("#newcatalog").html(th);  
         this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }

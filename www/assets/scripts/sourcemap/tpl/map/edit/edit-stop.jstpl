@@ -11,7 +11,8 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
 
-
+<div id="newcatalog">
+</div>
 <div id="stop-editor">
 <form>
 
@@ -68,15 +69,32 @@
 
 					<div class="footprint-math">x</div>
 					
+					<div class="clear"></div>
+					
 					<div class="footprint-section">					           
 	                    <label for="co2e">Factor</label>
                         <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>
                         <%= $("<div></div>").append(el).html() %>
 					</div>
+					
+               		<div id="c02e-impact-result" class="result">0 kg C02e</div>
+					
+					<div class="footprint-section">					           
+	                    <label for="energy">Energy Factor</label>
+                        <% el = $("<input></input>").attr("class", "footprint-energy").attr("type", "text").attr("name", "energy").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("energy",0)); %>
+                        <%= $("<div></div>").append(el).html() %>
+					</div>
 
-               		<div class="clear"></div>
-                    
-                    <div id="impact-result" class="result">0 kg C02e</div>
+               		<div id="energy-impact-result" class="result">0 kwh energy</div>
+
+					<div class="footprint-section">					           
+	                    <label for="water">Water Factor</label>
+                        <% el = $("<input></input>").attr("class", "footprint-water").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("water",0)); %>
+                        <%= $("<div></div>").append(el).html() %>
+					</div>
+
+               		<div id="water-impact-result" class="result">0 L water</div>
+
 
                 </fieldset>
             </div>

@@ -35,7 +35,7 @@ $(document).ready(function() {
         $(element).html(
             '<div id="passcode-input">'+
             '<form class="passcode-input">'+
-            '<label for="passcode"> This map is protected. Please enter the password:</label>'+
+            '<label id="passcode-msg" for="passcode"> This map is protected. Please enter the password:</label>'+
             '<input name="passcode" type="text" autocomplete="off"></input>'+
             '<input id="passcode-submit" type="submit"/>'+
             '</form>'
@@ -72,7 +72,7 @@ $(document).ready(function() {
         $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
         $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
             $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
+                //$('#fade, a.close').remove();
             }); //fade them both out
             return false;
         });
@@ -112,7 +112,7 @@ $(document).ready(function() {
             Sourcemap.loadSupplychain(scid, passcode, cb);
            
             $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
+                //$('#fade, a.close').remove();
             }); //fade them both out
         });
 

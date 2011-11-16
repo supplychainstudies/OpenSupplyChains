@@ -243,7 +243,7 @@ Sourcemap.initPasscodeInput = function(popID){
     $(element).html(
         '<div id="passcode-input">'+
         '<form class="passcode-input">'+
-        '<label for="passcode"> This map is protected. Please enter the password:</label>'+
+        '<label id="passcode-msg" for="passcode"> This map is protected. Please enter the password:</label>'+
         '<input name="passcode" type="text" autocomplete="off"></input>'+
         '<input id="passcode-submit" type="submit"/>'+
         '</form>'
@@ -286,7 +286,6 @@ Sourcemap.initPasscodeInput = function(popID){
         return false;
     });
 
-
 }
 
 Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
@@ -314,7 +313,12 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             // unlock the supply chain
         },
         error : function(data){
-            // do nothing
+            //console.log("Passcode incorrect");
+            var error_response = eval('('+data.response+')');
+            $('#popup').fadeIn();
+            $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
+            $('.passcode-input').find("input[name='passcode']").focus();
+            $("#fade").fadeIn();
         }
     });
 }

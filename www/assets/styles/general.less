@@ -985,14 +985,14 @@ h1#site-tagline { font-size:30px; }
     .map-controls {
         float: right;
         text-align:right;
-        width:395px;
+        width:387px;
         div{
-            float:left;
+            float:right;
             margin-left: 7px;
             border: 1px solid #d7d7d7;
             .rounded(4px);
             .gradient();
-            &.map-controls-publish {
+            &.map-controls-publish , &.map-controls-featured {
                 background: #f8f8f8;
                 border: 1px solid #bfbfbf;
                 width: 120px;
@@ -1003,6 +1003,30 @@ h1#site-tagline { font-size:30px; }
 					text-decoration:none;
                     border-left: 1px solid #d7d7d7; 
                     color: #777a7e;
+                }
+            }
+            &.map-controls-passcode{
+                float:left;
+                margin-top:10px;
+                background:#f8f8f8;
+                border: 1px solid #bbbbbb;
+                width: 249px;
+                max-height:36px;
+                overflow:hidden;
+                input,a { float:left;}
+                input { margin: 12px 9px 0; }
+                a {
+                    cursor:pointer;
+                    text-decoration:none;
+                    border-left:1px solid #d7d7d7;
+                    color:#777a7e;
+                }
+                input[type="submit"] { 
+                    min-width:75px;
+                }
+                #map-passcode-input{
+                    margin-top:7px;
+                    width:100px;
                 }
             }
             a {

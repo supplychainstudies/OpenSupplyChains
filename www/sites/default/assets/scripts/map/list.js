@@ -29,11 +29,11 @@ $(document).ready(function() {
             passcode = $('#' + popID).find("input[name='passcode']").val();
             var cb = function(sc){
                 new Sourcemap.Map.List(sc);                
+                $('#fade , .popup_block').fadeOut(function() {
+                    //$('#fade, a.close').remove();
+                });
             };
             Sourcemap.loadSupplychain(scid, passcode,cb);
-            $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
-            });
                     
         }); //end submit  
     }

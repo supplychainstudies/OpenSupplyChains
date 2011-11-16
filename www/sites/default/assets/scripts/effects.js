@@ -17,6 +17,30 @@ $(document).ready(function(){
     /* truncation */
     Sourcemap.truncate_string(".truncate");
 
+    /* Channel edit */
+    
+    var widt = false;
+    $('.map-passcode-checkbox').each(function(index){
+        //default
+        var ischecked = $(this).is(":checked");
+        var parent_control = $(this).parent(".map-controls-passcode");
+        $(parent_control).stop().animate({width:ischecked?249:120},500);     
+        $(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
+
+        $(this).click(function(){
+            var ischecked = $(this).is(":checked");
+            //console.log($(this).attr("value"));
+            //console.log(ischecked);
+            var parent_control = $(this).parent(".map-controls-passcode");
+            //$(this).parent(".map-controls-passcode").stop().animate({width:widt?120:249},500);            
+            $(parent_control).stop().animate({width:ischecked?249:120},500);            
+            $(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+            ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
+            //widt=!widt;
+        });
+    });
+
     /* user edit */
     $('a.edit-button').click(function(evt){
         $('a.edit-button enabled').each(function(){

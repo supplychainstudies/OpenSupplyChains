@@ -647,7 +647,7 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr) {
 }
 
 Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
-
+	console.log(this);
     // track currently edited feature
     this.editing = ref;
     $("#editor-tabs").tabs();
@@ -883,17 +883,20 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
 Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
     if(!this.catalog_search_xhr) this.catalog_search_xhr = {};
     if(this.catalog_search_xhr[o.catalog]) this.catalog_search_xhr[o.catalog].abort();
-	console.log(o.params);
+	console.log(o);
     this.catalog_search_xhr[o.catalog] = $.ajax({"url": "services/catalogs/"+o.catalog, "data": o.params || {}, 
         "success": $.proxy(function(json) {
             var cat_html = $('<ul class="catalog-items"></ul>');
             var alt = "";
             for(var i=0; i<json.results.length; i++) {
-    			if(!(json.results[i].co2e)) { continue;}
+				console.log(json);
+    			//if(!(json.results[i].co2e)) { continue;}
                 // Todo: Template this                
                 var cat_content = '';                    
                 cat_content += '<div class="clear"></div></div>'; 
-                cat_content += '<span class="cat-item-name">'+_S.ttrunc(json.results[i].name, 50)+'</span>';
+                cat_content += '<span class="cat-item-name">'+_S.ttrunc(json.results[i].name, 40)+'</span>';
+                cat_content += json.results[i].geography ? '<span class="cat-item-metainfo">Location: '+json.results[i].geography+'</span>': '';
+				cat_content += json.results[i].year!="0" ? '<span class="cat-item-metainfo">Year: '+json.results[i].year+'</span>': '';		
 				cat_content += '<span class="cat-item-footprints">';
 				cat_content +=  '<span class="cat-item-co2e">';
 				cat_content +=  json.results[i].co2e ? '<input type="checkbox" id="co2e-factor" />'+ Math.round(100*json.results[i].co2e)/100+' kg' : '&nbsp;';
@@ -948,7 +951,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                     o.params.l = o.params.l;
                     o.catalog = this.o.catalog;
                     this.editor.updateCatalogListing(o);
-                }, {"o": o, "editor": this}));
+                }, {"o": o, "editor": this.editor}));
                 $(this.editor.map_view.dialog).find('.catalog-pager').append(prev_link);
             }
 
@@ -1112,7 +1115,9 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     Sourcemap.template('map/edit/catalog', function(p, txt, th) {  
 	 	//$("#edit-catalog").html(th); //Bianca
 		$("#stop-editor").hide();
-		$("#dialog").width(920);
+		$("#dialog").width(1020);
+		$("#dialog").css("right",10);
+		$("#dialog").css("padding",0);
 		$("#newcatalog").show();
         $("#newcatalog").html(th);  
         this.editor.updateCatalogListing(this.o);
@@ -1127,7 +1132,8 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
             "co2e": true,
             "waste": true,
             "water": true,
-            "energy": true
+            "energy": true,
+			"unit": true
         }
     }
     var vals = {};
@@ -1146,7 +1152,7 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
     		}
         }
     }
-
+	console.log(vals);
     this.updateFeature(this.editing, vals);
     this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);     
     $("#editor-tabs").tabs('select', 2);

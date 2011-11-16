@@ -545,12 +545,40 @@
     }
 	#edit-stop-footprint, #edit-hop-footprint {
 		fieldset { padding:0; }
-		.footprint-section {
-			background:none;
-			float:left;
-			width:auto;
-			width:60px;
-			height:30px;
+		.footprint-row {
+			clear: both;
+			width: 300px;
+			padding: 4px;
+			margin: 4px;
+			.footprint-section {
+				clear: none;
+				background:none;
+				float:left;
+				width:60px;
+				height:30px;
+			}
+			.lock {
+				background: url(../images/icon-lock.png) 0px 0px no-repeat;    
+				width: 25px;
+				height: 25px;
+				float:left;
+			}
+			label {
+				clear: none;
+				width: 70px;
+				float: left;
+			}
+			input {
+				width: 60px;
+				clear: none;
+				padding: 5px;
+				float: left;
+			}
+			.result {
+				clear: none;
+				float: left;
+				width: 100px;
+			}
 		}
 		.footprint-math {
 			background:none;
@@ -698,12 +726,28 @@
 }
 #catalog {
 	.catalog-title {
-		font-size: 15px;
+		font-family: Helvetica;
+		font-size: 22px;
 		font-weight: bold;
 		clear: both;
 		text-align:center;
 		border-bottom: 1px solid #c9c9c9;
+		padding: 20px;
+		margin: 0px;
+		height: 18px;
+		background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(200,200,200,0.7) 100%);
+	    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(255,255,255,0.5)),color-stop(1,rgba(204,204,204,0.5)));
+	}
+	.catalog-search-bar {
+		font-family: Helvetica;
+		clear: both;
+		text-align:center;
+		border-bottom: 1px solid #c9c9c9;
+		height: 44px;
 		padding: 10px;
+		margin: 0px;
+		background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(200,200,200,0.7) 100%);
+	    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(255,255,255,0.5)),color-stop(1,rgba(204,204,204,0.5)));
 	}
 	.catalog-footprint-types {
 		float: right;
@@ -738,7 +782,7 @@
         ul.catalog-items {
             margin:0;
             li.catalog-item {
-				width: 888px;
+				width: 1000px;
 				height: 33px;
                 font-size:0.8em;
                 cursor: pointer;
@@ -747,12 +791,15 @@
                 list-style:none;
                 display:block;
 			    font-size:0.8em;
+				margin: 0px;
 				margin-bottom: 5px;
 				background-color: rgba(210,210,210,0.7);
-			    background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(240,240,240,0.7) 100%);
-			    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(216,216,216,0.5)),color-stop(1,rgba(204,204,204,0.5)));
+			    background-image: -moz-linear-gradient(center bottom,rgba(216,216,216,0.5) 0%,rgba(204,204,204,0.7) 100%);
+			    //background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(216,216,216,0.5)),color-stop(1,rgba(204,204,204,0.5)));
 			    .rounded(12px);
 			    .box_shadow(0, 1px, 3px);
+				border: 1px solid #d7d7d7;
+	             .rounded;
                 &:hover {
                     background:rgba(255,255,255,0.6);
                     color:#000;
@@ -760,9 +807,24 @@
                 .cat-item-name {
                     font-weight:bold;
 					float:left;
-					padding: 5px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+					padding-left: 10px;
 					span.cat-value { font-weight:normal; }
                 }
+				.cat-item-metainfo {
+                    font-weight:regular;
+					font-style: italic;
+					float:left;
+					padding-top: 13px;
+					padding-bottom: 13px;
+					padding-left: 7px;
+					font-size: 13px;
+					font-family: Helvetica;
+					color: #5f5f5f;
+					span.cat-value { font-weight:normal; }
+                }
+
                 .cat-item-footprints { 
 					float:right;
 					font-weight: bold;
@@ -800,16 +862,23 @@
     }
     #catalog-search {
         fieldset{
-            width:300px;
+            width:445px;
+			height: 43px;
             margin:0;
+			padding:0;
             background: url(../images/shadow.png) top repeat-x; 
-            border: 1px solid #c9c9c9;
+            border: 1px solid #d7d7d7;
              .rounded;
 
              input#catalog-search-field{
-                  width: 264px;
-                  padding: 10px 0 10px 36px;
-                  border: 0;
+				  font-family: Helvetica;
+				  font-size: 18px;
+				  color: #c5c7cb;
+                  width: 445px;
+				  height: 43px;
+                  padding-left: 30px;
+				  border: 0;
+				  margin:0;
                   outline: none;
                   background: url(../images/search.png) 12px center no-repeat; 
                   -webkit-appearance: none;

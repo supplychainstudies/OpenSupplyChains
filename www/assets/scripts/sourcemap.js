@@ -238,6 +238,55 @@ Sourcemap.validate = function(type, data) {
     return false;
 }
 
+Sourcemap.initPasscodeInput = function(popID){
+    var element = document.createElement('div');
+    $(element).html(
+        '<div id="passcode-input">'+
+        '<form class="passcode-input">'+
+        '<label id="passcode-msg" for="passcode"> This map is protected. Please enter the password:</label>'+
+        '<input name="passcode" type="text" autocomplete="off"></input>'+
+        '<input id="passcode-submit" type="submit"/>'+
+        '</form>'
+        +'</div>'
+    );
+    $(element).attr('id',popID);
+    $(element).addClass("popup_block");
+    $(element).prepend('<a href="#" class="close"></a>');
+    $('body').append($(element));
+
+    var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
+
+    // Error behavior
+    var onError = function(){ window.location = "/view/" + scid + "?private"; }
+
+    //Autofocus on password  
+    $(element).find("input[name='passcode']").focus(); 
+    
+    // CSS setting of pop up window
+    $('#' + popID).height(110);
+    $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
+    //$('#' + popID).width(600);
+    var popMargTop = ($('#' + popID).height() + 80) / 2;
+    var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+    $('#' + popID).css({
+        'margin-top' : -popMargTop,
+        'margin-left' : -popMargLeft,
+        'overflow' : 'hidden'
+    });     
+
+    $('#' + popID).fadeIn();
+
+    $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+    $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+    $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
+        $('#fade , .popup_block').fadeOut(function() {
+            $('#fade, a.close').remove();
+        }); //fade them both out
+        return false;
+    });
+
+}
 
 Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
     // fetch and initialize supplychain
@@ -264,7 +313,12 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             // unlock the supply chain
         },
         error : function(data){
-            // do nothing
+            //console.log("Passcode incorrect");
+            var error_response = eval('('+data.response+')');
+            $('#popup').fadeIn();
+            $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
+            $('.passcode-input').find("input[name='passcode']").focus();
+            $("#fade").fadeIn();
         }
     });
 }

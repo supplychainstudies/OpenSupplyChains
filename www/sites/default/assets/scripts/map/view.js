@@ -24,7 +24,8 @@ $(document).ready(function() {
 
     // get passcode exist or not
     var passcode = "";   
-    if($('#exist-passcode').attr("value")){   
+    //if($('#exist-passcode').attr("value")){   
+    if(Sourcemap.passcode_exist){   
         // TODO: If admin, skip passcode screen
 
         // if passcode exists
@@ -34,7 +35,7 @@ $(document).ready(function() {
         $(element).html(
             '<div id="passcode-input">'+
             '<form class="passcode-input">'+
-            '<label for="passcode"> This map is protected. Please enter the password:</label>'+
+            '<label id="passcode-msg" for="passcode"> This map is protected. Please enter the password:</label>'+
             '<input name="passcode" type="text" autocomplete="off"></input>'+
             '<input id="passcode-submit" type="submit"/>'+
             '</form>'
@@ -53,6 +54,28 @@ $(document).ready(function() {
         //Autofocus on password 
         $(element).find("input[name='passcode']").focus();
         
+        // CSS setting of pop up window        
+        $('#' + popID).height(110);
+        $('#' + popID).width(600);
+        var popMargTop = ($('#' + popID).height() + 80) / 2;
+        var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+        $('#' + popID).css({
+            'margin-top' : -popMargTop,
+            'margin-left' : -popMargLeft,
+            'overflow' : 'hidden'
+        });
+
+        $('#' + popID).fadeIn();
+            
+        $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+        $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+        $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
+            $('#fade , .popup_block').fadeOut(function() {
+                //$('#fade, a.close').remove();
+            }); //fade them both out
+            return false;
+        });
         
         // submit passcode to fetch supplychain
         $('form.passcode-input').submit(function(evt){
@@ -85,36 +108,14 @@ $(document).ready(function() {
                         })
                     );
                 $(".description").after(youtube_iframe);
-            }
+            };
             Sourcemap.loadSupplychain(scid, passcode, cb);
            
             $('#fade , .popup_block').fadeOut(function() {
-            $('#fade, a.close').remove();
+                //$('#fade, a.close').remove();
             }); //fade them both out
         });
 
-        // CSS setting of pop up window
-        $('#' + popID).height(110);
-        $('#' + popID).width(600);
-        var popMargTop = ($('#' + popID).height() + 80) / 2;
-        var popMargLeft = ($('#' + popID).width() + 80) / 2;
-
-        $('#' + popID).css({
-            'margin-top' : -popMargTop,
-            'margin-left' : -popMargLeft,
-            'overflow' : 'hidden'
-        });
-
-        $('#' + popID).fadeIn();
-            
-        $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
-        $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
-        $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
-            $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
-            }); //fade them both out
-            return false;
-        });
     } else {
         // get scid from inline script
         var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();

@@ -15,7 +15,10 @@
 <div class="<%= this.item.attributes.kind %>">
 
     <h2 class="title"><%= _S.htesc(this.item.getAttr("title", "An unnamed "+this.item.attributes.kind)) %><div class="dot" style="background:<%= this.item.attributes.color %>"></div></h2>
-    <% if(this.item.attributes.placename != undefined || this.item.attributes.address != undefined) { %><h3 class="placename"><%= _S.htesc(this.item.attributes.placename, this.item.attributes.address) %></h3><% } %>
+    <% if(this.item.attributes.address != undefined) { %>
+        <h3 class="placename"><%= _S.htesc(this.item.attributes.address) %></h3>
+    <% } %>
+    
     <% if(this.item.getAttr("description", false) && this.item.getAttr("description").length > 1) { %>
         <div class="description"><%= _S.htesc(this.item.getAttr("description")) %></div>
     <% } %>

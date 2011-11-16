@@ -1,4 +1,4 @@
-/* Copyright (C) Sourcemap 2011
+/* Copyright (C) Sourcemap 2014
  * This program is free software: you can redistribute it and/or modify it under the terms
  * of the GNU Affero General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
@@ -596,26 +596,32 @@ Sourcemap.ttrunc = function(str, lim, dots) {
     return tstr;
 }
 
-Sourcemap.truncate_string = function (target)
-{
-    // 1 line;
-    // in general.less : white-space is set to nowrap
-    $(target).each(function(){       
-        var new_string;
-        var width_diff;
-        var word_count;
-        var chat_diff=18;
-        // 18 : Chinese char width , 5 : dot width
+Sourcemap.truncate_string = function(target){
+    $(target).each(function(){
 
-        var width = $(this).parent().width();
-        while($(this)[0].scrollWidth>width)
-        {
-             width_diff = $(this)[0].scrollWidth - width;
-             word_count = Math.ceil(width_diff/chat_diff);
-             if(word_count<5) word_count = 5;
-             new_string = jQuery.trim($(this).text()); 
-             $(this).find("a").text(new_string.substr(0, new_string.length - word_count) +"...");
-        }   
+        // grab parent element dimensions
+        var width  = $(this).parent().width();
+        var height = $(this).parent().height();
+
+        // clone div to a new element for measurement
+        var testdiv = $(this).clone().css({'width': width, 'height': 'auto', 'overflow': 'auto', 'display': 'hidden'});
+        $('<br />').appendTo($(this).parent());
+        $(testdiv).appendTo($(this).parent());
+        var text = $.trim($(this).text());
+        replacementText = null;
+        console.log(text, width, $(testdiv).height());
+       
+        // remove one character at a time until the height equals the original 
+        for(i=text.length; height < $(testdiv).height() && i > 0; i--){
+            replacementText = text.substr(0, i);
+            $(testdiv).text(replacementText + "...");
+            console.log(height, $(testdiv).height());
+        }
+        
+        if(replacementText)
+            $(this).text($.trim(replacementText.slice(0,-1)) + "...");
+        $(testdiv).prev().remove();
+        $(testdiv).remove();
     });
 }
 

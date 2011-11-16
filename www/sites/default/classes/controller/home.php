@@ -59,7 +59,7 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         // This is an example of how we should do AJAX validation in Kohana
         $this->auto_render = FALSE;
         $this->template = null;
-        
+         
         $user = Auth::instance()->get_user();
         $set_to = null;
         if(Request::$method === 'POST') {

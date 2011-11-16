@@ -57,7 +57,9 @@
                 <li class="news-item">
                     <h5 class="title"><a href="http://blog.sourcemap.com"><?= HTML::chars($news_item->title_plain) ?></a></h5>
                     <p>
-                        <?= substr(HTML::chars($news_item->excerpt), 0, 130) ?>&hellip; 
+                        <span class="truncate">
+                        <?= substr(HTML::chars($news_item->excerpt), 0, 255) ?>&hellip; 
+                        </span>
                         <a class="readmore" href="<?= $news_item->url ?>">More &raquo;</a>
                     </p>
                 </li>

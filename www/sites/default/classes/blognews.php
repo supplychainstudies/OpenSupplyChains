@@ -13,21 +13,21 @@
 
 class Blognews {
 
-    const BASEURL = 'http://blog.sourcemap.com/api/get_recent_posts/';
+    const NEWSURL = 'http://blog.sourcemap.com/api/get_recent_posts/';
+    const PAGEURL = 'http://blog.sourcemap.com/api/get_page_index/';
 
     public static function cache_key($num) {
         return sprintf('blog-news-num-%02d', $num);
     }
 
-
-    public static function fetch($num=20, $cache=true) {
+    public static function fetchnews($num=20, $cache=true) {
         $num = max(0, min(50, $num));
 
         if($cache && ($cached = Cache::instance()->get(self::cache_key($num))))
             return $cached;
 
         try {
-            $news = file_get_contents(self::BASEURL);
+            $news = file_get_contents(self::NEWSURL);
             $news = json_decode($news);
         } catch(Exception $e) {
             $news = false;
@@ -37,4 +37,25 @@ class Blognews {
             Cache::instance()->set(self::cache_key($num), $news);
         return $news;
     }
+
+    public static function fetchindex($cache=true){
+        if($cache && ($cached = Cache::instance()->get("blog-index")))
+            return $cached;
+
+        try {
+            $pages = array();
+            $index = file_get_contents(self::PAGEURL);
+            $index = json_decode($index);
+            foreach($index->pages as $page){
+                $pages[] = $page; 
+            }
+        } catch(Exception $e) {
+            $pages = false;
+        }
+
+        if($pages && $cache)
+            Cache::instance()->set("blog-index", $pages);
+        return $pages;
+    }
+
 }

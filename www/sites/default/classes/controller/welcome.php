@@ -35,6 +35,6 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         $this->template->featured = $featured->results;
         $this->template->morefeatured = $morefeatured->results;
 
-        $this->template->news = Blognews::fetch(4);
+        $this->template->news = Blognews::fetchnews(4);
     }
 }

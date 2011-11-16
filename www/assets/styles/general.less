@@ -89,7 +89,7 @@ a {
     margin-bottom: -72px; // needed to stick footer to bottom of screen
 }
 #footer, .push {
-    height: 125px;
+    height: 100px;
 }
 .container{
     width:960px;
@@ -209,7 +209,6 @@ a {
         float:right;
         list-style:none;
         max-width: 335px;
-        margin-right: 35px;
         li{
             font-size: 17px;
             font-weight: bold;
@@ -248,7 +247,6 @@ a {
 
 /* Footer ---------------------------------------- */
 #footer {
-	height: 60px;
 	background-color: #454647;
 	border-top:1px solid #ccc;
 	font-size: 13px;
@@ -285,7 +283,7 @@ a {
 #search-div{ 
     margin: 10px 0 0 48px;
     input{ 
-        width: 280px;
+        width: 310px;
         background: url("../images/search.png") 12px center no-repeat;  
     } 
 }
@@ -634,7 +632,7 @@ h1#site-tagline { font-size:30px; }
 #slider {
    width: 1090px;
    margin: 0 auto 10px auto;
-   padding: 14px 4px 4px 4px;
+   padding: 16px 4px 4px 4px;
    overflow: hidden;
    background: url('../images/slider-bg.png') top no-repeat;
    height: 362px;
@@ -668,30 +666,31 @@ h1#site-tagline { font-size:30px; }
 
 .preview-map-item{
     float:left;
-    margin-right: 20px;
+    margin: 0 20px 20px 0;
     overflow: hidden;
     position: relative;
 
     &.last{margin-right: 0;}
     &.browse{margin: 10px 5px 10px 0;}
     
-    &.small { width: 169px; height: 162px; img{ width: 160px; height: 90px; } }   //explicit widths needed for truncation
-    &.medium{ img{ width: 220px; height: 128px; } }   //explicit widths needed for truncation
+    &.small { width: 169px; height: 137px; img{ width: 160px; height: 90px; } }   //explicit widths needed for truncation
+    &.medium{ width: 229px; height: 180px; img{ width: 220px; height: 128px; } }   //explicit widths needed for truncation
     
     .preview-map {
         padding: 4px 4px 4px 3px;
         background: #fff;
-        border: 1px solid #d9d9d9;
+        border: 1px solid #bbb;
         .rounded(3px);
         &:hover {
-            border-color:#bbb; 
+            border-color:#999; 
         }
 
     }
     .preview-title, .preview-author{
         margin-left: 4px;
         font-weight: normal;
-        white-space:nowrap;
+        height: 1.2em;
+        overflow:hidden;
         &.featured,
         &.carousel{
             width:230px;
@@ -706,7 +705,7 @@ h1#site-tagline { font-size:30px; }
         font-size:0.7em;
         font-style: italic;
         color:#888;
-        margin: 5px 5px 10px;
+        margin: 0 5px 10px;
         a {
             color:#888;
             text-decoration:underline;
@@ -718,7 +717,7 @@ h1#site-tagline { font-size:30px; }
     }
     .preview-icons{
         position: absolute;
-        right: 0;
+        right: 0; bottom: 0;
         font-size: 10px;
         font-weight: bold;
         color: #fff;
@@ -747,6 +746,15 @@ h1#site-tagline { font-size:30px; }
         .preview-title{ margin: 10px 0; }
     }
 }
+
+ul li.news-item p{
+    height: 55px;    
+    width: 500px;
+    overflow: hidden;
+    position: relative;
+}
+
+
 
 /* Browse page --------- */
 #category-list {

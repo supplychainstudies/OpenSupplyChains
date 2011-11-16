@@ -20,8 +20,8 @@
                 <img class="preview-map" src="static/<?php print $item->id; ?>.s.png" alt="" />
             </a>
             </div>
-            <h4 class="preview-title truncate vertical">
-                <a href="view/<?php print $item->id; ?>">
+            <h4 class="preview-title vertical">
+                <a class="truncate" href="view/<?php print $item->id; ?>">
                 <?= HTML::chars($item->attributes->title) ?>
                 </a>
             </h4>

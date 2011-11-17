@@ -28,8 +28,6 @@
         ?>
     </ul>
     <div class="clear"></div>
-    <ul class="blog">
-    </ul>
     <p>&copy; 2011 Sourcemap Inc. 
     <?php
         // version information

@@ -86,11 +86,15 @@ a {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin-bottom: -72px; // needed to stick footer to bottom of screen
+    margin-bottom: -75px; // needed to stick footer to bottom of screen
 }
-#footer, .push {
+#footer{
+    height: 73px;
+}
+.push{
     height: 100px;
 }
+
 .container{
     width:960px;
     margin-left: auto;
@@ -198,7 +202,8 @@ a {
 
 /* Header ---------------------------------------- */
 #header {
-    margin: 28px auto 20px;
+    margin: 0 auto 20px;
+    padding-top: 28px;
     #logo{
         float:left;
         h1 { display:none; }
@@ -250,10 +255,10 @@ a {
 	background-color: #454647;
 	border-top:1px solid #ccc;
 	font-size: 13px;
-	padding:0 0 11px 0;
-	font-weight: bold;
+    font-weight: bold;
 	text-shadow: 0 -1px -1px #353637;
-	.container{
+	padding: 0;
+    .container{
 	    background: url("../images/logo-footer.png") top right no-repeat;
 	}
 	ul {
@@ -372,6 +377,12 @@ input[type=text],input[type=password], textarea {
 input::-webkit-input-placeholder, input:-moz-placeholder { color:#999 }
 textarea { height: 55px; }
 
+div.third-width{
+    float:left;
+    width: 30%;
+    padding: 2% 2% 2% 1%;
+}
+
 &.sourcemap-form-button{
 	width: 100%;
 	border: none;
@@ -390,7 +401,9 @@ textarea { height: 55px; }
 	.gradient(#246587,#50a3ce);
 	.rounded(4px);
 	.box_shadow();
-	a { color:#f7f7f7; text-decoration: none; }
+	a { 
+        color:#f7f7f7; text-decoration: none; 
+    }
 	&:hover { color: #f7f7f7; background:#024365; }
 	&.disabled { background:#ccc; 	}
     &.alternate{
@@ -478,6 +491,25 @@ input[type=checkbox]{
         &:hover{ color: #444; cursor: text; }
         &.link{  background: url("../images/icon-link.png") 6px center no-repeat; }
         &.embed{ background: url("../images/icon-embed.png") 6px center no-repeat; }
+    }
+}
+
+.collapsed{ display: none; }
+.expander{ display: block; padding-bottom: 20px; }
+
+.receipt{
+    h2{
+        border-bottom: 1px solid #eee;
+    }
+    ul{
+        float: left;
+        width: 50%;
+        color: #999;
+        li{ margin-bottom: 10px; }
+        &.labels{
+            width: 38%;
+            text-align:center;
+        }
     }
 }
 
@@ -888,6 +920,16 @@ ul li.news-item p{
     }
 }
 
+.payment{
+    margin: 10px auto;
+    border-top: 1px solid #d4d4d4;
+    color: #888;
+    .container{
+        padding: 20px 20px 20px 50px;
+        background: url(../images/icon-receipt.png) left no-repeat transparent;
+    }
+}
+
 /* Channel ---------------------------------- */
 
 .channel-banner{
@@ -1081,6 +1123,7 @@ div.form-page {
 	    width: 505px;
 		p { font-size:20px; }
 		ul {
+            list-style: square;
 			margin:20px 20px 20px 30px;
 			li { margin:0 0 10px 0;	}
 		}
@@ -1101,7 +1144,16 @@ div.form-page {
                 margin: 13px 40px 4px 12px; 
             }
         }
+        .container{
+            margin: 0 10px;
+            width: auto;
+        }
 	}
+    .credit-cards{
+        float:right;
+        width: 405px; height: 50px;
+        background:url('../images/payment/cards.png') left transparent no-repeat;
+    }
 }
 
 
@@ -1187,7 +1239,7 @@ div.form-page {
     .rounded(12px);
     .box_shadow(3px, 1px, 10px);
 	h1 {
-		padding: 0 0 0 0;
+		padding: 0;
 	}
 	.overview {
 		float:right;

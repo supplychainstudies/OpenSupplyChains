@@ -34,41 +34,56 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             $this->request->redirect('auth');
         }
 
-        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
-        if($user->has('roles', $channel_role)) {
-            Message::instance()->set("You've already upgraded your account.");
-            $this->request->redirect('home');
-        } 
 
         if(strtolower(Request::$method) === 'post') { 
              $validate= $f->validate($_POST);   
              if( $validate ) {  
                 $p = $f->values();
                 try{
-                    // get the credit card details submitted by the form
-                    $token = $_POST['stripeToken'];
-
                     // set your secret key: remember to change this to your live secret key in production
                     // see your keys here https://manage.stripe.com/account
                     Stripe::setApiKey("ffzydGhK4dzlQFbK22Q0GGM6CSG74f9d");
 
-                    // create the charge on Stripe's servers - this will charge the user's card
-                    $charge = Stripe_Charge::create(array(
-                      "amount" => 9995, // amount in cents, again
-                      "currency" => "usd",
-                      "card" => $token,
-                      "description" => "payinguser@example.com")
-                    );
+                    try{
+                        Stripe_Plan::retrieve("channel");
+                    } catch (Exception $e) {
+                        // create plan if it doesn't exist
+                        Stripe_Plan::create(array(
+                          "amount" => 9995,
+                          "interval" => "year",
+                          "name" => "Channel",
+                          "currency" => "usd",
+                          "id" => "channel")
+                        );
+                    }
+                    
+                    if($renewing){
+                    }
+                    else{
+
+                    // get the credit card details submitted by the form
+                    $token = $_POST['stripeToken'];
+
+                    try{
+                        // do we already have a customer ID?  then we're renewing 
+                        Stripe_Customer::retrieve($user->username);
+                        $c->updateSubscription(array("plan" => "channel"));
+                    } catch (Exception $e) {
+                        // create new stripe customer based on existing username
+                        $customer = Stripe_Customer::create(array(
+                            "description" => $user->username,
+                            "plan" => "channel",
+                            "card" => $token
+                        ));
+
+                        $user->customer_id = $customer->id;
+                        $user->save();
+                    }
+
                 } catch (Exception $e) {
-                    Message::instance()->set('Please check the information below.');
+                    Message::instance()->set('Please check the information below.' . $e);
+                    $this->request->redirect('home/');
                 } 
-
-                //success! set channel status
-                $channel_role = ORM::factory('role', array('name' => 'channel'));
-                $user->add('roles', $channel_role)->save();
-
-                //TODO: create customer object and invoice object
-                // https://stripe.com/docs/api
 
                 //send a notification 
 				$mailer = Email::connect(); 
@@ -94,7 +109,12 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                 try { 
 					$sent = $mailer->send($swift_msg);
                     Message::instance()->set('Email confirmation sent.');
-                    return $this->request->redirect('user/thankyou');
+                    
+                    //set channel status
+                    $channel_role = ORM::factory('role', array('name' => 'channel'));
+                    $user->add('roles', $channel_role)->save();
+                    
+                    return $this->request->redirect('upgrade/thankyou');
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete account upgrade. Please contact support.');
                 } 
@@ -106,6 +126,13 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         } else { 
         /* pass */ 
         }
+        
+        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        if($user->has('roles', $channel_role)) {
+            Message::instance()->set("You've already upgraded your account.");
+            $this->request->redirect('home');
+        } 
+    
     }
     
     public function action_payments() {
@@ -127,7 +154,117 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             $this->request->redirect('user/upgrade');
         } 
         
-        //TODO: retrieve customer object and invoice objects
-        // https://stripe.com/docs/api
+        $customer = Stripe_Customer::retrieve($user->customer_id);
+
+        $this->template = new View('user/payments');
+        $this->template->username = $user->username;
+        $this->template->card_name = $customer->active_card->name;
+        $this->template->card = "xxxx xxxx xxxx " . $customer->active_card->last4;
+        $this->template->card_type = $customer->active_card->type;
+        $this->template->exp_month= $customer->active_card->exp_month;
+        $this->template->exp_year= $customer->active_card->exp_year;
+        $this->template->thru = strtotime($customer->next_recurring_charge->date);
+        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        if($user->has('roles', $channel_role)) {
+            $this->template->status = "Channel";
+        } 
+        else{
+            $this->template->status = "Free";
+        }
+
+        $payments = Stripe_Invoice::all(array(
+          "customer" => $user->customer_id,
+          "count" => 999)
+        );
+
+        // add card data to payments
+        $payment_data = array(); 
+        foreach($payments->data as $payment){
+            $charge = Stripe_Charge::retrieve($payment->charge);
+            $payment->card = $charge->card;
+            $payment_data[] = $payment;
+        }
+
+        $this->template->payments = $payment_data;
+        
+        $this->template->user = $user;
+    }
+    
+    public function action_thankyou() {
+        $this->layout->page_title = 'Thank you!';
+        if(!($user = Auth::instance()->get_user())) {
+            $this->request->redirect('auth');
+        }
+        
+        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        if(!($user->has('roles', $channel_role))) {
+            Message::instance()->set("You haven't upgraded your account yet.");
+            $this->request->redirect('user/upgrade');
+        } 
+
+        $customer = Stripe_Customer::retrieve($user->customer_id);
+
+        $this->template = new View('user/thankyou');
+        $this->template->username = $user->username;
+        $this->template->card_name = $customer->active_card->name;
+        $this->template->card = "xxxx xxxx xxxx " . $customer->active_card->last4;
+        $this->template->card_type = $customer->active_card->type;
+        $this->template->exp_month= $customer->active_card->exp_month;
+        $this->template->exp_year= $customer->active_card->exp_year;
+        $this->template->thru = strtotime($customer->next_recurring_charge->date);
+        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        if($user->has('roles', $channel_role)) {
+            $this->template->status = "Channel";
+        } 
+        else{
+            $this->template->status = "Free";
+        }
+        $this->template->user = $user;
+    }
+
+    public function action_renew() {
+        $this->template = new View('user/renew');
+        $this->layout->page_title = 'Renew your account';
+        if(!($user = Auth::instance()->get_user())) {
+            $this->request->redirect('auth');
+        }
+        
+        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        if(!($user->has('roles', $channel_role))) {
+            Message::instance()->set("You haven't upgraded your account yet.");
+            $this->request->redirect('user/upgrade');
+        } 
+        
+        $f = Sourcemap_Form::load('/upgrade');
+        $f->action('upgrade')->method('post');
+        $this->template->form = $f;
+        
+        try{
+            $customer = Stripe_Customer::retrieve($user->customer_id);
+            $f = Sourcemap_Form::load('/renew');
+            $f->action('upgrade')->method('post');
+            $this->template->renew_form = $f;
+            
+            $this->template->card_name = $customer->active_card->name;
+            $this->template->card = "xxxx xxxx xxxx " . $customer->active_card->last4;
+            $this->template->card_type = $customer->active_card->type;
+            $this->template->exp_month= $customer->active_card->exp_month;
+            $this->template->exp_year= $customer->active_card->exp_year;
+            $this->template->thru = strtotime($customer->next_recurring_charge->date);
+        } catch (Exception $e){
+            // No valid credit card on file for some reason
+        }
+        
+
+
+        $this->template->username = $user->username;
+        $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        if($user->has('roles', $channel_role)) {
+            $this->template->status = "Channel";
+        } 
+        else{
+            $this->template->status = "Free";
+        }
+        $this->template->user = $user;
     }
 }

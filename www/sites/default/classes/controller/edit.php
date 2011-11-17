@@ -277,4 +277,127 @@ class Controller_Edit extends Sourcemap_Controller_Map {
         }
     }
 
+    public function action_general($supplychain_id=false) {
+        $set_to = false;
+        $set_publish = null;
+        $set_featured = null;
+        $isset_passcode = false;
+        $set_passcode = null;
+        
+        if($supplychain_id && (Request::$method === 'POST')) {
+            $sc = ORM::factory('supplychain', $supplychain_id);
+            if($sc->loaded()) {
+                $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+                $owner_id = (int)$supplychain->user_id;
+                if($current_user_id && $supplychain->user_can($current_user_id, Sourcemap::WRITE)) {
+                    $p = Validate::factory($_POST);
+                    $p->rule('publish', 'regex', array('/(yes|no)/i'))
+                      ->rule('publish', 'not_empty')
+                      ->rule('featured', 'not_empty');
+                    if($p->check()) {
+                        $set_to = true;
+                        if(isset($p['publish']))
+                            $set_publish = strtolower($p['publish']) == 'yes';
+                        if(isset($p['featured']))
+                            $set_featured = strtolower($p['featured']) == 'yes';
+                        $isset_passcode = isset($_POST['passcode']);
+                        if($isset_passcode)
+                            $set_passcode = $_POST['passcode'];
+
+                    } else {
+                        Message::instance()->set('Missing required parameter.');
+                        $this->request->redirect('/home');
+                    }
+                } else {
+                    Message::instance()->set('You don\'t have permission to do that.');
+                    $this->request->redirect('/home');
+                }
+            } else {
+                Message::instance()->set('That map doesn\'t exist.');
+                $this->request->redirect('/home');
+            }
+        } elseif(Request::$method === 'GET') {
+            $sc = ORM::factory('supplychain', $supplychain_id);
+            if($sc->loaded()) {
+                $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+                $owner_id = (int)$sc->user_id;
+                if($current_user_id && $sc->user_can($current_user_id, Sourcemap::WRITE)) {
+                    $supplychain = $sc->kitchen_sink($sc->id);
+                    $p = Validate::factory($_GET);
+                    $p->rule('publish', 'regex', array('/(yes|no)/i'))
+                      ->rule('publish', 'not_empty')
+                      ->rule('featured', 'not_empty');
+                    if($p->check()) {
+                        $set_to = true;
+                        if(isset($p['publish']))
+                            $set_publish = strtolower($p['publish']) == 'yes';
+                        if(isset($p['featured']))
+                            $set_featured = strtolower($p['featured']) == 'yes';
+                        $isset_passcode = isset($_GET['passcode']);
+                        if($isset_passcode)
+                            $set_passcode = $_GET['passcode'];
+                        
+                    } else {
+                        Message::instance()->set('Missing required parameter.');
+                        $this->request->redirect('/home');
+                    }
+                } else {
+                    Message::instance()->set('You don\'t have permission to do that.');
+                    $this->request->redirect('/home');
+                }
+            } else {
+                Message::instance()->set('That map does not exist.');
+                $this->request->redirect('/home');
+            }
+        } else {
+            Message::instance()->set('Bad request.');
+            $this->request->redirect('/home');
+        }
+        // set_to : If parameter is set
+        if($set_to) {
+            if($set_publish === true)
+                $sc->other_perms |= $set_publish;
+            else
+                $sc->other_perms &= ~Sourcemap::READ;
+
+            if($set_featured)
+                $sc->user_featured = "TRUE";
+            else
+                $sc->user_featured = "FALSE";
+            
+            if($isset_passcode)
+                $supplychain->attributes->passcode =  $set_passcode;
+              
+            // try to save it
+            try {
+                $sc->save();
+                ORM::factory('supplychain')->save_raw_supplychain($supplychain, $supplychain->id);
+            
+                $scid = $supplychain_id;
+                $evt = Sourcemap_User_Event::UPDATEDSC;
+                try {
+                    Sourcemap_User_Event::factory($evt, $sc->user_id, $scid)->trigger();
+                } catch(Exception $e) {            
+                }
+                Cache::instance()->delete('supplychain-'.$scid);
+                if(Sourcemap_Search_Index::should_index($scid)) {
+                    Sourcemap_Search_Index::update($scid);
+                } else {
+                    Sourcemap_Search_Index::delete($scid);
+                }
+                $szs = Sourcemap_Map_Static::$image_sizes;
+                foreach($szs as $snm => $sz) {
+                    $ckey = Sourcemap_Map_Static::cache_key($scid, $snm);
+                    Cache::instance()->delete($ckey);
+                }
+            
+                Message::instance()->set('Map updated.', Message::SUCCESS);
+                return $this->request->redirect('/home');
+            } catch(Exception $e) {
+                $this->request->status = 500;
+                Message::instance()->set('Couldn\'t update your supplychain. Please contact support.');
+            }
+        }
+    }
+
 }

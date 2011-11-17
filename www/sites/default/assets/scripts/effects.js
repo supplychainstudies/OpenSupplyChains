@@ -23,8 +23,16 @@ $(document).ready(function(){
     });
     
     /* Channel edit */
+    $("input:checkbox").each(function(index){
+        var ischecked = $(this).is(":checked");
+        $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+
+        $(this).click(function(){
+            var ischecked = $(this).is(":checked");
+            $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        });
+    });
     
-    var widt = false;
     $('.map-passcode-checkbox').each(function(index){
         //default
         var ischecked = $(this).is(":checked");
@@ -35,14 +43,75 @@ $(document).ready(function(){
 
         $(this).click(function(){
             var ischecked = $(this).is(":checked");
-            //console.log($(this).attr("value"));
-            //console.log(ischecked);
             var parent_control = $(this).parent(".map-controls-passcode");
-            //$(this).parent(".map-controls-passcode").stop().animate({width:widt?120:249},500);            
             $(parent_control).stop().animate({width:ischecked?249:120},500);            
-            $(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+            //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
             ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
-            //widt=!widt;
+        });
+    });
+    //$('#map-passcode-input').each(function(index){
+    $('.map-controls').each(function(index){
+
+        var passcode_check = false;
+        $(this).children('.map-controls-passcode').children("input:checkbox").change(function(){
+            passcode_check = $(this).is(":checked");
+            // passcode_check : featured_check ? cancel featured : don't send data
+            
+            // !passcode_check :
+            if(!passcode_check){
+                // Delete #map-passcode-input value
+                if($(this).parent().children("#map-passcode-input").val()=="")
+                    passcode_check = true;
+                else
+                    $(this).parent().children("#map-passcode-input").val("");
+            }
+        });
+        
+        $(this).change(function(){
+
+            // publish
+            var publish_selector = $(this).children('.map-controls-publish"');
+            var publish_check = publish_selector.children("input:checkbox").is(":checked");
+
+            // featured
+            var featured_selector = $(this).children('.map-controls-featured');
+            var featured_check = featured_selector.children("input:checkbox").is(":checked");
+            
+            // passcode_check : featured_check ? cancel featured : don't send data
+            if(passcode_check){
+                passcode_check = false;   // set to default 
+                if(featured_check){
+                    featured_selector.children("input:checkbox").removeAttr("checked"); 
+                    featured_check = false;
+                } else {
+                    return false;
+                }
+            }
+            
+            // passcode 
+            var passcode_selector = $(this).children('.map-controls-passcode');
+            var passcode_val = passcode_selector.children("#map-passcode-input").val();
+            //console.log($(passcode_selector).children("input:checkbox").is(":checked"));
+            //console.log(passcode_selector.children("#map-passcode-input").val());
+
+            // supplychain id
+            var supplychain_id = $(this).attr('value');
+            //http://192.168.1.18/edit/general/5?publish=yes&featured=yes&passcode=aaa 
+            $.ajax({
+                url:'edit/general/'+supplychain_id,
+                data:{  
+                    publish: publish_check?"yes":"no",
+                    featured: featured_check?"yes":"no",
+                    passcode: passcode_val               
+                },
+                success : function(data) {
+                    //console.log("Success : "+data);
+                },
+                error : function(data){
+                    //console.log("Error : "+data);
+                }
+            });
+
         });
     });
 

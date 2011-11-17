@@ -16,7 +16,7 @@
 <div class="container">
     <ul>
     	<li><a href="info">About</a></li>                
-    	<li><a href="info/api">API and Code</a></li> 
+    	<li><a href="http://github.com/SourcemapFoundation/SrcClient/">API and Code</a></li> 
     	<li><a href="info/privacy">Privacy Policy</a></li>
     	<li><a href="info/terms">Terms of Service</a></li>
         <li><a href="http://blog.sourcemap.com">Blog</a></li> 

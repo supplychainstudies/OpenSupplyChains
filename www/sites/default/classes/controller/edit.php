@@ -360,7 +360,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
             else
                 $sc->other_perms &= ~Sourcemap::READ;
 
-            if($set_featured)
+            if($set_featured === true)
                 $sc->user_featured = "TRUE";
             else
                 $sc->user_featured = "FALSE";
@@ -370,9 +370,10 @@ class Controller_Edit extends Sourcemap_Controller_Map {
               
             // try to save it
             try {
-                $sc->save();
                 ORM::factory('supplychain')->save_raw_supplychain($supplychain, $supplychain->id);
-            
+                // sc cant exec first
+                $sc->save();
+
                 $scid = $supplychain_id;
                 $evt = Sourcemap_User_Event::UPDATEDSC;
                 try {

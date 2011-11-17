@@ -22,21 +22,22 @@ $(document).ready(function(){
         var ischecked = $(this).is(":checked");
         $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
 
-        $(this).click(function(){
+        $(this).change(function(){
             var ischecked = $(this).is(":checked");
             $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
         });
     });
-    
-    $('.map-passcode-checkbox').each(function(index){
+   
+    /*
+    $('#map-passcode-checkbox').each(function(index){
         //default
         var ischecked = $(this).is(":checked");
         var parent_control = $(this).parent(".map-controls-passcode");
         $(parent_control).stop().animate({width:ischecked?249:120},500);     
-        $(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
         ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
 
-        $(this).click(function(){
+        $(this).change(function(){
             var ischecked = $(this).is(":checked");
             var parent_control = $(this).parent(".map-controls-passcode");
             $(parent_control).stop().animate({width:ischecked?249:120},500);            
@@ -44,23 +45,52 @@ $(document).ready(function(){
             ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
         });
     });
+    */
     //$('#map-passcode-input').each(function(index){
     $('.map-controls').each(function(index){
 
-        var passcode_check = false;
-        $(this).children('.map-controls-passcode').children("input:checkbox").change(function(){
-            passcode_check = $(this).is(":checked");
-            // passcode_check : featured_check ? cancel featured : don't send data
-            
+        var publish_precheck = false;
+        var featured_precheck = false;
+        var passcode_precheck = false;
+        
+        // default view
+        var map_passcode = $(this).children('.map-controls-passcode');
+        var ischecked = $(map_passcode).children('#map-passcode-checkbox').is(":checked");
+        $(map_passcode).stop().animate({width:ischecked?249:120},500);     
+        //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        ischecked ? $(map_passcode).children("#map-passcode-input").show():$(map_passcode).children("#map-passcode-input").hide();
+
+        $(this).children('.map-controls-publish').children('#map-publish-checkbox').change(function(){
+            publish_precheck = true;
+        });
+
+        $(this).children('.map-controls-featured').children('#map-featured-checkbox').change(function(){
+            featured_precheck = true;
+        });
+
+        $(this).children('.map-controls-passcode').children("#map-passcode-checkbox").change(function(){
+            passcode_precheck = true;
+            //passcode_precheck = $(this).is(":checked");
+            // passcode_check : featured_check ? cancel featured : don't send data            
             // !passcode_check :
-            if(!passcode_check){
+            /*
+            if(!passcode_precheck){
                 // Delete #map-passcode-input value
                 if($(this).parent().children("#map-passcode-input").val()=="")
-                    passcode_check = true;
+                    passcode_precheck = true;
                 else
                     $(this).parent().children("#map-passcode-input").val("");
             }
+            */
+            // animation
+            var ischecked = $(this).is(":checked");
+            var parent_control = $(this).parent(".map-controls-passcode");
+            $(parent_control).stop().animate({width:ischecked?249:120},500);            
+            //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+            ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
         });
+
+
         
         $(this).change(function(){
 
@@ -72,22 +102,70 @@ $(document).ready(function(){
             var featured_selector = $(this).children('.map-controls-featured');
             var featured_check = featured_selector.children("input:checkbox").is(":checked");
             
-            // passcode_check : featured_check ? cancel featured : don't send data
-            if(passcode_check){
-                passcode_check = false;   // set to default 
-                if(featured_check){
-                    featured_selector.children("input:checkbox").removeAttr("checked"); 
-                    featured_check = false;
-                } else {
-                    return false;
-                }
-            }
-            
             // passcode 
             var passcode_selector = $(this).children('.map-controls-passcode');
+            var passcode_check = passcode_selector.children("input:checkbox").is(":checked");
             var passcode_val = passcode_selector.children("#map-passcode-input").val();
             //console.log($(passcode_selector).children("input:checkbox").is(":checked"));
             //console.log(passcode_selector.children("#map-passcode-input").val());
+
+            // precheck
+            // publish_check : featured_check ? cancel featured : (click featured before publish); 
+            if(publish_precheck){            
+                publish_precheck = false; // set to default
+
+                if(!publish_check){                    
+                    featured_selector.children("input:checkbox").removeAttr("checked");
+                    featured_check = false;                        
+                    featured_selector.children("a").attr("style","color:#A7AAAE");
+                }
+            }
+            
+            if(featured_precheck){                
+                featured_precheck = false; // set to default;    
+
+                if(!publish_check){                    
+                    featured_selector.children("input:checkbox").removeAttr("checked");
+                    featured_check = false;                        
+                    featured_selector.children("a").attr("style","color:#A7AAAE");
+                    // cause recursive
+                    // featured_selector.children("input:checkbox").trigger("change");
+                    return false;
+                }
+                if(passcode_check){
+                    // uncheck passcode and reset                    
+                    passcode_selector.children("input:checkbox").removeAttr("checked");
+                    passcode_check = false;
+                    passcode_selector.children("#map-passcode-input").val("");
+                    passcode_val = "";                        
+                    passcode_selector.children("input:checkbox").trigger("change");
+                }
+            }
+
+            // passcode_check : featured_check ? cancel featured : don't send data
+            if(passcode_precheck){
+                passcode_precheck = false;   // set to default 
+
+                if(passcode_check){
+                    if(featured_check){
+                        featured_selector.children("input:checkbox").removeAttr("checked"); 
+                        featured_check = false;                        
+                        featured_selector.children("a").attr("style","color:#A7AAAE");
+                    }else{
+                        return false;
+                    }
+                }else {
+                    if(passcode_val=="")
+                        return false;
+                    else{
+                        // reset passcode
+                        passcode_selector.children("#map-passcode-input").val("");
+                        passcode_val = "";                        
+                        // uncheck featured
+                    }
+                }
+            }
+            
 
             // supplychain id
             var supplychain_id = $(this).attr('value');

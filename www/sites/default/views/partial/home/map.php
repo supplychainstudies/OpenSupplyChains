@@ -62,7 +62,7 @@
             <div class="clear"></div>
             <?php $passcode_isset = isset($supplychain->attributes->passcode); ?>
             <div class="map-controls-passcode">
-                <input class="map-passcode-checkbox" type="checkbox" name="passcode" value="<?= $supplychain->id ?>" <?php if($passcode_isset): ?>checked<?php endif; ?> >
+                <input id="map-passcode-checkbox" type="checkbox" name="passcode" value="<?= $supplychain->id ?>" <?php if($passcode_isset): ?>checked<?php endif; ?> >
                 <a id="map-passcode-link">Passcode</a>
                 <input id="map-passcode-input" type="text" value="<?= $passcode_isset ? $supplychain->attributes->passcode : "" ?>"/>
             </div>

@@ -31,7 +31,7 @@
                 <span class="map-teaser"><?= HTML::chars($supplychain->attributes->description) ?></span>
             <?php endif; ?>
         </div>
-        <div class="map-controls">
+        <div class="map-controls" value="<?= $supplychain->id ?>">
             <div class="map-controls-delete">
                 <a class="red" href="delete/<?= $supplychain->id ?>">Delete</a>
             </div>
@@ -47,13 +47,15 @@
                 $user_featured = ($supplychain->user_featured) ; ?>
             <?php if($is_channel) { ?>
             <div class="map-controls-featured">
-                <input id="map-featured-checkbox" type="checkbox" name="featured" onclick="window.location='edit/featured/<?= $supplychain->id ?>?featured=<?= $user_featured ? "no" : "yes"?>'; return true;"<?= $user_featured ? "checked" : "" ?>/>
+                <!-- <input id="map-featured-checkbox" type="checkbox" name="featured" onclick="window.location='edit/featured/<?= $supplychain->id ?>?featured=<?= $user_featured ? "no" : "yes"?>'; return true;"<?= $user_featured ? "checked" : "" ?>/> -->
+                <input id="map-featured-checkbox" type="checkbox" name="featured" <?= $user_featured ? "checked" : "" ?> />
                 <a id="map-publish-link">Featured</a>
             </div> <? } ?>
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
             <?php if($supplychain->user_id==$user_id): ?>
             <div class="map-controls-publish">
-                <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/>
+                <!-- <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/> -->
+                <input id="map-publish-checkbox" type="checkbox" name="publish" <?= $public ? "checked" : "" ?>/>
                 <a id="map-publish-link">Public</a>
             </div>
             <?php endif; ?>

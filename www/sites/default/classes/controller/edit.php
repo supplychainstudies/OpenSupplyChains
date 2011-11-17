@@ -292,14 +292,18 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 if($current_user_id && $supplychain->user_can($current_user_id, Sourcemap::WRITE)) {
                     $p = Validate::factory($_POST);
                     $p->rule('publish', 'regex', array('/(yes|no)/i'))
-                        ->rule('publish', 'not_empty');
+                      ->rule('publish', 'not_empty')
+                      ->rule('featured', 'not_empty');
                     if($p->check()) {
                         $set_to = true;
-                        $set_publish = strtolower($p['publish']) == 'yes';
-                        $set_featured = strtolower($p['featured']) == 'yes';
-                        $isset_passcode = isset($p['passcode']);
+                        if(isset($p['publish']))
+                            $set_publish = strtolower($p['publish']) == 'yes';
+                        if(isset($p['featured']))
+                            $set_featured = strtolower($p['featured']) == 'yes';
+                        $isset_passcode = isset($_POST['passcode']);
                         if($isset_passcode)
-                            $set_passcode = $p['passcode'];
+                            $set_passcode = $_POST['passcode'];
+
                     } else {
                         Message::instance()->set('Missing required parameter.');
                         $this->request->redirect('/home');
@@ -360,7 +364,6 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 $sc->user_featured = "TRUE";
             else
                 $sc->user_featured = "FALSE";
-
             
             if($isset_passcode)
                 $supplychain->attributes->passcode =  $set_passcode;

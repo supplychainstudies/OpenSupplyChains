@@ -94,20 +94,24 @@ $(document).ready(function() {
                 var supplychain_desc = sc.attributes.description;
                 var regex = new RegExp(/\[youtube:(.+)\]/);
                 var regex_result = supplychain_desc.match(regex);
-                var supplychain_youtube_id = regex_result[1];             
+                var supplychain_youtube_id = null;             
+                if(regex_result)
+                    supplychain_youtube_id = regex_result[1];
 
                 $(".description").html(supplychain_desc.replace(regex));
-                var youtube_iframe = $('<div></div>')
-                    .addClass("description-video")
-                    .append($('<iframe></iframe>')
-                        .addClass("youtube-player")
-                        .attr({
-                            type:"text/html", width:480, height:280, 
-                            src:"http://www.youtube.com/embed/"+supplychain_youtube_id,
-                            frameborder:0
-                        })
-                    );
-                $(".description").after(youtube_iframe);
+                if(supplychain_youtube_id!=null){
+                    var youtube_iframe = $('<div></div>')
+                        .addClass("description-video")
+                        .append($('<iframe></iframe>')
+                            .addClass("youtube-player")
+                            .attr({
+                                type:"text/html", width:480, height:280, 
+                                src:"http://www.youtube.com/embed/"+supplychain_youtube_id,
+                                frameborder:0
+                            })
+                        );
+                    $(".description").after(youtube_iframe);
+                }
             };
             Sourcemap.loadSupplychain(scid, passcode, cb);
            

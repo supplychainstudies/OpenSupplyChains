@@ -12,64 +12,66 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<div id="header" class="container">
-    <div id="logo">
-        <a name="home" href="">        
-            <h1 id="site-title">Sourcemap</h1>
-            <img src="/assets/images/logo.png" alt="sourcemap" />
-        </a>
-    </div>
-    <ul id="navigation">
-        <li> <a href="browse">Browse</a> </li>
-        <li> <a href="create">Create</a> </li>
-        <?php if($current_user = Auth::instance()->get_user()): ?>
-        <?php // logic belongs elsewhere
-            $isChannel = false;
-            $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
-            if($current_user->has('roles', $channel_role))
-                $isChannel = true;
-        ?> 
-        <li>
-            <div> <a href="/home">Dashboard</a><?php if(!($isChannel)){ ?><a class="upgrade-text" href="/upgrade">Go&nbsp;Pro!</a><?php } ?></div>
-            <a id="existing-login" href="auth/logout">Sign out</a>
-        </li>
-        <?php else: ?>
-        <li class="register last">
-            <div class="button"> <a href="/register">Register</a> </div>
-            <a id="existing-login" href="auth">Sign in</a>
-        </li>
-        <?php endif; ?>
-    </ul>
-    <form method="post" action="/search/">
-        <div id="search-div" class="pseudo-form">
-            <input id="search" name="q" placeholder="Search" results="0" />
+<div class="container">
+    <div id="header">
+        <div id="logo">
+            <a name="home" href="">        
+                <h1 id="site-title">Sourcemap</h1>
+                <img src="/assets/images/logo.png" alt="sourcemap" />
+            </a>
         </div>
-    </form>
-    <div id="search-results">
-        <ul id="live-search-results">
-            <script type="text/html" id="search-result-template"> 
-                <![CDATA[
-                    <li>
-                        <div class="preview-map-item vertical">
-                            <a class="search-link" href="view/<%= this.id %>"></a>
-                            <div class="preview-badge">
-                                <img class="preview-map thumb" src="static/<%= this.id %>.s.png" alt="" />
-                            </div>
-                            <h3 class="preview-title list">
-                                <a><%= this.title %></a>
-                            </h3>
-                            <div>
-                                <h4 class="preview-author">
-                                    <a href="user/<%= this.author %>">
-                                        <%= this.author %>, <%= this.date %>
-                                 </h4>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </li>
-                ]]>
-            </script>
+        <ul id="navigation">
+            <li> <a href="browse">Browse</a> </li>
+            <li> <a href="create">Create</a> </li>
+            <?php if($current_user = Auth::instance()->get_user()): ?>
+            <?php // logic belongs elsewhere
+                $isChannel = false;
+                $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+                if($current_user->has('roles', $channel_role))
+                    $isChannel = true;
+            ?> 
+            <li>
+                <div> <a href="/home">Dashboard</a><?php if(!($isChannel)){ ?><a class="upgrade-text" href="/upgrade">Go&nbsp;Pro!</a><?php } ?></div>
+                <a id="existing-login" href="auth/logout">Sign out</a>
+            </li>
+            <?php else: ?>
+            <li class="register last">
+                <div class="button"> <a href="/register">Register</a> </div>
+                <a id="existing-login" href="auth">Sign in</a>
+            </li>
+            <?php endif; ?>
         </ul>
-    </div>
-    <div class="clear"></div>
+        <form method="post" action="/search/">
+            <div id="search-div" class="pseudo-form">
+                <input id="search" name="q" placeholder="Search" results="0" />
+            </div>
+        </form>
+        <div id="search-results">
+            <ul id="live-search-results">
+                <script type="text/html" id="search-result-template"> 
+                    <![CDATA[
+                        <li>
+                            <div class="preview-map-item vertical">
+                                <a class="search-link" href="view/<%= this.id %>"></a>
+                                <div class="preview-badge">
+                                    <img class="preview-map thumb" src="static/<%= this.id %>.s.png" alt="" />
+                                </div>
+                                <h3 class="preview-title list">
+                                    <a><%= this.title %></a>
+                                </h3>
+                                <div>
+                                    <h4 class="preview-author">
+                                        <a href="user/<%= this.author %>">
+                                            <%= this.author %>, <%= this.date %>
+                                     </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </li>
+                    ]]>
+                </script>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>    
 </div>    

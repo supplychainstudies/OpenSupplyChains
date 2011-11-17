@@ -21,7 +21,7 @@
 <div class="container form-page">
     <div class="copy-section">
          <p>Upgrade to a channel account for $99/year and get access to new modes, options, and features.</p>
-         <ul class="bulleted">
+         <ul>
             <li>Branding settings including logos, banners, and custom colors</li>
             <li>Unlimited calls to our <a href="/info/API/">API</a></li>
             <li>Password protected maps</li>
@@ -34,6 +34,9 @@
         <div class="sourcemap-form">
             <?= $form ?>
         </div>
+    </div>
+    <div class="clear"></div>
+    <div class="credit-cards">
     </div>
     <div class="clear"></div>
 </div>

@@ -7,6 +7,7 @@ $(document).ready(function() {
 
     var amount = 9995; //amount you want to charge in cents
     Stripe.createToken({
+        name: $('input[name="card-name"]').val(),
         number: $('input[name="card-number"]').val(),
         cvc: $('input[name="card-cvc"]').val(),
         exp_month: $('input[name="card-expiry-month"]').val(),

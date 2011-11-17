@@ -17,6 +17,11 @@ $(document).ready(function(){
     /* truncation */
     Sourcemap.truncate_string(".truncate");
 
+    /* collapse/expand */
+    $('a.expander').click(function(){
+        $(this).parent().next('.collapsed').slideToggle();
+    });
+    
     /* Channel edit */
     $("input:checkbox").each(function(index){
         var ischecked = $(this).is(":checked");

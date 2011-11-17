@@ -20,7 +20,7 @@
 
 <div class="container form-page">
     <div class="copy-section">
-         <p>Upgrade to a channel account for $99/year and get access to new modes, options, and features.</p>
+         <p>As a channel user, you have access to new modes, options, and features.</p>
          <ul class="bulleted">
             <li>Branding settings including logos, banners, and custom colors</li>
             <li>Unlimited calls to our <a href="/info/API/">API</a></li>
@@ -30,5 +30,52 @@
             <li>Custom views and visualizations</li>
         </ul>
     </div>
+    <div class="box-section upgrade">
+        <div class="sourcemap-form">
+            <div class="container receipt">
+                <h2 class="section-title">Card information for <?= isset($username) ? $username : "" ?></h2>
+                <ul class="labels">
+                    <li>Name on card:</li>
+                    <li>Card type:</li>
+                    <li>Card number:</li>
+                    <li>Expires:</li>
+                </ul>
+                <ul>
+                    <li><?= $card_name ?></li>
+                    <li><?= $card_type ?></li>
+                    <li><?= $card ?></li>
+                    <li><?= $exp_month ?> / <?= $exp_year ?></li>
+                </ul>
+                <h2 class="section-title">Account details</h2>
+                <ul class="receipt labels">
+                    <li>Joined:</li>
+                    <li>Account level:</li>
+                    <?= isset($thru) ? "<li>Paid through:</li>" : ""?>
+                </ul>
+                <ul class="receipt">
+                    <li><?= date("F j, Y", $user->created); ?></li>
+                    <li><?= $status ?></li>
+                    <?= isset($thru) ? "<li>" . date("F j, Y", $thru) . "</li>" : ""?>
+                    <li>
+                        <div class="button alternate">
+                            <a href="/upgrade/renew">Renew Subscription</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+                <hr class="spacer" />
+            </div>
+        </div>
+    </div>
     <div class="clear"></div>
+    <h2 class="section-title">Your payments (<?= count($payments); ?>)</h2>
+    <?php foreach($payments as $payment): ?>
+        <div class="payment <?= $payment->closed == 1 ? "successful" : ""?>?>">
+            <div class="container">
+                <?= date("F j, Y", $payment->date); ?> -- 
+                <?= $payment->closed == 1 ? "Processed" : "Processing"?> payment of <?= "$" . ($payment->total)/100; ?>
+                with card xxxx xxxx xxxx <?= $payment->card->last4 ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
 </div>

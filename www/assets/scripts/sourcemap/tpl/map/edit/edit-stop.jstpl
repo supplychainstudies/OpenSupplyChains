@@ -45,23 +45,23 @@
         <div id="edit-stop-footprint">
             <div class="sourcemap-form nopadding">
                 <fieldset>    
-       				<div class="footprint-row">
-					<!--<div class="footprint-section">  -->      
+       				<div class="footprint-row"> 
+					<div class="footprint-section">      
 	                    <label for="qty">Quantity</label>
                         <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty",0)); %>
                         <%= $("<div></div>").append(el).html() %>
-					<!--</div>-->
+					</div>
 					<% var unittype = this.ref.getAttr("unit","kg"); %>
-					<!--<div class="footprint-section selection">-->
+					<div class="footprint-section selection">
 	                    <label for="unit">Unit</label><br/>
 						<select class="footprint-unit" name="unit">
 							<option <% if(unittype == "kg") { %>selected<% } %> value="kg">Kg</option>
 							<option <% if(unittype == "ea") { %>selected<% } %> value="ea">Each</option>	
 							<% if(unittype != "ea" && unittype != "kg") { %><option value="<%=unittype %>" selected><%=unittype %></option><% } %>							
 						</select>
-					<!--</div>  -->       
+					</div>      
 					
-					<div class="footprint-math weight-context <% if(unittype == "kg") { %>hidden<% } %>">@</div>						
+					<div class="footprint-math weight-context <% if(unittype != "piece" && unittype != "ea") { %>hidden<% } %>">@</div>						
 					<div class="footprint-section weight-context <% if(unittype == "kg") { %>hidden<% } %>">					           
 	                    <label for="weight">Weight</label>
                         <% el = $("<input></input>").attr("class", "footprint-weight").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("weight",0)); %>
@@ -69,37 +69,39 @@
 					</div>					
 					<div class="footprint-math weight-context <% if(unittype == "kg") { %>hidden<% } %>">kg</div>		
 
-					<div class="footprint-math">x</div>
+					
 					</div>
 					<div class="clear"></div>
-				<div class="footprint-row">		
+				<div class="footprint-row indent">		
 					<!--<div class="footprint-section">-->					           
-	                    <label for="co2e">CO<sub>2</sub>e</label>
+	                    <label for="co2e">CO<sub>2</sub>e</label><div class="footprint-math">x</div>
                         <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>
                         <%= $("<div></div>").append(el).html() %>
 					<!--</div>-->
 					<span class="lock" id="lock-co2e">&nbsp;</span>
-					<div id="c02e-impact-result" class="result">0 kg C02e</div>
+					<span class="reference" id="reference-co2e">&nbsp;</span>
+					<% $("#reference-co2e").click(function () { window.open(this.ref.getAttr("co2e_reference",0),"_blank"); }); %>
+					<div class="footprint-math">=</div><div id="c02e-impact-result" class="result">0 kg</div>
 				</div>	
                		
-				<div class="footprint-row">					
-					<!--<div class="footprint-section">	-->				           
-	                    <label for="energy">Energy</label>
+				<div class="footprint-row indent">								           
+	                    <label for="energy">Energy</label><div class="footprint-math">x</div>
                         <% el = $("<input></input>").attr("class", "footprint-energy").attr("type", "text").attr("name", "energy").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("energy",0)); %>
                         <%= $("<div></div>").append(el).html() %>		
-					<!--</div>-->
 					<span class="lock" id="lock-energy">&nbsp;</span>
-					<div id="energy-impact-result" class="result">0 kwh energy</div>
+					<span class="reference" id="reference-energy">&nbsp;</span>
+					<% $("#reference-energy").click(function () { window.open(this.ref.getAttr("energy_reference",0),"_blank"); }); %>
+					<div class="footprint-math">=</div><div id="energy-impact-result" class="result">0 kwh</div>
 				</div>
                		
-				<div class="footprint-row">
-					<!--<div class="footprint-section">-->				           
-	                    <label for="water">Water</label>
+				<div class="footprint-row indent">				           
+	                    <label for="water">Water</label><div class="footprint-math">x</div>
                         <% el = $("<input></input>").attr("class", "footprint-water").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("water",0)); %>
                         <%= $("<div></div>").append(el).html() %>
-					<!--</div>-->
 					<span class="lock" id="lock-water">&nbsp;</span>
-					<div id="water-impact-result" class="result">0 L water</div>
+					<span class="reference" id="reference-water">&nbsp;</span>
+					<% $("#reference-water").click(function () { window.open(this.ref.getAttr("water_reference",0),"_blank"); }); %>
+					<div class="footprint-math">=</div><div id="water-impact-result" class="result">0 L</div>
                	</div>	
 
 

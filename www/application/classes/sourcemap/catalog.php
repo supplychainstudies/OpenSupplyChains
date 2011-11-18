@@ -27,7 +27,7 @@ abstract class Sourcemap_Catalog {
     public $_cache_ttl = 2592000; // seconds
 
     public $minlimit = 1;
-    public $maxlimit = 6;
+    public $maxlimit = 5;
 
     public function __construct($parameters=null) {
         $this->parameters = $parameters ? $parameters : null;

@@ -647,7 +647,6 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr) {
 }
 
 Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
-	console.log(this);
     // track currently edited feature
     this.editing = ref;
     $("#editor-tabs").tabs();
@@ -736,17 +735,17 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             if (!isNaN(quantity * co2e_factor * weight)){ 
                 var output = quantity * weight * co2e_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
-                editor.find('#c02e-impact-result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+                editor.find('#c02e-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#c02e-impact-result').text("-"); }
 			if (!isNaN(quantity * energy_factor * weight)){ 
                 var output = quantity * weight * energy_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kwh', 2);
-                editor.find('#energy-impact-result').text(scaled.value + " " + scaled.unit + " Energy"); 
+                editor.find('#energy-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#energy-impact-result').text("-"); }
 			if (!isNaN(quantity * water_factor * weight)){ 
                 var output = quantity * weight * water_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'L', 2);
-                editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit + " Water"); 
+                editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#water-impact-result').text("-"); }            
     	}, this));
         // trigger event on load
@@ -831,6 +830,9 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         Sourcemap.broadcast('supplychain-updated', supplychain);
     }, s));
 
+	$(this.map_view.dialog).find('#reference-co2e').click($.proxy(function (e) { window.open(this.ref.getAttr("co2e_reference",0),"_blank"); }));
+	$(this.map_view.dialog).find('#reference-energy').click($.proxy(function (e) { window.open(this.ref.getAttr("energy_reference",0),"_blank"); }));
+	$(this.map_view.dialog).find('#reference-water').click($.proxy(function (e) { window.open(this.ref.getAttr("water_reference",0),"_blank"); }));
     var cb = function(e) {
         //TODO: maybe move this down and add a spinner or disable the map/editor?
     }
@@ -883,20 +885,26 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
 Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
     if(!this.catalog_search_xhr) this.catalog_search_xhr = {};
     if(this.catalog_search_xhr[o.catalog]) this.catalog_search_xhr[o.catalog].abort();
-	console.log(o);
     this.catalog_search_xhr[o.catalog] = $.ajax({"url": "services/catalogs/"+o.catalog, "data": o.params || {}, 
         "success": $.proxy(function(json) {
             var cat_html = $('<ul class="catalog-items"></ul>');
             var alt = "";
             for(var i=0; i<json.results.length; i++) {
-				console.log(json);
     			//if(!(json.results[i].co2e)) { continue;}
-                // Todo: Template this                
+                // Todo: Template this 
+                json.results[i].uri = 'http://www.footprinted.org/' + json.results[i].uri;				
+				if (json.results[i].co2e) 
+					json.results[i].co2e_reference = json.results[i].uri;		 
+				if (json.results[i].energy)
+					json.results[i].energy_reference =json.results[i].uri;				
+				if (json.results[i].water)
+					json.results[i].water_reference = json.results[i].uri;
                 var cat_content = '';                    
-                cat_content += '<div class="clear"></div></div>'; 
-                cat_content += '<span class="cat-item-name">'+_S.ttrunc(json.results[i].name, 40)+'</span>';
+				cat_content += '<div class="cat-item-text">';
+                cat_content += '<span class="cat-item-name">'+_S.ttrunc(json.results[i].name, 30)+'</span>';
                 cat_content += json.results[i].geography ? '<span class="cat-item-metainfo">Location: '+json.results[i].geography+'</span>': '';
 				cat_content += json.results[i].year!="0" ? '<span class="cat-item-metainfo">Year: '+json.results[i].year+'</span>': '';		
+				cat_content += '</div>';
 				cat_content += '<span class="cat-item-footprints">';
 				cat_content +=  '<span class="cat-item-co2e">';
 				cat_content +=  json.results[i].co2e ? '<input type="checkbox" id="co2e-factor" />'+ Math.round(100*json.results[i].co2e)/100+' kg' : '&nbsp;';
@@ -908,32 +916,36 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 				cat_content +=  json.results[i].water ? '<input type="checkbox" id="water-factor" />'+Math.round(100*json.results[i].water)/100+' L ' : '&nbsp;';
 				cat_content +=  '</span>';
 				cat_content +=  '<a class="add-map-button">&nbsp;</a>';
-				cat_content +=  '<a class="reference-button" target="_blank" href="http://www.footprinted.org/' + json.results[i].uri + '">&nbsp;</a>';
+				cat_content +=  '<a class="reference-button" target="_blank" href="' + json.results[i].uri + '">&nbsp;</a>';
 				cat_content += '</span>';
     			cat_content += '<div class="clear"></div>';                    
                 
                 var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
                 $(new_li).find('#co2e-factor').click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true, "unit": true, "co2e_reference": true}}}));
                 $(new_li).find('#energy-factor').click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"energy": true, "unit": true, "energy_reference": true}}}));
                 $(new_li).find('#water-factor').click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));                
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"water": true, "unit": true, "water_reference": true}}}));                
+				$(new_li).find('.add-map-button').click($.proxy(function(evt) {
+                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true,"energy": true,"water": true, "unit": true, "co2e_reference": true, "energy_reference": true, "water_reference": true}}}));                
+
 				/*
                 $(new_li).click($.proxy(function(evt) {
                     this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
                 }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
    				*/
 				cat_html.append(new_li);
-				$(this.editor.map_view.dialog).find('.falseclose').click($.proxy(function() {
-                    $(this).parent().parent().parent().parent().width(411);
-					$(this).parent().parent().parent().parent().find('#newcatalog').hide();
-					$(this).parent().parent().parent().parent().find('#stop-editor').show();
-					}));
             }
+			$(this.editor.map_view.dialog).find('.falseclose').click($.proxy(function() {
+                $(this).parent().parent().parent().parent().width(411);
+				$(this).parent().parent().parent().parent().find('#newcatalog').hide();
+				$(this).parent().parent().parent().parent().find('#stop-editor').show();
+				}));
             o.results = json.results;
             o.params = json.parameters;
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);
@@ -953,7 +965,10 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                     this.editor.updateCatalogListing(o);
                 }, {"o": o, "editor": this.editor}));
                 $(this.editor.map_view.dialog).find('.catalog-pager').append(prev_link);
-            }
+            } else {
+				var prev_link = $('<span class="catalog-pager-prev"></span>');
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(prev_link);
+			}
 
             // pager next
             if(o.results.length == o.params.l) {
@@ -967,7 +982,10 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                     this.editor.updateCatalogListing(o);
                 }, {"o": o, "editor": this.editor}));
                 $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
-            }
+            } else {
+				var next_link = $('<span class="catalog-pager-next"></span>');
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
+			}
 
             // search bar
             $(this.editor.map_view.dialog).find('#catalog-search-field').keyup($.proxy(function(evt) {
@@ -1116,6 +1134,7 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
 	 	//$("#edit-catalog").html(th); //Bianca
 		$("#stop-editor").hide();
 		$("#dialog").width(1020);
+		$("#dialog").height(411);
 		$("#dialog").css("right",10);
 		$("#dialog").css("padding",0);
 		$("#newcatalog").show();
@@ -1124,8 +1143,9 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     }, tscope, tscope);
 }
 
-Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
+Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref, catalog_map) {
     // TODO: add the unit
+/*
     var catalog_map = {
         "osi": {
             "name": ["title"],
@@ -1136,6 +1156,7 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
 			"unit": true
         }
     }
+*/
     var vals = {};
     for(var k in item) {
         if(catalog_map[cat] && catalog_map[cat][k]) {
@@ -1152,9 +1173,9 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref) {
     		}
         }
     }
-	console.log(vals);
     this.updateFeature(this.editing, vals);
     this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);     
     $("#editor-tabs").tabs('select', 2);
     //$("#editor-tabs").tabs('select', 3);
 }
+

@@ -23,11 +23,11 @@
 	    </form>
 	    <div class="catalog-pager"></div>
 		<div class="catalog-footprint-types">
-			<span class="symbol-c02e">&nbsp;</span>
+			<span class="symbol-co2e">&nbsp;</span>
 			<span class="symbol-energy">&nbsp;</span>
 			<span class="symbol-water">&nbsp;</span>
 		</div>	
-	<div>
+	</div>
 	<div class="clear"></div>
     <div class="catalog-content"></div>
 </div>

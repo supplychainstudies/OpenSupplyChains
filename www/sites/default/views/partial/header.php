@@ -31,6 +31,7 @@
                     $isChannel = true;
             ?> 
             <li>
+                <div> <a href="/home">Dashboard</a></div> 
                 <a id="existing-login" href="auth/logout">Sign out</a>
             </li>
             <?php else: ?>

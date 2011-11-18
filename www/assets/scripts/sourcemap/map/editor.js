@@ -705,17 +705,17 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             if (!isNaN(quantity * co2e_factor * weight)){ 
                 var output = quantity * weight * co2e_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
-                editor.find('#c02e-impact-result').text(scaled.value + " " + scaled.unit + " CO2e"); 
+                editor.find('#c02e-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#c02e-impact-result').text("-"); }
 			if (!isNaN(quantity * energy_factor * weight)){ 
                 var output = quantity * weight * energy_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kwh', 2);
-                editor.find('#energy-impact-result').text(scaled.value + " " + scaled.unit + " Energy"); 
+                editor.find('#energy-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#energy-impact-result').text("-"); }
 			if (!isNaN(quantity * water_factor * weight)){ 
                 var output = quantity * weight * water_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'L', 2);
-                editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit + " Water"); 
+                editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#water-impact-result').text("-"); }
         }, this)); 
             	

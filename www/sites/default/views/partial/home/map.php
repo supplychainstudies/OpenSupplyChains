@@ -46,7 +46,7 @@
                 if($user->has('roles', $channel)) $is_channel = true;
                 $user_featured = ($supplychain->user_featured) ; ?>
             <?php if($is_channel) { ?>
-            <div class="map-controls-featured">
+            <div class="map-controls-featured channel">
                 <!-- <input id="map-featured-checkbox" type="checkbox" name="featured" onclick="window.location='edit/featured/<?= $supplychain->id ?>?featured=<?= $user_featured ? "no" : "yes"?>'; return true;"<?= $user_featured ? "checked" : "" ?>/> -->
                 <input id="map-featured-checkbox" type="checkbox" name="featured" <?= $user_featured ? "checked" : "" ?> />
                 <a id="map-publish-link">Featured</a>

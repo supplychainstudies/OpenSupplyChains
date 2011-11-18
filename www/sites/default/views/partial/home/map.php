@@ -53,19 +53,21 @@
             </div> <? } ?>
             <?php $public = ($supplychain->other_perms & Sourcemap::READ) > 0; ?>
             <?php if($supplychain->user_id==$user_id): ?>
-            <div class="map-controls-publish">
+            <div class="map-controls-publish <?php if($is_channel): ?> channel <?php endif; ?>">
                 <!-- <input id="map-publish-checkbox" type="checkbox" name="publish" onclick="window.location='edit/visibility/<?= $supplychain->id ?>?publish=<?= $public ? "no" : "yes"?>'; return true;"<?= $public ? "checked" : "" ?>/> -->
                 <input id="map-publish-checkbox" type="checkbox" name="publish" <?= $public ? "checked" : "" ?>/>
                 <a id="map-publish-link">Public</a>
             </div>
             <?php endif; ?>
             <div class="clear"></div>
+            <?php if($is_channel) { ?>
             <?php $passcode_isset = isset($supplychain->attributes->passcode); ?>
             <div class="map-controls-passcode">
                 <input id="map-passcode-checkbox" type="checkbox" name="passcode" value="<?= $supplychain->id ?>" <?php if($passcode_isset): ?>checked<?php endif; ?> >
                 <a id="map-passcode-link">Passcode</a>
                 <input id="map-passcode-input" type="text" value="<?= $passcode_isset ? $supplychain->attributes->passcode : "" ?>"/>
             </div>
+            <?php } ?>
         </div>        
         <div class="clear"></div>
 

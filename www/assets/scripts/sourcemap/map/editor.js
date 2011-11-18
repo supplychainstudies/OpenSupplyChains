@@ -830,9 +830,21 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         Sourcemap.broadcast('supplychain-updated', supplychain);
     }, s));
 
-	$(this.map_view.dialog).find('#reference-co2e').click($.proxy(function (e) { window.open(this.ref.getAttr("co2e_reference",0),"_blank"); }));
-	$(this.map_view.dialog).find('#reference-energy').click($.proxy(function (e) { window.open(this.ref.getAttr("energy_reference",0),"_blank"); }));
-	$(this.map_view.dialog).find('#reference-water').click($.proxy(function (e) { window.open(this.ref.getAttr("water_reference",0),"_blank"); }));
+	$(this.map_view.dialog).find('#reference-co2e').click(
+        $.proxy(function(e) { 
+            window.open(this.ref.getAttr("co2e_reference",0),"_blank"); 
+        }, s)
+    );
+	$(this.map_view.dialog).find('#reference-energy').click(
+        $.proxy(function(e) { 
+            window.open(this.ref.getAttr("energy_reference",0),"_blank"); 
+        }, s)
+    );
+	$(this.map_view.dialog).find('#reference-water').click(
+        $.proxy(function(e) { 
+            window.open(this.ref.getAttr("water_reference",0),"_blank"); 
+        }, s)
+    );
     var cb = function(e) {
         //TODO: maybe move this down and add a spinner or disable the map/editor?
     }

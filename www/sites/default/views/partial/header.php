@@ -31,7 +31,6 @@
                     $isChannel = true;
             ?> 
             <li>
-                <div> <a href="/home">Dashboard</a><?php if(!($isChannel)){ ?><a class="upgrade-text" href="/upgrade">Go&nbsp;Pro!</a><?php } ?></div>
                 <a id="existing-login" href="auth/logout">Sign out</a>
             </li>
             <?php else: ?>

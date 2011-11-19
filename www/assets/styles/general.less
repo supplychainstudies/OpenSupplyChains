@@ -217,6 +217,7 @@ a {
         max-width: 335px;
         li{
             font-size: 17px;
+            font-weight: bold;
             float:left;
             text-align: center;
             margin: 12px 24px 12px 5px;
@@ -359,7 +360,7 @@ label {
 	font-weight:bold;
 	float:right;
 	padding:10px 0 5px 0;
-	color:#ccc;
+	color:#888;
 }
 input[type=text],input[type=password], textarea {
 	width:98%;
@@ -426,10 +427,24 @@ input[type=submit] {
 div.submit-status{
     float: left;
     height: 40px;
-    idth: 40px;
+    width: 40px;
+    overflow: hidden;
     background: url("../images/throbber.gif") 8px 8px no-repeat;
+    &.succeeded{
+        background: url("../images/account-notice.png") 12px 13px no-repeat;
+    }
     &.failed{
         background: url("../images/account-alert.png") 12px 13px no-repeat;
+    }
+    &.text{
+        padding-left: 40px;
+        width: 240px;
+        color: #777;
+        font-size: 1em;
+        line-height: 1.5em;
+        ul{ 
+            margin: .75em 0 0 .2em;    
+        }
     }
 }
 
@@ -467,7 +482,7 @@ input[type=checkbox]{
 }   
 
 #recaptcha_area {
-    margin: 25px 0;
+    margin: 25px 0 10px;
     width:440px;
 }
 

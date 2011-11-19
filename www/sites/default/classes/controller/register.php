@@ -18,7 +18,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
     const MIGRATE_EMAIL = 'account-migration@sourcemap.com';
 
-    public function action_index() {        
+    public function action_index() { 
         if(Auth::instance()->get_user()) {
             $this->template->current_user_id = Auth::instance()->get_user();
             $this->template->current_user = ORM::factory('user', Auth::instance()->get_user());
@@ -26,23 +26,30 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         }
         $this->layout->page_title = 'Register an account on Sourcemap';
 
-        $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template'
-        );
-
         $f = Sourcemap_Form::load('/register');
         $f->action('register')->method('post');
 
         $this->template->form = $f;
 
         if(strtolower(Request::$method) === 'post') { 
-             $validate= $f->validate($_POST);   
-             if (array_key_exists('recaptcha', Kohana::modules())) { 
-                             $recap = Recaptcha::instance();  
+            // Pass recaptcha first
+            if (array_key_exists('recaptcha', Kohana::modules())) { 
+                 $recap = Recaptcha::instance();  
                  $revalid = (BOOL)($recap->is_valid($_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"])); 
-                $validate = ($validate && $revalid);
-            }    
-             if( $validate ) {  
+            }
+            if( !$revalid ) {
+                Message::instance()->set('Incorrect captcha.');
+            } else{
+                // basic validation
+                if (!$f->validate($_POST)){
+                    $errors = $f->errors();
+                    foreach($errors as $error){
+                        Message::instance()->set($error[0]);
+                    }
+                    return; 
+                }
+
+                // advanced validation
                 $p = $f->values();
 
                 if(!preg_match("/^[a-zA-Z]/",$p['username']))
@@ -50,6 +57,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                     Message::instance()->set('Please use alphabetical character as first letter of your Username.');
                     return;
                 }
+
                 // check for restricted username
                 $restricted = FALSE;
                 $restricted_names = array(
@@ -92,11 +100,13 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $new_user->email = $p['email'];
                 $new_user->password = $p['password'];
 				$new_user->save();
+
+                /*
 				if (isset($p['email_subscribe']) == true) {
 					$emailsubscriber_role = ORM::factory('role', array('name' => 'emailsubscriber'));
 					$new_user->add('roles', $emailsubscriber_role)->save();					
 				}
-				
+                */
 
                 if(!$new_user->id) {
                     Message::instance()->set('Could not complete registration. Please contact support.');
@@ -127,36 +137,14 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
                 try { 
 					$sent = $mailer->send($swift_msg);
-                    Message::instance()->set('Activation email sent.');
+                    Message::instance()->set('Activation email sent.', Message::SUCCESS);
                     return $this->request->redirect('register/thankyou');
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete registration. Please contact support.');
                 } 
 
-                if(isset($p['sourcemaporg_account']) && $p['sourcemaporg_account']) {
-                    try {
-	 					$swift_msg = Swift_Message::newInstance();
-						$msgbody = "\n";
-                        $msgbody .= 'New user '.$new_user->username.' requested migration from Sourcemap.org.'."\r\n\r\n";
-                        $msgbody .= "Sourcemap.org Account Name: {$p['sourcemaporg_account']}\r\n";
-                        $msgbody .= "New User Email: {$new_user->email}\r\n\r\n";
-                        $msgbody .= "Go to: ".URL::site('user/'.$new_user->id, true)." to view this user's profile.\r\n";
-                        $msgbody .= "Go to: ".URL::site('admin/users/'.$new_user->id, true)." to view this user's details.\r\n";
-						$swift_msg->setSubject("MIGRATE REQUEST: ".$p['sourcemaporg_account'])
-								  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
-								  ->setTo(array(self::MIGRATE_EMAIL => ''))
-								  ->setBody($msgbody);
-                        $sent = $mailer->send($swift_msg); 
-                    } catch(Exception $e) {
-                        error_log('COULD NOT SEND MIGRATION REQUEST EMAIL FOR: '.$new_user->username.':'.$p['sourcemaporg_account']);
-                        Message::instance()->set('We had trouble contacting the Sourcemap team. Please email us at '.self::MIGRATE_EMAIL
-                            .' to help us make sure things go smoothly.');
-                    }
-                }
                 return $this->request->redirect('register');
-            } else {
-                Message::instance()->set('Check the information below and try again.');
-            }
+            } 
         } else { 
         /* pass */ 
         }

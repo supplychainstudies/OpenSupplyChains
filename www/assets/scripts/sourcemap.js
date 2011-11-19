@@ -663,13 +663,11 @@ Sourcemap.truncate_string = function(target){
         $(testdiv).appendTo($(this).parent());
         var text = $.trim($(this).text());
         replacementText = null;
-        console.log(text, width, $(testdiv).height());
        
         // remove one character at a time until the height equals the original 
         for(i=text.length; height < $(testdiv).height() && i > 0; i--){
             replacementText = text.substr(0, i);
             $(testdiv).text(replacementText + "...");
-            console.log(height, $(testdiv).height());
         }
         
         if(replacementText)

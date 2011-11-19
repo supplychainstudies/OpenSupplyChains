@@ -137,8 +137,10 @@ class Sourcemap_Import_Csv {
             $lon = null;
             foreach($record as $k => $v) {
                 if($k == $latcol || $k == $loncol) {
-                    if($k == $latcol) $lat = $v;
-                    else $lon = $v;
+					if ($v != "") {
+                    	if($k == $latcol) $lat = $v;
+                    	else $lon = $v;
+					}
                     continue;
                 } elseif($k == $addresscol) {
                     if($results = Sourcemap_Geocoder::geocode($v)) {
@@ -149,7 +151,7 @@ class Sourcemap_Import_Csv {
                             $new_stop['attributes']['placename'] = $result->placename;
                     } else {
 						//$error_list[] = 'Could not geocode: "'.$v.'".';
-                        throw new Exception('Could not geocode: "'.$v.'".');
+                        //throw new Exception('Could not geocode: "'.$v.'".');
                     }
                 }
                 $new_stop['attributes'][$k] = $v;
@@ -164,7 +166,7 @@ class Sourcemap_Import_Csv {
                         $new_stop['attributes']['placename'] = $result->placename;
                 }
             }
-            //if(is_null($lon) || is_null($lat)) throw new Exception('No lat/lon.');
+            if(is_null($lon) || is_null($lat)) throw new Exception('No lat/lon.');
             $from_pt = new Sourcemap_Proj_Point($lon, $lat);
             $new_stop['geometry'] = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $from_pt)->toGeometry();
             $stops[] = (object)$new_stop;

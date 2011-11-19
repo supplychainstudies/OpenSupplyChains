@@ -212,18 +212,32 @@ Sourcemap.factory = function(type, data) {
             // make instance tree
             var g = new Sourcemap.Supplychain.Graph2(instance);
             var stids = g.nids.slice(0);
-            var tiers = {};
-            for(var i=0; i<stids.length; i++) {
-                tiers[stids[i]] = 0;
-            }
-            var max_plen = 0;
-            for(var i=0; i<g.paths.length; i++) {
-                var p = g.paths[i];
-                max_plen = p.length > max_plen ? p.length : max_plen;
-                for(var j=0; j<p.length; j++) {
-                    if(j > tiers[p[j]]) tiers[p[j]] = j;
-                }
-            }
+			var max_plen = 0;
+			if (sc.stops[0].attributes.tier) {
+				var tiers = {};				
+	            for(var i=0; i<stids.length; i++) {
+	                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
+					max_plen = Math.max(max_plen,parseInt(sc.stops[i].attributes.tier));
+	            }
+				for(x in tiers) {
+	                tiers[x] = max_plen-tiers[x];
+	            }
+	max_plen++;
+				console.log(tiers);
+				
+			} else {
+	            var tiers = {};
+	            for(var i=0; i<stids.length; i++) {
+	                tiers[stids[i]] = 0;
+	            }
+	            for(var i=0; i<g.paths.length; i++) {
+	                var p = g.paths[i];
+	                max_plen = p.length > max_plen ? p.length : max_plen;
+	                for(var j=0; j<p.length; j++) {
+	                    if(j > tiers[p[j]]) tiers[p[j]] = j;
+	                }
+	            }
+			}
             //default_feature_colors
             var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
             i//var dfc = this.options.default_feature_colors.slice(0);
@@ -356,7 +370,6 @@ Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
 }
 
 Sourcemap.buildTree = function(tree_id,sc) {
-
     var tiers = [],tier_list = [],hop_list = [];
     var max_plen = sc.max_plen;
     var max_length=(max_plen)?sc.max_plen:1,max_x=0,max_y=0;    
@@ -385,29 +398,57 @@ Sourcemap.buildTree = function(tree_id,sc) {
     // Create stop points
     for(var i=0,length=sc.stops.length;i<length;i++)
     {
-        tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
+		//if (sc.stops[i].attributes.tier) {
+			//var x = tiers.length - parseInt(sc.stops[i].attributes.tier);
+			//tiers[x].push(sc.stops[i]);
+			
+			// default status
+			//var letitle  = sc.stops[i].attributes.title;
+		//	if (letitle == undefined)
+		//		letitle = sc.stops[i].attributes.location;		
+			//	letitle = sc.stops[i].attributes.name;
+
+	       // if(sc.stops[i].attributes.size == undefined)
+	        //    size = 2;
+	        //else
+	        //    size = sc.stops[i].attributes.size;
+
+	        //tier_list[i] = { 
+	        //    title:letitle,
+	        //    index:i,
+	        //    tiers:sc.stops[i].attributes.tier,
+	        //    instance:sc.stops[i].instance_id,
+	            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
+	            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
+			//	size:size,
+	        //    color:sc.stops[i].attributes.color
+	       // }
+			
+	//	} else {
+	        tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
         
-        // default status
-		var letitle  = sc.stops[i].attributes.title;
-		if (letitle == undefined)
-			letitle = sc.stops[i].attributes.location;		
-		//	letitle = sc.stops[i].attributes.name;
+	        // default status
+			var letitle  = sc.stops[i].attributes.title;
+			if (letitle == undefined)
+				letitle = sc.stops[i].attributes.location;		
+			//	letitle = sc.stops[i].attributes.name;
 
-        if(sc.stops[i].attributes.size == undefined)
-            size = 2;
-        else
-            size = sc.stops[i].attributes.size;
+	        if(sc.stops[i].attributes.size == undefined)
+	            size = 2;
+	        else
+	            size = sc.stops[i].attributes.size;
 
-        tier_list[i] = { 
-            title:letitle,
-            index:i,
-            tiers:sc.tiers[sc.stops[i].instance_id],
-            instance:sc.stops[i].instance_id,
-            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
-            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
-			size:size,
-            color:sc.stops[i].attributes.color
-        }
+	        tier_list[i] = { 
+	            title:letitle,
+	            index:i,
+	            tiers:sc.tiers[sc.stops[i].instance_id],
+	            instance:sc.stops[i].instance_id,
+	            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
+	            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
+				size:size,
+	            color:sc.stops[i].attributes.color
+	        }
+		//}
     }
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
@@ -524,7 +565,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("x2",function(d){return d.x2})
             .attr("y1",function(d){return d.y1})
             .attr("y2",function(d){return d.y2})
-            .attr("stroke-width",3)
+            .attr("stroke-width",2)
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
             //.on("click",function(d){alert(d.from+" to "+d.to);})
             .attr("stroke",function(d){return d.color});

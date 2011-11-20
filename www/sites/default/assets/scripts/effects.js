@@ -32,51 +32,6 @@ $(document).ready(function(){
             $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
         });
     });
-  
-    /* AJAX-y forms */
-    // The goal is to give jQuery-enabled users access to a much better form submission experience.
-    // Keep in mind that javascript breaks all the time, so our forms need to work regardless of this code.
-    $('.sourcemap-form.ajax input[type=submit]').click(function(e){
-        e.preventDefault();
-        $(this).attr('disabled', '');
-        
-        form = $(this).parent();
-        submitStatus = $(form).find('.submit-status');
-
-        $(submitStatus).empty().removeClass('failed').show().animate({height: 40});
-
-        // get form attrs
-        var action = $(form).attr('action')
-        
-        // ajax validate
-        $.post(action, $(form).serialize(), function(data){
-            if (data === 'success'){
-                // TODO: make this work 
-            } else {
-                var success = false;
-                $(submitStatus).addClass('text').append('<ul />');
-                $(data).find('.status-message').each(function(){
-                    if($(this).hasClass('success')){
-                        success = true;
-                    }
-                    $(submitStatus).find('ul').append('<li>' + $(this).text().trim() + '</li>');
-                });
-
-                if(success)
-                    $(submitStatus).addClass('succeeded');
-                else
-                    $(submitStatus).addClass('failed');
-                
-                // expand height to fit parent
-                $(submitStatus).animate({ 
-                    height : $(submitStatus).find('ul').outerHeight() + 14
-                });
-
-                if(Recaptcha)
-                    Recaptcha.reload();
-            }
-        });
-    });
 
     $('.map-controls').each(function(index){
 

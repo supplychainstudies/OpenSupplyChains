@@ -32,6 +32,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
         $this->template->form = $f;
 
         if(strtolower(Request::$method) === 'post') { 
+            $ajax = isset($_POST["_form_ajax"]) ? 'true' : 'false';
+            
+            if ($ajax)
+                $this->auto_render=false; // will disable template rendering
+
             // Pass recaptcha first
             if (array_key_exists('recaptcha', Kohana::modules())) { 
                  $recap = Recaptcha::instance();  
@@ -46,6 +51,8 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                     foreach($errors as $error){
                         Message::instance()->set($error[0]);
                     }
+
+                    echo $ajax ? Message::instance()->render() : "";
                     return; 
                 }
 
@@ -138,13 +145,22 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 try { 
 					$sent = $mailer->send($swift_msg);
                     Message::instance()->set('Activation email sent.', Message::SUCCESS);
-                    return $this->request->redirect('register/thankyou');
+                    if ($ajax){
+                        echo Message::instance()->get() ? Message::instance()->render() : false;
+                        return;
+                    }
+                    else{
+                        return $this->request->redirect('register/thankyou');
+                    }
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete registration. Please contact support.');
                 } 
 
-                return $this->request->redirect('register');
-            } 
+            }
+            if ($ajax){
+                echo Message::instance()->get() ? Message::instance()->render() : false;
+            }
+
         } else { 
         /* pass */ 
         }

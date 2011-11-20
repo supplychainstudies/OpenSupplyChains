@@ -13,7 +13,7 @@
 
 
 $(document).ready(function(){
-    
+
     /* truncation */
     Sourcemap.truncate_string(".truncate");
 
@@ -32,26 +32,7 @@ $(document).ready(function(){
             $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
         });
     });
-   
-    /*
-    $('#map-passcode-checkbox').each(function(index){
-        //default
-        var ischecked = $(this).is(":checked");
-        var parent_control = $(this).parent(".map-controls-passcode");
-        $(parent_control).stop().animate({width:ischecked?249:120},500);     
-        //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
-        ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
 
-        $(this).change(function(){
-            var ischecked = $(this).is(":checked");
-            var parent_control = $(this).parent(".map-controls-passcode");
-            $(parent_control).stop().animate({width:ischecked?249:120},500);            
-            //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
-            ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
-        });
-    });
-    */
-    //$('#map-passcode-input').each(function(index){
     $('.map-controls').each(function(index){
 
         var publish_precheck = false;
@@ -251,7 +232,6 @@ $(document).ready(function(){
             + oldData
         );
     }
-
 
     /* unsupported browser detection */
     if (($.browser.msie) && $('.browser').length == 0) {

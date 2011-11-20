@@ -27,7 +27,7 @@
         </ul>
     </div>
     <div class="box-section register">
-        <div class="sourcemap-form">
+        <div class="sourcemap-form ajax">
             <?= $form ?>
         </div>
     </div>

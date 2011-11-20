@@ -40,6 +40,7 @@
 
 <?php elseif($field->field_type() === Sourcemap_Form_Field::SUBMIT): ?>
     <div class="clear"></div>
+    <div class="submit-status hidden"></div>
     <?php $attr['class'] = $field->css_class()."button form-button"; ?>
     <?= Form::submit($field->name(), $field->value(), $attr) ?>
 

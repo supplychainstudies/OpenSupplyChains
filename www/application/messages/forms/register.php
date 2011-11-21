@@ -26,6 +26,6 @@ return array(
         'default' => 'Your password needs to match'
     ),
     'confirm_terms' => array(
-        'not_empty' => 'Please agree to the terms 
+        'not_empty' => 'Please agree to the terms' 
     )
 );

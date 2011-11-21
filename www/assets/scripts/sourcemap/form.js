@@ -43,6 +43,8 @@ Sourcemap.Form.prototype.init = function() {
     //this.update();
     
     $(this.el()).find('div.error').hide();
+
+    /* do all of our validation server side...
     $(this._form_el).bind("submit", $.proxy(function() {
         if(this._errors === false) {
             (this._form_el).find('input[type=submit]').attr("disabled", "true");
@@ -57,6 +59,7 @@ Sourcemap.Form.prototype.init = function() {
         }, this));
         return false;
     }, this));
+    */
 }
 
 Sourcemap.Form.prototype.toggleThrobber = function() {
@@ -356,6 +359,53 @@ $(document).ready(function() {
               $(this).val(val.slice(0, maxlength));
             }
         }
+    });
+
+
+    /* AJAX-y forms */
+    // The goal is to give jQuery-enabled users access to a much better form submission experience.
+    // Keep in mind that javascript breaks all the time, so our forms need to work regardless of this code.
+    $('.sourcemap-form.ajax input[type=submit]').click(function(e){
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+        $(this).attr('disabled', '');
+
+        form = $(this).parent();
+        submitStatus = $(form).find('.submit-status');
+
+        $(form).append('<input type="hidden" name="_form_ajax" value="true"></input>');
+        $(submitStatus).empty().removeClass('failed').show().animate({height: 40});
+
+        // get form attrs
+        var action = $(form).attr('action')
+
+        // ajax validate
+        $.post(action, $(form).serialize(), function(data){
+            if (data === 'success'){
+                // TODO: make this work
+            } else {
+                var success = false;
+                $(submitStatus).addClass('text').append('<ul />');
+                $(data).find('.status-message').each(function(){
+                    if($(this).hasClass('success')){
+                        success = true;
+                    }
+                    $(submitStatus).find('ul').append('<li>' + $(this).text().trim() + '</li>');
+                });
+                
+                if(success)
+                    $(submitStatus).addClass('succeeded');
+                else
+                    $(submitStatus).addClass('failed');
+
+                // expand height to fit parent
+                $(submitStatus).animate({
+                    height : $(submitStatus).find('ul').height() + 14
+                });
+
+                if(Recaptcha)
+                    Recaptcha.reload();
+            }
+        });
     });
 
 });

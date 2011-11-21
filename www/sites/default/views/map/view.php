@@ -20,7 +20,10 @@
         </div>
     <?php endif; ?>
 
-<div id="exist-passcode" style="display:none" value="<?= $exist_passcode ?>"></div>
+    <script>
+        Sourcemap.passcode_exist = <?= isset($exist_passcode) ? '"'+$exist_passcode+'"' : '0' ?>;
+    </script>
+
 <div id="map-container">    
     <div id="map">
         <div id="sourcemap-map-view"></div>
@@ -75,7 +78,11 @@
     
 
     <h1>
-    	<?= HTML::chars($supplychain_name) ?> 
+        <span class="supplychain_name">
+        <?php if(!$exist_passcode):?>
+        	<?= HTML::chars($supplychain_name) ?> 
+        <?php endif; ?>
+        </span>
     	<?php if($can_edit): ?>
             <a id="map-edit-button" class="button" href="edit/<?= $supplychain_id; ?>">Edit Description</a>
         <?php endif; ?>

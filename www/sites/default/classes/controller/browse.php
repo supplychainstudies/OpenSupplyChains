@@ -32,13 +32,13 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $defaults = array(
             'q' => false,
             'p' => 1,
-            'l' => 20
+            'l' => 9999 
         );
 
         foreach($cats as $i => $cat) {
             $nms[Sourcemap_Taxonomy::slugify($cat->name)] = $cat;
         }
-
+        
         $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
 
         $params = $_GET;
@@ -47,18 +47,74 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
         $params = array_merge($defaults, $params);
 
+        // if a specific category is set, use the category view 
         if($category && isset($nms[$category])) {
-            // if a specific category is set, use the category view 
             $slug = $category;
             $category = $nms[$category];
             $params['c'] = $category->name;
+            $params['l'] = 48;
             $this->layout->page_title .= ' - '.$category->title;
             $this->template->category = $category->title;
+            $this->template->category_name = $category->name;
             $searches = Sourcemap_Search::find($params+array('recent' => 'yes'));
+            
+            $p = Pagination::factory(array(
+                'current_page' => array(
+                    'source' => 'query_string',
+                    'key' => 'p'
+                ),
+                'total_items' => $searches->hits_tot,
+                'items_per_page' => $searches->limit,
+                'view' => 'pagination/basic'
+            ));
+
+            $this->template->pager = $p;
+ 
         } elseif($category) {
-            Message::instance()->set('"'.$category.'" is not a valid category.');
-            return $this->request->redirect('browse');
+            if ($category == "uncategorized"){
+                $this->layout->page_title .= ' - Uncategorized';
+                $this->template->category = 'Uncategorized';
+                $this->template->category_name = 'uncategorized';
+                $params['l'] = 48;
+                $searches = Sourcemap_Search::find($params+array('c' => ''));
+            
+                $p = Pagination::factory(array(
+                    'current_page' => array(
+                        'source' => 'query_string',
+                        'key' => 'p'
+                    ),
+                    'total_items' => $searches->hits_tot,
+                    'items_per_page' => $searches->limit,
+                    'view' => 'pagination/basic'
+                ));
+
+            $this->template->pager = $p;
+            }
+            if ($category == "recent"){
+                $this->layout->page_title .= ' - Recent';
+                $this->template->category = 'Recent';
+                $this->template->category_name = 'Recent';
+                $params['l'] = 48;
+                $searches = Sourcemap_Search::find($params+array('recent' => 'yes'));
+            
+                $p = Pagination::factory(array(
+                    'current_page' => array(
+                        'source' => 'query_string',
+                        'key' => 'p'
+                    ),
+                    'total_items' => 144, 
+                    'items_per_page' => $searches->limit,
+                    'view' => 'pagination/basic'
+                ));
+
+            $this->template->pager = $p;
+            }
+            else{
+                Message::instance()->set('"'.$category.'" is not a valid category.');
+                return $this->request->redirect('browse');
+            }
         } else {
+        
             // Top-level category view
             $this->template->category = false;
             
@@ -68,32 +124,46 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
             foreach($tree->children as $subtree){
                 array_push($toplevels, $subtree->data->name);
             }
-            
+           
             // Do a general search for every top-level category
-            $searches = array();
-            foreach ($toplevels as $i => $cat){
-                $params['c'] = $cat;
-                $search = Sourcemap_Search::find($params+array('recent' => 'yes'));
-                array_push($searches, $search);
+            $cache_key = 'sourcemap-browse-searches';
+            $ttl = 60 * 60 * 24;
+            if($cached = Cache::instance()->get($cache_key)) {
+                $searches = $cached;
+            } else {
+                $searches = array();
+                foreach ($toplevels as $i => $cat){
+                    $params['c'] = $cat;
+                    $search = Sourcemap_Search::find($params+array('recent' => 'yes', 'limit' => '999'));
+                    $search->cat_title = $nms[$cat]->title; 
+                    array_push($searches, $search);
+                }
+                // Sort array by number of result
+                function sort_searches($a, $b){
+                    return $b->hits_tot - $a->hits_tot;
+                }
+                usort($searches, "sort_searches");
+                Cache::instance()->set($cache_key, $searches, $ttl);
             }
-
-            // Sort array by number of result
-            function sort_searches($a, $b){
-                return count($b->results) - count($a->results);
-            }
-            usort($searches, "sort_searches");
         }
         
         $this->template->searches = $searches;
 
-    	$params['l'] = 1;
-        $this->template->favorited = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));
-        $this->template->discussed = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
-        $this->template->interesting = Sourcemap_Search_Simple::find($params+array('comments' => 'yes'));
-        $this->template->recent = Sourcemap_Search_Simple::find($params+array('recent' => 'yes'));
-        
+    	// Other searches
+        $cache_key = 'sourcemap-browse-alternates';
+        $ttl = 60 * 60 * 24;
+        if($cached = Cache::instance()->get($cache_key)) {
+            $alternates = $cached;
+        } else {
+            $alternates = array();
+            $alternates['favorited'] = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));
+            $alternates['recent'] = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 999));
+            $alternates['uncategorized'] = Sourcemap_Search::find(array('c' => '', 'l' => 999));
+            Cache::instance()->set($cache_key, $alternates, $ttl);
+        }
+
+        $this->template->favorited = $alternates['favorited'];     
+        $this->template->recent = $alternates['recent'];  
+        $this->template->uncategorized = $alternates['uncategorized'];
     }
-
 }
-
-

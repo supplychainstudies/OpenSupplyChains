@@ -60,7 +60,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                         $msgbody = "\n";
                         $msgbody .= "Dear {$user->username},\n\n";
                         $msgbody .= "Welcome to Sourcemap!\n";
-                        $msgbody .= " Please click the link below to active your account:\n\n";
+                        $msgbody .= " Please click the link below to activate your account:\n\n";
                         $msgbody .= $url."\n\n";
                         $msgbody .= "If you have any questions, please email support@sourcemap.com.\n\n";
                         $msgbody .= "-The Sourcemap Team\n";
@@ -71,7 +71,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
                         try{
                             $sent = $mailer->send($swift_msg);
-                            Message::instance()->set('Resend activation mail, please check your email again.');
+                            Message::instance()->set('Registration email has been re-sent.  Please check your inbox.');
                             $this->request->redirect('register/thankyou');
                         } catch (Exception $e) {
                             // email resend failed

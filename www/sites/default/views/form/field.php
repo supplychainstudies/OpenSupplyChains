@@ -13,6 +13,7 @@
 ?>
 
 <?php $attr = $field->html_attrs(); $attr['class'] = $field->css_class(); ?>
+
 <?php if($field->field_type() === Sourcemap_Form_Field::TEXTAREA): ?>
     <?= Form::label($field->name(), $field->label()) ?>
     <?= Form::textarea($field->name(), $field->value(), $attr) ?>
@@ -23,6 +24,7 @@
         <?= $errors ?> 
         </div>
     <?php endif; ?>
+
 <?php elseif($field->field_type() === Sourcemap_Form_Field::SELECT): ?>
     <?= Form::label($field->name(), $field->label()) ?>
             <?= Form::select($field->name(), 
@@ -35,10 +37,13 @@
         <?= $errors ?> 
         </div>
     <?php endif; ?>
+
 <?php elseif($field->field_type() === Sourcemap_Form_Field::SUBMIT): ?>
     <div class="clear"></div>
+    <div class="submit-status hidden"></div>
     <?php $attr['class'] = $field->css_class()."button form-button"; ?>
     <?= Form::submit($field->name(), $field->value(), $attr) ?>
+
 <?php elseif($field->field_type() === Sourcemap_Form_Field::CHECKBOX): ?>
     <?= Form::label($field->name(), $field->label()) ?>
     <?php $attr['type'] = $field->field_type(); ?>
@@ -50,10 +55,14 @@
         <?= $errors ?> 
         </div>
     <?php endif; ?>
+
 <?php elseif($field->field_type() === Sourcemap_Form_Field::TEXT): ?>
+    <?php if($field->css_class()): ?>
+    <div class="<?= $field->css_class() ?>">
+    <?php endif; ?>
     <?= Form::label($field->name(), $field->label()) ?>
         <?php $attr['type'] = $field->field_type(); ?>
-        <?php $attr['class'] = $field->css_class()."textbox"; ?>
+        <?php $attr['class'] = "textbox"; ?>
         <?= Form::input($field->name(), $field->value(), $attr ) ?>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>
@@ -61,6 +70,10 @@
         <?= $errors ?> 
         </div>
     <?php endif; ?>
+    <?php if($field->css_class()): ?>
+    </div>
+    <?php endif; ?>
+
 <?php elseif($field->field_type() === Sourcemap_Form_Field::PASSWORD): ?>
     <?= Form::label($field->name(), $field->label()) ?>
         <?php $attr['type'] = $field->field_type(); ?>
@@ -72,6 +85,7 @@
         <?= $errors ?> 
         </div>
     <?php endif; ?>
+
 <?php else: ?>    
     <?= Form::label($field->name(), $field->label()) ?>
         <?php $attr['type'] = $field->field_type(); ?>

@@ -22,7 +22,7 @@
     <base href="<?= URL::base(true, true) ?>" />
     <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
-    <meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
+    <meta name="description" content="The open directory of supply chains and carbon footprints"/> 
     <meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
     <meta name="author" content="The Sourcemap Team">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
@@ -38,14 +38,17 @@
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>
 <body class="main">
+    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
     <div id="wrapper">
         <?= View::factory('partial/header', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
+        <?php if(Message::instance()->get() || Breadcrumbs::instance()->get()){ ?>
         <div class="container">
             <div class="messages">
                 <p><?= Breadcrumbs::instance()->get() ? Breadcrumbs::instance()->render() : false ?></p>
                 <p><?= Message::instance()->get() ? Message::instance()->render() : false ?></p>
             </div>
         </div>
+        <?php } ?>
         <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
         <div class="push"></div>
     </div><!-- #wrapper -->
@@ -53,7 +56,6 @@
          <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     
-    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
       
     <!--[if lt IE 7 ]>
         <script src="js/libs/dd_belatedpng.js"></script>

@@ -1,4 +1,4 @@
-/* Copyright (C) Sourcemap 2011
+/* Copyright (C) Sourcemap 2014
  * This program is free software: you can redistribute it and/or modify it under the terms
  * of the GNU Affero General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
@@ -238,6 +238,55 @@ Sourcemap.validate = function(type, data) {
     return false;
 }
 
+Sourcemap.initPasscodeInput = function(popID){
+    var element = document.createElement('div');
+    $(element).html(
+        '<div id="passcode-input">'+
+        '<form class="passcode-input">'+
+        '<label id="passcode-msg" for="passcode"> This map is protected. Please enter the password:</label>'+
+        '<input name="passcode" type="text" autocomplete="off"></input>'+
+        '<input id="passcode-submit" type="submit"/>'+
+        '</form>'
+        +'</div>'
+    );
+    $(element).attr('id',popID);
+    $(element).addClass("popup_block");
+    $(element).prepend('<a href="#" class="close"></a>');
+    $('body').append($(element));
+
+    var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
+
+    // Error behavior
+    var onError = function(){ window.location = "/view/" + scid + "?private"; }
+
+    //Autofocus on password  
+    $(element).find("input[name='passcode']").focus(); 
+    
+    // CSS setting of pop up window
+    $('#' + popID).height(110);
+    $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
+    //$('#' + popID).width(600);
+    var popMargTop = ($('#' + popID).height() + 80) / 2;
+    var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+    $('#' + popID).css({
+        'margin-top' : -popMargTop,
+        'margin-left' : -popMargLeft,
+        'overflow' : 'hidden'
+    });     
+
+    $('#' + popID).fadeIn();
+
+    $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+    $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+    $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
+        $('#fade , .popup_block').fadeOut(function() {
+            $('#fade, a.close').remove();
+        }); //fade them both out
+        return false;
+    });
+
+}
 
 Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
     // fetch and initialize supplychain
@@ -261,11 +310,228 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             sc.editable = data.editable;
             callback.apply(this, [sc]);
             _that.broadcast('supplychain:loaded', this, sc);
+            // unlock the supply chain
         },
         error : function(data){
-            //console.log(data.response);
+            //console.log("Passcode incorrect");
+            var error_response = eval('('+data.response+')');
+            $('#popup').fadeIn();
+            $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
+            $('.passcode-input').find("input[name='passcode']").focus();
+            $("#fade").fadeIn();
         }
     });
+}
+
+Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
+    // fetch and initialize supplychain
+    var _that = this;
+    var _remote_id = remote_id;
+
+    $.ajax({
+        url:'services/supplychains/'+remote_id,
+        data:{ passcode : passcode },
+        success : function(data) {
+            var sc = Sourcemap.factory('tree', data.supplychain);
+            sc.editable = data.editable;
+            callback.apply(this, [sc]);
+        },
+        error : function(data){
+        }
+    });
+}
+
+Sourcemap.buildTree = function(tree_id,sc) {
+
+    var tiers = [],tier_list = [],hop_list = [];
+    var max_plen = sc.max_plen;
+    var max_length=(max_plen)?sc.max_plen:1,max_x=0,max_y=0;    
+    // palette stuff
+    var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
+    for(var i=0; i<dfc.length; i++) {
+        dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
+    }
+    var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
+    //tier for palette
+    var g = new Sourcemap.Supplychain.Graph2(sc);
+    var stids = g.nids.slice(0);
+    var p_tiers = {};
+    for(var i=0; i<stids.length; i++) {
+        p_tiers[stids[i]] = 0;
+    }
+    for(var i=0; i<g.paths.length; i++) {
+        var p = g.paths[i];
+        for(var j=0; j<p.length; j++) {
+            if(j > p_tiers[p[j]]) p_tiers[p[j]] = j;
+        }
+    }
+    // Tiers for tree
+    for(var i=0;i<max_length;i++)
+    {   tiers[i] = new Array();  }
+    // Create stop points
+    for(var i=0,length=sc.stops.length;i<length;i++)
+    {
+        tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
+        
+        // default status
+        tier_list[i] = { 
+            title:sc.stops[i].attributes.title,
+            instance:sc.stops[i].instance_id,
+            y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
+            x:sc.tiers[sc.stops[i].instance_id]*150+100,
+            color:sc.stops[i].attributes.color
+        }
+    }
+    // get max_stack
+    var max_stack = 0;
+    var max_height =  $(tree_id).height();
+    var max_width = $(tree_id).width();
+    /*
+    for(var i=0;i<tiers.length;i++)
+    {        
+        max_stack = tiers[i].length > max_stack ? tiers[i].length : max_stack;
+    }
+    */
+    // Set middle stack in mid
+    for(var i=0,order=0;i<tiers.length;i++)
+    {
+        for(var j=0;j<tiers[i].length;j++){            
+            // divide y from max_stack into portion 
+            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
+                if(tier_list[k].instance==tiers[i][j].instance_id){
+                    tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+                    tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
+                    break;
+                }
+            }            
+        }
+    }
+    // Set stop points for Arc diagram    
+    /*
+    for(var i=0,order=0;i<tiers.length;i++)
+    {
+        for(var j=0;j<tiers[i].length;j++){            
+            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
+                if(tier_list[k].instance==tiers[i][j].instance_id){
+                    tier_list[k].y = 430;
+                    tier_list[k].x = order*105+50;
+                    order+=1;
+                    break;
+                }                                
+            }            
+        }
+    }
+    */
+    // Create hop points
+    for(var i=0, length=sc.hops.length;i<length;i++)
+    {
+        var h = sc.hops[i];
+        var fc = palette[p_tiers[h.from_stop_id]];
+        var tc = palette[p_tiers[h.to_stop_id]];
+        var hc = h.getAttr("color", fc.midpoint(tc).toString());
+        hop_list[i] = {            
+            id:h.instance_id,
+            //id:"hop"+i,
+            x1:tier_list[sc.hops[i].from_local_stop_id-1].x,
+            x2:tier_list[sc.hops[i].to_local_stop_id-1].x,
+            y1:tier_list[sc.hops[i].from_local_stop_id-1].y,
+            y2:tier_list[sc.hops[i].to_local_stop_id-1].y,
+            color:hc
+        }
+    }
+
+    var w = $(tree_id).width(),
+    h = $(tree_id).height();
+    //x = d3.scale.ordinal().domain(tier_x).rangePoints([0, w], 1),
+    //y = d3.scale.ordinal().domain(tier_y).rangePoints([0, h], 3);    
+    var svg = d3.select(tree_id).append("svg:svg")
+        .attr("width", w)
+        .attr("height", h);
+
+    //def marker
+    svg.append("svg:defs").selectAll("marker")
+        .data(hop_list)
+    .enter().append("svg:marker")
+        .attr("id", function(d){return d.id;})
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 0)
+        .attr("refY", 0)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .attr("stroke-width",2)
+    .append("svg:polyline")
+        .attr("points","0,0 10,5 0,10 1,5")
+        .attr("fill",function(d){return d.color;})
+    //.append("svg:path")
+    //    .attr("d", "M0,-5 L10,0 L0,5");
+
+    svg.append("svg:g").selectAll("text")
+    .data(tier_list)
+    .enter().append("svg:text")
+    .attr("x",function(d){return d.x})
+    .attr("y",function(d){return d.y})
+    .attr("dx",".1em") // padding
+    .attr("dy","1.8em")
+    .attr("text-anchor","middle")
+    .text(function(d){return d.title});
+    
+    // Arc
+    /*
+    svg.append("svg:g")
+    .selectAll("path")
+    .data(hop_list)
+    .enter().append("svg:path")    
+    .style("fill","none")
+    .style("stroke",function(d){return d.color})
+    //.attr("d","M20,400 l 90,-25 a25,25 -30 0,1 50,-25 l 50,-25 a25,50 -30 0,1 50,-25 l 50,-25 a25,75 -30 0,1 50,-25 l 50,-25 a25,100 -30 0,1 50,-25 l 50,-25");
+    .attr("d",function(d){
+        var diff_x = d.x2-d.x1
+        var diff_y = d.y2-d.y1
+        return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
+
+
+    */
+    // Simple line    
+    svg.append("svg:g").selectAll("line")
+        .data(hop_list)
+        .enter().append("svg:line")
+            .attr("x1",function(d){return d.x1})
+            .attr("x2",function(d){return d.x2})
+            .attr("y1",function(d){return d.y1})
+            .attr("y2",function(d){return d.y2})
+            .attr("stroke-width",3)
+            .attr("marker-end",function(d){ return "url(#"+d.id+")";})
+            .attr("stroke",function(d){return d.color});
+    
+                            
+   
+    /*
+    // path > line
+    var path = svg.append("svg:g").selectAll("path")
+    .data(hop_list)
+    .enter().append("svg:path")    
+        .style("fill",function(d){ return d.color})
+        .style("stroke",function(d){return d.color})
+        .attr("stroke-width", "3px")
+        .attr("marker-end",function(d){ 
+            return "url(#"+d.id+")";})        
+        .attr("d",function(d){
+            var diff_x = d.x2-d.x1
+            var diff_y = d.y2-d.y1
+            return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
+    */
+    
+    
+    svg.append("svg:g").selectAll("circle")
+        .data(tier_list)
+        .enter().append("svg:circle")
+        .attr("class", "little")
+        .attr("cx", function(d){return d.x})
+        .attr("cy", function(d){return d.y})
+        .style("fill", function(d){return d.color})
+        .attr("r", 12);
+    
 }
 
 Sourcemap.saveSupplychain = function(supplychain, o) {
@@ -384,26 +650,30 @@ Sourcemap.ttrunc = function(str, lim, dots) {
     return tstr;
 }
 
-Sourcemap.truncate_string = function (target)
-{
-    // 1 line;
-    // in general.less : white-space is set to nowrap
-    $(target).each(function(){       
-        var new_string;
-        var width_diff;
-        var word_count;
-        var chat_diff=18;
-        // 18 : Chinese char width , 5 : dot width
+Sourcemap.truncate_string = function(target){
+    $(target).each(function(){
 
-        var width = $(this).parent().width();
-        while($(this)[0].scrollWidth>width)
-        {
-             width_diff = $(this)[0].scrollWidth - width;
-             word_count = Math.ceil(width_diff/chat_diff);
-             if(word_count<5) word_count = 5;
-             new_string = jQuery.trim($(this).text()); 
-             $(this).find("a").text(new_string.substr(0, new_string.length - word_count) +"...");
-        }   
+        // grab parent element dimensions
+        var width  = $(this).parent().width();
+        var height = $(this).parent().height();
+
+        // clone div to a new element for measurement
+        var testdiv = $(this).clone().css({'width': width, 'height': 'auto', 'overflow': 'auto', 'display': 'hidden'});
+        $('<br />').appendTo($(this).parent());
+        $(testdiv).appendTo($(this).parent());
+        var text = $.trim($(this).text());
+        replacementText = null;
+       
+        // remove one character at a time until the height equals the original 
+        for(i=text.length; height < $(testdiv).height() && i > 0; i--){
+            replacementText = text.substr(0, i);
+            $(testdiv).text(replacementText + "...");
+        }
+        
+        if(replacementText)
+            $(this).text($.trim(replacementText.slice(0,-1)) + "...");
+        $(testdiv).prev().remove();
+        $(testdiv).remove();
     });
 }
 

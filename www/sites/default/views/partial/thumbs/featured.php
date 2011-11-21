@@ -19,12 +19,15 @@
             <div class="preview-badge">
             <a href="view/<?php print $item->id; ?>"><img class="preview-map" src="static/<?= $item->id ?>.m.png" alt="" /></a>
             </div>
-            <h3 class="preview-title truncate featured">
-                <a href="view/<?= $item->id; ?>">
+            <h3 class="preview-title featured">
+                <a class="truncate" href="view/<?= $item->id; ?>">
                     <?= HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap") ?>                   
                 </a></h3>
-            <h4 class="preview-author"><a href="user/<?= $item->owner->id; ?>"><?=  isset($item->owner->display_name)?  Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
-            <?= date("M j, Y", $item->created) ?></h4>
+            <h4 class="preview-author">
+                <a href="user/<?= $item->owner->id; ?>"><?=  isset($item->owner->display_name)?  Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
+                <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
+            </h4>
+            <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>
         </div>
     <?php endforeach; ?>
 <?php else: ?>

@@ -40,11 +40,12 @@ class Controller_Home extends Sourcemap_Controller_Layout {
             $scs_favorite[] = $sc->kitchen_sink($sc->id);
         }
 
-
         $isChannel = false;
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if($user->has('roles', $channel_role))
             $isChannel = true;
+
+        $user_arr['avatar'] = Gravatar::avatar($user->email, 128);
 
         $this->template->isChannel = $isChannel;
         $this->template->user = (object)$user_arr;
@@ -58,7 +59,7 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         // This is an example of how we should do AJAX validation in Kohana
         $this->auto_render = FALSE;
         $this->template = null;
-        
+         
         $user = Auth::instance()->get_user();
         $set_to = null;
         if(Request::$method === 'POST') {

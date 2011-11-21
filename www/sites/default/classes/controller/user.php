@@ -66,46 +66,57 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
                $this->template->user_profile = $user;
                $this->template->featured = $featured_ids;
-           } // channel role end           
+            } // channel role end           
 
             $user = (object)$user->as_array();
             $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
             
             if(!(Auth::instance()->get_user())) {            
-            unset($user->password);
-            $user->avatar = Gravatar::avatar($user->email, 128);
-            unset($user->email);
-            
-             $this->template->user = (object)$user;
+                unset($user->password);
+                $user->avatar = Gravatar::avatar($user->email, 128);
+                unset($user->email);
+                
+                $this->template->user = (object)$user;
 
-            $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
-            $pg = max($pg,1);
+                $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
+                $pg = max($pg,1);
 
-            $l = 10;
-            $q = array(
-                'user' => $user->id,
-                'l' => $l, 'o' => ($pg-1)*$l,
-                'p' => $pg, 'recent' => 'yes'
-            );
+                $l = 10;
+                $q = array(
+                    'user' => $user->id,
+                    'l' => $l, 'o' => ($pg-1)*$l,
+                    'p' => $pg, 'recent' => 'yes'
+                );
 
-            $r = Sourcemap_Search::find($q);
+                $r = Sourcemap_Search::find($q);
+                $supplychains = $r->results;
 
-            $this->template->search_result = $r;
-            
-            $p = Pagination::factory(array(
-                'current_page' => array(
-                    'source' => 'query_string',
-                    'key' => 'p'
-                ),
-                'total_items' => $r->hits_tot,
-                'items_per_page' => $r->limit,
-                'view' => 'pagination/basic'
-            ));
+                $this->template->search_result = $r;
+                
+                $p = Pagination::factory(array(
+                    'current_page' => array(
+                        'source' => 'query_string',
+                        'key' => 'p'
+                    ),
+                    'total_items' => $r->hits_tot,
+                    'items_per_page' => $r->limit,
+                    'view' => 'pagination/basic'
+                ));
+               
+                // load totals
+                // TODO: finish this
+                $totals = array(
+                    'supplychains' => count($supplychains),
+                    'stops' => "",
+                    'hops' => ""
+                );
 
-            $this->template->pager = $p;
-
-            $this->template->supplychains = $r->results;
+                $this->template->totals = (object)$totals;
+                $this->template->pager = $p;
+                $this->template->supplychains = $supplychains; 
             }
+
+
             //  If user id matches login id, redirect to dashboard
             else if($user->id==Auth::instance()->get_user()->id){
                 $this->request->redirect('home/');
@@ -135,9 +146,9 @@ class Controller_User extends Sourcemap_Controller_Layout {
                 $scs[] = $sc->kitchen_sink($sc->id);
             }
             
+            
             $this->template->user_profile = $p;
             $this->template->supplychains = $scs;
-
 
             } else {
             // User not logged in
@@ -169,7 +180,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
                 'items_per_page' => $r->limit,
                 'view' => 'pagination/basic'
             ));
-
+            
             $this->template->pager = $p;
             $this->template->supplychains = $r->results;
             

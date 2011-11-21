@@ -1,11 +1,11 @@
 .jcarousel-skin-sourcemap{
     .preview-map-item{
-        margin-right:7px;
+        margin: 0 8px 0 0;
     }
 
     .jcarousel-container-horizontal {
         width: 940px;
-        padding: 15px 40px;
+        padding: 2px 40px;
     }
     .jcarousel-clip {
         overflow: hidden;
@@ -13,16 +13,16 @@
     .jcarousel-item{
         // These need to be set explicitly, otherwise jcarousel won't start
         height: 180px;
-        width: 230px;
+        width: 229px;
     }
     .jcarousel-item.small{
-        height: 160px;
+        height: 144px;
         width: 173px;
     }
     .jcarousel-next-horizontal,
     .jcarousel-prev-horizontal {
         position: absolute;
-        top: 43px;
+        top: 26px;
         width: 62px;
         height: 89px;
         cursor: pointer;
@@ -56,10 +56,20 @@
         }
         .jcarousel-next-horizontal,
         .jcarousel-prev-horizontal {
-            top: 30px;
+            top: 15px;
         }
         .jcarousel-next-horizontal { right: 0px; }
         .jcarousel-prev-horizontal { left: -10px; }
+    }
+    &.wide{
+        .jcarousel-skin-sourcemap{
+            .jcarousel-container-horizontal{
+                width: 940px;
+            }
+            .preview-map-item{
+                margin-right: 17px;
+            }
+        }
     }
 }
 

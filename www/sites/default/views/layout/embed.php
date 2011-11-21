@@ -21,7 +21,7 @@
     <base href="<?= URL::base(true, true) ?>" />
     <title><?= HTML::chars(isset($page_title) && $page_title ? $page_title : APPLONGNM) ?></title>
 
-    <meta name="description" content="Sourcemap is a crowd-sourced directory of product supply chains and carbon footprints." /> 
+    <meta name="description" content="The open directory of supply chains and carbon footprints" /> 
     <meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
     <meta name="author" content="The Sourcemap Team">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
@@ -52,6 +52,7 @@
     <script>
         Sourcemap.embed_supplychain_id = <?= isset($supplychain_id) ? $supplychain_id : '"null"' ?>;
         Sourcemap.embed_params = <?= isset($embed_params) ? json_encode($embed_params) : '{}' ?>;
+        Sourcemap.passcode_exist = <?= isset($exist_passcode) ? '"'+$exist_passcode+'"' : '0' ?>;
     </script>
 	<? if(isset($embed_params) && $embed_params['served_as'] == "earth") { ?>
 		<script type="text/javascript" src="http://www.google.com/jsapi?autoload=%7B%22modules%22%3A%5B%7B%22name%22%3A%22earth%22%2C%22version%22%3A%221%22%7D%5D%7D&key=<?= Kohana::config('apis')->earth_api_key; ?>"></script>

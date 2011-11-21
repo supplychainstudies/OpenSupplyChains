@@ -12,11 +12,167 @@
  */
 
 
-
 $(document).ready(function(){
-    
+
     /* truncation */
     Sourcemap.truncate_string(".truncate");
+
+    /* collapse/expand */
+    $('a.expander').click(function(){
+        $(this).parent().next('.collapsed').slideToggle();
+    });
+    
+    /* Channel edit */
+    $("input:checkbox").each(function(index){
+        var ischecked = $(this).is(":checked");
+        $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+
+        $(this).change(function(){
+            var ischecked = $(this).is(":checked");
+            $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        });
+    });
+
+    $('.map-controls').each(function(index){
+
+        var publish_precheck = false;
+        var featured_precheck = false;
+        var passcode_precheck = false;
+        
+        // default view
+        var map_passcode = $(this).children('.map-controls-passcode');
+        var ischecked = $(map_passcode).children('#map-passcode-checkbox').is(":checked");
+        $(map_passcode).stop().animate({width:ischecked?249:120},500);     
+        //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        ischecked ? $(map_passcode).children("#map-passcode-input").show():$(map_passcode).children("#map-passcode-input").hide();
+
+        $(this).children('.map-controls-publish').children('#map-publish-checkbox').change(function(){
+            publish_precheck = true;
+        });
+
+        $(this).children('.map-controls-featured').children('#map-featured-checkbox').change(function(){
+            featured_precheck = true;
+        });
+
+        $(this).children('.map-controls-passcode').children("#map-passcode-checkbox").change(function(){
+            passcode_precheck = true;
+            //passcode_precheck = $(this).is(":checked");
+            // passcode_check : featured_check ? cancel featured : don't send data            
+            // !passcode_check :
+            /*
+            if(!passcode_precheck){
+                // Delete #map-passcode-input value
+                if($(this).parent().children("#map-passcode-input").val()=="")
+                    passcode_precheck = true;
+                else
+                    $(this).parent().children("#map-passcode-input").val("");
+            }
+            */
+            // animation
+            var ischecked = $(this).is(":checked");
+            var parent_control = $(this).parent(".map-controls-passcode");
+            $(parent_control).stop().animate({width:ischecked?249:120},500);            
+            //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+            ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
+        });
+
+
+        
+        $(this).change(function(){
+
+            // publish
+            var publish_selector = $(this).children('.map-controls-publish"');
+            var publish_check = publish_selector.children("input:checkbox").is(":checked");
+
+            // featured
+            var featured_selector = $(this).children('.map-controls-featured');
+            var featured_check = featured_selector.children("input:checkbox").is(":checked");
+            
+            // passcode 
+            var passcode_selector = $(this).children('.map-controls-passcode');
+            var passcode_check = passcode_selector.children("input:checkbox").is(":checked");
+            var passcode_val = passcode_selector.children("#map-passcode-input").val();
+            //console.log($(passcode_selector).children("input:checkbox").is(":checked"));
+            //console.log(passcode_selector.children("#map-passcode-input").val());
+
+            // precheck
+            // publish_check : featured_check ? cancel featured : (click featured before publish); 
+            if(publish_precheck){            
+                publish_precheck = false; // set to default
+
+                if(!publish_check){                    
+                    featured_selector.children("input:checkbox").removeAttr("checked");
+                    featured_check = false;                        
+                    featured_selector.children("a").attr("style","color:#A7AAAE");
+                }
+            }
+            
+            if(featured_precheck){                
+                featured_precheck = false; // set to default;    
+
+                if(!publish_check){                    
+                    featured_selector.children("input:checkbox").removeAttr("checked");
+                    featured_check = false;                        
+                    featured_selector.children("a").attr("style","color:#A7AAAE");
+                    // cause recursive
+                    // featured_selector.children("input:checkbox").trigger("change");
+                    return false;
+                }
+                if(passcode_check){
+                    // uncheck passcode and reset                    
+                    passcode_selector.children("input:checkbox").removeAttr("checked");
+                    passcode_check = false;
+                    passcode_selector.children("#map-passcode-input").val("");
+                    passcode_val = "";                        
+                    passcode_selector.children("input:checkbox").trigger("change");
+                }
+            }
+
+            // passcode_check : featured_check ? cancel featured : don't send data
+            if(passcode_precheck){
+                passcode_precheck = false;   // set to default 
+
+                if(passcode_check){
+                    if(featured_check){
+                        featured_selector.children("input:checkbox").removeAttr("checked"); 
+                        featured_check = false;                        
+                        featured_selector.children("a").attr("style","color:#A7AAAE");
+                    }else{
+                        return false;
+                    }
+                }else {
+                    if(passcode_val=="")
+                        return false;
+                    else{
+                        // reset passcode
+                        passcode_selector.children("#map-passcode-input").val("");
+                        passcode_val = "";                        
+                        // uncheck featured
+                    }
+                }
+            }
+            
+
+            // supplychain id
+            var supplychain_id = $(this).attr('value');
+            //http://192.168.1.18/edit/general/5?publish=yes&featured=yes&passcode=aaa 
+            $.ajax({
+                url:'edit/general/'+supplychain_id,
+                data:{  
+                    publish: publish_check?"yes":"no",
+                    featured: featured_check?"yes":"no",
+                    passcode: passcode_val               
+                },
+                success : function(data) {
+                    //console.log("Success : "+data);
+                },
+                error : function(data){
+                    //console.log("Error : "+data);
+                }
+            });
+
+        });
+    });
 
     /* user edit */
     $('a.edit-button').click(function(evt){
@@ -77,23 +233,17 @@ $(document).ready(function(){
         );
     }
 
-    /* carousel launch */
-    $('.carousel').each(function(){
-        $(this).jcarousel({
-            scroll: 4,
-        });
-    });
-
     /* unsupported browser detection */
-    if (($.browser.msie)) {
+    if (($.browser.msie) && $('.browser').length == 0) {
         
         //document.getElementById("status-message").className = "status-message browser";
-        $(".messages").html(
-            "<div class=\"status-message\" style=\"line-height: 1.8em\">"
+        $(".messages").append(
+            "<div class=\"status-wrap\">"
+            +"<div class=\"status-message\" style=\"line-height: 1.8em\">"
             +"<div class=\"browser\" "
-            +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; \"></div></div>"        
+            +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; \"></div></div></div>"        
         );
-        $(".browser").html(
+        $(".browser").append(
             " You're using Internet Explorer, which is not supported by Sourcemap."
           + " While we won't stop you from experimenting, we highly recommend using"
           + " the latest version of "
@@ -169,6 +319,13 @@ $(document).ready(function(){
             $('#fade, a.close').remove();  
     }); //fade them both out
         return false;
+    });
+    
+    /* carousel launch */
+    $('.carousel').each(function(){
+        $(this).jcarousel({
+            scroll: 4,
+        });
     });
 
 

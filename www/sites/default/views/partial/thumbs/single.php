@@ -31,7 +31,7 @@
             <h4 class="featured-info">
                  <a href="user/<?= isset($item->owner->id) ? $item->owner->id : "" ?>">
                     <?= isset($item->owner->username) ? HTML::chars($item->owner->username) : "" ?></a>,   
-                <?php isset($item->created) ? print date("F j, Y",$item->created) : "" ?>
+                    <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
             </h4>
         </div>
     </li>

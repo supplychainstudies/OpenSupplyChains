@@ -42,9 +42,9 @@
                 // check passcode
                 if(isset($cached->attributes->passcode))
                 {
-                    $user_passcode = $_GET['passcode'];
+                    $user_passcode = isset($_GET['passcode']) ? $_GET['passcode'] : "";
                     if($cached->attributes->passcode!=$user_passcode)
-                        return $this->_bad_request('Your enter the wrong passcode.');
+                        return $this->_bad_request('You entered the wrong passcode.');
                 }
 
                 $this->_cache_hit = true;
@@ -67,7 +67,7 @@
                 {
                     $user_passcode = $_GET['passcode'];
                     if($fetched->attributes->passcode!=$user_passcode)
-                        return $this->_bad_request('Your enter the wrong passcode');
+                        return $this->_bad_request('Your entered the wrong passcode');
                 }
                 $this->response = array(
                     'supplychain' => $fetched

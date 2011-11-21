@@ -18,7 +18,7 @@
         <div id="category-list-content">
             <div class="category-current">
                 Currently browsing&nbsp; 
-                <a href="browse/">
+                <a href="browse/<?= isset($category_name) ? $category_name : ""; ?>">
                     <?= $category ? $category : "Everything"; ?>
                 </a>&nbsp;
             </div> 
@@ -26,12 +26,20 @@
             <div class="category-dropdown">
                 <select name="BrowseSelect" onChange="location.href='browse/'+this.value;">
                 <option>Select a <?= $category ? "different " : ""; ?> category:</option>
+                <option value="">Everything</option>
                 <?php for($i=0; $i<count($taxonomy->children); $i++): ?>
                     <?php $t = $taxonomy->children[$i]; ?>
                     <option value="<?= $t->data->name ?>"><?= HTML::chars($t->data->title) ?></a>
                 <?php endfor; ?>
+                <option value="uncategorized"><a href="/uncategorized">Uncategorized</a></option>
                 </select>
             </div>
+            <?php //Build pager for sub-pages only ?>
+            <?php if (count($searches) == 1): ?>
+            <div class="category-pager">
+                <?= $pager->render() ?>
+            </div>
+            <?php endif; ?>
         </div>
         <div class="clear"></div>
     </div>
@@ -42,49 +50,43 @@
 <?php // TODO: split the following into two separate files ?>
 <?php // If we're at the top level, display a list of all categories ?>
 <?php if (count($searches) > 1){ ?>
+    <?php // recent ?>
+        <div class="category-view medium container wide">
+            <h3 class="section-title"><a href="/browse/recent">Recent</a></h3>
+            <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $recent->results, 'category' => 'recent', 'limit' => 15)) ?>
+        </div><!-- .container -->
+        <hr class="spacer" />
     <?php foreach($searches as $i=> $search){?>
-        
-        <?php // first 3 categories get to be big ?>
+        <?php // first 2 categories get to be big ?>
         <?php if ($i<2): ?>
         <div class="category-view medium container wide">
-            <h2 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
-            <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $search->results)) ?>
+            <h2 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->cat_title ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h2>
+            <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $search->results, 'category' => $search->parameters['c'], 'limit' => 10)) ?>
         </div>
         <hr class="spacer" />
 
-        <?php // remaining categories are small ?>
+        <?php // next 3 categories are small ?>
         <?php else: ?>
             <?php if ($i == 2): ?>
-        <div class="container wide">
-            <div id="sidebar-left"> 
             <?php endif; ?>
                 <?php if(count($search->results)>0): ?>
-                <div class="category-view small">
-                    <h3 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->parameters['c'] ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
-                    <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results)) ?>
-                </div>
+        <div class="category-view small container wide">
+            <h3 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->cat_title ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
+            <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results, 'category' => $search->parameters['c'], 'limit' => 15)) ?>
+        </div>
                 <?php endif ?>
         <?php endif ?>
+        <?php if ($i > 3){ break; } ?>
     <?php }?>
-            </div><!-- .left -->
-            <div id="sidebar" class="browse skinny">
-                <div class="container">
-                    <ul>
-                        <li>
-                            <h2 class="section-title">Interesting Sourcemaps</h2>
-                            <?= View::factory('partial/thumbs/featured', array('supplychains' => $interesting->results)) ?>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="clear"></div>
+    <?php // uncategorized ?>
+        <div class="category-view small container wide">
+            <h3 class="section-title"><a href="/browse/uncategorized">Uncategorized</a> <span class="category-quantity">(<?= count($uncategorized->results);?>)</span></h3>
+            <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $uncategorized->results, 'category' => 'uncategorized', 'limit' => 15)) ?>
         </div><!-- .container -->
 
 <?php } else { ?>
         <div class="container">
-            <h2 class="browse-header section-title">There are <?= count($searches->results);?> Sourcemaps in this category:</h2>
             <div class="category-view medium">
-                <?php // TODO: improve the names of partial views ?>
                 <?php echo View::factory('partial/thumbs/browse', array('supplychains' => $searches->results)) ?>
             </div>
             <div class="clear"></div>

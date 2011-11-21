@@ -66,8 +66,6 @@ class Model_Supplychain extends ORM {
         )
     );
 
-    
-
     public function save() {
         $this->modified = time();
         if(parent::save() && $this->pk()) {
@@ -78,17 +76,10 @@ class Model_Supplychain extends ORM {
             $rev->data = json_encode($this->kitchen_sink($this->pk()));
             $rev->rev_hash = md5($rev->data.microtime());
             $rev->save();
-            //print_r($this);
-            $this->updateCache(); 
+            $scid = $this->id;
+            Cache::instance()->delete('supplychain-'.$scid);
         }
         return $this;
-    }
-   
-    public function updateCache()
-    {
-        if(Cache::instance()->delete_all())
-        {
-        }
     }
 
     public function kitchen_sink($scid) {
@@ -221,6 +212,10 @@ class Model_Supplychain extends ORM {
                 'values (:supplychain_id, :key, :value)';
             $scattr_insert_query = DB::query(Database::INSERT, $scattr_sql);
             foreach($sc->attributes as $k => $v) {
+                // if passcode is set to none, don't set attributes
+                if($k==="passcode")
+                    if($v==="")
+                        continue;
                 list($nothing, $affected) = $scattr_insert_query->param(':supplychain_id', $scid)
                     ->param(':key', $k)->param(':value', (string)$v)->execute();
                 if(!$affected) throw new Exception('Could not insert supplychain attribute: "'.$k.'".');

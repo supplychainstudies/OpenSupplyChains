@@ -34,14 +34,39 @@ $(document).ready(function() {
 		    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
 
 		    });
-		    Sourcemap.loadSupplychain(scid, function(sc) {
-		        Sourcemap.embed_instance.map.addSupplychain(sc);
-		    	$(window).resize();
-		    	$("#banner").click(function() {
-		    		//window.location.href = "view/" + window.location.pathname.split("/")[2];
-                    window.open("view/" + window.location.pathname.split("/")[2]);
-		    	});
-		    });
+            // TODO : make password input window
+            var passcode = "";
+            if(!Sourcemap.passcode_exist){
+                // no passcode
+                Sourcemap.loadSupplychain(scid, passcode, function(sc) {
+                    Sourcemap.embed_instance.map.addSupplychain(sc);
+                    $(window).resize();
+                    $("#banner").click(function() {
+                        //window.location.href = "view/" + window.location.pathname.split("/")[2];
+                        window.open("view/" + window.location.pathname.split("/")[2]);
+                    });
+                });
+            } else {
+                var popID = "popup";
+                Sourcemap.initPasscodeInput(popID);
+                $('form.passcode-input').submit(function(evt){
+                    evt.preventDefault();
+                    passcode = $('#' + popID).find("input[name='passcode']").val();
+
+                    var cb = function(sc){
+                        Sourcemap.embed_instance.map.addSupplychain(sc);
+                        $(window).resize();
+                        $("#banner").click(function() {
+                            //window.location.href = "view/" + window.location.pathname.split("/")[2];
+                            window.open("view/" + window.location.pathname.split("/")[2]);
+                        });
+                    };
+                    Sourcemap.loadSupplychain(scid, passcode,cb);
+                    $('#fade , .popup_block').fadeOut(function() {
+                        $('#fade, a.close').remove();
+                    });
+                }); // submit end
+            }
 			break;
 		case "static":
 			var l = "view/" + window.location.pathname.split("/")[2];

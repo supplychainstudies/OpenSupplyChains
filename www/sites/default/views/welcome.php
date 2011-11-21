@@ -19,16 +19,15 @@
 <div class="container">
     <div id="sidebar" class="welcome">
         <div class="container"> 
-    		<h2 class="section-title">Popular Sourcemaps</h2>  
+    		<h2 class="section-title">Popular</h2>  
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $popular)) ?>
             </div>
             <div class="clear"></div>
         </div>           
 
-        <hr class="spacer" />
         <div class="container"> 
-    		<h2 class="section-title">Recent Sourcemaps</h2> 
+    		<h2 class="section-title">Recent</h2> 
             <div class="preview-map-section">
                 <?= View::factory('partial/thumbs/featured-vertical', array('supplychains' => $recent)) ?>
             </div>
@@ -42,7 +41,7 @@
 
             <hr class="spacer" />
             
-            <h2 class="section-title">Featured Sourcemaps</h2>
+            <h2 class="section-title">Featured</h2>
             <?= View::factory('partial/thumbs/featured', array('supplychains' => $morefeatured)) ?>
             <div class="clear"></div>
             <hr class="spacer" />
@@ -58,7 +57,9 @@
                 <li class="news-item">
                     <h5 class="title"><a href="http://blog.sourcemap.com"><?= HTML::chars($news_item->title_plain) ?></a></h5>
                     <p>
-                        <?= substr(HTML::chars($news_item->excerpt), 0, 130) ?>&hellip; 
+                        <span class="truncate">
+                        <?= substr(HTML::chars($news_item->excerpt), 0, 255) ?>&hellip; 
+                        </span>
                         <a class="readmore" href="<?= $news_item->url ?>">More &raquo;</a>
                     </p>
                 </li>

@@ -493,6 +493,10 @@
 
 /* Editor   -------------------------------------------------------------- */
 #stop-editor,#hop-editor {
+	.thick {
+		margin: 10px;
+		
+	}
     h2 input, h3 input {
         font-family:inherit;
         font-weight:inherit;
@@ -550,6 +554,9 @@
 	#edit-stop-footprint, #edit-hop-footprint {
 		fieldset { padding:0; }
 		.footprint-row {
+			.footprint-first-row {
+				margin-bottom: 40px;
+			}
 			clear: both;
 			width: 370px;
 			padding: 4px;
@@ -564,6 +571,12 @@
 			}
 			.lock {
 				background: url(../images/icon-lock.png) 0px 0px no-repeat;    
+				width: 25px;
+				height: 25px;
+				float:left;
+			}
+			.unlock {
+				background: url(../images/icon-unlock.png) 0px 0px no-repeat;    
 				width: 25px;
 				height: 25px;
 				float:left;

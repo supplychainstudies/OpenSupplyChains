@@ -648,6 +648,12 @@ Sourcemap.Map.Editor.prototype.showEdit = function(ftr) {
 
 Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
     // track currently edited feature
+	$("#stop-editor").show();
+	$("#dialog").width(410);
+	//$("#dialog").height("auto");
+	$("#dialog").css("right",37);
+	$("#dialog").css("padding",5);
+	$("#newcatalog").hide();
     this.editing = ref;
     $("#editor-tabs").tabs();
 
@@ -829,8 +835,9 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.editor.map_view.hideDialog(true);
         Sourcemap.broadcast('supplychain-updated', supplychain);
     }, s));
-
-	if (this.ref.getAttr("co2e_reference",0) != 0) {
+	if (s.ref.getAttr("co2e_reference",0) != 0) {
+		$(this.editor.map_view.dialog).find('#lock-co2e').addClass("lock");
+		$(this.editor.map_view.dialog).find('#lock-co2e').removeClass("unlock");
 		$(this.map_view.dialog).find('#reference-co2e').click(
 	        $.proxy(function(e) { 
 	            window.open(this.ref.getAttr("co2e_reference",0),"_blank"); 
@@ -839,7 +846,9 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	} else {
 		
 	}
-	if (this.ref.getAttr("energy_reference",0) != 0) {
+	if (s.ref.getAttr("energy_reference",0) != 0) {
+		$(this.editor.map_view.dialog).find('#lock-energy').addClass("lock");
+		$(this.editor.map_view.dialog).find('#lock-energy').removeClass("unlock");
 		$(this.map_view.dialog).find('#reference-energy').click(
 	        $.proxy(function(e) { 
 	            window.open(this.ref.getAttr("energy_reference",0),"_blank"); 
@@ -848,7 +857,9 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	} else {
 		
 	}
-	if (this.ref.getAttr("water_reference",0) != 0) {
+	if (s.ref.getAttr("water_reference",0) != 0) {
+		$(this.editor.map_view.dialog).find('#lock-water').addClass("lock");
+		$(this.editor.map_view.dialog).find('#lock-water').removeClass("unlock");
 		$(this.map_view.dialog).find('#reference-water').click(
 	        $.proxy(function(e) { 
 	            window.open(this.ref.getAttr("water_reference",0),"_blank"); 
@@ -857,6 +868,25 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	} else {
 		
 	}
+	$(this.map_view.dialog).find('[name^=co2e]').keyup(
+        $.proxy(function(e) { 
+			$(this.editor.map_view.dialog).find('#lock-co2e').removeClass("lock");
+			$(this.editor.map_view.dialog).find('#lock-co2e').addClass("unlock");
+			//this.editor.applyCatalogItem("", {"co2e-reference" : ""}, this.ref, {"osi": {"name": ["title"],"co2e_reference": true});
+        }, s)
+    );
+	$(this.map_view.dialog).find('[name^=energy]').keyup(
+        $.proxy(function(e) { 
+			$(this.editor.map_view.dialog).find('#lock-energy').removeClass("lock");
+			$(this.editor.map_view.dialog).find('#lock-energy').addClass("unlock");		
+        }, s)
+    );
+	$(this.map_view.dialog).find('[name^=water]').keyup(
+        $.proxy(function(e) { 
+			$(this.editor.map_view.dialog).find('#lock-water').removeClass("lock");
+			$(this.editor.map_view.dialog).find('#lock-water').addClass("unlock");
+        }, s)
+    );
     var cb = function(e) {
         //TODO: maybe move this down and add a spinner or disable the map/editor?
     }
@@ -1158,7 +1188,6 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
 	 	//$("#edit-catalog").html(th); //Bianca
 		$("#stop-editor").hide();
 		$("#dialog").width(1020);
-		$("#dialog").height(411);
 		$("#dialog").css("right",10);
 		$("#dialog").css("padding",0);
 		$("#newcatalog").show();

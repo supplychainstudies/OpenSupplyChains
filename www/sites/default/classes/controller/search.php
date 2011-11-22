@@ -27,8 +27,9 @@ class Controller_Search extends Sourcemap_Controller_Layout {
         );
 
         $params = $_GET;
-        if(strtolower(Request::$method) == 'post')
+        if(strtolower(Request::$method) === 'post') {
             $params = $_POST;
+        }
 
         //$params = array_merge($defaults, $params);
         $search_params = $defaults;
@@ -40,7 +41,7 @@ class Controller_Search extends Sourcemap_Controller_Layout {
 
         $this->template->search_result = $r;
     	$this->layout->page_title = 'Search results for ['.$search_params['q'].'] on Sourcemap';
-        
+
         $p = Pagination::factory(array(
             'current_page' => array(
                 'source' => 'q',

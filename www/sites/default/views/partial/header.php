@@ -41,7 +41,7 @@
             </li>
             <?php endif; ?>
         </ul>
-        <form method="post" action="/search/">
+        <form method="post" action="/search">
             <div id="search-div" class="pseudo-form">
                 <input id="search" name="q" placeholder="Search" results="0" />
             </div>

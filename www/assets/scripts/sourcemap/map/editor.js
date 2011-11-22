@@ -50,7 +50,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // listen for supplychain updates and save
     Sourcemap.listen('supplychain-updated', function(evt, sc, no_remap) {
         var succ = $.proxy(function() {
-            this.map_view.updateStatus("Saved...", "good-news");           
+            this.map_view.updateStatus("Saved.", "good-news");           
         }, this);
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");

@@ -651,7 +651,18 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     // track currently edited feature
     this.editing = ref;
-    $("#editor-tabs").tabs();
+    //$("#editor-tabs").tabs();
+	$('.accordion-body').hide();
+	$('.accordion .accordion-title').click(function() {
+		var open = $(this).next().is(":visible");
+		$('.accordion-body:visible').slideToggle('fast');
+		$('.accordion-title').find('.arrow').removeClass('arrowopen');
+		if (open == false) {
+			$(this).next().slideToggle('fast');
+			$(this).find('.arrow').addClass('arrowopen');
+		}				
+		return false;
+	});
 
     $('#edit-description').append('<div id="dialog-desc-counter"></div>');
     $("#dialog-description").keyup(function(){

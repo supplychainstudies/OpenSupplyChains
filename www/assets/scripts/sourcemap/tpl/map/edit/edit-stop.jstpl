@@ -23,26 +23,18 @@
 <h3 class="placename"><% var i = $("<input type=\"text\" name=\"address\" />"); i[0].setAttribute("value",this.ref.getAttr("address","")); %>
     <%= $("<div></div>").append(i).html() %>
 </h3>
-
-
 <div id="editor-tabs">
-	<ul>
-		<li><a href="#edit-description">Description</a></li>
-		<li><a href="#edit-media">Media</a></li>
-		<li><a href="#edit-stop-footprint">Footprint</a></li>
-		<li><a href="#edit-catalog" class="load-catalog-button">Material Catalog</a></li>
-		<div class="clear"></div>
-	</ul>
-    <div class="clear"></div>
+<div class="accordion">
     
-        <div id="edit-description" class="sourcemap-form">        
+		<h3 class="accordion-title"><div class="arrow"></div>Description</h3>
+        <div id="edit-description" class="sourcemap-form accordion-body">        
             <%= $("<div></div>").append(
                     $("<textarea></textarea>").attr("id","dialog-description").attr("maxlength","1000").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 1000 characters.").text(this.ref.getAttr("description",""))
                 ).html()
             %>
         </div>
-        <div id="edit-stop-footprint">
-            <div class="sourcemap-form nopadding">
+<h3 class="accordion-title"><div class="arrow"></div>Footprint</h3>
+        <div id="edit-stop-footprint" class="accordion-body sourcemap-form">
                 <fieldset>           
 					<div class="footprint-section">        
 	                    <label for="co2e">Quantity</label>
@@ -79,10 +71,9 @@
                     <div id="impact-result" class="result">0 kg C02e</div>
 
                 </fieldset>
-            </div>
         </div>
-        
-        <div id="edit-media" class="sourcemap-form">
+        <h3 class="accordion-title"><div class="arrow"></div>Media</h3>
+        <div id="edit-media" class="sourcemap-form accordion-body">
             <fieldset>
 				<% mediatype = this.ref.getAttr("youtube:link", false) ? "youtube:link" : this.ref.getAttr("flickr:setid", false) ? "flickr:setid" : "youtube:link"; %>
 				<select id="media-content-type">
@@ -98,8 +89,7 @@
                 
             </fieldset>
         </div>
-        <div id="edit-catalog"></div>
-
+		</div> <!-- End of Accordion -->
 </div>
 <div class="clear"></div>
 <ul id="edit-actions">

@@ -10,6 +10,9 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
+
+
+
 Sourcemap.Map.Base = function(o) {
     this.broadcast('map_base:instantiated', this);
     var o = o || {};
@@ -197,6 +200,8 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
+
+
     
 }
 
@@ -277,6 +282,7 @@ Sourcemap.Map.Base.prototype.initDialog = function() {
     $(this.dialog).removeClass("called-out");
     this.dialog_content = $('<div id="dialog-content"></div>');
     this.dialog.append(this.dialog_content);
+
 }
 
 Sourcemap.Map.Base.prototype.loadExternals = function(sc) {
@@ -365,7 +371,32 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-    		
+			var h = 0;
+			$(this.base.dialog_content).find('.accordion-body').each(function() {
+				h += parseInt($(this).css('height').replace('px',''));
+			});			
+			if (h > 170) {
+    			$(this.base.dialog_content).find('.accordion-body').hide();
+				// if theres a movie, show it
+				if ($(this.base.dialog_content).find('#dialog-media').length >= 0) {
+					$(this.base.dialog_content).find('#dialog-media').show();
+				} else {
+					// if not, show the description
+					if ($(this.base.dialog_content).find('#dialog-description').length >= 0) {
+						$(this.base.dialog_content).find('#dialog-description').show();
+					}
+				}
+				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
+					var open = $(this).next().is(":visible");
+					$('.accordion-body:visible').slideToggle('fast');
+					$('.accordion-title').find('.arrow').removeClass('arrowopen');
+					if (open == false) {
+						$(this).next().slideToggle('fast');
+						$(this).find('.arrow').addClass('arrowopen');
+					}				
+					return false;
+				});
+			} 
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
@@ -374,7 +405,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
                 // for multiple media item
     			$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
     			$("#dialog-media").children("."+target).css("left","0");
-    			
             }, this));
                 
         }, 
@@ -382,9 +412,8 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
         {"base": this, "stop": stop, "supplychain": sc, "feature": f},
         this.options.tpl_base_path
     );
-
     // this.map.map.panTo(this.getFeatureLonLat(f));
-    
+
 }
 
 Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {    
@@ -441,7 +470,32 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-
+			var h = 0;
+			$(this.base.dialog_content).find('.accordion-body').each(function() {
+				h += parseInt($(this).css('height').replace('px',''));
+			});			
+			if (h > 170) {
+    			$(this.base.dialog_content).find('.accordion-body').hide();
+				// if theres a movie, show it
+				if ($(this.base.dialog_content).find('#dialog-media').length >= 0) {
+					$(this.base.dialog_content).find('#dialog-media').show();
+				} else {
+					// if not, show the description
+					if ($(this.base.dialog_content).find('#dialog-description').length >= 0) {
+						$(this.base.dialog_content).find('#dialog-description').show();
+					}
+				}
+				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
+					var open = $(this).next().is(":visible");
+					$('.accordion-body:visible').slideToggle('fast');
+					$('.accordion-title').find('.arrow').removeClass('arrowopen');
+					if (open == false) {
+						$(this).next().slideToggle('fast');
+						$(this).find('.arrow').addClass('arrowopen');
+					}				
+					return false;
+				});
+			}
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");

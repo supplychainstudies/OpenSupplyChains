@@ -15,17 +15,25 @@
 <% if(this.stop.attributes.address != undefined) { %>
         <h3 class="placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", this.stop.attributes.address)), 50, true) %></h3>
 <% } %>
-
+<div class="accordion">
+<% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1 || this.stop.getAttr("url:moreinfo", false)) { %>
+<h3 class="accordion-title"><div class="arrow"></div>Description</h3>
+	<div class="description accordion-body">
 <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
-    <div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div>
+<%= _S.htesc(this.stop.getAttr("description")) %>
 <% } %>
 
 <% if(this.stop.getAttr("url:moreinfo", false)) { %>
+
     <%= $("<a class='url'>></a>").attr("href", this.stop.getAttr("url:moreinfo"))
         .text(this.stop.getAttr("urltitle:moreinfo", this.stop.getAttr("url:moreinfo",""))).attr("target", "blank").wrap("<div></div>").parent().html() %>
-<% } %>
 
+<% } %>
+	</div>
+<% } %>
 <% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false) || this.supplychain.getAttr("sm:ui:water", false)) { %>
+<h3 class="accordion-title"><div class="arrow"></div>Footprint</h3>
+<div class="accordion-body">
 <ul id="dialog-footprint">	
 	<% var unit = (this.stop.getAttr("unit","kg") == "kg") ? 1 : 0; %>
 	<% var weight = unit || this.stop.getAttr("weight"); %>
@@ -39,11 +47,14 @@
 	<% } %>
     <% if(this.stop.getAttr("water", false) && this.supplychain.getAttr("sm:ui:water", false)) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li> <% } %>
 </ul>
+</div>
+
 <% } %>
 
 
 <% if(this.stop.magic) { %>
-<div id="dialog-media">
+<h3 class="accordion-title"><div class="arrow"></div>Media</h3>
+<div id="dialog-media" class="accordion-body">
         <% if(this.stop.magic["youtube:link"]) { %>
             <%= Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]) %>
         <% } %>
@@ -66,6 +77,7 @@
         <% for(var i in this.stop.magic) { %>
                 <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  
         <% } %>
+</div>
         <div class="clear"></div>
     </div>
 </div>

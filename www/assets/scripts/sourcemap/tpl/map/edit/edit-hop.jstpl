@@ -19,23 +19,23 @@
     <%= $("<div></div>").append(i).html() %>
 </h2>
 
-<div id="editor-tabs">
-	<ul>
+<div id="editor-tabs" class="accordion">
+	<!--<ul>
 		<li><a href="#edit-description">Description</a></li>
 		<li><a href="#edit-media">Media</a></li>
 		<li><a href="#edit-hop-footprint">Footprint</a></li>
 		<div class="clear"></div>
 	</ul>
-    <div class="clear"></div>
-    
-        <div id="edit-description" class="sourcemap-form">        
+    <div class="clear"></div>-->
+    	<h3 class="accordion-title"><div class="arrow"></div>Description</h3>
+        <div id="edit-description" class="sourcemap-form accordion-body">        
             <%= $("<div></div>").append(
                     $("<textarea></textarea>").attr("id","dialog-description").attr("maxlength","1000").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 1000 characters.").html(this.ref.getAttr("description",""))
                 ).html()
             %>
         </div>
-        <div id="edit-hop-footprint">
-            <div class="sourcemap-form">
+		<h3 class="accordion-title"><div class="arrow"></div>Footprint</h3>
+        <div id="edit-hop-footprint" class="accordion-body sourcemap-form">
                 <fieldset>
 					<div class="footprint-section">        					
 	                    <label for="distance">Qty.</label>
@@ -70,9 +70,9 @@
                     <div id="impact-result" class="result">0 kg C02e</div>
 
                 </fieldset>
-            </div>
         </div>
-        <div id="edit-media" class="sourcemap-form">
+		<h3 class="accordion-title"><div class="arrow"></div>Media</h3>
+        <div id="edit-media" class="sourcemap-form accordion-body">
             <fieldset>
 				<% mediatype = this.ref.getAttr("youtube:link", false) ? "youtube:link" : this.ref.getAttr("flickr:setid", false) ? "flickr:setid" : "youtube:link"; %>
 				<select id="media-content-type">

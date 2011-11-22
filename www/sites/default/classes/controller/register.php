@@ -145,7 +145,6 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
 						  ->setTo(array($new_user->email => ''))
 						  ->setBody($msgbody);
-					
 
                 try { 
 					$sent = $mailer->send($swift_msg);

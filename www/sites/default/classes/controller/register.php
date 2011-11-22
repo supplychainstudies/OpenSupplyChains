@@ -82,6 +82,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 foreach ($restricted_names as $restricted_name){
                     if ($p['username'] == $restricted_name){
                         Message::instance()->set('That username is restricted.  Please try a different username.');
+                        echo $ajax ? Message::instance()->render() : "";
                         $restricted = TRUE;
                         break;
                     }

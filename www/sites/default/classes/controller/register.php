@@ -149,17 +149,20 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
                 try { 
 					$sent = $mailer->send($swift_msg);
-                    Message::instance()->set('Activation email sent.', Message::SUCCESS);
-                    if ($ajax){
-                        echo Message::instance()->get() ? Message::instance()->render() : false;
-                        return;
-                    }
-                    else{
-                        return $this->request->redirect('register/thankyou');
-                    }
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete registration. Please contact support.');
+                    echo Message::instance()->get() ? Message::instance()->render() : false;
+                    return;
                 } 
+                
+                Message::instance()->set('Activation email sent.', Message::SUCCESS);
+                if ($ajax){
+                    echo Message::instance()->get() ? Message::instance()->render() : false;
+                    return;
+                }
+                else{
+                    return $this->request->redirect('register/thankyou');
+                }
 
             }
             if ($ajax){

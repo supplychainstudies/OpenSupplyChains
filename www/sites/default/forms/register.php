@@ -39,7 +39,7 @@ return array(
         ),
     	'recaptcha' => array(
     		'type' => 'recaptcha',
-    		'label' => 'recaptcha_form'
+    		'label' => 'Please type the two words below:'
     	),
         'confirm_terms' => array(
             'type' => 'checkbox',

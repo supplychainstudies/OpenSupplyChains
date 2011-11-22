@@ -17,7 +17,7 @@ return array(
         'email' => 'A valid email address is required'
     ),
     'username' => array(
-        'default' => 'Please enter a unique username'
+        'default' => 'Please enter a valid username'
     ),
     'password' => array(
         'not_empty' => 'Please enter a password'

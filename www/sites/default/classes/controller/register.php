@@ -62,6 +62,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 if(!preg_match("/^[a-zA-Z]/",$p['username']))
                 {
                     Message::instance()->set('Please use alphabetical character as first letter of your Username.');
+                    echo $ajax ? Message::instance()->render() : "";
                     return;
                 }
 
@@ -93,12 +94,14 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $exists = ORM::factory('user')->where('username', 'ILIKE', $p['username'])->find()->loaded();
                 if($exists) {
                     Message::instance()->set('That username is taken.');
+                    echo $ajax ? Message::instance()->render() : "";
                     return;
                 }
                 // check for email in use
                 $exists = ORM::factory('user')->where('email', '=', $p['email'])->find()->loaded();
                 if($exists) {
                     Message::instance()->set('An account exists for that email address.');
+                    echo $ajax ? Message::instance()->render() : "";
                     return;
                 }
 
@@ -117,6 +120,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
                 if(!$new_user->id) {
                     Message::instance()->set('Could not complete registration. Please contact support.');
+                    echo $ajax ? Message::instance()->render() : "";
                     return $this->request->redirect('register');
                 }
 

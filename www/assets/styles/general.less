@@ -400,8 +400,7 @@ div.third-width{
 	background: none;
 }
 
-.button, input[type=submit] { 
-	padding: .5em 1em;
+.button { 
     text-align: center;
 	border: none;
 	font-size: 14px;
@@ -413,7 +412,10 @@ div.third-width{
 	.rounded(4px);
 	.box_shadow();
 	a { 
-        color:#f7f7f7; text-decoration: none; 
+        padding: .5em 1em;
+        color:#f7f7f7; 
+        text-decoration: none;
+        display:block;
     }
 	&:hover { color: #f7f7f7; background:#024365; }
 	&.disabled { background:#ccc; 	}
@@ -426,6 +428,12 @@ div.third-width{
         .gradient();
         a{
             color: #328cbb;
+        }
+    }
+    &.form-button{
+        padding: .5em 1em;
+        a{
+            padding: 0;
         }
     }
 }

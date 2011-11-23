@@ -45,40 +45,39 @@ class Controller_Contact extends Sourcemap_Controller_Layout {
                     return; 
                 }
 
+                $email = ($_POST['email']);
+                $message = ($_POST['message']);
+                
                 //send a notification 
 				$mailer = Email::connect(); 
 				$swift_msg = Swift_Message::newInstance();
 
-				$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your New Sourcemap Account');
+				$headers = array('from' => 'Sourcemap Support Form', 'subject' => 'Sourcemap Support Request');
 				
-                $h = md5(sprintf('%s-%s', "username", "alex@alexose.com"));
+                $h = md5(sprintf('%s-%s', $email, $email));
                 $lid = strrev(base64_encode("username"));
-                $url = URL::site("register/confirm?t=$lid-$h", true);
-                $msgbody = "\n";
-                $msgbody .= "Dear {$new_user->username},\n\n";
-                $msgbody .= "Welcome to Sourcemap!";
-                $msgbody .= " Click the link below to activate your account:\n\n";
-                $msgbody .= $url."\n\n";
-                $msgbody .= "If you have any questions, please email support@sourcemap.com.\n\n";
-                $msgbody .= "-The Sourcemap Team\n";
-                $swift_msg->setSubject('Re: Your New Sourcemap Account')
-						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
-						  ->setTo(array("alex@alexose.com" => ''))
+                $msgbody = $message;
+                $swift_msg->setSubject('Sourcemap Support Request')
+						  ->setFrom(array($email => $email))
+						  ->setTo(array("info@sourcemap.com" => ''))
 						  ->setBody($msgbody);
 
-                try { 
-					$sent = $mailer->send($swift_msg);
-                    Message::instance()->set('Activation email sent.', Message::SUCCESS);
-                    if ($ajax){
-                        echo Message::instance()->get() ? Message::instance()->render() : false;
-                        return;
-                    }
-                    else{
-                        return $this->request->redirect('register/thankyou');
-                    }
+                try {
+                    $sent = $mailer->send($swift_msg);
                 } catch (Exception $e) {
-                    Message::instance()->set('Sorry, could not complete registration. Please contact support.');
-                } 
+                    Message::instance()->set('Sorry, could not send message. Please contact support.');
+                    echo Message::instance()->get() ? Message::instance()->render() : false;
+                    return;
+                }
+
+                Message::instance()->set('Message sent.', Message::SUCCESS);
+                if ($ajax){
+                    echo "redirect contact/thankyou";
+                    return;
+                }
+                else{
+                    return $this->request->redirect('contact/thankyou');
+                }
 
             }
             if ($ajax){
@@ -91,45 +90,7 @@ class Controller_Contact extends Sourcemap_Controller_Layout {
     }
 
     public function action_thankyou(){
-        $this->template->set_filename('register/thankyou');
+        $this->template->set_filename('contact/thankyou');
     }
 
-    public function action_confirm(){
-        if(Auth::instance()->get_user()) {
-            Message::instance()->set(
-                'You\'re already signed in. Sign out and click the '.
-                'confirmation url again.', Message::INFO
-            );
-            return $this->request->redirect('home');
-        }
-        $get = Validate::factory($_GET);
-        $get->rule('t', 'regex', array('/^[A-Za-z0-9\+\/=]+-[A-Fa-f0-9]{32}$/'));
-        if($get->check()) {
-            list($uh, $h) = explode('-', $get['t']);
-            // check token
-            $username = base64_decode(strrev($uh));
-            $user = ORM::factory('user')->where('username', 'ILIKE', $username)
-                ->find();
-            $login = ORM::factory('role')->where('name', '=', 'login')
-                ->find();
-            if($user->loaded()) {
-                // see if acct is already confirmed
-                if($user->has('roles', $login)) {
-                    Message::instance()->set('That token has expired.');
-                    return $this->request->redirect('auth');
-                }
-            } else {
-                Message::instance()->set('Invalid confirmation token.');
-                return $this->request->redirect('auth');
-            }
-            // add login role
-            $user->add('roles', $login);
-            Message::instance()->set('Your account has been confirmed. Please Sign in (and start mapping).', Message::SUCCESS);
-            Sourcemap_User_Event::factory(Sourcemap_User_Event::REGISTERED, $user->id)->trigger();
-            return $this->request->redirect('auth');
-        } else {
-            Message::instance()->set('Invalid confirmation token.');
-            return $this->request->redirect('auth');
-        }
-    }
 }

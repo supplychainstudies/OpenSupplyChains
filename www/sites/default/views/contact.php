@@ -19,10 +19,10 @@
 </div>
 
 <div class="container form-page">
-    <div class="copy-section register">
-        <p>Contact us with any questions or concerns.</p>
+    <div class="copy-section contact">
+        <p>&nbsp;</p>
     </div>
-    <div class="box-section register">
+    <div class="box-section contact">
         <div class="sourcemap-form ajax">
             <?= $form ?>
         </div>

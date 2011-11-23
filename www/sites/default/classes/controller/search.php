@@ -44,7 +44,7 @@ class Controller_Search extends Sourcemap_Controller_Layout {
 
         $p = Pagination::factory(array(
             'current_page' => array(
-                'source' => 'q',
+                'source' => 'query_string',
                 'key' => 'p'
             ),
             'total_items' => $r->hits_tot,

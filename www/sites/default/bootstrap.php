@@ -94,3 +94,10 @@ Route::set('static maps', 'map/static/<id>.<sz>.png', array(
     'action' => 'static',
     'sz' => 'th-m'
 ));
+
+Route::set('wp', 'wp/<id>')
+    ->defaults(array(
+        'controller' => 'wp',
+        'action' => 'index'
+    )
+);

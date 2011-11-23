@@ -137,7 +137,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $msgbody = "\n";
                 $msgbody .= "Dear {$new_user->username},\n\n";
                 $msgbody .= "Welcome to Sourcemap!";
-                $msgbody .= " Click the link below to activate your account:\n\n";
+                $msgbody .= "Click the link below to activate your account:\n\n";
                 $msgbody .= $url."\n\n";
                 $msgbody .= "If you have any questions, please email support@sourcemap.com.\n\n";
                 $msgbody .= "-The Sourcemap Team\n";
@@ -145,7 +145,6 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
 						  ->setTo(array($new_user->email => ''))
 						  ->setBody($msgbody);
-
                 try { 
 					$sent = $mailer->send($swift_msg);
                 } catch (Exception $e) {

@@ -652,6 +652,7 @@ input[type=checkbox]{
 
 #discussion-section {
     width:505px;
+    min-height: 210px
     padding: 20px 20px 0 0;
     background: url("../images/secondary_background.jpg") top left no-repeat;
     h3 {
@@ -815,11 +816,24 @@ h1#site-tagline { font-size:30px; }
     }
 }
 
-ul li.news-item p{
-    height: 55px;    
-    width: 500px;
-    overflow: hidden;
-    position: relative;
+
+ul li.news-item{
+    .title{
+        float: left;
+    }
+    .date{
+        float: right;
+        margin-right: 10px;
+        color: #aaa;
+        font-weight: normal;
+        
+    }
+    p{
+        height: 55px;    
+        width: 500px;
+        overflow: hidden;
+        position: relative;
+    }
 }
 
 

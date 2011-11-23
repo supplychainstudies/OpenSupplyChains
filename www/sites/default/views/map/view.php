@@ -124,7 +124,7 @@
             </div>
            
             <?php else: ?>
-            <p><a href="/auth">Sign in</a> or <a href="/register">register</a> to add to the discussion</p> 
+            <p><a href="/auth">Sign in</a> or <a href="/register">register</a> <?= $comments ? "to add to the discussion" : "to start a discussion" ?></p> 
             <?php endif; ?>
             <?php if($comments): ?>
             <ul id="comments">
@@ -133,7 +133,6 @@
                 <?php endforeach; ?>
             </ul>
             <?php else: ?>
-            <h4 class="bad-news">Nobody's commented on this map yet.</h4>
             <?php endif; ?>
         </div><!-- #discussion-section -->
         <div class="clear"></div>

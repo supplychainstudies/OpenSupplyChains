@@ -11,10 +11,11 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
 
+<% var first = ""; %>
 <h2 class="title hop"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("title", "Hop")), 20, true) %></h2>
 <div class="accordion">
 <% if(this.hop.getAttr("description", false) && this.hop.getAttr("description").length > 1) { %>
-<h3 class="accordion-title"><div class="arrow"></div>Description</h3>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>
     <div class="description accordion-body"><%= _S.htesc(this.hop.getAttr("description")) %></div>
 <% } %>
 
@@ -27,7 +28,7 @@
     </div>
 <% } %>
 <% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false)) { %>
-<h3 class="accordion-title"><div class="arrow"></div>Footprint</h3>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
 <div class="accordion-body">
 <ul id="dialog-footprint">
     <% if(this.hop.gc_distance() && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li><% } %>
@@ -40,7 +41,7 @@
 <% } %>
 
 <% if(this.hop.magic) { %>
-<h3 class="accordion-title"><div class="arrow"></div>Media</h3>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Media</h3>
 <div id="dialog-media" class="accordion-body">
         <% if(this.hop.magic["youtube:link"]) { %>
             <%= Sourcemap.MagicWords.content.youtube.link(this.hop.magic["youtube:link"]) %>

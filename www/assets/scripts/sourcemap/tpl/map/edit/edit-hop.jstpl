@@ -27,7 +27,7 @@
 		<div class="clear"></div>
 	</ul>
     <div class="clear"></div>-->
-    	<h3 class="accordion-title"><div class="arrow"></div>Description</h3>
+    	<h3 class="accordion-title first"><div class="arrow"></div>Description</h3>
         <div id="edit-description" class="sourcemap-form accordion-body">        
             <%= $("<div></div>").append(
                     $("<textarea></textarea>").attr("id","dialog-description").attr("maxlength","1000").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 1000 characters.").html(this.ref.getAttr("description",""))

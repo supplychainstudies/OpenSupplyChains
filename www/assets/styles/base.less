@@ -48,6 +48,8 @@
 	padding: 0px;
     border: 1px solid rgb(162,162,162);
     background: rgba(255,255,255,0.85);
+	background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(225,225,225,0.7) 100%);
+    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(225,225,225,0.5)),color-stop(1,rgba(255,255,255,0.5)));
     .box_shadow(3px, 1px, 10px);
     .rounded(5px);
 	&.called-out {
@@ -59,12 +61,19 @@
         overflow:hidden;                       
         padding: 0px; margin: 0;
         color: #888888;
+		.error {
+			height: 12px;
+			float: right;
+			margin-right: 20px;
+			font-size: 10px;
+			color: #FF0000;
+		}
  		.accordion {
 			h3.accordion-title {
-				background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(230,230,230,0.7) 100%);
-			    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(230,230,230,0.5)),color-stop(1,rgba(255,255,255,0.5)));
-				.box_shadow(0,1px,6px);
-				border-bottom: solid #bfbfbf 1px;
+				background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(210,210,210,0.7) 100%);
+			    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(210,210,210,0.5)),color-stop(1,rgba(255,255,255,0.5)));
+				//.box_shadow(0,1px,6px);
+				border-bottom: solid #bbbbbb 1px;
 				padding: 5px;
 				margin: 0px;
 				color: #338db7;	
@@ -82,9 +91,14 @@
 		            }
 				}			
 			}
+			h3.first {
+				border-top: solid #bbbbbb 1px;
+			}
 			div.accordion-body {
-				background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(230,230,230,0.7) 100%);
-			    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(230,230,230,0.5)),color-stop(1,rgba(255,255,255,0.5)));
+				border-bottom: solid #bbbbbb 1px;
+				background-image: -moz-linear-gradient(center bottom,rgba(235,235,235,0.5) 0%,rgba(220,220,220,0.7) 100%);
+			    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(220,220,220,0.5)),color-stop(1,rgba(235,235,235,0.5)));
+				.box_shadow_inset(0, 2px, 3px, #dddddd);
 			}
 		}
         h2.title {
@@ -114,7 +128,7 @@
             font-weight: normal;
             color: #888888;            
             font-style: italic;
-			margin-left: 33px;
+			margin-left: 5px;
             margin-bottom: 10px;
         }
         div.description {
@@ -201,7 +215,8 @@
             min-height:220px;
             //background: rgb(200,200,200);
             padding: 20px 20px 30px 20px;
-            margin-left:-10px;
+			margin: 0px;
+            //margin-left:-10px;
             //.box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
             text-align:center;
             //border-bottom-left-radius:4px;	      
@@ -516,7 +531,7 @@
 	        color: #999999;
 	        .box_shadow_inset(0, 3px, 12px, #eee);
             width:310px;
-            //margin-left:28px;
+            margin-left:33px;
         }
     }
     #edit-description, #edit-stop-footprint, #edit-hop-footprint, #edit-media, #edit-catalog {
@@ -584,7 +599,7 @@
 	}
 	
     #edit-actions {
-        padding:0; margin:10px;
+		padding:0; margin:10px 15px;
         list-style:none;
         li {
             float:right;

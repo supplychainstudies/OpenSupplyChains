@@ -11,13 +11,15 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
 
+
+<% var first = "first"; %>
 <h2 class="title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 30, true) %><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
 <% if(this.stop.attributes.address != undefined) { %>
         <h3 class="placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", this.stop.attributes.address)), 50, true) %></h3>
 <% } %>
 <div class="accordion">
 <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1 || this.stop.getAttr("url:moreinfo", false)) { %>
-<h3 class="accordion-title"><div class="arrow"></div>Description</h3>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>
 	<div class="description accordion-body">
 <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
 <%= _S.htesc(this.stop.getAttr("description")) %>
@@ -32,7 +34,7 @@
 	</div>
 <% } %>
 <% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false) || this.supplychain.getAttr("sm:ui:water", false)) { %>
-<h3 class="accordion-title"><div class="arrow"></div>Footprint</h3>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
 <div class="accordion-body">
 <ul id="dialog-footprint">	
 	<% var unit = (this.stop.getAttr("unit","kg") == "kg") ? 1 : 0; %>
@@ -53,7 +55,7 @@
 
 
 <% if(this.stop.magic) { %>
-<h3 class="accordion-title"><div class="arrow"></div>Media</h3>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Media</h3>
 <div id="dialog-media" class="accordion-body">
         <% if(this.stop.magic["youtube:link"]) { %>
             <%= Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]) %>

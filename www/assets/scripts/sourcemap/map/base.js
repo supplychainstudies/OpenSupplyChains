@@ -388,7 +388,14 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 				}
 				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
 					var open = $(this).next().is(":visible");
-					$('.accordion-body:visible').slideToggle('fast');
+					
+					$('.accordion-body:visible').each(function() {
+						if ($(this).attr("id") == "dialog-media")
+							$(this).hide();
+						else 
+							$(this).slideToggle('fast');
+					});
+					
 					$('.accordion-title').find('.arrow').removeClass('arrowopen');
 					if (open == false) {
 						$(this).next().slideToggle('fast');
@@ -487,7 +494,13 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 				}
 				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
 					var open = $(this).next().is(":visible");
-					$('.accordion-body:visible').slideToggle('fast');
+					//$('.accordion-body:visible').slideToggle('fast');
+					$('.accordion-body:visible').each(function() {
+						if ($(this).attr("id") == "dialog-media")
+							$(this).hide();
+						else 
+							$(this).slideToggle('fast');
+					});
 					$('.accordion-title').find('.arrow').removeClass('arrowopen');
 					if (open == false) {
 						$(this).next().slideToggle('fast');

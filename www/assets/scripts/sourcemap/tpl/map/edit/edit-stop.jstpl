@@ -26,7 +26,7 @@
 <div id="editor-tabs">
 <div class="accordion">
     
-		<h3 class="accordion-title"><div class="arrow"></div>Description</h3>
+		<h3 class="accordion-title first"><div class="arrow"></div>Description</h3>
         <div id="edit-description" class="sourcemap-form accordion-body">        
             <%= $("<div></div>").append(
                     $("<textarea></textarea>").attr("id","dialog-description").attr("maxlength","1000").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 1000 characters.").text(this.ref.getAttr("description",""))

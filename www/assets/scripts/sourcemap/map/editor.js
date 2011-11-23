@@ -163,11 +163,13 @@ Sourcemap.Map.Editor.prototype.init = function() {
                         $(this.dialog_content).find("#newpoint-placename").keypress(function(e){
                             if(e.keyCode==13){$("#newpoint-button").click();};
                         });
+						$(this.dialog_content).find("#newpoint-placename").after('<div class="error"></div>');
     					$(this.dialog_content).find("#newpoint-button").click($.proxy(function() {
                             if(!$("#newpoint-placename").val()){
                                 // If no address and title was inputed
                                 if(!$("#newpoint-title").val()){
-                                    $("#dialog").shake();
+									$("#dialog").find(".error").html('Need a Location');
+                                    //$("#dialog").shake();
                                     return;
                                 }
                                 $("#newpoint-placename").val($("#newpoint-title").val());
@@ -183,7 +185,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     		                for(var k in this.map.supplychains) { sc = this.map.supplychains[k]; break; }
     						
     						$(this.dialog_content).find("#newpoint-button").attr("disabled","disabled").addClass("disabled");
-    						
+    						// Geolocate the location
     		                var cb = $.proxy(function(data) {
     		                    if(data && data.results && data.results.length && (data.results[0].lat != 90) && (data.results[0].lat != -90) ) {
                                     // point successfully added to field!
@@ -214,7 +216,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                                     this.map.map.panTo(new OpenLayers.LonLat(dest.lon, dest.lat));
     		                    } else {
                                     // unsuccessful
-    								$("#dialog").shake();
+    								$("#dialog").find(".error").html('Location Not Found');
     								$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
     					        }
     		                }, {"map":this.map, "sc":sc, "attr":attributes});
@@ -655,7 +657,12 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	$('.accordion-body').hide();
 	$('.accordion .accordion-title').click(function() {
 		var open = $(this).next().is(":visible");
-		$('.accordion-body:visible').slideToggle('fast');
+		$('.accordion-body:visible').each(function() {
+			if ($(this).attr("id") == "edit-media")
+				$(this).hide();
+			else
+				$(this).slideToggle('fast');
+		});
 		$('.accordion-title').find('.arrow').removeClass('arrowopen');
 		if (open == false) {
 			$(this).next().slideToggle('fast');

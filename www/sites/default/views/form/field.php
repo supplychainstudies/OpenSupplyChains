@@ -31,7 +31,6 @@
             <?= Form::select($field->name(), 
                 $field->custom_opts, $field->selected(), $attr
             );
-            print_r($field->options());
             ?>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>

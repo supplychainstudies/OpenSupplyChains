@@ -14,11 +14,12 @@
 $email = "";
 $username = "";
 
-
 if ($user = ORM::factory('user', Auth::instance()->get_user())){
     $email = $user->email; 
     $username = $user->username; 
 }
+
+ 
 
 return array(
     'fields' => array(
@@ -30,27 +31,6 @@ return array(
     			'maxlength' => 100,
     			'placeholder' => 'Enter your email address.'				
     		)
-        ),
-        'username' => array(
-            'type' => 'text',
-            'label' => 'Username',
-            'attributes' => array(
-                'value' => $username,
-                'maxlength' => 32,
-            )
-        ),
-        'concerning' => array(
-            'type' => 'select',
-            'label' => 'What is this concerning?',
-            'attributes' => array(
-                'options' => "wow", array(
-                    'eh' => 'eh',
-                    'eh2' => 'eh',
-                    'eh3' => 'eh',
-                    'eh4' => 'eh',
-                    'eh5' => 'eh'
-                )
-            )
         ),
         'message' => array(
             'type' => 'textarea',
@@ -73,10 +53,6 @@ return array(
         'email' => array(
             array('email'),
             array('not_empty')
-        ),
-        'username' => array(
-            array('not_empty'), 
-    		array('alpha_dash')
         ),
     ),
     'filters' => array()

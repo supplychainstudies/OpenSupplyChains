@@ -46,6 +46,14 @@
     <?php $attr['class'] = $field->css_class()."button form-button"; ?>
     <?= Form::submit($field->name(), $field->value(), $attr) ?>
 
+<?php elseif($field->field_type() === Sourcemap_Form_Field::RECAPTCHA): ?>
+    <?php if($field->css_class()): ?>
+    <div class="<?= $field->css_class() ?>">
+    <?php endif; ?>
+    <?= Form::label($field->name(), $field->label()) ?>
+    <?php $attr['class'] = $field->css_class()."button form-button"; ?>
+    <?= Form::recaptcha($field->name(), $field->value(), $attr) ?>
+
 <?php elseif($field->field_type() === Sourcemap_Form_Field::CHECKBOX): ?>
     <?= Form::label($field->name(), $field->label()) ?>
     <?php $attr['type'] = $field->field_type(); ?>
@@ -89,7 +97,7 @@
         </div>
     <?php endif; ?>
 
-<?php else: ?>    
+<?php else: ?> 
     <?= Form::label($field->name(), $field->label()) ?>
         <?php $attr['type'] = $field->field_type(); ?>
         <?php $attr['class'] = $field->css_class()." textbox"; ?>

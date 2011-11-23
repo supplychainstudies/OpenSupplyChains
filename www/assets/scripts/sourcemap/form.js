@@ -380,8 +380,9 @@ $(document).ready(function() {
 
         // ajax validate
         $.post(action, $(form).serialize(), function(data){
-            if (data === 'success'){
-                // TODO: make this work
+            if (data.substring(0,8) === 'redirect'){
+                var data = data.split(" ");
+                window.location = data[1];
             } else {
                 var success = false;
                 $(submitStatus).addClass('text').append('<ul />');

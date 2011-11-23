@@ -156,7 +156,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 
                 Message::instance()->set('Activation email sent.', Message::SUCCESS);
                 if ($ajax){
-                    echo Message::instance()->get() ? Message::instance()->render() : false;
+                    echo "redirect register/thankyou"; 
                     return;
                 }
                 else{

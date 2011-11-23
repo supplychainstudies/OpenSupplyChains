@@ -20,7 +20,7 @@
 
 <div class="container form-page">
     <div class="copy-section contact">
-        <p>&nbsp;</p>
+        <p>Please fill out this form to contact the Sourcemap Team with any questions or comments.</p>
     </div>
     <div class="box-section contact">
         <div class="sourcemap-form ajax">

@@ -234,9 +234,13 @@ $(document).ready(function(){
     }
 
     /* unsupported browser detection */
-    if (($.browser.msie) && $('.browser').length == 0) {
+    if ($.browser.msie  && parseInt($.browser.version) <= 8 && $('.browser').length == 0){
         
         //document.getElementById("status-message").className = "status-message browser";
+        if (!$('.messsages').length){
+            $('.container:eq(0)').append($('<div class="messages"></div>'));
+        }
+
         $(".messages").append(
             "<div class=\"status-wrap\">"
             +"<div class=\"status-message\" style=\"line-height: 1.8em\">"
@@ -244,7 +248,7 @@ $(document).ready(function(){
             +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; \"></div></div></div>"        
         );
         $(".browser").append(
-            " You're using Internet Explorer, which is not supported by Sourcemap."
+            " You're using Internet Explorer " +  parseInt($.browser.version) + ", which is not supported by Sourcemap."
           + " While we won't stop you from experimenting, we highly recommend using"
           + " the latest version of "
           + " <a href=\"http://www.google.com/chrome\">Chrome</a>,"

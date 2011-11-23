@@ -249,6 +249,7 @@ a {
                     text-decoration: none; 
                     color:#f7f7f7;
                     text-shadow: none;
+                    display: block;
                 }
             }
             #existing-login{
@@ -401,6 +402,7 @@ div.third-width{
 }
 
 .button { 
+    padding: .5em 1em;
     text-align: center;
 	border: none;
 	font-size: 14px;
@@ -411,12 +413,6 @@ div.third-width{
 	.gradient(#246587,#50a3ce);
 	.rounded(4px);
 	.box_shadow();
-	a { 
-        padding: .5em 1em;
-        color:#f7f7f7; 
-        text-decoration: none;
-        display:block;
-    }
 	&:hover { color: #f7f7f7; background:#024365; }
 	&.disabled { background:#ccc; 	}
     &.alternate{
@@ -652,12 +648,9 @@ input[type=checkbox]{
 
 #discussion-section {
     width:505px;
-    min-height: 210px
+    min-height: 110px;
     padding: 20px 20px 0 0;
     background: url("../images/secondary_background.jpg") top left no-repeat;
-    h3 {
-        font-size:1.2em;
-    }
     #comments {
         list-style:none;
         padding:10px 0 0 0;

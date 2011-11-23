@@ -36,7 +36,7 @@
             </li>
             <?php else: ?>
             <li class="register last">
-                <div class="button"> <a href="/register">Register</a> </div>
+                <a class="button" href="/register">Register</a>
                 <a id="existing-login" href="auth">Sign in</a>
             </li>
             <?php endif; ?>

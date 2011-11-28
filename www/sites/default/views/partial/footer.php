@@ -15,17 +15,17 @@
 <div class="clear"></div>
 <div class="container">
     <ul>
-    	<li><a href="info">About</a></li>                
-    	<li><a href="http://github.com/SourcemapFoundation/SrcClient/">API and Code</a></li> 
-    	<li><a href="info/privacy">Privacy Policy</a></li>
-    	<li><a href="info/terms">Terms of Service</a></li>
         <li><a href="http://blog.sourcemap.com">Blog</a></li> 
         <?php
         $pages = Blognews::fetchindex();
         foreach($pages as $page){
-            print '<li><a href="' . $page->url . '">' . $page->title . '</a></li>';
+            print '<li><a href="wp/' . $page->slug . '">' . $page->title . '</a></li>';
         } 
         ?>
+    	<li><a href="http://github.com/SourcemapFoundation/SrcClient/">API and Code</a></li> 
+    	<li><a href="info/privacy">Privacy Policy</a></li>
+    	<li><a href="info/terms">Terms of Service</a></li>
+    	<li><a href="/contact">Contact us</a></li>
     </ul>
     <div class="clear"></div>
     <p>&copy; 2011 Sourcemap Inc. 

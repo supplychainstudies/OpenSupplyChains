@@ -82,6 +82,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 foreach ($restricted_names as $restricted_name){
                     if ($p['username'] == $restricted_name){
                         Message::instance()->set('That username is restricted.  Please try a different username.');
+                        echo $ajax ? Message::instance()->render() : "";
                         $restricted = TRUE;
                         break;
                     }
@@ -136,7 +137,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 $msgbody = "\n";
                 $msgbody .= "Dear {$new_user->username},\n\n";
                 $msgbody .= "Welcome to Sourcemap!";
-                $msgbody .= " Click the link below to activate your account:\n\n";
+                $msgbody .= "Click the link below to activate your account:\n\n";
                 $msgbody .= $url."\n\n";
                 $msgbody .= "If you have any questions, please email support@sourcemap.com.\n\n";
                 $msgbody .= "-The Sourcemap Team\n";
@@ -144,21 +145,22 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
 						  ->setTo(array($new_user->email => ''))
 						  ->setBody($msgbody);
-					
-
                 try { 
 					$sent = $mailer->send($swift_msg);
-                    Message::instance()->set('Activation email sent.', Message::SUCCESS);
-                    if ($ajax){
-                        echo Message::instance()->get() ? Message::instance()->render() : false;
-                        return;
-                    }
-                    else{
-                        return $this->request->redirect('register/thankyou');
-                    }
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete registration. Please contact support.');
+                    echo Message::instance()->get() ? Message::instance()->render() : false;
+                    return;
                 } 
+                
+                Message::instance()->set('Activation email sent.', Message::SUCCESS);
+                if ($ajax){
+                    echo "redirect register/thankyou"; 
+                    return;
+                }
+                else{
+                    return $this->request->redirect('register/thankyou');
+                }
 
             }
             if ($ajax){

@@ -31,17 +31,17 @@
                     $isChannel = true;
             ?> 
             <li>
-                <div> <a href="/home">Dashboard</a><?php if(!($isChannel)){ ?><a class="upgrade-text" href="/upgrade">Go&nbsp;Pro!</a><?php } ?></div>
+                <div> <a href="/home">Dashboard</a></div> 
                 <a id="existing-login" href="auth/logout">Sign out</a>
             </li>
             <?php else: ?>
             <li class="register last">
-                <div class="button"> <a href="/register">Register</a> </div>
+                <a class="button" href="/register">Register</a>
                 <a id="existing-login" href="auth">Sign in</a>
             </li>
             <?php endif; ?>
         </ul>
-        <form method="post" action="/search/">
+        <form method="post" action="/search">
             <div id="search-div" class="pseudo-form">
                 <input id="search" name="q" placeholder="Search" results="0" />
             </div>

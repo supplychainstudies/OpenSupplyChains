@@ -27,8 +27,9 @@
 
 <?php elseif($field->field_type() === Sourcemap_Form_Field::SELECT): ?>
     <?= Form::label($field->name(), $field->label()) ?>
+        <?php $field->custom_opts = isset($attr['options']) ? $attr['options'] : $field->options(); ?>
             <?= Form::select($field->name(), 
-                $field->options(), $field->selected(), $attr
+                $field->custom_opts, $field->selected(), $attr
             );
             ?>
     <?php $errors = $field->errors(); ?>
@@ -43,6 +44,14 @@
     <div class="submit-status hidden"></div>
     <?php $attr['class'] = $field->css_class()."button form-button"; ?>
     <?= Form::submit($field->name(), $field->value(), $attr) ?>
+
+<?php elseif($field->field_type() === Sourcemap_Form_Field::RECAPTCHA): ?>
+    <?php if($field->css_class()): ?>
+    <div class="<?= $field->css_class() ?>">
+    <?php endif; ?>
+    <?= Form::label($field->name(), $field->label()) ?>
+    <?php $attr['class'] = $field->css_class()."button form-button"; ?>
+    <?= Form::recaptcha($field->name(), $field->value(), $attr) ?>
 
 <?php elseif($field->field_type() === Sourcemap_Form_Field::CHECKBOX): ?>
     <?= Form::label($field->name(), $field->label()) ?>
@@ -63,7 +72,8 @@
     <?= Form::label($field->name(), $field->label()) ?>
         <?php $attr['type'] = $field->field_type(); ?>
         <?php $attr['class'] = "textbox"; ?>
-        <?= Form::input($field->name(), $field->value(), $attr ) ?>
+        <?php $field->custom_value = isset($attr['value']) ? $attr['value'] : $field->value(); ?>
+        <?= Form::input($field->name(), $field->custom_value, $attr ) ?>
     <?php $errors = $field->errors(); ?>
     <?php if (!empty($errors)) : ?>
         <div class="sourcemap-form-error">
@@ -86,7 +96,7 @@
         </div>
     <?php endif; ?>
 
-<?php else: ?>    
+<?php else: ?> 
     <?= Form::label($field->name(), $field->label()) ?>
         <?php $attr['type'] = $field->field_type(); ?>
         <?php $attr['class'] = $field->css_class()." textbox"; ?>

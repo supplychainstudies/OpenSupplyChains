@@ -40,6 +40,11 @@ h1,h2,h3,h4,h5,h6{
             color: #ccc;
         }
     }
+    &.bad-news{
+        font-size: 1.4em;
+        font-weight: normal;
+        color: #777;
+    }
 }
 
 h1 { font-size: 32px; text-shadow: 0 1px 1px white; }
@@ -244,6 +249,7 @@ a {
                     text-decoration: none; 
                     color:#f7f7f7;
                     text-shadow: none;
+                    display: block;
                 }
             }
             #existing-login{
@@ -395,8 +401,8 @@ div.third-width{
 	background: none;
 }
 
-.button, input[type=submit] { 
-	padding: .5em 1em;
+.button, input[type=submit] {  
+    padding: .5em 1em;
     text-align: center;
 	border: none;
 	font-size: 14px;
@@ -407,9 +413,6 @@ div.third-width{
 	.gradient(#246587,#50a3ce);
 	.rounded(4px);
 	.box_shadow();
-	a { 
-        color:#f7f7f7; text-decoration: none; 
-    }
 	&:hover { color: #f7f7f7; background:#024365; }
 	&.disabled { background:#ccc; 	}
     &.alternate{
@@ -639,11 +642,9 @@ input[type=checkbox]{
 
 #discussion-section {
     width:505px;
+    min-height: 110px;
     padding: 20px 20px 0 0;
     background: url("../images/secondary_background.jpg") top left no-repeat;
-    h3 {
-        font-size:1.2em;
-    }
     #comments {
         list-style:none;
         padding:10px 0 0 0;
@@ -802,11 +803,24 @@ h1#site-tagline { font-size:30px; }
     }
 }
 
-ul li.news-item p{
-    height: 55px;    
-    width: 500px;
-    overflow: hidden;
-    position: relative;
+
+ul li.news-item{
+    .title{
+        float: left;
+    }
+    .date{
+        float: right;
+        margin-right: 10px;
+        color: #aaa;
+        font-weight: normal;
+        
+    }
+    p{
+        height: 55px;    
+        width: 500px;
+        overflow: hidden;
+        position: relative;
+    }
 }
 
 
@@ -1154,6 +1168,7 @@ div.form-page {
 			li { margin:0 0 10px 0;	}
 		}
         &.register{width: 435px;}
+        &.contact{width: 440px;}
 	}
 	div.box-section {
 	    float:left;
@@ -1168,6 +1183,12 @@ div.form-page {
             width: 460px;
             input[type="checkbox"]{
                 margin: 13px 40px 4px 12px; 
+            }
+        }
+        &.contact{
+            width: 460px;
+            textarea{
+                height: 120px;
             }
         }
         .container{

@@ -4,12 +4,15 @@
 
 class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
+    public $force_ssl = TRUE;
+
     public $layout = 'base';
     public $template = 'user/upgrade';
 
     const MIGRATE_EMAIL = 'account-migration@sourcemap.com';
 
     public function action_index() {        
+        
         $this->layout->page_title = 'Upgrade your account';
 
         $this->layout->scripts = array(

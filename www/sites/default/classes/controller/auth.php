@@ -54,11 +54,11 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
 
                         $headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your New Sourcemap Account');
 
-                        $h = md5(sprintf('%s-%s', $new_user->username, $new_user->email));
-                        $lid = strrev(base64_encode($new_user->username));
+                        $h = md5(sprintf('%s-%s', $user->username, $user->email));
+                        $lid = strrev(base64_encode($user->username));
                         $url = URL::site("register/confirm?t=$lid-$h", true);
                         $msgbody = "\n";
-                        $msgbody .= "Dear {$new_user->username},\n\n";
+                        $msgbody .= "Dear {$user->username},\n\n";
                         $msgbody .= "Welcome to Sourcemap!";
                         $msgbody .= " Click the link below to activate your account:\n\n";
                         $msgbody .= $url."\n\n";
@@ -66,7 +66,7 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                         $msgbody .= "-The Sourcemap Team\n";
                         $swift_msg->setSubject('Re: Your New Sourcemap Account')
                                   ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
-                                  ->setTo(array($new_user->email => ''))
+                                  ->setTo(array($user->email => ''))
                                   ->setBody($msgbody);
 
                         try{

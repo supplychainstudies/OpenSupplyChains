@@ -73,7 +73,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			for ($i = 0; $rows->cellExistsByColumnAndRow($i,2) == true; $i++) {
 				$value = strtolower($rows->getCellByColumnAndRow($i,2)->getValue());
 				$column = $rows->getCellByColumnAndRow($i,2)->getColumn();
-				if (strpos($value,"part-name") !== false)
+				if (strpos($value,"part-name") !== false || strpos($value,"part name") !== false)
 					$h["Part-Name"] = $column;
 				elseif (strpos($value,"bom-level") !== false || strpos($value,"bom level") !== false )
 					$h["BOM-Level"] = $column;
@@ -104,7 +104,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			$boms = array();
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != NULL && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Part-Number" && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Part-Name" && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Note:") {
+				if ($rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != NULL && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Part-Number" && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Part-Name" && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Note:" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Sort Order") {
 					//$uuid = $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() . " - " . $rows->getCell($h["City"] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h["Source-Name"] . $rowIndex)->getCalculatedValue() . ")";
 					$uuid = $rows->getCell($h["Source-Name"] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h["City"] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h["Country"] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h["Postal-Code"] . $rowIndex)->getCalculatedValue() . ")";
 					if (isset($stops[$uuid]) == false) {
@@ -129,7 +129,9 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 									$stops[$uuid]['Name'] .= " - " . $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " Days";
 									$stops[$uuid]['Risk Recovery Days'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue();
 									$stops[$uuid]['Description'] = "This site requires " . $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " days to return to 100% production. It supplies the following parts:<br />";
+									if ($h["Source-Split"] != "" && $h["Description"] != "") {
 									$stops[$uuid]['Description'] .= ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue()*100)."% of part ".$rows->getCell($h["Description"] . $rowIndex)->getCalculatedValue()."<br />";
+									}
 									$stops[$uuid]['size'] = self::returnSize($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue());
 									$stops[$uuid]['Percentage'] = 100*$rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365;
 								}
@@ -146,7 +148,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							if (trim($stops[$uuid]['Percentage']) == "") {
 								$stops[$uuid]['Percentage'] = "100";
 							}
-							$hops_to = $count;
+							$hops_from = $count;
 							$count++;
 					} else {
 						if (isset($h['Risk Recovery Days']) == true) {
@@ -160,7 +162,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								$stops[$uuid]['size'] = self::returnSize($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue());
 								$stops[$uuid]['Percentage'] = 100*$rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365;
 							}
-							if (in_array($rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue(),$stops[$uuid]["parts"]) === false) {
+							if (in_array($rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue(),$stops[$uuid]["parts"]) === false && $h["Source-Split"] != "" && $h["Description"] != "") {
 								$stops[$uuid]['Description'] .= ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue())."% of part ".$rows->getCell($h["Description"] . $rowIndex)->getCalculatedValue()."<br />";
 							}	
 						}
@@ -234,7 +236,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			for ($i = 0; $rows->cellExistsByColumnAndRow($i,3) == true; $i++) {
 				$value = strtolower($rows->getCellByColumnAndRow($i,3)->getCalculatedValue());
 				$column = $rows->getCellByColumnAndRow($i,3)->getColumn();
-				if (strpos($value,"part-name") !== false || strpos($value,"part name") !== false)
+				if (strpos($value,"part-name") !== false || strpos($value,"part name") !== false || strpos($value,"part number") !== false || strpos($value,"part-number") !== false)
 					$h["Part-Name"] = $column;
 				elseif (strpos($value,"origin") !== false && strpos($value,"name") !== false)
 					$h["O-Name"] = $column;
@@ -262,13 +264,14 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 					$h["D-Longitude"] = $column;
 				elseif (strpos($value,"flow") !== false)
 					$h["flow"] = $column;	
-				elseif (strpos($value,"recovery-time") !== false)
+				elseif (strpos($value,"recovery-time") !== false || strpos($value,"days") !== false || strpos($value,"risk") !== false)
 					$h["Risk Recovery Days"] = $column;			
 			}
 			$boms = array();
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rows->getCell("A" . $rowIndex)->getCalculatedValue() != NULL && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part-Number" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part name" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Note:") {
+				if ($rows->getCell("A" . $rowIndex)->getCalculatedValue() != NULL && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part-Number" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part Number" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part name" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Note:") {
+					var_dump($rows->getCell("A" . $rowIndex)->getCalculatedValue());
 					$uuid = $rows->getCell($h['O-Name'] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h['O-City'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['O-Country'] . $rowIndex)->getCalculatedValue() . $rows->getCell($h['O-Postal-Code'] . $rowIndex)->getCalculatedValue() . ")";
 
 					if (isset($stops[$uuid]) == false) {
@@ -283,15 +286,20 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								'size' => "1",
 								'Risk Recovery Days' => ""
 							);
-						if (isset($h['Risk Recovery Days']) == true) {
-							$stops[$uuid]['Description'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " Days at ". $stops[$uuid]['Description'];
-							$stops[$uuid]['Risk Recovery Days'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue();
-							$stops[$uuid]['size'] = self::returnSize($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue());
-							$stops[$uuid]['Percentage'] = 100*$rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365;
-						}
+							/*
+							if (isset($h['Risk Recovery Days']) == true) {
+								$stops[$uuid]['Description'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " Days at ". $stops[$uuid]['Description'];
+								$stops[$uuid]['Risk Recovery Days'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue();
+								$stops[$uuid]['size'] = self::returnSize($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue());
+								$stops[$uuid]['Percentage'] = 100*$rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365;
+							}
+							*/
 							$hops_from = $count;
 							$count++;
+							var_dump($stops[$uuid]); // take out later
+							
 					} else {
+						/*
 						if (isset($h['Risk Recovery Days']) == true) {
 							if ($stops[$uuid]['Risk Recovery Days'] < $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()) {
 								$stops[$uuid]['Description'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " Days at ". $stops[$uuid]['Description'];
@@ -300,6 +308,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								$stops[$uuid]['Percentage'] = 100*$rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365;
 							}
 						}
+						*/
 						$hops_from = $stops[$uuid]["num"];
 					}
 					
@@ -319,15 +328,18 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								'Risk Recovery Days' => "",
 								'size' => "1"
 							);
+							/*
 							if (isset($h['Risk Recovery Days']) == true) {
 								$stops[$uuid]['Description'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " Days at ". $stops[$uuid]['Description'];
 								$stops[$uuid]['Risk Recovery Days'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue();
 								$stops[$uuid]['size'] = self::returnSize($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue());
 								$stops[$uuid]['Percentage'] = 100*$rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365;
 							}
+							*/
 							$hops_to = $count;
 							$count++;
 					} else {
+						/*
 						if (isset($h['Risk Recovery Days']) == true) {
 							if ($stops[$uuid]['Risk Recovery Days'] < $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()) {
 								$stops[$uuid]['Description'] = $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " Days at ". $stops[$uuid]['Description'];
@@ -335,6 +347,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								$stops[$uuid]['size'] = self::returnSize($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue());															}
 								$stops[$uuid]['Percentage'] = 100*$rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365;
 						}
+						*/
 						$hops_to = $stops[$uuid]["num"];
 					}
 
@@ -356,8 +369,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							'To' => $hops_to,
 							'Description' => $description
 						);
+						
 				}
+				
 			}
+			
 		}
 		
 		
@@ -403,7 +419,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			//$stopswriter->getActiveSheet()->setCellValue("G".($count+1), $stop['color']);
 			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), $stop['size']);
 			$stopswriter->getActiveSheet()->setCellValue("H".($count+1), $stop['Risk Recovery Days']);
-			$stopswriter->getActiveSheet()->setCellValue("I".($count+1), $stop['Stream-Divider']);
+			//$stopswriter->getActiveSheet()->setCellValue("I".($count+1), $stop['Stream-Divider']);
 			$count++;
 		}
 	

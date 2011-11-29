@@ -16,9 +16,13 @@ class Controller_Services_Uploads extends Sourcemap_Controller_Service {
 	public function action_get() {    
 		$s3 = new S3(Kohana::config('apis')->awsAccessKey, Kohana::config('apis')->awsSecretKey);
         if(isset($_GET['bucket']) && isset($_GET['filename'])) {
-			$img = $s3->getObject($_GET['bucket'], baseName($_GET['filename']));
+            try{ // error: filename(account) not exist
+			    $img = $s3->getObject($_GET['bucket'], baseName($_GET['filename']));
+            } catch (Exception $e) {
+                return $this->request->redirect('assets/images/default-user.png'); 
+            }
 			$this->_format = "png";
-	        $this->response = $img->body;
+    	    $this->response = $img->body;
 
         } else {
             return $this->_bad_request("Bucket and filename required.");
@@ -35,9 +39,12 @@ class Controller_Services_Uploads extends Sourcemap_Controller_Service {
 		if(isset($posted->bucket) && isset($posted->filename)) {
 			$s3->putObjectFile($posted->file->tmp_name, $posted->bucket, $posted->filename, S3::ACL_PUBLIC_READ);
 
-			$this->response = (object)array(
+            return $this->request->redirect('home'); 
+			/*
+              $this->response = (object)array(
 	            'uploaded' => $posted->filename
 	        );
+             */
 		}
 		else {
 			return $this->_bad_request("Bucket and filename required.");

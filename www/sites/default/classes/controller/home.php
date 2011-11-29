@@ -45,7 +45,9 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         if($user->has('roles', $channel_role))
             $isChannel = true;
 
-        $user_arr['avatar'] = Gravatar::avatar($user->email, 128);
+        // Profile pictures url
+        //$user_arr['avatar'] = Gravatar::avatar($user->email, 128);
+        $user_arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$user_arr['username'];
 
         $this->template->isChannel = $isChannel;
         $this->template->user = (object)$user_arr;

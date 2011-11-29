@@ -11,7 +11,9 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
-
+<script>
+    var username = '<?= $user->username ?>';
+</script>
 <div class="container">
     <div class="dashboard-top">
         <div class="left">

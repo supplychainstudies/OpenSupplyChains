@@ -148,7 +148,8 @@ class Model_Supplychain extends ORM {
             $sc->hops = array_values($hops);
             $sc->owner = (object)array(
                 'id' => $owner->id, 'name' => $owner->username,
-                'avatar' => Gravatar::avatar($owner->email),
+                //'avatar' => Gravatar::avatar($owner->email),
+                'avatar' => "services/uploads?bucket=accountpics&filename=".$owner->username,
                 'banner_url' => $owner->banner_url,
                 'display_name' => $owner->display_name
             );

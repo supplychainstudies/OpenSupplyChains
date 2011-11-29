@@ -109,11 +109,7 @@
         </p>
 
         <div id="discussion-section">
-<<<<<<< HEAD
-            <h2>Discussion</h2>
-=======
             <h2 class="section-title">Discussion</h2>
->>>>>>> live
             <?php if($can_comment): ?>
             <div id="comment-form" class="sourcemap-form">
                 <fieldset>

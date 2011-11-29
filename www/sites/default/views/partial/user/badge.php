@@ -17,7 +17,8 @@
         <img src="<?= $user->avatar; ?>" />
         <?php if ($canEdit): ?>
         <div class="button alternate">
-            <a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>
+            <!--<a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>-->
+            <a id="change_profile_pic">Change pictures</a>
         </div>
         <div class="button alternate">
             <a href="auth/reset">Change password</a>

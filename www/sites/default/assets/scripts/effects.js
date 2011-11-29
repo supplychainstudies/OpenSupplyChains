@@ -22,12 +22,51 @@ $(document).ready(function(){
         $(this).parent().next('.collapsed').slideToggle();
     });
     
-    /* Channel edit */
-    $("input:checkbox").each(function(index){
-        var ischecked = $(this).is(":checked");
-        $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+    /* profiel pictures*/
+    $('a#change_profile_pic').click(function(){
+        //modal a profile upload window
+        var popID = 'popup';
+        var element = document.createElement('div');
+        $(element).html(
+            '<form method="post" action="/services/uploads" enctype="multipart/form-data">'+
+            '<input type="hidden" name="bucket" value="accountpics"/>'+
+            '<input type="hidden" name="filename" value="'+username+'"/>'+
+            '<input type="file" name="file" />'+
+            '<input type="submit" value="Upload" />'+
+            '</form>'
+        );
+        $(element).attr('id',popID);
+        $(element).addClass("popup_block");
+        $(element).prepend('<a href="#" class="close"></a>');
+        $('body').append($(element));
 
-        $(this).change(function(){
+        $('#' + popID).height(110);
+        $('#' + popID).width(600);
+        var popMargTop = ($('#' + popID).height() + 80) / 2;
+        var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+        $('#' + popID).css({
+            'margin-top' : -popMargTop,
+            'margin-left' : -popMargLeft,
+            'overflow' : 'hidden'
+        });
+        $('#' + popID).fadeIn();
+
+        $('body').append('<div id="fade"></div>'); //Add the fade layer to botto
+        $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the
+        $('a.close, #fade').live('click', function() { //When clicking on the cl
+            $('#fade , .popup_block').fadeOut(function() {
+            }); //fade them both out
+            return false;
+        });
+});
+
+/* Channel edit */
+$("input:checkbox").each(function(index){
+var ischecked = $(this).is(":checked");
+$(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+
+$(this).change(function(){
             var ischecked = $(this).is(":checked");
             $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
         });

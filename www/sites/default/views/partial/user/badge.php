@@ -23,6 +23,17 @@
         <div class="button alternate">
             <a href="auth/reset">Change password</a>
         </div>
+        
+            <?php if (!$isChannel): ?> 
+        <div class="button alternate"> 
+            <a href="/upgrade">Upgrade account</a> 
+        </div> 
+            <?php endif; ?> 
+            <?php if ($isChannel): ?> 
+        <div class="button alternate"> 
+            <a href="/upgrade/payments">Payments</a> 
+        </div> 
+            <?php endif; ?>  
         <?php endif; ?>
     </div>
     <ul class="user-details">

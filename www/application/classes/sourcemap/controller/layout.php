@@ -27,7 +27,10 @@ class Sourcemap_Controller_Layout extends Controller_Template {
 
     public function before() {
         $pret = parent::before();
-        if(extension_loaded('ssl')){
+       
+        $config = Kohana::config('sourcemap');
+       
+        if(Kohana::config('sourcemap.use_ssl')){
             $this->sslRedirect();
         }
         if($this->auto_render === true) {

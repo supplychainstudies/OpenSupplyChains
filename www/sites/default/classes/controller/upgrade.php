@@ -8,11 +8,13 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
     public $layout = 'base';
     public $template = 'user/upgrade';
+        
+    public $ssl_required = true;
 
     const MIGRATE_EMAIL = 'account-migration@sourcemap.com';
 
     public function action_index() {        
-        
+
         $this->layout->page_title = 'Upgrade your account';
 
         $this->layout->scripts = array(
@@ -51,28 +53,23 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                         );
                     }
                     
-                    if($renewing){
-                    }
-                    else{
+                    // get the credit card details submitted by the form
+                    $token = $_POST['stripeToken'];
 
-                        // get the credit card details submitted by the form
-                        $token = $_POST['stripeToken'];
+                    try{
+                        // do we already have a customer ID?  then we're renewing 
+                        Stripe_Customer::retrieve($user->username);
+                        $c->updateSubscription(array("plan" => "channel"));
+                    } catch (Exception $e) {
+                        // create new stripe customer based on existing username
+                        $customer = Stripe_Customer::create(array(
+                            "description" => $user->username,
+                            "plan" => "channel",
+                            "card" => $token
+                        ));
 
-                        try{
-                            // do we already have a customer ID?  then we're renewing 
-                            Stripe_Customer::retrieve($user->username);
-                            $c->updateSubscription(array("plan" => "channel"));
-                        } catch (Exception $e) {
-                            // create new stripe customer based on existing username
-                            $customer = Stripe_Customer::create(array(
-                                "description" => $user->username,
-                                "plan" => "channel",
-                                "card" => $token
-                            ));
-
-                            $user->customer_id = $customer->id;
-                            $user->save();
-                        }
+                        $user->customer_id = $customer->id;
+                        $user->save();
                     }
 
                 } catch (Exception $e) {

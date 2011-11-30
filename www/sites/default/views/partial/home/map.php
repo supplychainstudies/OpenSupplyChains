@@ -32,12 +32,14 @@
             <?php endif; ?>
         </div>
         <div class="map-controls" value="<?= $supplychain->id ?>">
+            <?php if($supplychain->user_id==$user_id): ?>
             <div class="map-controls-delete">
                 <a class="red" href="delete/<?= $supplychain->id ?>">Delete</a>
             </div>
             <div class="map-controls-edit">
                 <a href="edit/<?= $supplychain->id ?>">Edit</a>
             </div>
+            <?php endif; ?>
             <?php
                 $is_channel=false;
                 $user = ORM::factory('user', Auth::instance()->get_user());

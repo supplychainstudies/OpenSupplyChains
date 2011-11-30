@@ -470,6 +470,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("height", h);
 
     //def marker // TODO:make it work
+
     svg.append("svg:defs").selectAll("marker")
         .data(hop_list)
     .enter().append("svg:marker")
@@ -495,11 +496,11 @@ Sourcemap.buildTree = function(tree_id,sc) {
     .attr("dx",".1em") // padding
     .attr("dy","1.8em")
     .attr("text-anchor","middle")
-	.style("color",function(d){return d.color})
+	.style("fill",function(d){return d.color})
 	.style("font-size","12px")
 	.style("font-weight", "bold")
     .text(function(d){return d.title});
-    
+  
     // Arc
     /*
     svg.append("svg:g")
@@ -515,6 +516,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
     */
     // Simple line    
+
     svg.append("svg:g").attr("class","line").selectAll("line")
         .data(hop_list)
         .enter().append("svg:line")
@@ -545,7 +547,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
     */
     
-    
+ 
     svg.append("svg:g").attr("class","circle").selectAll("circle")
         .data(tier_list)
         .enter().append("svg:circle")
@@ -642,6 +644,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
     }
 
     // Tree-text
+/*
     svg.append("svg:g").selectAll("text")
         .data(tier_list)
         .enter().append("svg:text")
@@ -651,7 +654,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("dy","1.8em")
         .attr("text-anchor","middle")
         .text(function(d){return d.title});
-    
+  */  
 }
 
 Sourcemap.saveSupplychain = function(supplychain, o) {

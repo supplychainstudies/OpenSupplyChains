@@ -19,6 +19,15 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
         'tocol' => null
     );
 
+	public static function returnSize($val) {
+		$min = 30;
+		$max = 365;
+		$percent_min = 100*($min/$max);
+		$percent_max = 100*($max/$max);
+		$percent_val = 100*($val/$max);
+		//sqrt((min(array(max(array(($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()), 10)), 365)))/3.14)
+		return sqrt((min(array(max(array(($percent_val), $percent_min)), $percent_max)))/3.14);
+	}
 
     public static function xls2sc($xls=null, $o=array()) {
         $options = array();
@@ -28,23 +37,32 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
         extract($options);
         $sc = new stdClass();
 
-		// Row cap - Maximum Number of Rows
-		$row_cap = 5000;
-
 		//get upstream sheet
 		$contentReader = new PHPExcel_Reader_Excel5Contents();
 		$contentReader->setReadDataOnly(true);
 		$contentPHPExcel = $contentReader->loadContents($xls);
-		$sheets = $contentPHPExcel->getSheetNames();
-		$contentReader->setLoadSheetsOnly(0);
+		$sheets = array();
+		// If you have an upstream template
+		
+		$contentReader->setLoadSheetsOnly("Upstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
+		$sheets['Upstream'] = $contentPHPExcel->getActiveSheet();
+		$contentReader->setLoadSheetsOnly("Downstream");
+		$contentPHPExcel = $contentReader->loadContents($xls);
+		$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
+		
 		$stops = array();
 		$hops = array();
-		$rows = $contentPHPExcel->getActiveSheet();
-						
+		$count = 1;
+		foreach($sheets as $sheetname=>$sheet) {
 			// Figure out where all the columns are
+
+			// These two variables are for keeping track whether there is any content in the columns
+			// if there is at any point, that column in these variables will exist
+			$sh_columns = array();
+			$hh_columns = array();
 			$sh = array(
-				"Title" => "",
+				"Title" => "x",
 				"Address" => "",
 				"Description" => "",
 				"url:moreinfo" => "",
@@ -61,31 +79,28 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 				"Size" => ""
 			);
 			$hh = array(
-				"To" => "",
-				"From" => "",
+				"To" => "x",
+				"From" => "x",
 				"Weight" => "",
 				"Transportation" => "",
 				"Co2e" => "",
 				"Co2e-Reference" => ""
 			);
-			// Title row isn't always at row 1
+			$rows = $sheet;
+			$tiers = array();
+			// Figure out where the title row is
 			for ($starting_row = 1; $rows->cellExistsByColumnAndRow(1,$starting_row) == true; $starting_row++) {
 				$check_title = false;
 				$check_address = false;
 				for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
 					$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
 					$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
-					if ((strpos($value,"name") !== false || strpos($value,"title") !== false || strpos($value,"placename") !== false) && (strpos($value,"youtube") === false && strpos($value,"flickr") === false && strpos($value,"link") === false && strpos($value,"optional") === false)){	
-						$check_title = true;
-						if ($check_title == true && $check_address == true) { break 2; }
-					}
-					elseif (strpos($value,"location") !== false || strpos($value,"address") !== false || strpos($value,"coordinate") !== false) {	
-						$check_address = true;
-						if ($check_title == true && $check_address == true) { break 2; }
+					if (strpos($value,"location") !== false || strpos($value,"address") !== false || strpos($value,"coordinate") !== false) {	
+						break 2; 
 					}
 				}
-				if ($check_title == true && $check_address == true) { break 2; }
 			}
+			// Figure out what each of the columns represents. if its not recognizable, it gets its own column (becomes and attribute)
 			for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
 				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
 				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
@@ -101,7 +116,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					$sh["urltitle:moreinfo"] = $column;
 				elseif ($sh["youtube:link"] == "" && strpos($value,"youtube") !== false)	
 					$sh["youtube:link"] = $column;
-				elseif ($sh["Title"] == "" && strpos($value,"flickr") !== false)	
+				elseif ($sh["flickr:setid"] == "" && strpos($value,"flickr") !== false)	
 					$sh["flickr:setid"] = $column;
 				elseif ($sh["Weight"] == "" && strpos($value,"weight") !== false && strpos($value,"trans") === false)	
 					$sh["Weight"] = $column;
@@ -115,9 +130,6 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					$sh["Co2e"] = $column;
 				elseif ($sh["Co2e-Reference"] == "" && strpos($value,"co2e") !== false && strpos($value,"ref") !== false)
 					$sh["Co2e-Reference"] = $column;
-				elseif ($hh['To'] == "" && (strpos($value,"connect") !== false || strpos($value,"destin") !== false)) {
-					$hh["To"] = $column; $hh["From"] = "x"; 
-				}	
 				elseif ($hh["Weight"] == "" && strpos($value,"trans") !== false && strpos($value,"weight") !== false)
 					$hh["Weight"] = $column;				
 				elseif ($hh["Transportation"] == "" && strpos($value,"trans") !== false)
@@ -126,13 +138,17 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					$hh["Co2e"] = $column;
 				elseif ($hh["Co2e-Reference"] == "" && strpos($value,"trans") !== false && strpos($value,"co2e") !== false && strpos($value,"ref") !== false)
 					$hh["Co2e-Reference"] = $column;
+				elseif (strpos($value,"bom") !== false || strpos($value,"level") !== false || strpos($value,"tier") !== false) {
+					//Find a number somewhere in there
+					$pattern = '/\d/';
+					$instances = array();
+					preg_match($pattern, $value, $instances);
+					$tiers[$instances[0]] = $column;
+				}
 				else
 					$sh[$value] = $column;
-				var_dump($value);
-				var_dump($column);
-				var_dump($sh);
 			}
-			$count = 1;
+			
 			// Unset Columns that don't exist
 			foreach ($sh as $field=>$column) {
 				if ($column == "") {
@@ -144,73 +160,104 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					unset($hh[$field]);
 				} 
 			}
-			// These two variables are for keeping track whether there is any content in the columns
-			// if there is at any point, that column in these variables will exist
-			$sh_columns = array();
-			$hh_columns = array();
-			var_dump($sh);
-			var_dump($hh);
+			
+			$current_path = array();
+			
+			// Loop through all the rows
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rows->getCell("A" . $rowIndex)->getCalculatedValue() != NULL && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "" && strpos($rows->getCell("A" . $rowIndex)->getCalculatedValue(), "name") !== true && $rowIndex != 1) {				
-					$stops[$count] = array (
-						"id" => $count
-					);
-					foreach($sh as $field=>$column) {
-						if ($column != "x") {
-							$stops[$count][$field] = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());
-							if ($stops[$count][$field] != "" && isset($sh_columns[$field]) != true) {
-								$sh_columns[$field] = true; 
+				if ($rowIndex != 1) {
+					$name = "";
+					// Find the name
+					foreach ($tiers as $num=>$column) {
+						if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
+							$name = $rows->getCell($column . $rowIndex)->getCalculatedValue();							
+						}
+					}
+					if (isset($stops[$name]) == false) {
+						// create a stop 						
+						$stops[$name] = array (
+							"id" => $count,
+							"Title" => $name
+						);
+						$sh_columns['Title'] = true;
+						// go through all the existing columns and add the values
+						foreach($sh as $field=>$column) {
+							if ($column != "x") {
+								$stops[$name][$field] = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());
+								if ($stops[$name][$field] != "" && isset($sh_columns[$field]) != true) {
+									$sh_columns[$field] = true; 
+								}
 							}
+							
 						}
+						$count++;
 					}
-					// We have to figure out whether the value in the location/address field is an address or a lat/long
-					// a lat/long can look like 0.00,-0.00, so if we explode it and get two numbers, its a lat/lon
-					// otherwise, we'll have to try to geocode it
-					$test_ll = explode(",",$stops[$count]["Address"]);
-					if (count($test_ll) == 2) {
-						if (is_float($test_ll[0]) == true && is_float($test_ll[0]) == true) {
-							$sh_columns['lat'] = true; $sh['lat'] = "x";
-							$sh_columns['lon'] = true; $sh['lon'] = "x";
-							$stops[$count]["lat"] = $test_ll[0];
-							$stops[$count]["lon"] = $test_ll[1];
-						}
+					// Hops, now
+					if ($sheetname == "Upstream") {
+						$hops_from = $stops[$name]["id"];
+						$hops_to = "";
+						foreach ($tiers as $num=>$column) {
+							if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
+								if ($num != 0) {
+									$hops_to = $current_path[$num-1];
+								}
+								$current_path[$num] = $hops_from;
+								continue;							
+							}
+						}	
+					} else {
+						$hops_to = $stops[$name]["id"];
+						$hops_from = "";
+						foreach ($tiers as $num=>$column) {
+							if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
+								if ($num != 0) {
+									$hops_from = $current_path[$num-1];
+								}
+								$current_path[$num] = $hops_to;
+								continue;							
+							}
+						}						
 					}
-					if (isset($hh['To']) != false) {
-						if ($rows->getCell($hh["To"] . $rowIndex)->getCalculatedValue() != "") {
-							$new_num = count($hops);
-						
-							$hops[$new_num] = array();
-							$hh_columns['From'] = true;
-							foreach($hh as $field=>$column) {
+										
+					if ($hops_from != "" && $hops_to != "" && $hops_from != $hops_to) {
+						$new_num = count($hops);
+					
+						$hops[$new_num] = array(
+							"From"=>$hops_from,
+							"To"=>$hops_to
+						);
+						$hh_columns['From'] = true;$hh_columns['To'] = true;
+						foreach($hh as $field=>$column) {
+							if ($column != "x") {
 								$hops[$new_num][$field] = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());
 								if ($hops[$new_num][$field] != "" && isset($hh_columns[$field]) != true) {
 									$hh_columns[$field] = true; 
 								}
 							}
-							$hops[$new_num]['From'] = $count;
-							$hops[$new_num]['To-Name'] = trim($rows->getCell($hh["To"] . $rowIndex)->getCalculatedValue());
 						}
-					} 
-					$count++;
-				}
-				if ($count > $row_cap) {
-					break;
-				}
-			}
-		// Hops
-		foreach ($hops as $num=>$hop) {	
-			foreach ($stops as $stop) {
-				if ($hops[$num]['To-Name'] == $stop['Title'] || $hops[$num]['To-Name'] == $stop['Address']) {						
-						$hops[$num]['To'] = $stop['id'];
-						unset($hops[$num]['To-Name']);
-						break;
-				}
-			}
-		}
+					} // 	if ($hops_from != "" && $hops_to != "" and isset($hops[$hops_from."-".$hops_to]) == false && $hops_from != $hops_to) {
+				
+				} // If line isn't blank, etc
+			} // Foreach
+		} // foreach($sheets as $sheet=>$rows)
+
+		
+
+		
+		/*
+		
+		
+		
+		Now we convert the array to a phpexcel object and then to a csv output
+		
+		
+
+		*/
 		
 		var_dump($stops);
 		var_dump($hops);
+		
 		// new PHPExcel Object
 		$stopswriter = new PHPExcel();
 		$stopswriter->createSheet();
@@ -279,4 +326,6 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
         return $sc;
 		
     }
+
 }
+

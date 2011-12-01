@@ -33,8 +33,8 @@ return array(
             'css_class' => array('third-width '), 
             'attributes' => array(
                 'maxlength' => 5,
-                'boxwidth' => 'third'
-                'placeholder' => ' xxx';
+                'boxwidth' => 'third',
+                'placeholder' => ' xxx'
             )
         ),
         'card-expiry-month' => array(
@@ -43,8 +43,8 @@ return array(
             'css_class' => array('third-width '), 
             'attributes' => array(
                 'maxlength' => 5,
-                'boxwidth' => 'third'
-                'placeholder' => ' xx';
+                'boxwidth' => 'third',
+                'placeholder' => ' xx'
             )
         ),
         'card-expiry-year' => array(
@@ -53,8 +53,8 @@ return array(
             'css_class' => array('third-width '), 
             'attributes' => array(
                 'maxlength' => 4,
-                'boxwidth' => 'third'
-                'placeholder' => ' xxxx';
+                'boxwidth' => 'third',
+                'placeholder' => ' xxxx'
             )
         ),
         'confirm_terms' => array(

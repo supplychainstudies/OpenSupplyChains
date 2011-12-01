@@ -27,21 +27,38 @@ $(document).ready(function(){
         //modal a profile upload window
         var popID = 'popup';
         var element = document.createElement('div');
+        var banner_html = document.createElement('div');
+        
         $(element).html(
-            '<form method="post" action="/services/uploads" enctype="multipart/form-data">'+
+            '<div id="upload_content">'+
+            '<div class="upload_profile_pic">'+
+            '<h3>Profile picture</h3>'+
+            '<form id="profile_pic_upload" method="post" action="/services/uploads" enctype="multipart/form-data">'+
             '<input type="hidden" name="bucket" value="accountpics"/>'+
+            '<input type="hidden" name="filename" value="'+username+'"/>'+
+            '<input type="file" name="file" />'+
+            '<input type="submit" value="Upload" />'+
+            '</form></div><hr/></div>'
+        );
+        $(banner_html).html(
+            '<h3>Banner</h3>'+
+            '<form id="banner_upload" method="post" action="/services/uploads" enctype="multipart/form-data">'+
+            '<input type="hidden" name="bucket" value="bannerpics"/>'+
             '<input type="hidden" name="filename" value="'+username+'"/>'+
             '<input type="file" name="file" />'+
             '<input type="submit" value="Upload" />'+
             '</form>'
         );
+        $(banner_html).attr('class','upload_banner');
+        is_channel ? $(element).find("#upload_content").append(banner_html) : 0 ;
+
         $(element).attr('id',popID);
         $(element).addClass("popup_block");
         $(element).prepend('<a href="#" class="close"></a>');
         $('body').append($(element));
 
-        $('#' + popID).height(110);
-        $('#' + popID).width(600);
+        is_channel ? $('#' + popID).height(200) : $('#' + popID).height(100);
+        $('#' + popID).width(500);
         var popMargTop = ($('#' + popID).height() + 80) / 2;
         var popMargLeft = ($('#' + popID).width() + 80) / 2;
 
@@ -58,6 +75,16 @@ $(document).ready(function(){
             $('#fade , .popup_block').fadeOut(function() {
             }); //fade them both out
             return false;
+        });
+        $('form#profile_pic_upload').submit(function(evt){
+            var fileInput = $(this).children('input:file');
+            var Uploadfilesize = fileInput[0].files[0].fileSize;
+            var sizelimit = 500000;
+            // if filesize > 500kb
+            if(Uploadfilesize > sizelimit){
+                evt.preventDefault(); //prevent upload action
+                console.log("file size "+Uploadfilesize+" exceed limit "+sizelimit);
+            }
         });
 });
 

@@ -213,18 +213,36 @@ Sourcemap.factory = function(type, data) {
             var g = new Sourcemap.Supplychain.Graph2(instance);
             var stids = g.nids.slice(0);
 			var max_plen = 0;
+			var upperbound = 0;
+			
+			//Just for colors, which should match the map
+			var stop_colors = {};
+            for(var i=0; i<stids.length; i++) {
+                stop_colors[stids[i]] = 0;
+            }
+            for(var i=0; i<g.paths.length; i++) {
+                var p = g.paths[i];
+                max_plen = p.length > max_plen ? p.length : max_plen;
+                for(var j=0; j<p.length; j++) {
+                    if(j > stop_colors[p[j]]) stop_colors[p[j]] = j;
+                }
+            }
+			var max_plen = 0;
 			if (sc.stops[0].attributes.tier) {
-				var tiers = {};				
+				var tiers = {};	
+				var offset = 0;			
 	            for(var i=0; i<stids.length; i++) {
-	                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
-					max_plen = Math.max(max_plen,parseInt(sc.stops[i].attributes.tier));
+					console.log(parseInt(sc.stops[i].attributes.tier));
+					if (!isNaN(sc.stops[i].attributes.tier)) {		
+		                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
+						upperbound = Math.max(upperbound,parseInt(sc.stops[i].attributes.tier));
+					}
 	            }
 				for(x in tiers) {
-	                tiers[x] = max_plen-tiers[x];
+	                tiers[x] = upperbound-tiers[x];
+					max_plen = Math.max(max_plen,parseInt(tiers[x]));
 	            }
-	max_plen++;
-				console.log(tiers);
-				
+				max_plen++;		
 			} else {
 	            var tiers = {};
 	            for(var i=0; i<stids.length; i++) {
@@ -238,17 +256,21 @@ Sourcemap.factory = function(type, data) {
 	                }
 	            }
 			}
+			//max_plen++;
             //default_feature_colors
             var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
-            i//var dfc = this.options.default_feature_colors.slice(0);
+            //var dfc = this.options.default_feature_colors.slice(0);
             for(var i=0; i<dfc.length; i++) {
                     dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
             }
             var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
             for(var i=0,length=instance.stops.length;i<length;i++)
             {
+				
                 var st = instance.stops[i];
-                var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+                //var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+				
+				var scolor = st.getAttr("color", palette[stop_colors[st.instance_id]].toString());
                 st.attributes.tier = tiers[st.instance_id];
                 st.attributes.color = scolor;
             }
@@ -374,12 +396,14 @@ Sourcemap.buildTree = function(tree_id,sc) {
     var max_plen = sc.max_plen;
     var max_length=(max_plen)?sc.max_plen:1,max_x=0,max_y=0;    
     // palette stuff
+
     var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
     for(var i=0; i<dfc.length; i++) {
         dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
     }
     var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
     //tier for palette
+
     var g = new Sourcemap.Supplychain.Graph2(sc);
     var stids = g.nids.slice(0);
     var p_tiers = {};
@@ -458,8 +482,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         for(var j=0;j<tiers[i].length;j++){            
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
-					//tier_list[k].title = tiers[].
-                    tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+                    //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
                     tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
                 }
@@ -929,6 +953,7 @@ Sourcemap.Color.prototype.clone = function() {
 }
 
 Sourcemap.Color.prototype.midpoint = function(to_color) {
+	console.log(to_color);
     var dr = to_color.r - this.r;
     var mr = this.r + (Math.round(dr/2))
     var dg = to_color.g - this.g;

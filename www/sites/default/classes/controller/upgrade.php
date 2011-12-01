@@ -1,6 +1,5 @@
 <?php
-/* Copyright (C) Sourcemap 2011
-*/
+/* Copyright (C) Sourcemap 2011 */
 
 class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
@@ -54,14 +53,14 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                     }
                     
                     // get the credit card details submitted by the form
-                    $token = $_POST['stripeToken'];
+                    $token = $_POST['stripeToken'] ? $_POST['stripeToken'] : false;
 
                     try{
                         // do we already have a customer ID?  then we're renewing 
-                        Stripe_Customer::retrieve($user->username);
-                        $c->updateSubscription(array("plan" => "channel"));
+                        $cu = Stripe_Customer::retrieve($user->customer_id);
+                        $cu->updateSubscription(array("plan" => "channel"));
                     } catch (Exception $e) {
-                        // create new stripe customer based on existing username
+                        // otherwise create new stripe customer based on existing username
                         $customer = Stripe_Customer::create(array(
                             "description" => $user->username,
                             "plan" => "channel",
@@ -227,14 +226,14 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             $this->request->redirect('user/upgrade');
         } 
         
-        $f = Sourcemap_Form::load('/upgrade');
-        $f->action('upgrade')->method('post');
+        $f = Sourcemap_Form::load('/renew');
+        $f->action('upgrade/renew')->method('post');
         $this->template->form = $f;
         
         try{
             $customer = Stripe_Customer::retrieve($user->customer_id);
             $f = Sourcemap_Form::load('/renew');
-            $f->action('upgrade')->method('post');
+            $f->action('upgrade/renew')->method('post');
             $this->template->renew_form = $f;
             
             $this->template->card_name = $customer->active_card->name;
@@ -244,11 +243,82 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             $this->template->exp_year= $customer->active_card->exp_year;
             $this->template->thru = strtotime($customer->next_recurring_charge->date);
         } catch (Exception $e){
-            // No valid credit card on file for some reason
+            Message::instance()->set("No credit card on file.  Please contact support.");
+            $this->request->redirect('/upgrade/renew');
         }
         
+        if(strtolower(Request::$method) === 'post') { 
+             $validate= $f->validate($_POST);   
+             if( $validate ) {  
+                $p = $f->values();
+                try{
+                    try{
+                        Stripe_Plan::retrieve("channel");
+                    } catch (Exception $e) {
+                        Message::instance()->set("There was a problem.  Please contact support.");
+                        $this->request->redirect('/upgrade/renew');
+                    }
+ 
+                    // use existing card on file?
+                    if ($_POST['existing-card'] == "on"){
+                        // renew account with card on file 
+                        $customer->updateSubscription(array("plan" => "channel"));
+                    } else {
+                        // get the credit card details submitted by the form
+                        $token = $_POST['stripeToken'] ? $_POST['stripeToken'] : false;
+                        $customer->updateSubscription(array(
+                            "plan" => "channel",
+                            "card" => $token
+                        ));
+                    }
 
+                } catch (Exception $e) {
+                    Message::instance()->set('Please check the credit card information below.' . $e);
+                    $this->request->redirect('home/');
+                } 
 
+                //send a notification 
+				$mailer = Email::connect(); 
+				$swift_msg = Swift_Message::newInstance();
+
+				$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your Sourcemap Channel Renewal');
+				
+                $h = md5(sprintf('%s-%s', $user->username, $user->email));
+                $lid = strrev(base64_encode($user->username));
+                $url = URL::site("register/confirm?t=$lid-$h", true);
+                $msgbody = "\n";
+                $msgbody .= "Dear {$user->username},\n\n";
+                $msgbody .= "Thank you for renewing your channel!";
+                $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly-availble fields in your dashboard.\n\n";
+                $msgbody .= "If you have any questions, please contact us at support@sourcemap.com.\n\n";
+                $msgbody .= "-The Sourcemap Team\n";
+                $swift_msg->setSubject('Re: Your Newly Upgraded Sourcemap Account')
+						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
+						  ->setTo(array($user->email => ''))
+						  ->setBody($msgbody);
+					
+
+                try { 
+					$sent = $mailer->send($swift_msg);
+                    Message::instance()->set('Email confirmation sent.');
+                    
+                    //set channel status
+                    $channel_role = ORM::factory('role', array('name' => 'channel'));
+                    $user->add('roles', $channel_role)->save();
+                    
+                    return $this->request->redirect('upgrade/renew/thankyou');
+                } catch (Exception $e) {
+                    Message::instance()->set('Sorry, could not complete account upgrade. Please contact support.');
+                } 
+
+                return $this->request->redirect('register');
+            } else {
+                Message::instance()->set('Check the information below and try again.');
+                $this->request->redirect('upgrade/renew');
+            }
+        }
+       
+        
         $this->template->username = $user->username;
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if($user->has('roles', $channel_role)) {

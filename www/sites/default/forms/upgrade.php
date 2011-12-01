@@ -34,6 +34,7 @@ return array(
             'attributes' => array(
                 'maxlength' => 5,
                 'boxwidth' => 'third'
+                'placeholder' => ' xxx';
             )
         ),
         'card-expiry-month' => array(
@@ -43,6 +44,7 @@ return array(
             'attributes' => array(
                 'maxlength' => 5,
                 'boxwidth' => 'third'
+                'placeholder' => ' xx';
             )
         ),
         'card-expiry-year' => array(
@@ -52,6 +54,7 @@ return array(
             'attributes' => array(
                 'maxlength' => 4,
                 'boxwidth' => 'third'
+                'placeholder' => ' xxxx';
             )
         ),
         'confirm_terms' => array(

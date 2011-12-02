@@ -104,12 +104,13 @@ Kohana::modules(array(
   'orm'        => MODPATH.'orm',        // Object Relationship Mapping
 //'oauth'      => MODPATH.'oauth',      // OAuth authentication
   'pagination' => MODPATH.'pagination', // Paging of results
-//'unittest'   => MODPATH.'unittest',   // Unit testing
-//'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-  'sitemap'    => MODPATH.'sitemap',
-  'stripe'     => MODPATH.'stripe',     // Payments
-  'swiftmailer'=> MODPATH.'swiftmailer',
-  'recaptcha'  => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
+// 'unittest'   => MODPATH.'unittest',   // Unit testing
+// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
+  'sitemap' => MODPATH.'sitemap',
+  'phpexcel' => MODPATH.'phpexcel',
+  'stripe' => MODPATH.'stripe',
+  'swiftmailer' => MODPATH.'swiftmailer',
+  'recaptcha' => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
   ));  
 
 Kohana::add_include_path(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/');

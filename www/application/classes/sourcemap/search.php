@@ -73,7 +73,7 @@ class Sourcemap_Search {
         $pkeys = is_array($this->parameters) ? array_keys($this->parameters) : array();
         sort($pkeys);
         $pts = array();
-        for($i=0; $i<count($pkeys); $i++) {
+        for($i=0,$size = count($pkeys); $i<$size; $i++) {
             $pkey = $pkeys[$i];
             if(empty($this->parameters[$pkey]))
                 continue;

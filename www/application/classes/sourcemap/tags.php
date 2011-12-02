@@ -28,7 +28,7 @@ class Sourcemap_Tags {
             else {
                 $pp = $p;
                 $p = array();
-                for($pi=0; $pi<count($pp); $pi++) {
+                for($pi=0,$size = count($pp); $pi<$size; $pi++) {
                     $t = strtolower($pp[$pi]);
                     if(!in_array($t, $p))
                         $p[] = $t;

@@ -35,6 +35,28 @@
 .olMap > div {  z-index:0 !important; }
 .editable-options { display:none; }
 
+/* Tree container ------------------------------------------------------- */
+#tree-container{
+    width: 1040px; 
+    margin: 0 auto;
+    background: url('../images/map-bg.png') no-repeat;
+}
+
+#map {
+    padding: 15px 21px 24px;
+}
+
+#tree {
+    overflow:hidden;
+    #sourcemap-tree-view {
+        position:relative;        
+        border:4px solid #fff;
+        width: 1040px;
+        height: 570px;
+        .rounded(8px);
+        overflow:hidden;
+    }
+}
 /* Detail Pane ---------------------------------------------------------- */
 #dialog {
     position: absolute;

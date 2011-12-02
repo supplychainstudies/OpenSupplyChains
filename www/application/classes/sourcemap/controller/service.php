@@ -362,6 +362,11 @@ class Sourcemap_Controller_Service extends Controller_REST {
 	protected function  _serialize_kml($data) {
 		$supplychain = array_shift($data);
 		return Sourcemap_Kml::make($supplychain);
+    }	
+
+	protected function  _serialize_xls($data) {
+		$supplychain = array_shift($data);
+		return Sourcemap_xls::make($supplychain);
     }
 	
 	protected function  _serialize_xls($data) {

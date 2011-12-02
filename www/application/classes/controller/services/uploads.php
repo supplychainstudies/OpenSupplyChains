@@ -32,11 +32,14 @@ class Controller_Services_Uploads extends Sourcemap_Controller_Service {
     public function action_post() {
 	    $current_user = $this->get_current_user();
         if(!$current_user) {
-           // return $this->_forbidden('You must be signed in to create supplychains.');
+            return $this->_forbidden('You must be signed in to upload images.');
         }
 		$s3 = new S3(Kohana::config('apis')->awsAccessKey, Kohana::config('apis')->awsSecretKey);
 		$posted = $this->request->posted_data;
 		if(isset($posted->bucket) && isset($posted->filename)) {
+            if($current_user->username!=$posted->filename){
+                return $this->_bad_request("Wrong filename.");    
+            }
 			$s3->putObjectFile($posted->file->tmp_name, $posted->bucket, $posted->filename, S3::ACL_PUBLIC_READ);
 
             return $this->request->redirect('home'); 

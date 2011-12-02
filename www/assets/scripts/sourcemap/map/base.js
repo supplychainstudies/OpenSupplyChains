@@ -514,12 +514,8 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
     			$("#dialog-media").find(".navigation-item").removeClass("selected");
     			$(evt.target).addClass("selected");
-<<<<<<< HEAD
                 // for multiple media item
     			$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
-=======
-    			//$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
->>>>>>> xlssupport
     			$("#dialog-media").children("."+target).css("left","0");
     			
             }, this));

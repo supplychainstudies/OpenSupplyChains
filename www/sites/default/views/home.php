@@ -13,7 +13,7 @@
 ?>
 <script>
     var username = '<?= $user->username ?>';
-    var is_channel = <?= $isChannel ?>;
+    var is_channel = '<?= $isChannel ?>';
 </script>
 <div class="container">
     <div class="dashboard-top">

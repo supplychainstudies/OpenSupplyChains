@@ -42,15 +42,16 @@
         <?php endif; ?>
     </div>
     <ul class="user-details">
-        <li><span><?= HTML::chars($user->username); ?></span></li>
+        <li><span><div class="detail_cap">Account name</div><?= HTML::chars($user->username); ?></span></li>
         <?php if ($canEdit): ?>
-            <?= isset($user->email) ? '<li><span>' . HTML::chars($user->email) . '</span></li>' : ''; ?>
+            <?= isset($user->email) ? '<li><div class="detail_cap">email</div><span>' . HTML::chars($user->email) . '</span></li>' : ''; ?>
         <?php endif; ?>
         <?php if ($isChannel): ?>
         <li>
             <?php if ($canEdit): ?>
             <a href="#" title="display_name" class="edit-button"></a>
             <?php endif; ?>
+            <div class="detail_cap">Display name</div>
             <p id="display_name"><?= $user->display_name ? HTML::chars($user->display_name) : "<span class=\"empty\">No display name yet!</span>"; ?></p>
         </li>
         <?php endif; ?>
@@ -58,12 +59,14 @@
             <?php if ($canEdit): ?>
             <a href="#" title="url" class="edit-button"></a>
             <?php endif; ?>
+            <div class="detail_cap">Website</div>
             <p id="url"><?= isset($user->url) ? HTML::chars($user->url) : "<span class=\"empty\">No URL yet!</span>"; ?></p>
         </li>
         <li>
             <?php if ($canEdit): ?>
             <a href="#" title="description" class="edit-button"></a>
             <?php endif; ?>
+            <div class="detail_cap">Description</div>
             <p id="description"><?= isset($user->description) ? HTML::chars($user->description) : "<span class=\"empty\">No description yet!</span>"; ?></p>
         </li>
         <!-- <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span></li>-->

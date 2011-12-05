@@ -42,7 +42,9 @@ class Sourcemap_Kml {
 		foreach($data->features as $ftr) {
 			if($ftr->geometry->type == "Point") {
 				$k .= '<Placemark>';
-			    $k .= '<name>'.$ftr->properties->title.'</name>';
+			    $k .= '<name>';
+                $k .= isset($ftr->properties->title) ? $ftr->properties->title : "Untitled Point";
+                $k .= '</name>';
 			    $k .= '<styleUrl>#defaultpoint</styleUrl>';								
 			    $k .= '<description>';
 			    $k .= '<![CDATA[';
@@ -56,7 +58,9 @@ class Sourcemap_Kml {
 			}
 			else {	
 				$k .= '<Placemark>';
-			    $k .= '<name>'.$ftr->properties->title.'</name>';
+			    $k .= '<name>';
+                $k .= isset($ftr->properties->title) ? $ftr->properties->title : "Untitled Line";
+                $k .= '</name>';
 			    $k .= '<visibility>1</visibility>';		
 			    $k .= '<styleUrl>#defaultline</styleUrl>';					
 			    $k .= '<description>';

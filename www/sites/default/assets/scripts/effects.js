@@ -265,7 +265,7 @@ $(this).change(function(){
         var oldData =  $('#' + field).html();
         $('#' + field).html(''
             + '<form action="/home/update" method="post" class="edit-field">'
-            + '<' + input + ' type="text" name="' + field + '" placeholder="Enter description here"></' + input + '>'
+            + '<' + input + ' type="text" name="' + field + '" placeholder="Enter description here" value="'+oldData+'"></' + input + '>'
             + '<div class="submit-status" hidden></div>'
             + '<input type="submit"></input>'
             + '</form>'

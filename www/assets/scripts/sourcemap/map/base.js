@@ -379,10 +379,12 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     			$(this.base.dialog_content).find('.accordion-body').hide();
 				// if theres a movie, show it
 				if ($(this.base.dialog_content).find('#dialog-media').length >= 0) {
+					$(this.base.dialog_content).find('#dialog-media').prev().find('.arrow').addClass("arrowopen");
 					$(this.base.dialog_content).find('#dialog-media').show();
 				} else {
 					// if not, show the description
 					if ($(this.base.dialog_content).find('#dialog-description').length >= 0) {
+						$(this.base.dialog_content).find('#dialog-media').prev().find('.arrow').addClass("arrowopen");
 						$(this.base.dialog_content).find('#dialog-description').show();
 					}
 				}
@@ -403,7 +405,9 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 					}				
 					return false;
 				});
-			} 
+			} else {
+				$(this.base.dialog_content).find('.arrow').addClass("arrowopen");
+			}
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
@@ -494,7 +498,6 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 				}
 				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
 					var open = $(this).next().is(":visible");
-					//$('.accordion-body:visible').slideToggle('fast');
 					$('.accordion-body:visible').each(function() {
 						if ($(this).attr("id") == "dialog-media")
 							$(this).hide();
@@ -508,6 +511,8 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 					}				
 					return false;
 				});
+			} else {
+				$(this.base.dialog_content).find('.arrow').addClass("arrowopen");
 			}
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {

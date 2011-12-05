@@ -29,17 +29,19 @@ $(document).ready(function(){
         var element = document.createElement('div');
         var banner_html = document.createElement('div');
         var edit_id = $(this).attr("id");
-        var element_class,element_caption,form_id,upload_bucket;
+        var element_class,element_caption,upload_rules,form_id,upload_bucket;
         switch(edit_id){
             case "change_profile_pic":
                 element_class = "upload_profile_pic";
                 element_caption = "Profile picture";
+                upload_rules= "Upload size limit: 500kb / Width,Height: 200px";
                 form_id = "profile_pic_upload";
                 upload_bucket = "accountpics";
             break;
             case "change_banner":
                 element_class = "upload_banner";
                 element_caption = "Banner";
+                upload_rules= "Upload size limit: 2mb";
                 form_id = "banner_upload";
                 upload_bucket = "bannerpics";
             break;
@@ -48,7 +50,7 @@ $(document).ready(function(){
         $(element).html(
             '<div id="upload_content">'+
             '<div class="'+element_class+'">'+
-            '<h3>'+element_caption+'</h3>'+
+            '<h3>'+element_caption+'</h3><h4>'+upload_rules+'</h4><div class="clear"></div>'+
             '<form id="'+form_id+'" method="post" action="/services/uploads" enctype="multipart/form-data">'+
             '<input type="hidden" name="bucket" value="'+upload_bucket+'"/>'+
             '<input type="hidden" name="filename" value="'+username+'"/>'+
@@ -121,7 +123,7 @@ $(document).ready(function(){
             if(upload_id=="profile_pic_upload")
                 sizelimit = 500000;
             if(upload_id=="banner_upload")
-                sizelimit = 1000000;
+                sizelimit = 2000000;
 
             // if filesize > 500kb
             if(Uploadfilesize > sizelimit){

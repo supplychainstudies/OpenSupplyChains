@@ -21,6 +21,7 @@ class Sourcemap_csv {
 
 	    public static function parse($csv) {
 	        $lines = explode("\n", $csv);
+		var_dump($lines);
 	        $data = array();
 	        foreach($lines as $i => $line) {
 	            $data[] = self::parse_csv_row($line);

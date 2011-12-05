@@ -23,12 +23,40 @@ $(document).ready(function(){
     });
     
     /* profiel pictures*/
-    $('a#change_profile_pic').click(function(){
+    $('a#change_profile_pic,a#change_banner').click(function(){
         //modal a profile upload window
         var popID = 'popup';
         var element = document.createElement('div');
         var banner_html = document.createElement('div');
-        
+        var edit_id = $(this).attr("id");
+        var element_class,element_caption,form_id,upload_bucket;
+        switch(edit_id){
+            case "change_profile_pic":
+                element_class = "upload_profile_pic";
+                element_caption = "Profile picture";
+                form_id = "profile_pic_upload";
+                upload_bucket = "accountpics";
+            break;
+            case "change_banner":
+                element_class = "upload_banner";
+                element_caption = "Banner";
+                form_id = "banner_upload";
+                upload_bucket = "bannerpics";
+            break;
+        }
+
+        $(element).html(
+            '<div id="upload_content">'+
+            '<div class="'+element_class+'">'+
+            '<h3>'+element_caption+'</h3>'+
+            '<form id="'+form_id+'" method="post" action="/services/uploads" enctype="multipart/form-data">'+
+            '<input type="hidden" name="bucket" value="'+upload_bucket+'"/>'+
+            '<input type="hidden" name="filename" value="'+username+'"/>'+
+            '<input type="file" name="file" />'+
+            '<input type="submit" value="Upload" />'+
+            '</form></div></div>'
+        );
+        /*
         $(element).html(
             '<div id="upload_content">'+
             '<div class="upload_profile_pic">'+
@@ -51,13 +79,15 @@ $(document).ready(function(){
         );
         $(banner_html).attr('class','upload_banner');
         is_channel ? $(element).find("#upload_content").append(banner_html) : 0 ;
+        */
 
         $(element).attr('id',popID);
         $(element).addClass("popup_block");
         $(element).prepend('<a href="#" class="close"></a>');
         $('body').append($(element));
 
-        is_channel ? $('#' + popID).height(200) : $('#' + popID).height(100);
+        //is_channel ? $('#' + popID).height(200) : $('#' + popID).height(100);
+        $('#' + popID).height(100);
         $('#' + popID).width(500);
         var popMargTop = ($('#' + popID).height() + 80) / 2;
         var popMargLeft = ($('#' + popID).width() + 80) / 2;
@@ -73,13 +103,26 @@ $(document).ready(function(){
         $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the
         $('a.close, #fade').live('click', function() { //When clicking on the cl
             $('#fade , .popup_block').fadeOut(function() {
+                $('#fade, a.close').remove();
+                $('#'+popID).remove();
             }); //fade them both out
             return false;
         });
-        $('form#profile_pic_upload').submit(function(evt){
+        $('form#profile_pic_upload,form#banner_upload').submit(function(evt){
             var fileInput = $(this).children('input:file');
+            if(fileInput[0].files[0]==undefined){
+                evt.preventDefault();
+                console.log("No file input.")
+                return;    
+            }
             var Uploadfilesize = fileInput[0].files[0].fileSize;
-            var sizelimit = 500000;
+            var upload_id = $(this).attr("id");
+            var sizelimit;
+            if(upload_id=="profile_pic_upload")
+                sizelimit = 500000;
+            if(upload_id=="banner_upload")
+                sizelimit = 1000000;
+
             // if filesize > 500kb
             if(Uploadfilesize > sizelimit){
                 evt.preventDefault(); //prevent upload action

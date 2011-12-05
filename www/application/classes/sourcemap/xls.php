@@ -1,4 +1,4 @@
-sourcema<?php
+<?php
 /* Copyright (C) Sourcemap 2011
  * This program is free software: you can redistribute it and/or modify it under the terms
  * of the GNU Affero General Public License as published by the Free Software Foundation,
@@ -15,9 +15,94 @@ class Sourcemap_xls {
 	//public static function parse($kml) { }
 	//git@codebasehq.com:sourcemap/sourcemap/sourcemap.git
 	public static function make($supplychain) {
+		
+		$stopswriter = new PHPExcel();
+		$stopswriter->createSheet();
+		$stopswriter->setActiveSheetIndex(0);
+		$stopswriter->getActiveSheet()->setTitle("Upstream");
+		$stopswriter->createSheet();
+		$stopswriter->setActiveSheetIndex(1);
+		$stopswriter->getActiveSheet()->setTitle("Downstream");
+		
+		// We have to figure out the paths/tiers
+		// To do that, we can traverse hops and push stuff onto paths
+		$tree = array();
+		// Upstream Hierarchy
+		$uh = array();
+		// Downstream Hierarchy
+		$dh = array();
+		$umax_level = 0;
+		$dmax_level = 0;
+		// Find 0th points
+		//$start_stops = array();
+		//foreach($supplychain->hops as $hop) {
+		//	if (isset($start_stops[$hop->to_stop_id]) == false) $start_stops[$hop->to_stop_id]=1; else $start_stops[$hop->to_stop_id]++;
+		//	if (isset($start_stops[$hop->from_stop_id]) == false) $start_stops[$hop->from_stop_id]=1; else $start_stops[$hop->from_stop_id]++;
+		//}
+		//foreach($start_stops as $meow) {
+		//	
+		//}
+		foreach($supplychain->hops as $hop) {
+			// First, we have to see if the to stop is already in the tree
+			// http://192.168.1.39/services/supplychains/149?f=xls
+			//$found = false;
+			/*
+			foreach ($tree as $position=>$t) {
+				if ($t['id'] == $hop->to_stop_id) {
+					//$first_half = array_slice($tree,0,$position);
+					//$middle = array('id'=>$hop->from_stop_id,'level'=>($t['level']+1));
+					//$max_level = max($max_level, ($t['level']+1));
+					//$last_half = array_slice($tree,$position);
+					//array_unshift($last_half,$middle);
+					//$tree = array_merge($first_half,$last_half);
+					$stops_hierarchy[$hop->from_stop_id] = array('level'=>($t['level']+1), 'row'=>$position);
+					$found = true;
+					break 1;
+				}
+			} */
+			
+			
+			if(isset($uh[$hop->from_stop_id]) == false) {	
+				if(isset($uh[$hop->to_stop_id]) == false) {
+					$uh[$hop->to_stop_id] = array('level'=>0, 'row'=>count($uh)+1);
+				}		
+				$uh[$hop->from_stop_id] = array('level'=>($uh[$hop->to_stop_id]['level']+1), 'row'=>$uh[$hop->to_stop_id]['row']+1);
+				$umax_level = max($umax_level, ($uh[$hop->to_stop_id]['level']+1));
+				foreach ($uh as $num=>$st) {
+					if ($st['row'] >= $uh[$hop->from_stop_id]['row']) {
+						$uh[$num]['row']++;
+					}
+				} 
+			} else {
+				// Has to be downstream. Pop it in there, man
+				if(isset($dh[$hop->from_stop_id]) == false) {
+					$dh[$hop->from_stop_id] = array('level'=>0, 'row'=>count($dh)+1);
+				}
+				$dh[$hop->to_stop_id] = array('level'=>($dh[$hop->from_stop_id]['level']+1), 'row'=>$dh[$hop->from_stop_id]['row']+1);
+				$dmax_level = max($dmax_level, ($dh[$hop->from_stop_id]['level']+1));
+				foreach ($dh as $num=>$st) {
+					if ($st['row'] >= $dh[$hop->to_stop_id]['row']) {
+						$dh[$num]['row']++;
+					}
+				}
+			}
+			/*
+			else {	
+				$stops_hierarchy[$hop->to_stop_id] = array('level'=>0, 'row'=>count($stops_hierarchy));
+			} */
+			//var_dump($stops_hierarchy);
+		}
+		
+		
+		//var_dump($stops_hierarchy);
+		/*
         $points = array(
-        1 => array( 
-			"Name",
+        1 => array()
+		); 
+		for($i=0;$i<=$max_level;$i++) {
+			$points[1][] = "Tier ". $i;
+		}
+		array_push($points[1],
 			"Location",
 			"Address",
 			"Description",
@@ -27,41 +112,54 @@ class Sourcemap_xls {
 			"flickr:setid",
 			"qty",
 			"CO2e",
+			"CO2e-Reference",
+			"Water",
+			"Water-Reference",
+			"Energy",
+			"Energy-Reference",
 			"color",
 			"size"
-			)
-        );
-		$hops = array( 
-			1 => array(
-				"From",
-				"To",	
-				//"Origin Point (From)",
-				//"Destination Point (To)",
-				"Description",	
-				"Color",	
-				"Transport",	
-				"Qty",	
-				"unit",	
-				"CO2e"	
-				)
-		);
+			);
+		*/
+		
+		
+		
+		$ucolumns = array();
+		for($i=0;$i<=$umax_level;$i++) {
+			$ucolumns[] = "Tier ".$i;
+		}
+		$dcolumns = array();
+		for($i=0;$i<=$dmax_level;$i++) {
+			$dcolumns[] = "Tier ".$i;
+		}
 		foreach($supplychain->stops as $stop) {
-				$vals = array(
-					"title" => "",
-					"placename" => "",
-					"address" => "",
-					"coordinates" => "",
-					"description" => "",
-					"percentage" => "",
-					"youtube:title" => "",
-					"youtube:link" => "",
-					"flickr:setid" => "",
-					"qty" => "",
-					"co2e" => "",
-					"color" => "",
-					"size" => "0",
-					"unit" => ""
-				);	
+				if (isset($uh[$stop->id]) == true) {
+					$stopswriter->setActiveSheetIndex(0);
+					if (isset($stop->attributes->title) == true) {
+						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($uh[$stop->id]['level'],$uh[$stop->id]['row']+1,$stop->attributes->title);
+					}
+					foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+						if (in_array($attribute_name,$ucolumns) == false) {
+							$ucolumns[] = $attribute_name;
+						}
+						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$ucolumns),$uh[$stop->id]['row']+1,$attribute_value);					
+					}
+				}
+				if (isset($dh[$stop->id]) == true) {
+					$stopswriter->setActiveSheetIndex(1);
+					if (isset($stop->attributes->title) == true) {
+						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($dh[$stop->id]['level'],$dh[$stop->id]['row']+1,$stop->attributes->title);
+					}
+					foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+						if (in_array($attribute_name,$dcolumns) == false) {
+							$dcolumns[] = $attribute_name;
+						}
+						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$dcolumns),$dh[$stop->id]['row']+1,$attribute_value);					
+					}
+				}
+				
+				/*
+				$stops_hierarchy[$stop->id]['level'];
 				if (isset($stop->attributes->title) == true) {
 					$vals['title'] = $stop->attributes->title;
 					$vals['placename'] = $stop->attributes->title;
@@ -118,7 +216,17 @@ class Sourcemap_xls {
 						$vals['co2e'],
 						$vals['color']
 					);
+					*/
 			}
+			$stopswriter->setActiveSheetIndex(0);
+			foreach ($ucolumns as $num=>$column) {
+				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
+			}
+			$stopswriter->setActiveSheetIndex(1);
+			foreach ($dcolumns as $num=>$column) {
+				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
+			}
+			/*
 			foreach($supplychain->hops as $hop) {
 				$vals = array(
 					"from" => "",
@@ -176,33 +284,7 @@ class Sourcemap_xls {
 					);
 			}
 		
-		$transport = array (
-			1 => array ("Air (Long Distance)", 0.115558),
-			2 => array ("Air (Regional)", 0.219842),
-			3 => array ("Air Freight (Intercontinental)",	0.000450959),
-			4 => array ("Air Freight (Regional)",	0.000789178),
-			5 => array ("Automobile (20 mpg)",	6.76E-05),
-			6 => array ("Automobile (50 mpg)",	2.65E-05),
-			7 => array ("Container ship",	4.79E-05),
-			8 => array ("Freighter (Inland)",	2.54E-05),
-			9 => array ("Helicopter",	0.725748),
-			10 => array ("Oceanic Freight Ship",	4.23E-06),
-			11 => array ("Tanker ship (Oceanic)",	0.000171928),
-			12 => array ("Train (Freight)",	5.64E-06),
-			13 => array ("Train (long distance)",	0.00366404),
-			14 => array ("Train (Regional)",	0.00676438),
-			15 => array ("Tram",	0.259301),
-			16 => array ("Truck (16 ton)",	4.51E-05),
-			17 => array ("Truck (28 ton)",	3.38E-05),
-			18 => array ("Truck (40 ton)",	3.10E-05),
-			19 => array ("Van (3.5 ton)",	5.36E-05)			
-			);
-			
-		$units = array (
-			1 => array("kg"),
-			2 => array("lbs"),
-			3 => array("pax")
-			);
+		
 		$spreadsheet_attributes = array(
 	        'author'       => 'Sourcemap Incorporated',
 	        'title'        => $supplychain->attributes->title,
@@ -268,35 +350,6 @@ class Sourcemap_xls {
         $as->getColumnDimension('G')->setWidth(20); // Unit
         $as->getColumnDimension('H')->setWidth(20); // CO2e
 		$ws->set_data($hops, false);
-		// Set a dropdown for From
-		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('C',"=Stops!M:M", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-		// Set a dropdown for To
-		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('D',"=Stops!M:M", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-		// Working Validator - Leo doesnt want anymore //$ws->freezeTopRow();	
-		
-		//Now we set some sheets that contain data, which will be hidden
-		
-		// Create the transport Co2e Sheet
-		// Working Validator - Leo doesnt want anymore //$ws->create_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as = $ws->get_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as->setTitle('Transport CO2e');
-		// Working Validator - Leo doesnt want anymore //$ws->set_data($transport, false);
-		// Working Validator - Leo doesnt want anymore //$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
-
-		// Create the transport Co2e Sheet
-		// Working Validator - Leo doesnt want anymore //$ws->create_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as = $ws->get_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as->setTitle('Units');
-		// Working Validator - Leo doesnt want anymore //$ws->set_data($units, false);
-		// Working Validator - Leo doesnt want anymore //$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
-		
-		
-		// Working Validator - Leo doesnt want anymore //$ws->set_active_sheet(1);
-		// Set a dropdown for To
-		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('G',"='Transport CO2e'!A:A", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-		// Set a dropdown for To
-		// Working Validator - Leo doesnt want anymore //$ws->set_column_validation('I',"=Units!A:A", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-	
 		
 		// Set the Workbook to the first sheet
 		$ws->set_active_sheet(0);
@@ -304,8 +357,17 @@ class Sourcemap_xls {
 		if (isset($supplychain->attributes->title) == true) {
 			$title = $supplychain->attributes->title;
 		}
-		// Done! Open on the Client side			
-        $ws->send(array('name'=> $title, 'format'=>'Excel5'));
+		// Done! Open on the Client side
+		*/		
+		$sWriter = new PHPExcel_Writer_Excel5($stopswriter);	
+        //$writer->setPreCalculateFormulas(true);
+        $request = Request::instance();
+        $request->headers['Content-Type'] = "application/excel";
+        $request->headers['Content-Disposition'] = 'attachment;filename="sourcemap.xls"';
+        $request->headers['Cache-Control'] = 'max-age=0';
+        $request->send_headers();
+        $sWriter->save('php://output');
+
 	}
 	
 }

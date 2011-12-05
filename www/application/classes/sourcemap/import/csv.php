@@ -38,12 +38,11 @@ class Sourcemap_Import_Csv {
 		//$ex->createSheet();
 		//$ex->setActiveSheetIndex(0);
 		//$error_list = array();
-		
         $options = array();
         foreach(self::$default_options as $k => $v)
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;
         extract($options);
-
+		var_dump($csv);
         $csv = Sourcemap_Csv::parse($csv);
         $data = array();
         $raw_headers = array();
@@ -59,6 +58,7 @@ class Sourcemap_Import_Csv {
 			}
 		}
         foreach($csv as $ri => $row) {
+			//var_dump($row);
             if($headers && is_array($headers)) {
                 $record = array();
                 foreach($headers as $hi => $k) {
@@ -69,7 +69,6 @@ class Sourcemap_Import_Csv {
             if($record)
                 $data[] = $record;
         }
-        
         if($headers) {
             if(is_null($latcol) || is_null($loncol)) {
                 foreach($headers as $i => $h) {
@@ -103,6 +102,7 @@ class Sourcemap_Import_Csv {
                 }
             }
         }
+		//var_dump($headers);
 		//$ex->getActiveSheet()->fromArray($headers, NULL, "A1");
 		//$ex->getActiveSheet()->fromArray($data, NULL, "A2");
         $stops = array();
@@ -166,7 +166,13 @@ class Sourcemap_Import_Csv {
                         $new_stop['attributes']['placename'] = $result->placename;
                 }
             }
-            if(is_null($lon) || is_null($lat)) throw new Exception('No lat/lon.');
+            if(is_null($lon) || is_null($lat)) {
+				$lon = 0.0;
+				$lat = 0.0;
+				//throw new Exception('No lat/lon in record #'.$i);
+			}
+			var_dump($lon);
+			var_dump($lat);
             $from_pt = new Sourcemap_Proj_Point($lon, $lat);
             $new_stop['geometry'] = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $from_pt)->toGeometry();
             $stops[] = (object)$new_stop;
@@ -192,7 +198,8 @@ class Sourcemap_Import_Csv {
         	return $stops;
 		}
 		*/
-		return $stops;
+		
+		//return $stops;
     }
 
     public static function csv2hops($csv, $stops, $o=array()) {

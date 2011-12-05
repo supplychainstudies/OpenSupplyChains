@@ -40,7 +40,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		//get upstream sheet
 		$contentReader = new PHPExcel_Reader_Excel5Contents();
 		$contentReader->setReadDataOnly(true);
-		$contentPHPExcel = $contentReader->loadContents($xls);
+		//$contentPHPExcel = $contentReader->loadContents($xls);
 		$sheets = array();
 		// If you have an upstream template
 		
@@ -49,7 +49,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		$sheets['Upstream'] = $contentPHPExcel->getActiveSheet();
 		$contentReader->setLoadSheetsOnly("Downstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
-		$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
+		//$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
 		
 		$stops = array();
 		$hops = array();
@@ -255,8 +255,8 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 
 		*/
 		
-		var_dump($stops);
-		var_dump($hops);
+		//var_dump($stops);
+		//var_dump($hops);
 		
 		// new PHPExcel Object
 		$stopswriter = new PHPExcel();
@@ -286,42 +286,48 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 			}
 			$row_iterator++;
 		}
-	
-		// new PHPExcel Object
-		$hopswriter = new PHPExcel();
-		$hopswriter->createSheet();
-		$hopswriter->setActiveSheetIndex(0);
-		// Create the Stop headers
-		$column_iterator = 0;
-		foreach ($hh as $name=>$value) {
-			if (isset($hh_columns[$name]) == true) {
-				$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,1,$name);
-				$column_iterator++;
-			} else {
-				unset($sh[$name]);
-			}		
-		}
-		// Add the Data
-		$row_iterator = 2;
-		foreach ($hops as $num=>$hop) {
-			$column_iterator = 0;
-			foreach ($hh as $name=>$value) {
-				if (isset($hop[$name]) == true) {
-				$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,$hop[$name]);
-				}
-				$column_iterator++;
-			}
-			$row_iterator++;
-		}
 		$sWriter = new PHPExcel_Writer_CSVContents($stopswriter);
 		$stop_csv = $sWriter->returnContents();
-		$hWriter = new PHPExcel_Writer_CSVContents($hopswriter);
-		$hop_csv = $hWriter->returnContents();
-		var_dump($stop_csv);
-		var_dump($hop_csv);
 		
+		if (count($hops) != 0) {
+			// new PHPExcel Object
+			$hopswriter = new PHPExcel();
+			$hopswriter->createSheet();
+			$hopswriter->setActiveSheetIndex(0);
+			// Create the Stop headers
+			$column_iterator = 0;
+			foreach ($hh as $name=>$value) {
+				if (isset($hh_columns[$name]) == true) {
+					$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,1,$name);
+					$column_iterator++;
+				} else {
+					unset($sh[$name]);
+				}		
+			}
+			// Add the Data
+			$row_iterator = 2;
+		
+			foreach ($hops as $num=>$hop) {
+				$column_iterator = 0;
+				foreach ($hh as $name=>$value) {
+					if (isset($hop[$name]) == true) {
+					$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,$hop[$name]);
+					}
+					$column_iterator++;
+				}
+				$row_iterator++;
+			}
+			$hWriter = new PHPExcel_Writer_CSVContents($hopswriter);
+			$hop_csv = $hWriter->returnContents();
+		}
+		
+		//var_dump($stop_csv);
+		//var_dump($hop_csv);
+		$hop_csv = "To,From";
         $sc->stops = self::csv2stops($stop_csv, $options);
-        $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
+		//if (count($hops) != 0) {
+        	$sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
+		//}
         $sc->attributes = array();
         return $sc;
 		

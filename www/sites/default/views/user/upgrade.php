@@ -23,13 +23,11 @@
 
     <p>Upgrade to a Sourcemap Channel for $99/year. You'll get:</p>
         <ul>
-            <li>A profile page with your company.s logo and banner image</li>
             <li>Password-protected maps for private sharing</li>
             <li>The ability to create and save maps with Excel spreadsheets</li>
             <li>Enhanced API access</li>
             <li>...and more features coming soon!</li>
         </ul>
-    <p>*Contact us for more information on the Sourcemap API</p>
 
     </div>
     <div class="box-section upgrade">

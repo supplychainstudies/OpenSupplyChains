@@ -70,8 +70,9 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
             $user = (object)$user->as_array();
             $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
-            
-            if(!(Auth::instance()->get_user())) {            
+            $preview_mode = isset($_GET["preview"]);
+
+            if(!(Auth::instance()->get_user())||$preview_mode) {            
                 unset($user->password);
                 //$user->avatar = Gravatar::avatar($user->email, 128);
                 $user->avatar = "services/uploads?bucket=accountpics&filename=".$user->username;

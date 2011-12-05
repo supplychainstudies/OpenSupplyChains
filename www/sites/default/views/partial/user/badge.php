@@ -48,12 +48,6 @@
             <?php endif; ?>
             <p id="display_name"><?= $user->display_name ? HTML::chars($user->display_name) : "<span class=\"empty\">No display name yet!</span>"; ?></p>
         </li>
-        <li>
-            <?php if ($canEdit): ?>
-            <a href="#" title="banner_url" class="edit-button"></a>
-            <?php endif; ?>
-            <p id="banner_url"><?= isset($user->banner_url) ? HTML::chars($user->banner_url) : "<span class=\"empty\">No banner URL yet!</span>"; ?></p>
-        </li>
         <?php endif; ?>
         <li>
             <?php if ($canEdit): ?>

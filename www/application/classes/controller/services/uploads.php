@@ -19,7 +19,10 @@ class Controller_Services_Uploads extends Sourcemap_Controller_Service {
             try{ // error: filename(account) not exist
 			    $img = $s3->getObject($_GET['bucket'], baseName($_GET['filename']));
             } catch (Exception $e) {
-                return $this->request->redirect('assets/images/default-user.png'); 
+                if($_GET['bucket']=='accountpics')
+                    return $this->request->redirect('assets/images/default-user.png'); 
+                else // bucket : banner
+                    return $this->_bad_request("No such banner");
             }
 			$this->_format = "png";
     	    $this->response = $img->body;
@@ -42,6 +45,10 @@ class Controller_Services_Uploads extends Sourcemap_Controller_Service {
             }
 			$s3->putObjectFile($posted->file->tmp_name, $posted->bucket, $posted->filename, S3::ACL_PUBLIC_READ);
 
+            // if 
+            if($_POST['bucket']=='bannerpics'){
+                $current_user->banner_url = "/services/uploads?bucket=bannerpics&filename=".$current_user->username;
+            }                
             return $this->request->redirect('home'); 
 			/*
               $this->response = (object)array(

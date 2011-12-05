@@ -13,7 +13,7 @@
 ?>
 <script>
     var username = '<?= $user->username ?>';
-    var is_channel = <?= $isChannel ?>;
+    var is_channel = '<?= $isChannel ?>';
 </script>
 <div class="container">
     <div class="dashboard-top">
@@ -22,6 +22,7 @@
                 <h2 class="user-name section-title">
                     <?= isset($user->display_name) ? HTML::chars($user->display_name) : HTML::chars($user->username) ?>
                     <?= $isChannel ? '<span class="secondary">Channel Account</span>' : '' ?>
+                    <a class="preview-link" href="user/<?= $user->id ?>?preview">preview</a>
                 </h2>       
                 <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => $isChannel, 'canEdit' => true)) ?>
                 <hr class="spacer" />

@@ -43,11 +43,6 @@
 </div>
 <div class="clear" style="height: 20px"></div>
 <div class="container"> 
-<div class="account-alert question"> 
-    <p> 
-        Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
-    </p> 
-</div> 
 
 <?php if ($isChannel){ ?>
 <div class="account-alert notice"> 

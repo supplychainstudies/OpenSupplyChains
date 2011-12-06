@@ -196,6 +196,37 @@
         );
     }
 
+	public function action_delete() {        
+        $id = $this->request->param('id', false);
+        if(!$id) {
+            return $this->_bad_request('No id.');
+        }
+        if(!($supplychain = ORM::factory('supplychain', $id))) {
+            return $this->_not_found('That supplychain does not exist.');
+        }
+        $current_user = $this->get_current_user();
+        if(!$current_user) {
+            return $this->_forbidden('You must be signed in to create or edit supplychains.');
+        }
+        if(!$supplychain->user_can($current_user->id, Sourcemap::DELETE)) {
+            // TODO: use user_can method
+            $user_groups = ORM::factory('user', $current_user->id)
+                ->groups->find_all()->as_array('id', true);
+            return $this->_forbidden(
+                'You do not have permission to delete this supplychain.'
+            );
+        }
+        try {
+            $supplychain->delete();			
+        } catch(Exception $e) {
+            return $this->_bad_request('Could not delete supplychain: '.$e->getMessage());
+        }
+        $this->request->status = 202;
+        $this->response = (object)array(
+            'success' => 'Supplychain deleted.'
+        );
+    }
+
     protected function _validate_raw_supplychain($data) {
         if(!isset($data->supplychain) || !is_object($data->supplychain)) {
             throw new Exception('Bad data: no supplychain.');

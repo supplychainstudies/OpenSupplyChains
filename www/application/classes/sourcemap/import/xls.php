@@ -28,217 +28,298 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
         $sc = new stdClass();
 		$contentReader = new PHPExcel_Reader_Excel5Contents();
 		$contentReader->setReadDataOnly(true);
-		$contentReader->setLoadSheetsOnly("Stops");
+		//$contentPHPExcel = $contentReader->loadContents($xls);
+		$sheets = array();
+		// If you have an upstream template
+		
+		$contentReader->setLoadSheetsOnly("Upstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
-		$objWriter = new PHPExcel_Writer_CSVContents($contentPHPExcel);
-		$stop_csv = $objWriter->returnContents();
-		$contentReader->setLoadSheetsOnly("Hops");
+		$sheets['Upstream'] = $contentPHPExcel->getActiveSheet();
+		$contentReader->setLoadSheetsOnly("Downstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
-		$objWriter = new PHPExcel_Writer_CSVContents($contentPHPExcel);
-		$hop_csv = $objWriter->returnContents();
+		//$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
+		
+		$stops = array();
+		$hops = array();
+		$count = 1;
+		foreach($sheets as $sheetname=>$sheet) {
+			// Figure out where all the columns are
+
+			// These two variables are for keeping track whether there is any content in the columns
+			// if there is at any point, that column in these variables will exist
+			$sh_columns = array();
+			$hh_columns = array();
+			$sh = array(
+				"Title" => "x",
+				"Address" => "",
+				"Description" => "",
+				"url:moreinfo" => "",
+				"urltitle:moreinfo" => "",	
+				"youtube:link" => "",
+				"flickr:setid" => "",
+				"Weight" => "",	
+				"Unit" => "",	
+				"Co2e" => "",
+				"Co2e-Reference" => "",		
+				"Latitude" => "",	
+				"Longitude" => "",	
+				"Color" => "",
+				"Size" => ""
+			);
+			$hh = array(
+				"To" => "x",
+				"From" => "x",
+				"Weight" => "",
+				"Transportation" => "",
+				"Co2e" => "",
+				"Co2e-Reference" => ""
+			);
+			$rows = $sheet;
+			$tiers = array();
+			// Figure out where the title row is
+			for ($starting_row = 1; $rows->cellExistsByColumnAndRow(1,$starting_row) == true; $starting_row++) {
+				$check_title = false;
+				$check_address = false;
+				for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
+					$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
+					$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
+					if (strpos($value,"location") !== false || strpos($value,"address") !== false || strpos($value,"coordinate") !== false) {	
+						break 2; 
+					}
+				}
+			}
+			// Figure out what each of the columns represents. if its not recognizable, it gets its own column (becomes and attribute)
+			for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
+				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
+				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
+				if ($sh["Title"] == "" && (strpos($value,"name") !== false || strpos($value,"title") !== false || strpos($value,"placename") !== false) && (strpos($value,"youtube") === false && strpos($value,"flickr") === false && strpos($value,"link") === false && strpos($value,"optional") === false))
+					$sh["Title"] = $column;
+				elseif ($sh["Address"] == "" && (strpos($value,"location") !== false || strpos($value,"address") !== false || strpos($value,"coordinate") !== false || (strpos($value,"lat") !== false && strpos($value,"lon") !== false)))
+					$sh["Address"] = $column;
+				elseif ($sh["Description"] == "" && strpos($value,"descr") !== false)
+					$sh["Description"] = $column;
+				elseif ($sh["url:moreinfo"] == "" && strpos($value,"link") !== false)	
+					$sh["url:moreinfo"] = $column;
+				elseif ($sh["urltitle:moreinfo"] == "" && strpos($value,"link") !== false && (strpos($value,"title") !== false || strpos($value,"name") !== false))	
+					$sh["urltitle:moreinfo"] = $column;
+				elseif ($sh["youtube:link"] == "" && strpos($value,"youtube") !== false)	
+					$sh["youtube:link"] = $column;
+				elseif ($sh["flickr:setid"] == "" && strpos($value,"flickr") !== false)	
+					$sh["flickr:setid"] = $column;
+				elseif ($sh["Weight"] == "" && strpos($value,"weight") !== false && strpos($value,"trans") === false)	
+					$sh["Weight"] = $column;
+				elseif ($sh["Unit"] == "" && strpos($value,"unit") !== false || strpos($value,"uom") !== false)
+					$sh["Unit"] = $column;
+				elseif ($sh["Color"] == "" && strpos($value,"color") !== false)
+					$sh["Color"] = $column;
+				elseif ($sh["Size"] == "" && strpos($value,"size") !== false)
+					$sh["Size"] = $column;
+				elseif ($sh["Co2e"] == "" && strpos($value,"co2e") !== false)
+					$sh["Co2e"] = $column;
+				elseif ($sh["Co2e-Reference"] == "" && strpos($value,"co2e") !== false && strpos($value,"ref") !== false)
+					$sh["Co2e-Reference"] = $column;
+				elseif ($hh["Weight"] == "" && strpos($value,"trans") !== false && strpos($value,"weight") !== false)
+					$hh["Weight"] = $column;				
+				elseif ($hh["Transportation"] == "" && strpos($value,"trans") !== false)
+					$hh["Transportation"] = $column;
+				elseif ($hh["Co2e"] == "" && strpos($value,"trans") !== false && strpos($value,"co2e") !== false)
+					$hh["Co2e"] = $column;
+				elseif ($hh["Co2e-Reference"] == "" && strpos($value,"trans") !== false && strpos($value,"co2e") !== false && strpos($value,"ref") !== false)
+					$hh["Co2e-Reference"] = $column;
+				elseif (strpos($value,"bom") !== false || strpos($value,"level") !== false || strpos($value,"tier") !== false) {
+					//Find a number somewhere in there
+					$pattern = '/\d/';
+					$instances = array();
+					preg_match($pattern, $value, $instances);
+					$tiers[$instances[0]] = $column;
+				}
+				else
+					$sh[$value] = $column;
+			}
+			
+			// Unset Columns that don't exist
+			foreach ($sh as $field=>$column) {
+				if ($column == "") {
+					unset($sh[$field]);
+				} 
+			}			
+			foreach ($hh as $field=>$column) {
+				if ($column == "") {
+					unset($hh[$field]);
+				} 
+			}
+			
+			$current_path = array();
+			
+			// Loop through all the rows
+			foreach ($rows->getRowIterator() as $row) {
+				$rowIndex = $row->getRowIndex();
+				if ($rowIndex != 1) {
+					$name = "";
+					// Find the name
+					foreach ($tiers as $num=>$column) {
+						if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
+							$name = $rows->getCell($column . $rowIndex)->getCalculatedValue();							
+						}
+					}
+					if (isset($stops[$name]) == false) {
+						// create a stop 						
+						$stops[$name] = array (
+							"id" => $count,
+							"Title" => $name
+						);
+						$sh_columns['Title'] = true;
+						// go through all the existing columns and add the values
+						foreach($sh as $field=>$column) {
+							if ($column != "x") {
+								$stops[$name][$field] = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());
+								if ($stops[$name][$field] != "" && isset($sh_columns[$field]) != true) {
+									$sh_columns[$field] = true; 
+								}
+							}
+							
+						}
+						$count++;
+					}
+					// Hops, now
+					if ($sheetname == "Upstream") {
+						$hops_from = $stops[$name]["id"];
+						$hops_to = "";
+						foreach ($tiers as $num=>$column) {
+							if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
+								if ($num != 0) {
+									$hops_to = $current_path[$num-1];
+								}
+								$current_path[$num] = $hops_from;
+								continue;							
+							}
+						}	
+					} else {
+						$hops_to = $stops[$name]["id"];
+						$hops_from = "";
+						foreach ($tiers as $num=>$column) {
+							if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
+								if ($num != 0) {
+									$hops_from = $current_path[$num-1];
+								}
+								$current_path[$num] = $hops_to;
+								continue;							
+							}
+						}						
+					}
+										
+					if ($hops_from != "" && $hops_to != "" && $hops_from != $hops_to) {
+						$new_num = count($hops);
+					
+						$hops[$new_num] = array(
+							"From"=>$hops_from,
+							"To"=>$hops_to
+						);
+						$hh_columns['From'] = true;$hh_columns['To'] = true;
+						foreach($hh as $field=>$column) {
+							if ($column != "x") {
+								$hops[$new_num][$field] = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());
+								if ($hops[$new_num][$field] != "" && isset($hh_columns[$field]) != true) {
+									$hh_columns[$field] = true; 
+								}
+							}
+						}
+					} // 	if ($hops_from != "" && $hops_to != "" and isset($hops[$hops_from."-".$hops_to]) == false && $hops_from != $hops_to) {
+				
+				} // If line isn't blank, etc
+			} // Foreach
+		} // foreach($sheets as $sheet=>$rows)
+
+		
+
+		
+		/*
+		
+		
+		
+		Now we convert the array to a phpexcel object and then to a csv output
+		
+		
+
+		*/
+		
+		//var_dump($stops);
+		//var_dump($hops);
+		
+		// new PHPExcel Object
+		$stopswriter = new PHPExcel();
+		$stopswriter->createSheet();
+		$stopswriter->setActiveSheetIndex(0);
+		
+		// Create the Stops CSV
+		// Create the Stop headers
+		$column_iterator = 0;
+		foreach ($sh as $name=>$value) {
+			if (isset($sh_columns[$name]) == true) {
+				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,1,$name);
+				$column_iterator++;
+			} else {
+				unset($sh[$name]);
+			}
+		}
+		// Add the Data
+		$row_iterator = 2;
+		foreach ($stops as $num=>$stop) {
+			$column_iterator = 0;
+			foreach ($sh as $name=>$value) {
+					if (isset($stop[$name]) == true) {
+						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,$stop[$name]);		
+					}
+					$column_iterator++;
+			}
+			$row_iterator++;
+		}
+		$sWriter = new PHPExcel_Writer_CSVContents($stopswriter);
+		$stop_csv = $sWriter->returnContents();
+		
+		if (count($hops) != 0) {
+			// new PHPExcel Object
+			$hopswriter = new PHPExcel();
+			$hopswriter->createSheet();
+			$hopswriter->setActiveSheetIndex(0);
+			// Create the Stop headers
+			$column_iterator = 0;
+			foreach ($hh as $name=>$value) {
+				if (isset($hh_columns[$name]) == true) {
+					$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,1,$name);
+					$column_iterator++;
+				} else {
+					unset($sh[$name]);
+				}		
+			}
+			// Add the Data
+			$row_iterator = 2;
+		
+			foreach ($hops as $num=>$hop) {
+				$column_iterator = 0;
+				foreach ($hh as $name=>$value) {
+					if (isset($hop[$name]) == true) {
+					$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,$hop[$name]);
+					}
+					$column_iterator++;
+				}
+				$row_iterator++;
+			}
+			$hWriter = new PHPExcel_Writer_CSVContents($hopswriter);
+			$hop_csv = $hWriter->returnContents();
+		} else {
+			$hop_csv = "To,From";
+		}
+		
+		//var_dump($stop_csv);
+		//var_dump($hop_csv);
 		
         $sc->stops = self::csv2stops($stop_csv, $options);
-        $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
+		//if (count($hops) != 0) {
+        	$sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
+		//}
         $sc->attributes = array();
         return $sc;
     }
 
-    public static function xls2stops($csv, $o=array()) {
-        
-        $options = array();
-        foreach(self::$default_options as $k => $v)
-            $options[$k] = isset($o[$k]) ? $o[$k] : $v;
-        extract($options);
-
-        $csv = Sourcemap_Csv::parse($csv);
-        $data = array();
-        $raw_headers = array();
-        if($headers) {
-            $raw_headers = array_shift($csv);
-            $headers = array();
-        }
-        for($i=0; $i<count($raw_headers); $i++) 
-            if(strlen(trim($raw_headers[$i])))
-                $headers[] = strtolower($raw_headers[$i]);
-        foreach($csv as $ri => $row) {
-            if($headers && is_array($headers)) {
-                $record = array();
-                foreach($headers as $hi => $k) {
-                    if(isset($row[$hi]))
-                        $record[$k] = $row[$hi];
-                }
-            } else $record = $row;
-            if($record)
-                $data[] = $record;
-        }
-        
-        if($headers) {
-            if(is_null($latcol) || is_null($loncol)) {
-                foreach($headers as $i => $h) {
-                    if(is_null($latcol) && preg_match('/^lat(itude)?$/i', $h)) {
-                        $latcol = $h;
-                    } elseif(is_null($loncol) && preg_match('/^(lng)|(lon(g(itude)?)?)$/i', $h)) {
-                        $loncol = $h;
-                    } elseif((is_null($addresscol) &&  preg_match('/place ?name/i', $h)) || preg_match('/address/i', $h)) {
-                        $addresscol = $h;
-                    }
-                }
-                if(is_null($latcol) || is_null($loncol)) {
-                    $latcol = $loncol = null;
-                    if(is_null($addresscol))
-                        if(!isset($this)) {
-                            throw new Exception('Missing lat/lon or address column index.');
-                        }
-                        else{
-                            Message::instance()->set('The worksheet you choose may have wrong format, please try again.');
-                            $this->request->redirect('/tools/import/google/list');
-                        }
-                }
-            }
-            if(is_null($idcol)) {
-                foreach($headers as $i => $h) {
-                    if(preg_match('/^id$/i', $h)) {
-                        $idcol = $h;
-                        break;
-                    }
-                }
-            }
-        }
-
-        $stops = array();
-        foreach($data as $i => $record) {
-            if(is_null($addresscol)) {
-                if(!isset($record[$latcol], $record[$loncol]))
-                    throw new Exception('Missing lat/lon field (record #'.($i+1).').');
-            } else {
-                if(!isset($record[$addresscol]))
-                    throw new Exception('Missing address field (record #'.($i+1).').');
-            }
-            if($idcol && !isset($record[$idcol]))
-                throw new Exception('Missing id field (record #'.($i+1).').');
-            elseif($idcol && !is_numeric($record[$idcol]))
-                throw new Exception('Id value must be an integer.');
-            $new_stop = array(
-                'local_stop_id' => $idcol ? (int)$record[$idcol] : $i+1,
-                'attributes' => array()
-            );
-            $lat = null;
-            $lon = null;
-            foreach($record as $k => $v) {
-                if($k == $latcol || $k == $loncol) {
-                    if($k == $latcol) $lat = $v;
-                    else $lon = $v;
-                    continue;
-                } elseif($k == $addresscol) {
-                    if($results = Sourcemap_Geocoder::geocode($v)) {
-                        $result = $results[0];
-                        $lat = (float)$result->lat;
-                        $lon = (float)$result->lng;
-                        if(!isset($record['placename']))
-                            $new_stop['attributes']['placename'] = $result->placename;
-                    } else {
-                        throw new Exception('Could not geocode: "'.$v.'".');
-                    }
-                }
-                $new_stop['attributes'][$k] = $v;
-            }
-            if(!isset($new_stop['attributes']['placename']) && $lat && $lon) {
-                $results = Sourcemap_Geocoder::geocode((new Sourcemap_Proj_Point($lon, $lat)));
-                if($results) {
-                    $result = $results[0];
-                    //$lat = $result->lat;
-                    //$lon = $result->lng;
-                    if(!isset($record['placename']))
-                        $new_stop['attributes']['placename'] = $result->placename;
-                }
-            }
-            if(is_null($lon) || is_null($lat)) throw new Exception('No lat/lon.');
-            $from_pt = new Sourcemap_Proj_Point($lon, $lat);
-            $new_stop['geometry'] = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $from_pt)->toGeometry();
-            $stops[] = (object)$new_stop;
-        }
-        return $stops;
-
-    }
-
-    public static function xls2hops($csv, $stops, $o=array()) {
-        
-        $options = array();
-        foreach(self::$default_options as $k => $v)
-            $options[$k] = isset($o[$k]) ? $o[$k] : $v;
-        extract($options);
-
-        $csv = Sourcemap_Csv::parse($csv);
-
-        $raw_headers = array();
-        if($headers) {
-            $raw_headers = array_shift($csv);
-            $headers = array();
-            for($i=0; $i<count($raw_headers); $i++)
-                if(strlen(trim($raw_headers[$i])))
-                    $headers[] = strtolower($raw_headers[$i]);
-            foreach($headers as $i => $h) {
-                if(is_null($fromcol) && preg_match('/^from(_?stop)?$/i', $h)) {
-                    $fromcol = $h;
-                } elseif(is_null($tocol) && preg_match('/^to(_?stop)?$/i', $h)) {
-                    $tocol = $h;
-                }
-            }
-        }
-
-        if(!$fromcol || !$tocol) 
-            throw new Exception('To and from columns required.');
-
-        $data = array();
-
-        foreach($csv as $ri => $row) {
-            if($headers && is_array($headers)) {
-                $record = array();
-                foreach($headers as $hi => $k) {
-                    if(isset($row[$hi]))
-                        $record[$k] = $row[$hi];
-                }
-            } else $record = $row;
-            if($record)
-                $data[] = $record;
-        }
-
-        $stops_by_id = array();
-        foreach($stops as $sti => $st) {
-            $stops_by_id[(integer)$st->local_stop_id] = $st;
-        }
-
-        $hops = array();
-        foreach($data as $i => $record) {
-            if(!isset($record[$fromcol]) || !is_numeric($record[$fromcol]))
-                throw new Exception('Missing or invalid from field at record #'.($i+1).'.');
-            if(!isset($record[$tocol]) || !is_numeric($record[$tocol]))
-                throw new Exception('Missing or invalid to field at record #'.($i+1).'.');
-            $from = $record[$fromcol];
-            $to = $record[$tocol];
-            if(!isset($stops_by_id[(integer)$from]))
-                throw new Exception('From stop in hop does not exist in record #'.($i+1).'.');
-            if(!isset($stops_by_id[(integer)$to]))
-                throw new Exception('To stop in hop does not exist in record #'.($i+1).'.');
-            list($type, $fromcoords) = Sourcemap_Wkt::read($stops_by_id[$from]->geometry);
-            list($type, $tocoords) = Sourcemap_Wkt::read($stops_by_id[$to]->geometry);
-            $frompt = new Sourcemap_Proj_Point($fromcoords);
-            $topt = new Sourcemap_Proj_Point($tocoords);
-            $geometry = Sourcemap_Wkt::write(Sourcemap_Wkt::MULTILINESTRING, array($frompt, $topt));
-            $new_hop = (object)array(
-                'from_stop_id' => $from,
-                'to_stop_id' => $to,
-                'geometry' => $geometry,
-                'attributes' => new stdClass()
-            );
-            foreach($record as $k => $v) {
-                if($k !== $fromcol && $k !== $tocol)
-                    $new_hop->attributes->{$k} = $v;
-            }
-            $hops[] = $new_hop;
-        }
-
-
-        return $hops;
-    }
 }

@@ -30,7 +30,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             'sourcemap-template'
         );
 
-        $import_role = ORM::factory('role')->where('name', '=', 'import')->find();
+        $import_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
     	if(Auth::instance()->get_user()->has('roles', $import_role) || Auth::instance()->get_user()->has('roles', $admin_role)) {
     		$this->template->can_import = true;                         	

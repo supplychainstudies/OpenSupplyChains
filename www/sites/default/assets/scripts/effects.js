@@ -305,12 +305,23 @@ $(this).change(function(){
     var addForm = function(context, field){
         context.toggleClass('enabled');
         var input = 'input';
-        if ( field === 'description' )
-            input = 'textarea';  // description field gets a textarea
+
         var oldData =  $('#' + field).html();
+        $('#'+field).children('.empty').remove();
+
+        var oldData_html="";
+        var oldData_textarea ="";
+
+        if ( field === 'description' ){
+            input = 'textarea';  // description field gets a textarea
+            oldData_textarea = $('#'+field).text();
+        }else{
+            oldData_html = $('#'+field).text();
+        }
+
         $('#' + field).html(''
             + '<form action="/home/update" method="post" class="edit-field">'
-            + '<' + input + ' type="text" name="' + field + '" placeholder="Enter description here" value="'+oldData+'"></' + input + '>'
+            + '<' + input + ' type="text" name="' + field + '" placeholder="Enter description here" value="'+oldData_html+'">'+oldData_textarea+'</' + input + '>'
             + '<div class="submit-status" hidden></div>'
             + '<input type="submit"></input>'
             + '</form>'

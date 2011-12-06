@@ -12,7 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 ?>
 
-<div id="user-profile">
+<div id="user-profile" <?php if ($isChannel&&!$canEdit): ?>style="width:480px"<? endif; ?>>
     <div class="user-avatar">
         <img src="<?= $user->avatar; ?>" />
         <?php if ($canEdit): ?>

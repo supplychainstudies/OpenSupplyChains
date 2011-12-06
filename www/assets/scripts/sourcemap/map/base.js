@@ -263,7 +263,7 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     Sourcemap.template('map/banner', cb, s);
 
     if(this.options.watermark) {
-        this.watermark = $('<div id="watermark"></div>');
+        this.watermark = $('<a href="/"><div id="watermark"></div></a>');
         $(this.map.map.div).append(this.watermark);
     }
     return this;

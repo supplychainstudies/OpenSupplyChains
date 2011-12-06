@@ -34,8 +34,8 @@
                 <option value="uncategorized"><a href="/uncategorized">Uncategorized</a></option>
                 </select>
             </div>
-            <?php //Build pager for sub-pages only ?>
-            <?php if (count($searches) == 1): ?>
+            <?php //Build pager for sub-pages only (disable in bar) ?>
+            <?php if (false): ?>
             <div class="category-pager">
                 <?= $pager->render() ?>
             </div>
@@ -46,7 +46,12 @@
 </div>
 <?php endif; ?>
 <div class="clear"></div>
-
+<?php if (count($searches) == 1): ?>
+<div id="category-pagination">
+    <?= $pager->render() ?>
+</div>
+<?php endif; ?>
+<div class="clear"></div>
 <?php // TODO: split the following into two separate files ?>
 <?php // If we're at the top level, display a list of all categories ?>
 <?php if (count($searches) > 1){ ?>
@@ -94,3 +99,8 @@
 
 <div class="clear"></div>
 <?php } ?>
+<?php if (count($searches) == 1): ?>
+<div id="category-pagination">
+    <?= $pager->render() ?>
+</div>
+<?php endif; ?>

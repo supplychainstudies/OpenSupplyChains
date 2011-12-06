@@ -42,7 +42,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                 try{
                     // set your secret key: remember to change this to your live secret key in production
                     // see your keys here https://manage.stripe.com/account
-                    Stripe::setApiKey("ffzydGhK4dzlQFbK22Q0GGM6CSG74f9d");
+                    Stripe::setApiKey(Kohana::config('apis')->stripe_api_secret_key);
 
                     try{
                         Stripe_Plan::retrieve("channel");

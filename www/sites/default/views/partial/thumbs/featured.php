@@ -24,7 +24,7 @@
                     <?= HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "An Unnamed Sourcemap") ?>                   
                 </a></h3>
             <h4 class="preview-author">
-                <a href="user/<?= $item->owner->id; ?>"><?=  isset($item->owner->display_name)?  Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
+                <a href="user/<?= $item->owner->name; ?>"><?=  isset($item->owner->display_name)?  Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>,
                 <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
             </h4>
             <?= View::factory('partial/thumbs/icons', array('item' => $item)) ?>

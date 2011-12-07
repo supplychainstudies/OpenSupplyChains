@@ -79,9 +79,9 @@ class Controller_Home extends Sourcemap_Controller_Layout {
                 if($p->check()) {
                     // update db
                     foreach ($p as $i=>$field){
-                        if(!($p[$i] == "")){
+                        //if(!($p[$i] == "")){
                             $user->$i = $p[$i];
-                        }
+                        //}
                     }
                     $user->save();
                     echo "success";

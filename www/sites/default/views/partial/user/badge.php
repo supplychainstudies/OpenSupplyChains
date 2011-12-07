@@ -22,7 +22,7 @@
         </div>
         <?php if($isChannel): ?>
         <div class="button alternate">
-            <a id="change_banner">Upload Banner</a>
+            <a id="change_banner">Upload banner</a>
         </div>
         <? endif; ?>
         <div class="button alternate">

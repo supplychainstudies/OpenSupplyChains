@@ -48,6 +48,7 @@ class Controller_Services_Uploads extends Sourcemap_Controller_Service {
             // if 
             if($_POST['bucket']=='bannerpics'){
                 $current_user->banner_url = "/services/uploads?bucket=bannerpics&filename=".$current_user->username;
+                $current_user->save();
             }                
             return $this->request->redirect('home'); 
 			/*

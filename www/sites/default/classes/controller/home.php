@@ -72,16 +72,22 @@ class Controller_Home extends Sourcemap_Controller_Layout {
                 // user logged in, now let's validate the content
                 $p = Kohana::sanitize($_POST);
                 $p = Validate::factory($p);
-                $p->rule('description', 'max_length', array('10000'));
-                $p->rule('url', 'url');
-                $p->rule('banner_url', 'url');
-                $p->rule('display_name', 'max_length', array('127'));
+                if(isset($p['description']))
+                    $p->rule('description', 'max_length', array('10000'));
+                if(isset($p['url']))
+                    $p->rule('url', 'url');
+                if(isset($p['banner_url']))
+                    $p->rule('banner_url', 'url');
+                if(isset($p['display_name']))
+                    $p->rule('display_name', 'max_length', array('127'));
                 if($p->check()) {
                     // update db
                     foreach ($p as $i=>$field){
-                        //if(!($p[$i] == "")){
+                        if(!($p[$i] == "")){
                             $user->$i = $p[$i];
-                        //}
+                        } else {
+                            $user->$i = null;
+                        }
                     }
                     $user->save();
                     echo "success";

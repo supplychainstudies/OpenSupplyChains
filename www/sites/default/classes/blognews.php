@@ -27,7 +27,13 @@ class Blognews {
             return $cached;
 
         try {
-            $news = file_get_contents(self::NEWSURL);
+            $ch = curl_init(); 
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+            curl_setopt($ch, CURLOPT_URL, self::NEWSURL);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s 
+            $news = curl_exec($ch); 
+            curl_close($ch);
+            
             $news = json_decode($news);
         } catch(Exception $e) {
             $news = false;
@@ -43,8 +49,14 @@ class Blognews {
             return $cached;
 
         try {
+            $ch = curl_init(); 
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+            curl_setopt($ch, CURLOPT_URL, self::PAGEURL);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s 
+            $index = curl_exec($ch); 
+            curl_close($ch);
+            
             $pages = array();
-            $index = file_get_contents(self::PAGEURL);
             $index = json_decode($index);
             foreach($index->pages as $page){
                 $pages[] = $page; 

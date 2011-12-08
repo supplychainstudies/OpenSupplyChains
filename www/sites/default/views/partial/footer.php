@@ -47,7 +47,7 @@
                 $age = Kohana_date::span(strtotime($date), time(), 'days,hours,minutes,seconds');
                 echo "| ";
                 echo $tag;
-                echo "| ";
+                echo " | ";
                 echo "Commit ";
                 echo "<a href=\"". $codebase_url . $commit . "\">" . substr($commit, 0, 5) . "</a> ";
                 echo "| ";

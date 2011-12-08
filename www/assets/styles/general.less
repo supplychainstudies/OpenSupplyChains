@@ -1037,6 +1037,29 @@ ul li.news-item{
             font-size: 12px;
             &.featured-info a{ font-size: 12px; }
         }
+        .preview-icons{
+            position: absolute;
+            right: 12px;
+            bottom: 9px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #222;
+            div{
+                width: 20px;
+                padding: 8px 0 6px 0;
+                float: right;
+                text-align: center;
+                opacity: .3;
+                &.favorited{ 
+                    background: url(../images/icon-slider-favorited.png) center no-repeat ;
+                    background-size:22px;
+                }
+                &.discussed{ 
+                    background: url(../images/icon-slider-discussed.png) center no-repeat;
+                    background-size:22px;
+                }
+            }
+        }
     }
 
     #channel-featured-teaser{

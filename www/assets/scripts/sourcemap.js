@@ -232,7 +232,6 @@ Sourcemap.factory = function(type, data) {
 				var tiers = {};	
 				var offset = 0;			
 	            for(var i=0; i<stids.length; i++) {
-					console.log(parseInt(sc.stops[i].attributes.tier));
 					if (!isNaN(sc.stops[i].attributes.tier)) {		
 		                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
 						upperbound = Math.max(upperbound,parseInt(sc.stops[i].attributes.tier));
@@ -477,13 +476,129 @@ Sourcemap.buildTree = function(tree_id,sc) {
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
     // Set middle stack in mid
+
+	// So, what we should do here is stick the dots with the most connections in the middle, and the ones with the least on the outside
+    for(var i=0, length=sc.hops.length;i<length;i++)
+    {
+        var h = sc.hops[i];
+		for (var j = 0; j< tier_list.length; j++) {
+			if (h.from_stop_id == tier_list[j].instance) {
+				if (tier_list[j].connections) {
+					tier_list[j].connections++;
+				} else {
+					tier_list[j].connections=1;
+				}
+			} else if (h.to_stop_id == tier_list[j].instance) {
+				if (tier_list[j].connections) {
+					tier_list[j].connections++;
+				} else {
+					tier_list[j].connections=1;
+				}
+			}			
+		}
+    }
+	// All points that don't have connections are set to zero
+	for (var i = 0; i < tier_list.length; i++) {
+		if (!tier_list[i].connections) {
+			tier_list[i].connections = 0;	
+		}
+	}
+	
+	// Turn the connections into a row order
+	// Have to base this on connections, and also the row order of the parents
+    for(var i=0,order=0;i<tiers.length;i++) {
+		var tier_connections = new Array();
+		var tier_order = new Array();
+		// have to iterate through and rank
+		for(var j=0;j<tiers[i].length;j++){     
+            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){				
+                if(tier_list[k].instance==tiers[i][j].instance_id && tier_list[k].connections != undefined){
+					tier_connections[k] = tier_list[k].connections;
+					var neworder = 0;					
+					for (var l = 0; l<tier_connections.length;l++) {
+						if (tier_connections[l] != undefined) {
+							neworder++;
+						}
+					}
+					for (var l = 0; l<tier_connections.length;l++) {
+						if (tier_connections[l] > tier_connections[k]) {
+							neworder = Math.min(tier_order[l],neworder);
+							tier_order[l]++; 
+						}
+					}
+					tier_order[k] = neworder;
+					break;
+                }
+            }      
+        }
+		var len = 0;
+		for (var l = 0; l<tier_order.length;l++) {
+			if (tier_order[l] != undefined) {
+				len++;
+			}
+		}
+		for (var l = 0; l<tier_order.length;l++) {
+			if (tier_order[l] != undefined) {
+				if (parseInt(tier_order[l]/2) == (tier_order[l]/2)) {
+					//tier_list[l].order = (Math.floor(len/2) - (tier_order[l]/2))+1;
+					tier_list[l].order = tier_order[l]/2;
+				} else {
+					//tier_list[l].order = Math.floor(len/2) + ((tier_order[l]+1)/2);
+					tier_list[l].order = len - Math.floor(tier_order[l]/2);
+				}
+			}
+			// Now look for parents, push order toward parents
+			var parent_order = 0;
+			for(var n=0, length=sc.hops.length;n<length;n++)
+		    {
+				var h = sc.hops[n];
+				if (h.to_stop_id == tier_list[l].instance) {
+					var from = h.to_stop_id;
+					for (var m=0;m<tier_list.length;m++) {
+						if (tier_list[m].instance == h.to_stop_id) {
+								parent_order = tier_list[m].order;
+								break;
+						}
+					}
+				}		
+		    }
+			if (parent_order != 0) {
+				var old_order = tier_list[l].order;
+				tier_list[l].order = parent_order;
+				if (old_order > parent_order) {
+					for (var o = 0; o<tier_order.length;o++) {
+						if (tier_list[o].order >= tier_list[l].order && o!=l) {
+							tier_list[o].order++
+						}
+					}
+				} else if (old_order < parent_order) {
+					for (var o = 0; o<tier_order.length;o++) {
+						if (tier_list[o].order >= tier_list[l].order && o!=l) {
+							tier_list[o].order--;
+						}
+					}				
+				}
+			}
+		}
+	} 
     for(var i=0,order=0;i<tiers.length;i++)
     {
-        for(var j=0;j<tiers[i].length;j++){            
+		var y_offset = ((i*2.5)%5)*5;
+		console.log(y_offset);
+        for(var j=0;j<tiers[i].length;j++){     
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
                     //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
-					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
+					//tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
+					/*
+					if (parseInt(tier_list[k].order/2) == (tier_list[k].order/2)) {
+						tier_list[k].y = y_offset + ((500-(tiers[i].length*40))/2)+ (((tier_list[k].order/2))*40); 
+						//console.log("-"(tier_list[k].order/2));
+					} else {
+						tier_list[k].y = y_offset + (500-((500-(tiers[i].length*40))/2)) - ((Math.ceil(tier_list[k].order/2)-1)*40);
+						//console.log(tier_list[k].y);
+					} */
                     tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
                 }
@@ -953,7 +1068,6 @@ Sourcemap.Color.prototype.clone = function() {
 }
 
 Sourcemap.Color.prototype.midpoint = function(to_color) {
-	console.log(to_color);
     var dr = to_color.r - this.r;
     var mr = this.r + (Math.round(dr/2))
     var dg = to_color.g - this.g;

@@ -33,11 +33,6 @@ class Sourcemap_Import_Csv {
     }
 
     public static function csv2stops($csv, $o=array()) {
-		// create a bug check outputer
-		//$ex = new PHPExcel();
-		//$ex->createSheet();
-		//$ex->setActiveSheetIndex(0);
-		//$error_list = array();
         $options = array();
         foreach(self::$default_options as $k => $v)
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;
@@ -50,15 +45,12 @@ class Sourcemap_Import_Csv {
             $raw_headers = array_shift($csv);
             $headers = array();
         }
-		//for($i=0,$size_raw_headers = count($raw_headers); $i<$size_raw_headers; $i++) 
         for($i=0; $i<count($raw_headers); $i++) {
             if(strlen(trim($raw_headers[$i]))) {
                 $headers[] = strtolower($raw_headers[$i]);
-				//$ex->getActiveSheet()->setCellValuebyColumnAndRow($i,1,$raw_headers[$i]);
 			}
 		}
         foreach($csv as $ri => $row) {
-			//var_dump($row);
             if($headers && is_array($headers)) {
                 $record = array();
                 foreach($headers as $hi => $k) {
@@ -85,7 +77,6 @@ class Sourcemap_Import_Csv {
                     if(is_null($addresscol))
                         if(!isset($this)) {
                             throw new Exception('Missing lat/lon or address column index.');
-							//$error_list[] = 'Missing lat/lon or address/location column index.';
                         }
                         else{
                             Message::instance()->set('The worksheet you choose may have wrong format, please try again.');
@@ -102,31 +93,21 @@ class Sourcemap_Import_Csv {
                 }
             }
         }
-		//var_dump($headers);
-		//$ex->getActiveSheet()->fromArray($headers, NULL, "A1");
-		//$ex->getActiveSheet()->fromArray($data, NULL, "A2");
         $stops = array();
         foreach($data as $i => $record) {
             if(is_null($addresscol)) {
-                if(!isset($record[$latcol], $record[$loncol])) {
-					//$error_list[] = 'Missing lat/lon field (record #'.($i+1).')';
-					//$ex->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-					//$ex->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('FFFF0000');					
+                if(!isset($record[$latcol], $record[$loncol])) {				
                     throw new Exception('Missing lat/lon field (record #'.($i+1).').');
 				}
             } else {
                 if(!isset($record[$addresscol])) {
-					//$error_list[] = 'Missing address field (record #'.($i+1).').';
-					//$ex->getActiveSheet()->getStyle('A'.$i)->getBorders()->getTop()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
                     throw new Exception('Missing address field (record #'.($i+1).').');
 				}
             }
             if($idcol && !isset($record[$idcol])) {
-				//$error_list[] = 'Missing id field (record #'.($i+1).').';
                 throw new Exception('Missing id field (record #'.($i+1).').');
 			}
             elseif($idcol && !is_numeric($record[$idcol])) {
-				//$error_list[] = 'Id value must be an integer.';
                 throw new Exception('Id value must be an integer.');
 			}
             $new_stop = array(
@@ -160,8 +141,8 @@ class Sourcemap_Import_Csv {
                 $results = Sourcemap_Geocoder::geocode((new Sourcemap_Proj_Point($lon, $lat)));
                 if($results) {
                     $result = $results[0];
-                    //$lat = $result->lat;
-                    //$lon = $result->lng;
+                    $lat = $result->lat;
+                    $lon = $result->lng;
                     if(!isset($record['placename']))
                         $new_stop['attributes']['placename'] = $result->placename;
                 }
@@ -171,8 +152,6 @@ class Sourcemap_Import_Csv {
 				$lat = 0.0;
 				//throw new Exception('No lat/lon in record #'.$i);
 			}
-			var_dump($lon);
-			var_dump($lat);
             $from_pt = new Sourcemap_Proj_Point($lon, $lat);
             $new_stop['geometry'] = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $from_pt)->toGeometry();
             $stops[] = (object)$new_stop;
@@ -199,7 +178,7 @@ class Sourcemap_Import_Csv {
 		}
 		*/
 		
-		//return $stops;
+		return $stops;
     }
 
     public static function csv2hops($csv, $stops, $o=array()) {

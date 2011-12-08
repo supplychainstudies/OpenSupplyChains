@@ -11,39 +11,53 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
 
+
+<% var first = "first"; %>
 <h2 class="title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 30, true) %><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
 <% if(this.stop.attributes.address != undefined) { %>
         <h3 class="placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", this.stop.attributes.address)), 50, true) %></h3>
 <% } %>
-
+<div class="accordion">
+<% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1 || this.stop.getAttr("url:moreinfo", false)) { %>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>
+	<div class="description accordion-body">
 <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
-    <div class="description"><%= _S.htesc(this.stop.getAttr("description")) %></div>
+<%= _S.htesc(this.stop.getAttr("description")) %>
 <% } %>
 
 <% if(this.stop.getAttr("url:moreinfo", false)) { %>
+
     <%= $("<a class='url'>></a>").attr("href", this.stop.getAttr("url:moreinfo"))
         .text(this.stop.getAttr("urltitle:moreinfo", this.stop.getAttr("url:moreinfo",""))).attr("target", "blank").wrap("<div></div>").parent().html() %>
-<% } %>
 
-<% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false) || this.supplychain.getAttr("sm:ui:water", false)) { %>
+<% } %>
+	</div>
+<% } %>
+<% if(this.stop.getAttr("weight", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("energy", false) || this.stop.getAttr("water", false)) { %>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
+<div class="accordion-body">
 <ul id="dialog-footprint">	
 	<% var unit = (this.stop.getAttr("unit","kg") == "kg") ? 1 : 0; %>
 	<% var weight = unit || this.stop.getAttr("weight"); %>
-    <% if(weight && this.supplychain.getAttr("sm:ui:weight", false)) { %>
+    <% if(weight && this.stop.getAttr("weight", false)) { %>
 		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("qty", 0) * weight), "kg", 2); %>
 		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %></li>
 	<% } %>
-    <% if(this.stop.getAttr("co2e", false) && this.supplychain.getAttr("sm:ui:co2e", false)) { %>
+    <% if(this.stop.getAttr("co2e", false)) { %>
 		<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0)), "kg", 2); %>		
-		<li class="co2e"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> CO2e</li> 
+		<li class="co2e"><%= co2e_scaled.value %> <%= co2e_scaled.unit %></li> 
 	<% } %>
-    <% if(this.stop.getAttr("water", false) && this.supplychain.getAttr("sm:ui:water", false)) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L H2O</li> <% } %>
+    <% if(this.stop.getAttr("water", false)) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L</li> <% } %>
+    <% if(this.stop.getAttr("energy", false)) { %><li class="energy"><%= this.stop.getAttr("energy", 0) * this.stop.getAttr("qty", 0) %> kwh</li> <% } %>
 </ul>
+</div>
+
 <% } %>
 
 
 <% if(this.stop.magic) { %>
-<div id="dialog-media">
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Media</h3>
+<div id="dialog-media" class="accordion-body">
         <% if(this.stop.magic["youtube:link"]) { %>
             <%= Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]) %>
         <% } %>
@@ -66,6 +80,7 @@
         <% for(var i in this.stop.magic) { %>
                 <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  
         <% } %>
+</div>
         <div class="clear"></div>
     </div>
 </div>

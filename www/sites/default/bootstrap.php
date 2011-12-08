@@ -24,6 +24,13 @@ Route::set('view', '<controller>/<id>', array(
     )
 );
 
+Route::set('tree', '<controller>/<id>', array(
+    'controller' => '(tree)'
+))->defaults(array(
+        'action' => 'index'
+    )
+);
+
 Route::set('toplevel static maps', 'static/<id>.<sz>.png', array(
     'id' => '[a-z0-9]+', 'sz' => '(t|s|m|l|f|th-m)'
 ))->defaults(array(

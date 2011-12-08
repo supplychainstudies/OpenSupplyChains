@@ -29,7 +29,7 @@
                 <? if(isset($item->attributes->description)) { ?>
                     <h3 class="featured-teaser"><?= HTML::chars($item->attributes->description); ?></h3><? } ?>
             <h4 class="featured-info">
-                 <a href="user/<?= isset($item->owner->id) ? $item->owner->id : "" ?>">
+                 <a href="user/<?= isset($item->owner->username) ? $item->owner->username : $item->owner->id ?>">
                     <?= isset($item->owner->username) ? HTML::chars($item->owner->username) : "" ?></a>,   
                     <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
             </h4>

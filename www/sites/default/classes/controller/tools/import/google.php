@@ -22,7 +22,7 @@ class Controller_Tools_Import_Google extends Sourcemap_Controller_Layout {
             $this->request->redirect('/auth?next=/tools/import/google');
         }
         $current_user = Auth::instance()->get_user();
-        $import_role = ORM::factory('role')->where('name', '=', 'import')->find();
+        $import_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
         if($current_user->has('roles', $import_role) || $current_user->has('roles', $admin_role)) {
             // pass

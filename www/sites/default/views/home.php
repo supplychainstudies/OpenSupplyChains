@@ -11,7 +11,10 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
-
+<script>
+    var username = '<?= $user->username ?>';
+    var is_channel = '<?= $isChannel ?>';
+</script>
 <div class="container">
     <div class="dashboard-top">
         <div class="left">
@@ -19,6 +22,7 @@
                 <h2 class="user-name section-title">
                     <?= isset($user->display_name) ? HTML::chars($user->display_name) : HTML::chars($user->username) ?>
                     <?= $isChannel ? '<span class="secondary">Channel Account</span>' : '' ?>
+                    <a class="preview-link" href="user/<?= $user->username ?>?preview">preview</a>
                 </h2>       
                 <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => $isChannel, 'canEdit' => true)) ?>
                 <hr class="spacer" />
@@ -39,11 +43,6 @@
 </div>
 <div class="clear" style="height: 20px"></div>
 <div class="container"> 
-<div class="account-alert question"> 
-    <p> 
-        Did you make any maps on sourcemap.org? Email <a href="mailto:account-migration@sourcemap.com">account-migration@sourcemap.com</a> to import them into your new dashboard.
-    </p> 
-</div> 
 
 <?php if ($isChannel){ ?>
 <div class="account-alert notice"> 

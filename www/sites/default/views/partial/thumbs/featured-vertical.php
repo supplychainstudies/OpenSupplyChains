@@ -27,7 +27,7 @@
             </h4>
             <div>
                 <h4 class="preview-author">
-                    <a href="user/<?php print $item->owner->id; ?>">
+                    <a href="user/<?php print $item->owner->name; ?>">
                     <?= isset($item->owner->display_name)? Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
                     <?= View::factory('partial/thumbs/date', array('date' => $item->created)) ?>
                 </h4>

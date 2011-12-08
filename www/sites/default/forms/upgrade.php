@@ -33,7 +33,8 @@ return array(
             'css_class' => array('third-width '), 
             'attributes' => array(
                 'maxlength' => 5,
-                'boxwidth' => 'third'
+                'boxwidth' => 'third',
+                'placeholder' => ' xxx'
             )
         ),
         'card-expiry-month' => array(
@@ -42,7 +43,8 @@ return array(
             'css_class' => array('third-width '), 
             'attributes' => array(
                 'maxlength' => 5,
-                'boxwidth' => 'third'
+                'boxwidth' => 'third',
+                'placeholder' => ' xx'
             )
         ),
         'card-expiry-year' => array(
@@ -51,7 +53,8 @@ return array(
             'css_class' => array('third-width '), 
             'attributes' => array(
                 'maxlength' => 4,
-                'boxwidth' => 'third'
+                'boxwidth' => 'third',
+                'placeholder' => ' xxxx'
             )
         ),
         'confirm_terms' => array(
@@ -61,11 +64,18 @@ return array(
         ),
         'upgrade' => array(
             'type' => 'submit',
-            'label' => 'Upgrade'
+            'label' => 'Upgrade',
+            'css_class' => array('stripe ')
         )
     ),
     'messages_file' => 'forms/upgrade',
     'rules' => array(
+        'card-name' => array(
+            array('not_empty')
+        ),
+        'confirm_terms' => array(
+            array('not_empty')
+        ),
     ),
     'filters' => array()
 );

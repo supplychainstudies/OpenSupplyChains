@@ -24,6 +24,7 @@
     	<? if($can_import) { ?>
     	<ul>
     		<li><a href="tools/import/csv">Import from CSV File</a></li>
+			<li><a href="tools/import/xls">Import from XLS File</a></li>
     		<li><a href="tools/import/google">Import from Google Spreadsheets</a></li>
     	</ul>
     	<? } ?>

@@ -7,9 +7,9 @@
 	<?php endif ?>
 
 	<?php if ($previous_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev"><?php echo __('Previous') ?></a>
+		<a href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev"><?php echo __('<<') ?></a>
 	<?php else: ?>
-		<?php echo __('Previous') ?>
+		<?php echo __('<<') ?>
 	<?php endif ?>
 
 	<?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -23,9 +23,9 @@
 	<?php endfor ?>
 
 	<?php if ($next_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next"><?php echo __('Next') ?></a>
+		<a href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next"><?php echo __('>>') ?></a>
 	<?php else: ?>
-		<?php echo __('Next') ?>
+		<?php echo __('>>') ?>
 	<?php endif ?>
 
 	<?php if ($last_page !== FALSE): ?>

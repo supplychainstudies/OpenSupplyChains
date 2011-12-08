@@ -11,20 +11,25 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
 
+<% var first = ""; %>
 <h2 class="title hop"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("title", "Hop")), 20, true) %></h2>
-
+<div class="accordion">
 <% if(this.hop.getAttr("description", false) && this.hop.getAttr("description").length > 1) { %>
-    <div class="description"><%= _S.htesc(this.hop.getAttr("description")) %></div>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>
+    <div class="description accordion-body"><%= _S.htesc(this.hop.getAttr("description")) %></div>
 <% } %>
 
 <% if(this.hop.getAttr("url:moreinfo", false)) { %>
-    <div class="url moreinfo"> 
+	<h3 class="accordion-title"><div class="arrow"></div>More Info</h3>
+    <div class="url moreinfo accordion-body"> 
         <%= $("<a></a>").attr("href", this.hop.getAttr("url:moreinfo"))
             .text(this.hop.getAttr("urltitle:moreinfo", "Learn More")).attr("target", "blank")
             .wrap("<div></div>").parent().html() %>
     </div>
 <% } %>
 <% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false)) { %>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
+<div class="accordion-body">
 <ul id="dialog-footprint">
     <% if(this.hop.gc_distance() && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li><% } %>
 	<% if(this.hop.gc_distance() && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="weight"><%= this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
@@ -32,10 +37,12 @@
 	<% var scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("co2e", 0) * this.hop.gc_distance() * this.hop.getAttr("qty", 0)), "kg", 2); %>
 		<li class="co2e"> <%= scaled.value %> <%= scaled.unit %> CO2e</li> <% } %>
 </ul>
+</div>
 <% } %>
 
 <% if(this.hop.magic) { %>
-<div id="dialog-media">
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Media</h3>
+<div id="dialog-media" class="accordion-body">
         <% if(this.hop.magic["youtube:link"]) { %>
             <%= Sourcemap.MagicWords.content.youtube.link(this.hop.magic["youtube:link"]) %>
         <% } %>
@@ -59,6 +66,7 @@
         <% for(var i in this.hop.magic) { %>
                 <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  
         <% } %>
+</div>
         <div class="clear"></div>
     </div>
 </div>

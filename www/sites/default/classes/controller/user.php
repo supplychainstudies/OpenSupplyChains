@@ -70,10 +70,12 @@ class Controller_User extends Sourcemap_Controller_Layout {
 
             $user = (object)$user->as_array();
             $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
-            
-            if(!(Auth::instance()->get_user())) {            
+            $preview_mode = isset($_GET["preview"]);
+
+            if(!(Auth::instance()->get_user())||$preview_mode) {            
                 unset($user->password);
-                $user->avatar = Gravatar::avatar($user->email, 128);
+                //$user->avatar = Gravatar::avatar($user->email, 128);
+                $user->avatar = "services/uploads?bucket=accountpics&filename=".$user->username;
                 unset($user->email);
                 
                 $this->template->user = (object)$user;
@@ -133,10 +135,11 @@ class Controller_User extends Sourcemap_Controller_Layout {
             $p = false;            
             
             $user_arr = (object)$user->as_array();
-            unset($user_arr->password);
-            
+            unset($user_arr->password);            
+            $user_arr->avatar = "services/uploads?bucket=accountpics&filename=".$user_arr->username;
+
             $this->template->user = $user_arr;
-            $user_arr->avatar = Gravatar::avatar($user_arr->email, 128);
+            //$user_arr->avatar = Gravatar::avatar($user_arr->email, 128);
             $this->layout->page_title = "Dashboard for ".$this->template->user->username." on Sourcemap";
             $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user_arr->id, 6);
             
@@ -153,7 +156,9 @@ class Controller_User extends Sourcemap_Controller_Layout {
             } else {
             // User not logged in
             unset($user->password);
-            $user->avatar = Gravatar::avatar($user->email, 128);
+            //$user->avatar = Gravatar::avatar($user->email, 128);
+            $user->avatar = "services/uploads?bucket=accountpics&filename=".$user->username;
+
             unset($user->email);
             $this->template->user = $user;
 

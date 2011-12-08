@@ -93,6 +93,10 @@ $(document).ready(function() {
 
                 var supplychain_desc = sc.attributes.description;
                 var regex = new RegExp(/\[youtube:(.+)\]/);
+                if(supplychain_desc==undefined)
+                    return;
+                // If sc.attributes.description not exist than return   
+                    
                 var regex_result = supplychain_desc.match(regex);
                 var supplychain_youtube_id = null;             
                 if(regex_result)

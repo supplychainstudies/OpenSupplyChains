@@ -69,7 +69,7 @@ abstract class Sourcemap_Catalog {
         $pkeys = is_array($this->parameters) ? array_keys($this->parameters) : array();
         sort($pkeys);
         $pts = array();
-        for($i=0; $i<count($pkeys); $i++) {
+        for($i=0,$size = count($pkeys); $i<$size; $i++) {
             $pkey = $pkeys[$i];
             $pts[] = sprintf("%s:%s", $pkey, $this->parameters[$pkey]);
         }

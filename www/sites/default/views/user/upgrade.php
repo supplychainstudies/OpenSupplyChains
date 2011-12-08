@@ -12,6 +12,10 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<script type="text/javascript">
+    Stripe.setPublishableKey('<?= Kohana::config('apis')->stripe_api_public_key ?>');
+</script>
+
 <div id="page-title">
     <div class="container">
         <h1>Upgrade your Account</h1>
@@ -20,18 +24,18 @@
 
 <div class="container form-page">
     <div class="copy-section">
-         <p>Upgrade to a channel account for $99/year and get access to new modes, options, and features.</p>
-         <ul>
-            <li>Branding settings including logos, banners, and custom colors</li>
-            <li>Unlimited calls to our <a href="/info/API/">API</a></li>
-            <li>Password protected maps</li>
-            <li>Hidden maps</li>
-            <li>Upgraded profile page with featured maps</li>
-            <li>Custom views and visualizations</li>
+
+    <p>Upgrade to a Sourcemap Channel for $99/year. You'll get:</p>
+        <ul>
+            <li>Password-protected maps for private sharing</li>
+            <li>The ability to create and save maps with Excel spreadsheets</li>
+            <li>Enhanced API access</li>
+            <li>...and more features coming soon!</li>
         </ul>
+
     </div>
     <div class="box-section upgrade">
-        <div class="sourcemap-form">
+        <div class="sourcemap-form ajax stripe">
             <?= $form ?>
         </div>
     </div>

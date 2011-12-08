@@ -176,6 +176,73 @@ Sourcemap.factory = function(type, data) {
             instance.user_featured = sc.user_featured;
             instance.editable = data.editable;
             break;
+        case 'tree':
+            instance = new Sourcemap.Supplychain();
+            var sc = data;
+            var stop_ids = {};
+            sc.attributes = Sourcemap.deep_clone(sc.attributes);
+            //stops
+            for(var i=0; i<sc.stops.length; i++) {
+                var new_stop = new Sourcemap.Stop(
+                    sc.stops[i].geometry, sc.stops[i].attributes
+                );
+                stop_ids[sc.stops[i].local_stop_id] = new_stop.instance_id;
+                new_stop.local_stop_id = sc.stops[i].local_stop_id;
+                instance.addStop(new_stop);
+            }
+            //hops
+            for(var i=0; i<sc.hops.length; i++) {
+                var from_instance = stop_ids[sc.hops[i].from_stop_id];
+                var to_instance = stop_ids[sc.hops[i].to_stop_id];
+                var new_hop = new Sourcemap.Hop(
+                    sc.hops[i].geometry, from_instance, to_instance,
+                    sc.hops[i].attributes
+                );
+                instance.addHop(new_hop);
+            }
+            instance.owner = data.owner;
+            instance.remote_id = sc.id;
+            instance.created = sc.created;
+            instance.modified = sc.modified;
+            instance.attributes = sc.attributes;
+            instance.usergroup_perms = sc.usergroup_perms;
+            instance.other_perms = sc.other_perms;
+            instance.user_featured = sc.user_featured;
+            instance.editable = data.editable;
+            // make instance tree
+            var g = new Sourcemap.Supplychain.Graph2(instance);
+            var stids = g.nids.slice(0);
+            var tiers = {};
+            for(var i=0; i<stids.length; i++) {
+                tiers[stids[i]] = 0;
+            }
+            var max_plen = 0;
+            for(var i=0; i<g.paths.length; i++) {
+                var p = g.paths[i];
+                max_plen = p.length > max_plen ? p.length : max_plen;
+                for(var j=0; j<p.length; j++) {
+                    if(j > tiers[p[j]]) tiers[p[j]] = j;
+                }
+            }
+            //default_feature_colors
+            var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
+            i//var dfc = this.options.default_feature_colors.slice(0);
+            for(var i=0; i<dfc.length; i++) {
+                    dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
+            }
+            var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
+            for(var i=0,length=instance.stops.length;i<length;i++)
+            {
+                var st = instance.stops[i];
+                var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+                st.attributes.tier = tiers[st.instance_id];
+                st.attributes.color = scolor;
+            }
+
+            instance.tiers = tiers;
+            instance.max_plen = max_plen;
+
+            break;
         default:
             instance = false;
             break;
@@ -319,6 +386,24 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
             $('.passcode-input').find("input[name='passcode']").focus();
             $("#fade").fadeIn();
+        }
+    });
+}
+
+Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
+    // fetch and initialize supplychain
+    var _that = this;
+    var _remote_id = remote_id;
+
+    $.ajax({
+        url:'services/supplychains/'+remote_id,
+        data:{ passcode : passcode },
+        success : function(data) {
+            var sc = Sourcemap.factory('tree', data.supplychain);
+            sc.editable = data.editable;
+            callback.apply(this, [sc]);
+        },
+        error : function(data){
         }
     });
 }

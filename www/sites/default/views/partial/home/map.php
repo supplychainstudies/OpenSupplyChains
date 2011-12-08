@@ -61,6 +61,9 @@
                 <a id="map-publish-link">Public</a>
             </div>
             <div class="clear"></div>
+
+            <span class="map-controls-status" hidden></span>
+
             <?php if($is_channel) { ?>
             <?php $passcode_isset = isset($supplychain->attributes->passcode); ?>
             <div class="map-controls-passcode">

@@ -190,6 +190,9 @@ $(this).change(function(){
 
         
         $(this).change(function(){
+            // loading icon
+            $(this).find('.map-controls-status').show().removeClass('failed');
+            $(this).find('.map-controls-status').show().removeClass('succeeded');
 
             // publish
             var publish_selector = $(this).children('.map-controls-publish"');
@@ -227,6 +230,7 @@ $(this).change(function(){
                     featured_selector.children("a").attr("style","color:#A7AAAE");
                     // cause recursive
                     // featured_selector.children("input:checkbox").trigger("change");
+                    $(this).find('.map-controls-status').hide();
                     return false;
                 }
                 if(passcode_check){
@@ -249,12 +253,14 @@ $(this).change(function(){
                         featured_check = false;                        
                         featured_selector.children("a").attr("style","color:#A7AAAE");
                     }else{
+                        $(this).find('.map-controls-status').hide();
                         return false;
                     }
                 }else {
-                    if(passcode_val=="")
-                        return false;
-                    else{
+                    if(passcode_val==""){
+                        //$(this).find('.map-controls-status').hide();
+                        //return false;
+                    }else{
                         // reset passcode
                         passcode_selector.children("#map-passcode-input").val("");
                         passcode_val = "";                        
@@ -266,6 +272,7 @@ $(this).change(function(){
 
             // supplychain id
             var supplychain_id = $(this).attr('value');
+            var this_class = $(this).attr('class');
             //http://192.168.1.18/edit/general/5?publish=yes&featured=yes&passcode=aaa 
             $.ajax({
                 url:'edit/general/'+supplychain_id,
@@ -276,9 +283,10 @@ $(this).change(function(){
                 },
                 success : function(data) {
                     //console.log("Success : "+data);
+                    $("."+this_class).find('.map-controls-status').addClass('succeeded');
                 },
                 error : function(data){
-                    //console.log("Error : "+data);
+                    $("."+this_class).find('.map-controls-status').addClass('failed');
                 }
             });
 

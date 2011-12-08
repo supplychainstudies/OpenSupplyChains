@@ -1189,6 +1189,30 @@ ul li.news-item{
                 font-weight: bold;
             }
         }
+
+        span.map-controls-status{
+            float:right;
+            height: 40px;
+            width: 40px;
+            overflow: hidden;
+            background: url("../images/throbber.gif") 8px 8px no-repeat;
+            &.succeeded{
+                background: url("../images/account-notice.png") 12px 13px no-repeat;
+            }
+            &.failed{
+                background: url("../images/account-alert.png") 12px 13px no-repeat;
+            }
+            &.text{
+                padding-left: 40px;
+                width: 240px;
+                color: #777;
+                font-size: 1em;
+                line-height: 1.5em;
+                ul{ 
+                    margin: .75em 0 0 .2em;    
+                }
+            }
+        }
     }
 }
 #search-page, .user-profile-view {

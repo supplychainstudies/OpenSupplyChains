@@ -64,11 +64,18 @@ return array(
         ),
         'upgrade' => array(
             'type' => 'submit',
-            'label' => 'Upgrade'
+            'label' => 'Upgrade',
+            'css_class' => array('stripe ')
         )
     ),
     'messages_file' => 'forms/upgrade',
     'rules' => array(
+        'card-name' => array(
+            array('not_empty')
+        ),
+        'confirm_terms' => array(
+            array('not_empty')
+        ),
     ),
     'filters' => array()
 );

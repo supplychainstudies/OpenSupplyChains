@@ -12,6 +12,10 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<script type="text/javascript">
+    Stripe.setPublishableKey('<?= Kohana::config('apis')->stripe_api_public_key ?>');
+</script>
+
 <div id="page-title">
     <div class="container">
         <h1>Upgrade your Account</h1>
@@ -31,7 +35,7 @@
 
     </div>
     <div class="box-section upgrade">
-        <div class="sourcemap-form">
+        <div class="sourcemap-form ajax stripe">
             <?= $form ?>
         </div>
     </div>

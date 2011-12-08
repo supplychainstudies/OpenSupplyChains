@@ -17,7 +17,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         $this->layout->page_title = 'Upgrade your account';
 
         $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template', 'sourcemap-payments'
+            'sourcemap-payments'
         );
 
         $f = Sourcemap_Form::load('/upgrade');
@@ -30,9 +30,17 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         }
 
 
-        if(strtolower(Request::$method) === 'post') { 
-             $validate= $f->validate($_POST);   
-             if( $validate ) {  
+        if(strtolower(Request::$method) === 'post') {
+             $ajax = isset($_POST["_form_ajax"]) ? 'true' : 'false';
+             if (!$f->validate($_POST)){
+                 $errors = $f->errors();
+                 foreach($errors as $error){
+                     Message::instance()->set($error[0]);
+                 }
+
+                 echo $ajax ? Message::instance()->render() : "";
+                 return;
+             } else {
                 $p = $f->values();
                 try{
                     // set your secret key: remember to change this to your live secret key in production
@@ -72,7 +80,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                     }
 
                 } catch (Exception $e) {
-                    Message::instance()->set('Please check the information below.' . $e);
+                    Message::instance()->set('Please check your credit card information and try again.' . $e);
                     $this->request->redirect('home/');
                 } 
 
@@ -99,21 +107,27 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
                 try { 
 					$sent = $mailer->send($swift_msg);
+
                     Message::instance()->set('Email confirmation sent.');
                     
                     //set channel status
                     $channel_role = ORM::factory('role', array('name' => 'channel'));
                     $user->add('roles', $channel_role)->save();
+
+                    if ($ajax){
+                        echo "redirect upgrade/thankyou ";
+                        return;
+                    }
+                    else{
+                        return $this->request->redirect('upgrade/thankyou');
+                    }
                     
-                    return $this->request->redirect('upgrade/thankyou');
                 } catch (Exception $e) {
                     Message::instance()->set('Sorry, could not complete account upgrade. Please contact support.');
                 } 
 
                 return $this->request->redirect('register');
-            } else {
-                Message::instance()->set('Check the information below and try again.');
-            }
+            } 
         } else { 
         /* pass */ 
         }
@@ -132,7 +146,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         $this->layout->page_title = 'View your account payments';
 
         $this->layout->scripts = array(
-            'sourcemap-core', 'sourcemap-template', 'sourcemap-payments'
+            'sourcemap-payments'
         );
 
         if(!($user = Auth::instance()->get_user())) {

@@ -19,6 +19,16 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
         'tocol' => null
     );
 
+	public static function returnSize($val) {
+		$min = 30;
+		$max = 365;
+		$percent_min = 100*($min/$max);
+		$percent_max = 100*($max/$max);
+		$percent_val = 100*($val/$max);
+		//sqrt((min(array(max(array(($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()), 10)), 365)))/3.14)
+		return sqrt((min(array(max(array(($percent_val), $percent_min)), $percent_max)))/3.14);
+	}
+
     public static function xls2sc($xls=null, $o=array()) {
         $options = array();
         if(!is_array($o)) $o = (array)$o;
@@ -26,6 +36,8 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;
         extract($options);
         $sc = new stdClass();
+
+		//get upstream sheet
 		$contentReader = new PHPExcel_Reader_Excel5Contents();
 		$contentReader->setReadDataOnly(true);
 		//$contentPHPExcel = $contentReader->loadContents($xls);
@@ -299,7 +311,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 				$column_iterator = 0;
 				foreach ($hh as $name=>$value) {
 					if (isset($hop[$name]) == true) {
-					$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace("\n"," ",$hop[$name]));
+						$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace("\n"," ",$hop[$name]));
 					}
 					$column_iterator++;
 				}
@@ -313,7 +325,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		
 		//var_dump($stop_csv);
 		//var_dump($hop_csv);
-		
+
         $sc->stops = self::csv2stops($stop_csv, $options);
 		$sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
         $sc->attributes = array();
@@ -321,3 +333,4 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
     }
 
 }
+

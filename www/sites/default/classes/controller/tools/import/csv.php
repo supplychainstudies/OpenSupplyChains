@@ -61,6 +61,7 @@ class Controller_Tools_Import_Csv extends Sourcemap_Controller_Layout {
                 if($update) {
                     $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc, $update);
                 } else {
+					var_dump($sc);
                     $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc);
                 }
                 $new_sc = ORM::factory('supplychain', $new_sc_id);

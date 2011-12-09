@@ -212,29 +212,64 @@ Sourcemap.factory = function(type, data) {
             // make instance tree
             var g = new Sourcemap.Supplychain.Graph2(instance);
             var stids = g.nids.slice(0);
-            var tiers = {};
+			var max_plen = 0;
+			var upperbound = 0;
+			
+			//Just for colors, which should match the map
+			var stop_colors = {};
             for(var i=0; i<stids.length; i++) {
-                tiers[stids[i]] = 0;
+                stop_colors[stids[i]] = 0;
             }
-            var max_plen = 0;
             for(var i=0; i<g.paths.length; i++) {
                 var p = g.paths[i];
                 max_plen = p.length > max_plen ? p.length : max_plen;
                 for(var j=0; j<p.length; j++) {
-                    if(j > tiers[p[j]]) tiers[p[j]] = j;
+                    if(j > stop_colors[p[j]]) stop_colors[p[j]] = j;
                 }
             }
+			var max_plen = 0;
+			if (sc.stops[0].attributes.tier) {
+				var tiers = {};	
+				var offset = 0;			
+	            for(var i=0; i<stids.length; i++) {
+					if (!isNaN(sc.stops[i].attributes.tier)) {		
+		                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
+						upperbound = Math.max(upperbound,parseInt(sc.stops[i].attributes.tier));
+					}
+	            }
+				for(x in tiers) {
+	                tiers[x] = upperbound-tiers[x];
+					max_plen = Math.max(max_plen,parseInt(tiers[x]));
+	            }
+				max_plen++;		
+			} else {
+	            var tiers = {};
+	            for(var i=0; i<stids.length; i++) {
+	                tiers[stids[i]] = 0;
+	            }
+	            for(var i=0; i<g.paths.length; i++) {
+	                var p = g.paths[i];
+	                max_plen = p.length > max_plen ? p.length : max_plen;
+	                for(var j=0; j<p.length; j++) {
+	                    if(j > tiers[p[j]]) tiers[p[j]] = j;
+	                }
+	            }
+			}
+			//max_plen++;
             //default_feature_colors
             var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
-            i//var dfc = this.options.default_feature_colors.slice(0);
+            //var dfc = this.options.default_feature_colors.slice(0);
             for(var i=0; i<dfc.length; i++) {
                     dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
             }
             var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
             for(var i=0,length=instance.stops.length;i<length;i++)
             {
+				
                 var st = instance.stops[i];
-                var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+                //var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+				
+				var scolor = st.getAttr("color", palette[stop_colors[st.instance_id]].toString());
                 st.attributes.tier = tiers[st.instance_id];
                 st.attributes.color = scolor;
             }
@@ -427,17 +462,18 @@ Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
 }
 
 Sourcemap.buildTree = function(tree_id,sc) {
-
     var tiers = [],tier_list = [],hop_list = [];
     var max_plen = sc.max_plen;
     var max_length=(max_plen)?sc.max_plen:1,max_x=0,max_y=0;    
     // palette stuff
+
     var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
     for(var i=0; i<dfc.length; i++) {
         dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
     }
     var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
     //tier for palette
+
     var g = new Sourcemap.Supplychain.Graph2(sc);
     var stids = g.nids.slice(0);
     var p_tiers = {};
@@ -456,35 +492,184 @@ Sourcemap.buildTree = function(tree_id,sc) {
     // Create stop points
     for(var i=0,length=sc.stops.length;i<length;i++)
     {
-        tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
+		//if (sc.stops[i].attributes.tier) {
+			//var x = tiers.length - parseInt(sc.stops[i].attributes.tier);
+			//tiers[x].push(sc.stops[i]);
+			
+			// default status
+			//var letitle  = sc.stops[i].attributes.title;
+		//	if (letitle == undefined)
+		//		letitle = sc.stops[i].attributes.location;		
+			//	letitle = sc.stops[i].attributes.name;
+
+	       // if(sc.stops[i].attributes.size == undefined)
+	        //    size = 2;
+	        //else
+	        //    size = sc.stops[i].attributes.size;
+
+	        //tier_list[i] = { 
+	        //    title:letitle,
+	        //    index:i,
+	        //    tiers:sc.stops[i].attributes.tier,
+	        //    instance:sc.stops[i].instance_id,
+	            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
+	            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
+			//	size:size,
+	        //    color:sc.stops[i].attributes.color
+	       // }
+			
+	//	} else {
+	        tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
         
-        // default status
-        tier_list[i] = { 
-            title:sc.stops[i].attributes.title,
-            instance:sc.stops[i].instance_id,
-            y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
-            x:sc.tiers[sc.stops[i].instance_id]*150+100,
-            color:sc.stops[i].attributes.color
-        }
+	        // default status
+			var letitle  = sc.stops[i].attributes.title;
+			if (letitle == undefined)
+				letitle = sc.stops[i].attributes.location;		
+			//	letitle = sc.stops[i].attributes.name;
+
+	        if(sc.stops[i].attributes.size == undefined)
+	            size = 2;
+	        else
+	            size = sc.stops[i].attributes.size;
+
+	        tier_list[i] = { 
+	            title:letitle,
+	            index:i,
+	            tiers:sc.tiers[sc.stops[i].instance_id],
+	            instance:sc.stops[i].instance_id,
+	            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
+	            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
+				size:size,
+	            color:sc.stops[i].attributes.color
+	        }
+		//}
     }
-    // get max_stack
-    var max_stack = 0;
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
-    /*
-    for(var i=0;i<tiers.length;i++)
-    {        
-        max_stack = tiers[i].length > max_stack ? tiers[i].length : max_stack;
-    }
-    */
     // Set middle stack in mid
+
+	// So, what we should do here is stick the dots with the most connections in the middle, and the ones with the least on the outside
+    for(var i=0, length=sc.hops.length;i<length;i++)
+    {
+        var h = sc.hops[i];
+		for (var j = 0; j< tier_list.length; j++) {
+			if (h.from_stop_id == tier_list[j].instance) {
+				if (tier_list[j].connections) {
+					tier_list[j].connections++;
+				} else {
+					tier_list[j].connections=1;
+				}
+			} else if (h.to_stop_id == tier_list[j].instance) {
+				if (tier_list[j].connections) {
+					tier_list[j].connections++;
+				} else {
+					tier_list[j].connections=1;
+				}
+			}			
+		}
+    }
+	// All points that don't have connections are set to zero
+	for (var i = 0; i < tier_list.length; i++) {
+		if (!tier_list[i].connections) {
+			tier_list[i].connections = 0;	
+		}
+	}
+	
+	// Turn the connections into a row order
+	// Have to base this on connections, and also the row order of the parents
+    for(var i=0,order=0;i<tiers.length;i++) {
+		var tier_connections = new Array();
+		var tier_order = new Array();
+		// have to iterate through and rank
+		for(var j=0;j<tiers[i].length;j++){     
+            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){				
+                if(tier_list[k].instance==tiers[i][j].instance_id && tier_list[k].connections != undefined){
+					tier_connections[k] = tier_list[k].connections;
+					var neworder = 0;					
+					for (var l = 0; l<tier_connections.length;l++) {
+						if (tier_connections[l] != undefined) {
+							neworder++;
+						}
+					}
+					for (var l = 0; l<tier_connections.length;l++) {
+						if (tier_connections[l] > tier_connections[k]) {
+							neworder = Math.min(tier_order[l],neworder);
+							tier_order[l]++; 
+						}
+					}
+					tier_order[k] = neworder;
+					break;
+                }
+            }      
+        }
+		var len = 0;
+		for (var l = 0; l<tier_order.length;l++) {
+			if (tier_order[l] != undefined) {
+				len++;
+			}
+		}
+		for (var l = 0; l<tier_order.length;l++) {
+			if (tier_order[l] != undefined) {
+				if (parseInt(tier_order[l]/2) == (tier_order[l]/2)) {
+					//tier_list[l].order = (Math.floor(len/2) - (tier_order[l]/2))+1;
+					tier_list[l].order = tier_order[l]/2;
+				} else {
+					//tier_list[l].order = Math.floor(len/2) + ((tier_order[l]+1)/2);
+					tier_list[l].order = len - Math.floor(tier_order[l]/2);
+				}
+			}
+			// Now look for parents, push order toward parents
+			var parent_order = 0;
+			for(var n=0, length=sc.hops.length;n<length;n++)
+		    {
+				var h = sc.hops[n];
+				if (h.to_stop_id == tier_list[l].instance) {
+					var from = h.to_stop_id;
+					for (var m=0;m<tier_list.length;m++) {
+						if (tier_list[m].instance == h.to_stop_id) {
+								parent_order = tier_list[m].order;
+								break;
+						}
+					}
+				}		
+		    }
+			if (parent_order != 0) {
+				var old_order = tier_list[l].order;
+				tier_list[l].order = parent_order;
+				if (old_order > parent_order) {
+					for (var o = 0; o<tier_order.length;o++) {
+						if (tier_list[o].order >= tier_list[l].order && o!=l) {
+							tier_list[o].order++
+						}
+					}
+				} else if (old_order < parent_order) {
+					for (var o = 0; o<tier_order.length;o++) {
+						if (tier_list[o].order >= tier_list[l].order && o!=l) {
+							tier_list[o].order--;
+						}
+					}				
+				}
+			}
+		}
+	} 
     for(var i=0,order=0;i<tiers.length;i++)
     {
-        for(var j=0;j<tiers[i].length;j++){            
-            // divide y from max_stack into portion 
+		var y_offset = ((i*2.5)%5)*5;
+		console.log(y_offset);
+        for(var j=0;j<tiers[i].length;j++){     
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
-                    tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+                    //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+					//tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
+					/*
+					if (parseInt(tier_list[k].order/2) == (tier_list[k].order/2)) {
+						tier_list[k].y = y_offset + ((500-(tiers[i].length*40))/2)+ (((tier_list[k].order/2))*40); 
+						//console.log("-"(tier_list[k].order/2));
+					} else {
+						tier_list[k].y = y_offset + (500-((500-(tiers[i].length*40))/2)) - ((Math.ceil(tier_list[k].order/2)-1)*40);
+						//console.log(tier_list[k].y);
+					} */
                     tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
                 }
@@ -516,6 +701,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var hc = h.getAttr("color", fc.midpoint(tc).toString());
         hop_list[i] = {            
             id:h.instance_id,
+            from:h.from_stop_id,
+            to:h.to_stop_id,
             //id:"hop"+i,
             x1:tier_list[sc.hops[i].from_local_stop_id-1].x,
             x2:tier_list[sc.hops[i].to_local_stop_id-1].x,
@@ -533,7 +720,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("width", w)
         .attr("height", h);
 
-    //def marker
+    //def marker // TODO:make it work
+
     svg.append("svg:defs").selectAll("marker")
         .data(hop_list)
     .enter().append("svg:marker")
@@ -559,8 +747,11 @@ Sourcemap.buildTree = function(tree_id,sc) {
     .attr("dx",".1em") // padding
     .attr("dy","1.8em")
     .attr("text-anchor","middle")
+	.style("fill",function(d){return d.color})
+	.style("font-size","12px")
+	.style("font-weight", "bold")
     .text(function(d){return d.title});
-    
+  
     // Arc
     /*
     svg.append("svg:g")
@@ -574,22 +765,22 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var diff_x = d.x2-d.x1
         var diff_y = d.y2-d.y1
         return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
-
-
     */
     // Simple line    
-    svg.append("svg:g").selectAll("line")
+
+    svg.append("svg:g").attr("class","line").selectAll("line")
         .data(hop_list)
         .enter().append("svg:line")
             .attr("x1",function(d){return d.x1})
             .attr("x2",function(d){return d.x2})
             .attr("y1",function(d){return d.y1})
             .attr("y2",function(d){return d.y2})
-            .attr("stroke-width",3)
+            .attr("stroke-width",2)
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
+            //.on("click",function(d){alert(d.from+" to "+d.to);})
             .attr("stroke",function(d){return d.color});
-    
-                            
+	//svg.append("svg:g").selectAll("circle").data(hop_list).enter()
+	//.append("svg:image") .attr("class", "circle") .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png") .attr("x", function(d){return ((d.x1+d.x2)/2)}) .attr("y", function(d){return ((d.y1+d.y2)/2)}) .attr("width", "16px") .attr("height", "16px");
    
     /*
     // path > line
@@ -607,16 +798,114 @@ Sourcemap.buildTree = function(tree_id,sc) {
             return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
     */
     
-    
-    svg.append("svg:g").selectAll("circle")
+ 
+    svg.append("svg:g").attr("class","circle").selectAll("circle")
         .data(tier_list)
         .enter().append("svg:circle")
         .attr("class", "little")
         .attr("cx", function(d){return d.x})
         .attr("cy", function(d){return d.y})
+        .attr("opacity",1)
+        .on("mouseover",hover_circle(.1))
+        .on("mouseout",hover_circle(1))
         .style("fill", function(d){return d.color})
-        .attr("r", 12);
+        .attr("r", "8");
     
+    function hover_circle(opacity){
+        return function(g,i){
+            svg.selectAll("g.circle circle")
+            .filter(function(d){
+                    //console.log(d.index);   //this will scan by order 1~end
+                    //console.log(i);         //this is the id you pick
+                    update_updown(i);
+                    return check_stops(d.index,i);                        
+                })
+            .transition()
+                .style("opacity",opacity);
+
+           svg.selectAll("g.line line")
+           .filter(function(d){
+                    return check_hops(d,i);
+               })
+           .transition()
+                .style("opacity",opacity);
+       }
+    }
+
+    var upstream = [];
+    var downstream = [];
+    function update_updown(select)
+    {        
+        upstream = [];
+        downstream = [];
+        upstream.push(tier_list[select].instance);
+        downstream.push(tier_list[select].instance);
+        //downstream ~max
+        for(var j=0,down_max=downstream.length;j<down_max;j++){
+            for(var h=0,max=hop_list.length;h<max;h++){                        
+                if(hop_list[h].from==downstream[j]){
+                    //prevent circular supplychain
+                    if(jQuery.inArray(hop_list[h].to,downstream)>0)
+                        return;
+                    downstream.push(hop_list[h].to);
+                    down_max = downstream.length; 
+                }
+            }
+        }
+        //upstream
+        for(var j=0,up_max=upstream.length;j<up_max;j++){
+            for(var h=0,max=hop_list.length;h<max;h++){                        
+                if(hop_list[h].to==upstream[j]){
+                    //prevent circular supplychain
+                    if(jQuery.inArray(hop_list[h].from,upstream)>0)
+                        return;
+                    upstream.push(hop_list[h].from);
+                    up_max = upstream.length; 
+                }
+            }
+        }
+    }
+
+    function check_hops(hop,select)
+    {
+        // hops that connect to select stop
+        if(hop.from==tier_list[select].instance||hop.to==tier_list[select].instance)
+            return false;
+        if(jQuery.inArray(hop.from,upstream)>0){    
+            if(jQuery.inArray(hop.to,upstream)>0)
+                return false;
+        }
+        if(jQuery.inArray(hop.from,downstream)>0){    
+            if(jQuery.inArray(hop.to,downstream)>0)
+                return false;
+        }
+        return true;    
+    }
+
+    function check_stops(i,select)
+    {
+        if(i==select)
+            return false;
+        if(jQuery.inArray(tier_list[i].instance,downstream)>0)
+            return false;
+        if(jQuery.inArray(tier_list[i].instance,upstream)>0) 
+            return false;
+        //else return true
+        return true;         
+    }
+
+    // Tree-text
+/*
+    svg.append("svg:g").selectAll("text")
+        .data(tier_list)
+        .enter().append("svg:text")
+        .attr("x",function(d){return d.x})
+        .attr("y",function(d){return d.y})
+        .attr("dx",".1em") // padding
+        .attr("dy","1.8em")
+        .attr("text-anchor","middle")
+        .text(function(d){return d.title});
+  */  
 }
 
 Sourcemap.saveSupplychain = function(supplychain, o) {

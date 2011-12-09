@@ -1,211 +1,5 @@
 <?php
-<<<<<<< HEAD
-/* Copyright (C) Sourcemap 2011 */
 
-//require(MODPATH."PHPExcel/classes/PHPExcel.php");
-class Sourcemap_xls {
-    //public static function parse($kml) { }
-    //git@codebasehq.com:sourcemap/sourcemap/sourcemap.git
-    public static function make($supplychain) {
-        $points = array(
-        1 => array( 
-            "Name",
-            "Location",
-            "Address",
-            "Description",
-            "Percentage",
-            "youtube:title",
-            "youtube:link",
-            "flickr:setid",
-            "qty",
-            "CO2e",
-            "color",
-            "size"
-            )
-        );
-        $hops = array( 
-            1 => array(
-                "From",
-                "To",   
-                //"Origin Point (From)",
-                //"Destination Point (To)",
-                "Description",  
-                "Color",    
-                "Transport",    
-                "Qty",  
-                "unit", 
-                "CO2e"  
-                )
-        );
-        foreach($supplychain->stops as $stop) {
-                $vals = array(
-                    "title" => "",
-                    "placename" => "",
-                    "address" => "",
-                    "coordinates" => "",
-                    "description" => "",
-                    "percentage" => "",
-                    "youtube:title" => "",
-                    "youtube:link" => "",
-                    "flickr:setid" => "",
-                    "qty" => "",
-                    "co2e" => "",
-                    "color" => "",
-                    "size" => "0",
-                    "unit" => ""
-                );  
-                if (isset($stop->attributes->title) == true) {
-                    $vals['title'] = $stop->attributes->title;
-                    $vals['placename'] = $stop->attributes->title;
-                }
-                if (isset($stop->attributes->name) == true) {
-                    $vals['title'] = $stop->attributes->name;
-                }               
-                if (isset($stop->attributes->placename) == true) {
-                    $vals['placename'] = $stop->attributes->placename;
-                }
-                if (is_array($stop->geometry) == true) {
-                    $vals['address'] = $stop->geometry;
-                }
-                if (isset($stop->attributes->address) == true) {
-                    $vals['address'] = $stop->attributes->address;
-                }
-                if (isset($stop->attributes->description) == true) {
-                    $vals['description'] = $stop->attributes->description;
-                }
-                if (isset($stop->attributes->{"youtube-url"}) == true) {
-                    $vals['youtube:link'] = $stop->attributes->{"youtube-url"};
-                }
-                if (isset($stop->attributes->{"youtube-title"}) == true) {
-                    $vals['youtube:title'] = $stop->attributes->{"youtube-title"};
-                }
-                if (isset($stop->attributes->{"flickr-setid"}) == true) {
-                    $vals['flickr:setid'] = $stop->attributes->{"flickr-setid"};
-                }       
-                if (isset($stop->attributes->qty) == true) {
-                    $vals['qty'] = $stop->attributes->qty;
-                }
-                if (isset($stop->attributes->co2e) == true) {
-                    $vals['co2e'] = $stop->attributes->co2e;
-                }
-                if (isset($stop->attributes->color) == true) {
-                    $vals['color'] = $stop->attributes->color;
-                }
-                if (isset($stop->attributes->{"pct:vol"}) == true) {
-                    $vals['percentage'] = $stop->attributes->{"pct:vol"};
-                }
-                if (isset($stop->attributes->unit) == true) {
-                    $vals['unit'] = $stop->attributes->unit;
-                }
-                $points[] = array(
-                        $vals['title'],
-                        $vals['placename'],
-                        $vals['address'],
-                        $vals['description'],
-                        $vals['percentage'],
-                        $vals['youtube:title'],
-                        $vals['youtube:link'],
-                        $vals['flickr:setid'],
-                        $vals['qty'],
-                        $vals['co2e'],
-                        $vals['color']
-                    );
-            }
-            foreach($supplychain->hops as $hop) {
-                $vals = array(
-                    "from" => "",
-                    "to" => "", 
-                    "description" => "",    
-                    "color" => "",  
-                    "transport" => "",  
-                    "qty" => "",    
-                    "unit" => "",   
-                    "co2e" => ""
-                );
-        
-                if (isset($hop->from_stop_id) == true && isset($hop->to_stop_id) == true) {
-                    $vals['from'] = $hop->from_stop_id;
-                    $vals['to'] = $hop->to_stop_id;
-                    //$vals['from'] = $ftr->geometry->coordinates[0][0].", ".$ftr->geometry->coordinates[0][1];
-                    //$vals['to'] = $ftr->geometry->coordinates[1][0].", ".$ftr->geometry->coordinates[1][1];
-                }
-                if (isset($hop->attributes->description) == true) {
-                    $vals['description'] = $hop->attributes->description;
-                    if ($hop->attributes->description != "") {
-                        // Lotus thinks that this should look like "From - To" if its blank
-                    }
-                } 
-                if (isset($hop->attributes->color) == true) {
-                    $vals['color'] = $hop->attributes->color;
-                }
-                if (isset($hop->attributes->qty) == true) {
-                    $vals['qty'] = $hop->attributes->qty;
-                }
-                if (isset($hop->attributes->unit) == true) {
-                    $vals['unit'] = $hop->attributes->unit;
-                }       
-                if (isset($hop->attributes->co2e) == true) {
-                    $vals['co2e'] = $hop->attributes->co2e;
-                }       
-                if (isset($hop->attributes->{"youtube-url"}) == true) {
-                    $vals['youtube:link'] = $hop->attributes->{"youtube-url"};
-                }
-                if (isset($hop->attributes->{"youtube-title"}) == true) {
-                    $vals['youtube:title'] = $hop->attributes->{"youtube-title"};
-                }
-                if (isset($hop->attributes->{"flickr-setid"}) == true) {
-                    $vals['flickr:setid'] = $hop->attributes->{"flickr-setid"};
-                }
-                $hops[] = array(
-                        $vals['from'],
-                        $vals['to'],
-                        $vals["description"],   
-                        $vals['color'], 
-                        "", 
-                        $vals['qty'],
-                        $vals['unit'],
-                        $vals['co2e']
-                    );
-            }
-        
-        $transport = array (
-            1 => array ("Air (Long Distance)", 0.115558),
-            2 => array ("Air (Regional)", 0.219842),
-            3 => array ("Air Freight (Intercontinental)",   0.000450959),
-            4 => array ("Air Freight (Regional)",   0.000789178),
-            5 => array ("Automobile (20 mpg)",  6.76E-05),
-            6 => array ("Automobile (50 mpg)",  2.65E-05),
-            7 => array ("Container ship",   4.79E-05),
-            8 => array ("Freighter (Inland)",   2.54E-05),
-            9 => array ("Helicopter",   0.725748),
-            10 => array ("Oceanic Freight Ship",    4.23E-06),
-            11 => array ("Tanker ship (Oceanic)",   0.000171928),
-            12 => array ("Train (Freight)", 5.64E-06),
-            13 => array ("Train (long distance)",   0.00366404),
-            14 => array ("Train (Regional)",    0.00676438),
-            15 => array ("Tram",    0.259301),
-            16 => array ("Truck (16 ton)",  4.51E-05),
-            17 => array ("Truck (28 ton)",  3.38E-05),
-            18 => array ("Truck (40 ton)",  3.10E-05),
-            19 => array ("Van (3.5 ton)",   5.36E-05)           
-            );
-            
-        $units = array (
-            1 => array("kg"),
-            2 => array("lbs"),
-            3 => array("pax")
-            );
-        $spreadsheet_attributes = array(
-            'author'       => 'Sourcemap Incorporated',
-            'title'        => $supplychain->attributes->title,
-            'subject'      => $supplychain->attributes->title,          
-        );
-        if (isset($supplychain->attributes->description) == true) {
-            $spreadsheet_attributes['description'] = $supplychain->attributes->description;
-        }
-        
-        $ws = new Spreadsheet($spreadsheet_attributes);
-=======
 /* Copyright (C) Sourcemap 2011
  * This program is free software: you can redistribute it and/or modify it under the terms
  * of the GNU Affero General Public License as published by the Free Software Foundation,
@@ -423,7 +217,7 @@ class Sourcemap_xls {
 						$vals['co2e'],
 						$vals['color']
 					);
-					*/
+					
 			}
 			$stopswriter->setActiveSheetIndex(0);
 			foreach ($ucolumns as $num=>$column) {
@@ -433,7 +227,7 @@ class Sourcemap_xls {
 			foreach ($dcolumns as $num=>$column) {
 				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
 			}
-			/*
+			
 			foreach($supplychain->hops as $hop) {
 				$vals = array(
 					"from" => "",
@@ -502,7 +296,6 @@ class Sourcemap_xls {
 		}
 		
 		$ws = new Spreadsheet($spreadsheet_attributes);
->>>>>>> a764793... exporter work
 
         $ws->set_active_sheet(0);
         $as = $ws->get_active_sheet();
@@ -557,50 +350,7 @@ class Sourcemap_xls {
         $as->getColumnDimension('F')->setWidth(20); // Qty
         $as->getColumnDimension('G')->setWidth(20); // Unit
         $as->getColumnDimension('H')->setWidth(20); // CO2e
-<<<<<<< HEAD
-        $ws->set_data($hops, false);
-        // Set a dropdown for From
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('C',"=Stops!M:M", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-        // Set a dropdown for To
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('D',"=Stops!M:M", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-        // Working Validator - Leo doesnt want anymore //$ws->freezeTopRow();   
-        
-        //Now we set some sheets that contain data, which will be hidden
-        
-        // Create the transport Co2e Sheet
-        // Working Validator - Leo doesnt want anymore //$ws->create_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as = $ws->get_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as->setTitle('Transport CO2e');
-        // Working Validator - Leo doesnt want anymore //$ws->set_data($transport, false);
-        // Working Validator - Leo doesnt want anymore //$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
 
-        // Create the transport Co2e Sheet
-        // Working Validator - Leo doesnt want anymore //$ws->create_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as = $ws->get_active_sheet();
-        // Working Validator - Leo doesnt want anymore //$as->setTitle('Units');
-        // Working Validator - Leo doesnt want anymore //$ws->set_data($units, false);
-        // Working Validator - Leo doesnt want anymore //$as->setSheetState(PHPExcel_Worksheet::SHEETSTATE_HIDDEN);
-        
-        
-        // Working Validator - Leo doesnt want anymore //$ws->set_active_sheet(1);
-        // Set a dropdown for To
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('G',"='Transport CO2e'!A:A", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-        // Set a dropdown for To
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('I',"=Units!A:A", "LIST", "Limited to list", "This Column is limited to a list of stops.", "Limited to list", "This Column is limited to a list of stops.");
-    
-        
-        // Set the Workbook to the first sheet
-        $ws->set_active_sheet(0);
-        $title = "A Sourcemap";
-        if (isset($supplychain->attributes->title) == true) {
-            $title = $supplychain->attributes->title;
-        }
-        // Done! Open on the Client side            
-        $ws->send(array('name'=> $title, 'format'=>'Excel5'));
-    }
-    
-}
-=======
 		$ws->set_data($hops, false);
 		
 		// Set the Workbook to the first sheet
@@ -609,8 +359,9 @@ class Sourcemap_xls {
 		if (isset($supplychain->attributes->title) == true) {
 			$title = $supplychain->attributes->title;
 		}
+		
 		// Done! Open on the Client side
-		*/		
+		
 		$sWriter = new PHPExcel_Writer_Excel5($stopswriter);	
         //$writer->setPreCalculateFormulas(true);
         $request = Request::instance();
@@ -619,8 +370,8 @@ class Sourcemap_xls {
         $request->headers['Cache-Control'] = 'max-age=0';
         $request->send_headers();
         $sWriter->save('php://output');
-
+		*/
 	}
 	
 }
->>>>>>> a764793... exporter work
+

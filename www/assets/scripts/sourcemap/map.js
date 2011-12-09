@@ -155,7 +155,12 @@ Sourcemap.Map.prototype.init = function() {
 Sourcemap.Map.prototype.initMap = function() {
     var controls = [
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),
-            new OpenLayers.Control.Attribution()
+            new OpenLayers.Control.Attribution(),
+            new OpenLayers.Control.TouchNavigation({
+                dragPanOptions: {
+                    enableKinetic: true
+                }
+            }),
     ];
     var options = {
         "theme": "assets/scripts/libs/openlayers/theme/sourcemap/style.css",

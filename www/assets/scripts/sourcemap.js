@@ -228,21 +228,28 @@ Sourcemap.factory = function(type, data) {
                 }
             }
 			var max_plen = 0;
+			
+			// If there are predefined tiers, use those
+			// But they have to shifted, because they go from + to - tiers (since the middle product tier will be 0)
 			if (sc.stops[0].attributes.tier) {
 				var tiers = {};	
 				var offset = 0;			
 	            for(var i=0; i<stids.length; i++) {
 					if (!isNaN(sc.stops[i].attributes.tier)) {		
+						// store the tier
 		                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
+						// store the highest tier in the whole stack
 						upperbound = Math.max(upperbound,parseInt(sc.stops[i].attributes.tier));
 					}
 	            }
+				// Shift them all over so that everything is greater than 0
 				for(x in tiers) {
 	                tiers[x] = upperbound-tiers[x];
 					max_plen = Math.max(max_plen,parseInt(tiers[x]));
 	            }
 				max_plen++;		
 			} else {
+				// If tiers haven't been preset, create some
 	            var tiers = {};
 	            for(var i=0; i<stids.length; i++) {
 	                tiers[stids[i]] = 0;
@@ -255,7 +262,6 @@ Sourcemap.factory = function(type, data) {
 	                }
 	            }
 			}
-			//max_plen++;
             //default_feature_colors
             var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
             //var dfc = this.options.default_feature_colors.slice(0);

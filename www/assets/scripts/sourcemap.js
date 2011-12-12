@@ -228,21 +228,28 @@ Sourcemap.factory = function(type, data) {
                 }
             }
 			var max_plen = 0;
+			
+			// If there are predefined tiers, use those
+			// But they have to shifted, because they go from + to - tiers (since the middle product tier will be 0)
 			if (sc.stops[0].attributes.tier) {
 				var tiers = {};	
 				var offset = 0;			
 	            for(var i=0; i<stids.length; i++) {
 					if (!isNaN(sc.stops[i].attributes.tier)) {		
+						// store the tier
 		                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
+						// store the highest tier in the whole stack
 						upperbound = Math.max(upperbound,parseInt(sc.stops[i].attributes.tier));
 					}
 	            }
+				// Shift them all over so that everything is greater than 0
 				for(x in tiers) {
 	                tiers[x] = upperbound-tiers[x];
 					max_plen = Math.max(max_plen,parseInt(tiers[x]));
 	            }
 				max_plen++;		
 			} else {
+				// If tiers haven't been preset, create some
 	            var tiers = {};
 	            for(var i=0; i<stids.length; i++) {
 	                tiers[stids[i]] = 0;
@@ -255,7 +262,6 @@ Sourcemap.factory = function(type, data) {
 	                }
 	            }
 			}
-			//max_plen++;
             //default_feature_colors
             var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
             //var dfc = this.options.default_feature_colors.slice(0);
@@ -547,33 +553,29 @@ Sourcemap.buildTree = function(tree_id,sc) {
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
     // Set middle stack in mid
-
 	// So, what we should do here is stick the dots with the most connections in the middle, and the ones with the least on the outside
     for(var i=0, length=sc.hops.length;i<length;i++)
     {
         var h = sc.hops[i];
+        // for tier_list
 		for (var j = 0; j< tier_list.length; j++) {
-			if (h.from_stop_id == tier_list[j].instance) {
-				if (tier_list[j].connections) {
-					tier_list[j].connections++;
-				} else {
-					tier_list[j].connections=1;
-				}
-			} else if (h.to_stop_id == tier_list[j].instance) {
-				if (tier_list[j].connections) {
-					tier_list[j].connections++;
-				} else {
-					tier_list[j].connections=1;
-				}
-			}			
+			if (h.from_stop_id == tier_list[j].instance||h.to_stop_id == tier_list[j].instance) {
+                (tier_list[j].connections)?tier_list[j].connections++:tier_list[j].connections=1;                
+            }
+            // All points that don't have connections are set to zero
+            (tier_list[j].connections)?0:tier_list[j].connections=0;
 		}
+        // for tiers
+        for (var k =0;k<tiers.length;k++){
+            for(var j=0;j<tiers[k].length;j++){
+                if(h.from_stop_id == tiers[k][j].instance_id || h.to_stop_id == tiers[k][j].instance_id){ 
+                    (tiers[k][j].connections) ? tiers[k][j].connections++ : tiers[k][j].connections=1;
+                }
+                // All points that don't have connections are set to zero
+                (tiers[k][j].connections)? 0:tiers[k][j].connections=0;
+            }
+        }
     }
-	// All points that don't have connections are set to zero
-	for (var i = 0; i < tier_list.length; i++) {
-		if (!tier_list[i].connections) {
-			tier_list[i].connections = 0;	
-		}
-	}
 	
 	// Turn the connections into a row order
 	// Have to base this on connections, and also the row order of the parents
@@ -604,16 +606,16 @@ Sourcemap.buildTree = function(tree_id,sc) {
         }
 		var len = 0;
 		for (var l = 0; l<tier_order.length;l++) {
-			if (tier_order[l] != undefined) {
-				len++;
-			}
+			if (tier_order[l] != undefined) {len++;}
 		}
 		for (var l = 0; l<tier_order.length;l++) {
 			if (tier_order[l] != undefined) {
 				if (parseInt(tier_order[l]/2) == (tier_order[l]/2)) {
+                    // if tier_oder[l] is even
 					//tier_list[l].order = (Math.floor(len/2) - (tier_order[l]/2))+1;
 					tier_list[l].order = tier_order[l]/2;
 				} else {
+                    // if tier_oder[l] is odd
 					//tier_list[l].order = Math.floor(len/2) + ((tier_order[l]+1)/2);
 					tier_list[l].order = len - Math.floor(tier_order[l]/2);
 				}
@@ -623,17 +625,42 @@ Sourcemap.buildTree = function(tree_id,sc) {
 			for(var n=0, length=sc.hops.length;n<length;n++)
 		    {
 				var h = sc.hops[n];
-				if (h.to_stop_id == tier_list[l].instance) {
+				if (tier_list[l].instance==h.to_stop_id ) {
 					var from = h.to_stop_id;
 					for (var m=0;m<tier_list.length;m++) {
 						if (tier_list[m].instance == h.to_stop_id) {
-								parent_order = tier_list[m].order;
-								break;
+                            if(tier_list[m].order==undefined)
+                                break;
+                            // Make tier closer to the child point  
+                            parent_order = tier_list[m].order;
+                            console.log('parent:'+parent_order+'/stop_id:'+h.to_stop_id);
+                            if (parent_order != 0 && parent_order!= undefined) {
+                                console.log("shift to:"+parent_order);
+                                var old_order = tier_list[l].order;
+                                tier_list[l].order = parent_order;
+                                if (old_order > parent_order) {
+                                    for (var o = 0; o<tier_order.length;o++) {
+                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
+                                            tier_list[o].order++
+                                        }
+                                    }
+                                } else if (old_order < parent_order) {
+                                    for (var o = 0; o<tier_order.length;o++) {
+                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
+                                            tier_list[o].order--;
+                                        }
+                                    }				
+                                }
+                            }
+                            // end order
 						}
 					}
 				}		
+                //end hops
 		    }
-			if (parent_order != 0) {
+            /*
+			if (parent_order != 0 && parent_order!= undefined) {
+                console.log("shift to:"+parent_order);
 				var old_order = tier_list[l].order;
 				tier_list[l].order = parent_order;
 				if (old_order > parent_order) {
@@ -650,26 +677,35 @@ Sourcemap.buildTree = function(tree_id,sc) {
 					}				
 				}
 			}
+            */
+            // end tiers
 		}
+        console.log('--tiers['+i+']---');
+        console.log(tiers[i]);
+        console.log('--tier_order--');
+        console.log(tier_order);
 	} 
     for(var i=0,order=0;i<tiers.length;i++)
     {
 		var y_offset = ((i*2.5)%5)*5;
-		console.log(y_offset);
+		//console.log(y_offset);
         for(var j=0;j<tiers[i].length;j++){     
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
                     //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
-					//tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
-					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
+					
 					/*
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
+					
 					if (parseInt(tier_list[k].order/2) == (tier_list[k].order/2)) {
 						tier_list[k].y = y_offset + ((500-(tiers[i].length*40))/2)+ (((tier_list[k].order/2))*40); 
 						//console.log("-"(tier_list[k].order/2));
 					} else {
 						tier_list[k].y = y_offset + (500-((500-(tiers[i].length*40))/2)) - ((Math.ceil(tier_list[k].order/2)-1)*40);
 						//console.log(tier_list[k].y);
-					} */
+					} 
+					*/
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
                     tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
                 }
@@ -739,18 +775,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
     //.append("svg:path")
     //    .attr("d", "M0,-5 L10,0 L0,5");
 
-    svg.append("svg:g").selectAll("text")
-    .data(tier_list)
-    .enter().append("svg:text")
-    .attr("x",function(d){return d.x})
-    .attr("y",function(d){return d.y})
-    .attr("dx",".1em") // padding
-    .attr("dy","1.8em")
-    .attr("text-anchor","middle")
-	.style("fill",function(d){return d.color})
-	.style("font-size","12px")
-	.style("font-weight", "bold")
-    .text(function(d){return d.title});
   
     // Arc
     /*
@@ -779,8 +803,12 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
             //.on("click",function(d){alert(d.from+" to "+d.to);})
             .attr("stroke",function(d){return d.color});
-	//svg.append("svg:g").selectAll("circle").data(hop_list).enter()
-	//.append("svg:image") .attr("class", "circle") .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png") .attr("x", function(d){return ((d.x1+d.x2)/2)}) .attr("y", function(d){return ((d.y1+d.y2)/2)}) .attr("width", "16px") .attr("height", "16px");
+
+	svg.append("svg:g").attr("class","arrow").selectAll("arrow").data(hop_list).enter()
+	.append("svg:polygon") 
+		.attr("points", function (d) { return parseInt(((d.x1+d.x2)/2)-5)+ ","  + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , " + parseInt(((d.y1+d.y2)/2)+3) + " " + parseInt(((d.x1+d.x2)/2)+5) + " , " + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , "+ parseInt(((d.y1+d.y2)/2)-5) + " "+ parseInt(((d.x1+d.x2)/2)-5) + " ," + parseInt(((d.y1+d.y2)/2)+5);}) 
+		.attr("transform", function(d){ console.log((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)); return "rotate("+(((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)+90)+ " " + ((d.x1+d.x2)/2) + " " + ((d.y1+d.y2)/2))+")";}) 
+		.style("fill", function(d){return d.color}) .attr("width", "10px") .attr("height", "10px");
    
     /*
     // path > line
@@ -798,6 +826,18 @@ Sourcemap.buildTree = function(tree_id,sc) {
             return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
     */
     
+    svg.append("svg:g").attr("class","stop_title").selectAll("text")
+    .data(tier_list)
+    .enter().append("svg:text")
+    .attr("x",function(d){return d.x})
+    .attr("y",function(d){return d.y})
+    .attr("dx",".1em") // padding
+    .attr("dy","1.8em")
+    .attr("text-anchor","middle")
+	.style("fill",function(d){return d.color})
+	.style("font-size","12px")
+	.style("font-weight", "bold")
+    .text(function(d){return d.title});
  
     svg.append("svg:g").attr("class","circle").selectAll("circle")
         .data(tier_list)
@@ -815,18 +855,27 @@ Sourcemap.buildTree = function(tree_id,sc) {
         return function(g,i){
             svg.selectAll("g.circle circle")
             .filter(function(d){
-                    //console.log(d.index);   //this will scan by order 1~end
-                    //console.log(i);         //this is the id you pick
                     update_updown(i);
                     return check_stops(d.index,i);                        
                 })
             .transition()
                 .style("opacity",opacity);
 
+            svg.selectAll("g.stop_title text")
+            .filter(function(d){
+                    return check_stops(d.index,i);                        
+                })
+            .transition()
+                .style("opacity",opacity);
+           // Hide Arrow
+           svg.selectAll("g.arrow polygon")
+           .filter(function(d){return check_hops(d,i);})
+           .transition()
+                .style("opacity",opacity);
+
+           // Hide line
            svg.selectAll("g.line line")
-           .filter(function(d){
-                    return check_hops(d,i);
-               })
+           .filter(function(d){return check_hops(d,i);})
            .transition()
                 .style("opacity",opacity);
        }

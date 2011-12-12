@@ -33,14 +33,22 @@
 <% } %>
 	</div>
 <% } %>
-<% if(this.stop.getAttr("weight", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("energy", false) || this.stop.getAttr("water", false)) { %>
+<% if(this.stop.getAttr("qty", false) || this.stop.getAttr("weight", false) || this.stop.getAttr("co2e", false) || this.stop.getAttr("energy", false) || this.stop.getAttr("water", false)) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
 <div class="accordion-body">
 <ul id="dialog-footprint">	
 	<% var unit = (this.stop.getAttr("unit","kg") == "kg") ? 1 : 0; %>
 	<% var weight = unit || this.stop.getAttr("weight"); %>
-    <% if(weight && this.stop.getAttr("weight", false)) { %>
-		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("qty", 0) * weight), "kg", 2); %>
+    <% if(this.stop.getAttr("weight", false) && !this.stop.getAttr("qty", false)) { %>
+		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("weight", 0)), "kg", 2); %>
+		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %></li>
+	<% } %>
+	<% if(!this.stop.getAttr("weight", false) && this.stop.getAttr("qty", false)) { %>
+		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("qty", 0)), "kg", 2); %>
+		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %></li>
+	<% } %>
+	<% if(this.stop.getAttr("weight", false) && this.stop.getAttr("qty", false)) { %>
+		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("qty", 0) * this.stop.getAttr("weight", 0)), "kg", 2); %>
 		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %></li>
 	<% } %>
     <% if(this.stop.getAttr("co2e", false)) { %>

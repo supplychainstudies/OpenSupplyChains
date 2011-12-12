@@ -610,16 +610,16 @@ Sourcemap.buildTree = function(tree_id,sc) {
         }
 		var len = 0;
 		for (var l = 0; l<tier_order.length;l++) {
-			if (tier_order[l] != undefined) {
-				len++;
-			}
+			if (tier_order[l] != undefined) {len++;}
 		}
 		for (var l = 0; l<tier_order.length;l++) {
 			if (tier_order[l] != undefined) {
 				if (parseInt(tier_order[l]/2) == (tier_order[l]/2)) {
+                    // if tier_oder[l] is even
 					//tier_list[l].order = (Math.floor(len/2) - (tier_order[l]/2))+1;
 					tier_list[l].order = tier_order[l]/2;
 				} else {
+                    // if tier_oder[l] is odd
 					//tier_list[l].order = Math.floor(len/2) + ((tier_order[l]+1)/2);
 					tier_list[l].order = len - Math.floor(tier_order[l]/2);
 				}
@@ -629,17 +629,42 @@ Sourcemap.buildTree = function(tree_id,sc) {
 			for(var n=0, length=sc.hops.length;n<length;n++)
 		    {
 				var h = sc.hops[n];
-				if (h.to_stop_id == tier_list[l].instance) {
+				if (tier_list[l].instance==h.to_stop_id ) {
 					var from = h.to_stop_id;
 					for (var m=0;m<tier_list.length;m++) {
 						if (tier_list[m].instance == h.to_stop_id) {
-								parent_order = tier_list[m].order;
-								break;
+                            if(tier_list[m].order==undefined)
+                                break;
+                            parent_order = tier_list[m].order;
+                            console.log('parent:'+parent_order+'/stop_id:'+h.to_stop_id);
+                            // multiple points been : to one stop
+                            if (parent_order != 0 && parent_order!= undefined) {
+                                console.log("shift to:"+parent_order);
+                                var old_order = tier_list[l].order;
+                                tier_list[l].order = parent_order;
+                                if (old_order > parent_order) {
+                                    for (var o = 0; o<tier_order.length;o++) {
+                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
+                                            tier_list[o].order++
+                                        }
+                                    }
+                                } else if (old_order < parent_order) {
+                                    for (var o = 0; o<tier_order.length;o++) {
+                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
+                                            tier_list[o].order--;
+                                        }
+                                    }				
+                                }
+                            }
+                            // end order
 						}
 					}
 				}		
+                //end hops
 		    }
-			if (parent_order != 0) {
+            /*
+			if (parent_order != 0 && parent_order!= undefined) {
+                console.log("shift to:"+parent_order);
 				var old_order = tier_list[l].order;
 				tier_list[l].order = parent_order;
 				if (old_order > parent_order) {
@@ -656,12 +681,18 @@ Sourcemap.buildTree = function(tree_id,sc) {
 					}				
 				}
 			}
+            */
+            // end tiers
 		}
+        console.log('--tiers['+i+']---');
+        console.log(tiers[i]);
+        console.log('--tier_order--');
+        console.log(tier_order);
 	} 
     for(var i=0,order=0;i<tiers.length;i++)
     {
 		var y_offset = ((i*2.5)%5)*5;
-		console.log(y_offset);
+		//console.log(y_offset);
         for(var j=0;j<tiers[i].length;j++){     
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){

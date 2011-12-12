@@ -553,7 +553,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
     // Set middle stack in mid
-
+/*
 	// So, what we should do here is stick the dots with the most connections in the middle, and the ones with the least on the outside
     for(var i=0, length=sc.hops.length;i<length;i++)
     {
@@ -658,6 +658,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 			}
 		}
 	} 
+	*/
     for(var i=0,order=0;i<tiers.length;i++)
     {
 		var y_offset = ((i*2.5)%5)*5;
@@ -666,16 +667,19 @@ Sourcemap.buildTree = function(tree_id,sc) {
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
                     //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
-					//tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
-					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
+					
 					/*
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
+					
 					if (parseInt(tier_list[k].order/2) == (tier_list[k].order/2)) {
 						tier_list[k].y = y_offset + ((500-(tiers[i].length*40))/2)+ (((tier_list[k].order/2))*40); 
 						//console.log("-"(tier_list[k].order/2));
 					} else {
 						tier_list[k].y = y_offset + (500-((500-(tiers[i].length*40))/2)) - ((Math.ceil(tier_list[k].order/2)-1)*40);
 						//console.log(tier_list[k].y);
-					} */
+					} 
+					*/
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
                     tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
                 }
@@ -785,8 +789,11 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
             //.on("click",function(d){alert(d.from+" to "+d.to);})
             .attr("stroke",function(d){return d.color});
-	//svg.append("svg:g").selectAll("circle").data(hop_list).enter()
-	//.append("svg:image") .attr("class", "circle") .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png") .attr("x", function(d){return ((d.x1+d.x2)/2)}) .attr("y", function(d){return ((d.y1+d.y2)/2)}) .attr("width", "16px") .attr("height", "16px");
+	svg.append("svg:g").attr("class","arrow").selectAll("arrow").data(hop_list).enter()
+	.append("svg:polygon") 
+		.attr("points", function (d) { return parseInt(((d.x1+d.x2)/2)-5)+ ","  + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , " + parseInt(((d.y1+d.y2)/2)+3) + " " + parseInt(((d.x1+d.x2)/2)+5) + " , " + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , "+ parseInt(((d.y1+d.y2)/2)-5) + " "+ parseInt(((d.x1+d.x2)/2)-5) + " ," + parseInt(((d.y1+d.y2)/2)+5);}) 
+		.attr("transform", function(d){ console.log((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)); return "rotate("+(((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)+90)+ " " + ((d.x1+d.x2)/2) + " " + ((d.y1+d.y2)/2))+")";}) 
+		.style("fill", function(d){return d.color}) .attr("width", "10px") .attr("height", "10px");
    
     /*
     // path > line

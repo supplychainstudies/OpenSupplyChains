@@ -558,28 +558,25 @@ Sourcemap.buildTree = function(tree_id,sc) {
     for(var i=0, length=sc.hops.length;i<length;i++)
     {
         var h = sc.hops[i];
+        // for tier_list
 		for (var j = 0; j< tier_list.length; j++) {
-			if (h.from_stop_id == tier_list[j].instance) {
-				if (tier_list[j].connections) {
-					tier_list[j].connections++;
-				} else {
-					tier_list[j].connections=1;
-				}
-			} else if (h.to_stop_id == tier_list[j].instance) {
-				if (tier_list[j].connections) {
-					tier_list[j].connections++;
-				} else {
-					tier_list[j].connections=1;
-				}
-			}			
+			if (h.from_stop_id == tier_list[j].instance||h.to_stop_id == tier_list[j].instance) {
+                (tier_list[j].connections)?tier_list[j].connections++:tier_list[j].connections=1;                
+            }
+            // All points that don't have connections are set to zero
+            (tier_list[j].connections)?0:tier_list[j].connections=0;
 		}
+        // for tiers
+        for (var k =0;k<tiers.length;k++){
+            for(var j=0;j<tiers[k].length;j++){
+                if(h.from_stop_id == tiers[k][j].instance_id || h.to_stop_id == tiers[k][j].instance_id){ 
+                    (tiers[k][j].connections) ? tiers[k][j].connections++ : tiers[k][j].connections=1;
+                }
+                // All points that don't have connections are set to zero
+                (tiers[k][j].connections)? 0:tiers[k][j].connections=0;
+            }
+        }
     }
-	// All points that don't have connections are set to zero
-	for (var i = 0; i < tier_list.length; i++) {
-		if (!tier_list[i].connections) {
-			tier_list[i].connections = 0;	
-		}
-	}
 	
 	// Turn the connections into a row order
 	// Have to base this on connections, and also the row order of the parents
@@ -635,9 +632,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
 						if (tier_list[m].instance == h.to_stop_id) {
                             if(tier_list[m].order==undefined)
                                 break;
+                            // Make tier closer to the child point  
                             parent_order = tier_list[m].order;
                             console.log('parent:'+parent_order+'/stop_id:'+h.to_stop_id);
-                            // multiple points been : to one stop
                             if (parent_order != 0 && parent_order!= undefined) {
                                 console.log("shift to:"+parent_order);
                                 var old_order = tier_list[l].order;

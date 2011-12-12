@@ -553,7 +553,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
     // Set middle stack in mid
-/*
 	// So, what we should do here is stick the dots with the most connections in the middle, and the ones with the least on the outside
     for(var i=0, length=sc.hops.length;i<length;i++)
     {
@@ -686,7 +685,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
         console.log('--tier_order--');
         console.log(tier_order);
 	} 
-	*/
     for(var i=0,order=0;i<tiers.length;i++)
     {
 		var y_offset = ((i*2.5)%5)*5;
@@ -777,18 +775,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
     //.append("svg:path")
     //    .attr("d", "M0,-5 L10,0 L0,5");
 
-    svg.append("svg:g").selectAll("text")
-    .data(tier_list)
-    .enter().append("svg:text")
-    .attr("x",function(d){return d.x})
-    .attr("y",function(d){return d.y})
-    .attr("dx",".1em") // padding
-    .attr("dy","1.8em")
-    .attr("text-anchor","middle")
-	.style("fill",function(d){return d.color})
-	.style("font-size","12px")
-	.style("font-weight", "bold")
-    .text(function(d){return d.title});
   
     // Arc
     /*
@@ -817,6 +803,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
             //.on("click",function(d){alert(d.from+" to "+d.to);})
             .attr("stroke",function(d){return d.color});
+
 	svg.append("svg:g").attr("class","arrow").selectAll("arrow").data(hop_list).enter()
 	.append("svg:polygon") 
 		.attr("points", function (d) { return parseInt(((d.x1+d.x2)/2)-5)+ ","  + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , " + parseInt(((d.y1+d.y2)/2)+3) + " " + parseInt(((d.x1+d.x2)/2)+5) + " , " + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , "+ parseInt(((d.y1+d.y2)/2)-5) + " "+ parseInt(((d.x1+d.x2)/2)-5) + " ," + parseInt(((d.y1+d.y2)/2)+5);}) 
@@ -839,6 +826,18 @@ Sourcemap.buildTree = function(tree_id,sc) {
             return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
     */
     
+    svg.append("svg:g").attr("class","stop_title").selectAll("text")
+    .data(tier_list)
+    .enter().append("svg:text")
+    .attr("x",function(d){return d.x})
+    .attr("y",function(d){return d.y})
+    .attr("dx",".1em") // padding
+    .attr("dy","1.8em")
+    .attr("text-anchor","middle")
+	.style("fill",function(d){return d.color})
+	.style("font-size","12px")
+	.style("font-weight", "bold")
+    .text(function(d){return d.title});
  
     svg.append("svg:g").attr("class","circle").selectAll("circle")
         .data(tier_list)
@@ -856,18 +855,27 @@ Sourcemap.buildTree = function(tree_id,sc) {
         return function(g,i){
             svg.selectAll("g.circle circle")
             .filter(function(d){
-                    //console.log(d.index);   //this will scan by order 1~end
-                    //console.log(i);         //this is the id you pick
                     update_updown(i);
                     return check_stops(d.index,i);                        
                 })
             .transition()
                 .style("opacity",opacity);
 
+            svg.selectAll("g.stop_title text")
+            .filter(function(d){
+                    return check_stops(d.index,i);                        
+                })
+            .transition()
+                .style("opacity",opacity);
+           // Hide Arrow
+           svg.selectAll("g.arrow polygon")
+           .filter(function(d){return check_hops(d,i);})
+           .transition()
+                .style("opacity",opacity);
+
+           // Hide line
            svg.selectAll("g.line line")
-           .filter(function(d){
-                    return check_hops(d,i);
-               })
+           .filter(function(d){return check_hops(d,i);})
            .transition()
                 .style("opacity",opacity);
        }

@@ -599,6 +599,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
     //console.log(sc.hops);
     // Sort #2 : stops with only 1 connection should be clustered and move order
+    (function(){
+        return;
     var finish_stop_id_list =[];
     for(var j=0;j<tiers.length;j++){
         // move order -> cluster
@@ -663,8 +665,75 @@ Sourcemap.buildTree = function(tree_id,sc) {
             }
         }
     }
+    })();
     // End Sort #2
 
+    // Sort #3 : stops with only 1 connection should be clustered and move order
+    (function(){
+    var finish_stop_id_list =[];
+    var parent_stop_id_list =[];
+    for(var j=0;j<tiers.length;j++){
+        // move order -> cluster
+        // Move order close to its end
+        for(var k=0;k<tiers[j].length;k++){
+            var child_stop_id = "",parent_stop_id = "";
+            parent_stop_id_list = [];
+            for(var l=0;l<sc.hops.length;l++){
+                if(sc.hops[l].to_stop_id==tiers[j][k].instance_id){
+                    child_stop_id = sc.hops[l].to_stop_id;
+                    for(var z=0;z<tier_list.length;z++)
+                    {
+                        if(sc.hops[l].from_stop_id==tier_list[z].instance){
+                            if(tier_list[z].connections!=1)
+                                continue;
+                            parent_stop_id = sc.hops[l].from_stop_id;
+                            parent_stop_id_list.push(parent_stop_id);
+                            continue;
+                        }
+                    }
+                }
+            }
+            if(parent_stop_id_list.length<1||child_stop_id=="")
+                continue;
+            else{
+                (function(){
+                    for(var q=0,q_len=parent_stop_id_list.length;q<q_len;q++){
+                        var target = parent_stop_id_list.pop();
+                        for(var m=0;m<tiers.length;m++){
+                            for(var n=0;n<tiers[m].length;n++){
+                                if(tiers[m][n].instance_id!=target)
+                                    continue;
+                                console.log(target);
+
+                                var new_position,pos;
+                                var temp_item;
+                                var temp_item = tiers[m][n];
+                                pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (k/(tiers[j].length-1));
+                                if(pos>.5)
+                                    new_position = tiers[m].length;
+                                else if(pos==.5)    
+                                    new_position = parseInt(tiers[m].length/2);
+                                else
+                                    new_position = 0;
+
+                                var attr = tiers[m][n].attributes;
+                                console.log(pos+":"+attr.title+" / to ("+new_position+")   Ins:"+tiers[j][k].instance_id);
+
+                                tiers[m].splice(n,1);
+                                tiers[m].splice(new_position,0,temp_item);
+
+                                continue;
+                            }
+                        }
+                    }
+                })(); // end function
+            }//end else
+            continue;
+        }
+    }
+    })();
+    // End Sort #3
+    
 	// Turn the connections into a row order
 	// Have to base this on connections, and also the row order of the parents
     /*

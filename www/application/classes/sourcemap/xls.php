@@ -70,37 +70,51 @@ class Sourcemap_xls {
 				$uh[$hop->from_stop_id] = array('level'=>($uh[$hop->to_stop_id]['level']+1), 'row'=>$uh[$hop->to_stop_id]['row']+1);
 				$umax_level = max($umax_level, ($uh[$hop->to_stop_id]['level']+1));
 				foreach ($uh as $num=>$st) {
-					if ($st['row'] >= $uh[$hop->from_stop_id]['row']) {
+					if ($st['row'] >= $uh[$hop->from_stop_id]['row'] && $num != $hop->from_stop_id) {
 						$uh[$num]['row']++;
 					}
 				} 
 			} else {
-				// Has to be downstream. Pop it in there, man
+				// Has to be downstream, therefore:
+				// 1) Take it out of the upstream series
+				// Anything that is a child needs to be moved up one level
+				/*
+				$trip = false;
+				foreach ($uh as $num=>$st) {
+					if ($st['row'] >= $uh[$hop->from_stop_id]['row']) {
+						$uh[$num]['row']--;
+						if ($uh[$num]['level'] <= $uh[$hop->from_stop_id]['level']) {
+							$trip = true;
+						}
+						if ($trip == false) {
+							$uh[$num]['level']--;
+						}
+					}
+				}	
+				unset($uh[$hop->from_stop_id]);	
+				*/
+				
+										
+				// 2) Pop it in the downstream series
 				if(isset($dh[$hop->from_stop_id]) == false) {
 					$dh[$hop->from_stop_id] = array('level'=>0, 'row'=>count($dh)+1);
 				}
 				$dh[$hop->to_stop_id] = array('level'=>($dh[$hop->from_stop_id]['level']+1), 'row'=>$dh[$hop->from_stop_id]['row']+1);
 				$dmax_level = max($dmax_level, ($dh[$hop->from_stop_id]['level']+1));
 				foreach ($dh as $num=>$st) {
-					if ($st['row'] >= $dh[$hop->to_stop_id]['row']) {
+					if ($st['row'] >= $dh[$hop->to_stop_id]['row'] && $num != $hop->to_stop_id) {
 						$dh[$num]['row']++;
 					}
 				}
 			}
-			/*
-			else {	
-				$stops_hierarchy[$hop->to_stop_id] = array('level'=>0, 'row'=>count($stops_hierarchy));
-			} */
-			//var_dump($stops_hierarchy);
+			//var_dump($uh);
+			//var_dump($dh);
 		}
 		
-		
-		//var_dump($stops_hierarchy);
-		/*
         $points = array(
-        1 => array()
+        	1 => array()
 		); 
-		for($i=0;$i<=$max_level;$i++) {
+		for($i=0;$i<=$umax_level;$i++) {
 			$points[1][] = "Tier ". $i;
 		}
 		array_push($points[1],
@@ -121,10 +135,7 @@ class Sourcemap_xls {
 			"color",
 			"size"
 			);
-		*/
-		
-		
-		
+
 		$ucolumns = array();
 		for($i=0;$i<=$umax_level;$i++) {
 			$ucolumns[] = "Tier ".$i;
@@ -159,8 +170,20 @@ class Sourcemap_xls {
 					}
 				}
 				
-				/*
-				$stops_hierarchy[$stop->id]['level'];
+				$vals = array(
+						'title' => '',
+						'placename' => '',
+						'address' => '',
+						'description' => '',
+						'percentage' => '',
+						'youtube:title' => '',
+						'youtube:link' => '',
+						'flickr:setid' => '',
+						'qty' => '',
+						'co2e' => '',
+						'color' => ''
+					);
+				
 				if (isset($stop->attributes->title) == true) {
 					$vals['title'] = $stop->attributes->title;
 					$vals['placename'] = $stop->attributes->title;
@@ -370,7 +393,7 @@ class Sourcemap_xls {
         $request->headers['Cache-Control'] = 'max-age=0';
         $request->send_headers();
         $sWriter->save('php://output');
-		*/
+		
 	}
 	
 }

@@ -689,6 +689,12 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
          }
     });
 
+    $(this.map_view.dialog).find('.catalog').click($.proxy(function() {
+        this.q = '';
+        this.params = {"name": ''};
+        this.showCatalog(this);
+    }, this));
+
     $(this.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
         this.q = '';
         this.params = {"name": ''};

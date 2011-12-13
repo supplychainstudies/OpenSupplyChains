@@ -59,7 +59,7 @@ return array(
         ),
         'confirm_terms' => array(
             'type' => 'checkbox',
-            'label' => 'I have read and agree to the <a href="/info/terms/#document-content?w=500" target="_blank" class="modal">terms of service</a>.',
+            'label' => 'I have read and agree to the <a href="/info/channel/#document-content?w=500" target="_blank" class="modal">terms of service</a>.',
             'default' => 0
         ),
         'upgrade' => array(

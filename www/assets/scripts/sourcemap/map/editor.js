@@ -939,6 +939,24 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
 Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
     if(!this.catalog_search_xhr) this.catalog_search_xhr = {};
     if(this.catalog_search_xhr[o.catalog]) this.catalog_search_xhr[o.catalog].abort();
+	var curate = true;
+	var curatedcontent = new Array(
+			"http://footprinted.org/DryLumber10812824",
+			"http://footprinted.org/ElectricArcFurnaceBillet20024557",
+			"http://footprinted.org/GreenLumber53300828",
+			"http://footprinted.org/HighDensityPolyethyleneHDPE40221568",
+			"http://footprinted.org/HighImpactPolystyreneHIPS26587636",
+			"http://footprinted.org/HotRolledCoilSteel37900884",
+			"http://footprinted.org/LinearLowDensityPolyethyleneLLDPE25698089",
+			"http://footprinted.org/LowDensityPolyethyleneLDPE46262481",
+			"http://footprinted.org/MoltenAmberGlass57706722",
+			"http://footprinted.org/MoltenEmeraldGlass55425705",
+			"http://footprinted.org/MoltenFlintGlass26882735",
+			"http://footprinted.org/PolyethyleneTerephthalatePET12926860",
+			"http://footprinted.org/1000kgPolypropylenePP62280870",
+			"http://footprinted.org/PolyvinylChloridePVC54593231",
+			"http://footprinted.org/PrimaryAluminumIngot84706627"
+		);
     this.catalog_search_xhr[o.catalog] = $.ajax({"url": "services/catalogs/"+o.catalog, "data": o.params || {}, 
         "success": $.proxy(function(json) {
             var cat_html = $('<ul class="catalog-items"></ul>');
@@ -946,54 +964,56 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             for(var i=0; i<json.results.length; i++) {
     			//if(!(json.results[i].co2e)) { continue;}
                 // Todo: Template this 
-                json.results[i].uri = 'http://www.footprinted.org/' + json.results[i].uri;				
-				if (json.results[i].co2e) 
-					json.results[i].co2e_reference = json.results[i].uri;		 
-				if (json.results[i].energy)
-					json.results[i].energy_reference =json.results[i].uri;				
-				if (json.results[i].water)
-					json.results[i].water_reference = json.results[i].uri;
-                var cat_content = '';                    
-				cat_content += '<div class="cat-item-text">';
-                cat_content += '<span class="cat-item-name">'+_S.ttrunc(json.results[i].name, 30)+'</span>';
-                cat_content += json.results[i].geography ? '<span class="cat-item-metainfo">Location: '+json.results[i].geography+'</span>': '';
-				cat_content += json.results[i].year!="0" ? '<span class="cat-item-metainfo">Year: '+json.results[i].year+'</span>': '';		
-				cat_content += '</div>';
-				cat_content += '<span class="cat-item-footprints">';
-				cat_content +=  '<span class="cat-item-co2e">';
-				cat_content +=  json.results[i].co2e ? '<input type="checkbox" id="co2e-factor" />'+ Math.round(100*json.results[i].co2e)/100+' kg' : '&nbsp;';
-				cat_content +=  '</span>';
-				cat_content +=  '<span class="cat-item-energy">';
-				cat_content +=  json.results[i].energy ? '<input type="checkbox" id="energy-factor" />'+ Math.round(100*json.results[i].energy)/100+' kwh' : '&nbsp;';
-				cat_content +=  '</span>';
-				cat_content +=  '<span class="cat-item-water">';
-				cat_content +=  json.results[i].water ? '<input type="checkbox" id="water-factor" />'+Math.round(100*json.results[i].water)/100+' L ' : '&nbsp;';
-				cat_content +=  '</span>';
-				cat_content +=  '<a class="add-map-button">&nbsp;</a>';
-				cat_content +=  '<a class="reference-button" target="_blank" href="' + json.results[i].uri + '">&nbsp;</a>';
-				cat_content += '</span>';
-    			cat_content += '<div class="clear"></div>';                    
+				json.results[i].uri = 'http://www.footprinted.org/' + json.results[i].uri;
+				if ((curate == true && $.inArray(json.results[i].uri, curatedcontent) != -1) || curate == false) {                					
+					if (json.results[i].co2e) 
+						json.results[i].co2e_reference = json.results[i].uri;		 
+					if (json.results[i].energy)
+						json.results[i].energy_reference =json.results[i].uri;				
+					if (json.results[i].water)
+						json.results[i].water_reference = json.results[i].uri;
+	                var cat_content = '';                    
+					cat_content += '<div class="cat-item-text">';
+	                cat_content += '<span class="cat-item-name">'+_S.ttrunc(json.results[i].name, 30)+'</span>';
+	                cat_content += json.results[i].geography ? '<span class="cat-item-metainfo">Location: '+json.results[i].geography+'</span>': '';
+					cat_content += json.results[i].year!="0" ? '<span class="cat-item-metainfo">Year: '+json.results[i].year+'</span>': '';		
+					cat_content += '</div>';
+					cat_content += '<span class="cat-item-footprints">';
+					cat_content +=  '<span class="cat-item-co2e">';
+					cat_content +=  json.results[i].co2e ? '<input type="checkbox" id="co2e-factor" />'+ Math.round(100*json.results[i].co2e)/100+' kg' : '&nbsp;';
+					cat_content +=  '</span>';
+					cat_content +=  '<span class="cat-item-energy">';
+					cat_content +=  json.results[i].energy ? '<input type="checkbox" id="energy-factor" />'+ Math.round(100*json.results[i].energy)/100+' kwh' : '&nbsp;';
+					cat_content +=  '</span>';
+					cat_content +=  '<span class="cat-item-water">';
+					cat_content +=  json.results[i].water ? '<input type="checkbox" id="water-factor" />'+Math.round(100*json.results[i].water)/100+' L ' : '&nbsp;';
+					cat_content +=  '</span>';
+					cat_content +=  '<a class="add-map-button">&nbsp;</a>';
+					cat_content +=  '<a class="reference-button" target="_blank" href="' + json.results[i].uri + '">&nbsp;</a>';
+					cat_content += '</span>';
+	    			cat_content += '<div class="clear"></div>';                    
                 
-                var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
-                $(new_li).find('#co2e-factor').click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true, "unit": true, "co2e_reference": true}}}));
-                $(new_li).find('#energy-factor').click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"energy": true, "unit": true, "energy_reference": true}}}));
-                $(new_li).find('#water-factor').click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"water": true, "unit": true, "water_reference": true}}}));                
-				$(new_li).find('.add-map-button').click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true,"energy": true,"water": true, "unit": true, "co2e_reference": true, "energy_reference": true, "water_reference": true}}}));                
+	                var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
+	                $(new_li).find('#co2e-factor').click($.proxy(function(evt) {
+	                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+	                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true, "unit": true, "co2e_reference": true}}}));
+	                $(new_li).find('#energy-factor').click($.proxy(function(evt) {
+	                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+	                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"energy": true, "unit": true, "energy_reference": true}}}));
+	                $(new_li).find('#water-factor').click($.proxy(function(evt) {
+	                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+	                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"water": true, "unit": true, "water_reference": true}}}));                
+					$(new_li).find('.add-map-button').click($.proxy(function(evt) {
+	                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+	                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true,"energy": true,"water": true, "unit": true, "co2e_reference": true, "energy_reference": true, "water_reference": true}}}));                
 
-				/*
-                $(new_li).click($.proxy(function(evt) {
-                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
-                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
-   				*/
-				cat_html.append(new_li);
+					/*
+	                $(new_li).click($.proxy(function(evt) {
+	                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref);
+	                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog}));
+	   				*/
+					cat_html.append(new_li);
+				}
             }
 			$(this.editor.map_view.dialog).find('.falseclose').click($.proxy(function() {
                 $(this).parent().parent().parent().parent().width(411);

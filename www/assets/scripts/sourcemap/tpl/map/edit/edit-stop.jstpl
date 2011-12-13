@@ -62,7 +62,7 @@
 					<div class="footprint-math weight-context <% if(unittype == "kg") { %>hidden<% } %>">kg</div>		
 
 					
-				</div>
+				
 				<div class="footprint-row"></div>
 				<div class="footprint-row indent">		
 					<!--<div class="footprint-section">-->					           

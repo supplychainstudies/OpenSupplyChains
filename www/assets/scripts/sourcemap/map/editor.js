@@ -990,6 +990,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
     			//if(!(json.results[i].co2e)) { continue;}
                 // Todo: Template this 
 				json.results[i].uri = 'http://www.footprinted.org/' + json.results[i].uri;
+				console.log($.inArray(json.results[i].uri, curatedcontent));
 				if ((curate == true && $.inArray(json.results[i].uri, curatedcontent) != -1) || curate == false) {                					
 					if (json.results[i].co2e) 
 						json.results[i].co2e_reference = json.results[i].uri;		 
@@ -1227,6 +1228,7 @@ Sourcemap.Map.Editor.prototype.updateMedia = function(ref, editor) {
 Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
     var o = o || {};
     o.q = o.q ? o.q : '';
+console.log(o);
     o.catalog = o.catalog ? o.catalog : "osi";
     var tscope = {"editor": this, "o": o, "ref": o.ref};
     Sourcemap.template('map/edit/catalog', function(p, txt, th) {  

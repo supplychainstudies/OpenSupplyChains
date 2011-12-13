@@ -20,14 +20,19 @@
             <!--<a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>-->
             <a id="change_profile_pic">Change picture</a>
         </div>
-        <?php if($isChannel): ?>
+            <?php if($isChannel): ?>
         <div class="button alternate">
             <a id="change_banner">Upload banner</a>
         </div>
-        <? endif; ?>
+            <? endif; ?>
         <div class="button alternate">
             <a href="auth/reset">Change password</a>
         </div>
+            <?php if($isChannel): ?>
+        <div class="button alternate">
+            <a href="/upgrade/payments">Payments</a>
+        </div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
     <ul class="user-details">

@@ -93,7 +93,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                 $msgbody .= "Dear {$user->username},\n\n";
                 $msgbody .= "Thank you for upgrading to a channel account.\n\n";
                 $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.\n\n";
-                $msgbody .= "If you have any questions, please contact us at support@sourcemap.com.\n\n";
+                $msgbody .= "If you have any questions, please contact us at channels@sourcemap.com.\n\n";
                 $msgbody .= "-The Sourcemap Team\n";
                 $swift_msg->setSubject('Re: Your Newly Upgraded Sourcemap Account')
 						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
@@ -300,7 +300,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                 $msgbody .= "Dear {$user->username},\n\n";
                 $msgbody .= "Thank you for renewing your channel!";
                 $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly-availble fields in your dashboard.\n\n";
-                $msgbody .= "If you have any questions, please contact us at support@sourcemap.com.\n\n";
+                $msgbody .= "If you have any questions, please contact us at channels@sourcemap.com.\n\n";
                 $msgbody .= "-The Sourcemap Team\n";
                 $swift_msg->setSubject('Re: Your Newly Upgraded Sourcemap Account')
 						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))

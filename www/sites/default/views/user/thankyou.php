@@ -28,7 +28,7 @@
     <div class="box-section upgrade">
         <div class="sourcemap-form">
             <div class="container receipt">
-                <h2 class="section-title">Payment confirmation for <?= isset($username) ? $username : "" ?></h2>
+                <h2 class="section-title">Card information for <?= isset($username) ? $username : "" ?></h2>
                 <ul class="labels">
                     <li>Name on card:</li>
                     <li>Card type:</li>
@@ -36,10 +36,10 @@
                     <li>Expires:</li>
                 </ul>
                 <ul>
-                    <li><?= $card_name ?></li>
-                    <li><?= $card_type ?></li>
-                    <li><?= $card ?></li>
-                    <li><?= $exp_month ?> / <?= $exp_year ?></li>
+                    <li><?= isset($card_name) ? $card_name : '';?></li>
+                    <li><?= isset($card_type) ? $card_type: '';?></li>
+                    <li><?= isset($card) ? $card : '';?></li>
+                    <li><?= isset($exp_month) ? $exp_month : '';?> / <?= isset($exp_year) ? $exp_year : '';?></li>
                 </ul>
                 <h2 class="section-title">Account details</h2>
                 <ul class="receipt labels">
@@ -49,7 +49,7 @@
                 </ul>
                 <ul class="receipt">
                     <li><?= date("F j, Y", $user->created); ?></li>
-                    <li><?= $status ?></li>
+                    <li><?= isset($status) ? $status : ''; ?></li>
                     <?= isset($thru) ? "<li>" . date("F j, Y", $thru) . "</li>" : ""?>
                 </ul>
                 <div class="clear"></div>

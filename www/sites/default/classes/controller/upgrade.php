@@ -52,7 +52,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                     } catch (Exception $e) {
                         // create plan if it doesn't exist
                         Stripe_Plan::create(array(
-                          "amount" => 9995,
+                          "amount" => 9900,
                           "interval" => "year",
                           "name" => "Channel",
                           "currency" => "usd",

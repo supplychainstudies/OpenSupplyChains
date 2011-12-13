@@ -576,9 +576,30 @@ Sourcemap.buildTree = function(tree_id,sc) {
             }
         }
     }
+    
+    // Sort #1 : Stop with largest connections in mid;
+    for(var k=0;k<tiers.length;k++){
+        tiers[k].sort(function(a,b){return a.connections - b.connections;});
+        // sort tiers[k]
+
+        var new_arr = [];
+        for(var bool=0,y=0,z=0;y<tiers[k].length;y++){
+            if(bool){
+                bool=0;
+                new_arr.splice(z,0,tiers[k][y]); 
+            } else {
+                new_arr.splice(new_arr.length-z,0,tiers[k][y]); 
+                bool=1;
+                z+=1;
+            }  
+        }
+        tiers[k] = new_arr;
+    }
+    // End Sort #1
 	
 	// Turn the connections into a row order
 	// Have to base this on connections, and also the row order of the parents
+    /*
     for(var i=0,order=0;i<tiers.length;i++) {
 		var tier_connections = new Array();
 		var tier_order = new Array();
@@ -625,15 +646,16 @@ Sourcemap.buildTree = function(tree_id,sc) {
 			for(var n=0, length=sc.hops.length;n<length;n++)
 		    {
 				var h = sc.hops[n];
-				if (tier_list[l].instance==h.to_stop_id ) {
-					var from = h.to_stop_id;
+                var stop_id = h.to_stop_id;
+                //var stop_id = h.to_stop_id;
+				if (tier_list[l].instance==stop_id ) {
 					for (var m=0;m<tier_list.length;m++) {
-						if (tier_list[m].instance == h.to_stop_id) {
+						if (tier_list[m].instance == stop_id) {
                             if(tier_list[m].order==undefined)
                                 break;
                             // Make tier closer to the child point  
                             parent_order = tier_list[m].order;
-                            console.log('parent:'+parent_order+'/stop_id:'+h.to_stop_id);
+                            console.log('parent:'+parent_order+'/stop_id:'+stop_id);
                             if (parent_order != 0 && parent_order!= undefined) {
                                 console.log("shift to:"+parent_order);
                                 var old_order = tier_list[l].order;
@@ -658,33 +680,15 @@ Sourcemap.buildTree = function(tree_id,sc) {
 				}		
                 //end hops
 		    }
-            /*
-			if (parent_order != 0 && parent_order!= undefined) {
-                console.log("shift to:"+parent_order);
-				var old_order = tier_list[l].order;
-				tier_list[l].order = parent_order;
-				if (old_order > parent_order) {
-					for (var o = 0; o<tier_order.length;o++) {
-						if (tier_list[o].order >= tier_list[l].order && o!=l) {
-							tier_list[o].order++
-						}
-					}
-				} else if (old_order < parent_order) {
-					for (var o = 0; o<tier_order.length;o++) {
-						if (tier_list[o].order >= tier_list[l].order && o!=l) {
-							tier_list[o].order--;
-						}
-					}				
-				}
-			}
-            */
-            // end tiers
+            // end tiers_order
 		}
         console.log('--tiers['+i+']---');
         console.log(tiers[i]);
         console.log('--tier_order--');
         console.log(tier_order);
-	} 
+	}
+    
+    */
     for(var i=0,order=0;i<tiers.length;i++)
     {
 		var y_offset = ((i*2.5)%5)*5;
@@ -807,7 +811,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
 	svg.append("svg:g").attr("class","arrow").selectAll("arrow").data(hop_list).enter()
 	.append("svg:polygon") 
 		.attr("points", function (d) { return parseInt(((d.x1+d.x2)/2)-5)+ ","  + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , " + parseInt(((d.y1+d.y2)/2)+3) + " " + parseInt(((d.x1+d.x2)/2)+5) + " , " + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , "+ parseInt(((d.y1+d.y2)/2)-5) + " "+ parseInt(((d.x1+d.x2)/2)-5) + " ," + parseInt(((d.y1+d.y2)/2)+5);}) 
-		.attr("transform", function(d){ console.log((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)); return "rotate("+(((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)+90)+ " " + ((d.x1+d.x2)/2) + " " + ((d.y1+d.y2)/2))+")";}) 
+		.attr("transform", function(d){ //console.log((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)); 
+                return "rotate("+(((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)+90)+ " " + ((d.x1+d.x2)/2) + " " + ((d.y1+d.y2)/2))+")";}) 
 		.style("fill", function(d){return d.color}) .attr("width", "10px") .attr("height", "10px");
    
     /*

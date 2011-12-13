@@ -552,8 +552,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
     }
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
-    // Set middle stack in mid
-	// So, what we should do here is stick the dots with the most connections in the middle, and the ones with the least on the outside
+
+
+    // connctions of each points
     for(var i=0, length=sc.hops.length;i<length;i++)
     {
         var h = sc.hops[i];
@@ -581,7 +582,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
     for(var k=0;k<tiers.length;k++){
         tiers[k].sort(function(a,b){return a.connections - b.connections;});
         // sort tiers[k]
-
         var new_arr = [];
         for(var bool=0,y=0,z=0;y<tiers[k].length;y++){
             if(bool){
@@ -596,7 +596,75 @@ Sourcemap.buildTree = function(tree_id,sc) {
         tiers[k] = new_arr;
     }
     // End Sort #1
-	
+
+    //console.log(sc.hops);
+    // Sort #2 : stops with only 1 connection should be clustered and move order
+    var finish_stop_id_list =[];
+    for(var j=0;j<tiers.length;j++){
+        // move order -> cluster
+        // Move order close to its end
+        for(var k=0;k<tiers[j].length;k++){
+            if(tiers[j][k].connections==1){
+                // with only single connection (end or start)
+                //console.log(j+","+k);
+                //console.log(tiers[j][k]);
+                var child_stop_id = "";
+                var parent_stop_id = "";
+                for(var l=0;l<sc.hops.length;l++){
+                    if(sc.hops[l].from_stop_id==tiers[j][k].instance_id){
+                        child_stop_id = sc.hops[l].to_stop_id;
+                        parent_stop_id = sc.hops[l].from_stop_id;
+                        console.log(tiers[j][k].attributes.title);
+                        continue;
+                    }
+                }
+                if(child_stop_id =="")
+                    continue;   // means its the end of the stop
+                else if(jQuery.inArray(parent_stop_id,finish_stop_id_list)>=0)
+                    continue;
+                else{    
+                    console.log(child_stop_id); 
+                    //console.log(tiers[j][k]);
+                    (function(){
+                    for(var m=0;m<tiers.length;m++){
+                        for(var n=0;n<tiers[m].length;n++){
+                            if(tiers[m][n].instance_id == child_stop_id){
+                                //if(tiers[m].length==1){
+                                //    return;
+                                //}else{
+                                    // Do the order changing stuff
+                                    var new_position,pos;
+                                    var temp_item;
+                                    var temp_item = tiers[j][k];
+                                    pos = (tiers[m].length==1) ? (k/(tiers[j].length-1)) : (n/(tiers[m].length-1));
+
+                                    if(pos>.5)
+                                        new_position = tiers[j].length;
+                                    else if(pos==.5)    
+                                        new_position = parseInt(tiers[j].length/2);
+                                    else
+                                        new_position = 0;
+    
+                                    var attr = tiers[j][k].attributes;
+                                    console.log(pos+":"+attr.title+" / to ("+new_position+")   Ins:"+tiers[j][k].instance_id);
+
+                                    tiers[j].splice(k,1);
+                                    tiers[j].splice(new_position,0,temp_item);
+
+                                    finish_stop_id_list.push(parent_stop_id);
+                                    k--; //
+                                    return;
+                                //}
+                            }                                
+                        }
+                    }
+                    })(); // end of function
+                }
+            }
+        }
+    }
+    // End Sort #2
+
 	// Turn the connections into a row order
 	// Have to base this on connections, and also the row order of the parents
     /*
@@ -732,6 +800,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         }
     }
     */
+
     // Create hop points
     for(var i=0, length=sc.hops.length;i<length;i++)
     {
@@ -853,6 +922,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("opacity",1)
         .on("mouseover",hover_circle(.1))
         .on("mouseout",hover_circle(1))
+        .on("click",function(d){console.log(d.instance);})
         .style("fill", function(d){return d.color})
         .attr("r", "8");
     

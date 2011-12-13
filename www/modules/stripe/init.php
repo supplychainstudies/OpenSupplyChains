@@ -2,5 +2,7 @@
 require_once("classes/Stripe.php");
 $instance = "default";
 
-Stripe::setApiKey(Kohana::config('apis')->stripe_api_secret_key);
+if(isset(Kohana::config('apis')->stripe_api_secret_key)){
+    Stripe::setApiKey(Kohana::config('apis')->stripe_api_secret_key);
+}
 ?>

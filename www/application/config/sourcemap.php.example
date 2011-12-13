@@ -10,5 +10,6 @@ return array(
     'job_queue' => true,
     'job_queue_host' => '127.0.0.1',
     'job_queue_port' => 11300,
-    'maptic_baseurl' => 'http://maptic.local/'
+    'maptic_baseurl' => 'http://maptic.local/',
+    'use_ssl' => false
 );

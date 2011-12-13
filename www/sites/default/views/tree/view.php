@@ -21,6 +21,7 @@
     <?php endif; ?>
 
 <div id="exist-passcode" style="display:none" value="<?= $exist_passcode ?>"></div>
+
 <div id="tree-container">    
     <div id="tree">
         <div id="sourcemap-tree-view"></div>
@@ -51,7 +52,7 @@
     <?php endif; ?>
     <p class="author">
         <img src="<?= HTML::chars($supplychain_avatar) ?>" alt="Avatar"></img>
-        <a class="author-link" href="user/<?= $supplychain_ownerid ?>"><?= isset($supplychain_display_name)? $supplychain_display_name : $supplychain_owner ?></a>, <?= $supplychain_date ?>
+        <a class="author-link" href="user/<?= $supplychain_owner ?>"><?= isset($supplychain_display_name)? $supplychain_display_name : $supplychain_owner ?></a>, <?= $supplychain_date ?>
     	<? $first = true; foreach($supplychain_taxonomy as $cat) { ?>
     		<? if($first) { ?>in <a href="browse/<?= HTML::chars($cat->name); ?>"><?= HTML::chars($cat->title); ?></a>
     		<? $first = false; } else { ?>, <a href="browse/<?= $cat->name; ?>"><?= HTML::chars($cat->title); ?></a> <? } ?>

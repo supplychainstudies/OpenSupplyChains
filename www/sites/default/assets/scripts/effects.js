@@ -13,9 +13,285 @@
 
 
 $(document).ready(function(){
-    
+
     /* truncation */
     Sourcemap.truncate_string(".truncate");
+
+    /* collapse/expand */
+    $('a.expander').click(function(){
+        $(this).parent().next('.collapsed').slideToggle();
+    });
+    
+    /* profiel pictures*/
+    $('a#change_profile_pic,a#change_banner').click(function(){
+        //modal a profile upload window
+        var popID = 'popup';
+        var element = document.createElement('div');
+        var banner_html = document.createElement('div');
+        var edit_id = $(this).attr("id");
+        var element_class,element_caption,upload_rules,form_id,upload_bucket;
+        switch(edit_id){
+            case "change_profile_pic":
+                element_class = "upload_profile_pic";
+                element_caption = "Profile picture";
+                upload_rules= "Upload size limit: 500kb / Width,Height: 200px";
+                form_id = "profile_pic_upload";
+                upload_bucket = "accountpics";
+            break;
+            case "change_banner":
+                element_class = "upload_banner";
+                element_caption = "Banner";
+                upload_rules= "Upload size limit: 2mb";
+                form_id = "banner_upload";
+                upload_bucket = "bannerpics";
+            break;
+        }
+
+        $(element).html(
+            '<div id="upload_content">'+
+            '<div class="'+element_class+'">'+
+            '<h3>'+element_caption+'</h3><h4>'+upload_rules+'</h4><div class="clear"></div>'+
+            '<form id="'+form_id+'" method="post" action="/services/uploads" enctype="multipart/form-data">'+
+            '<input type="hidden" name="bucket" value="'+upload_bucket+'"/>'+
+            '<input type="hidden" name="filename" value="'+username+'"/>'+
+            '<input type="file" name="file" />'+
+            '<input type="submit" value="Upload" />'+
+            '</form></div></div>'
+        );
+        /*
+        $(element).html(
+            '<div id="upload_content">'+
+            '<div class="upload_profile_pic">'+
+            '<h3>Profile picture</h3>'+
+            '<form id="profile_pic_upload" method="post" action="/services/uploads" enctype="multipart/form-data">'+
+            '<input type="hidden" name="bucket" value="accountpics"/>'+
+            '<input type="hidden" name="filename" value="'+username+'"/>'+
+            '<input type="file" name="file" />'+
+            '<input type="submit" value="Upload" />'+
+            '</form></div><hr/></div>'
+        );
+        $(banner_html).html(
+            '<h3>Banner</h3>'+
+            '<form id="banner_upload" method="post" action="/services/uploads" enctype="multipart/form-data">'+
+            '<input type="hidden" name="bucket" value="bannerpics"/>'+
+            '<input type="hidden" name="filename" value="'+username+'"/>'+
+            '<input type="file" name="file" />'+
+            '<input type="submit" value="Upload" />'+
+            '</form>'
+        );
+        $(banner_html).attr('class','upload_banner');
+        is_channel ? $(element).find("#upload_content").append(banner_html) : 0 ;
+        */
+
+        $(element).attr('id',popID);
+        $(element).addClass("popup_block");
+        $(element).prepend('<a href="#" class="close"></a>');
+        $('body').append($(element));
+
+        //is_channel ? $('#' + popID).height(200) : $('#' + popID).height(100);
+        $('#' + popID).height(100);
+        $('#' + popID).width(500);
+        var popMargTop = ($('#' + popID).height() + 80) / 2;
+        var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+        $('#' + popID).css({
+            'margin-top' : -popMargTop,
+            'margin-left' : -popMargLeft,
+            'overflow' : 'hidden'
+        });
+        $('#' + popID).fadeIn();
+
+        $('body').append('<div id="fade"></div>'); //Add the fade layer to botto
+        $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the
+        $('a.close, #fade').live('click', function() { //When clicking on the cl
+            $('#fade , .popup_block').fadeOut(function() {
+                $('#fade, a.close').remove();
+                $('#'+popID).remove();
+            }); //fade them both out
+            return false;
+        });
+        $('form#profile_pic_upload,form#banner_upload').submit(function(evt){
+            var fileInput = $(this).children('input:file');
+            if(fileInput[0].files[0]==undefined){
+                evt.preventDefault();
+                console.log("No file input.")
+                return;    
+            }
+            var Uploadfilesize = fileInput[0].files[0].fileSize;
+            var upload_id = $(this).attr("id");
+            var sizelimit;
+            if(upload_id=="profile_pic_upload")
+                sizelimit = 500000;
+            if(upload_id=="banner_upload")
+                sizelimit = 2000000;
+
+            // if filesize > 500kb
+            if(Uploadfilesize > sizelimit){
+                evt.preventDefault(); //prevent upload action
+                console.log("file size "+Uploadfilesize+" exceed limit "+sizelimit);
+            }
+        });
+});
+
+/* Channel edit */
+$("input:checkbox").each(function(index){
+var ischecked = $(this).is(":checked");
+$(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+
+$(this).change(function(){
+            var ischecked = $(this).is(":checked");
+            $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        });
+    });
+
+    $('.map-controls').each(function(index){
+
+        var publish_precheck = false;
+        var featured_precheck = false;
+        var passcode_precheck = false;
+        
+        // default view
+        var map_passcode = $(this).children('.map-controls-passcode');
+        var ischecked = $(map_passcode).children('#map-passcode-checkbox').is(":checked");
+        $(map_passcode).stop().animate({width:ischecked?249:120},500);     
+        //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+        ischecked ? $(map_passcode).children("#map-passcode-input").show():$(map_passcode).children("#map-passcode-input").hide();
+
+        $(this).children('.map-controls-publish').children('#map-publish-checkbox').change(function(){
+            publish_precheck = true;
+        });
+
+        $(this).children('.map-controls-featured').children('#map-featured-checkbox').change(function(){
+            featured_precheck = true;
+        });
+
+        $(this).children('.map-controls-passcode').children("#map-passcode-checkbox").change(function(){
+            passcode_precheck = true;
+            //passcode_precheck = $(this).is(":checked");
+            // passcode_check : featured_check ? cancel featured : don't send data            
+            // !passcode_check :
+            /*
+            if(!passcode_precheck){
+                // Delete #map-passcode-input value
+                if($(this).parent().children("#map-passcode-input").val()=="")
+                    passcode_precheck = true;
+                else
+                    $(this).parent().children("#map-passcode-input").val("");
+            }
+            */
+            // animation
+            var ischecked = $(this).is(":checked");
+            var parent_control = $(this).parent(".map-controls-passcode");
+            $(parent_control).stop().animate({width:ischecked?249:120},500);            
+            //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+            ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
+        });
+
+
+        
+        $(this).change(function(){
+            // loading icon
+            $(this).find('.map-controls-status').show().removeClass('failed');
+            $(this).find('.map-controls-status').show().removeClass('succeeded');
+
+            // publish
+            var publish_selector = $(this).children('.map-controls-publish"');
+            var publish_check = publish_selector.children("input:checkbox").is(":checked");
+
+            // featured
+            var featured_selector = $(this).children('.map-controls-featured');
+            var featured_check = featured_selector.children("input:checkbox").is(":checked");
+            
+            // passcode 
+            var passcode_selector = $(this).children('.map-controls-passcode');
+            var passcode_check = passcode_selector.children("input:checkbox").is(":checked");
+            var passcode_val = passcode_selector.children("#map-passcode-input").val();
+            //console.log($(passcode_selector).children("input:checkbox").is(":checked"));
+            //console.log(passcode_selector.children("#map-passcode-input").val());
+
+            // precheck
+            // publish_check : featured_check ? cancel featured : (click featured before publish); 
+            if(publish_precheck){            
+                publish_precheck = false; // set to default
+
+                if(!publish_check){                    
+                    featured_selector.children("input:checkbox").removeAttr("checked");
+                    featured_check = false;                        
+                    featured_selector.children("a").attr("style","color:#A7AAAE");
+                }
+            }
+            
+            if(featured_precheck){                
+                featured_precheck = false; // set to default;    
+
+                if(!publish_check){                    
+                    featured_selector.children("input:checkbox").removeAttr("checked");
+                    featured_check = false;                        
+                    featured_selector.children("a").attr("style","color:#A7AAAE");
+                    // cause recursive
+                    // featured_selector.children("input:checkbox").trigger("change");
+                    $(this).find('.map-controls-status').hide();
+                    return false;
+                }
+                if(passcode_check){
+                    // uncheck passcode and reset                    
+                    passcode_selector.children("input:checkbox").removeAttr("checked");
+                    passcode_check = false;
+                    passcode_selector.children("#map-passcode-input").val("");
+                    passcode_val = "";                        
+                    passcode_selector.children("input:checkbox").trigger("change");
+                }
+            }
+
+            // passcode_check : featured_check ? cancel featured : don't send data
+            if(passcode_precheck){
+                passcode_precheck = false;   // set to default 
+
+                if(passcode_check){
+                    if(featured_check){
+                        featured_selector.children("input:checkbox").removeAttr("checked"); 
+                        featured_check = false;                        
+                        featured_selector.children("a").attr("style","color:#A7AAAE");
+                    }else{
+                        $(this).find('.map-controls-status').hide();
+                        return false;
+                    }
+                }else {
+                    if(passcode_val==""){
+                        //$(this).find('.map-controls-status').hide();
+                        //return false;
+                    }else{
+                        // reset passcode
+                        passcode_selector.children("#map-passcode-input").val("");
+                        passcode_val = "";                        
+                        // uncheck featured
+                    }
+                }
+            }
+            
+
+            // supplychain id
+            var supplychain_id = $(this).attr('value');
+            var this_class = $(this).attr('class');
+            //http://192.168.1.18/edit/general/5?publish=yes&featured=yes&passcode=aaa 
+            $.ajax({
+                url:'edit/general/'+supplychain_id,
+                data:{  
+                    publish: publish_check?"yes":"no",
+                    featured: featured_check?"yes":"no",
+                    passcode: passcode_val               
+                },
+                success : function(data) {
+                    //console.log("Success : "+data);
+                    $("."+this_class).find('.map-controls-status').addClass('succeeded');
+                },
+                error : function(data){
+                    $("."+this_class).find('.map-controls-status').addClass('failed');
+                }
+            });
+
+        });
+    });
 
     /* user edit */
     $('a.edit-button').click(function(evt){
@@ -37,12 +313,23 @@ $(document).ready(function(){
     var addForm = function(context, field){
         context.toggleClass('enabled');
         var input = 'input';
-        if ( field === 'description' )
-            input = 'textarea';  // description field gets a textarea
+
         var oldData =  $('#' + field).html();
+        $('#'+field).children('.empty').remove();
+
+        var oldData_html="";
+        var oldData_textarea ="";
+
+        if ( field === 'description' ){
+            input = 'textarea';  // description field gets a textarea
+            oldData_textarea = $('#'+field).text();
+        }else{
+            oldData_html = $('#'+field).text();
+        }
+
         $('#' + field).html(''
             + '<form action="/home/update" method="post" class="edit-field">'
-            + '<' + input + ' type="text" name="' + field + '" placeholder="Enter description here"></' + input + '>'
+            + '<' + input + ' type="text" name="' + field + '" placeholder="Enter description here" value="'+oldData_html+'">'+oldData_textarea+'</' + input + '>'
             + '<div class="submit-status" hidden></div>'
             + '<input type="submit"></input>'
             + '</form>'
@@ -76,11 +363,14 @@ $(document).ready(function(){
         );
     }
 
-
     /* unsupported browser detection */
-    if (($.browser.msie) && $('.browser').length == 0) {
+    if ($.browser.msie  && parseInt($.browser.version) <= 8 && $('.browser').length == 0){
         
         //document.getElementById("status-message").className = "status-message browser";
+        if (!$('.messsages').length){
+            $('.container:eq(0)').append($('<div class="messages"></div>'));
+        }
+
         $(".messages").append(
             "<div class=\"status-wrap\">"
             +"<div class=\"status-message\" style=\"line-height: 1.8em\">"
@@ -88,7 +378,7 @@ $(document).ready(function(){
             +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; \"></div></div></div>"        
         );
         $(".browser").append(
-            " You're using Internet Explorer, which is not supported by Sourcemap."
+            " You're using Internet Explorer " +  parseInt($.browser.version) + ", which is not supported by Sourcemap."
           + " While we won't stop you from experimenting, we highly recommend using"
           + " the latest version of "
           + " <a href=\"http://www.google.com/chrome\">Chrome</a>,"

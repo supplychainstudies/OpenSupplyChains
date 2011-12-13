@@ -35,10 +35,16 @@
 
     <div class="clear"></div>
     
-    <div class="channel-featured-maps">
-        <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
-        <div class="clear"></div>
-        <div id="channel-featured-teaser"></div>
+    <div class="channel-left">
+        <div class="channel-featured-maps">
+            <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
+            <div class="clear"></div>
+            <div id="channel-featured-teaser"></div>
+        </div>
+
+        <div class="channel-featured-badge">
+        <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => true, 'canEdit' => false)) ?>
+        </div>
     </div>
 
     <div class="channel-other-maps">

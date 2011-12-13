@@ -50,7 +50,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     // listen for supplychain updates and save
     Sourcemap.listen('supplychain-updated', function(evt, sc, no_remap) {
         var succ = $.proxy(function() {
-            this.map_view.updateStatus("Saved...", "good-news");           
+            this.map_view.updateStatus("Saved.", "good-news");           
         }, this);
         var fail = $.proxy(function() {
             this.map_view.updateStatus("Could not save! Contact support.", "bad-news");
@@ -163,11 +163,13 @@ Sourcemap.Map.Editor.prototype.init = function() {
                         $(this.dialog_content).find("#newpoint-placename").keypress(function(e){
                             if(e.keyCode==13){$("#newpoint-button").click();};
                         });
+						$(this.dialog_content).find("#newpoint-placename").after('<div class="error"></div>');
     					$(this.dialog_content).find("#newpoint-button").click($.proxy(function() {
                             if(!$("#newpoint-placename").val()){
                                 // If no address and title was inputed
                                 if(!$("#newpoint-title").val()){
-                                    $("#dialog").shake();
+									$("#dialog").find(".error").html('Need a Location');
+                                    //$("#dialog").shake();
                                     return;
                                 }
                                 $("#newpoint-placename").val($("#newpoint-title").val());
@@ -183,7 +185,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
     		                for(var k in this.map.supplychains) { sc = this.map.supplychains[k]; break; }
     						
     						$(this.dialog_content).find("#newpoint-button").attr("disabled","disabled").addClass("disabled");
-    						
+    						// Geolocate the location
     		                var cb = $.proxy(function(data) {
     		                    if(data && data.results && data.results.length && (data.results[0].lat != 90) && (data.results[0].lat != -90) ) {
                                     // point successfully added to field!
@@ -214,7 +216,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
                                     this.map.map.panTo(new OpenLayers.LonLat(dest.lon, dest.lat));
     		                    } else {
                                     // unsuccessful
-    								$("#dialog").shake();
+    								$("#dialog").find(".error").html('Location Not Found');
     								$("#dialog").find("#newpoint-button").removeAttr("disabled").removeClass("disabled");									
     					        }
     		                }, {"map":this.map, "sc":sc, "attr":attributes});
@@ -320,7 +322,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
 
     // save contents of editor ui on dialog close
     Sourcemap.listen('sourcemap-base-dialog-close', $.proxy(function(b, vs) {
-        if(this.editing) {
+        //if(this.editing) {
+        if(false) {
             // save updated attributes
             var f = this.map_view.dialog_content.find('form');
             var valsa = f.serializeArray();
@@ -604,8 +607,8 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
     if(trigger_events) {
         Sourcemap.broadcast('supplychain-updated', 
             this.map.findSupplychain(st.supplychain_id)
-        );
-    }
+        );  
+    } 
 }
 
 Sourcemap.Map.Editor.prototype.syncStopHops = function(sc, st) {
@@ -655,7 +658,23 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	$("#dialog").css("padding",5);
 	$("#newcatalog").hide();
     this.editing = ref;
-    $("#editor-tabs").tabs();
+    //$("#editor-tabs").tabs();
+	$('.accordion-body').hide();
+	$('.accordion .accordion-title').click(function() {
+		var open = $(this).next().is(":visible");
+		$('.accordion-body:visible').each(function() {
+			if ($(this).attr("id") == "edit-media")
+				$(this).hide();
+			else
+				$(this).slideToggle('fast');
+		});
+		$('.accordion-title').find('.arrow').removeClass('arrowopen');
+		if (open == false) {
+			$(this).next().slideToggle('fast');
+			$(this).find('.arrow').addClass('arrowopen');
+		}				
+		return false;
+	});
 
     $('#edit-description').append('<div id="dialog-desc-counter"></div>');
     $("#dialog-description").keyup(function(){
@@ -674,6 +693,12 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             }
          }
     });
+
+    $(this.map_view.dialog).find('.catalog').click($.proxy(function() {
+        this.q = '';
+        this.params = {"name": ''};
+        this.showCatalog(this);
+    }, this));
 
     $(this.map_view.dialog).find('.load-catalog-button').click($.proxy(function() {
         this.q = '';

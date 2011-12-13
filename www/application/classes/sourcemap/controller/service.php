@@ -46,7 +46,9 @@ class Sourcemap_Controller_Service extends Controller_REST {
             'multipart/form-data'
         ),
         'csv' => 'text/csv',
-		'xls' => 'application/xls'
+		'xls' => 'application/xls',
+		'xlsx' => 'application/xlsx',
+		'png' => 'image/png'		
     );
 
     public $_cache_hit = false;
@@ -367,6 +369,15 @@ class Sourcemap_Controller_Service extends Controller_REST {
 		return Sourcemap_xls::make($supplychain);
     }
 	
+	protected function  _serialize_xlsx($data) {
+		$supplychain = array_shift($data);
+		return Sourcemap_xls::make($supplychain);
+    }
+
+    protected function _serialize_png($png) {
+        return $png;
+    }
+
     protected function  _rest_error($code=400, $msg='Not found.') {
         $this->request->status = $code;
         $this->headers['Content-Type'] = $this->_format_content_type();

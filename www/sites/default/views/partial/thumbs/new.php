@@ -29,8 +29,8 @@ if ($data):
             </h3>
             <div class="preview-author">
                 <h4>
-                    <a href="user/<?php $item->owner->id; ?>">
-                        <?= isset($item->owner->name) ? Text::limit_chars(HTML::chars($item->owner->name), 17) : "Unknown Author" ?></a>, 
+                    <a href="user/<?php $item->owner->name; ?>">
+                        <?= isset($item->owner->display_name)?  Text::limit_chars(HTML::chars($item->owner->display_name), 17) : Text::limit_chars(HTML::chars($item->owner->name), 17) ?></a>, 
                     <?php print date("M j, Y",$item->created);?>
                 </h4>
             </div>

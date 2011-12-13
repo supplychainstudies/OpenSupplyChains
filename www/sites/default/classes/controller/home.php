@@ -45,7 +45,9 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         if($user->has('roles', $channel_role))
             $isChannel = true;
 
-        $user_arr['avatar'] = Gravatar::avatar($user->email, 128);
+        // Profile pictures url
+        //$user_arr['avatar'] = Gravatar::avatar($user->email, 128);
+        $user_arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$user_arr['username'];
 
         $this->template->isChannel = $isChannel;
         $this->template->user = (object)$user_arr;
@@ -59,7 +61,7 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         // This is an example of how we should do AJAX validation in Kohana
         $this->auto_render = FALSE;
         $this->template = null;
-        
+         
         $user = Auth::instance()->get_user();
         $set_to = null;
         if(Request::$method === 'POST') {
@@ -70,15 +72,21 @@ class Controller_Home extends Sourcemap_Controller_Layout {
                 // user logged in, now let's validate the content
                 $p = Kohana::sanitize($_POST);
                 $p = Validate::factory($p);
-                $p->rule('description', 'max_length', array('10000'));
-                $p->rule('url', 'url');
-                $p->rule('banner_url', 'url');
-                $p->rule('display_name', 'max_length', array('127'));
+                if(isset($p['description']))
+                    $p->rule('description', 'max_length', array('10000'));
+                if(isset($p['url']))
+                    $p->rule('url', 'url');
+                if(isset($p['banner_url']))
+                    $p->rule('banner_url', 'url');
+                if(isset($p['display_name']))
+                    $p->rule('display_name', 'max_length', array('127'));
                 if($p->check()) {
                     // update db
                     foreach ($p as $i=>$field){
                         if(!($p[$i] == "")){
                             $user->$i = $p[$i];
+                        } else {
+                            $user->$i = null;
                         }
                     }
                     $user->save();

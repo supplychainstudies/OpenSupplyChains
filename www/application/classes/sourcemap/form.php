@@ -12,7 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 // TODO: groups -> fieldsets
-             ; 
+
 class Sourcemap_Form {
     
     public static $use_templates = true;
@@ -255,14 +255,15 @@ class Sourcemap_Form {
         return $this->_fields;
     }
 
-    public function field($f, $t=null, $l=null, $wt=null) { // name, type, default value, weight
-        if($t || $l || $wt) {
+    public function field($f, $t=null, $w=null, $l=null, $wt=null) { // name, type, width, default value, weight
+        if($t || $w || $l || $wt) {
             $nm = $f;
             $f = Sourcemap_Form_Field::factory($t);
             $f->form($this);
             $this->_fields[$nm] = $f;
             $f->name($nm);
             $f->label($l);
+            if($w !== null) $f->width($w);
             if($wt !== null) $f->weight($wt);
         } else {
             $f = $this->get_field($f);
@@ -300,30 +301,30 @@ class Sourcemap_Form {
     }
 
     public function input($f, $l=null, $wt=null) {
-        return $this->field($f, Sourcemap_Form_Field::INPUT, $l, $wt);
+        return $this->field($f, Sourcemap_Form_Field::INPUT, $w, $l, $wt);
     }
     
     public function password($f, $l=null, $wt=null) {
-       return $this->field($f, Sourcemap_Form_Field::PASSWORD, $l, $wt);
+       return $this->field($f, Sourcemap_Form_Field::PASSWORD, $w, $l, $wt);
     }
 
     public function select($f, $l=null, $wt=null) {
-        return $this->field($f, Sourcemap_Form_Field::SELECT, $l, $wt);
+        return $this->field($f, Sourcemap_Form_Field::SELECT, $w, $l, $wt);
     }
 
     public function submit($f, $v=null, $wt=null) {
-       return $this->field($f, Sourcemap_Form_Field::SUBMIT, $v, $wt);
+       return $this->field($f, Sourcemap_Form_Field::SUBMIT, $w, $v, $wt);
     }
 
     public function textarea($f, $v=null, $wt=null) {
-       return $this->field($f, Sourcemap_Form_Field::TEXTAREA, $v, $wt);
+       return $this->field($f, Sourcemap_Form_Field::TEXTAREA, $w, $v, $wt);
     }
 
     public function checkbox($f, $v=null, $wt=null) {
-       return $this->field($f, Sourcemap_Form_Field::CHECKBOX, $v, $wt);
+       return $this->field($f, Sourcemap_Form_Field::CHECKBOX, $w, $v, $wt);
     } 
     
     public function recaptcha($f, $v=null, $wt=null) {  
-       return $this->field($f, Sourcemap_Form_Field::RECAPTCHA, $v, $wt);
+       return $this->field($f, Sourcemap_Form_Field::RECAPTCHA, $w, $v, $wt);
     }
 }

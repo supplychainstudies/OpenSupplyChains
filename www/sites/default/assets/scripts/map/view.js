@@ -24,7 +24,8 @@ $(document).ready(function() {
 
     // get passcode exist or not
     var passcode = "";   
-    if($('#exist-passcode').attr("value")){   
+    //if($('#exist-passcode').attr("value")){   
+    if(Sourcemap.passcode_exist){   
         // TODO: If admin, skip passcode screen
 
         // if passcode exists
@@ -34,7 +35,7 @@ $(document).ready(function() {
         $(element).html(
             '<div id="passcode-input">'+
             '<form class="passcode-input">'+
-            '<label for="passcode"> This map is protected. Please enter the password:</label>'+
+            '<label id="passcode-msg" for="passcode"> This map is protected. Please enter the password:</label>'+
             '<input name="passcode" type="text" autocomplete="off"></input>'+
             '<input id="passcode-submit" type="submit"/>'+
             '</form>'
@@ -53,47 +54,7 @@ $(document).ready(function() {
         //Autofocus on password 
         $(element).find("input[name='passcode']").focus();
         
-        
-        // submit passcode to fetch supplychain
-        $('form.passcode-input').submit(function(evt){
-            evt.preventDefault();
-            passcode = $(element).find("input[name='passcode']").val();
-
-            // get scid from inline script 
-            // fetch from supplychain
-            var cb = function(sc) {
-                var m = Sourcemap.view_instance.map;
-                m.addSupplychain(sc);
-                new Sourcemap.Map.Editor(Sourcemap.view_instance);
-                jQuery('title').html(sc.attributes.title+" on Sourcemap");
-                $(".supplychain_name").html(sc.attributes.title);
-
-                var supplychain_desc = sc.attributes.description;
-                var regex = new RegExp(/\[youtube:(.+)\]/);
-                var regex_result = supplychain_desc.match(regex);
-                var supplychain_youtube_id = regex_result[1];             
-
-                $(".description").html(supplychain_desc.replace(regex));
-                var youtube_iframe = $('<div></div>')
-                    .addClass("description-video")
-                    .append($('<iframe></iframe>')
-                        .addClass("youtube-player")
-                        .attr({
-                            type:"text/html", width:480, height:280, 
-                            src:"http://www.youtube.com/embed/"+supplychain_youtube_id,
-                            frameborder:0
-                        })
-                    );
-                $(".description").after(youtube_iframe);
-            }
-            Sourcemap.loadSupplychain(scid, passcode, cb);
-           
-            $('#fade , .popup_block').fadeOut(function() {
-            $('#fade, a.close').remove();
-            }); //fade them both out
-        });
-
-        // CSS setting of pop up window
+        // CSS setting of pop up window        
         $('#' + popID).height(110);
         $('#' + popID).width(600);
         var popMargTop = ($('#' + popID).height() + 80) / 2;
@@ -111,10 +72,58 @@ $(document).ready(function() {
         $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
         $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
             $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
+                //$('#fade, a.close').remove();
             }); //fade them both out
             return false;
         });
+        
+        // submit passcode to fetch supplychain
+        $('form.passcode-input').submit(function(evt){
+            evt.preventDefault();
+            passcode = $(element).find("input[name='passcode']").val();
+
+            // get scid from inline script 
+            // fetch from supplychain
+            var cb = function(sc) {
+                var m = Sourcemap.view_instance.map;
+                m.addSupplychain(sc);
+                new Sourcemap.Map.Editor(Sourcemap.view_instance);
+                jQuery('title').html(sc.attributes.title+" on Sourcemap");
+                $(".supplychain_name").html(sc.attributes.title);
+
+                var supplychain_desc = sc.attributes.description;
+                var regex = new RegExp(/\[youtube:(.+)\]/);
+                if(supplychain_desc==undefined)
+                    return;
+                // If sc.attributes.description not exist than return   
+                    
+                var regex_result = supplychain_desc.match(regex);
+                var supplychain_youtube_id = null;             
+                if(regex_result)
+                    supplychain_youtube_id = regex_result[1];
+
+                $(".description").html(supplychain_desc.replace(regex));
+                if(supplychain_youtube_id!=null){
+                    var youtube_iframe = $('<div></div>')
+                        .addClass("description-video")
+                        .append($('<iframe></iframe>')
+                            .addClass("youtube-player")
+                            .attr({
+                                type:"text/html", width:480, height:280, 
+                                src:"http://www.youtube.com/embed/"+supplychain_youtube_id,
+                                frameborder:0
+                            })
+                        );
+                    $(".description").after(youtube_iframe);
+                }
+            };
+            Sourcemap.loadSupplychain(scid, passcode, cb);
+           
+            $('#fade , .popup_block').fadeOut(function() {
+                //$('#fade, a.close').remove();
+            }); //fade them both out
+        });
+
     } else {
         // get scid from inline script
         var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();

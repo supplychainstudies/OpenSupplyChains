@@ -27,8 +27,8 @@ class Sourcemap_Form_Field {
 
     protected $_label = false;
     protected $_info = false;
-    protected $_type = 'text';
     protected $_value = null;
+    protected $_type = 'text';
     protected $_weight = 0;
     protected $_template = 'form/field';
 

@@ -17,7 +17,7 @@ return array(
         'email' => 'A valid email address is required'
     ),
     'username' => array(
-        'default' => 'Please enter a unique username'
+        'default' => 'Please enter a valid username'
     ),
     'password' => array(
         'not_empty' => 'Please enter a password'
@@ -26,6 +26,6 @@ return array(
         'default' => 'Your password needs to match'
     ),
     'confirm_terms' => array(
-        'not_empty' => 'Please agree to the terms 
+        'not_empty' => 'Please agree to the terms' 
     )
 );

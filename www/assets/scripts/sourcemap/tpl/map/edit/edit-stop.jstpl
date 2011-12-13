@@ -24,30 +24,22 @@
 <h3 class="placename"><% var i = $("<input type=\"text\" name=\"address\" />"); i[0].setAttribute("value",this.ref.getAttr("address","")); %>
     <%= $("<div></div>").append(i).html() %>
 </h3>
-
-
 <div id="editor-tabs">
-	<ul>
-		<li><a href="#edit-description">Description</a></li>
-		<li><a href="#edit-media">Media</a></li>
-		<li><a href="#edit-stop-footprint">Footprint</a></li>
-		<li><a href="#edit-catalog" class="load-catalog-button">Material Catalog</a></li>
-		<div class="clear"></div>
-	</ul>
-    <div class="clear"></div>
+<div class="accordion">
     
-        <div id="edit-description" class="sourcemap-form">        
+		<h3 class="accordion-title first"><div class="arrow"></div>Description</h3>
+        <div id="edit-description" class="sourcemap-form accordion-body">        
             <%= $("<div></div>").append(
-                    $("<textarea></textarea>").attr("id","dialog-description").attr("maxlength","140").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 140 characters.").text(this.ref.getAttr("description",""))
+                    $("<textarea></textarea>").attr("id","dialog-description").attr("maxlength","1000").attr("name", "description").addClass("textbox").attr("placeholder","Maximum 1000 characters.").text(this.ref.getAttr("description",""))
                 ).html()
             %>
         </div>
-        <div id="edit-stop-footprint">
-            <div class="sourcemap-form nopadding">
-                <fieldset>    
-       				<div class="footprint-row"> 
-					<div class="footprint-section">      
-	                    <label for="qty">Quantity</label>
+
+<h3 class="accordion-title"><div class="arrow"></div>Footprint</h3>
+        <div id="edit-stop-footprint" class="accordion-body sourcemap-form">
+                <fieldset>           
+					<div class="footprint-section">        
+	                    <label for="co2e">Quantity</label>
                         <% el = $("<input></input>").attr("class", "footprint-qty").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty",0)); %>
                         <%= $("<div></div>").append(el).html() %>
 					</div>
@@ -106,10 +98,9 @@
 
 
                 </fieldset>
-            </div>
         </div>
-        
-        <div id="edit-media" class="sourcemap-form">
+        <h3 class="accordion-title"><div class="arrow"></div>Media</h3>
+        <div id="edit-media" class="sourcemap-form accordion-body">
             <fieldset>
 				<% mediatype = this.ref.getAttr("youtube:link", false) ? "youtube:link" : this.ref.getAttr("flickr:setid", false) ? "flickr:setid" : "youtube:link"; %>
 				<select id="media-content-type">
@@ -117,7 +108,7 @@
 					<option <% if(mediatype == "flickr:setid") { %> selected<% } %> value="flickr:setid">Flickr Setid</option>
 				</select>
 				
-                <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>
+                <% el = $("<input></input>").attr("id", "media-content-value").attr("type", "text").attr("name", mediatype).addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr(mediatype, "")); %>   
                 <%= $("<div></div>").append(el).html() %>
 
                 <div class="clear"></div>
@@ -125,8 +116,12 @@
                 
             </fieldset>
         </div>
-        <div id="edit-catalog"></div>
-
+        <h3 class="accordion-title catalog"><div class="arrow"></div>Catalog</h3>
+        <div id="edit-catalog" class="sourcemap-form accordion-body">
+			<div class="catalog-content">
+			</div>
+		</div>
+		</div> <!-- End of Accordion -->
 </div>
 <div class="clear"></div>
 <ul id="edit-actions">

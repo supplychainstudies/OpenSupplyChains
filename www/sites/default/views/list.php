@@ -12,6 +12,9 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
+<script>
+    Sourcemap.passcode_exist = <?= isset($exist_passcode) ? '"'+$exist_passcode+'"' : '0' ?>;
+</script>
 <div id="list-overview">
 	<div class="overview">
     <h1><?= HTML::chars($supplychain_name) ?></h1>

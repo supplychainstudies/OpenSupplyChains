@@ -90,6 +90,25 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
             $this->template->pager = $p;
             }
+            if ($category == "recent"){
+                $this->layout->page_title .= ' - Recent';
+                $this->template->category = 'Recent';
+                $this->template->category_name = 'Recent';
+                $params['l'] = 48;
+                $searches = Sourcemap_Search::find($params+array('recent' => 'yes'));
+            
+                $p = Pagination::factory(array(
+                    'current_page' => array(
+                        'source' => 'query_string',
+                        'key' => 'p'
+                    ),
+                    'total_items' => 144, 
+                    'items_per_page' => $searches->limit,
+                    'view' => 'pagination/basic'
+                ));
+
+            $this->template->pager = $p;
+            }
             else{
                 Message::instance()->set('"'.$category.'" is not a valid category.');
                 return $this->request->redirect('browse');
@@ -138,13 +157,13 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         } else {
             $alternates = array();
             $alternates['favorited'] = Sourcemap_Search_Simple::find($params+array('favorited' => 'yes'));
-            $alternates['interesting'] = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 3));
+            $alternates['recent'] = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 999));
             $alternates['uncategorized'] = Sourcemap_Search::find(array('c' => '', 'l' => 999));
             Cache::instance()->set($cache_key, $alternates, $ttl);
         }
 
         $this->template->favorited = $alternates['favorited'];     
-        $this->template->interesting = $alternates['interesting'];  
+        $this->template->recent = $alternates['recent'];  
         $this->template->uncategorized = $alternates['uncategorized'];
     }
 }

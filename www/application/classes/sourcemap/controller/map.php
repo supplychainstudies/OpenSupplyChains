@@ -51,7 +51,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
 
                 // passcode for the map          
                 $exist_passcode = isset($sc->attributes->passcode);
-                $this->template->exist_passcode = $exist_passcode;;
+                $this->template->exist_passcode = $exist_passcode;
 
                 // Necessary for every map
                 $this->layout->supplychain_id = $supplychain_id;
@@ -98,12 +98,15 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     // comments
                     $c = $supplychain->comments->find_all();
                     $comment_data = array();
+                    // commenter's info
                     foreach($c as $i => $comment) {
                         $arr = $comment->as_array();
                         $arr['username'] = $comment->user->username;
-                        $arr['avatar'] = Gravatar::avatar($comment->user->email, 32);
+                        $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
+                        //$arr['avatar'] = Gravatar::avatar($comment->user->email, 32);
                         $comment_data[] = (object)$arr;
                     }
+                    $comment_data = array_reverse($comment_data);
 
                 } else {
                     $comment_data = array();
@@ -169,7 +172,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 foreach($c as $i => $comment) {
                     $arr = $comment->as_array();
                     $arr['username'] = $comment->user->username;
-                    $arr['avatar'] = Gravatar::avatar($comment->user->email);
+                    $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
+                    //$arr['avatar'] = Gravatar::avatar($comment->user->email);
                     $comment_data[] = (object)$arr;
                 }
                 $this->template->comments = $comment_data;
@@ -301,7 +305,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     'sites/default/assets/styles/reset.css',
                     'assets/styles/base.less',
                     'assets/styles/embed.less',
-                    'assets/styles/general.less'
+                    'assets/styles/general.less',
+                    'sites/default/assets/styles/modal.less'
                 );
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
@@ -360,6 +365,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                         }
                     }*/
                     $this->layout->embed_params = $params;
+                    $exist_passcode = isset($sc->attributes->passcode);
+                    $this->layout->exist_passcode = $exist_passcode;
                 } else {
                     $this->request->status = 400;
                     $this->layout = View::factory('layout/embed');

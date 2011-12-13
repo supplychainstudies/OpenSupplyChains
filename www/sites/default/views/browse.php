@@ -34,8 +34,8 @@
                 <option value="uncategorized"><a href="/uncategorized">Uncategorized</a></option>
                 </select>
             </div>
-            <?php //Build pager for sub-pages only ?>
-            <?php if (count($searches) == 1): ?>
+            <?php //Build pager for sub-pages only (disable in bar) ?>
+            <?php if (false): ?>
             <div class="category-pager">
                 <?= $pager->render() ?>
             </div>
@@ -46,10 +46,21 @@
 </div>
 <?php endif; ?>
 <div class="clear"></div>
-
+<?php if (count($searches) == 1): ?>
+<div id="category-pagination">
+    <?= $pager->render() ?>
+</div>
+<?php endif; ?>
+<div class="clear"></div>
 <?php // TODO: split the following into two separate files ?>
 <?php // If we're at the top level, display a list of all categories ?>
 <?php if (count($searches) > 1){ ?>
+    <?php // recent ?>
+        <div class="category-view medium container wide">
+            <h3 class="section-title"><a href="/browse/recent">Recent</a></h3>
+            <?php echo View::factory('partial/thumbs/carousel', array('supplychains' => $recent->results, 'category' => 'recent', 'limit' => 15)) ?>
+        </div><!-- .container -->
+        <hr class="spacer" />
     <?php foreach($searches as $i=> $search){?>
         <?php // first 2 categories get to be big ?>
         <?php if ($i<2): ?>
@@ -62,36 +73,20 @@
         <?php // next 3 categories are small ?>
         <?php else: ?>
             <?php if ($i == 2): ?>
-        <div class="container wide">
-            <div id="sidebar-left"> 
             <?php endif; ?>
                 <?php if(count($search->results)>0): ?>
-                <div class="category-view small">
-                    <h3 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->cat_title ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
-                    <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results, 'category' => $search->parameters['c'], 'limit' => 7)) ?>
-                </div>
+        <div class="category-view small container wide">
+            <h3 class="section-title"><a href="/browse/<?= $search->parameters['c'] ?>"><?= $search->cat_title ?></a> <span class="category-quantity">(<?= count($search->results);?>)</span></h3>
+            <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $search->results, 'category' => $search->parameters['c'], 'limit' => 15)) ?>
+        </div>
                 <?php endif ?>
         <?php endif ?>
         <?php if ($i > 3){ break; } ?>
-
     <?php }?>
-    </div><!-- .left -->
-            <div id="sidebar" class="browse skinny">
-                <div class="container">
-                    <ul>
-                        <li>
-                            <h2 class="section-title">Brand New:</h2>
-                            <?= View::factory('partial/thumbs/featured', array('supplychains' => $interesting->results)) ?>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="clear"></div>
     <?php // uncategorized ?>
-            <div class="category-view small wide">
-                <h3 class="section-title"><a href="/browse/uncategorized">Uncategorized</a> <span class="category-quantity">(<?= count($uncategorized->results);?>)</span></h3>
-                <?php echo View::factory('partial/thumbs/carousel-wide', array('supplychains' => $uncategorized->results, 'category' => 'uncategorized', 'limit' => 15)) ?>
-             </div> 
+        <div class="category-view small container wide">
+            <h3 class="section-title"><a href="/browse/uncategorized">Uncategorized</a> <span class="category-quantity">(<?= count($uncategorized->results);?>)</span></h3>
+            <?php echo View::factory('partial/thumbs/carousel-small', array('supplychains' => $uncategorized->results, 'category' => 'uncategorized', 'limit' => 15)) ?>
         </div><!-- .container -->
 
 <?php } else { ?>
@@ -104,3 +99,8 @@
 
 <div class="clear"></div>
 <?php } ?>
+<?php if (count($searches) == 1): ?>
+<div id="category-pagination">
+    <?= $pager->render() ?>
+</div>
+<?php endif; ?>

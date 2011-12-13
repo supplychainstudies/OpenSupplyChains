@@ -13,54 +13,68 @@
 
 return array(
     'fields' => array(
-        'username' => array(
+        'card-name' => array(
             'type' => 'text',
-            'label' => 'Username',
+            'label' => 'Name on Card',
             'attributes' => array(
-                'maxlength' => 32,
-    			'placeholder' => 'Confirm the user you wish to upgrade'
+                'maxlength' => 140,
             )
         ),
         'card-number' => array(
             'type' => 'text',
             'label' => 'Card Number',
             'attributes' => array(
-                'maxlength' => 20
+                'maxlength' => 20,
             )
         ),
         'card-cvc' => array(
             'type' => 'text',
-            'label' => 'Security Code (CVC)',
+            'label' => 'Security Code',
+            'css_class' => array('third-width '), 
             'attributes' => array(
-                'maxlength' => 5
+                'maxlength' => 5,
+                'boxwidth' => 'third',
+                'placeholder' => ' xxx'
             )
         ),
         'card-expiry-month' => array(
             'type' => 'text',
-            'class' => 'halfwidth',
             'label' => 'Month',
+            'css_class' => array('third-width '), 
             'attributes' => array(
-                'maxlength' => 5
+                'maxlength' => 5,
+                'boxwidth' => 'third',
+                'placeholder' => ' xx'
             )
         ),
         'card-expiry-year' => array(
             'type' => 'text',
-            'class' => 'halfwidth',
             'label' => 'Year',
+            'css_class' => array('third-width '), 
             'attributes' => array(
-                'maxlength' => 4
+                'maxlength' => 4,
+                'boxwidth' => 'third',
+                'placeholder' => ' xxxx'
             )
+        ),
+        'confirm_terms' => array(
+            'type' => 'checkbox',
+            'label' => 'I have read and agree to the <a href="/info/terms/#document-content?w=500" target="_blank" class="modal">terms of service</a>.',
+            'default' => 0
         ),
         'upgrade' => array(
             'type' => 'submit',
-            'label' => 'Upgrade'
+            'label' => 'Upgrade',
+            'css_class' => array('stripe ')
         )
     ),
     'messages_file' => 'forms/upgrade',
     'rules' => array(
-        'username' => array(
-            array('not_empty'), 
-    		array('alpha_dash')
+        'card-name' => array(
+            array('not_empty')
+        ),
+        'confirm_terms' => array(
+            array('not_empty')
         ),
     ),
     'filters' => array()

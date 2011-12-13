@@ -38,6 +38,7 @@
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>
 <body class="main">
+    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
     <div id="wrapper">
         <?= View::factory('partial/header', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         <?php if(Message::instance()->get() || Breadcrumbs::instance()->get()){ ?>
@@ -55,7 +56,6 @@
          <?= View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
     </div>
     
-    <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
       
     <!--[if lt IE 7 ]>
         <script src="js/libs/dd_belatedpng.js"></script>

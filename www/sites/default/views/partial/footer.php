@@ -15,17 +15,18 @@
 <div class="clear"></div>
 <div class="container">
     <ul>
-    	<li><a href="info">About</a></li>                
-    	<li><a href="http://blog.sourcemap.com/help-with-sourcemap/">Help and FAQ</a></li> 
-    	<li><a href="info/api">API and Code</a></li> 
-
-    	<li><a href="http://blog.sourcemap.com/contact/">Get In Touch</a></li>                   
-    	<li><a href="http://blog.sourcemap.com">Blog</a></li> 
-    	<li><a href="http://blog.sourcemap.com/category/press/">Press</a></li> 
-
+        <li><a href="http://blog.sourcemap.com">Blog</a></li> 
+        <?php
+        $pages = Blognews::fetchindex();
+        foreach($pages as $page){
+            print '<li><a href="wp/' . $page->slug . '">' . $page->title . '</a></li>';
+        } 
+        ?>
     	<li><a href="info/privacy">Privacy Policy</a></li>
     	<li><a href="info/terms">Terms of Service</a></li>
-    </ul>   
+    	<li><a href="/contact">Contact us</a></li>
+    </ul>
+    <div class="clear"></div>
     <p>&copy; 2011 Sourcemap Inc. 
     <?php
         // version information
@@ -37,6 +38,7 @@
             $date = "";
             $age = "";
             $commit = "";
+            $tag = "";
 
             // if we have a www/version.php file, use it
             if (file_exists('version.php')){
@@ -44,6 +46,8 @@
                 $date = str_replace( "Date: ", "", $date );
                 $age = Kohana_date::span(strtotime($date), time(), 'days,hours,minutes,seconds');
                 echo "| ";
+                echo $tag;
+                echo " | ";
                 echo "Commit ";
                 echo "<a href=\"". $codebase_url . $commit . "\">" . substr($commit, 0, 5) . "</a> ";
                 echo "| ";

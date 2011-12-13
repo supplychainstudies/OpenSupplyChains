@@ -1,4 +1,4 @@
-/* Copyright (C) Sourcemap 2011
+/* Copyright (C) Sourcemap 2014
  * This program is free software: you can redistribute it and/or modify it under the terms
  * of the GNU Affero General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
@@ -213,19 +213,43 @@ Sourcemap.factory = function(type, data) {
             var g = new Sourcemap.Supplychain.Graph2(instance);
             var stids = g.nids.slice(0);
 			var max_plen = 0;
+			var upperbound = 0;
+			
+			//Just for colors, which should match the map
+			var stop_colors = {};
+            for(var i=0; i<stids.length; i++) {
+                stop_colors[stids[i]] = 0;
+            }
+            for(var i=0; i<g.paths.length; i++) {
+                var p = g.paths[i];
+                max_plen = p.length > max_plen ? p.length : max_plen;
+                for(var j=0; j<p.length; j++) {
+                    if(j > stop_colors[p[j]]) stop_colors[p[j]] = j;
+                }
+            }
+			var max_plen = 0;
+			
+			// If there are predefined tiers, use those
+			// But they have to shifted, because they go from + to - tiers (since the middle product tier will be 0)
 			if (sc.stops[0].attributes.tier) {
-				var tiers = {};				
+				var tiers = {};	
+				var offset = 0;			
 	            for(var i=0; i<stids.length; i++) {
-	                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
-					max_plen = Math.max(max_plen,parseInt(sc.stops[i].attributes.tier));
+					if (!isNaN(sc.stops[i].attributes.tier)) {		
+						// store the tier
+		                tiers[stids[i]] = parseInt(sc.stops[i].attributes.tier);
+						// store the highest tier in the whole stack
+						upperbound = Math.max(upperbound,parseInt(sc.stops[i].attributes.tier));
+					}
 	            }
+				// Shift them all over so that everything is greater than 0
 				for(x in tiers) {
-	                tiers[x] = max_plen-tiers[x];
+	                tiers[x] = upperbound-tiers[x];
+					max_plen = Math.max(max_plen,parseInt(tiers[x]));
 	            }
-	max_plen++;
-				console.log(tiers);
-				
+				max_plen++;		
 			} else {
+				// If tiers haven't been preset, create some
 	            var tiers = {};
 	            for(var i=0; i<stids.length; i++) {
 	                tiers[stids[i]] = 0;
@@ -240,15 +264,18 @@ Sourcemap.factory = function(type, data) {
 			}
             //default_feature_colors
             var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
-            i//var dfc = this.options.default_feature_colors.slice(0);
+            //var dfc = this.options.default_feature_colors.slice(0);
             for(var i=0; i<dfc.length; i++) {
                     dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
             }
             var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
             for(var i=0,length=instance.stops.length;i<length;i++)
             {
+				
                 var st = instance.stops[i];
-                var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+                //var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+				
+				var scolor = st.getAttr("color", palette[stop_colors[st.instance_id]].toString());
                 st.attributes.tier = tiers[st.instance_id];
                 st.attributes.color = scolor;
             }
@@ -319,6 +346,55 @@ Sourcemap.validate = function(type, data) {
     return false;
 }
 
+Sourcemap.initPasscodeInput = function(popID){
+    var element = document.createElement('div');
+    $(element).html(
+        '<div id="passcode-input">'+
+        '<form class="passcode-input">'+
+        '<label id="passcode-msg" for="passcode"> This map is protected. Please enter the password:</label>'+
+        '<input name="passcode" type="text" autocomplete="off"></input>'+
+        '<input id="passcode-submit" type="submit"/>'+
+        '</form>'
+        +'</div>'
+    );
+    $(element).attr('id',popID);
+    $(element).addClass("popup_block");
+    $(element).prepend('<a href="#" class="close"></a>');
+    $('body').append($(element));
+
+    var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
+
+    // Error behavior
+    var onError = function(){ window.location = "/view/" + scid + "?private"; }
+
+    //Autofocus on password  
+    $(element).find("input[name='passcode']").focus(); 
+    
+    // CSS setting of pop up window
+    $('#' + popID).height(110);
+    $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
+    //$('#' + popID).width(600);
+    var popMargTop = ($('#' + popID).height() + 80) / 2;
+    var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+    $('#' + popID).css({
+        'margin-top' : -popMargTop,
+        'margin-left' : -popMargLeft,
+        'overflow' : 'hidden'
+    });     
+
+    $('#' + popID).fadeIn();
+
+    $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+    $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+    $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
+        $('#fade , .popup_block').fadeOut(function() {
+            $('#fade, a.close').remove();
+        }); //fade them both out
+        return false;
+    });
+
+}
 
 Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
     // fetch and initialize supplychain
@@ -345,11 +421,33 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             // unlock the supply chain
         },
         error : function(data){
-            // do nothing
+            //console.log("Passcode incorrect");
+            var error_response = eval('('+data.response+')');
+            $('#popup').fadeIn();
+            $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
+            $('.passcode-input').find("input[name='passcode']").focus();
+            $("#fade").fadeIn();
         }
     });
 }
 
+Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
+    // fetch and initialize supplychain
+    var _that = this;
+    var _remote_id = remote_id;
+
+    $.ajax({
+        url:'services/supplychains/'+remote_id,
+        data:{ passcode : passcode },
+        success : function(data) {
+            var sc = Sourcemap.factory('tree', data.supplychain);
+            sc.editable = data.editable;
+            callback.apply(this, [sc]);
+        },
+        error : function(data){
+        }
+    });
+}
 
 Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
     // fetch and initialize supplychain
@@ -374,12 +472,14 @@ Sourcemap.buildTree = function(tree_id,sc) {
     var max_plen = sc.max_plen;
     var max_length=(max_plen)?sc.max_plen:1,max_x=0,max_y=0;    
     // palette stuff
+
     var dfc = ["#35a297", "#b01560", "#e2a919"].slice(0);
     for(var i=0; i<dfc.length; i++) {
         dfc[i] = (new Sourcemap.Color()).fromHex(dfc[i]);
     }
     var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
     //tier for palette
+
     var g = new Sourcemap.Supplychain.Graph2(sc);
     var stids = g.nids.slice(0);
     var p_tiers = {};
@@ -450,25 +550,166 @@ Sourcemap.buildTree = function(tree_id,sc) {
 	        }
 		//}
     }
-    // get max_stack
-    var max_stack = 0;
     var max_height =  $(tree_id).height();
     var max_width = $(tree_id).width();
-    /*
-    for(var i=0;i<tiers.length;i++)
-    {        
-        max_stack = tiers[i].length > max_stack ? tiers[i].length : max_stack;
-    }
-    */
     // Set middle stack in mid
+	// So, what we should do here is stick the dots with the most connections in the middle, and the ones with the least on the outside
+    for(var i=0, length=sc.hops.length;i<length;i++)
+    {
+        var h = sc.hops[i];
+        // for tier_list
+		for (var j = 0; j< tier_list.length; j++) {
+			if (h.from_stop_id == tier_list[j].instance||h.to_stop_id == tier_list[j].instance) {
+                (tier_list[j].connections)?tier_list[j].connections++:tier_list[j].connections=1;                
+            }
+            // All points that don't have connections are set to zero
+            (tier_list[j].connections)?0:tier_list[j].connections=0;
+		}
+        // for tiers
+        for (var k =0;k<tiers.length;k++){
+            for(var j=0;j<tiers[k].length;j++){
+                if(h.from_stop_id == tiers[k][j].instance_id || h.to_stop_id == tiers[k][j].instance_id){ 
+                    (tiers[k][j].connections) ? tiers[k][j].connections++ : tiers[k][j].connections=1;
+                }
+                // All points that don't have connections are set to zero
+                (tiers[k][j].connections)? 0:tiers[k][j].connections=0;
+            }
+        }
+    }
+    
+    // Sort #1 : Stop with largest connections in mid;
+    for(var k=0;k<tiers.length;k++){
+        tiers[k].sort(function(a,b){return a.connections - b.connections;});
+        // sort tiers[k]
+
+        var new_arr = [];
+        for(var bool=0,y=0,z=0;y<tiers[k].length;y++){
+            if(bool){
+                bool=0;
+                new_arr.splice(z,0,tiers[k][y]); 
+            } else {
+                new_arr.splice(new_arr.length-z,0,tiers[k][y]); 
+                bool=1;
+                z+=1;
+            }  
+        }
+        tiers[k] = new_arr;
+    }
+    // End Sort #1
+	
+	// Turn the connections into a row order
+	// Have to base this on connections, and also the row order of the parents
+    /*
+    for(var i=0,order=0;i<tiers.length;i++) {
+		var tier_connections = new Array();
+		var tier_order = new Array();
+		// have to iterate through and rank
+		for(var j=0;j<tiers[i].length;j++){     
+            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){				
+                if(tier_list[k].instance==tiers[i][j].instance_id && tier_list[k].connections != undefined){
+					tier_connections[k] = tier_list[k].connections;
+					var neworder = 0;					
+					for (var l = 0; l<tier_connections.length;l++) {
+						if (tier_connections[l] != undefined) {
+							neworder++;
+						}
+					}
+					for (var l = 0; l<tier_connections.length;l++) {
+						if (tier_connections[l] > tier_connections[k]) {
+							neworder = Math.min(tier_order[l],neworder);
+							tier_order[l]++; 
+						}
+					}
+					tier_order[k] = neworder;
+					break;
+                }
+            }      
+        }
+		var len = 0;
+		for (var l = 0; l<tier_order.length;l++) {
+			if (tier_order[l] != undefined) {len++;}
+		}
+		for (var l = 0; l<tier_order.length;l++) {
+			if (tier_order[l] != undefined) {
+				if (parseInt(tier_order[l]/2) == (tier_order[l]/2)) {
+                    // if tier_oder[l] is even
+					//tier_list[l].order = (Math.floor(len/2) - (tier_order[l]/2))+1;
+					tier_list[l].order = tier_order[l]/2;
+				} else {
+                    // if tier_oder[l] is odd
+					//tier_list[l].order = Math.floor(len/2) + ((tier_order[l]+1)/2);
+					tier_list[l].order = len - Math.floor(tier_order[l]/2);
+				}
+			}
+			// Now look for parents, push order toward parents
+			var parent_order = 0;
+			for(var n=0, length=sc.hops.length;n<length;n++)
+		    {
+				var h = sc.hops[n];
+                var stop_id = h.to_stop_id;
+                //var stop_id = h.to_stop_id;
+				if (tier_list[l].instance==stop_id ) {
+					for (var m=0;m<tier_list.length;m++) {
+						if (tier_list[m].instance == stop_id) {
+                            if(tier_list[m].order==undefined)
+                                break;
+                            // Make tier closer to the child point  
+                            parent_order = tier_list[m].order;
+                            console.log('parent:'+parent_order+'/stop_id:'+stop_id);
+                            if (parent_order != 0 && parent_order!= undefined) {
+                                console.log("shift to:"+parent_order);
+                                var old_order = tier_list[l].order;
+                                tier_list[l].order = parent_order;
+                                if (old_order > parent_order) {
+                                    for (var o = 0; o<tier_order.length;o++) {
+                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
+                                            tier_list[o].order++
+                                        }
+                                    }
+                                } else if (old_order < parent_order) {
+                                    for (var o = 0; o<tier_order.length;o++) {
+                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
+                                            tier_list[o].order--;
+                                        }
+                                    }				
+                                }
+                            }
+                            // end order
+						}
+					}
+				}		
+                //end hops
+		    }
+            // end tiers_order
+		}
+        console.log('--tiers['+i+']---');
+        console.log(tiers[i]);
+        console.log('--tier_order--');
+        console.log(tier_order);
+	}
+    
+    */
     for(var i=0,order=0;i<tiers.length;i++)
     {
-        for(var j=0;j<tiers[i].length;j++){            
-            // divide y from max_stack into portion 
+		var y_offset = ((i*2.5)%5)*5;
+		//console.log(y_offset);
+        for(var j=0;j<tiers[i].length;j++){     
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
-					//tier_list[k].title = tiers[].
-                    tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+                    //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
+					
+					/*
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
+					
+					if (parseInt(tier_list[k].order/2) == (tier_list[k].order/2)) {
+						tier_list[k].y = y_offset + ((500-(tiers[i].length*40))/2)+ (((tier_list[k].order/2))*40); 
+						//console.log("-"(tier_list[k].order/2));
+					} else {
+						tier_list[k].y = y_offset + (500-((500-(tiers[i].length*40))/2)) - ((Math.ceil(tier_list[k].order/2)-1)*40);
+						//console.log(tier_list[k].y);
+					} 
+					*/
+					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
                     tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
                     break;
                 }
@@ -519,7 +760,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
         .attr("width", w)
         .attr("height", h);
 
-    //def marker
+    //def marker // TODO:make it work
+
     svg.append("svg:defs").selectAll("marker")
         .data(hop_list)
     .enter().append("svg:marker")
@@ -537,19 +779,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
     //.append("svg:path")
     //    .attr("d", "M0,-5 L10,0 L0,5");
 
-    svg.append("svg:g").selectAll("text")
-    .data(tier_list)
-    .enter().append("svg:text")
-    .attr("x",function(d){return d.x})
-    .attr("y",function(d){return d.y})
-    .attr("dx",".1em") // padding
-    .attr("dy","1.8em")
-    .attr("text-anchor","middle")
-	.attr("fill",function(d){return d.color})
-	.style("font-size","12px")
-	.style("font-weight", "bold")
-    .text(function(d){return d.title});
-    
     // Arc
     /*
     svg.append("svg:g")
@@ -563,10 +792,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
         var diff_x = d.x2-d.x1
         var diff_y = d.y2-d.y1
         return "M "+d.x1+","+d.y1+" a45,50 0 0,1 "+diff_x+","+diff_y});
-
-
     */
     // Simple line    
+
     svg.append("svg:g").attr("class","line").selectAll("line")
         .data(hop_list)
         .enter().append("svg:line")
@@ -578,19 +806,13 @@ Sourcemap.buildTree = function(tree_id,sc) {
             .attr("marker-end",function(d){ return "url(#"+d.id+")";})
             //.on("click",function(d){alert(d.from+" to "+d.to);})
             .attr("stroke",function(d){return d.color});
-	//svg.append("svg:g").selectAll("circle").data(hop_list).enter()
-	//.append("svg:image") .attr("class", "circle") .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png") .attr("x", function(d){return ((d.x1+d.x2)/2)}) .attr("y", function(d){return ((d.y1+d.y2)/2)}) .attr("width", "16px") .attr("height", "16px");
-    /*
-	svg.append("svg:g").selectAll("circle").data(hop_list).enter()
-	.append("svg:arc") 
-		.attr("class", "circle") 
-		.attr("x", function(d){return ((d.x1+d.x2)/2)}) 
-		.attr("y", function(d){return ((d.y1+d.y2)/2)}) 
-		.startAngle(40) 
-	    .endAngle(60) 
-	    .innerRadius(12) 
-	    .outerRadius(15);
-	 */                       
+
+	svg.append("svg:g").attr("class","arrow").selectAll("arrow").data(hop_list).enter()
+	.append("svg:polygon") 
+		.attr("points", function (d) { return parseInt(((d.x1+d.x2)/2)-5)+ ","  + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , " + parseInt(((d.y1+d.y2)/2)+3) + " " + parseInt(((d.x1+d.x2)/2)+5) + " , " + parseInt(((d.y1+d.y2)/2)+5) + " " + parseInt((d.x1+d.x2)/2) + " , "+ parseInt(((d.y1+d.y2)/2)-5) + " "+ parseInt(((d.x1+d.x2)/2)-5) + " ," + parseInt(((d.y1+d.y2)/2)+5);}) 
+		.attr("transform", function(d){ //console.log((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)); 
+                return "rotate("+(((Math.atan((d.y2-d.y1)/(d.x2-d.x1))*57.2957795)+90)+ " " + ((d.x1+d.x2)/2) + " " + ((d.y1+d.y2)/2))+")";}) 
+		.style("fill", function(d){return d.color}) .attr("width", "10px") .attr("height", "10px");
    
     /*
     // path > line
@@ -608,7 +830,19 @@ Sourcemap.buildTree = function(tree_id,sc) {
             return "M "+d.x1+","+d.y1+"  l"+diff_x+","+diff_y});
     */
     
-    
+    svg.append("svg:g").attr("class","stop_title").selectAll("text")
+    .data(tier_list)
+    .enter().append("svg:text")
+    .attr("x",function(d){return d.x})
+    .attr("y",function(d){return d.y})
+    .attr("dx",".1em") // padding
+    .attr("dy","1.8em")
+    .attr("text-anchor","middle")
+	.style("fill",function(d){return d.color})
+	.style("font-size","12px")
+	.style("font-weight", "bold")
+    .text(function(d){return d.title});
+ 
     svg.append("svg:g").attr("class","circle").selectAll("circle")
         .data(tier_list)
         .enter().append("svg:circle")
@@ -625,18 +859,27 @@ Sourcemap.buildTree = function(tree_id,sc) {
         return function(g,i){
             svg.selectAll("g.circle circle")
             .filter(function(d){
-                    //console.log(d.index);   //this will scan by order 1~end
-                    //console.log(i);       //this is the id you pick
                     update_updown(i);
                     return check_stops(d.index,i);                        
                 })
             .transition()
                 .style("opacity",opacity);
 
+            svg.selectAll("g.stop_title text")
+            .filter(function(d){
+                    return check_stops(d.index,i);                        
+                })
+            .transition()
+                .style("opacity",opacity);
+           // Hide Arrow
+           svg.selectAll("g.arrow polygon")
+           .filter(function(d){return check_hops(d,i);})
+           .transition()
+                .style("opacity",opacity);
+
+           // Hide line
            svg.selectAll("g.line line")
-           .filter(function(d){
-                    return check_hops(d,i);
-               })
+           .filter(function(d){return check_hops(d,i);})
            .transition()
                 .style("opacity",opacity);
        }
@@ -644,7 +887,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
     var upstream = [];
     var downstream = [];
-    
     function update_updown(select)
     {        
         upstream = [];
@@ -655,6 +897,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
         for(var j=0,down_max=downstream.length;j<down_max;j++){
             for(var h=0,max=hop_list.length;h<max;h++){                        
                 if(hop_list[h].from==downstream[j]){
+                    //prevent circular supplychain
+                    if(jQuery.inArray(hop_list[h].to,downstream)>0)
+                        return;
                     downstream.push(hop_list[h].to);
                     down_max = downstream.length; 
                 }
@@ -664,6 +909,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
         for(var j=0,up_max=upstream.length;j<up_max;j++){
             for(var h=0,max=hop_list.length;h<max;h++){                        
                 if(hop_list[h].to==upstream[j]){
+                    //prevent circular supplychain
+                    if(jQuery.inArray(hop_list[h].from,upstream)>0)
+                        return;
                     upstream.push(hop_list[h].from);
                     up_max = upstream.length; 
                 }
@@ -673,9 +921,9 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
     function check_hops(hop,select)
     {
+        // hops that connect to select stop
         if(hop.from==tier_list[select].instance||hop.to==tier_list[select].instance)
             return false;
-
         if(jQuery.inArray(hop.from,upstream)>0){    
             if(jQuery.inArray(hop.to,upstream)>0)
                 return false;
@@ -684,27 +932,33 @@ Sourcemap.buildTree = function(tree_id,sc) {
             if(jQuery.inArray(hop.to,downstream)>0)
                 return false;
         }
-        
         return true;    
     }
 
     function check_stops(i,select)
     {
-        if(i==select){
+        if(i==select)
             return false;
-        }
-        if(jQuery.inArray(tier_list[i].instance,downstream)>0){    
+        if(jQuery.inArray(tier_list[i].instance,downstream)>0)
             return false;
-        }
-        if(jQuery.inArray(tier_list[i].instance,upstream)>0){    
+        if(jQuery.inArray(tier_list[i].instance,upstream)>0) 
             return false;
-        }        
-
         //else return true
         return true;         
     }
 
-    
+    // Tree-text
+/*
+    svg.append("svg:g").selectAll("text")
+        .data(tier_list)
+        .enter().append("svg:text")
+        .attr("x",function(d){return d.x})
+        .attr("y",function(d){return d.y})
+        .attr("dx",".1em") // padding
+        .attr("dy","1.8em")
+        .attr("text-anchor","middle")
+        .text(function(d){return d.title});
+  */  
 }
 
 Sourcemap.saveSupplychain = function(supplychain, o) {
@@ -823,26 +1077,30 @@ Sourcemap.ttrunc = function(str, lim, dots) {
     return tstr;
 }
 
-Sourcemap.truncate_string = function (target)
-{
-    // 1 line;
-    // in general.less : white-space is set to nowrap
-    $(target).each(function(){       
-        var new_string;
-        var width_diff;
-        var word_count;
-        var chat_diff=18;
-        // 18 : Chinese char width , 5 : dot width
+Sourcemap.truncate_string = function(target){
+    $(target).each(function(){
 
-        var width = $(this).parent().width();
-        while($(this)[0].scrollWidth>width)
-        {
-             width_diff = $(this)[0].scrollWidth - width;
-             word_count = Math.ceil(width_diff/chat_diff);
-             if(word_count<5) word_count = 5;
-             new_string = jQuery.trim($(this).text()); 
-             $(this).find("a").text(new_string.substr(0, new_string.length - word_count) +"...");
-        }   
+        // grab parent element dimensions
+        var width  = $(this).parent().width();
+        var height = $(this).parent().height();
+
+        // clone div to a new element for measurement
+        var testdiv = $(this).clone().css({'width': width, 'height': 'auto', 'overflow': 'auto', 'display': 'hidden'});
+        $('<br />').appendTo($(this).parent());
+        $(testdiv).appendTo($(this).parent());
+        var text = $.trim($(this).text());
+        replacementText = null;
+       
+        // remove one character at a time until the height equals the original 
+        for(i=text.length; height < $(testdiv).height() && i > 0; i--){
+            replacementText = text.substr(0, i);
+            $(testdiv).text(replacementText + "...");
+        }
+        
+        if(replacementText)
+            $(this).text($.trim(replacementText.slice(0,-1)) + "...");
+        $(testdiv).prev().remove();
+        $(testdiv).remove();
     });
 }
 

@@ -123,7 +123,7 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
     // Added clause to force IE6 to work.
     if ((strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0;') !== false)) {
         $javaScriptEmbed = file_get_contents($server . '/challenge?k=' . $pubkey . $errorpart);
-        return '<script type="text/javascript">
+        return '<label>Enter the two words below:</label> <script type="text/javascript">
 	 var RecaptchaOptions = {
 	    theme : "clean"
 	 };
@@ -137,7 +137,7 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
      
     } else {
      
-        return '<script type="text/javascript">
+        return '<label>Enter the two words below:</label><script type="text/javascript">
 	 var RecaptchaOptions = {
 	    theme : "clean"
 	 };

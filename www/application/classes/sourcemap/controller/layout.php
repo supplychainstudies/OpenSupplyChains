@@ -22,12 +22,38 @@ class Sourcemap_Controller_Layout extends Controller_Template {
         'assets/styles/general.less',
     );
 
+    public $ssl_required = false; // controller-wide ssl required
+    public $ssl_actions  = false; // action specific ssl required
+
     public function before() {
         $pret = parent::before();
+       
+        $config = Kohana::config('sourcemap');
+       
+        if(Kohana::config('sourcemap.use_ssl')){
+            $this->sslRedirect();
+        }
         if($this->auto_render === true) {
             $this->layout = View::factory('layout/'.$this->layout);
         }
         return $pret;
+    }
+
+    private function sslRedirect(){
+       // via http://www.jamie.co.za/2010/10/07/kohana-https-redirect/
+
+       $action_name = Request::instance()->action;
+     
+       if (($this->ssl_required) || (is_array($this->ssl_actions) && in_array($action_name, $this->ssl_actions))){
+          if (Request::$protocol == 'http'){
+             Request::Instance()->redirect(URL::site(Request::Instance()->uri, 'https'));
+          }
+       }
+       else{
+          if (Request::$protocol == 'https'){
+             Request::Instance()->redirect(URL::site(Request::Instance()->uri, 'http'));
+          }
+       }
     }
 
     public function after() {

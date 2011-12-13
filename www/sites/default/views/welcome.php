@@ -26,7 +26,6 @@
             <div class="clear"></div>
         </div>           
 
-        <hr class="spacer" />
         <div class="container"> 
     		<h2 class="section-title">Recent</h2> 
             <div class="preview-map-section">
@@ -57,12 +56,16 @@
                 <?php foreach($news->posts as $i => $news_item): ?>
                 <li class="news-item">
                     <h5 class="title"><a href="http://blog.sourcemap.com"><?= HTML::chars($news_item->title_plain) ?></a></h5>
+                    <h5 class="date"> <?= date("F d, Y", strtotime(($news_item->date))) ?></h5>
+                    <div class="clear"></div>
                     <p>
-                        <?= substr(HTML::chars($news_item->excerpt), 0, 130) ?>&hellip; 
+                        <span class="truncate">
+                        <?= substr(HTML::chars($news_item->excerpt), 0, 255) ?>&hellip; 
+                        </span>
                         <a class="readmore" href="<?= $news_item->url ?>">More &raquo;</a>
                     </p>
                 </li>
-                <?php if (++$i == 4) break; ?>
+                <?php if (++$i == 3) break; ?>
                 <?php endforeach; ?>
             </ul>
         </div>

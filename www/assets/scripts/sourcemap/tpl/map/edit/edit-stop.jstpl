@@ -89,11 +89,6 @@
                 
             </fieldset>
         </div>
-        <h3 class="accordion-title catalog"><div class="arrow"></div>Catalog</h3>
-        <div id="edit-catalog" class="sourcemap-form accordion-body">
-			<div class="catalog-content">
-			</div>
-		</div>
 		</div> <!-- End of Accordion -->
 </div>
 <div class="clear"></div>

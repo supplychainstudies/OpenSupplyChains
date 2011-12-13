@@ -84,12 +84,9 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			}
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rowIndex > $starting_row && $rows->getCell($fh["forecast"] . $rowIndex)->getCalculatedValue() != NULL) {
+				if ($rowIndex > $starting_row) {
 					$forecast_values[$rows->getCell($fh["part"] . $rowIndex)->getCalculatedValue()] = $rows->getCell($fh["forecast"] . $rowIndex)->getCalculatedValue(); 
 				}
-			}
-			if (count($forecast_values) == 0) {
-				unset($forecast_values);
 			}
 		}
 		if ($upstream_sheet != "") {
@@ -101,7 +98,6 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			$h = array(
 				"BOM-Level" => "",
 				"Part-Name"	=> "",
-				"Part-Number"	=> "",
 				"Description" => "",	
 				"Qty" => "",	
 				"Unit" => "",	
@@ -150,9 +146,6 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 				elseif (strpos($value,"time") !== false)
 					$h["Risk Recovery Days"] = $column;
 			}
-			if ($h["Part-Number"] == "") {
-				$h["Part-Number"] = $h["Part-Name"];
-			}
 			$count = 1;
 			$boms = array();
 			foreach ($rows->getRowIterator() as $row) {
@@ -188,12 +181,12 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								if ($stops[$uuid]['varort'] >= 20) {
 									$stops[$uuid]['color'] = "#ff0000";
 								} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-									$stops[$uuid]['color'] = "#ffc000";
+									$stops[$uuid]['color'] = "#efa841";
 								} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-									$stops[$uuid]['color'] = "#ffff00";
+									$stops[$uuid]['color'] = "#fdf659";
 								} else {
-									$stops[$uuid]['color'] = "#92d050";
-								}	
+									$stops[$uuid]['color'] = "#a1d662";
+								}
 							} else {
 								foreach ($stops as $stop) {
 									if ($stop['num'] == $boms[0]) {
@@ -205,11 +198,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 													if ($stops[$uuid]['varort'] >= 20) {
 														$stops[$uuid]['color'] = "#ff0000";
 													} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-														$stops[$uuid]['color'] = "#ffc000";
+														$stops[$uuid]['color'] = "#efa841";
 													} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-														$stops[$uuid]['color'] = "#ffff00";
+														$stops[$uuid]['color'] = "#fdf659";
 													} else {
-														$stops[$uuid]['color'] = "#92d050";
+														$stops[$uuid]['color'] = "#a1d662";
 													}												
 												}
 											}
@@ -224,12 +217,12 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 													if ($stops[$uuid]['varort'] >= 20) {
 														$stops[$uuid]['color'] = "#ff0000";
 													} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-														$stops[$uuid]['color'] = "#ffc000";
+														$stops[$uuid]['color'] = "#efa841";
 													} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-														$stops[$uuid]['color'] = "#ffff00";
+														$stops[$uuid]['color'] = "#fdf659";
 													} else {
-														$stops[$uuid]['color'] = "#92d050";
-													}											
+														$stops[$uuid]['color'] = "#a1d662";
+													}												
 												}
 											}
 										}
@@ -258,11 +251,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 													if ($stops[$uuid]['varort'] >= 20) {
 														$stops[$uuid]['color'] = "#ff0000";
 													} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-														$stops[$uuid]['color'] = "#ffc000";
+														$stops[$uuid]['color'] = "#efa841";
 													} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-														$stops[$uuid]['color'] = "#ffff00";
+														$stops[$uuid]['color'] = "#fdf659";
 													} else {
-														$stops[$uuid]['color'] = "#92d050";
+														$stops[$uuid]['color'] = "#a1d662";
 													}												
 												}
 											}
@@ -274,11 +267,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 														if ($stops[$uuid]['varort'] >= 20) {
 															$stops[$uuid]['color'] = "#ff0000";
 														} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-															$stops[$uuid]['color'] = "#ffc000";
+															$stops[$uuid]['color'] = "#efa841";
 														} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-															$stops[$uuid]['color'] = "#ffff00";
+															$stops[$uuid]['color'] = "#fdf659";
 														} else {
-															$stops[$uuid]['color'] = "#92d050";
+															$stops[$uuid]['color'] = "#a1d662";
 														}												
 													}
 												}
@@ -313,9 +306,9 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							if ($v >= 1) {
 								$hops[$hops_from."-".$hops_to]['color'] = "#ff0000";
 							} elseif ($v < 1 && $v >= 0.5) {
-								$hops[$hops_from."-".$hops_to]['color'] = "#ffff00";
+								$hops[$hops_from."-".$hops_to]['color'] = "#fdf659";
 							} else {
-								$hops[$hops_from."-".$hops_to]['color'] = "#92d050";
+								$hops[$hops_from."-".$hops_to]['color'] = "#a1d662";
 							}
 						}
 						
@@ -454,11 +447,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								if ($stops[$uuid]['varort'] >= 20) {
 									$stops[$uuid]['color'] = "#ff0000";
 								} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-									$stops[$uuid]['color'] = "#ffc000";
+									$stops[$uuid]['color'] = "#efa841";
 								} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-									$stops[$uuid]['color'] = "#ffff00";
+									$stops[$uuid]['color'] = "#fdf659";
 								} else {
-									$stops[$uuid]['color'] = "#92d050";
+									$stops[$uuid]['color'] = "#a1d662";
 								}
 							} else {
 									$stops[$uuid]['parts'][] = array('name'=>$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue(), 'split'=> $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue());
@@ -481,10 +474,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							if ($v >= 1) {
 								$hops[$hops_from."-".$hops_to]['color'] = "#ff0000";
 							} elseif ($v < 1 && $v >= 0.5) {
-								$hops[$hops_from."-".$hops_to]['color'] = "#ffff00";
+								$hops[$hops_from."-".$hops_to]['color'] = "#fdf659";
 							} else {
-								$hops[$hops_from."-".$hops_to]['color'] = "#92d050";
+								$hops[$hops_from."-".$hops_to]['color'] = "#a1d662";
 							}
+							
 						}
 						foreach ($stops as $u=>$stop) {
 							if ($stop["num"] == $hops_from) { 
@@ -576,7 +570,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			$stopswriter->getActiveSheet()->setCellValue("E".($count+1), $stop['color']);
 			$stopswriter->getActiveSheet()->setCellValue("F".($count+1), $stop['varort']);
 			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), $stop['tier']);
-			$stopswriter->getActiveSheet()->setCellValue("H".($count+1), "0.5");
+			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), "0.5");
 			//$stopswriter->getActiveSheet()->setCellValue("J".($count+1), $stop['lat']);
 			//$stopswriter->getActiveSheet()->setCellValue("K".($count+1), $stop['long']);
 			$count++;

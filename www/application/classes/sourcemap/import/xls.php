@@ -49,7 +49,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		$sheets['Upstream'] = $contentPHPExcel->getActiveSheet();
 		$contentReader->setLoadSheetsOnly("Downstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
-		$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
+		//$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
 		
 		$stops = array();
 		$hops = array();
@@ -145,13 +145,11 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					preg_match($pattern, $value, $instances);
 					$tiers[$instances[0]] = $column;
 				}
-				else {
-					// If you can't find one of our typical column names, add it in as a new type of attr
+				else
 					$sh[$value] = $column;
-				}
 			}
 			
-			// Unset Columns that don't exist in this sheet
+			// Unset Columns that don't exist
 			foreach ($sh as $field=>$column) {
 				if ($column == "") {
 					unset($sh[$field]);
@@ -176,7 +174,6 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 							$name = $rows->getCell($column . $rowIndex)->getCalculatedValue();							
 						}
 					}
-					// Check if that stop has been already added
 					if (isset($stops[$name]) == false) {
 						// create a stop 						
 						$stops[$name] = array (
@@ -196,9 +193,8 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 						}
 						$count++;
 					}
-					// Set a Hop between this stop and the most recent stop in the previous tier
+					// Hops, now
 					if ($sheetname == "Upstream") {
-						// If the sheet is named upstream, then the tiers travel from upstream to downstream, which means the the parent is the to stop, the existing stop is the from stop
 						$hops_from = $stops[$name]["id"];
 						$hops_to = "";
 						foreach ($tiers as $num=>$column) {
@@ -210,8 +206,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 								continue;							
 							}
 						}	
-					} elseif ($sheetname == "Downstream") {
-						// If the sheet is named Downstream, it travels the opposite way, the parent is the from, and the current stop is the to
+					} else {
 						$hops_to = $stops[$name]["id"];
 						$hops_from = "";
 						foreach ($tiers as $num=>$column) {
@@ -223,18 +218,6 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 								continue;							
 							}
 						}						
-					} else {
-						$hops_from = $stops[$name]["id"];
-						$hops_to = "";
-						foreach ($tiers as $num=>$column) {
-							if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
-								if ($num != 0) {
-									$hops_to = $current_path[$num-1];
-								}
-								$current_path[$num] = $hops_from;
-								continue;							
-							}
-						}	
 					}
 										
 					if ($hops_from != "" && $hops_to != "" && $hops_from != $hops_to) {

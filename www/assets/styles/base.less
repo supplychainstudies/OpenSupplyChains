@@ -45,11 +45,9 @@
     //border: 1px solid #d4d4d4;
     //.rounded(12px);
     //.box_shadow(3px, 1px, 10px);
-	//background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(200,200,200,0.7) 100%);
-    //background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(200,200,200,0.5)),color-stop(1,rgba(255,255,255,0.5)));
-    background-image: -moz-linear-gradient(center bottom,rgba(76,97,154,1) 0%,rgba(14,28,65,1) 100%);
-    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(14,28,65,1)),color-stop(1,rgba(76,97,154,1)));
-	.rounded(12px);
+	background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(200,200,200,0.7) 100%);
+    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(200,200,200,0.5)),color-stop(1,rgba(255,255,255,0.5)));
+    .rounded(12px);
 }
 
 #tree {
@@ -566,12 +564,15 @@
         }
     }
     #edit-description, #edit-stop-footprint, #edit-hop-footprint, #edit-media, #edit-catalog {
-        height:150px;
+        height:170px;
         //background: rgb(200,200,200);
         //padding: 10px 20px; 
         //.box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
         overflow:auto;
     }
+	#edit-media {
+		padding: 10px 20px; 
+	}
     #edit-description {
         overflow:hidden;
 		text-align: center;
@@ -590,8 +591,8 @@
         }
     }
 	#edit-stop-footprint, #edit-hop-footprint {
-		//padding: 10px 20px; 
-		fieldset { padding: 10px 20px; }
+		padding: 10px 20px; 
+		fieldset { padding:0; }
 		.footprint-section {
 			background:none;
 			float:left;
@@ -671,9 +672,9 @@
 	}
 	
 	#edit-media {
-		padding: 0px;
 		fieldset {
-			padding: 10px 20px; 
+			margin-top:5px;
+			padding:0;
 		}
 		select#media-content-type {
 			float:left;
@@ -746,7 +747,7 @@
 }
 #catalog {
     .catalog-content {
-        padding:10px !important;   
+        padding:0 !important;   
         ul.catalog-items {
             margin:0;
             li.catalog-item {
@@ -802,11 +803,9 @@
         display:inline;
     }
     #catalog-search {
-		margin: 10px;
         fieldset{
             width:300px;
             margin:0;
-			padding:0px;
             background: url(../images/shadow.png) top repeat-x; 
             border: 1px solid #c9c9c9;
              .rounded;

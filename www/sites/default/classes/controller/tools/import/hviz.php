@@ -68,12 +68,12 @@ class Controller_Tools_Import_Hviz extends Controller_Tools_Import_Xls {
                     $attr = ORM::factory('supplychain_attribute');
                     $attr->supplychain_id = $new_sc_id;
                     $attr->key = 'title';
-                    $attr->value = substr($posted->supplychain_name, 0, 64);
+                    $attr->value = substr($posted->supplychain_name . " - Risk Recovery Days per Site", 0, 64);
                     $attr->save();
                     $attr = ORM::factory('supplychain_attribute');
                     $attr->supplychain_id = $new_sc_id;
                     $attr->key = 'name';
-                    $attr->value = substr($posted->supplychain_name, 0, 64);
+                    $attr->value = substr($posted->supplychain_name . " - Risk Recovery Days per Site", 0, 64);
                     $attr->save();
                 }
                 if($new_sc_id)

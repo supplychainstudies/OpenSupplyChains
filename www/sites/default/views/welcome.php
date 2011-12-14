@@ -13,8 +13,10 @@
 ?>
 
 <div class="container slider">
-    <div id="slider">
-        <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
+    <div id="sliderwrap">
+        <div id="slider">
+            <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
+        </div>
     </div>
 </div>
 

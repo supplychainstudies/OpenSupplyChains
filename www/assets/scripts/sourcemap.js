@@ -675,6 +675,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
     for(var j=0;j<tiers.length;j++){
         // move order -> cluster
         // Move order close to its end
+        //TODO: make the order from biggest to smalest in tree in k
         for(var k=0;k<tiers[j].length;k++){
             var child_stop_id = "",parent_stop_id = "";
             parent_stop_id_list = [];

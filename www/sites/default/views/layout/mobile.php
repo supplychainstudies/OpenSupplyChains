@@ -33,9 +33,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
     <script>
-        // initialize map when page ready
-        var map;
-
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
             window.scrollTo(0, 0);
@@ -48,10 +45,6 @@
         };
         setTimeout(fixSize, 700);
         setTimeout(fixSize, 1500);
-
-        // allow testing of specific renderers via "?renderer=Canvas", etc
-        var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
-        renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
     </script>
 
 

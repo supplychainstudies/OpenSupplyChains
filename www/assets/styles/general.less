@@ -13,7 +13,10 @@
 
 @import "sourcemap";
 
-html,body { height:100%;}
+html,body { 
+    height:100%;
+    min-width: 960px;    
+}
 
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -694,43 +697,45 @@ input[type=checkbox]{
 h1#site-tagline { font-size:30px; }
 
 .container.slider{
-    width: 100%; height: 360px;
+    width: 100%; height: 380px;
     position: relative;
 }
 
-#slider {
-   width: 1090px;
+#sliderwrap {
+   width: 100%;
    margin: 0 auto;
-   padding: 16px 4px 4px 4px;
    position: absolute;
    left: -50%;
    right: -50%;
    overflow: hidden;
    background: url('../images/slider-bg.png') top no-repeat;
    height: 362px;
-   .featured-preview-map.large{
-       .rounded(8px);
-   }
-    .anythingWindow {
-		ul { list-style:none; }
-    }
-    .preview-icons{
-        position: absolute;
-        right: 32px;
-        bottom: 16px;
-        font-size: 12px;
-        font-weight: bold;
-        color: #222;
-        div{
-            width: 32px;
-            padding: 8px 0 6px 0;
-            float: right;
-            text-align: center;
-            opacity: .3;
-            &.favorited{ background: url(../images/icon-slider-favorited.png) center no-repeat }
-            &.discussed{ background: url(../images/icon-slider-discussed.png) center no-repeat }
+   #slider{
+       padding: 16px 4px 4px 4px;
+       .featured-preview-map.large{
+           .rounded(8px);
+       }
+        .anythingWindow {
+            ul { list-style:none; }
         }
-    }
+        .preview-icons{
+            position: absolute;
+            right: 32px;
+            bottom: 16px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #222;
+            div{
+                width: 32px;
+                padding: 8px 0 6px 0;
+                float: right;
+                text-align: center;
+                opacity: .3;
+                &.favorited{ background: url(../images/icon-slider-favorited.png) center no-repeat }
+                &.discussed{ background: url(../images/icon-slider-discussed.png) center no-repeat }
+            }
+        }
+   }
 }
 
 

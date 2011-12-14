@@ -676,11 +676,27 @@ Sourcemap.buildTree = function(tree_id,sc) {
         // move order -> cluster
         // Move order close to its end
         //TODO: make the order from biggest to smalest in tree in k
-        for(var k=0;k<tiers[j].length;k++){
+        var len_of_tier = tiers[j].length;
+        var default_mid,target_value;
+        if((len_of_tier/2)==parseInt(len_of_tier/2))
+            default_mid = (len_of_tier/2)-1;
+        else
+            default_mid = (len_of_tier-1)/2;
+        for(var bool=0,v=0,k=0;k<len_of_tier;k++){
+            if(bool==0){
+                target_value = default_mid-v;
+                v+=1;
+                bool = 1;
+            } else {
+                target_value = default_mid+v;
+                bool = 0;
+            }
+            //console.log(target_value);
             var child_stop_id = "",parent_stop_id = "";
             parent_stop_id_list = [];
             for(var l=0;l<sc.hops.length;l++){
-                if(sc.hops[l].to_stop_id==tiers[j][k].instance_id){
+                //if(sc.hops[l].to_stop_id==tiers[j][k].instance_id){
+                if(sc.hops[l].to_stop_id==tiers[j][target_value].instance_id){
                     child_stop_id = sc.hops[l].to_stop_id;
                     for(var z=0;z<tier_list.length;z++)
                     {
@@ -704,22 +720,19 @@ Sourcemap.buildTree = function(tree_id,sc) {
                             for(var n=0;n<tiers[m].length;n++){
                                 if(tiers[m][n].instance_id!=target)
                                     continue;
-                                console.log(target);
-
                                 var new_position,pos;
                                 var temp_item;
                                 var temp_item = tiers[m][n];
-                                pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (k/(tiers[j].length-1));
+                                //pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (k/(tiers[j].length-1));
+                                pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (target_value/(tiers[j].length-1));
                                 if(pos>.5)
                                     new_position = tiers[m].length;
                                 else if(pos==.5)    
                                     new_position = parseInt(tiers[m].length/2);
                                 else
                                     new_position = 0;
-
-                                var attr = tiers[m][n].attributes;
-                                console.log(pos+":"+attr.title+" / to ("+new_position+")   Ins:"+tiers[j][k].instance_id);
-
+                                //var attr = tiers[m][n].attributes;
+                                //console.log(pos+":"+attr.title+" / to ("+new_position+")   Ins:"+tiers[j][k].instance_id);
                                 tiers[m].splice(n,1);
                                 tiers[m].splice(new_position,0,temp_item);
 

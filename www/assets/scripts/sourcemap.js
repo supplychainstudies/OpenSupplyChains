@@ -600,7 +600,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
     //console.log(sc.hops);
     // Sort #2 : stops with only 1 connection should be clustered and move order
     (function(){
-        return;
+        return;     //disable, jump to sort #3
     var finish_stop_id_list =[];
     for(var j=0;j<tiers.length;j++){
         // move order -> cluster
@@ -672,10 +672,10 @@ Sourcemap.buildTree = function(tree_id,sc) {
     (function(){
     var finish_stop_id_list =[];
     var parent_stop_id_list =[];
+    var children_stop_id_list =[];
     for(var j=0;j<tiers.length;j++){
         // move order -> cluster
         // Move order close to its end
-        //TODO: make the order from biggest to smalest in tree in k
         var len_of_tier = tiers[j].length;
         var default_mid,target_value;
         if((len_of_tier/2)==parseInt(len_of_tier/2))
@@ -692,30 +692,52 @@ Sourcemap.buildTree = function(tree_id,sc) {
                 bool = 0;
             }
             //console.log(target_value);
+            var target_stop_id = ""
             var child_stop_id = "",parent_stop_id = "";
             parent_stop_id_list = [];
+            children_stop_id_list = [];
             for(var l=0;l<sc.hops.length;l++){
                 //if(sc.hops[l].to_stop_id==tiers[j][k].instance_id){
                 if(sc.hops[l].to_stop_id==tiers[j][target_value].instance_id){
-                    child_stop_id = sc.hops[l].to_stop_id;
+                    // If Parent is 1
+                    target_stop_id = sc.hops[l].to_stop_id;
                     for(var z=0;z<tier_list.length;z++)
                     {
                         if(sc.hops[l].from_stop_id==tier_list[z].instance){
-                            if(tier_list[z].connections!=1)
-                                continue;
-                            parent_stop_id = sc.hops[l].from_stop_id;
-                            parent_stop_id_list.push(parent_stop_id);
+                            if(tier_list[z].connections==1){
+                                parent_stop_id = sc.hops[l].from_stop_id;
+                                parent_stop_id_list.push(parent_stop_id);
+                            }
+                            continue;
+                        }
+                    }
+                } 
+                if (sc.hops[l].from_stop_id==tiers[j][target_value].instance_id){
+                    // If child is 1
+                    target_stop_id = sc.hops[l].from_stop_id;
+                    for(var z=0;z<tier_list.length;z++)
+                    {
+                        if(sc.hops[l].to_stop_id==tier_list[z].instance){
+                            if(tier_list[z].connections==1){
+                                child_stop_id = sc.hops[l].to_stop_id;
+                                children_stop_id_list.push(child_stop_id);
+                            }
                             continue;
                         }
                     }
                 }
             }
-            if(parent_stop_id_list.length<1||child_stop_id=="")
+            //if(parent_stop_id_list.length<1||target_stop_id=="")
+            if(target_stop_id=="")
                 continue;
             else{
+                // Parent order function
                 (function(){
+                    var target;
                     for(var q=0,q_len=parent_stop_id_list.length;q<q_len;q++){
-                        var target = parent_stop_id_list.pop();
+                        if(parent_stop_id_list.length<1)
+                            return; // nothing inside list
+                        target = parent_stop_id_list.pop();
                         for(var m=0;m<tiers.length;m++){
                             for(var n=0;n<tiers[m].length;n++){
                                 if(tiers[m][n].instance_id!=target)
@@ -735,12 +757,41 @@ Sourcemap.buildTree = function(tree_id,sc) {
                                 //console.log(pos+":"+attr.title+" / to ("+new_position+")   Ins:"+tiers[j][k].instance_id);
                                 tiers[m].splice(n,1);
                                 tiers[m].splice(new_position,0,temp_item);
-
                                 continue;
                             }
                         }
                     }
-                })(); // end function
+                })(); // end parent order function
+                //console.log(children_stop_id_list);
+                // children order function
+                (function(){
+                    var target;
+                    for(var q=0,q_len=children_stop_id_list.length;q<q_len;q++){
+                        target = children_stop_id_list.pop();
+                        for(var m=0;m<tiers.length;m++){
+                            for(var n=0;n<tiers[m].length;n++){
+                                if(tiers[m][n].instance_id!=target)
+                                    continue;
+                                var new_position,pos;
+                                var temp_item;
+                                var temp_item = tiers[m][n];
+                                //pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (k/(tiers[j].length-1));
+                                pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (target_value/(tiers[j].length-1));
+                                if(pos>.5)
+                                    new_position = tiers[m].length;
+                                else if(pos==.5)    
+                                    new_position = parseInt(tiers[m].length/2);
+                                else
+                                    new_position = 0;
+                                //var attr = tiers[m][n].attributes;
+                                //console.log(pos+":"+attr.title+" / to ("+new_position+")   Ins:"+tiers[j][k].instance_id);
+                                tiers[m].splice(n,1);
+                                tiers[m].splice(new_position,0,temp_item);
+                                continue;
+                            }
+                        }
+                    }
+                })(); // end parent order function
             }//end else
             continue;
         }
@@ -1048,29 +1099,33 @@ Sourcemap.buildTree = function(tree_id,sc) {
         upstream.push(tier_list[select].instance);
         downstream.push(tier_list[select].instance);
         //downstream ~max
+        (function(){
         for(var j=0,down_max=downstream.length;j<down_max;j++){
             for(var h=0,max=hop_list.length;h<max;h++){                        
                 if(hop_list[h].from==downstream[j]){
                     //prevent circular supplychain
                     if(jQuery.inArray(hop_list[h].to,downstream)>0)
-                        return;
+                        continue;
                     downstream.push(hop_list[h].to);
                     down_max = downstream.length; 
                 }
             }
         }
+        })(); // end of funciton
         //upstream
+        (function(){
         for(var j=0,up_max=upstream.length;j<up_max;j++){
             for(var h=0,max=hop_list.length;h<max;h++){                        
                 if(hop_list[h].to==upstream[j]){
                     //prevent circular supplychain
                     if(jQuery.inArray(hop_list[h].from,upstream)>0)
-                        return;
+                        continue;
                     upstream.push(hop_list[h].from);
                     up_max = upstream.length; 
                 }
             }
         }
+        })(); // end of function
     }
 
     function check_hops(hop,select)
@@ -1091,6 +1146,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
     function check_stops(i,select)
     {
+        // false : not change opacity 
         if(i==select)
             return false;
         if(jQuery.inArray(tier_list[i].instance,downstream)>0)

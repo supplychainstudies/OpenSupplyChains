@@ -46,22 +46,69 @@ class Sourcemap_xls {
 	}
 	
 	
-	public static function moveEverythingDownBelowThisRow($row, $hierarchy) {
-
-		
-		return $hierarchy;
+	public static function findDivergence($stopid, $supplychain, $stop_tally) {
+		//find the next stop
+		if (isset($stop_tally[$stopid]['from']) == true) {
+			if ($stop_tally[$stopid]['from'] > 1) {
+				return $stopid;
+			} else {
+				if (isset($stop_tally[$stopid]['next']) == true) {
+					return self::findDivergence($stop_tally[$stopid]['next'], $supplychain, $stop_tally);
+				} else {
+					return $stopid;
+				}
+			}
+		} elseif (isset($stop_tally[$stopid]['from']) == false && isset($stop_tally[$stopid]['to']) == true) {
+			return $stopid;
+		} 
+		/*
+		if (isset($stop_tally[$stopid]['next']) == true) {
+			if (isset($stop_tally[$stop_tally[$stopid]['next']]['from']) == true) {
+				if ($stop_tally[$stop_tally[$stopid]['next']]['from'] > 1) {
+					return $stop_tally[$stopid]['next'];
+				} else {
+					self::findDivergence($stop_tally[$stopid]['next'], $supplychain, $stop_tally);
+				}
+			} else {
+				return $stopid;
+			}
+		} else {
+			return $stopid;
+		}
+		*/
 	}
 	
+	public static function traverseForward($stopid, $tier, $supplychain, $tree) { 
+		array_push($tree, array("id"=>$stopid, "tier"=>$tier));		
+		// Find all the next stops
+		foreach ($supplychain->hops as $hop) {
+			if ($stopid == $hop->from_stop_id) {
+				$tree = self::traverseForward($hop->to_stop_id, $tier+1, $supplychain, $tree);
+			}
+		}
+		return $tree; 
+	}
+	
+	public static function traverseBackward($stopid, $tier, $supplychain, $tree ) { 
+		array_push($tree, array("id"=>$stopid, "tier"=>$tier));		
+		// Find all the next stops
+		foreach ($supplychain->hops as $hop) {
+			if ($stopid == $hop->to_stop_id) {
+				$tree = self::traverseBackward($hop->from_stop_id, $tier+1, $supplychain, $tree);
+			}
+		}
+		return $tree; 
+	}
+	
+	public static function getStopInfo($id, $supplychain) {
+		foreach ($supplychain->stops as $stop) {
+			if ($id == $stop->id) {
+				return $stop;
+			}
+		}
+	}
 	
 	public static function make($supplychain) {
-		
-		$stopswriter = new PHPExcel();
-		$stopswriter->createSheet();
-		$stopswriter->setActiveSheetIndex(0);
-		$stopswriter->getActiveSheet()->setTitle("Upstream");
-		$stopswriter->createSheet();
-		$stopswriter->setActiveSheetIndex(1);
-		$stopswriter->getActiveSheet()->setTitle("Downstream");
 	
 		// We have to figure out the paths/tiers
 		// To do that, we can traverse hops and push stuff onto paths
@@ -72,9 +119,8 @@ class Sourcemap_xls {
 		$dh = array();
 		$umax_level = 0;
 		$dmax_level = 0;
-
+		/*
 		foreach($supplychain->hops as $hop) {
-			// First, we have to see if the to stop is already in the tree
 			// http://192.168.1.39/services/supplychains/211?f=xls
 			// If it is upstream
 			if(isset($dh[$hop->from_stop_id]) == false && isset($uh[$hop->from_stop_id]['f']) == false && isset($uh[$hop->from_stop_id]) == false) {	
@@ -165,6 +211,8 @@ class Sourcemap_xls {
 							}
 						}
 					}
+					// we have to loop and pull stuff back levels
+					
 				}
 				// If the to stop isn't there, put it in underneath the from stop and move everything else down
 				if (isset($dh[$hop->to_stop_id]) == false) {
@@ -179,8 +227,10 @@ class Sourcemap_xls {
 					// If the to stop is in there, move it and its children underneath the from stop and move everything else up a couple of rows
 					$r = $dh[$hop->to_stop_id]['row'];
 					$leveltrip = $dh[$hop->to_stop_id]['level'];
+					//$maxloops = count($dh)- $r +1;
+					//$maxcount = 0;
 					$level = $leveltrip+1;
-					while ($level>$leveltrip) {
+					while ($level>$leveltrip && $maxcount<$maxloops) {
 						foreach ($dh as $num=>$st) {
 							if ($st['row'] == $r) {
 								$level = $dh[$num]['level'];
@@ -191,6 +241,7 @@ class Sourcemap_xls {
 				                        $uh[$num2]['row']--; 
 				                    } 
 				                }
+								$maxcount++;
 								break 1;		
 							}
 						}
@@ -202,9 +253,9 @@ class Sourcemap_xls {
 			var_dump($hop->to_stop_id);
 			var_dump($uh);
 			var_dump($dh);
-			*/
+			
 		}	
-		/*
+		*/
 		$uh = array();
 		$dh = array();
 		$stop_tally = array();
@@ -218,9 +269,90 @@ class Sourcemap_xls {
 				$stop_tally[$hop->from_stop_id]['from'] = 1;
 			} else {
 				$stop_tally[$hop->from_stop_id]['from']++;
-			}			
+			}
+			$stop_tally[$hop->from_stop_id]['next'] = $hop->to_stop_id;	
 		}
-		var_dump($stop_tally);
+		$middles = array();
+		$downstream_tree = array();
+		$upstream_tree = array();
+		foreach($supplychain->stops as $stop) {
+			if (isset($stop_tally[$stop->id]) == true) {
+				// then, this is a starting point in the tree
+				if (isset($stop_tally[$stop->id]['to']) == false && isset($stop_tally[$stop->id]['from']) == true){
+					// iterate through and find the first spot where it diverges
+					$middles[] = self::findDivergence($stop->id, $supplychain, $stop_tally);
+				} 
+			} else {
+				$upstream_tree[] = array("id"=>$stop->id, "tier"=>0);
+			}
+		}
+		$middles = array_unique($middles);
+		foreach($middles as $middle) {
+			$downstream_tree = self::traverseForward($middle,0, $supplychain, $downstream_tree);
+			$upstream_tree = self::traverseBackward($middle,0, $supplychain, $upstream_tree);
+		}
+		$ucolumns = array();
+		$dcolumns = array();
+		foreach ($upstream_tree as $h) {
+			if (isset($ucolumns[$h['tier']]) == false) {
+				$ucolumns[$h['tier']] = "Tier ".$h['tier'];
+			}
+		}
+		foreach ($downstream_tree as $h) {
+			if (isset($dcolumns[$h['tier']]) == false) {
+				$dcolumns[$h['tier']] = "Tier ".$h['tier'];
+			}
+		}
+		
+		// If there's only 1 tier in the downstream sheet, it means that we dont need one
+		if (count($dcolumns) == 1) {
+			unset($downstream_tree);
+		}
+		
+		$stopswriter = new PHPExcel();
+		if (isset($upstream_tree) == true){
+			$stopswriter->createSheet();
+			$stopswriter->setActiveSheetIndex(0);
+			$stopswriter->getActiveSheet()->setTitle("Upstream");
+			foreach ($upstream_tree as $num=>$row) {
+				$stop = self::getStopInfo($row['id'], $supplychain);
+				if (isset($stop->attributes->title) == true) {
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($row['tier'],$num+2,$stop->attributes->title);
+				}
+			
+				foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+					if (in_array($attribute_name,$ucolumns) == false) {
+						$ucolumns[] = $attribute_name;
+					}
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$ucolumns),$num+2,$attribute_value);					
+				} 
+			}
+			foreach ($ucolumns as $num=>$column) {
+				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
+			}	
+		}
+		if (isset($downstream_tree) == true) {	
+			$stopswriter->createSheet();
+			$stopswriter->setActiveSheetIndex(1);
+			$stopswriter->getActiveSheet()->setTitle("Downstream");
+			foreach ($downstream_tree as $num=>$row) {
+				$stop = self::getStopInfo($row['id'], $supplychain);
+				if (isset($stop->attributes->title) == true) {
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($row['tier'],$num+2,$stop->attributes->title);
+				}
+			
+				foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+					if (in_array($attribute_name,$dcolumns) == false) {
+						$dcolumns[] = $attribute_name;
+					}
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$dcolumns),$num+2,$attribute_value);					
+				} 
+			} 
+			foreach ($dcolumns as $num=>$column) {
+				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
+			}
+		}
+		/*
 		foreach($supplychain->stops as $stop) {
 			if (isset($stop_tally[$stop->id]) == true) {
 				if (isset($stop_tally[$stop->id]['to']) == true && isset($stop_tally[$stop->id]['from']) == true){
@@ -248,6 +380,7 @@ class Sourcemap_xls {
 			}
 		}
 		*/
+		/*
 		$ucolumns = array();
 		for($i=0;$i<=$umax_level;$i++) {
 			$ucolumns[] = "Tier ".$i;
@@ -353,18 +486,8 @@ class Sourcemap_xls {
 					$vals['color']
 				);	
 		}
-		
-		$stopswriter->setActiveSheetIndex(0);
-		foreach ($ucolumns as $num=>$column) {
-			$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
-		}
-		$stopswriter->setActiveSheetIndex(1);
-		foreach ($dcolumns as $num=>$column) {
-			$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
-		}
-		
-		// Done! Open on the Client side
-		
+		*/
+
 		$sWriter = new PHPExcel_Writer_Excel5($stopswriter);	
         //$writer->setPreCalculateFormulas(true);
         $request = Request::instance();
@@ -373,7 +496,8 @@ class Sourcemap_xls {
         $request->headers['Cache-Control'] = 'max-age=0';
         $request->send_headers();
         $sWriter->save('php://output');
-		
+		// Done! Open on the Client side
+				
 	}
 	
 }

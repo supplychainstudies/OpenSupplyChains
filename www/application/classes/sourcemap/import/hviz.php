@@ -28,6 +28,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		//sqrt((min(array(max(array(($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()), 10)), 365)))/3.14)
 		return sqrt((min(array(max(array(($percent_val), $percent_min)), $percent_max)))/3.14);
 	}
+	
 
     public static function hviz2sc($xls=null, $o=array()) {
         $options = array();
@@ -116,11 +117,21 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			);
 			
 			//$description = array();
-		
-
-			for ($i = 0; $rows->cellExistsByColumnAndRow($i,2) == true; $i++) {
-				$value = strtolower($rows->getCellByColumnAndRow($i,2)->getValue());
-				$column = $rows->getCellByColumnAndRow($i,2)->getColumn();
+			// Find title row
+			for ($starting_row = 1; $starting_row < 20; $starting_row++) {
+				for ($i = 0; $i<20; $i++) {
+					if ($rows->cellExistsByColumnAndRow($i,$starting_row) == true){
+						$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
+						$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
+						if (strpos($value,"bom") !== false) {	
+							break 2; 
+						}
+					}
+				}
+			}
+			for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
+				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
+				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
 				if (strpos($value,"part-name") !== false || strpos($value,"part name") !== false)
 					$h["Part-Name"] = $column;
 				elseif (strpos($value,"part") !== false && (strpos($value,"num") !== false || strpos($value,"#") !== false))
@@ -155,9 +166,10 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			}
 			$count = 1;
 			$boms = array();
+			var_dump($h);
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != NULL && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Part-Number" && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Part-Name" && $rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue() != "Note:" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Sort Order") {
+				if ($rowIndex>$starting_row) {
 					$uuid = $rows->getCell($h["Source-Name"] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h["City"] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h["Country"] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h["Postal-Code"] . $rowIndex)->getCalculatedValue() . ")";
 					if (isset($stops[$uuid]) == false) {						
 						$stops[$uuid] = array (
@@ -175,6 +187,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								'tier' => $rows->getCell($h["BOM-Level"] . $rowIndex)->getCalculatedValue(),
 								'days' => $rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()						
 						);
+						var_dump($rows->getCell($h["Source-Name"] . $rowIndex)->getCalculatedValue());
 						$tier_start = min($rows->getCell($h["BOM-Level"] . $rowIndex)->getCalculatedValue(),$tier_start);
 						$tier_end = max($rows->getCell($h["BOM-Level"] . $rowIndex)->getCalculatedValue(),$tier_end);
 						if (isset($forecast_values) == true) {
@@ -184,7 +197,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								} elseif (isset($forecast_values[$stops[$uuid]['partnumbers'][0]]) == true) {
 									$stops[$uuid]['varort'] = $forecast_values[$stops[$uuid]['partnumbers'][0]] * ($rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()/365) * $rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue();	
 								}
-								
+								/*
 								if ($stops[$uuid]['varort'] >= 20) {
 									$stops[$uuid]['color'] = "#ff0000";
 								} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
@@ -194,48 +207,54 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								} else {
 									$stops[$uuid]['color'] = "#92d050";
 								}
+								*/
 							} else {
+								/*
+								if (isset($boms[0]) == true) {
 								foreach ($stops as $stop) {
-									if ($stop['num'] == $boms[0]) {
-										foreach ($stop['parts'] as $part) {
-											foreach($forecast_values as $pn=>$vals) {
-												if ($pn == $part['name']) {
-													$bom0partvalue = $vals;
-													$stops[$uuid]['varort'] = ($rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()/365) * ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue()) * ($vals);
-													if ($stops[$uuid]['varort'] >= 20) {
-														$stops[$uuid]['color'] = "#ff0000";
-													} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-														$stops[$uuid]['color'] = "#ffc000";
-													} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-														$stops[$uuid]['color'] = "#ffff00";
-													} else {
-														$stops[$uuid]['color'] = "#92d050";
-													}												
+										if ($stop['num'] == $boms[0]) {
+											foreach ($stop['parts'] as $part) {
+												foreach($forecast_values as $pn=>$vals) {
+													if ($pn == $part['name']) {
+														$bom0partvalue = $vals;
+														$stops[$uuid]['varort'] = ($rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()/365) * ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue()) * ($vals);
+														if ($stops[$uuid]['varort'] >= 20) {
+															$stops[$uuid]['color'] = "#ff0000";
+														} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
+															$stops[$uuid]['color'] = "#ffc000";
+														} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
+															$stops[$uuid]['color'] = "#ffff00";
+														} else {
+															$stops[$uuid]['color'] = "#92d050";
+														}												
+													}
 												}
 											}
-										}
-										foreach ($stop['partnumbers'] as $part) {
-											foreach($forecast_values as $pn=>$vals) {
-												if ($pn == $part) {
-													$bom0partvalue = $vals;
+											foreach ($stop['partnumbers'] as $part) {
+												foreach($forecast_values as $pn=>$vals) {
+													if ($pn == $part) {
+														$bom0partvalue = $vals;
 													
-													$stops[$uuid]['varort'] = ($rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()/365) * ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue()) * ($vals);
-													var_dump($rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " - " . $rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue() . " - " . $vals . " = " . $stops[$uuid]['varort']);
-													if ($stops[$uuid]['varort'] >= 20) {
-														$stops[$uuid]['color'] = "#ff0000";
-													} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
-														$stops[$uuid]['color'] = "#ffc000";
-													} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
-														$stops[$uuid]['color'] = "#ffff00";
-													} else {
-														$stops[$uuid]['color'] = "#92d050";
-													}												
+														$stops[$uuid]['varort'] = ($rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue()/365) * ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue()) * ($vals);
+														var_dump($rows->getCell($h["Risk Recovery Days"] . $rowIndex)->getCalculatedValue() . " - " . $rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue() . " - " . $vals . " = " . $stops[$uuid]['varort']);
+														if ($stops[$uuid]['varort'] >= 20) {
+															$stops[$uuid]['color'] = "#ff0000";
+														} elseif ($stops[$uuid]['varort'] < 20 && $stops[$uuid]['varort'] >= 10) {
+															$stops[$uuid]['color'] = "#ffc000";
+														} elseif ($stops[$uuid]['varort'] < 10 && $stops[$uuid]['varort'] >= 5) {
+															$stops[$uuid]['color'] = "#ffff00";
+														} else {
+															$stops[$uuid]['color'] = "#92d050";
+														}												
+													}
 												}
 											}
 										}
 									}
 								}
+								
 							}
+							*/
 							//$stops[$uuid]['Description'] .= ($rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue()*100)."% of part ".$rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue()." ";
 						}
 						if (trim($stops[$uuid]['Address']) == "") {
@@ -246,6 +265,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 					} else {
 						// Make sure its the lowest tier
 						$stops[$uuid]['tier'] = max($stops[$uuid]['tier'], $rows->getCell($h["BOM-Level"] . $rowIndex)->getCalculatedValue());
+						/*
 						if (isset($forecast_values) == true) {
 							if (isset($forecast_values) == true) {
 								foreach ($stops as $stop) {
@@ -288,6 +308,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								}
 
 							}
+							*/
 							$stops[$uuid]["parts"][] = array('name'=>$rows->getCell($h["Part-Name"] . $rowIndex)->getCalculatedValue(),'split'=>$rows->getCell($h["Source-Split"] . $rowIndex)->getCalculatedValue());
 						}	
 					}
@@ -307,7 +328,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							'Description' => '',
 							'color'=>'#000000'
 						);
-						
+						/*
 						if (isset($forecast_values) == true) {		
 							$v = (7/365)* $rows->getCell($h['Source-Split'] . $rowIndex)->getCalculatedValue() * $bom0partvalue;
 							if ($v >= 1) {
@@ -318,7 +339,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								$hops[$hops_from."-".$hops_to]['color'] = "#92d050";
 							}
 						}
-						
+						*/
 						foreach ($stops as $u=>$stop) {
 							if ($stop["num"] == $hops_from) { 
 								$hops[$hops_from."-".$hops_to]['Description'] .= "From: " . $stop['Location'];
@@ -376,10 +397,22 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 				"flow" => "",
 				"Risk Recovery Days" => ""		
 			);
-
-			for ($i = 0; $rows->cellExistsByColumnAndRow($i,3) == true; $i++) {
-				$value = strtolower($rows->getCellByColumnAndRow($i,3)->getCalculatedValue());
-				$column = $rows->getCellByColumnAndRow($i,3)->getColumn();
+		for ($starting_row = 1; $starting_row<10; $starting_row++) {
+			$check_title = false;
+			$check_address = false;
+			for ($i = 0; $i<20; $i++) {
+				if ($rows->cellExistsByColumnAndRow($i,$starting_row) == true){
+					$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
+					$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
+					if (strpos($value,"location") !== false || strpos($value,"address") !== false || strpos($value,"coordinate") !== false) {	
+						break 2; 
+					}
+				}
+			}
+		}
+			for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
+				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getCalculatedValue());
+				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
 				if (strpos($value,"part-name") !== false || strpos($value,"part name") !== false || strpos($value,"part number") !== false || strpos($value,"part-number") !== false)
 					$h["Part-Name"] = $column;
 				elseif (strpos($value,"origin") !== false && strpos($value,"name") !== false)
@@ -411,10 +444,11 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 				elseif (strpos($value,"recovery-time") !== false || strpos($value,"days") !== false || strpos($value,"risk") !== false)
 					$h["Risk Recovery Days"] = $column;			
 			}
+			var_dump($h);
 			$boms = array();
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rows->getCell("A" . $rowIndex)->getCalculatedValue() != NULL && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part-Number" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part Number" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Part name" && $rows->getCell("A" . $rowIndex)->getCalculatedValue() != "Note:") {
+				if ($rowIndex>$starting_row) {
 					$uuid = $rows->getCell($h['O-Name'] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h['O-City'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['O-Country'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['O-Postal-Code'] . $rowIndex)->getCalculatedValue() . ")";
 
 					if (isset($stops[$uuid]) == false) {
@@ -448,6 +482,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 								'days' => $rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue(),
 								'parts' => array(array("name"=>$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue(), "split"=>$rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue()))
 							);
+							/*
 							if (isset($forecast_values) == true) {	
 								$bomval = $forecast_values[$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue()];					
 								$stops[$uuid]['varort'] = ($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue()/365) * $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue() * $bomval;
@@ -463,6 +498,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							} else {
 									$stops[$uuid]['parts'][] = array('name'=>$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue(), 'split'=> $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue());
 							}
+							*/
 							$tier_start = min($stops[$uuid]['tier'],$tier_start);
 							$tier_end = max($stops[$uuid]['tier'],$tier_end);
 							$count++;
@@ -474,6 +510,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							'Description' => "",
 							'color'=>'#000000'
 						);
+						/*
 						if (isset($forecast_values) == true) {
 								
 							$bomval = $forecast_values[$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue()];					
@@ -487,6 +524,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							}
 							
 						}
+						*/
 						foreach ($stops as $u=>$stop) {
 							if ($stop["num"] == $hops_from) { 
 								$hops[$hops_from."-".$hops_to]['Description'] .= "From: " . $stop['Location'];

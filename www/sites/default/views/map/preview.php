@@ -38,7 +38,7 @@
 
     <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
   	
-	<a href="/embed/<?= $supplychain_id ?>" class="full-site-button">View on Full Site</a>
+	<a href="/mobile/<?= $supplychain_id ?>" class="full-site-button">View Full Map</a>
 
     <div class="clear"></div>
 </div><!-- .container.preview -->

@@ -448,20 +448,24 @@
         #banner-favorite {
             background: url(../images/icon-favorite.png) 10px -19px no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);
-            padding-right: 20px;
+            padding-right: 0;
             &.marked {
                 background: url(../images/icon-favorite.png) 10px 11px no-repeat;
             }
         }
         #banner-owner {
             background: url(../images/icon-owner.png) 10px center no-repeat;
-            border-left: 1px solid rgba(140,140,140,0.25);            
+            border-left: 1px solid rgba(140,140,140,0.25);   
+			border-right: 1px solid rgba(140,140,140,0.25);    
+         
             padding-left: 45px;
             overflow:hidden;
         }
         #banner-share {
             background: url(../images/icon-share.png) 10px center no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);    
+            padding-right: 0;
+
         }
         #banner-lock {
             border-left:1px solid rgba(140,140,140,0.25);
@@ -472,10 +476,16 @@
                 :hover{text-decoration:none;}
             }
         }
-        #banner-owner, #banner-favorite, #banner-share, #banner-lock {
+		.banner-favorite-link:hover, .banner-share-link:hover {
+			text-decoration:none;
+		}
+        #banner-owner, #banner-favorite, #banner-share, #banner-lock, .banner-map-search {
             padding-left: 40px;
             float: right;
         }
+		.banner-map-search {
+			margin:12px 10px 0 10px;
+		}
         .map-status {
             float:right;
             text-align:right;

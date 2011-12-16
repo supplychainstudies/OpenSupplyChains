@@ -22,16 +22,14 @@
 	    </div>
 		</a> 
 	<% } %>
-    <a class="banner-share-link" href="javascript:void(0);">
-    <div id="banner-share">
-        Share
-    </div>
+    <a class="banner-share-link" title="share" alt="share" href="javascript:void(0);">
+    <div id="banner-share">&nbsp;</div>
     </a>
-    <a class="banner-favorite-link" href="javascript:void(0);">
-    <div id="banner-favorite">
-        Favorite 
-    </div>
+    <a class="banner-favorite-link" title="favorite" alt="favorite" href="javascript:void(0);">
+    <div id="banner-favorite">&nbsp;</div>
     </a>
+	<input type="search" class="banner-map-search"></input>
+
     <div id="banner-owner">
         <% var d = new Date(this.sc.modified*1000); %>
         <a href="user/<%= this.sc.owner.name %>"><% if(this.sc.owner.display_name!=undefined){%><%= this.sc.owner.display_name %><%}else{%><%= this.sc.owner.name %><%}%></a>&nbsp;&nbsp;<%= _S.ttrunc(_S.fmt_date(d),14) %>

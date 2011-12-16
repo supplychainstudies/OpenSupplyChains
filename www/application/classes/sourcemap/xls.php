@@ -15,6 +15,44 @@
 class Sourcemap_xls {
 	//public static function parse($kml) { }
 	//git@codebasehq.com:sourcemap/sourcemap/sourcemap.git
+	
+	public static function addChildren($supplychain, $stop, $direction, $hierarchy) {
+		foreach($supplychain->hops as $hop) {
+			if ($direction = "upstream") {
+				if ($stop == $hop->to_stop_id) {
+					$hierarchy[$hop->from_stop_id] = array("level"=>$hierarchy[$stop]['level']+1,"row"=>$hierarchy[$stop]['row']+1);
+					foreach ($hierarchy as $st=>$h) {
+						if ($h['row']>=$hierarchy[$hop->from_stop_id]['row']) {
+							$hierarchy[$st]['row']++;
+						}
+					}
+					$hierarchy = addChildren($supplychain, $hop->from_stop_id, $direction, $hierarchy);
+				}
+			}
+			if ($direction = "downstream") {
+				if ($stop == $hop->from_stop_id) {
+					$hierarchy[$hop->to_stop_id] = array("level"=>$hierarchy[$stop]['level']+1,"row"=>$hierarchy[$stop]['row']+1);
+					foreach ($hierarchy as $st=>$h) {
+						if ($h['row']>=$hierarchy[$hop->to_stop_id]['row']) {
+							$hierarchy[$st]['row']++;
+						}
+					}
+					$hierarchy = addChildren($supplychain, $hop->from_stop_id, $direction, $hierarchy);
+				}
+			}
+		}
+		
+		return $hierarchy;
+	}
+	
+	
+	public static function moveEverythingDownBelowThisRow($row, $hierarchy) {
+
+		
+		return $hierarchy;
+	}
+	
+	
 	public static function make($supplychain) {
 		
 		$stopswriter = new PHPExcel();
@@ -24,7 +62,7 @@ class Sourcemap_xls {
 		$stopswriter->createSheet();
 		$stopswriter->setActiveSheetIndex(1);
 		$stopswriter->getActiveSheet()->setTitle("Downstream");
-		
+	
 		// We have to figure out the paths/tiers
 		// To do that, we can traverse hops and push stuff onto paths
 		$tree = array();
@@ -34,76 +72,182 @@ class Sourcemap_xls {
 		$dh = array();
 		$umax_level = 0;
 		$dmax_level = 0;
-		// Find 0th points
-		//$start_stops = array();
-		//foreach($supplychain->hops as $hop) {
-		//	if (isset($start_stops[$hop->to_stop_id]) == false) $start_stops[$hop->to_stop_id]=1; else $start_stops[$hop->to_stop_id]++;
-		//	if (isset($start_stops[$hop->from_stop_id]) == false) $start_stops[$hop->from_stop_id]=1; else $start_stops[$hop->from_stop_id]++;
-		//}
-		//foreach($start_stops as $meow) {
-		//	
-		//}
+
 		foreach($supplychain->hops as $hop) {
 			// First, we have to see if the to stop is already in the tree
 			// http://192.168.1.39/services/supplychains/211?f=xls
-			$found = false;
-			foreach ($tree as $position=>$t) {
-				if ($t['id'] == $hop->to_stop_id) {
-					//$first_half = array_slice($tree,0,$position);
-					//$middle = array('id'=>$hop->from_stop_id,'level'=>($t['level']+1));
-					//$max_level = max($max_level, ($t['level']+1));
-					//$last_half = array_slice($tree,$position);
-					//array_unshift($last_half,$middle);
-					//$tree = array_merge($first_half,$last_half);
-					$stops_hierarchy[$hop->from_stop_id] = array('level'=>($t['level']+1), 'row'=>$position);
-					$found = true;
-					break 1;
-				}
-			} 
 			// If it is upstream
-			if(isset($uh[$hop->from_stop_id]) == false) {	
+			if(isset($dh[$hop->from_stop_id]) == false && isset($uh[$hop->from_stop_id]['f']) == false && isset($uh[$hop->from_stop_id]) == false) {	
 				if(isset($uh[$hop->to_stop_id]) == false) {
 					$uh[$hop->to_stop_id] = array('level'=>0, 'row'=>count($uh)+1);
 				}		
 				$uh[$hop->from_stop_id] = array('level'=>($uh[$hop->to_stop_id]['level']+1), 'row'=>$uh[$hop->to_stop_id]['row']+1);
 				$umax_level = max($umax_level, ($uh[$hop->to_stop_id]['level']+1));
 				foreach ($uh as $num=>$st) {
-					if ($st['row'] >= $uh[$hop->from_stop_id]['row']&& $num != $hop->from_stop_id) {
+					if ($st['row'] >= $uh[$hop->from_stop_id]['row'] && $num != $hop->from_stop_id) {
 						$uh[$num]['row']++;
 					}
 				} 
+			} elseif (isset($dh[$hop->from_stop_id]) == false && isset($uh[$hop->from_stop_id]['f']) == false && isset($uh[$hop->from_stop_id]) == true) {
+				$uh[$hop->from_stop_id]['f'] = "f";
+				// for from and every child of from, move it over a level
+				$leveltrip = $uh[$hop->from_stop_id]['level'];
+				$level = $leveltrip+1;
+				$uh[$hop->from_stop_id]['level']++;
+				for ($i=$uh[$hop->from_stop_id]['row']+1; $level>$leveltrip && $i < count($uh); $i++) {
+					foreach ($uh as $num=>$st) {
+						if ($uh[$num]['row'] == $i) {
+							if ($uh[$num]['level']>$leveltrip) {
+								$level = $uh[$num]['level'];
+								$uh[$num]['level']++;
+							}
+							break 1;
+						}
+					}
+				}
+				if(isset($uh[$hop->to_stop_id]) == false) {
+					$uh[$hop->to_stop_id] = array('level'=>0, 'row'=> $uh[$hop->from_stop_id]['row']);
+					foreach ($uh as $num=>$st) {
+						if ($st['row'] >= $uh[$hop->to_stop_id]['row'] && $num != $hop->to_stop_id) {
+							$uh[$num]['row']++;
+						}
+					}					
+				}				
 			} else {
-               // Has to be downstream, therefore: 
-	           // 1) Take it out of the upstream series 
-	           // Anything that is a child needs to be moved up one level 	                
-                $trip = false; 
-                foreach ($uh as $num=>$st) { 
-                    if ($st['row'] >= $uh[$hop->from_stop_id]['row']) { 
-                        $uh[$num]['row']--; 
-                        if ($uh[$num]['level'] <= $uh[$hop->from_stop_id]['level']) { 
-                            $trip = true; 
-                        } 
-                        if ($trip == false) { 
-                            $uh[$num]['level']--; 
-                        } 
-                    } 
-                }     
-                unset($uh[$hop->from_stop_id]);     
-                                        
-	            // 2) Pop it in the downstream series
+                //  First, check if the to point is already there 
+	            //  Pop it in the downstream series
 				if(isset($dh[$hop->from_stop_id]) == false) {
 					$dh[$hop->from_stop_id] = array('level'=>0, 'row'=>count($dh)+1);
+				
+					// Anything that is a parent needs to be made into a child on downstream sheet
+					$level = 3;
+					$start =$uh[$hop->from_stop_id]['row']-1;
+					// travel up the rows from where fromstopid is to grab all the parents
+					for ($r = $start; $level>0 && $r>0; $r--) {
+						// loop through all the upstream rows to find the one that is row-1
+						foreach ($uh as $num=>$st) {
+							// If this is the previous row
+							if ($uh[$num]['row'] == $r) {
+								// If the stop isn't already in the downstream sheet, put it in at the bottom
+								if (isset($dh[$num]) == false) {
+									$level = abs($uh[$hop->from_stop_id]['level'] - $st['level']);
+									$dh[$num] = array('level'=>$level, 'row'=>count($dh)+1);
+									foreach ($uh as $num2=>$st2) { 
+					                    if ($uh[$num2]['row'] >= $uh[$num]['row']) { 
+					                        $uh[$num2]['row']--; 
+					                    } 
+					                }
+								} else {
+								// if the stop is in there already, grab it and everything between it and the next row at the same level (that would be all of its children) and move it and its children to the bottom
+									$r2 = $dh[$num]['row'];
+									// The loop should run till the level of the current stop in dh is leveltrip
+									$leveltrip = $dh[$num]['level'];
+									$level2 = $leveltrip+1;
+									while ($level2>$leveltrip) {
+										foreach ($dh as $num2=>$st2) {
+											if ($st2['row'] == $r2) {
+												$level2 = $dh[$num2]['level'];
+												$dh[$num2]['level'] = $dh[$num]['level']++;
+												$dh[$num2]['row'] = count($dh)+1;
+												foreach ($uh as $num3=>$st3) { 
+								                    if ($st3['row'] >= $r2) { 
+								                        $uh[$num3]['row']--; 
+								                    } 
+								                }
+												break 1;		
+											}
+										}
+									} 
+									$level = 0;									
+								}
+								unset($uh[$num]);
+								break 1;	
+							}
+						}
+					}
 				}
-				$dh[$hop->to_stop_id] = array('level'=>($dh[$hop->from_stop_id]['level']+1), 'row'=>$dh[$hop->from_stop_id]['row']+1);
-				$dmax_level = max($dmax_level, ($dh[$hop->from_stop_id]['level']+1));
-				foreach ($dh as $num=>$st) {
-					if ($st['row'] >= $dh[$hop->to_stop_id]['row']&& $num != $hop->to_stop_id) {
-						$dh[$num]['row']++;
+				// If the to stop isn't there, put it in underneath the from stop and move everything else down
+				if (isset($dh[$hop->to_stop_id]) == false) {
+					$dh[$hop->to_stop_id] = array('level'=>($dh[$hop->from_stop_id]['level']+1), 'row'=>$dh[$hop->from_stop_id]['row']+1);						
+					$dmax_level = max($dmax_level, ($dh[$hop->to_stop_id]['level']+1));
+					foreach ($dh as $num=>$st) {
+						if ($st['row'] >= $dh[$hop->to_stop_id]['row'] && $num != $hop->to_stop_id) {
+							$dh[$num]['row']++;
+						}
+					}
+				} else {
+					// If the to stop is in there, move it and its children underneath the from stop and move everything else up a couple of rows
+					$r = $dh[$hop->to_stop_id]['row'];
+					$leveltrip = $dh[$hop->to_stop_id]['level'];
+					$level = $leveltrip+1;
+					while ($level>$leveltrip) {
+						foreach ($dh as $num=>$st) {
+							if ($st['row'] == $r) {
+								$level = $dh[$num]['level'];
+								$dh[$num]['level']++;
+								$dh[$num]['row'] = count($dh) +1;
+								foreach ($uh as $num2=>$st2) { 
+				                    if ($st2['row'] >= $r) { 
+				                        $uh[$num2]['row']--; 
+				                    } 
+				                }
+								break 1;		
+							}
+						}
 					}
 				}
 			}
+			/*
+			var_dump($hop->from_stop_id);
+			var_dump($hop->to_stop_id);
+			var_dump($uh);
+			var_dump($dh);
+			*/
 		}	
-		
+		/*
+		$uh = array();
+		$dh = array();
+		$stop_tally = array();
+		foreach($supplychain->hops as $hop) {
+			if (isset($stop_tally[$hop->to_stop_id]['to']) == false) {
+				$stop_tally[$hop->to_stop_id]['to'] = 1;
+			} else {
+				$stop_tally[$hop->to_stop_id]['to']++;
+			}
+			if (isset($stop_tally[$hop->from_stop_id]['from']) == false) {
+				$stop_tally[$hop->from_stop_id]['from'] = 1;
+			} else {
+				$stop_tally[$hop->from_stop_id]['from']++;
+			}			
+		}
+		var_dump($stop_tally);
+		foreach($supplychain->stops as $stop) {
+			if (isset($stop_tally[$stop->id]) == true) {
+				if (isset($stop_tally[$stop->id]['to']) == true && isset($stop_tally[$stop->id]['from']) == true){
+					if ($stop_tally[$stop->id]['from']>1 && $stop_tally[$stop->id]['to']>1) {
+						$dh[$stop->id] = array("level"=>0,"row"=>count($dh)+1);
+						$uh[$stop->id] = array("level"=>0,"row"=>count($uh)+1);
+						$uh = $this->addChildren($supplychain, $stop->id, "upstream", $uh);
+						$dh = $this->addChildren($supplychain, $stop->id, "downstream", $dh);
+					}
+				}
+			} else {
+				$dh[$stop->id] = array("level"=>0,"row"=>count($dh)+1);
+			}
+		}
+		$ucolumns = array();
+		$dcolumns = array();
+		foreach ($uh as $h) {
+			if (isset($ucolumns[$h['level']]) == false) {
+				$ucolumns[$h['level']] = "Tier ".$h['level'];
+			}
+		}
+		foreach ($dh as $h) {
+			if (isset($dcolumns[$h['level']]) == false) {
+				$dcolumns[$h['level']] = "Tier ".$h['level'];
+			}
+		}
+		*/
 		$ucolumns = array();
 		for($i=0;$i<=$umax_level;$i++) {
 			$ucolumns[] = "Tier ".$i;
@@ -112,6 +256,7 @@ class Sourcemap_xls {
 		for($i=0;$i<=$dmax_level;$i++) {
 			$dcolumns[] = "Tier ".$i;
 		} 
+		
 		foreach($supplychain->stops as $stop) {
 			if (isset($uh[$stop->id]) == true) {
 				$stopswriter->setActiveSheetIndex(0);

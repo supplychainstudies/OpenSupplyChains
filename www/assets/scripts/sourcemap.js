@@ -651,9 +651,16 @@ Sourcemap.buildTree = function(tree_id,sc) {
                 if($.inArray(1,tier_difference)>=0){
                     return;
                 } else {
-                    // if all of them > 1
+                    // if all of them > 1 (including one item)
                     // move the target tier to right position in temp
-                    for(var counter=0;waiting_list.length>0;counter++){
+                    // Sort it and do it once
+                    if(tier_difference.length!=1){
+                        waiting_list.sort(function(a,b){return tier_difference[a] - tier_difference[b];});
+                        console.log("sorted");
+                        console.log(tier_difference);
+                    }
+                    //tiers[k].sort(function(a,b){return a.connections - b.connections;});
+                    //for(var counter=0;waiting_list.length>0;counter++){
                         var item = waiting_list.shift(); 
                         var target_pos,target_tier,item_pos,item_tier;
                         for(var m=0;m<temp_tiers.length;m++){
@@ -680,7 +687,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
                         } // else undefine or ==1
                         onchange = 1;
-                    } // end all waiting_list
+                    //} // end all waiting_list
                 }
                 // rescan the list if something change
                 return;

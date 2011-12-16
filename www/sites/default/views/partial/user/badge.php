@@ -20,25 +20,19 @@
             <!--<a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>-->
             <a id="change_profile_pic">Change picture</a>
         </div>
-        <?php if($isChannel): ?>
+            <?php if($isChannel): ?>
         <div class="button alternate">
             <a id="change_banner">Upload banner</a>
         </div>
-        <? endif; ?>
+            <? endif; ?>
         <div class="button alternate">
             <a href="auth/reset">Change password</a>
         </div>
-        
-            <?php if (!$isChannel): ?> 
-        <div class="button alternate"> 
-            <a href="/upgrade">Upgrade account</a> 
-        </div> 
-            <?php endif; ?> 
-            <?php if ($isChannel): ?> 
-        <div class="button alternate"> 
-            <a href="/upgrade/payments">Payments</a> 
-        </div> 
-            <?php endif; ?>  
+            <?php if($isChannel): ?>
+        <div class="button alternate">
+            <a href="/upgrade/payments">Payments</a>
+        </div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
     <ul class="user-details">
@@ -48,26 +42,32 @@
         <?php endif; ?>
         <?php if ($isChannel): ?>
         <li>
+            <?php $message = ""; ?>
             <?php if ($canEdit): ?>
             <a href="#" title="display_name" class="edit-button"></a>
+                <?php $message = "<span class=\"empty\">No display name yet!</span>"; ?>
             <?php endif; ?>
             <div class="detail_cap">Display name</div>
-            <p id="display_name"><?= $user->display_name ? HTML::chars($user->display_name) : "<span class=\"empty\">No display name yet!</span>"; ?></p>
+            <p id="display_name"><?= $user->display_name ? HTML::chars($user->display_name) : $message; ?></p>
         </li>
         <?php endif; ?>
         <li>
+            <?php $message = ""; ?>
             <?php if ($canEdit): ?>
             <a href="#" title="url" class="edit-button"></a>
+                <?php $message = "<span class=\"empty\">No URL yet!</span>"; ?>
             <?php endif; ?>
             <div class="detail_cap">Website</div>
-            <p id="url"><?= isset($user->url) ? HTML::chars($user->url) : "<span class=\"empty\">No URL yet!</span>"; ?></p>
+            <p id="url"><?= isset($user->url) ? HTML::chars($user->url) : $message; ?></p>
         </li>
         <li>
+            <?php $message = ""; ?>
             <?php if ($canEdit): ?>
             <a href="#" title="description" class="edit-button"></a>
+                <?php $message = "<span class=\"empty\">No description yet!</span>"; ?>
             <?php endif; ?>
             <div class="detail_cap">Description</div>
-            <p id="description"><?= isset($user->description) ? HTML::chars($user->description) : "<span class=\"empty\">No description yet!</span>"; ?></p>
+            <p id="description"><?= isset($user->description) ? HTML::chars($user->description) : $message; ?></p>
         </li>
         <!-- <li>Last Signed In: <span><?= date('F j, Y', $user->last_login) ?></span></li>-->
     </ul>

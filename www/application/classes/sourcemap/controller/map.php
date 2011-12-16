@@ -30,6 +30,11 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
     }
     
     public function action_view($supplychain_id) {
+        //redirect mobile users to mobile template
+        if (Request::user_agent('mobile')){
+            $this->request->redirect('mobile/' . $supplychain_id);
+        }
+
         if(!is_numeric($supplychain_id)) {
             $supplychain_id = $this->_match_alias($supplychain_id);
         }
@@ -383,6 +388,112 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
         } else {
             $this->request->status = 404;
             $this->layout = View::factory('layout/error');
+            $this->template = View::factory('error');
+            $this->template->error_message = 'That map could not be found.';
+        }
+    }
+    
+    public function action_mobile($supplychain_id) {
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
+        $supplychain = ORM::factory('supplychain', $supplychain_id);
+        if($supplychain->loaded()) {
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+            $owner_id = (int)$supplychain->user_id;
+            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
+                $this->layout = View::factory('layout/mobile');
+                $this->template = View::factory('map/mobile');
+    	        $sc = $supplychain->kitchen_sink($supplychain_id);
+
+    			$this->layout->page_title = (isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "")).' on Sourcemap';
+
+                $this->layout->supplychain_id = $supplychain_id;
+                $this->layout->scripts = array(
+                    'sourcemap-embed'
+                );
+                $this->layout->styles = array(
+                    'sites/default/assets/styles/reset.css',
+                    'assets/styles/base.less',
+                    'assets/styles/embed.less',
+                    'assets/styles/general.less',
+                    'sites/default/assets/styles/modal.less'
+                );
+                $params = array(
+                    'tour' => 'yes', 'tour_start_delay' => 7,
+                    'tour_interval' => 5, 'banner' => 'yes',
+                    'tileswitcher' => 'no', 'geoloc' => true, 
+                    'downstream_sc' => null, 'tileset' => 'cloudmade',
+                    'locate_user' => 'no', 'position' => '0|0|0',
+					'served_as' => 'default'
+                );
+                foreach($params as $k => $v) 
+                    if(isset($_GET[$k])) 
+                        $params[$k] = $_GET[$k];
+                $v = Validate::factory($params);
+                $v->rule('tour', 'regex', array('/yes|no/i'))
+                    ->rule('tour_start_delay', 'numeric')
+                    ->rule('tour_start_delay', 'range', array(0, 300))
+                    ->rule('tour_interval', 'numeric')
+                    ->rule('tour_interval', 'range', array(1, 15))
+                    ->rule('geoloc', 'not_empty')
+                    ->rule('banner', 'regex', array('/yes|no/i'))
+                    ->rule('tileswitcher', 'regex', array('/yes|no/i'))
+                    ->rule('locate_user', 'regex', array('/yes|no/i'))
+                    ->rule('tileset', 'regex', array('/terrain|satellite|cloudmade/i'))
+                    ->rule('downstream_sc', 'numeric')
+                    ->rule('position', 'not_empty')
+                    ->rule('served_as', 'regex', array('/default|static|earth/i'));
+
+                if($v->check()) {
+                    $params = $v->as_array();
+                    $params['tour_start_delay'] = (int)$params['tour_start_delay'];
+                    $params['tour_interval'] = (int)$params['tour_interval'];
+                    $params['tour'] = 
+                        strtolower(trim($params['tour'])) === 'yes' ? true : false;
+                    $params['banner'] = 
+                        strtolower(trim($params['banner'])) === 'yes' ? true : false;
+                    $params['tileswitcher'] =
+                        strtolower(trim($params['tileswitcher'])) === 'yes' ? true : false;
+                    $params['locate_user'] =
+                        strtolower(trim($params['locate_user'])) === 'yes' ? true : false;
+                    $params['tileset'] = strtolower(trim($params['tileset']));
+                    $params['position'] = strtolower(trim($params['position']));
+                    $params['served_as'] = strtolower(trim($params['served_as']));
+                    /*
+                    if($params['geoloc']) {
+                        $params['iploc'] = false;
+                        if(isset($_SERVER['REMOTE_ADDR'])) {
+                            //$_SERVER['REMOTE_ADDR'] = '128.59.48.24'; // ny, ny (columbia.edu)
+                            $params['iploc'] = $iploc = Sourcemap_Ip::find_ip($_SERVER['REMOTE_ADDR']);
+                            $iploc = $iploc ? $iploc[0] : null;
+                            if($params['downstream_sc'] && $iploc) {
+                                $pt = new Sourcemap_Proj_Point($iploc->longitude, $iploc->latitude);
+                                $pt = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $pt);
+                                $nearby = ORM::factory('stop', (int)$params['downstream_sc'])->nearby($pt, 3);
+                                $params['downstream_nearby'] = $nearby;
+                            }
+                        }
+                    }*/
+                    $this->layout->embed_params = $params;
+                    $exist_passcode = isset($sc->attributes->passcode);
+                    $this->layout->exist_passcode = $exist_passcode;
+                } else {
+                    $this->request->status = 400;
+                    $this->layout = View::factory('layout/mobile');
+                    $this->template = View::factory('error');
+                    $this->template->error_message = 'Bad parameters.';
+                }
+            } else {
+                $this->request->status = 403;
+                $this->layout = View::factory('layout/mobile');
+                $this->template = View::factory('error');
+                $this->template->error_message = 'This map is private.';
+            }
+
+        } else {
+            $this->request->status = 404;
+            $this->layout = View::factory('layout/mobile');
             $this->template = View::factory('error');
             $this->template->error_message = 'That map could not be found.';
         }

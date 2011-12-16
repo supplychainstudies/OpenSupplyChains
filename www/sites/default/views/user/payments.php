@@ -21,14 +21,12 @@
 <div class="container form-page">
     <div class="copy-section">
          <p>As a channel user, you have access to new modes, options, and features.</p>
-         <ul class="bulleted">
-            <li>Branding settings including logos, banners, and custom colors</li>
-            <li>Unlimited calls to our <a href="/info/API/">API</a></li>
-            <li>Password protected maps</li>
-            <li>Hidden maps</li>
-            <li>Upgraded profile page with featured maps</li>
-            <li>Custom views and visualizations</li>
-        </ul>
+         <ul>
+             <li>Password-protected maps for private sharing</li>
+             <li>The ability to create and save maps with Excel spreadsheets</li>
+             <li>Enhanced API access</li>
+             <li>...and more features coming soon!</li>
+         </ul> 
     </div>
     <div class="box-section upgrade">
         <div class="sourcemap-form">
@@ -41,10 +39,10 @@
                     <li>Expires:</li>
                 </ul>
                 <ul>
-                    <li><?= $card_name ?></li>
-                    <li><?= $card_type ?></li>
-                    <li><?= $card ?></li>
-                    <li><?= $exp_month ?> / <?= $exp_year ?></li>
+                    <li><?= isset($card_name) ? $card_name : '';?></li>
+                    <li><?= isset($card_type) ? $card_type: '';?></li>
+                    <li><?= isset($card) ? $card : '';?></li>
+                    <li><?= isset($exp_month) ? $exp_month : '';?> / <?= isset($exp_year) ? $exp_year : '';?></li>
                 </ul>
                 <h2 class="section-title">Account details</h2>
                 <ul class="receipt labels">
@@ -54,7 +52,7 @@
                 </ul>
                 <ul class="receipt">
                     <li><?= date("F j, Y", $user->created); ?></li>
-                    <li><?= $status ?></li>
+                    <li><?= isset($status) ? $status : ''; ?></li>
                     <?= isset($thru) ? "<li>" . date("F j, Y", $thru) . "</li>" : ""?>
                     <li>
                         <div class="button alternate">

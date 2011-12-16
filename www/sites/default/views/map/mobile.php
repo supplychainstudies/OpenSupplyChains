@@ -33,12 +33,14 @@
     <?php endif; ?>
 
     <div class="mobile-map-preview">
-        <a href="/embed/<?= $supplychain_id ?>"><img src="/static/<?= $supplychain_id ?>.m.png" /></a>    
+        <img src="/static/<?= $supplychain_id ?>.l.png"/>
+	    <div class="mobile-footer"><a href="/"><img src="assets/images/mobile/logo.png" /></a></div>
+
     </div>
 
     <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
-  
-    <div class="mobile-footer"><a href="/"><img src="assets/images/logo.png" /></a></div>
+  	
+	<a href="/embed/<?= $supplychain_id ?>" class="full-site-button">View on Full Site</a>
 
     <div class="clear"></div>
 </div><!-- .container.mobile -->

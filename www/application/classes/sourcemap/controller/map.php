@@ -41,13 +41,13 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             // If this map is not private or user has right to read this
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {                
                 //redirect mobile users to mobile template
-                if (Request::user_agent('mobile')){
+                //if (Request::user_agent('mobile')){
                     $this->layout = new View('layout/mobile');
                     $this->layout->styles = array(
                         'assets/styles/mobile.less'
                     );
                     $this->template = new View('map/mobile');
-                }
+                //}
 
                 // passcode for the map          
                 $exist_passcode = isset($sc->attributes->passcode);

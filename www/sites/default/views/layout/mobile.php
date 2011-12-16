@@ -27,7 +27,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
     <meta http-equiv="content-language" content="en-us">
     
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta name="viewport" content="initial-scale=1.2, maximum-scale=1.2, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />

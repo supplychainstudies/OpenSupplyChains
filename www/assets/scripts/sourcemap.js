@@ -580,22 +580,127 @@ Sourcemap.buildTree = function(tree_id,sc) {
     
     // Sort #0 : Squeeze the tier together
     // remove something from array:y.splice( $.inArray(removeItem, y), 1 );
-    /*
-    for(var i=0, length=sc.hops.length;i<length;i++){
-        var h = sc.hops[i];
-        (function(){
-           console.log(h.from_stop_id);
-           console.log(h.to_stop_id);
-           console.log("-------");
-        })();
-    }
-    */
     //var temp_tiers = tiers.slice(0);    // copy array ( not deep
     //var newObject = jQuery.extend(true, {}, oldObject); // clone object
     var temp_tiers = $.extend(true,[],tiers);
+    var onchange = 0;
+    var length = tiers.length-1; // last tiers should skip
+    for(var i=0;i<length;i++){
+        var length_of_tiers_i = tiers[i].length;
+        for(var j=0;j<length_of_tiers_i;j++){
+            // Scan every point in tiers from tiers 0 to end
+            var target = tiers[i][j];
+            console.log("-->"+target.attributes.title);
+            var children_list = [];
+            var tier_difference = [];
+            (function(){
+                // scan hops find how many target connect target 
+                // get children list
+                for(var k=0,length_hop=sc.hops.length;k<length_hop;k++){
+                    var h = sc.hops[k];
+                    if(h.from_stop_id!=target.instance_id)
+                        continue;
+                    (function(){    
+                    var length_of_inner = tiers.length;
+                    for(var m=0;m<length_of_inner;m++){
+                        var length_of_inner_m = tiers[m].length;
+                        for(var n=0;n<length_of_inner_m;n++){
+                            var target_child = tiers[m][n];
+                            if(h.to_stop_id!=target_child.instance_id)
+                                continue;
+                            children_list.push(target_child);
+                            return;
+                        }
+                    }
+                    })(); 
+                }// end of finding all children of each stop
+                //console.log(children_list);
+
+
+                // calculate item[id1].tiers - target tiers one of them should be 1 
+                var waiting_list = [];
+                for(var counter=0;children_list.length>0;counter++){
+                    var item = children_list.shift(); 
+                    var target_pos,target_tier,item_pos,item_tier;
+                    if(item.instance_id=="stop-21") // 6/ 21
+                        console.log(target);
+                    for(var m=0;m<temp_tiers.length;m++){
+                        if(jQuery.inArray(target,temp_tiers[m])>=0){
+                            target_pos = jQuery.inArray(target,temp_tiers[m]);
+                            target_tier = m;
+                            continue;
+                        }
+                        if(jQuery.inArray(item,temp_tiers[m])>=0){
+                            item_pos = jQuery.inArray(item,temp_tiers[m]);
+                            item_tier = m;
+                            break;
+                        }
+                    } // get both pos and tier
+                    tier_difference.push(item_tier-target_tier);
+                    // put in waiting list
+                    if(item_tier-target_tier>1){
+                        waiting_list.push(item);
+                    }
+                } // end all children_list
+                console.log(tier_difference);
+                // if nothing in tier_difference
+                if(tier_difference.length<1){
+                    return;
+                }
+                // if one of them 1 return;
+                if($.inArray(1,tier_difference)>=0){
+                    return;
+                } else {
+                    // if all of them > 1
+                    // move the target tier to right position in temp
+                    for(var counter=0;waiting_list.length>0;counter++){
+                        var item = waiting_list.shift(); 
+                        var target_pos,target_tier,item_pos,item_tier;
+                        for(var m=0;m<temp_tiers.length;m++){
+                            if(jQuery.inArray(target,temp_tiers[m])>=0){
+                                target_pos = jQuery.inArray(target,temp_tiers[m]);
+                                target_tier = m;
+                                continue;
+                            }
+                            if(jQuery.inArray(item,temp_tiers[m])>=0){
+                                item_pos = jQuery.inArray(item,temp_tiers[m]);
+                                item_tier = m;
+                                break;
+                            }
+                        } // get both pos and tier
+                        if(item_tier-target_tier>1){
+                            console.log("** Work **");
+                            console.log("target:"+target_pos+","+target_tier);
+                            console.log(target.attributes.title);
+                            console.log("item:"+item_pos+","+item_tier);
+                            console.log(item.attributes.title);
+                            var temp = temp_tiers[target_tier][target_pos];
+                            temp_tiers[target_tier].splice(target_pos,1);
+                            temp_tiers[item_tier-1].push(temp);
+
+                        } // else undefine or ==1
+                        onchange = 1;
+                    } // end all waiting_list
+                }
+                // rescan the list if something change
+                return;
+            })(); // end of tier[i][j]
+            if (onchange>0){
+                i=-1;
+                j=-1;
+                onchange = 0;
+                break;
+            }
+        } // end of tiers[i]
+    } // end of tiers
+    // copy the map into 
+    tiers = temp_tiers;
+    console.log(tiers);
+    /*
     var done_list = [];
     for(var i=0,length=tiers.length;i<length;i++){
         for(var j=0,length_i=tiers[i].length;j<length_i;j++){
+            // scan whole points from tier 0 to tier end
             var children_list = [];
             var parent_list = [];
             var waiting_list = [];
@@ -603,6 +708,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
             var multi_children = 0;
             (function(){
                 //console.log(target);
+                console.log("-> "+target.instance_id+":"+target.attributes.title);
                 if(target.connections==1){
                     children_list.push(target.instance_id);
                     // will include end with 1 connection
@@ -610,44 +716,57 @@ Sourcemap.buildTree = function(tree_id,sc) {
                 for(var child_num=0;children_list.length>0;child_num++){
                     var target_instance = children_list.shift(); // length_children-1
                     if(jQuery.inArray(target_instance,done_list)>0){ // already done it
-                        console.log("done");
+                        console.log("done?");
                         return;
                     }
                     for(var k=0,length_hop=sc.hops.length;k<length_hop;k++){
                         (function(){
                             var h = sc.hops[k];
-                            if(h.from_stop_id==target_instance){
-                                parent_list.push(target_instance);
-                                // fliter : end with 1 connection
-                                //console.log(target_instance); // show the branches
-                                // scan for child position
-                                for(var m=0,lenoftier=tiers[m].length;m<lenoftier;m++){
-                                    for(var n=0,lenoftier_m=tiers[m].length;n<lenoftier_m;n++){
-                                        var child = tiers[m][n];
-                                        if(h.to_stop_id==child.instance_id){
-                                            if(jQuery.inArray(child.instance_id,children_list)>0)
-                                                return; // multiple assign to one child
-                                            if(jQuery.inArray(target_instance,parent_list)>0){
-                                                // multi children : conflict, do the extend check
-                                                //console.log("Multiple children");
-                                                multi_children = 1;
-                                            }
-                                            console.log(child.instance_id);
-                                            waiting_list.push(child);
-                                            console.log("---");
-                                            children_list.push(child.instance_id);                   
-                                            return; // next hop
-                                        }
+                            //if(h.from_stop_id==target_instance){
+                                //if($.inArray(target_instance,parent_list)<0)
+                                // fliter : 1 connection + from = tier 0
+                            //}
+                            // scan for child position
+                            var lenoftier = tiers.length;
+                            for(var m=0;m<lenoftier;m++){
+                                var lenoftier_m = tiers[m].length;
+                                for(var n=0;n<lenoftier_m;n++){
+                                    var child = tiers[m][n];
+                                    if(h.to_stop_id!=child.instance_id||h.from_stop_id!=target_instance){
+                                        continue;
                                     }
+                                    if($.inArray(child.instance_id,children_list)>0){
+                                        return; // multiple assign to one child
+                                    }
+                                    if(jQuery.inArray(target_instance,parent_list)>0){
+                                        // multi children : conflict, do the extend check
+                                        //console.log("Multiple children");
+                                        multi_children += 1;
+                                    }
+                                    // find the children stop that connect to the very beginning
+                                    console.log(child.instance_id+":"+child.attributes.title);
+                                    waiting_list.push(child);
+                                    parent_list.push(target_instance);
+                                    children_list.push(child.instance_id);                   
+                                    return; // next hop
                                 }
                             }
                         })(); // hop function 
                     } // end of hop loop                
+                    console.log("parent");
+                    console.log(parent_list);
+                    console.log("children");
+                    console.log(children_list);
                     //find out all the child in child list
                     // Check is there tier not next to each other
                     // if one child
+                    console.log(multi_children);
                     if(multi_children==0){
-                        console.log("Single children");
+                        //for(var counter=0;waiting_list.length>0;counter++)
+
+                        console.log("Single stop's children");
+                        console.log(waiting_list);
+                        console.log("---");
                         if(waiting_list.length<1)
                             return; // nothing left
                         var item = waiting_list.shift(); 
@@ -666,26 +785,35 @@ Sourcemap.buildTree = function(tree_id,sc) {
                         } // get both pos and tier
 
                         if(item_tier-target_tier>1){
-                            console.log("work");
-                            console.log(target_pos+","+target_tier);
-                            console.log(target);
-                            console.log(item_pos+","+item_tier);
-                            console.log(item);
+                            console.log("** Work **");
+                            console.log("target:"+target_pos+","+target_tier);
+                            console.log(target.attributes.title);
+                            console.log("item:"+item_pos+","+item_tier);
+                            console.log(item.attributes.title);
                             var temp = temp_tiers[target_tier][target_pos];
                             temp_tiers[target_tier].splice(target_pos,1);
                             temp_tiers[item_tier-1].push(temp);
+
                         } // else undefine or ==1
+
                     }
-                    // if multi children
+                    // if multi children or end of stream
 
                     // done
                     done_list.push(target_instance);
+                    // need to rework on item
+                    //done_list.splice( $.inArray(item, done_list), 1 );
+                    //done_list.push(target.instance_id);
+
+                    console.log("done_list");
+                    console.log(done_list);
+                    console.log("---------------------------------------");
                 }// end of children_list
             })();
         }
     } // end of original tiers search
+    */
 
-    tiers = temp_tiers;
 
 
     // Sort #1 : Stop with largest connections in mid;

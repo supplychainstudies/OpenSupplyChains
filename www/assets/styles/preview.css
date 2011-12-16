@@ -1,11 +1,5 @@
-/* Mobile styles ---------------------------------- */
+/* Preview styles ---------------------------------- */
 
-
-/*
-Design by predic8 GmbH
-http://www.predic8.de
-Released for free under a Creative Commons Attribution 2.5 License
-*/
 html { width:100%; }
 body {
     background: #eee;
@@ -118,7 +112,7 @@ li:last-child {
 
 /* Channel ---------------------------------- */
 
-.container-mobile{
+.container-preview{
     padding: 20px;
     width: 100%;
     text-align:center;
@@ -134,10 +128,10 @@ li:last-child {
     width: 100%;
 }
 
-.mobile-map-preview {
+.map-preview {
 	position:relative;
 }
-.mobile-map-preview > img {
+.map-preview > img {
 	border-top:2px solid #eee;
 	border-bottom:2px solid #eee;
 	width:100%;
@@ -157,13 +151,13 @@ li:last-child {
     -webkit-box-shadow: 2px 2px 4px #999;
 
 }
-.mobile-footer {
+.preview-footer {
 	position:absolute;
 	bottom:10px;
 	right:5px;
 
 }
-.mobile-footer a {
+.preview-footer a {
 	display:block;
 	width:28px;
 	height:28px;

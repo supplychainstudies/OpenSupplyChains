@@ -30,9 +30,9 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
     }
     
     public function action_view($supplychain_id) {
-        //redirect mobile users to mobile template
+        // Redirect mobile users to preview template
         if (Request::user_agent('mobile')){
-            $this->request->redirect('mobile/' . $supplychain_id);
+            $this->request->redirect('preview/' . $supplychain_id);
         }
 
         if(!is_numeric($supplychain_id)) {
@@ -45,7 +45,6 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             // If this map is not private or user has right to read this
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {                
-
                 // passcode for the map          
                 $exist_passcode = isset($sc->attributes->passcode);
                 $this->template->exist_passcode = $exist_passcode;
@@ -385,6 +384,69 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
         }
     }
     
+    public function action_preview($supplychain_id) {
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
+        $supplychain = ORM::factory('supplychain', $supplychain_id);
+        $sc = $supplychain->kitchen_sink($supplychain_id);
+        if($supplychain->loaded()) {
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+            $owner_id = (int)$supplychain->user_id;
+            // If this map is not private or user has right to read this
+            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {                
+                $this->layout = new View('layout/preview');
+                $this->template = new View('map/preview');
+
+                // passcode for the map          
+                $exist_passcode = isset($sc->attributes->passcode);
+                $this->template->exist_passcode = $exist_passcode;
+
+                // Necessary for every map
+                $this->layout->supplychain_id = $supplychain_id;
+                $this->template->supplychain_id = $supplychain_id;
+                $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
+                $this->template->can_comment = (bool)$current_user_id;
+                $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
+                $this->template->supplychain_date = date('F j, Y', $sc->created );
+                $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
+                isset($sc->owner->display_name) ? $this->template->supplychain_display_name = $sc->owner->display_name : "";
+                $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
+                $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
+
+                if(!$exist_passcode){
+
+                    $supplychain_desc = "";                    
+                    // check description for shortcodes
+                    // only youtube ID is supported for now...
+                    if (isset($sc->attributes->description)) {
+                        $supplychain_desc = $sc->attributes->description;
+                        $regex = "/\\[youtube:([^]]+)]/";
+                        if (preg_match($regex, $supplychain_desc, $regs)) {
+                            $supplychain_youtube_id = $regs[1];
+                            $supplychain_desc = str_replace($regs[0], '', $supplychain_desc);
+                        }
+                    }
+                    // pass supplychain metadeta to template 
+                    $this->template->supplychain_name = isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "");
+                    $this->template->supplychain_desc = isset($supplychain_desc) ? $supplychain_desc : "" ;
+                    //$this->template->supplychain_youtube_id = isset($supplychain_youtube_id) ? $supplychain_youtube_id : "" ;
+                    isset($supplychain_youtube_id) ? $this->template->supplychain_youtube_id = $supplychain_youtube_id : "" ;
+
+                    $this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();                    
+                    $this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
+	            
+				}
+            } else {
+                Message::instance()->set('That map is private.');
+                $this->request->redirect('browse');
+            }
+        } else {
+            Message::instance()->set('That map could not be found.');
+            $this->request->redirect('browse');
+        }
+    }
+	
     public function action_mobile($supplychain_id) {
         if(!is_numeric($supplychain_id)) {
             $supplychain_id = $this->_match_alias($supplychain_id);

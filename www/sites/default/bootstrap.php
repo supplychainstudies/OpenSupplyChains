@@ -18,7 +18,7 @@ if(!class_exists('Kohana')) die('Looks like we\'re missing Kohana.  Check your c
  */
 
 Route::set('view', '<controller>/<id>', array(
-    'controller' => '(view|embed|mobile|comment|create|edit|delete|list)'
+    'controller' => '(view|embed|mobile|preview|comment|create|edit|delete|list)'
 ))->defaults(array(
         'action' => 'index'
     )

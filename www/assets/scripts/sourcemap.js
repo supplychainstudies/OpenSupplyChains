@@ -651,10 +651,18 @@ Sourcemap.buildTree = function(tree_id,sc) {
                 if($.inArray(1,tier_difference)>=0){
                     return;
                 } else {
-                    // if all of them > 1
+                    // if all of them > 1 (including one item)
                     // move the target tier to right position in temp
-                    for(var counter=0;waiting_list.length>0;counter++){
-                        var item = waiting_list.shift(); 
+                    // Sort it and do it once
+                    var position = 0;
+                    if(tier_difference.length!=1){
+                        var lowest = Math.min.apply(null,tier_difference);
+                        position = tier_difference.indexOf(lowest);
+                        console.log("--- Smallest at "+position+" ---");
+                    }
+                    //tiers[k].sort(function(a,b){return a.connections - b.connections;});
+                    //for(var counter=0;waiting_list.length>0;counter++){
+                        var item = waiting_list[position]; 
                         var target_pos,target_tier,item_pos,item_tier;
                         for(var m=0;m<temp_tiers.length;m++){
                             if(jQuery.inArray(target,temp_tiers[m])>=0){
@@ -680,7 +688,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
                         } // else undefine or ==1
                         onchange = 1;
-                    } // end all waiting_list
+                    //} // end all waiting_list
                 }
                 // rescan the list if something change
                 return;

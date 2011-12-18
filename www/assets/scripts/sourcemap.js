@@ -1157,8 +1157,21 @@ Sourcemap.buildTree = function(tree_id,sc) {
 						//console.log(tier_list[k].y);
 					} 
 					*/
-					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
-                    tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
+					var yspacing = 40;
+					var xoffset = 0;
+					if (tiers[i].length > 14) {
+						yspacing = 20;
+						/*
+						if (parseInt(j/2) == j/2) {
+						// Even - move it left
+							xoffset = 20;				
+						} else {
+							xoffset = -20;
+						}
+						*/
+					}
+					tier_list[k].y = ((500-(tiers[i].length*yspacing))/2)+(j+1)*yspacing;
+                    tier_list[k].x = ((i+1)*(max_width)/(tiers.length+1))+xoffset;
                     break;
                 }
             }            

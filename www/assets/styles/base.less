@@ -239,18 +239,9 @@
             position:relative;
             width:360px;
             min-height:220px;
-            //background: rgb(200,200,200);
             padding: 20px 20px 30px 20px;
 			margin: 0px;
-            //margin-left:-10px;
-            //.box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
             text-align:center;
-            //border-bottom-left-radius:4px;	      
-            //-moz-border-radius-bottomleft:4px;
-            //-webkit-border-bottom-left-radius:4px;
-            //border-bottom-right-radius:4px;	      
-            //-moz-border-radius-bottomright:4px;
-            //-webkit-border-bottom-right-radius:4px;
 			iframe, object, embed, div.media-object {
 				position:absolute;
 				top:0; bottom:0; 
@@ -329,7 +320,6 @@
 /* Dock  -------------------------------------------------------------- */
 #sourcemap-dock {
     @dock-height: 3.25em;
-    z-index: 1008;
     width: 100%;
     bottom: 0; left: 0;
     position: absolute;
@@ -337,6 +327,7 @@
     overflow: hidden;
     text-align: center;
     pointer-events: none;
+    z-index: 1020;    
     .sourcemap-dock-outerwrap {
         float: left;
         position:relative;
@@ -394,6 +385,7 @@
     height: 100px; width: 74px;
     display: block;
     background: url(../images/legend.png) center center no-repeat;
+    z-index: 1010;
 
     &.cloudmade{ background: url(../images/legend.png) center center no-repeat; }
     &.satellite{ background: url(../images/legend-light.png) center center no-repeat;}    
@@ -404,8 +396,8 @@
     position: absolute;
     width:161px;height:20px;
     bottom:20px;left:85px;
-    z-index:1012;
     display: block;
+    z-index: 1010;
 
     &.cloudmade{ background: url(../images/legend-gradient.png) center center no-repeat;}
     &.satellite{ 
@@ -421,16 +413,20 @@
 /* Banner  -------------------------------------------------------------- */
 #banner { 
     position:absolute;
+    overflow: hidden;
     height: 42px; top:10px; left:10px; right:10px;
     font-size:0.8em;
 	background-color: rgba(240,240,240,0.7);
     background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(240,240,240,0.7) 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(240,240,240,0.5)),color-stop(1,rgba(255,255,255,0.5)));
+    min-width: 600px;
     .rounded(12px);
     .box_shadow(0, 1px, 3px);
     div#banner-content {
         div { padding: 13px; }
         #banner-summary {
+            float: none;
+            position: absolute;
             color: #353535;
             font-weight:bold;
             font-size: 22px;
@@ -452,7 +448,6 @@
             background: url(../images/icon-owner.png) 10px center no-repeat;
             border-left: 1px solid rgba(140,140,140,0.25);   
 			border-right: 1px solid rgba(140,140,140,0.25);    
-         
             padding-left: 45px;
             overflow:hidden;
         }

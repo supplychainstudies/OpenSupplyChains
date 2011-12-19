@@ -43,7 +43,13 @@ body#embedded-supplychain {
     }
 }
 body.zoom {
-	#banner { zoom: .8; -moz-transform: scale(.8); }
+    @z : .5;
+	#banner { 
+        zoom: @z; -moz-transform: scale(@z); 
+        .banner-date{
+            display:none;
+        }
+    }
 	#dialog {
 	    top:45px;
 	    width:360px;
@@ -58,18 +64,18 @@ body.zoom {
 				margin-bottom:-18px;
 	        }
 			#dialog-media-navigation {
-				zoom: .8; -moz-transform: scale(.8);    	
+				zoom: @z; -moz-transform: scale(@z);    	
 			}
 	        #dialog-footprint {
-	            zoom: .8; -moz-transform: scale(.8);    
+	            zoom: @z; -moz-transform: scale(@z);    
 	            overflow:hidden !important;
 	        }
 			.dot {
-				zoom: .8; -moz-transform: scale(.8);    
+				zoom: @z; -moz-transform: scale(@z);    
 			}
 	    }    
 	}
-	#sourcemap-dock { zoom: .8; -moz-transform: scale(.8);}
+	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
 }
 
 .static-embed {

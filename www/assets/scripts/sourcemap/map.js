@@ -166,6 +166,7 @@ Sourcemap.Map.prototype.init = function() {
     return this;
 }
 Sourcemap.Map.prototype.initMap = function() {
+    OpenLayers.ImgPath = "assets/images/";
     var controls = [
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),
             new OpenLayers.Control.Attribution(),
@@ -182,6 +183,8 @@ Sourcemap.Map.prototype.initMap = function() {
         "controls": controls
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
+    this.map.div.extras = $('<div id="extras"></div>');
+    $(this.map.div).append(this.map.div.extras);
     this.broadcast('map:openlayers_map_initialized', this);
     return this;
 }
@@ -201,8 +204,6 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
             "type": google.maps.MapTypeId.SATELLITE,
             "animationEnabled": false,
             "minZoomLevel": 1, "maxZoomLevel": 17,
-            //"displayOutsideMaxExtent": false,
-            //"maxExtent": new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
             "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
@@ -236,7 +237,7 @@ Sourcemap.Map.prototype.initDock = function() {
     this.dock_outerwrap = $('<div class="sourcemap-dock-outerwrap"></div>');
     this.dock_content = $('<div class="sourcemap-dock-content"></div>');
     this.dock_element = $('<div id="sourcemap-dock"></div>');
-    $(this.map.div).css("position", "relative").append(
+    $(this.map.div.extras).css("position", "relative").append(
         this.dock_element.append(this.dock_outerwrap.append(this.dock_content))
     );
     this.dockAdd('zoomout', {
@@ -633,7 +634,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     }
 
     //Add or remove gradient to map 
-    var gradient = $(this.map.div).find('#sourcemap-gradient');
+    var gradient = $(this.map.div.extras).find('#sourcemap-gradient');
     if ($(gradient).length == 0) { // if gradient legend not exist
         if(!max_plen){
             //console.log('both empty do nothing');
@@ -641,7 +642,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
             var gradient = $('<div id="sourcemap-gradient"></div>');
             if(this.map.baseLayer.name)
                 gradient.addClass(this.map.baseLayer.name);
-            $(this.map.div).append(gradient);
+            $(this.map.div.extras).append(gradient);
         }
     } else {
         if(max_plen){ // if exist

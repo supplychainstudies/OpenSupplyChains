@@ -66,6 +66,10 @@ $(document).ready(function() {
                         $('#fade, a.close').remove();
                     });
                 }); // submit end
+                if(Sourcemap.passcode!=''){
+                    $("#"+popID).find("input[name='passcode']").val(Sourcemap.passcode);
+                    $('form.passcode-input').submit();
+                }
             }
 			break;
 		case "static":

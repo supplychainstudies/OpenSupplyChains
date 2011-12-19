@@ -139,6 +139,10 @@ li:last-child {
 
 }
 
+.description-video{
+    margin: 1em auto 0;
+}
+
 .full-site-button {
 	padding:0.5em 0.8em;
 	margin:.5em auto;

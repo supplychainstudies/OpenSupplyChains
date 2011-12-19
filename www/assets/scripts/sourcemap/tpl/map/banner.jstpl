@@ -28,7 +28,9 @@
     <a class="banner-favorite-link" title="favorite" alt="favorite" href="javascript:void(0);">
     <div id="banner-favorite">&nbsp;</div>
     </a>
-	<input type="search" class="banner-map-search"></input>
+	<div class="banner-map-search">
+        <input type="search"></input>
+    </div>
 
     <div id="banner-owner">
         <% var d = new Date(this.sc.modified*1000); %>

@@ -1110,23 +1110,26 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
 }
 
 Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {
+    var viewSize = this.getPaddedSize();
+   
+    var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
+                                    extent.getHeight() / viewSize.h );
+
+    var zoomForExtent = this.getZoomForResolution(idealResolution,closest);
+    return zoomForExtent;
+}
+
+Sourcemap.Map.prototype.getPaddedSize = function(){
     var viewSize = this.map.getSize();
 
     // add padding around viewport so features don't appear offscreen
     // TODO: improve the way this works
     viewSize.h *= .5;
     viewSize.w *= .5;
-   
-    var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
-                                    extent.getHeight() / viewSize.h );
 
-
-    var zoomForExtent = this.getZoomForResolution(idealResolution,closest);
-    //console.log("ZFE:"+zoomForExtent+",viewSize:"+viewSize.w+"/"+viewSize.h+",extent:"+extent.getWidth()+"/"+extent.getHeight());
-    return zoomForExtent;
-    //return this.getZoomForResolution(idealResolution, closest);
-
+    return viewSize;
 }
+
 
 Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
     var zoom;

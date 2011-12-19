@@ -42,11 +42,6 @@
     margin: 0 auto;
     padding: 4px;
     background: #fefefe;
-    //border: 1px solid #d4d4d4;
-    //.rounded(12px);
-    //.box_shadow(3px, 1px, 10px);
-	//background-image: -moz-linear-gradient(center bottom,rgba(255,255,255,0.5) 0%,rgba(200,200,200,0.7) 100%);
-    //background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(200,200,200,0.5)),color-stop(1,rgba(255,255,255,0.5)));
     background-image: -moz-linear-gradient(center bottom,rgba(76,97,154,1) 0%,rgba(14,28,65,1) 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(14,28,65,1)),color-stop(1,rgba(76,97,154,1)));
 	.rounded(12px);
@@ -484,7 +479,24 @@
             float: right;
         }
 		.banner-map-search {
-			margin:12px 10px 0 10px;
+            background: #fff url("../images/shadow.png") top repeat-x;
+            border: 1px solid #c9c9c9;
+            float:right;
+            height: 32px; width: 170px;
+            padding: 0;
+            margin: 4px 10px 0;
+            .rounded;
+            input{
+                margin: 9px auto;
+                padding-left: 32px;
+                border: 0;
+                font-size:12px;
+                outline: none;
+                -webkit-appearance: none;
+                background: url("../images/search.png") 8px center no-repeat;
+                color: #999;
+                &:hover{ color: #444; cursor: text; }
+            }
 		}
         .map-status {
             float:right;

@@ -56,7 +56,7 @@
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>    
 </head>
 
-<body id="embedded-supplychain">
+<body id="embedded-supplychain" class="mobile">
 <?= $content ?>
 
 

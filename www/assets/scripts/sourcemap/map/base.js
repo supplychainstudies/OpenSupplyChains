@@ -10,9 +10,6 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-
-
-
 Sourcemap.Map.Base = function(o) {
     this.broadcast('map_base:instantiated', this);
     var o = o || {};
@@ -122,6 +119,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             
     }, this));
     $(this.map.map.div).css("position", "relative");
+    this.initActiveBox();
 
     // TODO: check this update punch
     Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
@@ -136,6 +134,15 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         this.map.dockControlEl(metric).find('.value').text(scaled.value);
         this.map.dockControlEl(metric).find('.unit').text(scaled.unit);
     	
+    }, this));
+        
+    // make banner go away after a few seconds of inactivity
+    $(this.map.map.div).mouseover($.proxy(function(e) { 
+        this.stopControlTimer();
+        
+    }, this));
+    $(this.map.map.div).mouseout($.proxy(function() { 
+        this.startControlTimer();
     }, this));
 
 }
@@ -200,10 +207,20 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
-
-
     
 }
+
+Sourcemap.Map.Base.prototype.initActiveBox = function(mapDiv) {
+    // The active box is the area that prevents the controls from sliding back into view.
+    
+    var size = this.map.getPaddedSize();
+    var activeBox = $('<div id="activeBox"></div>').css({
+        'height' : size.h,
+        'width' : $(mapDiv).width() 
+    });
+    $(mapDiv).prepend(activeBox);
+}
+
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     this.banner_div = $(this.map.map.div).find('#banner').length ? 
@@ -258,7 +275,6 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             },this)
         });
 		$(this.banner_div).find('.banner-map-search').keyup($.proxy(function() { this.searchFilterMap();}, this));
-		
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
@@ -270,7 +286,22 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     }
     return this;
 }
-        
+
+Sourcemap.Map.Base.prototype.toggleControls = function(){
+    // include all elements that should be toggled
+    var controls
+}
+
+Sourcemap.Map.Base.prototype.startControlTimer = function(){
+    this.controlTimer = window.setTimeout($.proxy(function() {
+        // timer finished
+    }, this),500);
+}
+
+Sourcemap.Map.Base.prototype.stopControlTimer = function(){
+    clearTimeout(this.controlTimer);
+}
+
 Sourcemap.Map.Base.prototype.initDialog = function() {   
     // set up dialog
     if(!this.dialog) {

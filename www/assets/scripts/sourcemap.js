@@ -651,10 +651,18 @@ Sourcemap.buildTree = function(tree_id,sc) {
                 if($.inArray(1,tier_difference)>=0){
                     return;
                 } else {
-                    // if all of them > 1
+                    // if all of them > 1 (including one item)
                     // move the target tier to right position in temp
-                    for(var counter=0;waiting_list.length>0;counter++){
-                        var item = waiting_list.shift(); 
+                    // Sort it and do it once
+                    var position = 0;
+                    if(tier_difference.length!=1){
+                        var lowest = Math.min.apply(null,tier_difference);
+                        position = tier_difference.indexOf(lowest);
+                        console.log("--- Smallest at "+position+" ---");
+                    }
+                    //tiers[k].sort(function(a,b){return a.connections - b.connections;});
+                    //for(var counter=0;waiting_list.length>0;counter++){
+                        var item = waiting_list[position]; 
                         var target_pos,target_tier,item_pos,item_tier;
                         for(var m=0;m<temp_tiers.length;m++){
                             if(jQuery.inArray(target,temp_tiers[m])>=0){
@@ -680,7 +688,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
                         } // else undefine or ==1
                         onchange = 1;
-                    } // end all waiting_list
+                    //} // end all waiting_list
                 }
                 // rescan the list if something change
                 return;
@@ -1149,8 +1157,21 @@ Sourcemap.buildTree = function(tree_id,sc) {
 						//console.log(tier_list[k].y);
 					} 
 					*/
-					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(j+1)*40;
-                    tier_list[k].x = (i+1)*(max_width)/(tiers.length+1);
+					var yspacing = 40;
+					var xoffset = 0;
+					if (tiers[i].length > 14) {
+						yspacing = 20;
+						/*
+						if (parseInt(j/2) == j/2) {
+						// Even - move it left
+							xoffset = 20;				
+						} else {
+							xoffset = -20;
+						}
+						*/
+					}
+					tier_list[k].y = ((500-(tiers[i].length*yspacing))/2)+(j+1)*yspacing;
+                    tier_list[k].x = ((i+1)*(max_width)/(tiers.length+1))+xoffset;
                     break;
                 }
             }            

@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
+class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
     public static $default_options = array(
         'headers' => true, 'latcol' => null,
         'loncol' => null, 'addresscol' => null,
@@ -678,37 +678,37 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		$stopswriter->getActiveSheet()->setCellValue("B1", 'Location');
 		$stopswriter->getActiveSheet()->setCellValue("C1", 'Address');
 		$stopswriter->getActiveSheet()->setCellValue("D1", 'Description');
-		/*
+
 		$stopswriter->getActiveSheet()->setCellValue("E1", 'color');
 		$stopswriter->getActiveSheet()->setCellValue("F1", 'varort');
 		$stopswriter->getActiveSheet()->setCellValue("G1", 'tier');
 		$stopswriter->getActiveSheet()->setCellValue("H1", 'size');
 		$stopswriter->getActiveSheet()->setCellValue("I1", 'lat');
 		$stopswriter->getActiveSheet()->setCellValue("J1", 'long');	
-		*/
 
+/*
 		$stopswriter->getActiveSheet()->setCellValue("E1", 'varort');
 		$stopswriter->getActiveSheet()->setCellValue("F1", 'tier');
 		$stopswriter->getActiveSheet()->setCellValue("G1", 'size');
 		$stopswriter->getActiveSheet()->setCellValue("H1", 'lat');
 		$stopswriter->getActiveSheet()->setCellValue("I1", 'long');
-		
+*/		
 		$count = 1;	
 		foreach ($stops as $num=>$stop) {
 			$stopswriter->getActiveSheet()->setCellValue("A".($count+1), $stop['Name']);
 			$stopswriter->getActiveSheet()->setCellValue("B".($count+1), $stop['Location']);
 			$stopswriter->getActiveSheet()->setCellValue("C".($count+1), $stop['Address']);
 			$stopswriter->getActiveSheet()->setCellValue("D".($count+1), $stop['Description']);
-			/*
+			
 			$stopswriter->getActiveSheet()->setCellValue("E".($count+1), $stop['color']);
 			$stopswriter->getActiveSheet()->setCellValue("F".($count+1), $stop['varort']);
 			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), $stop['tier']);
 			$stopswriter->getActiveSheet()->setCellValue("H".($count+1), "0.5");
-			*/
+			/*
 			$stopswriter->getActiveSheet()->setCellValue("E".($count+1), $stop['varort']);
 			$stopswriter->getActiveSheet()->setCellValue("F".($count+1), $stop['tier']);
 			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), "0.5");
-			
+			*/
 			//$stopswriter->getActiveSheet()->setCellValue("J".($count+1), $stop['lat']);
 			//$stopswriter->getActiveSheet()->setCellValue("K".($count+1), $stop['long']);
 			$count++;

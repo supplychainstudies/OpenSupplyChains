@@ -55,6 +55,12 @@ Sourcemap.Map.prototype.defaults = {
             "labelXOffset": 0,
             "labelYOffset": "${yoffset}", 
         },
+        "disabled": {
+            "fillColor": "#cccccc",
+            "strokeColor": "#cccccc",
+            "strokeOpacity": 0.5,
+			"fillOpacity": 0.5
+        },
         "select": {
             "fillColor": "#ffffff",
             "fillOpacity": 1.0
@@ -102,6 +108,13 @@ Sourcemap.Map.prototype.defaults = {
             "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
             "rotation": "${angle}"
+        },
+        "disabled": {
+            "fillColor": "#cccccc",
+            "strokeColor": "#cccccc",
+            "fontColor": "#cccccc",
+            "fillOpacity": 0.5,
+            "strokeOpacity": 0.5,
         },
     	"arrow": {
     		"graphicName": "${type}",
@@ -368,7 +381,7 @@ Sourcemap.Map.prototype.initControls = function() {
                     this
                 ),
                 "onUnselect": OpenLayers.Function.bind(
-                    function(feature) {
+                    function(feature) {	
                         this.broadcast('map:feature_unselected', this, feature); 
                     },
                     this

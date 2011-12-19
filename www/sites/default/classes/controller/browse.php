@@ -89,8 +89,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
                 ));
 
             $this->template->pager = $p;
-            }
-            if ($category == "recent"){
+            }else if ($category == "recent"){
                 $this->layout->page_title .= ' - Recent';
                 $this->template->category = 'Recent';
                 $this->template->category_name = 'Recent';

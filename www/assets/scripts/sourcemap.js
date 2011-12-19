@@ -1430,6 +1430,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
   */  
 }
 
+
 Sourcemap.saveSupplychain = function(supplychain, o) {
     window.onbeforeunload = function() {
       window.onbeforeunload = null;
@@ -1918,3 +1919,4 @@ Sourcemap.Date.format = function(dt) {
 Sourcemap.fmt_date = function(dt) {
     return Sourcemap.Date.format(dt);
 }
+

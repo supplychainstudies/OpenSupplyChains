@@ -498,6 +498,11 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     'locate_user' => 'no', 'position' => '0|0|0',
 					'served_as' => 'default'
                 );
+
+                $input_passcode = False;
+                if(isset($_GET['passcode'])){
+                    $input_passcode = $_GET['passcode'];
+                }
                 foreach($params as $k => $v) 
                     if(isset($_GET[$k])) 
                         $params[$k] = $_GET[$k];
@@ -549,6 +554,9 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     $this->layout->embed_params = $params;
                     $exist_passcode = isset($sc->attributes->passcode);
                     $this->layout->exist_passcode = $exist_passcode;
+                    if($input_passcode!=False){
+                        $this->layout->passcode = $input_passcode; 
+                    }
                 } else {
                     $this->request->status = 400;
                     $this->layout = View::factory('layout/mobile');

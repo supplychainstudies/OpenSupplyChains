@@ -11,7 +11,15 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
-
+<?php if($passcode_match===False): ?>
+<div id="passcode-input">
+<form class="passcode-input" action"/" method="get">
+<label for="passcode"> This map is protected. Please enter the password:</label>
+<input name="passcode" type="text"></input>
+<input id="passcode-submit" type="submit"/>
+</form>
+</div>
+<?php else: ?>
 <?php if (isset($supplychain_banner_url) && $supplychain_banner_url): ?>
 <div class="container preview">
     <div class="channel-banner">
@@ -30,7 +38,7 @@
 
     </div>
 	
-    <a href="/mobile/<?= $supplychain_id ?>" class="full-site-button">View Interactive Map</a>
+    <a href="/mobile/<?= $supplychain_id ?><?php if($passcode_match==True){ ?>?passcode=<?=$passcode ?><?php } ?>" class="full-site-button">View Interactive Map</a>
     
     <?php if (isset($supplychain_youtube_id)): ?>
     <div class="description-video">
@@ -43,3 +51,4 @@
 
     <div class="clear"></div>
 </div><!-- .container.preview -->
+<?php endif; ?>

@@ -398,9 +398,27 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->layout = new View('layout/preview');
                 $this->template = new View('map/preview');
 
-                // passcode for the map          
-                $exist_passcode = isset($sc->attributes->passcode);
+                // passcode for the map
+                $passcode_match = null;
+                $exist_passcode = isset($sc->attributes->passcode);    
                 $this->template->exist_passcode = $exist_passcode;
+                if(isset($sc->attributes->passcode)){
+                    if(isset($_GET['passcode'])){
+                        $input_passcode = $_GET['passcode']; 
+                        $correct_passcode = $sc->attributes->passcode;
+                        if($input_passcode===$correct_passcode){
+                            $passcode_match = True;
+                        }
+                    }
+                    if($passcode_match==null){
+                        $passcode_match = False;
+                    }
+                }
+                $this->template->passcode_match = $passcode_match;
+                if($passcode_match==True){
+                    $this->template->passcode = $input_passcode;
+                }
+                
 
                 // Necessary for every map
                 $this->layout->supplychain_id = $supplychain_id;
@@ -414,8 +432,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
 
-                if(!$exist_passcode){
-
+                if(!$exist_passcode||$passcode_match){
                     $supplychain_desc = "";                    
                     // check description for shortcodes
                     // only youtube ID is supported for now...

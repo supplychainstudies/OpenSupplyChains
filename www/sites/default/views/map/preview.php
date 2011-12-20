@@ -32,12 +32,6 @@
 <div class="container preview">
     <h1><?= HTML::chars($supplychain_name) ?></h1>
     
-    <div class="map-preview">
-        <img src="/static/<?= $supplychain_id ?>.l.png"/>
-	    <div class="preview-footer"><a href="/"><img src="assets/images/mobile/logo.png" /></a></div>
-
-    </div>
-    
     <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
     
     <?php if (isset($supplychain_youtube_id)): ?>
@@ -45,6 +39,11 @@
         <iframe class="youtube-player" type="text/html" width="240px" height="180px" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>?showinfo=0" frameborder="0"></iframe> 
     </div>
     <?php endif; ?>
+    
+    <div class="map-preview">
+        <img src="/static/<?= $supplychain_id ?>.l.png"/>
+	    <div class="preview-footer"><a href="/"><img src="assets/images/mobile/logo.png" /></a></div>
+    </div>
 	
     <a href="/mobile/<?= $supplychain_id ?><?php if($passcode_match==True){ ?>?passcode=<?=$passcode ?><?php } ?>" class="full-site-button">View Interactive Map</a>
 

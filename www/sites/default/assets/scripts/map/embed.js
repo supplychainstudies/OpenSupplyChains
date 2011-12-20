@@ -53,6 +53,11 @@ $(document).ready(function() {
                     evt.preventDefault();
                     passcode = $('#' + popID).find("input[name='passcode']").val();
 
+                    $('.submit-status').fadeIn();
+                    $('#fade , .popup_block').fadeOut(function() {
+                        //$('#fade, a.close').remove();
+                    });
+
                     var cb = function(sc){
                         Sourcemap.embed_instance.map.addSupplychain(sc);
                         $(window).resize();
@@ -62,13 +67,19 @@ $(document).ready(function() {
                         });
                     };
                     Sourcemap.loadSupplychain(scid, passcode,cb);
-                    $('#fade , .popup_block').fadeOut(function() {
-                        $('#fade, a.close').remove();
-                    });
                 }); // submit end
                 if(Sourcemap.passcode!=''){
-                    $("#"+popID).find("input[name='passcode']").val(Sourcemap.passcode);
-                    $('form.passcode-input').submit();
+                    $('#fade , .popup_block').fadeOut(function() {
+                    });
+                    passcode = Sourcemap.passcode;
+                    var cb = function(sc){
+                        Sourcemap.embed_instance.map.addSupplychain(sc);
+                        $(window).resize();
+                        $("#banner").click(function() {
+                            window.open("view/" + window.location.pathname.split("/")[2]);
+                        });
+                    };
+                    Sourcemap.loadSupplychain(scid, passcode,cb);
                 }
             }
 			break;

@@ -373,7 +373,6 @@ Sourcemap.initPasscodeInput = function(popID){
     // CSS setting of pop up window
     $('#' + popID).height(110);
     $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
-    //$('#' + popID).width(600);
     var popMargTop = ($('#' + popID).height() + 80) / 2;
     var popMargLeft = ($('#' + popID).width() + 80) / 2;
 
@@ -383,16 +382,27 @@ Sourcemap.initPasscodeInput = function(popID){
         'overflow' : 'hidden'
     });     
 
-    $('#' + popID).fadeIn();
+    var loading = document.createElement('div');
+    $(loading).attr('class','submit-status');
+    $(loading).css({'display':'none'});
+    $('body').append($(loading));
+
 
     $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
-    $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+    $('#fade').css({'filter' : 'alpha(opacity=80)'});
     $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
         $('#fade , .popup_block').fadeOut(function() {
-            $('#fade, a.close').remove();
+            //$('#fade, a.close').remove();
         }); //fade them both out
         return false;
     });
+
+    if(Sourcemap.passcode==''){
+        $('#' + popID).fadeIn();
+        $('#fade').fadeIn(); //Fade in the fade layer 
+    } else {
+        $(loading).fadeIn();
+    }
 
 }
 
@@ -400,16 +410,6 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
     // fetch and initialize supplychain
     var _that = this;
     var _remote_id = remote_id;
-    /*
-    $.get('services/supplychains/'+remote_id, { passcode : passcode },  function(data) {
-            var sc = Sourcemap.factory('supplychain', data.supplychain);
-            sc.editable = data.editable;
-            callback.apply(this, [sc]);
-            // notice this event fires _after_ the callback runs.
-            _that.broadcast('supplychain:loaded', this, sc);
-        }
-    );
-    */
     $.ajax({
         url:'services/supplychains/'+remote_id,
         data:{ passcode : passcode },
@@ -419,6 +419,8 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             callback.apply(this, [sc]);
             _that.broadcast('supplychain:loaded', this, sc);
             // unlock the supply chain
+            // disable loading icon
+            $('.submit-status').fadeOut();
         },
         error : function(data){
             //console.log("Passcode incorrect");
@@ -427,6 +429,7 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
             $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
             $('.passcode-input').find("input[name='passcode']").focus();
             $("#fade").fadeIn();
+            $('.submit-status').fadeOut();
         }
     });
 }
@@ -498,35 +501,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
     // Create stop points
     for(var i=0,length=sc.stops.length;i<length;i++)
     {
-		//if (sc.stops[i].attributes.tier) {
-			//var x = tiers.length - parseInt(sc.stops[i].attributes.tier);
-			//tiers[x].push(sc.stops[i]);
-			
-			// default status
-			//var letitle  = sc.stops[i].attributes.title;
-		//	if (letitle == undefined)
-		//		letitle = sc.stops[i].attributes.location;		
-			//	letitle = sc.stops[i].attributes.name;
-
-	       // if(sc.stops[i].attributes.size == undefined)
-	        //    size = 2;
-	        //else
-	        //    size = sc.stops[i].attributes.size;
-
-	        //tier_list[i] = { 
-	        //    title:letitle,
-	        //    index:i,
-	        //    tiers:sc.stops[i].attributes.tier,
-	        //    instance:sc.stops[i].instance_id,
-	            //y:(tiers[sc.tiers[sc.stops[i].instance_id]].length-1)*80+300,
-	            //x:sc.tiers[sc.stops[i].instance_id]*150+100,
-			//	size:size,
-	        //    color:sc.stops[i].attributes.color
-	       // }
-			
-	//	} else {
 	        tiers[sc.tiers[sc.stops[i].instance_id]].push(sc.stops[i]);
-        
+
 	        // default status
 			var letitle  = sc.stops[i].attributes.title;
 			if (letitle == undefined)
@@ -579,10 +555,10 @@ Sourcemap.buildTree = function(tree_id,sc) {
     }
     
     // Sort #0 : Squeeze the tier together
-    // remove something from array:y.splice( $.inArray(removeItem, y), 1 );
     //var temp_tiers = tiers.slice(0);    // copy array ( not deep
     //var newObject = jQuery.extend(true, {}, oldObject); // clone object
     var temp_tiers = $.extend(true,[],tiers);
+    var original_tiers = $.extend(true,[],tiers);
     var onchange = 0;
     var length = tiers.length-1; // last tiers should skip
     for(var i=0;i<length;i++){
@@ -609,13 +585,10 @@ Sourcemap.buildTree = function(tree_id,sc) {
                             if(h.to_stop_id!=target_child.instance_id)
                                 continue;
                             children_list.push(target_child);
-                            return;
                         }
                     }
                     })(); 
                 }// end of finding all children of each stop
-                //console.log(children_list);
-
 
                 // calculate item[id1].tiers - target tiers one of them should be 1 
                 var waiting_list = [];
@@ -661,40 +634,39 @@ Sourcemap.buildTree = function(tree_id,sc) {
                         console.log("--- Smallest at "+position+" ---");
                     }
                     //tiers[k].sort(function(a,b){return a.connections - b.connections;});
-                    //for(var counter=0;waiting_list.length>0;counter++){
-                        var item = waiting_list[position]; 
-                        var target_pos,target_tier,item_pos,item_tier;
-                        for(var m=0;m<temp_tiers.length;m++){
-                            if(jQuery.inArray(target,temp_tiers[m])>=0){
-                                target_pos = jQuery.inArray(target,temp_tiers[m]);
-                                target_tier = m;
-                                continue;
-                            }
-                            if(jQuery.inArray(item,temp_tiers[m])>=0){
-                                item_pos = jQuery.inArray(item,temp_tiers[m]);
-                                item_tier = m;
-                                break;
-                            }
-                        } // get both pos and tier
-                        if(item_tier-target_tier>1){
-                            console.log("** Work **");
-                            console.log("target:"+target_pos+","+target_tier);
-                            console.log(target.attributes.title);
-                            console.log("item:"+item_pos+","+item_tier);
-                            console.log(item.attributes.title);
-                            var temp = temp_tiers[target_tier][target_pos];
-                            temp_tiers[target_tier].splice(target_pos,1);
-                            temp_tiers[item_tier-1].push(temp);
+                    
+                    var item = waiting_list[position]; 
+                    var target_pos,target_tier,item_pos,item_tier;
+                    for(var m=0;m<temp_tiers.length;m++){
+                        if(jQuery.inArray(target,temp_tiers[m])>=0){
+                            target_pos = jQuery.inArray(target,temp_tiers[m]);
+                            target_tier = m;
+                            continue;
+                        }
+                        if(jQuery.inArray(item,temp_tiers[m])>=0){
+                            item_pos = jQuery.inArray(item,temp_tiers[m]);
+                            item_tier = m;
+                            break;
+                        }
+                    } // get both pos and tier
+                    if(item_tier-target_tier>1){
+                        console.log("** Work **");
+                        console.log("target:"+target_pos+","+target_tier);
+                        console.log(target.attributes.title);
+                        console.log("item:"+item_pos+","+item_tier);
+                        console.log(item.attributes.title);
+                        var temp = temp_tiers[target_tier][target_pos];
+                        temp_tiers[target_tier].splice(target_pos,1);
+                        temp_tiers[item_tier-1].push(temp);
 
-                        } // else undefine or ==1
-                        onchange = 1;
-                    //} // end all waiting_list
+                    } // else undefine or ==1
+                    onchange = 1;
                 }
                 // rescan the list if something change
                 return;
             })(); // end of tier[i][j]
             if (onchange>0){
-                i=-1;
+                i=-1; // next for loop : i=0,j=0
                 j=-1;
                 onchange = 0;
                 break;
@@ -703,126 +675,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
     } // end of tiers
     // copy the map into 
     tiers = temp_tiers;
-    console.log(tiers);
-    /*
-    var done_list = [];
-    for(var i=0,length=tiers.length;i<length;i++){
-        for(var j=0,length_i=tiers[i].length;j<length_i;j++){
-            // scan whole points from tier 0 to tier end
-            var children_list = [];
-            var parent_list = [];
-            var waiting_list = [];
-            var target = tiers[i][j];
-            var multi_children = 0;
-            (function(){
-                //console.log(target);
-                console.log("-> "+target.instance_id+":"+target.attributes.title);
-                if(target.connections==1){
-                    children_list.push(target.instance_id);
-                    // will include end with 1 connection
-                }
-                for(var child_num=0;children_list.length>0;child_num++){
-                    var target_instance = children_list.shift(); // length_children-1
-                    if(jQuery.inArray(target_instance,done_list)>0){ // already done it
-                        console.log("done?");
-                        return;
-                    }
-                    for(var k=0,length_hop=sc.hops.length;k<length_hop;k++){
-                        (function(){
-                            var h = sc.hops[k];
-                            //if(h.from_stop_id==target_instance){
-                                //if($.inArray(target_instance,parent_list)<0)
-                                // fliter : 1 connection + from = tier 0
-                            //}
-                            // scan for child position
-                            var lenoftier = tiers.length;
-                            for(var m=0;m<lenoftier;m++){
-                                var lenoftier_m = tiers[m].length;
-                                for(var n=0;n<lenoftier_m;n++){
-                                    var child = tiers[m][n];
-                                    if(h.to_stop_id!=child.instance_id||h.from_stop_id!=target_instance){
-                                        continue;
-                                    }
-                                    if($.inArray(child.instance_id,children_list)>0){
-                                        return; // multiple assign to one child
-                                    }
-                                    if(jQuery.inArray(target_instance,parent_list)>0){
-                                        // multi children : conflict, do the extend check
-                                        //console.log("Multiple children");
-                                        multi_children += 1;
-                                    }
-                                    // find the children stop that connect to the very beginning
-                                    console.log(child.instance_id+":"+child.attributes.title);
-                                    waiting_list.push(child);
-                                    parent_list.push(target_instance);
-                                    children_list.push(child.instance_id);                   
-                                    return; // next hop
-                                }
-                            }
-                        })(); // hop function 
-                    } // end of hop loop                
-                    console.log("parent");
-                    console.log(parent_list);
-                    console.log("children");
-                    console.log(children_list);
-                    //find out all the child in child list
-                    // Check is there tier not next to each other
-                    // if one child
-                    console.log(multi_children);
-                    if(multi_children==0){
-                        //for(var counter=0;waiting_list.length>0;counter++)
-
-                        console.log("Single stop's children");
-                        console.log(waiting_list);
-                        console.log("---");
-                        if(waiting_list.length<1)
-                            return; // nothing left
-                        var item = waiting_list.shift(); 
-                        var target_pos,target_tier,item_pos,item_tier;
-                        for(var m=0;m<temp_tiers.length;m++){
-                            if(jQuery.inArray(target,temp_tiers[m])>=0){
-                                target_pos = jQuery.inArray(target,temp_tiers[m]);
-                                target_tier = m;
-                                continue;
-                            }
-                            if(jQuery.inArray(item,temp_tiers[m])>=0){
-                                item_pos = jQuery.inArray(item,temp_tiers[m]);
-                                item_tier = m;
-                                break;
-                            }
-                        } // get both pos and tier
-
-                        if(item_tier-target_tier>1){
-                            console.log("** Work **");
-                            console.log("target:"+target_pos+","+target_tier);
-                            console.log(target.attributes.title);
-                            console.log("item:"+item_pos+","+item_tier);
-                            console.log(item.attributes.title);
-                            var temp = temp_tiers[target_tier][target_pos];
-                            temp_tiers[target_tier].splice(target_pos,1);
-                            temp_tiers[item_tier-1].push(temp);
-
-                        } // else undefine or ==1
-
-                    }
-                    // if multi children or end of stream
-
-                    // done
-                    done_list.push(target_instance);
-                    // need to rework on item
-                    //done_list.splice( $.inArray(item, done_list), 1 );
-                    //done_list.push(target.instance_id);
-
-                    console.log("done_list");
-                    console.log(done_list);
-                    console.log("---------------------------------------");
-                }// end of children_list
-            })();
-        }
-    } // end of original tiers search
-    */
-
-
 
     // Sort #1 : Stop with largest connections in mid;
     for(var k=0;k<tiers.length;k++){
@@ -1045,107 +897,15 @@ Sourcemap.buildTree = function(tree_id,sc) {
     })();
     // End Sort #3
     
-	// Turn the connections into a row order
-	// Have to base this on connections, and also the row order of the parents
-    /*
-    for(var i=0,order=0;i<tiers.length;i++) {
-		var tier_connections = new Array();
-		var tier_order = new Array();
-		// have to iterate through and rank
-		for(var j=0;j<tiers[i].length;j++){     
-            for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){				
-                if(tier_list[k].instance==tiers[i][j].instance_id && tier_list[k].connections != undefined){
-					tier_connections[k] = tier_list[k].connections;
-					var neworder = 0;					
-					for (var l = 0; l<tier_connections.length;l++) {
-						if (tier_connections[l] != undefined) {
-							neworder++;
-						}
-					}
-					for (var l = 0; l<tier_connections.length;l++) {
-						if (tier_connections[l] > tier_connections[k]) {
-							neworder = Math.min(tier_order[l],neworder);
-							tier_order[l]++; 
-						}
-					}
-					tier_order[k] = neworder;
-					break;
-                }
-            }      
-        }
-		var len = 0;
-		for (var l = 0; l<tier_order.length;l++) {
-			if (tier_order[l] != undefined) {len++;}
-		}
-		for (var l = 0; l<tier_order.length;l++) {
-			if (tier_order[l] != undefined) {
-				if (parseInt(tier_order[l]/2) == (tier_order[l]/2)) {
-                    // if tier_oder[l] is even
-					//tier_list[l].order = (Math.floor(len/2) - (tier_order[l]/2))+1;
-					tier_list[l].order = tier_order[l]/2;
-				} else {
-                    // if tier_oder[l] is odd
-					//tier_list[l].order = Math.floor(len/2) + ((tier_order[l]+1)/2);
-					tier_list[l].order = len - Math.floor(tier_order[l]/2);
-				}
-			}
-			// Now look for parents, push order toward parents
-			var parent_order = 0;
-			for(var n=0, length=sc.hops.length;n<length;n++)
-		    {
-				var h = sc.hops[n];
-                var stop_id = h.to_stop_id;
-                //var stop_id = h.to_stop_id;
-				if (tier_list[l].instance==stop_id ) {
-					for (var m=0;m<tier_list.length;m++) {
-						if (tier_list[m].instance == stop_id) {
-                            if(tier_list[m].order==undefined)
-                                break;
-                            // Make tier closer to the child point  
-                            parent_order = tier_list[m].order;
-                            console.log('parent:'+parent_order+'/stop_id:'+stop_id);
-                            if (parent_order != 0 && parent_order!= undefined) {
-                                console.log("shift to:"+parent_order);
-                                var old_order = tier_list[l].order;
-                                tier_list[l].order = parent_order;
-                                if (old_order > parent_order) {
-                                    for (var o = 0; o<tier_order.length;o++) {
-                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
-                                            tier_list[o].order++
-                                        }
-                                    }
-                                } else if (old_order < parent_order) {
-                                    for (var o = 0; o<tier_order.length;o++) {
-                                        if (tier_list[o].order >= tier_list[l].order && o!=l) {
-                                            tier_list[o].order--;
-                                        }
-                                    }				
-                                }
-                            }
-                            // end order
-						}
-					}
-				}		
-                //end hops
-		    }
-            // end tiers_order
-		}
-        console.log('--tiers['+i+']---');
-        console.log(tiers[i]);
-        console.log('--tier_order--');
-        console.log(tier_order);
-	}
-    
-    */
+    // Assign position for each point
     for(var i=0,order=0;i<tiers.length;i++)
     {
 		var y_offset = ((i*2.5)%5)*5;
-		//console.log(y_offset);
-        for(var j=0;j<tiers[i].length;j++){     
+		//console.log(i+":"+y_offset);
+        for(var j=0;j<tiers[i].length;j++){ 
             for(var k=0,tier_list_length=tier_list.length;k<tier_list_length;k++){
                 if(tier_list[k].instance==tiers[i][j].instance_id){
                     //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
-					
 					/*
 					tier_list[k].y = ((500-(tiers[i].length*40))/2)+(tier_list[k].order)*40;
 					
@@ -1160,7 +920,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 					var yspacing = 40;
 					var xoffset = 0;
 					if (tiers[i].length > 14) {
-						yspacing = 20;
+						yspacing = 30;
 						/*
 						if (parseInt(j/2) == j/2) {
 						// Even - move it left
@@ -1170,7 +930,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
 						}
 						*/
 					}
-					tier_list[k].y = ((500-(tiers[i].length*yspacing))/2)+(j+1)*yspacing;
+					tier_list[k].y = ((max_height-(tiers[i].length*yspacing))/2)+(j+1)*yspacing;
+                    //tier_list[k].y = (j+1)*(max_height)/(tiers[i].length+1);
                     tier_list[k].x = ((i+1)*(max_width)/(tiers.length+1))+xoffset;
                     break;
                 }

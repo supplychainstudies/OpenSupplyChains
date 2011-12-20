@@ -16,180 +16,74 @@ class Controller_User extends Sourcemap_Controller_Layout {
     public $layout = 'base';
     public $template = 'user/profile';
 
+    // TODO: cache this crap
     public function action_index($identifier=false) {
-        // TODO: cache this crap
         if(!$identifier) {
             Message::instance()->set('No user specified.');
             return $this->request->redirect('');
         }
+        
         if(is_numeric($identifier)) {
-            // pass
             $user = ORM::factory('user', $identifier);
         } else {
             $user = ORM::factory('user')->where('username', 'ILIKE', $identifier)->find();
-        }        
-        if($user->loaded()) {
+        }
 
+        if($user->loaded()) {
+            $this->layout->page_title = "Dashboard for " . $user->username . " on Sourcemap";
             $user_arr = $user->as_array();
             unset($user_arr['password']);
-
-           // Additional functions for "channel" user
-           $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
-           if($user->has('roles', $channel_role)) {
-
-               $banner_url="";
-               $featured_scs = Array();
-               $supplychains = $user->supplychains->order_by('modified', 'desc')->find_all(); // this search should simply return all user_favorited supplychains
-               foreach ($supplychains as $i=>$supplychain){
-                   $current = $supplychain->kitchen_sink($supplychain->id);
-                   if ($current->user_featured){
-                       $featured_scs[] = $supplychain;
-                   }
-               }
+            
+            // Redirect logged-in users to dashboard, unless preview flag is set
+            $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
+            $preview_mode = isset($_GET["preview"]);
+            $current_user_id = isset(Auth::instance()->get_user()->id) ? Auth::instance()->get_user()->id : "";
+            if($user->id == $current_user_id && !($preview_mode)){
+                $this->request->redirect('home/');
+            }
+            
+            // Additional functions for "channel" user
+            $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+            if($user->has('roles', $channel_role)) {
+                $banner_url="";
+                
+                // Return all user_favorited supplychain IDs
+                // TODO: turn this into a search (for better caching)
+                $featured_scs = Array();
+                $supplychains = $user->supplychains->order_by('modified', 'desc')->find_all(); 
+                foreach ($supplychains as $i=>$supplychain){
+                    $current = $supplychain->kitchen_sink($supplychain->id);
+                    if ($current->user_featured){
+                        $featured_scs[] = $supplychain;
+                    }
+                }
 
                // Load slider functionality
                $this->layout->scripts = array(
                    'sourcemap-core',
                    'sourcemap-channel'
                );
+
                $this->layout->styles = $this->default_styles;
                $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
-
-               $q = array(
-                'user' => $user->id,
-                'user_featured' => 'yes',
-                'recent' => 'yes'
-                );
-               $featured_ids = Sourcemap_Search::find($q);
-
                $this->template = new View('channel/profile');
-
                $this->template->user_profile = $user;
-               $this->template->featured = $featured_ids;
-            } // channel role end           
+               $this->template->featured = $featured_scs;
+            } 
 
-            $user = (object)$user->as_array();
-            $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
-            $preview_mode = isset($_GET["preview"]);
-
-            if(!(Auth::instance()->get_user())||$preview_mode) {            
-                unset($user->password);
-                //$user->avatar = Gravatar::avatar($user->email, 128);
-                $user->avatar = "services/uploads?bucket=accountpics&filename=".$user->username;
-                unset($user->email);
-                
-                $this->template->user = (object)$user;
-
-                $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
-                $pg = max($pg,1);
-
-                $l = 10;
-                $q = array(
-                    'user' => $user->id,
-                    'l' => $l, 'o' => ($pg-1)*$l,
-                    'p' => $pg, 'recent' => 'yes'
-                );
-
-                $r = Sourcemap_Search::find($q);
-                $supplychains = $r->results;
-
-                $this->template->search_result = $r;
-                
-                $p = Pagination::factory(array(
-                    'current_page' => array(
-                        'source' => 'query_string',
-                        'key' => 'p'
-                    ),
-                    'total_items' => $r->hits_tot,
-                    'items_per_page' => $r->limit,
-                    'view' => 'pagination/basic'
-                ));
-               
-                // load totals
-                // TODO: finish this
-                $totals = array(
-                    'supplychains' => count($supplychains),
-                    'stops' => "",
-                    'hops' => ""
-                );
-
-                $this->template->totals = (object)$totals;
-                $this->template->pager = $p;
-                $this->template->supplychains = $supplychains; 
-            }
-
-
-            //  If user id matches login id, redirect to dashboard
-            else if($user->id==Auth::instance()->get_user()->id){
-                $this->request->redirect('home/');
-            }
-            // If user is an admin
-            else if(Auth::instance()->get_user() && Auth::instance()->get_user()->has('roles', $admin)){                
-            // If enter numeric user id
-            if(is_numeric($identifier)) {
-                 $user = ORM::factory('user', $identifier);
-            } else {
-                 $user = ORM::factory('user')->where('username', 'ILIKE', $identifier)->find();
-            }
-                        
-            $p = false;            
+            // Normal user functions
+            $user_arr['avatar'] = "services/uploads?bucket=accountpics&filename=" . $user->username;
             
-            $user_arr = (object)$user->as_array();
-            unset($user_arr->password);            
-            $user_arr->avatar = "services/uploads?bucket=accountpics&filename=".$user_arr->username;
-
-            $this->template->user = $user_arr;
-            //$user_arr->avatar = Gravatar::avatar($user_arr->email, 128);
-            $this->layout->page_title = "Dashboard for ".$this->template->user->username." on Sourcemap";
-            $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user_arr->id, 6);
-            
+            // Return all user's supplychain IDs
+            // TODO: turn this into a search (for better caching)
             $scs = array();
-            $scs_t =array();
             foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {            
                 $scs[] = $sc->kitchen_sink($sc->id);
             }
             
-            
-            $this->template->user_profile = $p;
+            $this->template->user = (object)$user_arr;
             $this->template->supplychains = $scs;
 
-            } else {
-            // User not logged in
-            unset($user->password);
-            //$user->avatar = Gravatar::avatar($user->email, 128);
-            $user->avatar = "services/uploads?bucket=accountpics&filename=".$user->username;
-
-            unset($user->email);
-            $this->template->user = $user;
-
-            $pg = isset($_GET['p']) && (int)$_GET['p'] ? $_GET['p'] : 1;
-            $pg = max($pg,1);
-
-            $l = 10;
-            $q = array(
-                'user' => $user->id,
-                'l' => $l, 'o' => ($pg-1)*$l,
-                'p' => $pg, 'recent' => 'yes'
-            );
-
-            $r = Sourcemap_Search::find($q);
-
-            $this->template->search_result = $r;
-            
-            $p = Pagination::factory(array(
-                'current_page' => array(
-                    'source' => 'query_string',
-                    'key' => 'p'
-                ),
-                'total_items' => $r->hits_tot,
-                'items_per_page' => $r->limit,
-                'view' => 'pagination/basic'
-            ));
-            
-            $this->template->pager = $p;
-            $this->template->supplychains = $r->results;
-            
-            }
         } else {
             Message::instance()->set('That user doesn\'t exist.');
             return $this->request->redirect('');

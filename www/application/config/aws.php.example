@@ -1,0 +1,7 @@
+<?php defined('SYSPATH') or die('No direct access allowed.');
+
+return array(
+	'avatar_bucket'  => 'dev-accountpics',
+	'banner_bucket'  => 'dev-bannerpics',
+	'generic_bucket'  => 'dev-otherpics',
+);

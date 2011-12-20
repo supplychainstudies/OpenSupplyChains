@@ -72,7 +72,6 @@ class Controller_User extends Sourcemap_Controller_Layout {
             } 
 
             // Normal user functions
-            $user_arr['avatar'] = "services/uploads?bucket=accountpics&filename=" . $user->username;
             
             // Return all user's supplychain IDs
             // TODO: turn this into a search (for better caching)
@@ -82,10 +81,20 @@ class Controller_User extends Sourcemap_Controller_Layout {
             }
             
             $this->template->user = (object)$user_arr;
+            $this->template->avatar_url = Sourcemap_Image::avatar($user, 64, true);
             $this->template->supplychains = $scs;
 
         } else {
             Message::instance()->set('That user doesn\'t exist.');
+            return $this->request->redirect('');
+        }
+    }
+    
+    public function action_upload() {
+        if(strtolower(Request::$method) === 'post') {
+            
+        }
+        else{
             return $this->request->redirect('');
         }
     }

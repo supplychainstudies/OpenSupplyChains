@@ -24,7 +24,7 @@
                     <?= $isChannel ? '<span class="secondary">Channel Account</span>' : '' ?>
                     <a class="preview-link" href="user/<?= $user->username ?>?preview">See how this looks to other users</a>
                 </h2>       
-                <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => $isChannel, 'canEdit' => true)) ?>
+                <?= View::factory('partial/user/badge', array('user' => $user, 'avatar_url' => $avatar_url, 'isChannel' => $isChannel, 'canEdit' => true)) ?>
                 <hr class="spacer" />
             </div>
             <div class="clear"></div>

@@ -43,7 +43,7 @@
         </div>
 
         <div class="channel-featured-badge">
-        <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => true, 'canEdit' => false)) ?>
+        <?= View::factory('partial/user/badge', array('user' => $user, 'avatar_url' => $avatar_url, 'isChannel' => true, 'canEdit' => false)) ?>
         </div>
     </div>
 

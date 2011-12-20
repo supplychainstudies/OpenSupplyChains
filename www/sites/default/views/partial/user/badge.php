@@ -14,15 +14,14 @@
 
 <div id="user-profile" <?php if ($isChannel&&!$canEdit): ?>style="width:480px"<? endif; ?>>
     <div class="user-avatar">
-        <img src="<?= $user->avatar; ?>" />
+        <img src="<?= $avatar_url; ?>" />
         <?php if ($canEdit): ?>
         <div class="button alternate">
-            <!--<a href="http://www.gravatar.com/<?= Gravatar::hash($user->email) ?>">Change photo</a>-->
-            <a id="change_profile_pic">Change picture</a>
+            <a id="change_profile_pic" name="<?= Kohana::config('aws')->avatar_bucket ?>">Change picture</a>
         </div>
             <?php if($isChannel): ?>
         <div class="button alternate">
-            <a id="change_banner">Upload banner</a>
+            <a id="change_banner" name="<?= Kohana::config('aws')->banner_bucket ?>">Upload banner</a>
         </div>
             <? endif; ?>
         <div class="button alternate">

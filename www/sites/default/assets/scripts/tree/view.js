@@ -12,6 +12,7 @@
 
 $(document).ready(function() {
     var tree_element_id = '#sourcemap-tree-view';
+    $('#tree-container').css("min-height", $(window).height()).css("min-width", $(window).width());
     var passcode = ""; 
     var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();    
 

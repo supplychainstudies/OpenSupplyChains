@@ -14,7 +14,11 @@
 <?php if($passcode_match===False): ?>
 <div id="passcode-input">
 <form class="passcode-input" action"/" method="get">
+<?php if(!isset($passcode)): ?>
 <label for="passcode"> This map is protected. Please enter the password:</label>
+<?php else: ?>
+<label for="passcode"> Your password is wrong. Please re-enter the password:</label>
+<?php endif; ?>
 <input name="passcode" type="text"></input>
 <input id="passcode-submit" type="submit"/>
 </form>

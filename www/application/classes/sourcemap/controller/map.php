@@ -408,7 +408,11 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                         $correct_passcode = $sc->attributes->passcode;
                         if($input_passcode===$correct_passcode){
                             $passcode_match = True;
+                        } else {
+                            $passcode_match = False;
                         }
+                        //
+                        $this->template->passcode = $input_passcode;
                     }
                     if($passcode_match==null){
                         $passcode_match = False;

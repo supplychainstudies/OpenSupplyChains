@@ -345,21 +345,6 @@ Sourcemap.Map.prototype.initEvents = function() {
     });
     // zoom evts
     this.map.events.register("zoomend", this, function() {
-        var s = this.getSelected();
-        s = s.length ? s[0] : false;
-        if(!s) s = this._sel_before_zoom;
-        if(s) {
-            if(s.cluster) {
-                Sourcemap.broadcast("map:feature_unselected", this, s);
-            } else {
-                if(s.layer)
-                    this.controls.select.select(s);
-                else
-                    Sourcemap.broadcast("map:feature_unselected", this, s);
-            }
-            this.map.setCenter(s.geometry.getBounds().getCenterLonLat());
-        }
-        this._sel_before_zoom = null;
     });
     return this;
 }

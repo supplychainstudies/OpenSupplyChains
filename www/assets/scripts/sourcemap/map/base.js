@@ -442,6 +442,15 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			} else {
 				$(this.base.dialog_content).find('.arrow').addClass("arrowopen");
 			}
+
+            // Sets up zoom on click
+            $(this.base.dialog_content).find('.dot')
+                .css({'cursor': 'pointer'})
+                .click($.proxy(function(evt) {
+                    this.base.map.map.moveTo(this.base.getFeatureLonLat(this.feature));
+                    this.base.map.map.zoomTo(this.base.map.map.maxZoomLevel);
+                }, this));
+
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
@@ -905,8 +914,6 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
                 if ($(legend).length == 0) {
                     var legend = $('<div id="sourcemap-legend"></div>');
                     legend.addClass(viz_nm);
-                    // This actually crash IE
-                    //console.log(this)
                     if (this.map.map.baseLayer.name)
                         legend.addClass(this.map.map.baseLayer.name);
                     $(this.map.map.div).append(legend);

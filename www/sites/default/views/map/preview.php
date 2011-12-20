@@ -25,7 +25,7 @@
     <div class="channel-banner">
        <img src="<?= $supplychain_banner_url?>"/>
     </div>
-    <div class="clear" style="height: 20px"></div>
+    <div class="clear"></div>
 </div><!-- .container.preview -->
 <?php endif; ?>
 
@@ -37,17 +37,16 @@
 	    <div class="preview-footer"><a href="/"><img src="assets/images/mobile/logo.png" /></a></div>
 
     </div>
-	
-    <a href="/mobile/<?= $supplychain_id ?><?php if($passcode_match==True){ ?>?passcode=<?=$passcode ?><?php } ?>" class="full-site-button">View Interactive Map</a>
+    
+    <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
     
     <?php if (isset($supplychain_youtube_id)): ?>
     <div class="description-video">
         <iframe class="youtube-player" type="text/html" width="240px" height="180px" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>?showinfo=0" frameborder="0"></iframe> 
     </div>
     <?php endif; ?>
-
-    <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
-  	
+	
+    <a href="/mobile/<?= $supplychain_id ?><?php if($passcode_match==True){ ?>?passcode=<?=$passcode ?><?php } ?>" class="full-site-button">View Interactive Map</a>
 
     <div class="clear"></div>
 </div><!-- .container.preview -->

@@ -14,7 +14,7 @@
 
 <div class="container">
     <div id="main" class="sidebar">
-        <?= View::factory('partial/user/badge', array('user' => $user, 'isChannel' => false, 'canEdit' => false)) ?>
+        <?= View::factory('partial/user/badge', array('user' => $user, 'avatar_url' => $avatar_url, 'isChannel' => false, 'canEdit' => false)) ?>
     </div>
     <div id="sidebar" class="profile">
         <div class="container">

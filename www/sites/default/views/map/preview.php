@@ -42,7 +42,7 @@
     
     <?php if (isset($supplychain_youtube_id)): ?>
     <div class="description-video">
-        <iframe class="youtube-player" type="text/html" width="240px" height="180px" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>&showinfo=0" frameborder="0"></iframe> 
+        <iframe class="youtube-player" type="text/html" width="240px" height="180px" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>?showinfo=0" frameborder="0"></iframe> 
     </div>
     <?php endif; ?>
 

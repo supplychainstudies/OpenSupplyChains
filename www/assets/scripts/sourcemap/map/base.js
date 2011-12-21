@@ -186,7 +186,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             this.showStopDetails(
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
-        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {
+        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );
@@ -257,6 +257,8 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
                 }
             },this)
         });
+		$(this.banner_div).find('.banner-map-search').keyup($.proxy(function() { this.searchFilterMap();}, this));
+		
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
@@ -346,6 +348,7 @@ Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
         $(this.dialog).hide();
         if(!notrigger) {
             this.map.controls["select"].unselectAll();
+			this.searchFilterMap();
             Sourcemap.broadcast('sourcemap-base-dialog-close', 
                 this, this.map.editor ? $(this.dialog).find("form").serializeArray() : false
             );
@@ -760,6 +763,66 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		    }, 
 	{"vmin": vmin, "vmax": vmax, "vtot": vtot, "smin": smin, "smax": smax, "attr_nm": attr_nm, "basemap": this, "color": active_color});
     return this.decorateStopFeatures(dec_fn) && this.decorateHopFeatures(dec_fn);
+}
+
+Sourcemap.Map.Base.prototype.searchFilterMap = function() {
+	var query = $(this.banner_div).find('.banner-map-search').val();
+    for(var scid in this.map.stop_features) {
+        for(var k in this.map.stop_features[scid]) {
+            var s = this.map.stop_features[scid][k];
+            s = s.stop ? s.stop : s;
+
+			var match = false;
+			for(var a in s.attributes) {
+				if(typeof(s.attributes[a]) == 'string') {
+					if(s.attributes[a].search(query) != -1) { match = true; }
+				}
+			}
+			if(match == true) { s.renderIntent = 'default'; }
+			else { s.renderIntent = 'disabled'; }
+        }
+    }
+
+    for(var scid in this.map.hop_features) {
+        for(var fromStop in this.map.hop_features[scid]){
+            for (var toStop in this.map.hop_features[scid][fromStop]){
+                var h = this.map.hop_features[scid][fromStop][toStop];
+				var arr = h.arrow ? h.arrow : {};	
+				var arr2 = h.arrow2 ? h.arrow2 : h.arrow;			
+						
+                h = h.hop ? h.hop : h;	
+				var match = false;
+				for(var a in h.attributes) {
+					if(typeof(h.attributes[a]) == 'string') {
+						if(h.attributes[a].search(query) != -1) { match = true; }
+					}
+				}
+				if(match == true) { h.renderIntent = 'default'; arr.renderIntent = 'arrow'; arr2.renderIntent = 'arrow';}
+				else { h.renderIntent = 'disabled'; arr.renderIntent = 'disabled'; arr2.renderIntent = 'disabled';}
+            }
+        }
+    }
+    for(var scid in this.map.cluster_features) {
+        for(var l in this.map.cluster_features[scid]) {
+	        var c = this.map.cluster_features[scid][l];
+
+			var match = false;						
+			lookup:	
+			for(var k in c.cluster) {
+				var s = c.cluster[k];
+				s = s.stop ? s.stop : s;
+
+				for(var a in s.attributes) {
+					if(typeof(s.attributes[a]) == 'string') {
+						if(s.attributes[a].search(query) != -1) { match = true;  break lookup;}
+					}
+				}
+			}
+			if(match == true) { c.renderIntent = 'cluster'; }
+			else { c.renderIntent = 'disabled'; }
+        }
+    }
+	this.map.redraw();
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {

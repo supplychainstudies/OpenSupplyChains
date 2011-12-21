@@ -52,7 +52,7 @@ abstract class Sourcemap_Catalog {
         $response = Sourcemap_Http_Client::do_get(
             $this->get_url(), $this->parameters, $this->headers
         );
-        return $response->status_ok() ? $this->unserialize($response) : false;
+		return $response->status_ok() ? $this->unserialize($response) : false;
     }
 
     public function unserialize($response) {
@@ -90,12 +90,20 @@ abstract class Sourcemap_Catalog {
     public static function get($catalog, $parameters=null) {
         $cat = self::factory($catalog, $parameters);
         if(!$cat) return false;
-        if($cat->_cache && ($cached = Cache::instance()->get($cat->get_cache_key()))) {
+        if($cat->_cache && ($cached = Cache::instance()->get($cat->get_cache_key()))) {			
             $got = $cached;
             if($got && is_array($got)) $got['cache_hit'] = true;
         } else {
             $cat->setup();
-            $got = $cat->fetch();
+			if (isset($cat->parameters['curated']) == true) {
+				if ($cat->parameters['curated'] == true) {
+					$got = $cat->cfetch();
+				} else {
+					$got = $cat->fetch();
+				}
+			} else {
+				$got = $cat->fetch();
+			}           
             if($cat->_cache) {
                 Cache::instance()->set($cat->get_cache_key(), $got, $cat->_cache_ttl);
             }

@@ -45,7 +45,7 @@
 					</div>
 					<% var unittype = this.ref.getAttr("unit","kg"); %>
 					<div class="footprint-section selection">
-	                    <label for="unit">Unit</label><br/>
+	                    <label for="unit">Unit</label>
 						<select class="footprint-unit" name="unit">
 							<option <% if(unittype == "kg") { %>selected<% } %> value="kg">Kg</option>
 							<option <% if(unittype == "ea") { %>selected<% } %> value="ea">Each</option>	
@@ -62,7 +62,7 @@
 					<div class="footprint-math weight-context <% if(unittype == "kg") { %>hidden<% } %>">kg</div>		
 
 					
-				
+				<div><hr /></div>
 				<div class="footprint-row"></div>
 				<div class="footprint-row indent">		
 					<!--<div class="footprint-section">-->					           
@@ -117,10 +117,6 @@
             </fieldset>
         </div>
         <h3 class="accordion-title catalog"><div class="arrow"></div>Catalog</h3>
-        <div id="edit-catalog" class="sourcemap-form accordion-body">
-			<div class="catalog-content">
-			</div>
-		</div>
 		</div> <!-- End of Accordion -->
 </div>
 <div class="clear"></div>

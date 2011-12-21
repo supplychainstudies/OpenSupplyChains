@@ -9,7 +9,10 @@
  * See the GNU Affero General Public License for more details.
  * 
  * You should have received a copy of the GNU Affero General Public License along with this
- * program. If not, see <http://www.gnu.org/licenses/>.*/ 
-?>
+ * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-<div id="sourcemap-map-embed"></div>
+class Controller_Mobile extends Sourcemap_Controller_Map {
+    public function action_index($scid) {
+        return parent::action_mobile($scid);
+    }
+}

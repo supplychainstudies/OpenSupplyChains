@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
+class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
     public static $default_options = array(
         'headers' => true, 'latcol' => null,
         'loncol' => null, 'addresscol' => null,
@@ -352,7 +352,6 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							$hops[$hops_from."-".$hops_to]['varort'] = (7/365)* $rows->getCell($h['Source-Split'] . $rowIndex)->getCalculatedValue() * $bom0partvalue;
 						}					
 						foreach ($stops as $u=>$stop) {
->>>>>>> master
 							if ($stop["num"] == $hops_from) { 
 								$hops[$hops_from."-".$hops_to]['Description'] .= "From: " . $stop['Location'];
 								$hops[$hops_from."-".$hops_to]['fuuid'] = $u;
@@ -505,6 +504,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 					$prev = $uuid;
 					$hops_from = $stops[$uuid]["num"];					
 					$uuid = $rows->getCell($h['D-Name'] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h['D-City'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['D-Country'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['D-Postal-Code'] . $rowIndex)->getCalculatedValue() . ")";
+
 					if (isset($stops[$uuid]) == false) {
 						$stops[$uuid] = array (
 								'num' => $count,
@@ -560,18 +560,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 						);
 						if (isset($forecast_values) == true) {		
 							$bomval = $forecast_values[$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue()];					
-<<<<<<< HEAD
-							$v = (7/365)* $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue() * $bomval;
-							if ($v >= 1) {
-								$hops[$hops_from."-".$hops_to]['color'] = "#ff0000";
-							} elseif ($v < 1 && $v >= 0.5) {
-								$hops[$hops_from."-".$hops_to]['color'] = "#ffff00";
-							} else {
-								$hops[$hops_from."-".$hops_to]['color'] = "#92d050";
-							}
-=======
 							$hops[$hops_from."-".$hops_to]['varort'] = (7/365)* $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue() * $bomval;							
->>>>>>> master
 						}
 						foreach ($stops as $u=>$stop) {
 							if ($stop["num"] == $hops_from) { 
@@ -678,8 +667,8 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 
 		*/
 		
-		//var_dump($stops);
-		//var_dump($hops);
+		var_dump($stops);
+		var_dump($hops);
 		// new PHPExcel Object
 		$stopswriter = new PHPExcel();
 		$stopswriter->createSheet();
@@ -689,37 +678,37 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		$stopswriter->getActiveSheet()->setCellValue("B1", 'Location');
 		$stopswriter->getActiveSheet()->setCellValue("C1", 'Address');
 		$stopswriter->getActiveSheet()->setCellValue("D1", 'Description');
-		/*
+
 		$stopswriter->getActiveSheet()->setCellValue("E1", 'color');
 		$stopswriter->getActiveSheet()->setCellValue("F1", 'varort');
 		$stopswriter->getActiveSheet()->setCellValue("G1", 'tier');
 		$stopswriter->getActiveSheet()->setCellValue("H1", 'size');
 		$stopswriter->getActiveSheet()->setCellValue("I1", 'lat');
 		$stopswriter->getActiveSheet()->setCellValue("J1", 'long');	
-		*/
 
+/*
 		$stopswriter->getActiveSheet()->setCellValue("E1", 'varort');
 		$stopswriter->getActiveSheet()->setCellValue("F1", 'tier');
 		$stopswriter->getActiveSheet()->setCellValue("G1", 'size');
 		$stopswriter->getActiveSheet()->setCellValue("H1", 'lat');
 		$stopswriter->getActiveSheet()->setCellValue("I1", 'long');
-		
+*/		
 		$count = 1;	
 		foreach ($stops as $num=>$stop) {
 			$stopswriter->getActiveSheet()->setCellValue("A".($count+1), $stop['Name']);
 			$stopswriter->getActiveSheet()->setCellValue("B".($count+1), $stop['Location']);
 			$stopswriter->getActiveSheet()->setCellValue("C".($count+1), $stop['Address']);
 			$stopswriter->getActiveSheet()->setCellValue("D".($count+1), $stop['Description']);
-			/*
+			
 			$stopswriter->getActiveSheet()->setCellValue("E".($count+1), $stop['color']);
 			$stopswriter->getActiveSheet()->setCellValue("F".($count+1), $stop['varort']);
 			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), $stop['tier']);
 			$stopswriter->getActiveSheet()->setCellValue("H".($count+1), "0.5");
-			*/
+			/*
 			$stopswriter->getActiveSheet()->setCellValue("E".($count+1), $stop['varort']);
 			$stopswriter->getActiveSheet()->setCellValue("F".($count+1), $stop['tier']);
 			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), "0.5");
-			
+			*/
 			//$stopswriter->getActiveSheet()->setCellValue("J".($count+1), $stop['lat']);
 			//$stopswriter->getActiveSheet()->setCellValue("K".($count+1), $stop['long']);
 			$count++;
@@ -750,14 +739,8 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		
         $sc->stops = self::csv2stops($stop_csv, $options);
         $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
-<<<<<<< HEAD
-        $sc->attributes = array();
-        return $sc;
-=======
         $sc->attributes = array("description"=>$description);
         return $sc;	
->>>>>>> master
     }
 
-}
 }

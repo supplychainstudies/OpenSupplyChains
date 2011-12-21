@@ -95,7 +95,7 @@ return array(
         ),
         'openlayers' => array(
             'scripts' => array(
-                'assets/scripts/libs/openlayers/OpenLayers.js'
+                'assets/scripts/libs/openlayers/OpenLayers.custom.js'
             )
         ),
         'openlayers-cloudmade' => array(

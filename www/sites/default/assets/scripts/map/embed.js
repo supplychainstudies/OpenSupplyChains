@@ -41,7 +41,7 @@ $(document).ready(function() {
                 Sourcemap.loadSupplychain(scid, passcode, function(sc) {
                     Sourcemap.embed_instance.map.addSupplychain(sc);
                     $(window).resize();
-                    $("#banner").click(function() {
+                    $("#banner-summary").click(function() {
                         //window.location.href = "view/" + window.location.pathname.split("/")[2];
                         window.open("view/" + window.location.pathname.split("/")[2]);
                     });

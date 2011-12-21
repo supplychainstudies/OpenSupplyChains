@@ -1,5 +1,6 @@
-www/application/config/apis.php
 www/application/config/cache.php
+www/application/config/apis.php
+www/application/config/aws.php
 www/application/config/database.php
 www/application/config/sourcemap.php
 www/application/config/recaptcha.php

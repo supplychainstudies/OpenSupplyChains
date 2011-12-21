@@ -63,7 +63,7 @@ $(document).ready(function() {
             if (lettersleft == maxlength)
                 $('#desc-counter').html('&nbsp;')
             else if(lettersleft>1)
-                $('#desc-counter').text(lettersleft+' characters remaining');
+                ('#desc-counter').text(lettersleft+' characters remaining');
             else if(lettersleft == 1)
                 $('#desc-counter').text(lettersleft+' character remaining');
             else
@@ -86,6 +86,7 @@ function loadAjaxForms(){
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
         $(this).attr('disabled', '');
 
+        console.log($(this));
         form = $(this).parent();
         submitStatus = $(form).find('.submit-status');
 

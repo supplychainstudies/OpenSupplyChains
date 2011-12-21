@@ -378,7 +378,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
 
         } else {
             $this->request->status = 404;
-            $this->layout = View::factory('layout/error');
+            $this->layout = View::factory('layout/embederror');
             $this->template = View::factory('error');
             $this->template->error_message = 'That map could not be found.';
         }

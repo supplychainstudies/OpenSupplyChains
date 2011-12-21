@@ -808,7 +808,8 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 }
 
 Sourcemap.Map.Base.prototype.searchFilterMap = function() {
-	var query = $(this.banner_div).find('#map-search').val();
+	var query = new RegExp($(this.banner_div).find('#map-search').val(), "i");
+    
     for(var scid in this.map.stop_features) {
         for(var k in this.map.stop_features[scid]) {
             var s = this.map.stop_features[scid][k];

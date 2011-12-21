@@ -59,7 +59,8 @@ Sourcemap.Map.prototype.defaults = {
             "fillColor": "#cccccc",
             "strokeColor": "#cccccc",
             "strokeOpacity": 0.5,
-			"fillOpacity": 0.5
+			"fillOpacity": 0.5,
+            "fontColor": "#cccccc",
         },
         "select": {
             "fillColor": "#ffffff",
@@ -267,9 +268,13 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
+    return this;
+}
+
+Sourcemap.Map.prototype.enableFullscreen = function(){
     this.dockAdd('fullscreen', {
         "title": 'Fullscreen',
-        "panel": 'fullscreen',
+        "panel": 'zoom',
         "callbacks": {
             "click": function() {
                 if (!$('#map-container').hasClass('fullscreen')){
@@ -280,6 +285,7 @@ Sourcemap.Map.prototype.initDock = function() {
                     $('#map-container').addClass('fullscreen');
                     $('#sourcemap-dock').find('.control.fullscreen').addClass('active');
                     window.scrollTo(0,0);
+                    this.map.updateSize();
                 }
                 else{
                     // return to inline mode
@@ -288,11 +294,11 @@ Sourcemap.Map.prototype.initDock = function() {
                     });
                     $('#map-container').removeClass('fullscreen');
                     $('#sourcemap-dock').find('.control.fullscreen').removeClass('active')
+                    this.map.updateSize();
                 }
             }
         }
     });
-    return this;
 }
 
 Sourcemap.Map.prototype.dockAdd = function(nm, o) {

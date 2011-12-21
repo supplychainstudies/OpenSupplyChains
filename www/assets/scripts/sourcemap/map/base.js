@@ -274,7 +274,9 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
                 }
             },this)
         });
-		$(this.banner_div).find('.banner-map-search').keyup($.proxy(function() { this.searchFilterMap();}, this));
+		$(this.banner_div).find('#map-search').keyup($.proxy(function() { 
+            this.searchFilterMap();
+        }, this));
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
@@ -806,7 +808,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 }
 
 Sourcemap.Map.Base.prototype.searchFilterMap = function() {
-	var query = $(this.banner_div).find('.banner-map-search').val();
+	var query = $(this.banner_div).find('#map-search').val();
     for(var scid in this.map.stop_features) {
         for(var k in this.map.stop_features[scid]) {
             var s = this.map.stop_features[scid][k];

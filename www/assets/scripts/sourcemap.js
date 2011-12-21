@@ -792,6 +792,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
                     {
                         if(sc.hops[l].from_stop_id==tier_list[z].instance){
                             if(tier_list[z].connections==1){
+                            //if(tier_list[z].connections<=3){
                                 parent_stop_id = sc.hops[l].from_stop_id;
                                 parent_stop_id_list.push(parent_stop_id);
                             }
@@ -806,6 +807,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
                     {
                         if(sc.hops[l].to_stop_id==tier_list[z].instance){
                             if(tier_list[z].connections==1){
+                            //if(tier_list[z].connections<=3){
                                 child_stop_id = sc.hops[l].to_stop_id;
                                 children_stop_id_list.push(child_stop_id);
                             }
@@ -835,7 +837,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
                                 //pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (k/(tiers[j].length-1));
                                 pos = (tiers[j].length==1) ? (n/(tiers[m].length-1)) : (target_value/(tiers[j].length-1));
                                 if(pos>.5)
-                                    new_position = tiers[m].length;
+                                    new_position = tiers[m].length-1;
                                 else if(pos==.5)    
                                     new_position = parseInt(tiers[m].length/2);
                                 else

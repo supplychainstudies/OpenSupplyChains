@@ -18,6 +18,7 @@
     height: 615px;
     margin: 0 auto;
     background: url('../images/map-bg.png') no-repeat;
+    .noselect;
 }
 
 #map {
@@ -40,7 +41,6 @@
     width: 1090px;
     height: 615px;
     margin: 0 auto;
-    padding: 4px;
     background: #fefefe;
     background-image: -moz-linear-gradient(center bottom,rgba(76,97,154,1) 0%,rgba(14,28,65,1) 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(14,28,65,1)),color-stop(1,rgba(76,97,154,1)));
@@ -48,13 +48,18 @@
 }
 
 #tree {
-    padding: 15px 21px 24px;
+    //padding: 15px 21px 24px;
+    //padding:15px 10px 15px 20px;
+    padding-top:15px;
+    padding-left:28px;
     overflow:hidden;
     #sourcemap-tree-view {
         position:relative;        
         border:4px solid #fff;
-        width: 1040px;
-        height: 570px;
+        //width: 1040px;
+        //height: 570px;
+        min-width:1040px;
+        min-height:570px;
         .rounded(8px);
         overflow:hidden;
     }
@@ -232,7 +237,6 @@
                 &.co2e{padding-left: 40px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
                 &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
 				&.distance{padding-left: 40px; background: url(../images/dock-icon-distance.png) 10px 12px no-repeat;}
-                
             }
         }   
         #dialog-media {
@@ -368,6 +372,11 @@
                     &.co2e{padding-left: 40px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
                     &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
                     &.addstop{padding-left: 40px; display:none; background: url(../images/dock-icon-addpoint.png) 10px 12px no-repeat;}
+                    &.fullscreen{ padding-left: 40px; background: url(../images/icon-fullscreen.png) 15px 9px no-repeat; 
+                        &.active {
+                            background: url(../images/icon-fullscreen.png) 15px -32px no-repeat;
+                        }
+                    } 
 
                     &.toggle {  &.active { color: #333; background-color:rgba(200,200,200,0.85); } }
                     &:last-child { border-radius: 0 12px 12px 0; border: none; }
@@ -870,6 +879,22 @@
 #color-selector
 {
     padding-left:10px;
+}
+
+/* Fullscreen ------------------------------------------------- */
+
+#map-container.fullscreen{
+    #map, #sourcemap-map-view{
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        border: 0;
+        width: 100%; height: 100%;
+        background: #fff;
+        padding: 0;
+        z-index: 9999;
+        #sourcemap-map-view{
+        }   
+    }
 }
 
 /* Openlayers  ------------------------------------------------- */

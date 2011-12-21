@@ -13,10 +13,12 @@
 $(document).ready(function() {
     var tree_element_id = '#sourcemap-tree-view';
     $('#tree-container').css("min-height", $(window).height()).css("min-width", $(window).width());
+    $(tree_element_id).css("height",$(window).height()*.95).css("width",$(window).width()*.95);
     var passcode = ""; 
     var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();    
 
-    if($('#exist-passcode').attr("value")){
+    //if($('#exist-passcode').attr("value")){
+    if(Sourcemap.passcode_exist){
         var popID = 'popup';
         var element = document.createElement('div');
         $(element).html(

@@ -267,6 +267,31 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
+    this.dockAdd('fullscreen', {
+        "title": 'Fullscreen',
+        "panel": 'fullscreen',
+        "callbacks": {
+            "click": function() {
+                if (!$('#map-container').hasClass('fullscreen')){
+                    // init fullscreen mode
+                    var viewportWidth  = window.innerWidth;
+                    var viewportHeight = window.innerHeight;
+                    $('body').css({'overflow': 'hidden'});
+                    $('#map-container').addClass('fullscreen');
+                    $('#sourcemap-dock').find('.control.fullscreen').addClass('active');
+                    window.scrollTo(0,0);
+                }
+                else{
+                    // return to inline mode
+                    $('body').css({
+                        'overflow': 'auto'
+                    });
+                    $('#map-container').removeClass('fullscreen');
+                    $('#sourcemap-dock').find('.control.fullscreen').removeClass('active')
+                }
+            }
+        }
+    });
     return this;
 }
 

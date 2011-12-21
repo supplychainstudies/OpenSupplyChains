@@ -37,6 +37,22 @@ Sourcemap.Map.prototype.defaults = {
     "hops_as_bezier": false, "arrows_on_hops": true,
     "default_feature_color": "#35a297", "clustering": true,
     "default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
+    "resolutions":[
+        39135.758475,
+        19567.8792375,
+        9783.93961875,
+        4891.969809375,
+        2445.9849046875,
+        1222.99245234375,
+        611.496226171875,
+        305.7481130859375,
+        152.87405654296876,
+        76.43702827148438,
+        38.21851413574219,
+        19.109257067871095,
+        9.554628533935547,
+        4.777314266967774
+    ],
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -191,27 +207,30 @@ Sourcemap.Map.prototype.initMap = function() {
 }
 
 Sourcemap.Map.prototype.initBaseLayer = function() {
+
     this.map.addLayer(new OpenLayers.Layer.Google(
         "terrain", {
-            'sphericalMercator': true,
-            "type": google.maps.MapTypeId.TERRAIN,
-            "animationEnabled": false,
-            "minZoomLevel": 1, "maxZoomLevel": 17,
-            "wrapDateLine":false,
+        'sphericalMercator': true,
+        "type": google.maps.MapTypeId.TERRAIN,
+        "animationEnabled": false,
+        "resolutions": this.defaults.resolutions,
+        "minZoomLevel": 2, "maxZoomLevel": 17,
+        "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
         "satellite", {
-            'sphericalMercator': true,
-            "type": google.maps.MapTypeId.SATELLITE,
-            "animationEnabled": false,
-            "minZoomLevel": 1, "maxZoomLevel": 17,
-            "wrapDateLine":false,
+        'sphericalMercator': true,
+        "type": google.maps.MapTypeId.SATELLITE,
+        "animationEnabled": false,
+        "resolutions": this.defaults.resolutions,
+        "minZoomLevel": 2, "maxZoomLevel": 17,
+        "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 44909,
-        "maxResolution":39135.758475,
+        "resolutions": this.defaults.resolutions,
         "minZoomLevel": 1, "maxZoomLevel": 12
     }));
     

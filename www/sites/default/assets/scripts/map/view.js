@@ -20,6 +20,7 @@ $(document).ready(function() {
         if(view.options.locate_user) {
             view.showLocationDialog();
         }
+        view.map.enableFullscreen();
     });
 
     // get passcode exist or not

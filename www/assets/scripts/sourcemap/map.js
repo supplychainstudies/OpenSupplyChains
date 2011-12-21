@@ -59,7 +59,8 @@ Sourcemap.Map.prototype.defaults = {
             "fillColor": "#cccccc",
             "strokeColor": "#cccccc",
             "strokeOpacity": 0.5,
-			"fillOpacity": 0.5
+			"fillOpacity": 0.5,
+            "fontColor": "#cccccc",
         },
         "select": {
             "fillColor": "#ffffff",
@@ -267,9 +268,13 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
+    return this;
+}
+
+Sourcemap.Map.prototype.enableFullscreen = function(){
     this.dockAdd('fullscreen', {
         "title": 'Fullscreen',
-        "panel": 'fullscreen',
+        "panel": 'zoom',
         "callbacks": {
             "click": function() {
                 if (!$('#map-container').hasClass('fullscreen')){
@@ -292,7 +297,6 @@ Sourcemap.Map.prototype.initDock = function() {
             }
         }
     });
-    return this;
 }
 
 Sourcemap.Map.prototype.dockAdd = function(nm, o) {

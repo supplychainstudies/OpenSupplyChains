@@ -12,62 +12,6 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 return array(
-    'fields' => array(
-        'card-name' => array(
-            'type' => 'text',
-            'label' => 'Name on Card',
-            'attributes' => array(
-                'maxlength' => 140,
-            )
-        ),
-        'card-number' => array(
-            'type' => 'text',
-            'label' => 'Card Number',
-            'attributes' => array(
-                'maxlength' => 20,
-            )
-        ),
-        'card-cvc' => array(
-            'type' => 'text',
-            'label' => 'Security Code',
-            'css_class' => array('third-width '), 
-            'attributes' => array(
-                'maxlength' => 5,
-                'boxwidth' => 'third',
-                'placeholder' => ' xxx'
-            )
-        ),
-        'card-expiry-month' => array(
-            'type' => 'text',
-            'label' => 'Month',
-            'css_class' => array('third-width '), 
-            'attributes' => array(
-                'maxlength' => 5,
-                'boxwidth' => 'third',
-                'placeholder' => ' xx'
-            )
-        ),
-        'card-expiry-year' => array(
-            'type' => 'text',
-            'label' => 'Year',
-            'css_class' => array('third-width '), 
-            'attributes' => array(
-                'maxlength' => 4,
-                'boxwidth' => 'third',
-                'placeholder' => ' xxxx'
-            )
-        ),
-        'confirm_terms' => array(
-            'type' => 'checkbox',
-            'label' => 'I have read and agree to the <a href="/info/channel/#document-content?w=500" target="_blank" class="modal">terms of service</a>.',
-            'default' => 0
-        ),
-        'upgrade' => array(
-            'type' => 'submit',
-            'label' => 'Upgrade',
-            'css_class' => array('stripe ')
-        )
-    ),
     'messages_file' => 'forms/upgrade',
     'rules' => array(
         'card-name' => array(

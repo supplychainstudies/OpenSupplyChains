@@ -21,6 +21,7 @@ class Controller_Info extends Sourcemap_Controller_Layout {
     public function action_dmca() { $this->template = View::factory('info/terms'); }
     public function action_privacy() { $this->template = View::factory('info/privacy'); }
     public function action_channel() { $this->template = View::factory('info/channel'); }
+    public function action_payment() { $this->template = View::factory('info/payment'); }
     
 }
 

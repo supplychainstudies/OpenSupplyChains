@@ -87,6 +87,18 @@ a {
     text-decoration: none;
     &:visited{ color: @link-color; }
     &:hover{ text-decoration: underline; }
+    &.tooltip{
+        display: inline-block;
+        .gradient(#3884ab,#4f9fc9);
+        .rounded(4px);
+        color: #fff;
+        font-weight: bold;
+        font-size: .9em;
+        text-align: center;
+        padding: .05em .2em .05em .1em;
+        width: 1em;
+        &:hover{ text-decoration: none; }
+    }
 }
 
 .hidden{
@@ -399,10 +411,20 @@ input[type=text],input[type=password], textarea {
 input::-webkit-input-placeholder, input:-moz-placeholder { color:#999 }
 textarea { height: 55px; }
 
-div.third-width{
+div.half-width{
     float:left;
     width: 30%;
-    padding: 2% 2% 2% 1%;
+    padding: 0 2% 0 1%;
+    input{
+        margin-top: 2px;
+        height: 19px;
+    }
+}
+    
+&.cvc-code input{
+    width: 50px;
+    float: left;
+    padding-left: 10px;
 }
 
 &.sourcemap-form-button{

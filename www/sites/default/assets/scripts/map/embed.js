@@ -68,7 +68,9 @@ $(document).ready(function() {
                     };
                     Sourcemap.loadSupplychain(scid, passcode,cb);
                 }); // submit end
-                if(Sourcemap.passcode!=''){
+                if(Sourcemap.passcode==''||Sourcemap.passcode==undefined){
+                
+                } else {
                     $('#fade , .popup_block').fadeOut(function() {
                     });
                     passcode = Sourcemap.passcode;

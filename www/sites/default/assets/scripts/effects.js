@@ -375,6 +375,7 @@ $(this).change(function(){
         var popURL = $(this).attr('href'); 
 
         // parse URL options
+        // TODO: additional options
         var popDestURL = popURL.split('?')[0];
         var popDest = popURL.split('#')[0] + " #" + popURL.split('#')[1]; 
         var query = popURL.split('?');
@@ -395,9 +396,9 @@ $(this).change(function(){
 
                 $('body').append($(element));
                
-                $('#' + popID).height(370);
+                $('#' + popID).height(300);
                 var popMargTop = ($('#' + popID).height() + 80) / 2;
-                var popMargLeft = ($('#' + popID).width() + 80) / 2;
+                var popMargLeft = (popWidth / 2) + 20; //plus padding
                 
                 $('#' + popID).css({ 
                     'margin-top' : -popMargTop,

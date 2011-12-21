@@ -20,11 +20,6 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             'sourcemap-payments'
         );
 
-        $f = Sourcemap_Form::load('/upgrade');
-        $f->action('upgrade')->method('post');
-
-        $this->template->form = $f;
-
         if(!($user = Auth::instance()->get_user())) {
             $this->request->redirect('auth');
         }

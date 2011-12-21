@@ -285,6 +285,7 @@ Sourcemap.Map.prototype.enableFullscreen = function(){
                     $('#map-container').addClass('fullscreen');
                     $('#sourcemap-dock').find('.control.fullscreen').addClass('active');
                     window.scrollTo(0,0);
+                    this.map.updateSize();
                 }
                 else{
                     // return to inline mode
@@ -293,6 +294,7 @@ Sourcemap.Map.prototype.enableFullscreen = function(){
                     });
                     $('#map-container').removeClass('fullscreen');
                     $('#sourcemap-dock').find('.control.fullscreen').removeClass('active')
+                    this.map.updateSize();
                 }
             }
         }

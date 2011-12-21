@@ -18,6 +18,7 @@ return array(
             'label' => 'Username',
     		'attributes' => array(
     			'maxlength' => 55,
+                'autofocus' => 'autofocus',
     		)
         ),
         'password' => array(

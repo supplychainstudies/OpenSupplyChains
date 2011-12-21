@@ -4,6 +4,7 @@ www/application/config/aws.php
 www/application/config/database.php
 www/application/config/sourcemap.php
 www/application/config/recaptcha.php
+www/application/config/aws.php
 www/application/cache/
 tools/env/dev
 *._*

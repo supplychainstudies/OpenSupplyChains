@@ -367,8 +367,6 @@ Sourcemap.initPasscodeInput = function(popID){
     // Error behavior
     var onError = function(){ window.location = "/view/" + scid + "?private"; }
 
-    //Autofocus on password  
-    $(element).find("input[name='passcode']").focus(); 
     
     // CSS setting of pop up window
     $('#' + popID).height(110);
@@ -397,9 +395,11 @@ Sourcemap.initPasscodeInput = function(popID){
         return false;
     });
 
-    if(Sourcemap.passcode==''){
+    if(Sourcemap.passcode==''||Sourcemap.passcode==undefined){
         $('#' + popID).fadeIn();
         $('#fade').fadeIn(); //Fade in the fade layer 
+        //Autofocus on password  
+        $('#'+popID).find("input[name='passcode']").focus(); 
     } else {
         $(loading).fadeIn();
     }
@@ -446,26 +446,15 @@ Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
             var sc = Sourcemap.factory('tree', data.supplychain);
             sc.editable = data.editable;
             callback.apply(this, [sc]);
+            $('.submit-status').fadeOut();
         },
         error : function(data){
-        }
-    });
-}
-
-Sourcemap.loadSupplychainToTree = function(remote_id, passcode, callback) {
-    // fetch and initialize supplychain
-    var _that = this;
-    var _remote_id = remote_id;
-
-    $.ajax({
-        url:'services/supplychains/'+remote_id,
-        data:{ passcode : passcode },
-        success : function(data) {
-            var sc = Sourcemap.factory('tree', data.supplychain);
-            sc.editable = data.editable;
-            callback.apply(this, [sc]);
-        },
-        error : function(data){
+            $('.submit-status').fadeOut();
+            var error_response = eval('('+data.response+')');
+            $('#popup').fadeIn();
+            $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
+            $('.passcode-input').find("input[name='passcode']").focus();
+            $("#fade").fadeIn();
         }
     });
 }

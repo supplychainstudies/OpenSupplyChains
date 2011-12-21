@@ -32,7 +32,11 @@
         <input type="search"></input>
     </div>
 
-    <div id="banner-owner">
+    <% if (jQuery.fn.('').length() > 0){ %>
+       <div id="banner-owner">
+    <% } else { %> 
+        <div id="banner-owner" style="">
+    <% } %>
         <% var d = new Date(this.sc.modified*1000); %>
         <a href="user/<%= this.sc.owner.name %>"><% if(this.sc.owner.display_name!=undefined){%><%= this.sc.owner.display_name %><%}else{%><%= this.sc.owner.name %><%}%></a><span class="banner-date">&nbsp;&nbsp;<%= _S.ttrunc(_S.fmt_date(d),14) %></span>
     </div>

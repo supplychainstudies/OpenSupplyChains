@@ -13,7 +13,7 @@
 ?>
 
 <script>
-    Sourcemap.passcode_exist = <?= isset($exist_passcode) ? '"'+$exist_passcode+'"' : '0' ?>;
+    Sourcemap.passcode_exist = "<?= isset($exist_passcode) ? $exist_passcode : '0' ?>";
 </script>
 <div id="list-overview">
 	<div class="overview">

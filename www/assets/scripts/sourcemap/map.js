@@ -602,14 +602,50 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     }
     var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
     
+	var ends = Sourcemap.deep_clone(supplychain.stops);
+	for(var i=0; i<supplychain.hops.length; i++) {
+		for(j in ends) {
+			if (ends[j] != undefined) {
+				if (ends[j].instance_id == supplychain.hops[i].from_stop_id) {
+					delete ends[j]; 					
+				}
+			}
+		}
+	}
+	for(j in ends) {
+		if (ends[j] != undefined) {
+			var sw = false;
+			for(var i=0; i<supplychain.hops.length; i++) {
+				
+				if (ends[j].instance_id == supplychain.hops[i].to_stop_id) {
+					console.log(ends[j].instance_id.toString());
+					sw = true;
+					break;					
+				}
+			} 
+			if (sw == false) {
+				delete ends[j]; 
+			}
+		}
+	}
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     var featureList = [];
-    
     for(var i=0; i<supplychain.stops.length; i++) {
         var st = supplychain.stops[i];
         var new_ftr = this.mapStop(st, scid);
-        var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+		var end_switch = false;
+		for (e in ends) {
+			if (st.instance_id == ends[e].instance_id) {
+				end_switch = true;
+				break;
+			}
+		}
+		if (end_switch == true) {
+			var scolor = st.getAttr("color", palette[palette.length-1].toString());
+		} else {
+			var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+		}  
         new_ftr.attributes.tier = tiers[st.instance_id];
         new_ftr.attributes.color = scolor;
         new_ftr.attributes.scolor = scolor;

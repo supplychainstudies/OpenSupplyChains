@@ -41,7 +41,6 @@
     width: 1090px;
     height: 615px;
     margin: 0 auto;
-    padding: 4px;
     background: #fefefe;
     background-image: -moz-linear-gradient(center bottom,rgba(76,97,154,1) 0%,rgba(14,28,65,1) 100%);
     background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,rgba(14,28,65,1)),color-stop(1,rgba(76,97,154,1)));
@@ -49,13 +48,18 @@
 }
 
 #tree {
-    padding: 15px 21px 24px;
+    //padding: 15px 21px 24px;
+    //padding:15px 10px 15px 20px;
+    padding-top:15px;
+    padding-left:28px;
     overflow:hidden;
     #sourcemap-tree-view {
         position:relative;        
         border:4px solid #fff;
-        width: 1040px;
-        height: 570px;
+        //width: 1040px;
+        //height: 570px;
+        min-width:1040px;
+        min-height:570px;
         .rounded(8px);
         overflow:hidden;
     }

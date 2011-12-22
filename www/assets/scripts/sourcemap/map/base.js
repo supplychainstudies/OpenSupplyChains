@@ -119,7 +119,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             
     }, this));
     $(this.map.map.div).css("position", "relative");
-    this.initActiveBox();
+    this.initActiveBox(this.map.map.div);
 
     // TODO: check this update punch
     Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
@@ -212,15 +212,15 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 
 Sourcemap.Map.Base.prototype.initActiveBox = function(mapDiv) {
     // The active box is the area that prevents the controls from sliding back into view.
+    // We can also use it for positioning the dialog within the embed window.
     
     var size = this.map.getPaddedSize();
     var activeBox = $('<div id="activeBox"></div>').css({
         'height' : size.h,
-        'width' : $(mapDiv).width() 
-    });
+        'width' : $(mapDiv).width()
+        });
     $(mapDiv).prepend(activeBox);
 }
-
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     this.banner_div = $(this.map.map.div).find('#banner').length ? 

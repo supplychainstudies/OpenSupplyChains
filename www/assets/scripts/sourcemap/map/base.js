@@ -425,23 +425,48 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			var h = 0;
+			var h = this.base.map.activeArea.h -55;
+			// First, find out how much height is already occupied 
+			$(this.base.dialog_content).find('.placename').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			$(this.base.dialog_content).find('.title').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			$(this.base.dialog_content).find('.accordion-title').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			console.log(h);
+			// Each accordion body can be the size of the leftover space
 			$(this.base.dialog_content).find('.accordion-body').each(function() {
-				h += parseInt($(this).css('height').replace('px',''));
-			});			
-			if (h > 170) {
-    			$(this.base.dialog_content).find('.accordion-body').hide();
-				// if theres a movie, show it
-				if ($(this.base.dialog_content).find('#dialog-media').length >= 0) {
-					$(this.base.dialog_content).find('#dialog-media').prev().find('.arrow').addClass("arrowopen");
-					$(this.base.dialog_content).find('#dialog-media').show();
-				} else {
-					// if not, show the description
-					if ($(this.base.dialog_content).find('#dialog-description').length >= 0) {
-						$(this.base.dialog_content).find('#dialog-media').prev().find('.arrow').addClass("arrowopen");
-						$(this.base.dialog_content).find('#dialog-description').show();
-					}
+				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
+				if (thissize > h) {	
+					var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
+					$(this).css('height',newsize+"px");
+					$(this).css('overflow',"auto");
 				}
+			});
+			
+			$(this.base.dialog_content).find('#dialog-media').each(function() {
+				if (this.base.map.activeArea.h- parseInt(this.base.dialog_content.css("height").replace("px","")) > parseInt($(this).css('h').replace('px',""))) {
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+			$(this.base.dialog_content).find('#dialog-description').each(function() {
+				if (this.base.map.activeArea.h- parseInt(this.base.dialog_content.css("height").replace("px","")) > parseInt($(this).css('h').replace('px',""))) {
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+			$(this.base.dialog_content).find('#dialog-footprint').each(function() {
+				if (this.base.map.activeArea.h- parseInt(this.base.dialog_content.css("height").replace("px","")) > parseInt($(this).css('h').replace('px',""))) {
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+
+			
 				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
 					var open = $(this).next().is(":visible");
 					
@@ -459,9 +484,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 					}				
 					return false;
 				});
-			} else {
-				$(this.base.dialog_content).find('.arrow').addClass("arrowopen");
-			}
 
             // Sets up zoom on click
             $(this.base.dialog_content).find('.dot')

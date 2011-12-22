@@ -99,7 +99,6 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                         $arr = $comment->as_array();
                         $arr['username'] = $comment->user->username;
                         $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
-                        //$arr['avatar'] = Gravatar::avatar($comment->user->email, 32);
                         $comment_data[] = (object)$arr;
                     }
                     $comment_data = array_reverse($comment_data);
@@ -169,7 +168,6 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     $arr = $comment->as_array();
                     $arr['username'] = $comment->user->username;
                     $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
-                    //$arr['avatar'] = Gravatar::avatar($comment->user->email);
                     $comment_data[] = (object)$arr;
                 }
                 $this->template->comments = $comment_data;

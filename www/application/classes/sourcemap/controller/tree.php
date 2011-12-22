@@ -100,7 +100,7 @@ class Sourcemap_Controller_Tree extends Sourcemap_Controller_Layout {
                 foreach($c as $i => $comment) {
                     $arr = $comment->as_array();
                     $arr['username'] = $comment->user->username;
-                    $arr['avatar'] = Gravatar::avatar($comment->user->email, 32);
+                    $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
                     $comment_data[] = (object)$arr;
                 }
                 $this->template->comments = $comment_data;

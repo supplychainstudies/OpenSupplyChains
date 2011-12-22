@@ -80,6 +80,8 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
+    this.setActiveArea();
+    this.map.activeStatus = false;
     
     Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
     	this.toggleTileset(sc);
@@ -202,15 +204,30 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
-   
+  
+    /* disabled until we decide on show/hide behavior
     this.map.map.events.register("mousemove", this.map.map.events, $.proxy(function(e) {
+        var activeStatus = false;
         if (e.offsetY < this.map.activeArea.top || e.offsetY > (this.map.activeArea.bottom + this.map.activeArea.h)){
-            this.stopControlTimer();
+            var activeStatus = false;
         } else {
+            var activeStatus = true;
             this.stopControlTimer();
             this.startControlTimer();
         }
+
+        // Check if active status has changed
+        if (activeStatus != this.map.activeStatus){
+            if (activeStatus == true){
+                this.enableControlTimer();
+            } else {
+                this.showControls();
+                this.disableControlTimer();
+            }
+            this.map.activeStatus = activeStatus;
+        }
     }, this));
+    */
     
 }
 
@@ -298,28 +315,54 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
     return this;
 }
 
-Sourcemap.Map.Base.prototype.toggleControls = function(){
-    // include all elements that should be toggled
+Sourcemap.Map.Base.prototype.getControls = function(){
+    // return a list of "controls" that should be hidden
     var controls = [
         $('#banner'),
         $('#sourcemap-dock'),
-        $('#sourcemap-legend')
+        $('#sourcemap-gradient')
     ];
+    return controls;
+}
 
-    $(controls).each(function(){
+Sourcemap.Map.Base.prototype.toggleControls = function(){
+    // include all elements that should be toggled
+    $(this.getControls()).each(function(){
         $(this).fadeToggle();
-        console.log($(this));
+    });
+}
+
+Sourcemap.Map.Base.prototype.showControls = function(){
+    $(this.getControls()).each(function(){
+        $(this).fadeIn();
+    });
+}
+
+Sourcemap.Map.Base.prototype.hideControls = function(){
+    $(this.getControls()).each(function(){
+        $(this).fadeOut();
     });
 }
 
 Sourcemap.Map.Base.prototype.startControlTimer = function(){
-//    this.controlTimer = window.setTimeout($.proxy(function() {
-//        this.toggleControls();
-//    }, this),500);
+    if (this.controlTimerEnabled){
+        this.controlTimer = window.setTimeout($.proxy(function() {
+            this.hideControls();
+        }, this),1000);
+    }
 }
 
 Sourcemap.Map.Base.prototype.stopControlTimer = function(){
-//    clearTimeout(this.controlTimer);
+    clearTimeout(this.controlTimer);
+}
+
+Sourcemap.Map.Base.prototype.disableControlTimer = function(){
+    this.stopControlTimer();
+    this.controlTimerEnabled = false;
+}
+
+Sourcemap.Map.Base.prototype.enableControlTimer = function(){
+    this.controlTimerEnabled = true;
 }
 
 Sourcemap.Map.Base.prototype.initDialog = function() {   

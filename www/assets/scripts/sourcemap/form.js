@@ -104,7 +104,6 @@ function loadAjaxForms(){
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
         $(this).attr('disabled', '');
 
-        console.log($(this));
         form = $(this).parent();
         submitStatus = $(form).find('.submit-status');
 

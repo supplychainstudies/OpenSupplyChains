@@ -214,7 +214,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.TERRAIN,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 2, "maxZoomLevel": 17,
+        "minZoomLevel": 1, "maxZoomLevel": 17,
         "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
@@ -223,14 +223,13 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.SATELLITE,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 2, "maxZoomLevel": 17,
+        "minZoomLevel": 1, "maxZoomLevel": 17,
         "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 44909,
-        "resolutions": this.defaults.resolutions,
         "minZoomLevel": 1, "maxZoomLevel": 12
     }));
     
@@ -426,6 +425,8 @@ Sourcemap.Map.prototype.initControls = function() {
             })
         );
 
+
+
         // wrap select control select method to look for features
         // after map redraw...
 
@@ -489,7 +490,9 @@ Sourcemap.Map.prototype.initControls = function() {
             map.controls.select.setLayer(layers);
         });
         this.controls.select.activate();
+
     }
+    // end layer.length
     $(document).one('map:layer_added', function(e, map, label, layer) {
         if(!map.controls.select) { map.initControls(); }
     });
@@ -643,7 +646,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
 			for(var i=0; i<supplychain.hops.length; i++) {
 				
 				if (ends[j].instance_id == supplychain.hops[i].to_stop_id) {
-					console.log(ends[j].instance_id.toString());
 					sw = true;
 					break;					
 				}
@@ -708,7 +710,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     var gradient = $(this.map.div.extras).find('#sourcemap-gradient');
     if ($(gradient).length == 0) { // if gradient legend not exist
         if(!max_plen){
-            //console.log('both empty do nothing');
         }else{                      // add gradient to map
             var gradient = $('<div id="sourcemap-gradient"></div>');
             if(this.map.baseLayer.name)
@@ -717,7 +718,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
         }
     } else {
         if(max_plen){ // if exist
-            //console.log('both occur check baseLayer name');
             if(!gradient.hasClass(this.map.baseLayer.name)) {// if map tileset is different
                 gradient.removeClass(gradient.attr("class"));
                 gradient.addClass(this.map.baseLayer.name);
@@ -1161,7 +1161,6 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
     //if there's only one stop on the map, let's zoom to the minimum level
     //if (oneStop() == true){
     //    this.map.setCenter(center, this.map.minZoomLevel+1);
-    //    console.log("One stop");
     //}
     //else{
         if (this.map.baseLayer.wrapDateLine) {
@@ -1261,7 +1260,6 @@ Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
 
 
         var zoomFromReso = Math.max(this.map.minZoomLevel, zoom);
-        //console.log("zoom:"+zoom+"/minZoom:"+this.map.minZoomLevel+"/zoomFromReso:"+zoomFromReso);
         return zoomFromReso;
         //return Math.max(this.map.minZoomLevel, zoom);
 }

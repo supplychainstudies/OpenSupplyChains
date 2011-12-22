@@ -38,8 +38,14 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             $this->template->can_import = false; 
         }
         $this->template->create_form = $f;
-    	$this->template->user_supplychains = ORM::factory('supplychain')
-            ->where('user_id', '=', Auth::instance()->get_user()->id)->find_all();
+        
+        $scs = array();
+        $user = Auth::instance()->get_user();
+        foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {
+            $scs[] = $sc->kitchen_sink($sc->id);
+        }
+
+    	$this->template->user_supplychains = $scs; 
 
         if(strtolower(Request::$method) === 'post') {
             if($f->validate($_POST)) {

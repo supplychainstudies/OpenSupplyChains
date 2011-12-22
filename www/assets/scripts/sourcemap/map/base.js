@@ -224,7 +224,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
                 this.showControls();
                 this.disableControlTimer();
             }
-            console.log('changed');
             this.map.activeStatus = activeStatus;
         }
     }, this));
@@ -331,21 +330,18 @@ Sourcemap.Map.Base.prototype.toggleControls = function(){
     $(this.getControls()).each(function(){
         $(this).fadeToggle();
     });
-    console.log('toggle');
 }
 
 Sourcemap.Map.Base.prototype.showControls = function(){
     $(this.getControls()).each(function(){
         $(this).fadeIn();
     });
-    console.log('in');
 }
 
 Sourcemap.Map.Base.prototype.hideControls = function(){
     $(this.getControls()).each(function(){
         $(this).fadeOut();
     });
-    console.log('out');
 }
 
 Sourcemap.Map.Base.prototype.startControlTimer = function(){

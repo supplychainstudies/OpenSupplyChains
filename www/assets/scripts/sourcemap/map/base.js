@@ -119,7 +119,6 @@ Sourcemap.Map.Base.prototype.initMap = function() {
             
     }, this));
     $(this.map.map.div).css("position", "relative");
-    this.initActiveBox(this.map.map.div);
 
     // TODO: check this update punch
     Sourcemap.listen('map-base-calc-update', $.proxy(function(evt, metric, value) {
@@ -136,15 +135,6 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     	
     }, this));
         
-    // make banner go away after a few seconds of inactivity
-    $(this.map.map.div).mouseover($.proxy(function(e) { 
-        this.stopControlTimer();
-        
-    }, this));
-    $(this.map.map.div).mouseout($.proxy(function() { 
-        this.startControlTimer();
-    }, this));
-
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -203,23 +193,42 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.hideDialog();
     }, this));
+    
+    this.map.map.events.register("moveend", this.map.map, $.proxy(function(e) {
+        // I would prefer to use "resize" here, but it doesn't work.
+        this.setActiveArea();
+    }, this));
 
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
+   
+    this.map.map.events.register("mousemove", this.map.map.events, $.proxy(function(e) {
+        if (e.offsetY < this.map.activeArea.top || e.offsetY > (this.map.activeArea.bottom + this.map.activeArea.h)){
+            this.stopControlTimer();
+        } else {
+            this.stopControlTimer();
+            this.startControlTimer();
+        }
+    }, this));
     
 }
 
-Sourcemap.Map.Base.prototype.initActiveBox = function(mapDiv) {
-    // The active box is the area that prevents the controls from sliding back into view.
-    // We can also use it for positioning the dialog within the embed window.
+Sourcemap.Map.Base.prototype.setActiveArea = function(){
+    // The active area is the part of the viewport that isn't covered by menus. 
     
-    var size = this.map.getPaddedSize();
-    var activeBox = $('<div id="activeBox"></div>').css({
-        'height' : size.h,
-        'width' : $(mapDiv).width()
-        });
-    $(mapDiv).prepend(activeBox);
+    var topOffset = $('#banner').height();
+    var bottomOffset = $('#sourcemap-dock').height();
+
+    var wholeArea = this.map.map.getSize();
+    var activeArea = {
+        'h': wholeArea.h - topOffset - bottomOffset,
+        'w': wholeArea.w,
+        'top': topOffset + 20,
+        'bottom': bottomOffset + 20 
+    }
+   
+    this.map.activeArea = activeArea;
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
@@ -291,17 +300,26 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 
 Sourcemap.Map.Base.prototype.toggleControls = function(){
     // include all elements that should be toggled
-    var controls
+    var controls = [
+        $('#banner'),
+        $('#sourcemap-dock'),
+        $('#sourcemap-legend')
+    ];
+
+    $(controls).each(function(){
+        $(this).fadeToggle();
+        console.log($(this));
+    });
 }
 
 Sourcemap.Map.Base.prototype.startControlTimer = function(){
-    this.controlTimer = window.setTimeout($.proxy(function() {
-        // timer finished
-    }, this),500);
+//    this.controlTimer = window.setTimeout($.proxy(function() {
+//        this.toggleControls();
+//    }, this),500);
 }
 
 Sourcemap.Map.Base.prototype.stopControlTimer = function(){
-    clearTimeout(this.controlTimer);
+//    clearTimeout(this.controlTimer);
 }
 
 Sourcemap.Map.Base.prototype.initDialog = function() {   

@@ -52,7 +52,25 @@
 */
 
 $(document).ready(function() {
-
+	
+   $('[name="file_front"]').click(function() {
+        $('[name="file"]').click();
+    });	
+   $('[name="file"]').change(function() {
+		var filename = $('[name="file"]').val();
+		var parts = filename.split("\\");
+		var filetype = parts[parts.length-1].split(".");
+		if (filetype[filetype.length-1] == "xls") {
+			$('[name="file_front"]').val(parts[parts.length-1]);
+			$('.sourcemap-form form').attr('action','/tools/import/xls');
+			$('.sourcemap-form form').append($('[name="file"]'));
+		} else {
+			$('[name="file_front"]').val("Not supported...");
+			$('.sourcemap-form form').attr('action','/create');
+			$('[name="file"]').val("");
+		}
+        
+    });
    $('#form-description').before('<div id="desc-counter"></div>');
    $('.sourcemap-form textarea').keyup(function() {
         var maxlength = $(this).attr('maxlength');

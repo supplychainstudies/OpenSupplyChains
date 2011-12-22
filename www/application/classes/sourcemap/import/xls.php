@@ -57,7 +57,8 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		
 		$stops = array();
 		$hops = array();
-		$maxrows;
+		$maxrows = 10000;
+		$maxrowcount = 1;
 		$count = 1;
 		foreach($sheets as $sheetname=>$sheet) {
 			// Figure out where all the columns are

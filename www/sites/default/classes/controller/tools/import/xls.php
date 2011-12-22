@@ -35,6 +35,9 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
         );
         if(strtolower(Request::$method) === 'post') {
             $posted = (object)array_merge($_POST, Sourcemap_Upload::get_uploads());
+			if(isset($posted->file)) {
+				$posted->xls_file = $posted->file;
+			}
             if(isset($posted->xls_file) && $posted->xls_file instanceof Sourcemap_Upload && $posted->xls_file->ok()) {
                 $xls = $posted->xls_file->get_contents();
                 try {
@@ -81,7 +84,7 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
                 else
                     return $this->_internal_server_error('Could not save.');
             } else {
-                return $this->_bad_request('Stop file required.');
+                //return $this->_bad_request('Stop file required.');
             }
         } else {
             $this->template->user_supplychains = ORM::factory('supplychain')

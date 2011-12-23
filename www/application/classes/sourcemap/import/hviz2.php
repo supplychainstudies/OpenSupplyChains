@@ -640,15 +640,13 @@ class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
 		}
 		
 		$description = "";
-		/*
+		
 		if (isset($maxvarort) == true) {
 			$description = '\<div style="width:10px;height:10px;background-color:#ff0000;"\>&nbsp;\</div\>' . 'Over ' . $maxvarort . '\<br /\>';
 			$description .= '\<div style="width:10px;height:10px;background-color:#ffc000;"\>&nbsp;\</div\>' . 'Between ' . $maxvarort . " and ". ($maxvarort/2) . '<br /\>';
 			$description .= '\<div style="width:10px;height:10px;background-color:#ffff00;"\>&nbsp;\</div\>' . 'Between ' . $maxvarort/2 . " and ". ($maxvarort/4) . '<br /\>';
 			$description .= '\<div style="width:10px;height:10px;background-color:#92d050;"\>&nbsp;\</div\>' . 'Under ' . ($maxvarort/4) . '\<br /\>';
 		}
-		*/
-		/*
 		if (isset($maxvarort) == true) {
 			$description = 'Red is over ' . floor($maxvarort). ". ";
 			$description .= 'Orange is between ' . floor($maxvarort) . " and ". floor($maxvarort/2) . '. ';
@@ -656,7 +654,7 @@ class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
 			$description .= 'Green is under ' . floor($maxvarort/4) . '. ';
 			$description .= 'Blue do not have VARORT values. ';
 		}
-		*/
+		
 		/*
 		
 		
@@ -721,13 +719,13 @@ class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
 		$hopswriter->getActiveSheet()->setCellValue("A1", 'From');
 		$hopswriter->getActiveSheet()->setCellValue("B1", 'To');
 		$hopswriter->getActiveSheet()->setCellValue("C1", 'Description');
-		//$hopswriter->getActiveSheet()->setCellValue("D1", 'Color');
+		$hopswriter->getActiveSheet()->setCellValue("D1", 'Color');
 		$count = 2;
 		foreach ($hops as $num=>$hop) {
 			$hopswriter->getActiveSheet()->setCellValue("A".($count), trim($hop['From']));
 			$hopswriter->getActiveSheet()->setCellValue("B".($count), trim($hop['To']));
 			$hopswriter->getActiveSheet()->setCellValue("C".($count), trim($hop['Description']));
-			//$hopswriter->getActiveSheet()->setCellValue("D".($count), trim($hop['color']));
+			$hopswriter->getActiveSheet()->setCellValue("D".($count), trim($hop['color']));
 			$count++;
 		} 
 		$sWriter = new PHPExcel_Writer_CSVContents($stopswriter);

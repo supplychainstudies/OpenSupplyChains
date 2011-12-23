@@ -214,7 +214,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.TERRAIN,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 2, "maxZoomLevel": 17,
+        "minZoomLevel": 1, "maxZoomLevel": 17,
         "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
@@ -223,14 +223,14 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.SATELLITE,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 2, "maxZoomLevel": 17,
+        "minZoomLevel": 1, "maxZoomLevel": 17,
         "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 44909,
-        "resolutions": this.defaults.resolutions,
+        //"resolutions": this.defaults.resolutions,
         "minZoomLevel": 1, "maxZoomLevel": 12
     }));
     

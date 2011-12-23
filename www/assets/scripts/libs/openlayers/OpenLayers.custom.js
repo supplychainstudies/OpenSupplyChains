@@ -10422,7 +10422,7 @@ OpenLayers.Map = OpenLayers.Class({
     isValidZoomLevel: function(zoomLevel) {
         return ( (zoomLevel != null) &&
                  (zoomLevel >= this.getRestrictedMinZoom()) && 
-                 (zoomLevel < this.getNumZoomLevels()) );
+                 (zoomLevel <= this.getNumZoomLevels()) );
     },
     
     /** 

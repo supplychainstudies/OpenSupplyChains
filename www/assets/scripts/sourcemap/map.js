@@ -214,7 +214,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.TERRAIN,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 1, "maxZoomLevel": 17,
+        "minZoomLevel": 2, "maxZoomLevel": 17,
         "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
@@ -223,13 +223,14 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.SATELLITE,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 1, "maxZoomLevel": 17,
+        "minZoomLevel": 2, "maxZoomLevel": 17,
         "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 44909,
+        "resolutions": this.defaults.resolutions,
         "minZoomLevel": 1, "maxZoomLevel": 12
     }));
     
@@ -425,8 +426,6 @@ Sourcemap.Map.prototype.initControls = function() {
             })
         );
 
-
-
         // wrap select control select method to look for features
         // after map redraw...
 
@@ -490,9 +489,7 @@ Sourcemap.Map.prototype.initControls = function() {
             map.controls.select.setLayer(layers);
         });
         this.controls.select.activate();
-
     }
-    // end layer.length
     $(document).one('map:layer_added', function(e, map, label, layer) {
         if(!map.controls.select) { map.initControls(); }
     });

@@ -16,7 +16,7 @@
 <div class="accordion">
 <% if(this.hop.getAttr("description", false) && this.hop.getAttr("description").length > 1) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>
-    <div class="description accordion-body"><%= _S.htesc(this.hop.getAttr("description")) %></div>
+    <div id="dialog-description" class="accordion-body"><%= _S.htesc(this.hop.getAttr("description")) %></div>
 <% } %>
 
 <% if(this.hop.getAttr("url:moreinfo", false)) { %>

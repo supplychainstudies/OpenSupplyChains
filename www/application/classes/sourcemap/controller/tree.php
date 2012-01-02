@@ -34,7 +34,9 @@ class Sourcemap_Controller_Tree extends Sourcemap_Controller_Layout {
         if($supplychain->loaded()) {
             $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
             $owner_id = (int)$supplychain->user_id;
-            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
+			$hviz_role = ORM::factory('role')->where('name', '=', 'hviz')->find();
+	        $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
+            if($supplychain->user_can($current_user_id, Sourcemap::READ) && ($current_user->has('roles', $admin_role) || $current_user->has('roles', $hviz_role))) {
 
                 //redirect mobile users to mobile template
                 if (Request::user_agent('mobile')){

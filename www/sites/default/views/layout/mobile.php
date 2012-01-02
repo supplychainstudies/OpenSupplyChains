@@ -24,24 +24,26 @@
     <meta name="description" content="The open directory of supply chains and carbon footprints" /> 
     <meta name="keywords" content="carbon footprint, supply chain, life-cycle assessment, transparency, traceability, sustainable, green products" />
     <meta name="author" content="The Sourcemap Team">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
     <meta http-equiv="content-language" content="en-us">
     
+    <!--
     <meta name="viewport" content="initial-scale=1.2, maximum-scale=1.2, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    -->
 
     <script>
         // Get rid of address bar on iphone/ipod
         var fixSize = function() {
-            window.scrollTo(0, 0);
             document.body.style.height = '100%';
             if (!(/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()))) {
                 if (document.body.parentNode) {
                     document.body.parentNode.style.height = '100%';
                 }
             }
+            window.scrollTo(0, 0);
         };
         setTimeout(fixSize, 700);
         setTimeout(fixSize, 1500);

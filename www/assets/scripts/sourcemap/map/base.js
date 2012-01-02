@@ -479,7 +479,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			$(this.base.dialog_content).find('.accordion-title').each(function() {
 				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
 			});
-			console.log(h);
 			// Each accordion body can be the size of the leftover space
 			$(this.base.dialog_content).find('.accordion-body').each(function() {
 				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
@@ -490,24 +489,30 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 				}
 			});
 			
-			$(this.base.dialog_content).find('#dialog-media').each(function() {
-				if (this.base.map.activeArea.h- parseInt(this.base.dialog_content.css("height").replace("px","")) > parseInt($(this).css('h').replace('px',""))) {
+			$(this.base.dialog_content).find('#dialog-media').each($.proxy(function(newbase) {
+				console.log(this);				
+				if ((this.newbase.base.map.activeArea.h- parseInt(this.newbase.base.dialog_content.css("height").replace("px",""))) > (parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',"")))) {
 					$(this).prev().find('.arrow').addClass("arrowopen");
 					$(this).show();
 				}					
-			});
-			$(this.base.dialog_content).find('#dialog-description').each(function() {
-				if (this.base.map.activeArea.h- parseInt(this.base.dialog_content.css("height").replace("px","")) > parseInt($(this).css('h').replace('px',""))) {
+			},{"newbase":this}));
+			
+			console.log("next");
+			$(this.base.dialog_content).find('#dialog-description').each($.proxy(function(newbase) {
+				
+				console.log((this.newbase.base.map.activeArea.h- parseInt(this.newbase.base.dialog_content.css("height").replace("px",""))));
+				console.log((parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""))))
+				if ((this.newbase.base.map.activeArea.h- parseInt(this.newbase.base.dialog_content.css("height").replace("px",""))) > (parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',"")))) {
 					$(this).prev().find('.arrow').addClass("arrowopen");
 					$(this).show();
 				}					
-			});
-			$(this.base.dialog_content).find('#dialog-footprint').each(function() {
-				if (this.base.map.activeArea.h- parseInt(this.base.dialog_content.css("height").replace("px","")) > parseInt($(this).css('h').replace('px',""))) {
+			},{"newbase":this}));
+			$(this.base.dialog_content).find('#dialog-footprint').each($.proxy(function(newbase) {
+				if ((this.newbase.base.map.activeArea.h- parseInt(this.newbase.base.dialog_content.css("height").replace("px",""))) > (parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',"")))) {
 					$(this).prev().find('.arrow').addClass("arrowopen");
 					$(this).show();
 				}					
-			});
+			},{"newbase":this}));
 
 			
 				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {

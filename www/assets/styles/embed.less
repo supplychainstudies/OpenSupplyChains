@@ -90,7 +90,7 @@ body.zoom {
 	    }    
 	}
     // end dialog  
-    .olControlAttribution {
+    .olControlAttribution,.olLayerGooglePoweredBy, .olLayerGoogleCopyright {
             zoom:@z; -moz-transform: scale(@z);
     }
 }
@@ -109,9 +109,26 @@ body.mobilezoom {
             }
         }
     }
-	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
-    .olControlAttribution {
-            zoom:@z; -moz-transform: scale(@z);
+	#extras { 
+        zoom: @z; -moz-transform: scale(@z); 
+        bottom:15px;
+    }
+
+    .olControlAttribution ,.olLayerGooglePoweredBy, .olLayerGoogleCopyright{
+        zoom:@z; -moz-transform: scale(@z);
+    }
+    .olControlAttribution {bottom: -5px !important;}
+
+    #watermark {
+        &.satellite,&.terrain{
+            left:70px;
+            bottom:-10px;
+        }
+    }
+    #sourcemap-gradient{
+        &.satellite,&.terrain{
+            bottom:25px;left:0px;
+        }
     }
 }
 
@@ -140,7 +157,8 @@ body.vertical{
 	    }    
 	}
     // end dialog  
-} // end horizontal
+} // end vertical
+
 body.horizontal{
     @z : .5;
 	#dialog {

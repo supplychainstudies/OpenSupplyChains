@@ -29,7 +29,6 @@ $(document).ready(function() {
 		    	if(parseInt($(window).height()) > 480 && parseInt($(window).width()) > 640) {
 		    		$("body").removeClass("mobilezoom");
                     $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
-                    console.log("window resize big");
 		    	}
 		    	else {
 		    		$("body").addClass("mobilezoom");			
@@ -48,7 +47,6 @@ $(document).ready(function() {
                     if(!isiOS){
                         $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
                     }
-                    console.log("window resize small");
 		    	}
 		      	//$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
 		    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center

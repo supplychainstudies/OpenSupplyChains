@@ -19,7 +19,7 @@
         <?php
         $pages = Blognews::fetchindex();
         foreach($pages as $page){
-            print '<li><a href="wp/' . $page->slug . '">' . $page->title . '</a></li>';
+            print '<li><a href="info/' . $page->slug . '">' . $page->title . '</a></li>';
         } 
         ?>
     	<li><a href="info/privacy">Privacy Policy</a></li>

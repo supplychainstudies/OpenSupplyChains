@@ -13,7 +13,9 @@
 /* EMBED STYLES  -------------------------------------------------------------- */ 
 @import "sourcemap";
 
-html { overflow:hidden } /* Ideal embed width/height right now is no less than 640 by 480 */
+html { 
+    //overflow:hidden;
+} /* Ideal embed width/height right now is no less than 640 by 480 */
 
 body#embedded-supplychain {
     width: 100%; height:100%;
@@ -49,7 +51,22 @@ body.zoom {
         .banner-date{
             display:none;
         }
+        #banner-content{
+            .banner-map-search{
+                input{
+                    margin-top:5px;
+                }
+            }
+        }
     }
+	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
+    .olControlAttribution {
+            zoom:@z; -moz-transform: scale(@z);
+    }
+}
+
+body.horizontal{
+    @z : .5;
 	#dialog {
 	    top:45px;
 	    width:360px;
@@ -73,9 +90,12 @@ body.zoom {
 			.dot {
 				zoom: @z; -moz-transform: scale(@z);    
 			}
+            .close {
+				zoom: @z; -moz-transform: scale(@z);    
+			}
 	    }    
 	}
-	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
+    // end dialog  
 }
 
 .static-embed {

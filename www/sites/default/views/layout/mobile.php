@@ -36,8 +36,9 @@
 
     <script>
         // Get rid of address bar on iphone/ipod
+        /*
         var fixSize = function() {
-            document.body.style.height = '100%';
+            //document.body.style.height = '100%';
             if (!(/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()))) {
                 if (document.body.parentNode) {
                     document.body.parentNode.style.height = '100%';
@@ -47,6 +48,7 @@
         };
         setTimeout(fixSize, 700);
         setTimeout(fixSize, 1500);
+        */
     </script>
 
 

@@ -54,7 +54,7 @@ $(document).ready(function() {
                 // iOS hide address bar 
                 setTimeout(function(){
                     if(window.pageYOffset !== 0) return;
-                    window.scrollTo(0,0);
+                    window.scrollTo(0,window.pageYOffset + 1);
                 },100);
 		    });
 

@@ -130,6 +130,26 @@ body.mobilezoom {
             bottom:25px;left:0px;
         }
     }
+	#dialog {
+	    #dialog-content {
+	        h2.title { 
+                &.hop {
+                    background:url("../images/chevron.png") 0 6px no-repeat;
+                    background-size:1em;
+                }
+            }
+        }
+        div.close{
+            top:4px !important;
+            background-size:1.2em;
+        }
+        .dot {
+            top:4px !important;
+            height:1em;
+            width:1em;
+            //zoom: @z; -moz-transform: scale(@z);    
+        }
+    }
 }
 
 body.vertical{
@@ -138,7 +158,9 @@ body.vertical{
 	    top:45px;
 	    width:250px;
 	    #dialog-content {
-	        h2.title { font-size: 14px; }
+	        h2.title { 
+                font-size: 14px; 
+            }
 	        h3.placename { font-size:12px; }
 	        div.description { font-size:12px; }
 	        .url { font-size:12px; }
@@ -152,8 +174,6 @@ body.vertical{
 	            zoom: @z; -moz-transform: scale(@z);    
 	            overflow:hidden !important;
 	        }
-			.dot { zoom: @z; -moz-transform: scale(@z);}
-            .close {zoom: @z; -moz-transform: scale(@z);} 
 	    }    
 	}
     // end dialog  
@@ -179,8 +199,6 @@ body.horizontal{
 	            zoom: @z; -moz-transform: scale(@z);    
 	            overflow:hidden !important;
 	        }
-			.dot { zoom: @z; -moz-transform: scale(@z);}
-            .close {zoom: @z; -moz-transform: scale(@z);} 
 	    }    
 	}
     // end dialog  

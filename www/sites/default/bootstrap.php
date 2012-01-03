@@ -108,3 +108,5 @@ Route::set('wp', 'wp/<id>')
         'action' => 'index'
     )
 );
+
+//Sourcemap::register_plugin('hello');

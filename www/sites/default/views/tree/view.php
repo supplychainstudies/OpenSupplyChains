@@ -16,13 +16,11 @@
 <script>
     Sourcemap.passcode_exist = "<?= isset($exist_passcode) ? $exist_passcode : '0' ?>";
 </script>
-
 <div id="tree-container">    
     <div id="tree">
         <div id="sourcemap-tree-view"></div>
     </div>    
 </div>
-
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
         <div class="container">

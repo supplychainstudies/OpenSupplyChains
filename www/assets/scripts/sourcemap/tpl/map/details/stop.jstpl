@@ -20,7 +20,7 @@
 <div class="accordion">
 <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1 || this.stop.getAttr("url:moreinfo", false)) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>
-	<div class="description accordion-body">
+	<div id="dialog-description" class="accordion-body">
 <% if(this.stop.getAttr("description", false) && this.stop.getAttr("description").length > 1) { %>
 <%= _S.htesc(this.stop.getAttr("description")) %>
 <% } %>

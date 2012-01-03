@@ -46,6 +46,8 @@ class Sourcemap {
 
     public static $job_queue = null;
 
+    public static $plugins = null;
+
     public static function init() {
         if(isset(Kohana::$environment))
             self::$env = Kohana::$environment;
@@ -61,6 +63,17 @@ class Sourcemap {
         Sourcemap_CSS::$convert_less = self::$env == self::DEV ? false : true;
         // Use db for session storage
         Session::$default = 'database';
+        self::$plugins = array();
+    }
+
+    public static function shutdown() {
+        foreach(self::$plugins as $nm => $p) {
+            try {
+                $p->shutdown();
+            } catch(Exception $e) {
+                // log this?
+            }
+        }
     }
 
     public static function environment() {
@@ -123,6 +136,10 @@ class Sourcemap {
         return $site;
     }
 
+    public static function site_path() {
+        return self::sites_path().self::site().DIRECTORY_SEPARATOR;
+    }
+
     public static function enqueue($type, $params=null) {
         if(Kohana::config('sourcemap.job_queue')) {
             if(!self::$job_queue) {
@@ -139,5 +156,80 @@ class Sourcemap {
 
     public static function fmt_date($t) {
         return date('%M %j, %Y', $t);
+    }
+
+    public static function plugin_paths() {
+        static $plugin_paths;
+        if(!$plugin_paths) {
+            $plugin_paths = array();
+            if(is_dir(self::site_path().'plugins'.DIRECTORY_SEPARATOR)) {
+                $plugin_paths[] = self::site_path().'plugins'.DIRECTORY_SEPARATOR;
+            }
+            if(is_dir(APPPATH.'plugins'.DIRECTORY_SEPARATOR)) {
+                $plugin_paths[] = APPPATH.'plugins'.DIRECTORY_SEPARATOR;
+            }
+        }
+        return $plugin_paths;
+    }
+
+    public static function plugins_avail() {
+        static $plugins;
+        if(!$plugins) {
+            if($plugins = Kohana::config('sourcemap.plugins')) {
+                // pass
+            } else {
+                $plugins = array();
+                $paths = self::plugin_paths();
+                foreach($paths as $pi => $path) {
+                    $sdir = dir($path);
+                    while(false !== ($f = $sdir->read())) {
+                        if(substr($f, 0, 1) != '.' && is_dir($path.$f))
+                            $plugins[$f] = $path.$f.DIRECTORY_SEPARATOR;
+                    }
+                }
+            }
+        }
+        return $plugins;
+    }
+
+    public static function register_plugin($plugin_name) {
+        $avail = self::plugins_avail();
+        if(isset($avail[$plugin_name])) {
+            if(isset(self::$plugins[$plugin_name])) {
+                // pass?
+            } else {
+                $plugin_path = $avail[$plugin_name];
+                $plugin = new Sourcemap_Plugin($plugin_name, $plugin_path);
+                self::$plugins[$plugin_name] = $plugin;
+                Kohana::add_include_path($plugin->path);
+                $bootstrap_path = "$plugin_path/bootstrap.php";
+                if(file_exists($bootstrap_path)) {
+                    include($bootstrap_path);
+                }
+            }
+        }
+        return;
+    }
+
+    public static function unregister_plugin($plugin_name) {
+        if(isset(self::$plugins[$plugin_name])) {
+            $plugin = self::$plugins[$plugin_name];
+            $teardown_path = "{$plugin->path}/teardown.php";
+            if(file_exists($teardown_path)) {
+                include($teardown_path);
+            }
+            unset(self::$plugins[$plugin_name]);
+            Kohana::remove_include_path($plugin->path);
+            unset($plugin);
+        }
+        return;
+    }
+
+    public static function get_plugin($plugin_name) {
+        $plugin = null;
+        if(isset(self::$plugins[$plugin_name])) {
+            $plugin = self::$plugins[$plugin_name];
+        }
+        return $plugin;
     }
 }

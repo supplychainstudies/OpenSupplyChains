@@ -52,7 +52,10 @@ $(document).ready(function() {
 		    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
                 
                 // iOS hide address bar 
-                setTimeout(function(){window.scrollTo(0,0);},100);
+                setTimeout(function(){
+                    if(window.pageYOffset !== 0) return;
+                    window.scrollTo(0,0);
+                },100);
 		    });
 
 

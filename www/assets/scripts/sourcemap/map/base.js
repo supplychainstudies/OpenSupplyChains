@@ -303,6 +303,9 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 		$(this.banner_div).find('#map-search').keyup($.proxy(function() { 
             this.searchFilterMap();
         }, this));
+        $(this.banner_div).find("#map-search").blur(function(){
+            setTimeout(function(){window.scrollTo(0,0);},100);
+        });
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};

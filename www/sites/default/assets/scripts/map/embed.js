@@ -24,14 +24,15 @@ $(document).ready(function() {
 
 		    // fetch supplychain
 		    $(window).resize(function() {
-                var classlist = "zoom vertical horizontal";
+                var classlist = "vertical horizontal";
                 $("body").removeClass(classlist);
 		    	if(parseInt($(window).height()) > 480 && parseInt($(window).width()) > 640) {
-		    		$("body").removeClass("zoom");
+		    		$("body").removeClass("mobilezoom");
+                    $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
                     console.log("window resize big");
 		    	}
 		    	else {
-		    		$("body").addClass("zoom");			
+		    		$("body").addClass("mobilezoom");			
                     // Mobile view
                     var isiOS = (/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()));
                     
@@ -42,8 +43,7 @@ $(document).ready(function() {
                     } else {
                         // horizontal
                         $("body").addClass("horizontal");			
-                        //$('#sourcemap-map-embed').css("height", 320).css("width", 480);
-                        $('#sourcemap-map-embed').css("height", 266).css("width", 480);
+                        $('#sourcemap-map-embed').css("height", 268).css("width", 480);
                     }
                     if(!isiOS){
                         $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
@@ -52,12 +52,12 @@ $(document).ready(function() {
 		    	}
 		      	//$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
 		    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
-                setTimeout(function(){
-                    window.scrollTo(0,0);   
-                    //alert("move");
-                },100);
-
+                
+                // iOS hide address bar 
+                setTimeout(function(){window.scrollTo(0,0);},100);
 		    });
+
+
             // TODO : make password input window
             var passcode = "";
             if(!Sourcemap.passcode_exist){
@@ -108,6 +108,7 @@ $(document).ready(function() {
                     Sourcemap.loadSupplychain(scid, passcode,cb);
                 }
             }
+            // end passcode part
 			break;
 		case "static":
 			var l = "view/" + window.location.pathname.split("/")[2];

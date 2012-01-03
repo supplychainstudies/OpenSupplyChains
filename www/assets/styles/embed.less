@@ -44,6 +44,7 @@ body#embedded-supplychain {
         #banner-favorite, #banner-share ,#banner-edit , #banner-preview, #banner-lock{ display:none; }
     }
 }
+
 body.zoom {
     @z : .5;
 	#banner { 
@@ -60,13 +61,6 @@ body.zoom {
         }
     }
 	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
-    .olControlAttribution {
-            zoom:@z; -moz-transform: scale(@z);
-    }
-}
-
-body.horizontal{
-    @z : .5;
 	#dialog {
 	    top:45px;
 	    width:360px;
@@ -96,7 +90,83 @@ body.horizontal{
 	    }    
 	}
     // end dialog  
+    .olControlAttribution {
+            zoom:@z; -moz-transform: scale(@z);
+    }
 }
+body.mobilezoom {
+    @z : .5;
+	#banner { 
+        zoom: @z; -moz-transform: scale(@z); 
+        .banner-date{
+            display:none;
+        }
+        #banner-content{
+            .banner-map-search{
+                input{
+                    margin-top:5px;
+                }
+            }
+        }
+    }
+	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
+    .olControlAttribution {
+            zoom:@z; -moz-transform: scale(@z);
+    }
+}
+
+body.vertical{
+    @z : .4;
+	#dialog {
+	    top:45px;
+	    width:250px;
+	    #dialog-content {
+	        h2.title { font-size: 14px; }
+	        h3.placename { font-size:12px; }
+	        div.description { font-size:12px; }
+	        .url { font-size:12px; }
+	        #dialog-media {
+				background:#000;
+	            padding:40px 0 0 0;
+				margin-bottom:-18px;
+	        }
+			#dialog-media-navigation {zoom: @z; -moz-transform: scale(@z);}
+	        #dialog-footprint {
+	            zoom: @z; -moz-transform: scale(@z);    
+	            overflow:hidden !important;
+	        }
+			.dot { zoom: @z; -moz-transform: scale(@z);}
+            .close {zoom: @z; -moz-transform: scale(@z);} 
+	    }    
+	}
+    // end dialog  
+} // end horizontal
+body.horizontal{
+    @z : .5;
+	#dialog {
+	    top:45px;
+	    width:360px;
+	    #dialog-content {
+	        h2.title { font-size: 14px; }
+	        h3.placename { font-size:12px; }
+	        div.description { font-size:12px; }
+	        .url { font-size:12px; }
+	        #dialog-media {
+				background:#000;
+	            padding:40px 0 0 0;
+				margin-bottom:-18px;
+	        }
+			#dialog-media-navigation {zoom: @z; -moz-transform: scale(@z);}
+	        #dialog-footprint {
+	            zoom: @z; -moz-transform: scale(@z);    
+	            overflow:hidden !important;
+	        }
+			.dot { zoom: @z; -moz-transform: scale(@z);}
+            .close {zoom: @z; -moz-transform: scale(@z);} 
+	    }    
+	}
+    // end dialog  
+} // end horizontal
 
 .static-embed {
 	margin:auto;

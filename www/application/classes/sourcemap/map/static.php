@@ -44,7 +44,7 @@ class Sourcemap_Map_Static {
         'f' => array(1032,560),
         'l' => array(710, 320),
         'm' => array(220, 128),
-        's' => array(160, 98),
+        's' => array(168, 106),
         't' => array(160, 105)
     );
 

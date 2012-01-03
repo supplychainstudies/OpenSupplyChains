@@ -21,18 +21,30 @@
 <div class="container form-page">
     <div class="copy-section">
     	<p>Tell the story behind a product or a service: map the locations of suppliers, add descriptions, photos and videos, calculate the carbon footprint, and embed or link to the map to share it with the world!</p>
-    	<? if($can_import) { ?>
-    	<ul>
-    		<li><a href="tools/import/csv">Import from CSV File</a></li>
-			<li><a href="tools/import/xls">Import from XLS File</a></li>
-    		<li><a href="tools/import/google">Import from Google Spreadsheets</a></li>
-    	</ul>
-    	<? } ?>
+    	<?php if($can_import) { ?>
+		<div style="margin-top: 15px; margin-bottom: 15px">
+            <a class="tooltip pro" style="float: left; margin-top: 8px; margin-right: 10px; padding-bottom: 3px">Pro</a><h3 class="blue" style="clear: right; float: left;">Build your Sourcemap from a File</h3>
+            <div style="clear: both; float:left;">
+                <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" /> <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px;" /> 	
+                <?php if(isset($user_supplychains) && $user_supplychains): ?>
+                    <select name="replace_into" style="margin-top: 10px; width: 330px; height: 30px; padding: 0 30px 0 10px; clear: none; float: left">
+                        <option value="0">Create a new map</option>
+                        <?php foreach($user_supplychains as $sc): ?>
+                        <option value="<?= $sc->id ?>"><?php
+                            echo "Replace \"";
+                            echo isset($sc->attributes->title) ? HTML::chars($sc->attributes->title) : $sc->id;
+                            echo "\" created ";
+                            echo date("F j, Y", $sc->created);
+                        ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+        <?php } ?>
+		</div>
     </div>
     <div class="box-section">
-        <div class="sourcemap-form">
-            <?= $create_form ?>
-        </div>
+    	<?= $create_form ?>
     </div>
     <div class="clear"></div>
 </div>

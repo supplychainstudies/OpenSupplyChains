@@ -37,6 +37,22 @@ Sourcemap.Map.prototype.defaults = {
     "hops_as_bezier": false, "arrows_on_hops": true,
     "default_feature_color": "#35a297", "clustering": true,
     "default_feature_colors": ["#35a297", "#b01560", "#e2a919"],
+    "resolutions":[
+        39135.758475,
+        19567.8792375,
+        9783.93961875,
+        4891.969809375,
+        2445.9849046875,
+        1222.99245234375,
+        611.496226171875,
+        305.7481130859375,
+        152.87405654296876,
+        76.43702827148438,
+        38.21851413574219,
+        19.109257067871095,
+        9.554628533935547,
+        4.777314266967774
+    ],
     "stop_style": {
         "default": {
             "pointRadius": "${size}",
@@ -54,6 +70,13 @@ Sourcemap.Map.prototype.defaults = {
             "labelAlign": "cm",
             "labelXOffset": 0,
             "labelYOffset": "${yoffset}", 
+        },
+        "disabled": {
+            "fillColor": "#cccccc",
+            "strokeColor": "#cccccc",
+            "strokeOpacity": 0.5,
+			"fillOpacity": 0.5,
+            "fontColor": "#cccccc",
         },
         "select": {
             "fillColor": "#ffffff",
@@ -102,6 +125,13 @@ Sourcemap.Map.prototype.defaults = {
             "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
             "rotation": "${angle}"
+        },
+        "disabled": {
+            "fillColor": "#cccccc",
+            "strokeColor": "#cccccc",
+            "fontColor": "#cccccc",
+            "fillOpacity": 0.5,
+            "strokeOpacity": 0.5,
         },
     	"arrow": {
     		"graphicName": "${type}",
@@ -153,9 +183,15 @@ Sourcemap.Map.prototype.init = function() {
     return this;
 }
 Sourcemap.Map.prototype.initMap = function() {
+    OpenLayers.ImgPath = "assets/images/";
     var controls = [
             new OpenLayers.Control.Navigation({"handleRightClicks": true}),
-            new OpenLayers.Control.Attribution()
+            new OpenLayers.Control.Attribution(),
+            new OpenLayers.Control.TouchNavigation({
+                dragPanOptions: {
+                    enableKinetic: true
+                }
+            }),
     ];
     var options = {
         "theme": "assets/scripts/libs/openlayers/theme/sourcemap/style.css",
@@ -164,34 +200,37 @@ Sourcemap.Map.prototype.initMap = function() {
         "controls": controls
     };
     this.map = new OpenLayers.Map(this.options.element_id, options);
+    this.map.div.extras = $('<div id="extras"></div>');
+    $(this.map.div).append(this.map.div.extras);
     this.broadcast('map:openlayers_map_initialized', this);
     return this;
 }
 
 Sourcemap.Map.prototype.initBaseLayer = function() {
+
     this.map.addLayer(new OpenLayers.Layer.Google(
         "terrain", {
-            'sphericalMercator': true,
-            "type": google.maps.MapTypeId.TERRAIN,
-            "animationEnabled": false,
-            "minZoomLevel": 1, "maxZoomLevel": 17,
-            "wrapDateLine":false,
+        'sphericalMercator': true,
+        "type": google.maps.MapTypeId.TERRAIN,
+        "animationEnabled": false,
+        "resolutions": this.defaults.resolutions,
+        "minZoomLevel": 1, "maxZoomLevel": 17,
+        "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
         "satellite", {
-            'sphericalMercator': true,
-            "type": google.maps.MapTypeId.SATELLITE,
-            "animationEnabled": false,
-            "minZoomLevel": 1, "maxZoomLevel": 17,
-            //"displayOutsideMaxExtent": false,
-            //"maxExtent": new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
-            "wrapDateLine":false,
+        'sphericalMercator': true,
+        "type": google.maps.MapTypeId.SATELLITE,
+        "animationEnabled": false,
+        "resolutions": this.defaults.resolutions,
+        "minZoomLevel": 1, "maxZoomLevel": 17,
+        "wrapDateLine":false,
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 44909,
-        "maxResolution":39135.758475,
+        //"resolutions": this.defaults.resolutions,
         "minZoomLevel": 1, "maxZoomLevel": 12
     }));
     
@@ -218,7 +257,7 @@ Sourcemap.Map.prototype.initDock = function() {
     this.dock_outerwrap = $('<div class="sourcemap-dock-outerwrap"></div>');
     this.dock_content = $('<div class="sourcemap-dock-content"></div>');
     this.dock_element = $('<div id="sourcemap-dock"></div>');
-    $(this.map.div).css("position", "relative").append(
+    $(this.map.div.extras).css("position", "relative").append(
         this.dock_element.append(this.dock_outerwrap.append(this.dock_content))
     );
     this.dockAdd('zoomout', {
@@ -249,6 +288,36 @@ Sourcemap.Map.prototype.initDock = function() {
         }
     });
     return this;
+}
+
+Sourcemap.Map.prototype.enableFullscreen = function(){
+    this.dockAdd('fullscreen', {
+        "title": 'Fullscreen',
+        "panel": 'zoom',
+        "callbacks": {
+            "click": function() {
+                if (!$('#map-container').hasClass('fullscreen')){
+                    // init fullscreen mode
+                    var viewportWidth  = window.innerWidth;
+                    var viewportHeight = window.innerHeight;
+                    $('body').css({'overflow': 'hidden'});
+                    $('#map-container').addClass('fullscreen');
+                    $('#sourcemap-dock').find('.control.fullscreen').addClass('active');
+                    window.scrollTo(0,0);
+                    this.map.updateSize();
+                }
+                else{
+                    // return to inline mode
+                    $('body').css({
+                        'overflow': 'auto'
+                    });
+                    $('#map-container').removeClass('fullscreen');
+                    $('#sourcemap-dock').find('.control.fullscreen').removeClass('active')
+                    this.map.updateSize();
+                }
+            }
+        }
+    });
 }
 
 Sourcemap.Map.prototype.dockAdd = function(nm, o) {
@@ -326,21 +395,6 @@ Sourcemap.Map.prototype.initEvents = function() {
     });
     // zoom evts
     this.map.events.register("zoomend", this, function() {
-        var s = this.getSelected();
-        s = s.length ? s[0] : false;
-        if(!s) s = this._sel_before_zoom;
-        if(s) {
-            if(s.cluster) {
-                Sourcemap.broadcast("map:feature_unselected", this, s);
-            } else {
-                if(s.layer)
-                    this.controls.select.select(s);
-                else
-                    Sourcemap.broadcast("map:feature_unselected", this, s);
-            }
-            this.map.setCenter(s.geometry.getBounds().getCenterLonLat());
-        }
-        this._sel_before_zoom = null;
     });
     return this;
 }
@@ -363,7 +417,7 @@ Sourcemap.Map.prototype.initControls = function() {
                     this
                 ),
                 "onUnselect": OpenLayers.Function.bind(
-                    function(feature) {
+                    function(feature) {	
                         this.broadcast('map:feature_unselected', this, feature); 
                     },
                     this
@@ -573,14 +627,49 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     }
     var palette = Sourcemap.Color.graduate(dfc, max_plen || 1);
     
+	var ends = Sourcemap.deep_clone(supplychain.stops);
+	for(var i=0; i<supplychain.hops.length; i++) {
+		for(j in ends) {
+			if (ends[j] != undefined) {
+				if (ends[j].instance_id == supplychain.hops[i].from_stop_id) {
+					delete ends[j]; 					
+				}
+			}
+		}
+	}
+	for(j in ends) {
+		if (ends[j] != undefined) {
+			var sw = false;
+			for(var i=0; i<supplychain.hops.length; i++) {
+				
+				if (ends[j].instance_id == supplychain.hops[i].to_stop_id) {
+					sw = true;
+					break;					
+				}
+			} 
+			if (sw == false) {
+				delete ends[j]; 
+			}
+		}
+	}
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     var featureList = [];
-    
     for(var i=0; i<supplychain.stops.length; i++) {
         var st = supplychain.stops[i];
         var new_ftr = this.mapStop(st, scid);
-        var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+		var end_switch = false;
+		for (e in ends) {
+			if (st.instance_id == ends[e].instance_id) {
+				end_switch = true;
+				break;
+			}
+		}
+		if (end_switch == true) {
+			var scolor = st.getAttr("color", palette[palette.length-1].toString());
+		} else {
+			var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
+		}  
         new_ftr.attributes.tier = tiers[st.instance_id];
         new_ftr.attributes.color = scolor;
         new_ftr.attributes.scolor = scolor;
@@ -615,19 +704,17 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     }
 
     //Add or remove gradient to map 
-    var gradient = $(this.map.div).find('#sourcemap-gradient');
+    var gradient = $(this.map.div.extras).find('#sourcemap-gradient');
     if ($(gradient).length == 0) { // if gradient legend not exist
         if(!max_plen){
-            //console.log('both empty do nothing');
         }else{                      // add gradient to map
             var gradient = $('<div id="sourcemap-gradient"></div>');
             if(this.map.baseLayer.name)
                 gradient.addClass(this.map.baseLayer.name);
-            $(this.map.div).append(gradient);
+            $(this.map.div.extras).append(gradient);
         }
     } else {
         if(max_plen){ // if exist
-            //console.log('both occur check baseLayer name');
             if(!gradient.hasClass(this.map.baseLayer.name)) {// if map tileset is different
                 gradient.removeClass(gradient.attr("class"));
                 gradient.addClass(this.map.baseLayer.name);
@@ -1071,7 +1158,6 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
     //if there's only one stop on the map, let's zoom to the minimum level
     //if (oneStop() == true){
     //    this.map.setCenter(center, this.map.minZoomLevel+1);
-    //    console.log("One stop");
     //}
     //else{
         if (this.map.baseLayer.wrapDateLine) {
@@ -1092,23 +1178,26 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
 }
 
 Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {
+    var viewSize = this.getPaddedSize();
+   
+    var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
+                                    extent.getHeight() / viewSize.h );
+
+    var zoomForExtent = this.getZoomForResolution(idealResolution,closest);
+    return zoomForExtent;
+}
+
+Sourcemap.Map.prototype.getPaddedSize = function(){
     var viewSize = this.map.getSize();
 
     // add padding around viewport so features don't appear offscreen
     // TODO: improve the way this works
     viewSize.h *= .5;
     viewSize.w *= .5;
-   
-    var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
-                                    extent.getHeight() / viewSize.h );
 
-
-    var zoomForExtent = this.getZoomForResolution(idealResolution,closest);
-    //console.log("ZFE:"+zoomForExtent+",viewSize:"+viewSize.w+"/"+viewSize.h+",extent:"+extent.getWidth()+"/"+extent.getHeight());
-    return zoomForExtent;
-    //return this.getZoomForResolution(idealResolution, closest);
-
+    return viewSize;
 }
+
 
 Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
     var zoom;
@@ -1168,7 +1257,6 @@ Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
 
 
         var zoomFromReso = Math.max(this.map.minZoomLevel, zoom);
-        //console.log("zoom:"+zoom+"/minZoom:"+this.map.minZoomLevel+"/zoomFromReso:"+zoomFromReso);
         return zoomFromReso;
         //return Math.max(this.map.minZoomLevel, zoom);
 }

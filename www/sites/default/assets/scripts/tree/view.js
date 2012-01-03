@@ -12,62 +12,28 @@
 
 $(document).ready(function() {
     var tree_element_id = '#sourcemap-tree-view';
+    $('#tree-container').css("min-height", $(window).height()).css("min-width", $(window).width());
+    $(tree_element_id).css("height",$(window).height()*.95).css("width",$(window).width()*.95);
     var passcode = ""; 
     var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();    
 
-    if($('#exist-passcode').attr("value")){
+    //if($('#exist-passcode').attr("value")){
+    if(Sourcemap.passcode_exist){
         var popID = 'popup';
-        var element = document.createElement('div');
-        $(element).html(
-            '<div id="passcode-input">'+
-            '<form class="passcode-input">'+
-            '<label for="passcode"> This map is protected. Please enter the password:</label>'+
-            '<input name="passcode" type="text"></input>'+
-            '<input id="passcode-submit" type="submit"/>'+
-            '</form>'
-            +'</div>'
-        );
-        $(element).attr('id',popID);
-        $(element).addClass("popup_block");
-        $(element).prepend('<a href="#" class="close"></a>');
-        $('body').append($(element));
-
+        Sourcemap.initPasscodeInput(popID);
         $('form.passcode-input').submit(function(evt){
             evt.preventDefault();
-            passcode = $(element).find("input[name='passcode']").val();
+            passcode = $('#' + popID).find("input[name='passcode']").val();
+
+            $('#fade , .popup_block').fadeOut(function() {
+                //$('#fade, a.close').remove();
+            }); //fade them both out
 
             // fetch from supplychain
             Sourcemap.loadSupplychainToTree(scid, passcode, function(sc) {
                 Sourcemap.buildTree(tree_element_id,sc);
             });
-            $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
-            }); //fade them both out
         });
-
-        //css
-        $('#' + popID).height(110);
-        $('#' + popID).width(600);
-        var popMargTop = ($('#' + popID).height() + 80) / 2;
-        var popMargLeft = ($('#' + popID).width() + 80) / 2;
-
-        $('#' + popID).css({
-            'margin-top' : -popMargTop,
-            'margin-left' : -popMargLeft,
-            'overflow' : 'hidden'
-        });
-
-        $('#' + popID).fadeIn();
-
-        $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
-        $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
-        $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
-            $('#fade , .popup_block').fadeOut(function() {
-                $('#fade, a.close').remove();
-            }); //fade them both out
-            return false;
-        });
-
     } else {
         Sourcemap.loadSupplychainToTree(scid, passcode, function(sc) {
             Sourcemap.buildTree(tree_element_id,sc);

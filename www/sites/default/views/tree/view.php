@@ -11,23 +11,16 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
-    <?php if (isset($supplychain_banner_url) && $supplychain_banner_url): ?>
-        <div class="container">
-            <div class="channel-banner">
-               <img src="<?= $supplychain_banner_url?>"/>
-            </div>
-            <div class="clear" style="height: 20px"></div>
-        </div>
-    <?php endif; ?>
 
 <div id="exist-passcode" style="display:none" value="<?= $exist_passcode ?>"></div>
-
+<script>
+    Sourcemap.passcode_exist = "<?= isset($exist_passcode) ? $exist_passcode : '0' ?>";
+</script>
 <div id="tree-container">    
     <div id="tree">
         <div id="sourcemap-tree-view"></div>
     </div>    
 </div>
-
 <div id="map-secondary" class="container">
     <div id="sidebar" class="map-view">
         <div class="container">

@@ -12,8 +12,12 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<div id="slider">
-    <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
+<div class="container slider">
+    <div id="sliderwrap">
+        <div id="slider">
+            <?= View::factory('partial/thumbs/slider', array('supplychains' => $featured)) ?>
+        </div>
+    </div>
 </div>
 
 <div class="container">

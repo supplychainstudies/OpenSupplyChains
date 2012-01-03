@@ -27,6 +27,11 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
             $this->template->current_user = false;
             $f = Sourcemap_Form::load('/auth');
             $f->action('auth')->method('post');
+			if(strtolower(Request::$method) === 'get') {
+				if(isset($_GET['next']) == true) {
+					$f->action('auth?next='.$_GET['next']);
+				}
+			}
             $this->template->login_form = $f;
         }
 
@@ -84,9 +89,9 @@ class Controller_Auth extends Sourcemap_Controller_Layout {
                     }
                     $this->request->redirect('auth');
                 }
-
-                if (!empty($_POST->next)) {
-                    $this->request->redirect($_POST->next);
+				var_dump($_GET);
+                if (isset($_GET['next']) == true) {
+                    $this->request->redirect($_GET['next']);
                 } else {
                     $this->request->redirect('home/');
                 }

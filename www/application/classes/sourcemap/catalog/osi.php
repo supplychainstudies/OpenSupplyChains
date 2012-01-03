@@ -51,7 +51,11 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
     }
 
     public function fetch() {
-        $response = parent::fetch();
+        if ($isCurated){
+
+        } else { 
+            $response = parent::fetch();
+        }
         if($response) {
             $response = (object)$response;
             $response->parameters['l'] = $this->limit;

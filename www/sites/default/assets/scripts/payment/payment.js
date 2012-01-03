@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 function loadAjaxStripe(){
   $('.sourcemap-form.ajax.stripe input[type=submit]').click(function(e){
-    var amount = 9995; //amount you want to charge in cents
+    var amount = 9900; //amount you want to charge in cents
     Stripe.createToken({
         name: $('input[name="card-name"]').val(),
         number: $('input[name="card-number"]').val(),

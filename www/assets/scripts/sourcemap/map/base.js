@@ -10,9 +10,6 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-
-
-
 Sourcemap.Map.Base = function(o) {
     this.broadcast('map_base:instantiated', this);
     var o = o || {};
@@ -83,6 +80,8 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
+    this.setActiveArea();
+    this.map.activeStatus = false;
     
     Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
     	this.toggleTileset(sc);
@@ -137,7 +136,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         this.map.dockControlEl(metric).find('.unit').text(scaled.unit);
     	
     }, this));
-
+        
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -186,7 +185,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             this.showStopDetails(
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
-        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {
+        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );
@@ -196,13 +195,57 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.hideDialog();
     }, this));
+    
+    this.map.map.events.register("moveend", this.map.map, $.proxy(function(e) {
+        // I would prefer to use "resize" here, but it doesn't work.
+        this.setActiveArea();
+    }, this));
 
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
+  
+    /* disabled until we decide on show/hide behavior
+    this.map.map.events.register("mousemove", this.map.map.events, $.proxy(function(e) {
+        var activeStatus = false;
+        if (e.offsetY < this.map.activeArea.top || e.offsetY > (this.map.activeArea.bottom + this.map.activeArea.h)){
+            var activeStatus = false;
+        } else {
+            var activeStatus = true;
+            this.stopControlTimer();
+            this.startControlTimer();
+        }
 
-
+        // Check if active status has changed
+        if (activeStatus != this.map.activeStatus){
+            if (activeStatus == true){
+                this.enableControlTimer();
+            } else {
+                this.showControls();
+                this.disableControlTimer();
+            }
+            this.map.activeStatus = activeStatus;
+        }
+    }, this));
+    */
     
+}
+
+Sourcemap.Map.Base.prototype.setActiveArea = function(){
+    // The active area is the part of the viewport that isn't covered by menus. 
+    
+    var topOffset = $('#banner').height();
+    var bottomOffset = $('#sourcemap-dock').height();
+
+    var wholeArea = this.map.map.getSize();
+    var activeArea = {
+        'h': wholeArea.h - topOffset - bottomOffset,
+        'w': wholeArea.w,
+        'top': topOffset + 20,
+        'bottom': bottomOffset + 20 
+    }
+   
+    this.map.activeArea = activeArea;
 }
 
 Sourcemap.Map.Base.prototype.initBanner = function(sc) {
@@ -257,6 +300,9 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
                 }
             },this)
         });
+		$(this.banner_div).find('#map-search').keyup($.proxy(function() { 
+            this.searchFilterMap();
+        }, this));
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
@@ -264,11 +310,61 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 
     if(this.options.watermark) {
         this.watermark = $('<a href="/"><div id="watermark"></div></a>');
-        $(this.map.map.div).append(this.watermark);
+        $(this.map.map.div.extras).append(this.watermark);
     }
     return this;
 }
-        
+
+Sourcemap.Map.Base.prototype.getControls = function(){
+    // return a list of "controls" that should be hidden
+    var controls = [
+        $('#banner'),
+        $('#sourcemap-dock'),
+        $('#sourcemap-gradient')
+    ];
+    return controls;
+}
+
+Sourcemap.Map.Base.prototype.toggleControls = function(){
+    // include all elements that should be toggled
+    $(this.getControls()).each(function(){
+        $(this).fadeToggle();
+    });
+}
+
+Sourcemap.Map.Base.prototype.showControls = function(){
+    $(this.getControls()).each(function(){
+        $(this).fadeIn();
+    });
+}
+
+Sourcemap.Map.Base.prototype.hideControls = function(){
+    $(this.getControls()).each(function(){
+        $(this).fadeOut();
+    });
+}
+
+Sourcemap.Map.Base.prototype.startControlTimer = function(){
+    if (this.controlTimerEnabled){
+        this.controlTimer = window.setTimeout($.proxy(function() {
+            this.hideControls();
+        }, this),1000);
+    }
+}
+
+Sourcemap.Map.Base.prototype.stopControlTimer = function(){
+    clearTimeout(this.controlTimer);
+}
+
+Sourcemap.Map.Base.prototype.disableControlTimer = function(){
+    this.stopControlTimer();
+    this.controlTimerEnabled = false;
+}
+
+Sourcemap.Map.Base.prototype.enableControlTimer = function(){
+    this.controlTimerEnabled = true;
+}
+
 Sourcemap.Map.Base.prototype.initDialog = function() {   
     // set up dialog
     if(!this.dialog) {
@@ -346,6 +442,7 @@ Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
         $(this.dialog).hide();
         if(!notrigger) {
             this.map.controls["select"].unselectAll();
+			this.searchFilterMap();
             Sourcemap.broadcast('sourcemap-base-dialog-close', 
                 this, this.map.editor ? $(this.dialog).find("form").serializeArray() : false
             );
@@ -371,23 +468,54 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			var h = 0;
+			var h = this.base.map.activeArea.h -55;
+			// First, find out how much height is already occupied 
+			$(this.base.dialog_content).find('.placename').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			$(this.base.dialog_content).find('.title').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			$(this.base.dialog_content).find('.accordion-title').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			// Each accordion body can be the size of the leftover space
 			$(this.base.dialog_content).find('.accordion-body').each(function() {
-				h += parseInt($(this).css('height').replace('px',''));
-			});			
-			if (h > 170) {
-    			$(this.base.dialog_content).find('.accordion-body').hide();
-				// if theres a movie, show it
-				if ($(this.base.dialog_content).find('#dialog-media').length >= 0) {
-					$(this.base.dialog_content).find('#dialog-media').prev().find('.arrow').addClass("arrowopen");
-					$(this.base.dialog_content).find('#dialog-media').show();
-				} else {
-					// if not, show the description
-					if ($(this.base.dialog_content).find('#dialog-description').length >= 0) {
-						$(this.base.dialog_content).find('#dialog-media').prev().find('.arrow').addClass("arrowopen");
-						$(this.base.dialog_content).find('#dialog-description').show();
-					}
+				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
+				if (thissize > h) {	
+					var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
+					$(this).css('height',newsize+"px");
+					$(this).css('overflow',"auto");
 				}
+				$(this).hide();
+			});
+			// h is all the room we have to open stuff in
+			var reduced_height = h;
+			// If there's a media accordion (and there's enough room to show it), show it
+			$(this.base.dialog_content).find('#dialog-media').each(function() {	
+				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				if (reduced_height > val) {
+					reduced_height = reduced_height - val;
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+			$(this.base.dialog_content).find('#dialog-description').each(function() {	
+				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				if (reduced_height > val) {
+					reduced_height = reduced_height - val;
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+			$(this.base.dialog_content).find('#dialog-footprint').each(function() {	
+				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				if (reduced_height > val) {
+					reduced_height = reduced_height - val;
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
 				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
 					var open = $(this).next().is(":visible");
 					
@@ -405,9 +533,15 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 					}				
 					return false;
 				});
-			} else {
-				$(this.base.dialog_content).find('.arrow').addClass("arrowopen");
-			}
+
+            // Sets up zoom on click
+            $(this.base.dialog_content).find('.dot')
+                .css({'cursor': 'pointer'})
+                .click($.proxy(function(evt) {
+                    this.base.map.map.moveTo(this.base.getFeatureLonLat(this.feature));
+                    this.base.map.map.zoomTo(this.base.map.map.maxZoomLevel);
+                }, this));
+
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
@@ -481,39 +615,73 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			var h = 0;
+			var h = this.base.map.activeArea.h -55;
+			// First, find out how much height is already occupied 
+			$(this.base.dialog_content).find('.placename').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			$(this.base.dialog_content).find('.title').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			$(this.base.dialog_content).find('.accordion-title').each(function() {
+				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+			});
+			// Each accordion body can be the size of the leftover space
 			$(this.base.dialog_content).find('.accordion-body').each(function() {
-				h += parseInt($(this).css('height').replace('px',''));
-			});			
-			if (h > 170) {
-    			$(this.base.dialog_content).find('.accordion-body').hide();
-				// if theres a movie, show it
-				if ($(this.base.dialog_content).find('#dialog-media').length >= 0) {
-					$(this.base.dialog_content).find('#dialog-media').show();
-				} else {
-					// if not, show the description
-					if ($(this.base.dialog_content).find('#dialog-description').length >= 0) {
-						$(this.base.dialog_content).find('#dialog-description').show();
-					}
+				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
+				if (thissize > h) {	
+					var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
+					$(this).css('height',newsize+"px");
+					$(this).css('overflow',"auto");
 				}
-				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
-					var open = $(this).next().is(":visible");
-					$('.accordion-body:visible').each(function() {
-						if ($(this).attr("id") == "dialog-media")
-							$(this).hide();
-						else 
-							$(this).slideToggle('fast');
-					});
-					$('.accordion-title').find('.arrow').removeClass('arrowopen');
-					if (open == false) {
-						$(this).next().slideToggle('fast');
-						$(this).find('.arrow').addClass('arrowopen');
-					}				
-					return false;
+				$(this).hide();
+			});
+			// h is all the room we have to open stuff in
+			var reduced_height = h;
+			// If there's a media accordion (and there's enough room to show it), show it
+			$(this.base.dialog_content).find('#dialog-media').each(function() {	
+				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				if (reduced_height > val) {
+					reduced_height = reduced_height - val;
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+			// If there's a description accordion (and there's enough room to show it), show it
+			$(this.base.dialog_content).find('#dialog-description').each(function() {	
+				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				if (reduced_height > val) {
+					reduced_height = reduced_height - val;
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+			// If there's a footprint accordion (and there's enough room to show it), show it
+			$(this.base.dialog_content).find('#dialog-footprint').each(function() {	
+				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				if (reduced_height > val) {
+					reduced_height = reduced_height - val;
+					$(this).prev().find('.arrow').addClass("arrowopen");
+					$(this).show();
+				}					
+			});
+			$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
+				var open = $(this).next().is(":visible");
+				
+				$('.accordion-body:visible').each(function() {
+					if ($(this).attr("id") == "dialog-media")
+						$(this).hide();
+					else 
+						$(this).slideToggle('fast');
 				});
-			} else {
-				$(this.base.dialog_content).find('.arrow').addClass("arrowopen");
-			}
+				
+				$('.accordion-title').find('.arrow').removeClass('arrowopen');
+				if (open == false) {
+					$(this).next().slideToggle('fast');
+					$(this).find('.arrow').addClass('arrowopen');
+				}				
+				return false;
+			});	
             // Sets up content-nav behavior
             $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
                 var target = evt.target.id.split('-').pop().replace(":","-");
@@ -762,6 +930,67 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
     return this.decorateStopFeatures(dec_fn) && this.decorateHopFeatures(dec_fn);
 }
 
+Sourcemap.Map.Base.prototype.searchFilterMap = function() {
+	var query = new RegExp($(this.banner_div).find('#map-search').val(), "i");
+    
+    for(var scid in this.map.stop_features) {
+        for(var k in this.map.stop_features[scid]) {
+            var s = this.map.stop_features[scid][k];
+            s = s.stop ? s.stop : s;
+
+			var match = false;
+			for(var a in s.attributes) {
+				if(typeof(s.attributes[a]) == 'string') {
+					if(s.attributes[a].search(query) != -1) { match = true; }
+				}
+			}
+			if(match == true) { s.renderIntent = 'default'; }
+			else { s.renderIntent = 'disabled'; }
+        }
+    }
+
+    for(var scid in this.map.hop_features) {
+        for(var fromStop in this.map.hop_features[scid]){
+            for (var toStop in this.map.hop_features[scid][fromStop]){
+                var h = this.map.hop_features[scid][fromStop][toStop];
+				var arr = h.arrow ? h.arrow : {};	
+				var arr2 = h.arrow2 ? h.arrow2 : h.arrow;			
+						
+                h = h.hop ? h.hop : h;	
+				var match = false;
+				for(var a in h.attributes) {
+					if(typeof(h.attributes[a]) == 'string') {
+						if(h.attributes[a].search(query) != -1) { match = true; }
+					}
+				}
+				if(match == true) { h.renderIntent = 'default'; arr.renderIntent = 'arrow'; arr2.renderIntent = 'arrow';}
+				else { h.renderIntent = 'disabled'; arr.renderIntent = 'disabled'; arr2.renderIntent = 'disabled';}
+            }
+        }
+    }
+    for(var scid in this.map.cluster_features) {
+        for(var l in this.map.cluster_features[scid]) {
+	        var c = this.map.cluster_features[scid][l];
+
+			var match = false;						
+			lookup:	
+			for(var k in c.cluster) {
+				var s = c.cluster[k];
+				s = s.stop ? s.stop : s;
+
+				for(var a in s.attributes) {
+					if(typeof(s.attributes[a]) == 'string') {
+						if(s.attributes[a].search(query) != -1) { match = true;  break lookup;}
+					}
+				}
+			}
+			if(match == true) { c.renderIntent = 'cluster'; }
+			else { c.renderIntent = 'disabled'; }
+        }
+    }
+	this.map.redraw();
+}
+
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
     if(this.visualization_mode){
         if(this.visualization_mode != viz_nm) {
@@ -811,8 +1040,6 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
                 if ($(legend).length == 0) {
                     var legend = $('<div id="sourcemap-legend"></div>');
                     legend.addClass(viz_nm);
-                    // This actually crash IE
-                    //console.log(this)
                     if (this.map.map.baseLayer.name)
                         legend.addClass(this.map.map.baseLayer.name);
                     $(this.map.map.div).append(legend);

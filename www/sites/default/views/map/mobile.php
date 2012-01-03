@@ -12,33 +12,4 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?php // TEMPORARY MOBILE VIEW TO MAKE OFFICE DEPOT HAPPY ?>
-
-<?php if (isset($supplychain_banner_url) && $supplychain_banner_url): ?>
-<div class="container mobile">
-    <div class="channel-banner">
-       <img src="<?= $supplychain_banner_url?>"/>
-    </div>
-    <div class="clear" style="height: 20px"></div>
-</div><!-- .container.mobile -->
-<?php endif; ?>
-
-<div class="container mobile">
-    <h1><?= HTML::chars($supplychain_name) ?></h1>
-    
-    <?php if (isset($supplychain_youtube_id)): ?>
-    <div class="description-video">
-        <iframe class="youtube-player" type="text/html" width="220" height="150" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>&showinfo=0" frameborder="0"></iframe> 
-    </div>
-    <?php endif; ?>
-
-    <div class="mobile-map-preview">
-        <a href="/embed/<?= $supplychain_id ?>"><img src="/static/<?= $supplychain_id ?>.m.png" /></a>    
-    </div>
-
-    <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
-  
-    <div class="mobile-footer"><a href="/"><img src="assets/images/logo.png" /></a></div>
-
-    <div class="clear"></div>
-</div><!-- .container.mobile -->
+<div id="sourcemap-map-embed"></div>

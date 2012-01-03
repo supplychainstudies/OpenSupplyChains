@@ -16,7 +16,7 @@
 <div class="accordion">
 <% if(this.hop.getAttr("description", false) && this.hop.getAttr("description").length > 1) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>
-    <div class="description accordion-body"><%= _S.htesc(this.hop.getAttr("description")) %></div>
+    <div id="dialog-description" class="accordion-body"><%= _S.htesc(this.hop.getAttr("description")) %></div>
 <% } %>
 
 <% if(this.hop.getAttr("url:moreinfo", false)) { %>
@@ -27,13 +27,15 @@
             .wrap("<div></div>").parent().html() %>
     </div>
 <% } %>
-<% if(this.supplychain.getAttr("sm:ui:weight", false) || this.supplychain.getAttr("sm:ui:co2e", false)) { %>
+<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0) || (this.hop.getAttr("co2e", false) && this.hop.getAttr("co2e", false) != 0) || (this.hop.getAttr("qty", false) && this.hop.getAttr("qty", false) != 0)) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
 <div class="accordion-body">
 <ul id="dialog-footprint">
-    <% if(this.hop.gc_distance() && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li><% } %>
-	<% if(this.hop.gc_distance() && this.supplychain.getAttr("sm:ui:weight", false)) { %><li class="weight"><%= this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
-    <% if(this.hop.getAttr("co2e", false) && this.supplychain.getAttr("sm:ui:co2e", false)) { %>
+    <% if(this.hop.gc_distance()) { %><li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li><% } %>
+	<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0) && (!this.hop.getAttr("qty", false) || this.hop.getAttr("qty", false) == 0)) { %><li class="weight"><%= this.hop.getAttr("weight", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
+	<% if((!this.hop.getAttr("weight", false) || this.hop.getAttr("weight", false) == 0) && (this.hop.getAttr("qty", false) && this.hop.getAttr("qty", false) != 0)) { %><li class="weight"><%= this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
+	<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0) && (this.hop.getAttr("qty", false) && this.hop.getAttr("qty", false) != 0)) { %><li class="weight"><%= this.hop.getAttr("weight", 0)*this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
+    <% if((this.hop.getAttr("co2e", false) && this.hop.getAttr("co2e", false) != 0)) { %>
 	<% var scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("co2e", 0) * this.hop.gc_distance() * this.hop.getAttr("qty", 0)), "kg", 2); %>
 		<li class="co2e"> <%= scaled.value %> <%= scaled.unit %> CO2e</li> <% } %>
 </ul>

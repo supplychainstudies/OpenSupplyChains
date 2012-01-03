@@ -24,14 +24,38 @@ $(document).ready(function() {
 
 		    // fetch supplychain
 		    $(window).resize(function() {
+                var classlist = "zoom vertical horizontal";
+                $("body").removeClass(classlist);
 		    	if(parseInt($(window).height()) > 480 && parseInt($(window).width()) > 640) {
 		    		$("body").removeClass("zoom");
+                    console.log("window resize big");
 		    	}
 		    	else {
 		    		$("body").addClass("zoom");			
+                    // Mobile view
+                    var isiOS = (/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()));
+                    
+                    if(parseInt($(window).height()) > parseInt($(window).width())){
+                        // vertical
+                        $("body").addClass("vertical");			
+                        $('#sourcemap-map-embed').css("height", 416).css("width", 320);
+                    } else {
+                        // horizontal
+                        $("body").addClass("horizontal");			
+                        //$('#sourcemap-map-embed').css("height", 320).css("width", 480);
+                        $('#sourcemap-map-embed').css("height", 266).css("width", 480);
+                    }
+                    if(!isiOS){
+                        $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
+                    }
+                    console.log("window resize small");
 		    	}
-		      	$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
+		      	//$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
 		    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
+                setTimeout(function(){
+                    window.scrollTo(0,0);   
+                    //alert("move");
+                },100);
 
 		    });
             // TODO : make password input window
@@ -41,7 +65,7 @@ $(document).ready(function() {
                 Sourcemap.loadSupplychain(scid, passcode, function(sc) {
                     Sourcemap.embed_instance.map.addSupplychain(sc);
                     $(window).resize();
-                    $("#banner").click(function() {
+                    $("#banner-summary").click(function() {
                         //window.location.href = "view/" + window.location.pathname.split("/")[2];
                         window.open("view/" + window.location.pathname.split("/")[2]);
                     });
@@ -53,6 +77,11 @@ $(document).ready(function() {
                     evt.preventDefault();
                     passcode = $('#' + popID).find("input[name='passcode']").val();
 
+                    $('.submit-status').fadeIn();
+                    $('#fade , .popup_block').fadeOut(function() {
+                        //$('#fade, a.close').remove();
+                    });
+
                     var cb = function(sc){
                         Sourcemap.embed_instance.map.addSupplychain(sc);
                         $(window).resize();
@@ -62,10 +91,22 @@ $(document).ready(function() {
                         });
                     };
                     Sourcemap.loadSupplychain(scid, passcode,cb);
-                    $('#fade , .popup_block').fadeOut(function() {
-                        $('#fade, a.close').remove();
-                    });
                 }); // submit end
+                if(Sourcemap.passcode==''||Sourcemap.passcode==undefined){
+                
+                } else {
+                    $('#fade , .popup_block').fadeOut(function() {
+                    });
+                    passcode = Sourcemap.passcode;
+                    var cb = function(sc){
+                        Sourcemap.embed_instance.map.addSupplychain(sc);
+                        $(window).resize();
+                        $("#banner").click(function() {
+                            window.open("view/" + window.location.pathname.split("/")[2]);
+                        });
+                    };
+                    Sourcemap.loadSupplychain(scid, passcode,cb);
+                }
             }
 			break;
 		case "static":
@@ -117,3 +158,4 @@ $(document).ready(function() {
 	}
 
 });
+

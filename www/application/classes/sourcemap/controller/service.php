@@ -48,7 +48,8 @@ class Sourcemap_Controller_Service extends Controller_REST {
         'csv' => 'text/csv',
 		'xls' => 'application/xls',
 		'xlsx' => 'application/xlsx',
-		'png' => 'image/png'		
+		'png' => 'image/png',		
+		'jpeg' => 'image/jpeg'		
     );
 
     public $_cache_hit = false;
@@ -376,6 +377,10 @@ class Sourcemap_Controller_Service extends Controller_REST {
 
     protected function _serialize_png($png) {
         return $png;
+    }
+    
+    protected function _serialize_jpeg($jpeg) {
+        return $jpeg;
     }
 
     protected function  _rest_error($code=400, $msg='Not found.') {

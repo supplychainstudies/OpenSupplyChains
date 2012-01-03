@@ -12,6 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
+	public $maxrows = 10000;
     public static $default_options = array(
         'headers' => true, 'latcol' => null,
         'loncol' => null, 'addresscol' => null,
@@ -49,10 +50,15 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		$sheets['Upstream'] = $contentPHPExcel->getActiveSheet();
 		$contentReader->setLoadSheetsOnly("Downstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
-		//$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
+		if (count($contentPHPExcel->getSheetNames()) != 0) {
+			$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
+		}
+		
 		
 		$stops = array();
 		$hops = array();
+		$maxrows = 10000;
+		$maxrowcount = 1;
 		$count = 1;
 		foreach($sheets as $sheetname=>$sheet) {
 			// Figure out where all the columns are
@@ -64,6 +70,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 			$sh = array(
 				"Title" => "x",
 				"Address" => "",
+				"Location" => "",
 				"Description" => "",
 				"url:moreinfo" => "",
 				"urltitle:moreinfo" => "",	
@@ -106,8 +113,10 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
 				if ($sh["Title"] == "" && (strpos($value,"name") !== false || strpos($value,"title") !== false || strpos($value,"placename") !== false) && (strpos($value,"youtube") === false && strpos($value,"flickr") === false && strpos($value,"link") === false && strpos($value,"optional") === false))
 					$sh["Title"] = $column;
-				elseif ($sh["Address"] == "" && (strpos($value,"location") !== false || strpos($value,"address") !== false || strpos($value,"coordinate") !== false || (strpos($value,"lat") !== false && strpos($value,"lon") !== false)))
+				elseif ($sh["Address"] == "" && (strpos($value,"address") !== false || strpos($value,"coordinate") !== false || (strpos($value,"lat") !== false && strpos($value,"lon") !== false)))
 					$sh["Address"] = $column;
+				elseif ($sh["Location"] == "" && (strpos($value,"location") !== false))
+					$sh["Location"] = $column;
 				elseif ($sh["Description"] == "" && strpos($value,"descr") !== false)
 					$sh["Description"] = $column;
 				elseif ($sh["url:moreinfo"] == "" && strpos($value,"link") !== false)	
@@ -145,10 +154,14 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					preg_match($pattern, $value, $instances);
 					$tiers[$instances[0]] = $column;
 				}
-				else
+				else {
+					// If you can't find one of our typical column names, add it in as a new type of attr 
 					$sh[$value] = $column;
+				}
 			}
-			
+			if ($sh["Address"] == "" && $sh["Location"] != "") {
+				$sh["Address"] = $sh["Location"];
+			}
 			// Unset Columns that don't exist
 			foreach ($sh as $field=>$column) {
 				if ($column == "") {
@@ -171,14 +184,17 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					// Find the name
 					foreach ($tiers as $num=>$column) {
 						if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
-							$name = $rows->getCell($column . $rowIndex)->getCalculatedValue();							
+							$title = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());							
 						}
 					}
+					// Should be unique name + address
+					$name = $title . "-" . trim($rows->getCell($sh['Address'] . $rowIndex)->getCalculatedValue());
+					// Check if that stop has been already added 
 					if (isset($stops[$name]) == false) {
 						// create a stop 						
 						$stops[$name] = array (
 							"id" => $count,
-							"Title" => $name
+							"Title" => $title
 						);
 						$sh_columns['Title'] = true;
 						// go through all the existing columns and add the values
@@ -193,8 +209,9 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 						}
 						$count++;
 					}
-					// Hops, now
+					// Set a Hop between this stop and the most recent stop in the previous tier 
 					if ($sheetname == "Upstream") {
+						// If the sheet is named upstream, then the tiers travel from upstream to downstream, which means the the parent is the to stop, the existing stop is the from stop 
 						$hops_from = $stops[$name]["id"];
 						$hops_to = "";
 						foreach ($tiers as $num=>$column) {
@@ -207,6 +224,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 							}
 						}	
 					} else {
+						// If the sheet is named Downstream, it travels the opposite way, the parent is the from, and the current stop is the to 
 						$hops_to = $stops[$name]["id"];
 						$hops_from = "";
 						foreach ($tiers as $num=>$column) {
@@ -239,6 +257,10 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					} // 	if ($hops_from != "" && $hops_to != "" and isset($hops[$hops_from."-".$hops_to]) == false && $hops_from != $hops_to) {
 				
 				} // If line isn't blank, etc
+				$maxrowcount++;
+				if ($maxrowcount>$maxrows) {
+					break 2;
+				}
 			} // Foreach
 		} // foreach($sheets as $sheet=>$rows)
 

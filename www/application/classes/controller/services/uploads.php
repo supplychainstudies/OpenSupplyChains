@@ -1,3 +1,4 @@
+p
 <?php
 /* Copyright (C) Sourcemap 2011
  * This program is free software: you can redistribute it and/or modify it under the terms
@@ -13,20 +14,21 @@
 
 class Controller_Services_Uploads extends Sourcemap_Controller_Service {
 	
-	public function action_get() {    
-		$s3 = new S3(Kohana::config('apis')->awsAccessKey, Kohana::config('apis')->awsSecretKey);
+	public function action_get() {
+        $s3 = new S3(Kohana::config('apis')->awsAccessKey, Kohana::config('apis')->awsSecretKey);
         if(isset($_GET['bucket']) && isset($_GET['filename'])) {
-            try{ // error: filename(account) not exist
+            try{ 
 			    $img = $s3->getObject($_GET['bucket'], baseName($_GET['filename']));
             } catch (Exception $e) {
-                if($_GET['bucket']=='accountpics')
-                    return $this->request->redirect('assets/images/default-user.png'); 
-                else // bucket : banner
-                    return $this->_bad_request("No such banner");
+                return $this->_bad_request("No such image.");
             }
-			$this->_format = "png";
-    	    $this->response = $img->body;
+            $format = substr(strrchr($_GET['filename'],'.'),1);
+			if ($format == 'jpeg'){
+                $format = 'jpg';
+            }
 
+            $this->_format = $format;
+    	    $this->response = $img->body;
         } else {
             return $this->_bad_request("Bucket and filename required.");
         }
@@ -39,23 +41,28 @@ class Controller_Services_Uploads extends Sourcemap_Controller_Service {
         }
 		$s3 = new S3(Kohana::config('apis')->awsAccessKey, Kohana::config('apis')->awsSecretKey);
 		$posted = $this->request->posted_data;
-		if(isset($posted->bucket) && isset($posted->filename)) {
-            if($current_user->username!=$posted->filename){
-                return $this->_bad_request("Wrong filename.");    
-            }
-			$s3->putObjectFile($posted->file->tmp_name, $posted->bucket, $posted->filename, S3::ACL_PUBLIC_READ);
 
-            // if 
-            if($_POST['bucket']=='bannerpics'){
-                $current_user->banner_url = "/services/uploads?bucket=bannerpics&filename=".$current_user->username;
-                $current_user->save();
-            }                
+        // construct file name based on user's acct
+        $filename = $current_user->username . "." . substr(strrchr($posted->file->name,'.'),1);
+        if(isset($posted->bucket) && isset($filename)) {
+            try{
+                // Note that we don't create buckets dynamically-- We'll have to log in to AWS and create the bucket manually
+                $s3->putObjectFile($posted->file->tmp_name, $posted->bucket, $filename, S3::ACL_PUBLIC_READ);
+                
+                if ($posted->bucket == Kohana::config('aws')->avatar_bucket){ 
+                    $current_user->avatar_url = $filename;
+                    $current_user->save();
+                } elseif ($posted->bucket == Kohana::config('aws')->banner_bucket){
+                    $current_user->banner_url = $filename;
+                    $current_user->save();
+                } else { // generic
+                    //pass
+                }
+            } catch (Exception $e){
+                return $this->_bad_request("There was a problem saving:" . $e);
+            }
+
             return $this->request->redirect('home'); 
-			/*
-              $this->response = (object)array(
-	            'uploaded' => $posted->filename
-	        );
-             */
 		}
 		else {
 			return $this->_bad_request("Bucket and filename required.");

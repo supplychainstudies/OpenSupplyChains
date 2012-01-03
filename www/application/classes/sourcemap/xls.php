@@ -15,16 +15,101 @@
 class Sourcemap_xls {
 	//public static function parse($kml) { }
 	//git@codebasehq.com:sourcemap/sourcemap/sourcemap.git
+	
+	public static function addChildren($supplychain, $stop, $direction, $hierarchy) {
+		foreach($supplychain->hops as $hop) {
+			if ($direction = "upstream") {
+				if ($stop == $hop->to_stop_id) {
+					$hierarchy[$hop->from_stop_id] = array("level"=>$hierarchy[$stop]['level']+1,"row"=>$hierarchy[$stop]['row']+1);
+					foreach ($hierarchy as $st=>$h) {
+						if ($h['row']>=$hierarchy[$hop->from_stop_id]['row']) {
+							$hierarchy[$st]['row']++;
+						}
+					}
+					$hierarchy = addChildren($supplychain, $hop->from_stop_id, $direction, $hierarchy);
+				}
+			}
+			if ($direction = "downstream") {
+				if ($stop == $hop->from_stop_id) {
+					$hierarchy[$hop->to_stop_id] = array("level"=>$hierarchy[$stop]['level']+1,"row"=>$hierarchy[$stop]['row']+1);
+					foreach ($hierarchy as $st=>$h) {
+						if ($h['row']>=$hierarchy[$hop->to_stop_id]['row']) {
+							$hierarchy[$st]['row']++;
+						}
+					}
+					$hierarchy = addChildren($supplychain, $hop->from_stop_id, $direction, $hierarchy);
+				}
+			}
+		}
+		
+		return $hierarchy;
+	}
+	
+	
+	public static function findDivergence($stopid, $supplychain, $stop_tally) {
+		//find the next stop
+		if (isset($stop_tally[$stopid]['from']) == true) {
+			if ($stop_tally[$stopid]['from'] > 1) {
+				return $stopid;
+			} else {
+				if (isset($stop_tally[$stopid]['next']) == true) {
+					return self::findDivergence($stop_tally[$stopid]['next'], $supplychain, $stop_tally);
+				} else {
+					return $stopid;
+				}
+			}
+		} elseif (isset($stop_tally[$stopid]['from']) == false && isset($stop_tally[$stopid]['to']) == true) {
+			return $stopid;
+		} 
+		/*
+		if (isset($stop_tally[$stopid]['next']) == true) {
+			if (isset($stop_tally[$stop_tally[$stopid]['next']]['from']) == true) {
+				if ($stop_tally[$stop_tally[$stopid]['next']]['from'] > 1) {
+					return $stop_tally[$stopid]['next'];
+				} else {
+					self::findDivergence($stop_tally[$stopid]['next'], $supplychain, $stop_tally);
+				}
+			} else {
+				return $stopid;
+			}
+		} else {
+			return $stopid;
+		}
+		*/
+	}
+	
+	public static function traverseForward($stopid, $tier, $supplychain, $tree) { 
+		array_push($tree, array("id"=>$stopid, "tier"=>$tier));		
+		// Find all the next stops
+		foreach ($supplychain->hops as $hop) {
+			if ($stopid == $hop->from_stop_id) {
+				$tree = self::traverseForward($hop->to_stop_id, $tier+1, $supplychain, $tree);
+			}
+		}
+		return $tree; 
+	}
+	
+	public static function traverseBackward($stopid, $tier, $supplychain, $tree ) { 
+		array_push($tree, array("id"=>$stopid, "tier"=>$tier));		
+		// Find all the next stops
+		foreach ($supplychain->hops as $hop) {
+			if ($stopid == $hop->to_stop_id) {
+				$tree = self::traverseBackward($hop->from_stop_id, $tier+1, $supplychain, $tree);
+			}
+		}
+		return $tree; 
+	}
+	
+	public static function getStopInfo($id, $supplychain) {
+		foreach ($supplychain->stops as $stop) {
+			if ($id == $stop->id) {
+				return $stop;
+			}
+		}
+	}
+	
 	public static function make($supplychain) {
-		
-		$stopswriter = new PHPExcel();
-		$stopswriter->createSheet();
-		$stopswriter->setActiveSheetIndex(0);
-		$stopswriter->getActiveSheet()->setTitle("Upstream");
-		$stopswriter->createSheet();
-		$stopswriter->setActiveSheetIndex(1);
-		$stopswriter->getActiveSheet()->setTitle("Downstream");
-		
+	
 		// We have to figure out the paths/tiers
 		// To do that, we can traverse hops and push stuff onto paths
 		$tree = array();
@@ -34,97 +119,268 @@ class Sourcemap_xls {
 		$dh = array();
 		$umax_level = 0;
 		$dmax_level = 0;
-		// Find 0th points
-		//$start_stops = array();
-		//foreach($supplychain->hops as $hop) {
-		//	if (isset($start_stops[$hop->to_stop_id]) == false) $start_stops[$hop->to_stop_id]=1; else $start_stops[$hop->to_stop_id]++;
-		//	if (isset($start_stops[$hop->from_stop_id]) == false) $start_stops[$hop->from_stop_id]=1; else $start_stops[$hop->from_stop_id]++;
-		//}
-		//foreach($start_stops as $meow) {
-		//	
-		//}
+		/*
 		foreach($supplychain->hops as $hop) {
-			// First, we have to see if the to stop is already in the tree
-			// http://192.168.1.39/services/supplychains/149?f=xls
-			//$found = false;
-			/*
-			foreach ($tree as $position=>$t) {
-				if ($t['id'] == $hop->to_stop_id) {
-					//$first_half = array_slice($tree,0,$position);
-					//$middle = array('id'=>$hop->from_stop_id,'level'=>($t['level']+1));
-					//$max_level = max($max_level, ($t['level']+1));
-					//$last_half = array_slice($tree,$position);
-					//array_unshift($last_half,$middle);
-					//$tree = array_merge($first_half,$last_half);
-					$stops_hierarchy[$hop->from_stop_id] = array('level'=>($t['level']+1), 'row'=>$position);
-					$found = true;
-					break 1;
-				}
-			} */
-			
-			
-			if(isset($uh[$hop->from_stop_id]) == false) {	
+			// http://192.168.1.39/services/supplychains/211?f=xls
+			// If it is upstream
+			if(isset($dh[$hop->from_stop_id]) == false && isset($uh[$hop->from_stop_id]['f']) == false && isset($uh[$hop->from_stop_id]) == false) {	
 				if(isset($uh[$hop->to_stop_id]) == false) {
 					$uh[$hop->to_stop_id] = array('level'=>0, 'row'=>count($uh)+1);
 				}		
 				$uh[$hop->from_stop_id] = array('level'=>($uh[$hop->to_stop_id]['level']+1), 'row'=>$uh[$hop->to_stop_id]['row']+1);
 				$umax_level = max($umax_level, ($uh[$hop->to_stop_id]['level']+1));
 				foreach ($uh as $num=>$st) {
-					if ($st['row'] >= $uh[$hop->from_stop_id]['row']) {
+					if ($st['row'] >= $uh[$hop->from_stop_id]['row'] && $num != $hop->from_stop_id) {
 						$uh[$num]['row']++;
 					}
 				} 
+			} elseif (isset($dh[$hop->from_stop_id]) == false && isset($uh[$hop->from_stop_id]['f']) == false && isset($uh[$hop->from_stop_id]) == true) {
+				$uh[$hop->from_stop_id]['f'] = "f";
+				// for from and every child of from, move it over a level
+				$leveltrip = $uh[$hop->from_stop_id]['level'];
+				$level = $leveltrip+1;
+				$uh[$hop->from_stop_id]['level']++;
+				for ($i=$uh[$hop->from_stop_id]['row']+1; $level>$leveltrip && $i < count($uh); $i++) {
+					foreach ($uh as $num=>$st) {
+						if ($uh[$num]['row'] == $i) {
+							if ($uh[$num]['level']>$leveltrip) {
+								$level = $uh[$num]['level'];
+								$uh[$num]['level']++;
+							}
+							break 1;
+						}
+					}
+				}
+				if(isset($uh[$hop->to_stop_id]) == false) {
+					$uh[$hop->to_stop_id] = array('level'=>0, 'row'=> $uh[$hop->from_stop_id]['row']);
+					foreach ($uh as $num=>$st) {
+						if ($st['row'] >= $uh[$hop->to_stop_id]['row'] && $num != $hop->to_stop_id) {
+							$uh[$num]['row']++;
+						}
+					}					
+				}				
 			} else {
-				// Has to be downstream. Pop it in there, man
+                //  First, check if the to point is already there 
+	            //  Pop it in the downstream series
 				if(isset($dh[$hop->from_stop_id]) == false) {
 					$dh[$hop->from_stop_id] = array('level'=>0, 'row'=>count($dh)+1);
+				
+					// Anything that is a parent needs to be made into a child on downstream sheet
+					$level = 3;
+					$start =$uh[$hop->from_stop_id]['row']-1;
+					// travel up the rows from where fromstopid is to grab all the parents
+					for ($r = $start; $level>0 && $r>0; $r--) {
+						// loop through all the upstream rows to find the one that is row-1
+						foreach ($uh as $num=>$st) {
+							// If this is the previous row
+							if ($uh[$num]['row'] == $r) {
+								// If the stop isn't already in the downstream sheet, put it in at the bottom
+								if (isset($dh[$num]) == false) {
+									$level = abs($uh[$hop->from_stop_id]['level'] - $st['level']);
+									$dh[$num] = array('level'=>$level, 'row'=>count($dh)+1);
+									foreach ($uh as $num2=>$st2) { 
+					                    if ($uh[$num2]['row'] >= $uh[$num]['row']) { 
+					                        $uh[$num2]['row']--; 
+					                    } 
+					                }
+								} else {
+								// if the stop is in there already, grab it and everything between it and the next row at the same level (that would be all of its children) and move it and its children to the bottom
+									$r2 = $dh[$num]['row'];
+									// The loop should run till the level of the current stop in dh is leveltrip
+									$leveltrip = $dh[$num]['level'];
+									$level2 = $leveltrip+1;
+									while ($level2>$leveltrip) {
+										foreach ($dh as $num2=>$st2) {
+											if ($st2['row'] == $r2) {
+												$level2 = $dh[$num2]['level'];
+												$dh[$num2]['level'] = $dh[$num]['level']++;
+												$dh[$num2]['row'] = count($dh)+1;
+												foreach ($uh as $num3=>$st3) { 
+								                    if ($st3['row'] >= $r2) { 
+								                        $uh[$num3]['row']--; 
+								                    } 
+								                }
+												break 1;		
+											}
+										}
+									} 
+									$level = 0;									
+								}
+								unset($uh[$num]);
+								break 1;	
+							}
+						}
+					}
+					// we have to loop and pull stuff back levels
+					
 				}
-				$dh[$hop->to_stop_id] = array('level'=>($dh[$hop->from_stop_id]['level']+1), 'row'=>$dh[$hop->from_stop_id]['row']+1);
-				$dmax_level = max($dmax_level, ($dh[$hop->from_stop_id]['level']+1));
-				foreach ($dh as $num=>$st) {
-					if ($st['row'] >= $dh[$hop->to_stop_id]['row']) {
-						$dh[$num]['row']++;
+				// If the to stop isn't there, put it in underneath the from stop and move everything else down
+				if (isset($dh[$hop->to_stop_id]) == false) {
+					$dh[$hop->to_stop_id] = array('level'=>($dh[$hop->from_stop_id]['level']+1), 'row'=>$dh[$hop->from_stop_id]['row']+1);						
+					$dmax_level = max($dmax_level, ($dh[$hop->to_stop_id]['level']+1));
+					foreach ($dh as $num=>$st) {
+						if ($st['row'] >= $dh[$hop->to_stop_id]['row'] && $num != $hop->to_stop_id) {
+							$dh[$num]['row']++;
+						}
+					}
+				} else {
+					// If the to stop is in there, move it and its children underneath the from stop and move everything else up a couple of rows
+					$r = $dh[$hop->to_stop_id]['row'];
+					$leveltrip = $dh[$hop->to_stop_id]['level'];
+					//$maxloops = count($dh)- $r +1;
+					//$maxcount = 0;
+					$level = $leveltrip+1;
+					while ($level>$leveltrip && $maxcount<$maxloops) {
+						foreach ($dh as $num=>$st) {
+							if ($st['row'] == $r) {
+								$level = $dh[$num]['level'];
+								$dh[$num]['level']++;
+								$dh[$num]['row'] = count($dh) +1;
+								foreach ($uh as $num2=>$st2) { 
+				                    if ($st2['row'] >= $r) { 
+				                        $uh[$num2]['row']--; 
+				                    } 
+				                }
+								$maxcount++;
+								break 1;		
+							}
+						}
 					}
 				}
 			}
 			/*
-			else {	
-				$stops_hierarchy[$hop->to_stop_id] = array('level'=>0, 'row'=>count($stops_hierarchy));
-			} */
-			//var_dump($stops_hierarchy);
-		}
-		
-		
-		//var_dump($stops_hierarchy);
-		/*
-        $points = array(
-        1 => array()
-		); 
-		for($i=0;$i<=$max_level;$i++) {
-			$points[1][] = "Tier ". $i;
-		}
-		array_push($points[1],
-			"Location",
-			"Address",
-			"Description",
-			"Percentage",
-			"youtube:title",
-			"youtube:link",
-			"flickr:setid",
-			"qty",
-			"CO2e",
-			"CO2e-Reference",
-			"Water",
-			"Water-Reference",
-			"Energy",
-			"Energy-Reference",
-			"color",
-			"size"
-			);
+			var_dump($hop->from_stop_id);
+			var_dump($hop->to_stop_id);
+			var_dump($uh);
+			var_dump($dh);
+			
+		}	
 		*/
+		$uh = array();
+		$dh = array();
+		$stop_tally = array();
+		foreach($supplychain->hops as $hop) {
+			if (isset($stop_tally[$hop->to_stop_id]['to']) == false) {
+				$stop_tally[$hop->to_stop_id]['to'] = 1;
+			} else {
+				$stop_tally[$hop->to_stop_id]['to']++;
+			}
+			if (isset($stop_tally[$hop->from_stop_id]['from']) == false) {
+				$stop_tally[$hop->from_stop_id]['from'] = 1;
+			} else {
+				$stop_tally[$hop->from_stop_id]['from']++;
+			}
+			$stop_tally[$hop->from_stop_id]['next'] = $hop->to_stop_id;	
+		}
+		$middles = array();
+		$downstream_tree = array();
+		$upstream_tree = array();
+		foreach($supplychain->stops as $stop) {
+			if (isset($stop_tally[$stop->id]) == true) {
+				// then, this is a starting point in the tree
+				if (isset($stop_tally[$stop->id]['to']) == false && isset($stop_tally[$stop->id]['from']) == true){
+					// iterate through and find the first spot where it diverges
+					$middles[] = self::findDivergence($stop->id, $supplychain, $stop_tally);
+				} 
+			} else {
+				$upstream_tree[] = array("id"=>$stop->id, "tier"=>0);
+			}
+		}
+		$middles = array_unique($middles);
+		foreach($middles as $middle) {
+			$downstream_tree = self::traverseForward($middle,0, $supplychain, $downstream_tree);
+			$upstream_tree = self::traverseBackward($middle,0, $supplychain, $upstream_tree);
+		}
+		$ucolumns = array();
+		$dcolumns = array();
+		foreach ($upstream_tree as $h) {
+			if (isset($ucolumns[$h['tier']]) == false) {
+				$ucolumns[$h['tier']] = "Tier ".$h['tier'];
+			}
+		}
+		foreach ($downstream_tree as $h) {
+			if (isset($dcolumns[$h['tier']]) == false) {
+				$dcolumns[$h['tier']] = "Tier ".$h['tier'];
+			}
+		}
 		
+		// If there's only 1 tier in the downstream sheet, it means that we dont need one
+		if (count($dcolumns) == 1) {
+			unset($downstream_tree);
+		}
 		
-		
+		$stopswriter = new PHPExcel();
+		if (isset($upstream_tree) == true){
+			$stopswriter->createSheet();
+			$stopswriter->setActiveSheetIndex(0);
+			$stopswriter->getActiveSheet()->setTitle("Upstream");
+			foreach ($upstream_tree as $num=>$row) {
+				$stop = self::getStopInfo($row['id'], $supplychain);
+				if (isset($stop->attributes->title) == true) {
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($row['tier'],$num+2,$stop->attributes->title);
+				}
+			
+				foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+					if (in_array($attribute_name,$ucolumns) == false) {
+						$ucolumns[] = $attribute_name;
+					}
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$ucolumns),$num+2,$attribute_value);					
+				} 
+			}
+			foreach ($ucolumns as $num=>$column) {
+				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
+			}	
+		}
+		if (isset($downstream_tree) == true) {	
+			$stopswriter->createSheet();
+			$stopswriter->setActiveSheetIndex(1);
+			$stopswriter->getActiveSheet()->setTitle("Downstream");
+			foreach ($downstream_tree as $num=>$row) {
+				$stop = self::getStopInfo($row['id'], $supplychain);
+				if (isset($stop->attributes->title) == true) {
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($row['tier'],$num+2,$stop->attributes->title);
+				}
+			
+				foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+					if (in_array($attribute_name,$dcolumns) == false) {
+						$dcolumns[] = $attribute_name;
+					}
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$dcolumns),$num+2,$attribute_value);					
+				} 
+			} 
+			foreach ($dcolumns as $num=>$column) {
+				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
+			}
+		}
+		/*
+		foreach($supplychain->stops as $stop) {
+			if (isset($stop_tally[$stop->id]) == true) {
+				if (isset($stop_tally[$stop->id]['to']) == true && isset($stop_tally[$stop->id]['from']) == true){
+					if ($stop_tally[$stop->id]['from']>1 && $stop_tally[$stop->id]['to']>1) {
+						$dh[$stop->id] = array("level"=>0,"row"=>count($dh)+1);
+						$uh[$stop->id] = array("level"=>0,"row"=>count($uh)+1);
+						$uh = $this->addChildren($supplychain, $stop->id, "upstream", $uh);
+						$dh = $this->addChildren($supplychain, $stop->id, "downstream", $dh);
+					}
+				}
+			} else {
+				$dh[$stop->id] = array("level"=>0,"row"=>count($dh)+1);
+			}
+		}
+		$ucolumns = array();
+		$dcolumns = array();
+		foreach ($uh as $h) {
+			if (isset($ucolumns[$h['level']]) == false) {
+				$ucolumns[$h['level']] = "Tier ".$h['level'];
+			}
+		}
+		foreach ($dh as $h) {
+			if (isset($dcolumns[$h['level']]) == false) {
+				$dcolumns[$h['level']] = "Tier ".$h['level'];
+			}
+		}
+		*/
+		/*
 		$ucolumns = array();
 		for($i=0;$i<=$umax_level;$i++) {
 			$ucolumns[] = "Tier ".$i;
@@ -132,236 +388,106 @@ class Sourcemap_xls {
 		$dcolumns = array();
 		for($i=0;$i<=$dmax_level;$i++) {
 			$dcolumns[] = "Tier ".$i;
-		}
+		} 
+		
 		foreach($supplychain->stops as $stop) {
-				if (isset($uh[$stop->id]) == true) {
-					$stopswriter->setActiveSheetIndex(0);
-					if (isset($stop->attributes->title) == true) {
-						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($uh[$stop->id]['level'],$uh[$stop->id]['row']+1,$stop->attributes->title);
-					}
-					foreach ($stop->attributes as $attribute_name=>$attribute_value) {
-						if (in_array($attribute_name,$ucolumns) == false) {
-							$ucolumns[] = $attribute_name;
-						}
-						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$ucolumns),$uh[$stop->id]['row']+1,$attribute_value);					
-					}
-				}
-				if (isset($dh[$stop->id]) == true) {
-					$stopswriter->setActiveSheetIndex(1);
-					if (isset($stop->attributes->title) == true) {
-						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($dh[$stop->id]['level'],$dh[$stop->id]['row']+1,$stop->attributes->title);
-					}
-					foreach ($stop->attributes as $attribute_name=>$attribute_value) {
-						if (in_array($attribute_name,$dcolumns) == false) {
-							$dcolumns[] = $attribute_name;
-						}
-						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$dcolumns),$dh[$stop->id]['row']+1,$attribute_value);					
-					}
-				}
-				
-				/*
-				$stops_hierarchy[$stop->id]['level'];
+			if (isset($uh[$stop->id]) == true) {
+				$stopswriter->setActiveSheetIndex(0);
 				if (isset($stop->attributes->title) == true) {
-					$vals['title'] = $stop->attributes->title;
-					$vals['placename'] = $stop->attributes->title;
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($uh[$stop->id]['level'],$uh[$stop->id]['row']+1,$stop->attributes->title);
 				}
-				if (isset($stop->attributes->name) == true) {
-					$vals['title'] = $stop->attributes->name;
-				}				
-				if (isset($stop->attributes->placename) == true) {
-					$vals['placename'] = $stop->attributes->placename;
-				}
-				if (is_array($stop->geometry) == true) {
-					$vals['address'] = $stop->geometry;
-				}
-				if (isset($stop->attributes->address) == true) {
-					$vals['address'] = $stop->attributes->address;
-				}
-				if (isset($stop->attributes->description) == true) {
-					$vals['description'] = $stop->attributes->description;
-				}
-				if (isset($stop->attributes->{"youtube-url"}) == true) {
-					$vals['youtube:link'] = $stop->attributes->{"youtube-url"};
-				}
-				if (isset($stop->attributes->{"youtube-title"}) == true) {
-					$vals['youtube:title'] = $stop->attributes->{"youtube-title"};
-				}
-				if (isset($stop->attributes->{"flickr-setid"}) == true) {
-					$vals['flickr:setid'] = $stop->attributes->{"flickr-setid"};
-				}		
-				if (isset($stop->attributes->qty) == true) {
-					$vals['qty'] = $stop->attributes->qty;
-				}
-				if (isset($stop->attributes->co2e) == true) {
-					$vals['co2e'] = $stop->attributes->co2e;
-				}
-				if (isset($stop->attributes->color) == true) {
-					$vals['color'] = $stop->attributes->color;
-				}
-				if (isset($stop->attributes->{"pct:vol"}) == true) {
-					$vals['percentage'] = $stop->attributes->{"pct:vol"};
-				}
-				if (isset($stop->attributes->unit) == true) {
-					$vals['unit'] = $stop->attributes->unit;
-				}
-				$points[] = array(
-						$vals['title'],
-						$vals['placename'],
-						$vals['address'],
-						$vals['description'],
-						$vals['percentage'],
-						$vals['youtube:title'],
-						$vals['youtube:link'],
-						$vals['flickr:setid'],
-						$vals['qty'],
-						$vals['co2e'],
-						$vals['color']
-					);
-					
-			}
-			$stopswriter->setActiveSheetIndex(0);
-			foreach ($ucolumns as $num=>$column) {
-				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
-			}
-			$stopswriter->setActiveSheetIndex(1);
-			foreach ($dcolumns as $num=>$column) {
-				$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($num,1,$column);
-			}
-			
-			foreach($supplychain->hops as $hop) {
-				$vals = array(
-					"from" => "",
-					"to" => "",	
-					"description" => "",	
-					"color" => "",	
-					"transport" => "",	
-					"qty" => "",	
-					"unit" => "",	
-					"co2e" => ""
-				);
-		
-				if (isset($hop->from_stop_id) == true && isset($hop->to_stop_id) == true) {
-					$vals['from'] = $hop->from_stop_id;
-					$vals['to'] = $hop->to_stop_id;
-					//$vals['from'] = $ftr->geometry->coordinates[0][0].", ".$ftr->geometry->coordinates[0][1];
-					//$vals['to'] = $ftr->geometry->coordinates[1][0].", ".$ftr->geometry->coordinates[1][1];
-				}
-				if (isset($hop->attributes->description) == true) {
-					$vals['description'] = $hop->attributes->description;
-					if ($hop->attributes->description != "") {
-						// Lotus thinks that this should look like "From - To" if its blank
+				foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+					if (in_array($attribute_name,$ucolumns) == false) {
+						$ucolumns[] = $attribute_name;
 					}
-				} 
-				if (isset($hop->attributes->color) == true) {
-					$vals['color'] = $hop->attributes->color;
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$ucolumns),$uh[$stop->id]['row']+1,$attribute_value);					
 				}
-				if (isset($hop->attributes->qty) == true) {
-					$vals['qty'] = $hop->attributes->qty;
-				}
-				if (isset($hop->attributes->unit) == true) {
-					$vals['unit'] = $hop->attributes->unit;
-				}		
-				if (isset($hop->attributes->co2e) == true) {
-					$vals['co2e'] = $hop->attributes->co2e;
-				}		
-				if (isset($hop->attributes->{"youtube-url"}) == true) {
-					$vals['youtube:link'] = $hop->attributes->{"youtube-url"};
-				}
-				if (isset($hop->attributes->{"youtube-title"}) == true) {
-					$vals['youtube:title'] = $hop->attributes->{"youtube-title"};
-				}
-				if (isset($hop->attributes->{"flickr-setid"}) == true) {
-					$vals['flickr:setid'] = $hop->attributes->{"flickr-setid"};
-				}
-			    $hops[] = array(
-						$vals['from'],
-						$vals['to'],
-						$vals["description"],	
-						$vals['color'],	
-						"",	
-						$vals['qty'],
-						$vals['unit'],
-						$vals['co2e']
-					);
 			}
-		
-		
-		$spreadsheet_attributes = array(
-	        'author'       => 'Sourcemap Incorporated',
-	        'title'        => $supplychain->attributes->title,
-	        'subject'      => $supplychain->attributes->title,			
-		);
-		if (isset($supplychain->attributes->description) == true) {
-			$spreadsheet_attributes['description'] = $supplychain->attributes->description;
+			if (isset($dh[$stop->id]) == true) {
+				$stopswriter->setActiveSheetIndex(1);
+				if (isset($stop->attributes->title) == true) {
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($dh[$stop->id]['level'],$dh[$stop->id]['row']+1,$stop->attributes->title);
+				}
+				foreach ($stop->attributes as $attribute_name=>$attribute_value) {
+					if (in_array($attribute_name,$dcolumns) == false) {
+						$dcolumns[] = $attribute_name;
+					}
+					$stopswriter->getActiveSheet()->setCellValueByColumnAndRow(array_search($attribute_name,$dcolumns),$dh[$stop->id]['row']+1,$attribute_value);					
+				}
+			}
+			$vals = array(
+				'title' => "",
+				'placename' => "",
+				'address' => "",
+				'description' => "",
+				'percentage' => "",
+				'youtube:title' => "",
+				'youtube:link' => "",
+				'flickr:setid' => "",
+				'qty' => "",
+				'co2e' => "",
+				'color' => ""
+			);
+			//$stops_hierarchy[$stop->id]['level'];
+			if (isset($stop->attributes->title) == true) {
+				$vals['title'] = $stop->attributes->title;
+				$vals['placename'] = $stop->attributes->title;
+			}
+			if (isset($stop->attributes->name) == true) {
+				$vals['title'] = $stop->attributes->name;
+			}				
+			if (isset($stop->attributes->placename) == true) {
+				$vals['placename'] = $stop->attributes->placename;
+			}
+			if (is_array($stop->geometry) == true) {
+				$vals['address'] = $stop->geometry;
+			}
+			if (isset($stop->attributes->address) == true) {
+				$vals['address'] = $stop->attributes->address;
+			}
+			if (isset($stop->attributes->description) == true) {
+				$vals['description'] = $stop->attributes->description;
+			}
+			if (isset($stop->attributes->{"youtube-url"}) == true) {
+				$vals['youtube:link'] = $stop->attributes->{"youtube-url"};
+			}
+			if (isset($stop->attributes->{"youtube-title"}) == true) {
+				$vals['youtube:title'] = $stop->attributes->{"youtube-title"};
+			}
+			if (isset($stop->attributes->{"flickr-setid"}) == true) {
+				$vals['flickr:setid'] = $stop->attributes->{"flickr-setid"};
+			}		
+			if (isset($stop->attributes->qty) == true) {
+				$vals['qty'] = $stop->attributes->qty;
+			}
+			if (isset($stop->attributes->co2e) == true) {
+				$vals['co2e'] = $stop->attributes->co2e;
+			}
+			if (isset($stop->attributes->color) == true) {
+				$vals['color'] = $stop->attributes->color;
+			}
+			if (isset($stop->attributes->{"pct:vol"}) == true) {
+				$vals['percentage'] = $stop->attributes->{"pct:vol"};
+			}
+			if (isset($stop->attributes->unit) == true) {
+				$vals['unit'] = $stop->attributes->unit;
+			}
+			$points[] = array(
+					$vals['title'],
+					$vals['placename'],
+					$vals['address'],
+					$vals['description'],
+					$vals['percentage'],
+					$vals['youtube:title'],
+					$vals['youtube:link'],
+					$vals['flickr:setid'],
+					$vals['qty'],
+					$vals['co2e'],
+					$vals['color']
+				);	
 		}
-		
-		$ws = new Spreadsheet($spreadsheet_attributes);
+		*/
 
-        $ws->set_active_sheet(0);
-        $as = $ws->get_active_sheet();
-        $as->setTitle('Stops');
-        $as->getDefaultStyle()->getFont()->setSize(12);
-        $as->getColumnDimension('A')->setWidth(20); // Name
-        $as->getColumnDimension('B')->setWidth(20); // Location
-        $as->getColumnDimension('C')->setWidth(20); // Address
-        $as->getColumnDimension('D')->setWidth(20); // Description
-        $as->getColumnDimension('E')->setWidth(7); // Percentage
-        $as->getColumnDimension('F')->setWidth(20); // youtube:title
-        $as->getColumnDimension('G')->setWidth(20); // youtube:link
-        $as->getColumnDimension('H')->setWidth(20); // flickr:setid
-        $as->getColumnDimension('I')->setWidth(10); // qty
-        $as->getColumnDimension('J')->setWidth(10); // CO2e
-        $as->getColumnDimension('K')->setWidth(10); // Color
-        $as->getColumnDimension('L')->setWidth(10); // Size
-        $as->getColumnDimension('M')->setWidth(20); // Code
-        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('M')->setVisible(false); // Make To invisible
-        // Percentage
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('E',array(0,100), "DECIMAL", "Entry", "Enter a number between 0 and 100","Invalid Entry", "Enter a number between 0 and 100");
-        // Change E so that its in between 0 and 100    
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('G','IF(MID(cell,1,7)="http://", TRUE, FALSE)', "CUSTOM", "Enter a URL", "Enter a valid website address in a similar format to 'http://www.example.com'.", "Enter a URL", "Enter a valid website address in a similar format to 'http://www.example.com'.");
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('I',"", "DECIMAL", "Entry", "Enter a number","Invalid Entry", "Enter a number");        
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('J',"", "DECIMAL", "Entry", "Enter a number","Invalid Entry", "Enter a number");
-        // lock I (Size)        
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_validation('K','=IF(LEN(cell)=7,IF(MID(cell,1,1)="#",IF(ISERROR(HEX2DEC(MID(cell,2,6)))=FALSE,TRUE,FALSE),FALSE),FALSE)',"CUSTOM","Here you must put a hexadecimal color value preceded by the pound sign (for example, '#DFDFDF'). You can use a color picker like (http://www.colorpicker.com/) to get these values.", "Incorrect Input","That is not a hexadecimal color value. Refer to a tool like (http://www.colorpicker.com/) to get a value in the form '#DFDFDF'");
-        // Add All the points to the Sheet
-        $ws->set_data($points, false);
-        // Add a unique name row
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_formula('M', '=IF(Acounter<>"","#"&Acounter& " - "&Bcounter&"","")');
-
-        // Calculate the size column
-        // Working Validator - Leo doesnt want anymore //$ws->set_column_formula('L', '=IF(isNumber(Ecounter)=TRUE,SQRT((MIN(100,MAX(10,Ecounter)))/3.14),"")');
-        // set M to apply formula
-        //$ws->freezeTopRow();
-
-        // HOPS       
-        $ws->create_active_sheet();
-        $as = $ws->get_active_sheet();
-        $as->setTitle('Hops');
-        $as->getDefaultStyle()->getFont()->setSize(12);
-        $as->getColumnDimension('A')->setWidth(20); // From
-        $as->getColumnDimension('B')->setWidth(20); // To
-        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('C')->setWidth(20); // Origin Point (From)
-        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('D')->setWidth(20); // Destination Point (To)
-        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('A')->setVisible(false); // Make From invisible
-        // Working Validator - Leo doesnt want anymore //$as->getColumnDimension('B')->setVisible(false); // Make To invisible
-        $as->getColumnDimension('C')->setWidth(20); // Description
-        $as->getColumnDimension('D')->setWidth(20); // Color
-        $as->getColumnDimension('E')->setWidth(20); // Transport
-        $as->getColumnDimension('F')->setWidth(20); // Qty
-        $as->getColumnDimension('G')->setWidth(20); // Unit
-        $as->getColumnDimension('H')->setWidth(20); // CO2e
-
-		$ws->set_data($hops, false);
-		
-		// Set the Workbook to the first sheet
-		$ws->set_active_sheet(0);
-		$title = "A Sourcemap";
-		if (isset($supplychain->attributes->title) == true) {
-			$title = $supplychain->attributes->title;
-		}
-		
-		// Done! Open on the Client side
-		
 		$sWriter = new PHPExcel_Writer_Excel5($stopswriter);	
         //$writer->setPreCalculateFormulas(true);
         $request = Request::instance();
@@ -370,7 +496,8 @@ class Sourcemap_xls {
         $request->headers['Cache-Control'] = 'max-age=0';
         $request->send_headers();
         $sWriter->save('php://output');
-		*/
+		// Done! Open on the Client side
+				
 	}
 	
 }

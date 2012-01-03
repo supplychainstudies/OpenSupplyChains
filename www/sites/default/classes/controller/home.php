@@ -45,16 +45,13 @@ class Controller_Home extends Sourcemap_Controller_Layout {
         if($user->has('roles', $channel_role))
             $isChannel = true;
 
-        // Profile pictures url
-        //$user_arr['avatar'] = Gravatar::avatar($user->email, 128);
-        $user_arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$user_arr['username'];
-
         $this->template->isChannel = $isChannel;
         $this->template->user = (object)$user_arr;
         $this->layout->page_title = "Dashboard for ".$this->template->user->username." on Sourcemap";
         $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user->id, 6);
         $this->template->supplychains = $scs;
         $this->template->favorites = $scs_favorite;
+        $this->template->avatar_url = Sourcemap_Image::avatar($user, 64, true);
     }
 
     public function action_update(){

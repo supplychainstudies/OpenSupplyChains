@@ -30,6 +30,11 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
     }
     
     public function action_view($supplychain_id) {
+        // Redirect mobile users to preview template
+        if (Request::user_agent('mobile')){
+            $this->request->redirect('preview/' . $supplychain_id);
+        }
+
         if(!is_numeric($supplychain_id)) {
             $supplychain_id = $this->_match_alias($supplychain_id);
         }
@@ -40,15 +45,6 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
             $owner_id = (int)$supplychain->user_id;
             // If this map is not private or user has right to read this
             if($supplychain->user_can($current_user_id, Sourcemap::READ)) {                
-                //redirect mobile users to mobile template
-                if (Request::user_agent('mobile')){
-                    $this->layout = new View('layout/mobile');
-                    $this->layout->styles = array(
-                        'assets/styles/mobile.less'
-                    );
-                    $this->template = new View('map/mobile');
-                }
-
                 // passcode for the map          
                 $exist_passcode = isset($sc->attributes->passcode);
                 $this->template->exist_passcode = $exist_passcode;
@@ -103,7 +99,6 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                         $arr = $comment->as_array();
                         $arr['username'] = $comment->user->username;
                         $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
-                        //$arr['avatar'] = Gravatar::avatar($comment->user->email, 32);
                         $comment_data[] = (object)$arr;
                     }
                     $comment_data = array_reverse($comment_data);
@@ -173,7 +168,6 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     $arr = $comment->as_array();
                     $arr['username'] = $comment->user->username;
                     $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
-                    //$arr['avatar'] = Gravatar::avatar($comment->user->email);
                     $comment_data[] = (object)$arr;
                 }
                 $this->template->comments = $comment_data;
@@ -382,7 +376,205 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
 
         } else {
             $this->request->status = 404;
-            $this->layout = View::factory('layout/error');
+            $this->layout = View::factory('layout/embederror');
+            $this->template = View::factory('error');
+            $this->template->error_message = 'That map could not be found.';
+        }
+    }
+    
+    public function action_preview($supplychain_id) {
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
+        $supplychain = ORM::factory('supplychain', $supplychain_id);
+        $sc = $supplychain->kitchen_sink($supplychain_id);
+        if($supplychain->loaded()) {
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+            $owner_id = (int)$supplychain->user_id;
+            // If this map is not private or user has right to read this
+            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {                
+                $this->layout = new View('layout/preview');
+                $this->template = new View('map/preview');
+
+                // passcode for the map
+                $passcode_match = null;
+                $exist_passcode = isset($sc->attributes->passcode);    
+                $this->template->exist_passcode = $exist_passcode;
+                if(isset($sc->attributes->passcode)){
+                    if(isset($_GET['passcode'])){
+                        $input_passcode = $_GET['passcode']; 
+                        $correct_passcode = $sc->attributes->passcode;
+                        if($input_passcode===$correct_passcode){
+                            $passcode_match = True;
+                        } else {
+                            $passcode_match = False;
+                        }
+                        //
+                        $this->template->passcode = $input_passcode;
+                    }
+                    if($passcode_match==null){
+                        $passcode_match = False;
+                    }
+                }
+                $this->template->passcode_match = $passcode_match;
+                if($passcode_match==True){
+                    $this->template->passcode = $input_passcode;
+                }
+                
+
+                // Necessary for every map
+                $this->layout->supplychain_id = $supplychain_id;
+                $this->template->supplychain_id = $supplychain_id;
+                $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
+                $this->template->can_comment = (bool)$current_user_id;
+                $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
+                $this->template->supplychain_date = date('F j, Y', $sc->created );
+                $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
+                isset($sc->owner->display_name) ? $this->template->supplychain_display_name = $sc->owner->display_name : "";
+                $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
+                $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
+
+                if(!$exist_passcode||$passcode_match){
+                    $supplychain_desc = "";                    
+                    // check description for shortcodes
+                    // only youtube ID is supported for now...
+                    if (isset($sc->attributes->description)) {
+                        $supplychain_desc = $sc->attributes->description;
+                        $regex = "/\\[youtube:([^]]+)]/";
+                        if (preg_match($regex, $supplychain_desc, $regs)) {
+                            $supplychain_youtube_id = $regs[1];
+                            $supplychain_desc = str_replace($regs[0], '', $supplychain_desc);
+                        }
+                    }
+                    // pass supplychain metadeta to template 
+                    $this->template->supplychain_name = isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "");
+                    $this->template->supplychain_desc = isset($supplychain_desc) ? $supplychain_desc : "" ;
+                    //$this->template->supplychain_youtube_id = isset($supplychain_youtube_id) ? $supplychain_youtube_id : "" ;
+                    isset($supplychain_youtube_id) ? $this->template->supplychain_youtube_id = $supplychain_youtube_id : "" ;
+
+                    $this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();                    
+                    $this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
+	            
+				}
+            } else {
+                Message::instance()->set('That map is private.');
+                $this->request->redirect('browse');
+            }
+        } else {
+            Message::instance()->set('That map could not be found.');
+            $this->request->redirect('browse');
+        }
+    }
+	
+    public function action_mobile($supplychain_id) {
+        if(!is_numeric($supplychain_id)) {
+            $supplychain_id = $this->_match_alias($supplychain_id);
+        }
+        $supplychain = ORM::factory('supplychain', $supplychain_id);
+        if($supplychain->loaded()) {
+            $current_user_id = Auth::instance()->logged_in() ? (int)Auth::instance()->get_user()->id : 0;
+            $owner_id = (int)$supplychain->user_id;
+            if($supplychain->user_can($current_user_id, Sourcemap::READ)) {
+                $this->layout = View::factory('layout/mobile');
+                $this->template = View::factory('map/mobile');
+    	        $sc = $supplychain->kitchen_sink($supplychain_id);
+
+    			$this->layout->page_title = (isset($sc->attributes->title) ? $sc->attributes->title : (isset($sc->attributes->name) ? $sc->attributes->name : "")).' on Sourcemap';
+
+                $this->layout->supplychain_id = $supplychain_id;
+                $this->layout->scripts = array(
+                    'sourcemap-embed'
+                );
+                $this->layout->styles = array(
+                    'sites/default/assets/styles/reset.css',
+                    'assets/styles/base.less',
+                    'assets/styles/embed.less',
+                    'assets/styles/general.less',
+                    'sites/default/assets/styles/modal.less'
+                );
+                $params = array(
+                    'tour' => 'yes', 'tour_start_delay' => 7,
+                    'tour_interval' => 5, 'banner' => 'yes',
+                    'tileswitcher' => 'no', 'geoloc' => true, 
+                    'downstream_sc' => null, 'tileset' => 'cloudmade',
+                    'locate_user' => 'no', 'position' => '0|0|0',
+					'served_as' => 'default'
+                );
+
+                $input_passcode = False;
+                if(isset($_GET['passcode'])){
+                    $input_passcode = $_GET['passcode'];
+                }
+                foreach($params as $k => $v) 
+                    if(isset($_GET[$k])) 
+                        $params[$k] = $_GET[$k];
+                $v = Validate::factory($params);
+                $v->rule('tour', 'regex', array('/yes|no/i'))
+                    ->rule('tour_start_delay', 'numeric')
+                    ->rule('tour_start_delay', 'range', array(0, 300))
+                    ->rule('tour_interval', 'numeric')
+                    ->rule('tour_interval', 'range', array(1, 15))
+                    ->rule('geoloc', 'not_empty')
+                    ->rule('banner', 'regex', array('/yes|no/i'))
+                    ->rule('tileswitcher', 'regex', array('/yes|no/i'))
+                    ->rule('locate_user', 'regex', array('/yes|no/i'))
+                    ->rule('tileset', 'regex', array('/terrain|satellite|cloudmade/i'))
+                    ->rule('downstream_sc', 'numeric')
+                    ->rule('position', 'not_empty')
+                    ->rule('served_as', 'regex', array('/default|static|earth/i'));
+
+                if($v->check()) {
+                    $params = $v->as_array();
+                    $params['tour_start_delay'] = (int)$params['tour_start_delay'];
+                    $params['tour_interval'] = (int)$params['tour_interval'];
+                    $params['tour'] = 
+                        strtolower(trim($params['tour'])) === 'yes' ? true : false;
+                    $params['banner'] = 
+                        strtolower(trim($params['banner'])) === 'yes' ? true : false;
+                    $params['tileswitcher'] =
+                        strtolower(trim($params['tileswitcher'])) === 'yes' ? true : false;
+                    $params['locate_user'] =
+                        strtolower(trim($params['locate_user'])) === 'yes' ? true : false;
+                    $params['tileset'] = strtolower(trim($params['tileset']));
+                    $params['position'] = strtolower(trim($params['position']));
+                    $params['served_as'] = strtolower(trim($params['served_as']));
+                    /*
+                    if($params['geoloc']) {
+                        $params['iploc'] = false;
+                        if(isset($_SERVER['REMOTE_ADDR'])) {
+                            //$_SERVER['REMOTE_ADDR'] = '128.59.48.24'; // ny, ny (columbia.edu)
+                            $params['iploc'] = $iploc = Sourcemap_Ip::find_ip($_SERVER['REMOTE_ADDR']);
+                            $iploc = $iploc ? $iploc[0] : null;
+                            if($params['downstream_sc'] && $iploc) {
+                                $pt = new Sourcemap_Proj_Point($iploc->longitude, $iploc->latitude);
+                                $pt = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $pt);
+                                $nearby = ORM::factory('stop', (int)$params['downstream_sc'])->nearby($pt, 3);
+                                $params['downstream_nearby'] = $nearby;
+                            }
+                        }
+                    }*/
+                    $this->layout->embed_params = $params;
+                    $exist_passcode = isset($sc->attributes->passcode);
+                    $this->layout->exist_passcode = $exist_passcode;
+                    if($input_passcode!=False){
+                        $this->layout->passcode = $input_passcode; 
+                    }
+                } else {
+                    $this->request->status = 400;
+                    $this->layout = View::factory('layout/mobile');
+                    $this->template = View::factory('error');
+                    $this->template->error_message = 'Bad parameters.';
+                }
+            } else {
+                $this->request->status = 403;
+                $this->layout = View::factory('layout/mobile');
+                $this->template = View::factory('error');
+                $this->template->error_message = 'This map is private.';
+            }
+
+        } else {
+            $this->request->status = 404;
+            $this->layout = View::factory('layout/mobile');
             $this->template = View::factory('error');
             $this->template->error_message = 'That map could not be found.';
         }

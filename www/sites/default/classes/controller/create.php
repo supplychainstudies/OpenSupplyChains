@@ -20,7 +20,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     	$this->layout->page_title = 'Create a Sourcemap';
     	
         $f = Sourcemap_Form::load('/create');
-        $f->action('create')->method('post');
+        $f->action('create')->method('post')->enctype("multipart/form-data");
 
         if(!Auth::instance()->get_user()) {
             $this->request->redirect('auth');
@@ -38,7 +38,14 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             $this->template->can_import = false; 
         }
         $this->template->create_form = $f;
-    
+        
+        $scs = array();
+        $user = Auth::instance()->get_user();
+        foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {
+            $scs[] = $sc->kitchen_sink($sc->id);
+        }
+
+    	$this->template->user_supplychains = $scs; 
 
         if(strtolower(Request::$method) === 'post') {
             if($f->validate($_POST)) {

@@ -13,7 +13,9 @@
 /* EMBED STYLES  -------------------------------------------------------------- */ 
 @import "sourcemap";
 
-html { overflow:hidden } /* Ideal embed width/height right now is no less than 640 by 480 */
+html { 
+    //overflow:hidden;
+} /* Ideal embed width/height right now is no less than 640 by 480 */
 
 body#embedded-supplychain {
     width: 100%; height:100%;
@@ -43,7 +45,28 @@ body#embedded-supplychain {
     }
 }
 body.zoom {
-	#banner { zoom: .8; -moz-transform: scale(.8); }
+    @z : .5;
+	#banner { 
+        zoom: @z; -moz-transform: scale(@z); 
+        .banner-date{
+            display:none;
+        }
+        #banner-content{
+            .banner-map-search{
+                input{
+                    margin-top:5px;
+                }
+            }
+        }
+    }
+	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
+    .olControlAttribution {
+            zoom:@z; -moz-transform: scale(@z);
+    }
+}
+
+body.horizontal{
+    @z : .5;
 	#dialog {
 	    top:45px;
 	    width:360px;
@@ -58,18 +81,21 @@ body.zoom {
 				margin-bottom:-18px;
 	        }
 			#dialog-media-navigation {
-				zoom: .8; -moz-transform: scale(.8);    	
+				zoom: @z; -moz-transform: scale(@z);    	
 			}
 	        #dialog-footprint {
-	            zoom: .8; -moz-transform: scale(.8);    
+	            zoom: @z; -moz-transform: scale(@z);    
 	            overflow:hidden !important;
 	        }
 			.dot {
-				zoom: .8; -moz-transform: scale(.8);    
+				zoom: @z; -moz-transform: scale(@z);    
+			}
+            .close {
+				zoom: @z; -moz-transform: scale(@z);    
 			}
 	    }    
 	}
-	#sourcemap-dock { zoom: .8; -moz-transform: scale(.8);}
+    // end dialog  
 }
 
 .static-embed {
@@ -83,4 +109,10 @@ body.zoom {
 	text-align:center;
 	.gradient(#111111,#333333);
     a { color:#999; }
+}
+
+/* MOBILE STYLES  -------------------------------------------------------------- */ 
+
+body#embedded-supplychain.mobile {
+    overflow:hidden;
 }

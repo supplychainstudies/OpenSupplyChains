@@ -20,11 +20,6 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             'sourcemap-payments'
         );
 
-        $f = Sourcemap_Form::load('/upgrade');
-        $f->action('upgrade')->method('post');
-
-        $this->template->form = $f;
-
         if(!($user = Auth::instance()->get_user())) {
             $this->request->redirect('auth');
         }
@@ -43,16 +38,12 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
              } else {
                 $p = $f->values();
                 try{
-                    // set your secret key: remember to change this to your live secret key in production
-                    // see your keys here https://manage.stripe.com/account
-                    Stripe::setApiKey(Kohana::config('apis')->stripe_api_secret_key);
-
                     try{
                         Stripe_Plan::retrieve("channel");
                     } catch (Exception $e) {
                         // create plan if it doesn't exist
                         Stripe_Plan::create(array(
-                          "amount" => 9995,
+                          "amount" => 9900,
                           "interval" => "year",
                           "name" => "Channel",
                           "currency" => "usd",
@@ -95,9 +86,9 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                 $url = URL::site("register/confirm?t=$lid-$h", true);
                 $msgbody = "\n";
                 $msgbody .= "Dear {$user->username},\n\n";
-                $msgbody .= "Thank you for upgrading to a channel account!";
-                $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly-availble fields in your dashboard.\n\n";
-                $msgbody .= "If you have any questions, please contact us at support@sourcemap.com.\n\n";
+                $msgbody .= "Thank you for upgrading to a channel account.\n\n";
+                $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.\n\n";
+                $msgbody .= "If you have any questions, please contact us at channels@sourcemap.com.\n\n";
                 $msgbody .= "-The Sourcemap Team\n";
                 $swift_msg->setSubject('Re: Your Newly Upgraded Sourcemap Account')
 						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
@@ -304,7 +295,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                 $msgbody .= "Dear {$user->username},\n\n";
                 $msgbody .= "Thank you for renewing your channel!";
                 $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly-availble fields in your dashboard.\n\n";
-                $msgbody .= "If you have any questions, please contact us at support@sourcemap.com.\n\n";
+                $msgbody .= "If you have any questions, please contact us at channels@sourcemap.com.\n\n";
                 $msgbody .= "-The Sourcemap Team\n";
                 $swift_msg->setSubject('Re: Your Newly Upgraded Sourcemap Account')
 						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))

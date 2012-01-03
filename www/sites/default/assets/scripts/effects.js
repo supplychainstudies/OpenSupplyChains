@@ -22,28 +22,27 @@ $(document).ready(function(){
         $(this).parent().next('.collapsed').slideToggle();
     });
     
-    /* profiel pictures*/
+    /* profile picture upload */
     $('a#change_profile_pic,a#change_banner').click(function(){
         //modal a profile upload window
         var popID = 'popup';
         var element = document.createElement('div');
         var banner_html = document.createElement('div');
         var edit_id = $(this).attr("id");
-        var element_class,element_caption,upload_rules,form_id,upload_bucket;
+        var upload_bucket = $(this).attr("name");
+        var element_class,element_caption,upload_rules,form_id;
         switch(edit_id){
             case "change_profile_pic":
                 element_class = "upload_profile_pic";
                 element_caption = "Profile picture";
                 upload_rules= "Upload size limit: 500kb / Width,Height: 200px";
                 form_id = "profile_pic_upload";
-                upload_bucket = "accountpics";
             break;
             case "change_banner":
                 element_class = "upload_banner";
                 element_caption = "Banner";
                 upload_rules= "Upload size limit: 2mb";
                 form_id = "banner_upload";
-                upload_bucket = "bannerpics";
             break;
         }
 
@@ -53,35 +52,10 @@ $(document).ready(function(){
             '<h3>'+element_caption+'</h3><h4>'+upload_rules+'</h4><div class="clear"></div>'+
             '<form id="'+form_id+'" method="post" action="/services/uploads" enctype="multipart/form-data">'+
             '<input type="hidden" name="bucket" value="'+upload_bucket+'"/>'+
-            '<input type="hidden" name="filename" value="'+username+'"/>'+
             '<input type="file" name="file" />'+
             '<input type="submit" value="Upload" />'+
             '</form></div></div>'
         );
-        /*
-        $(element).html(
-            '<div id="upload_content">'+
-            '<div class="upload_profile_pic">'+
-            '<h3>Profile picture</h3>'+
-            '<form id="profile_pic_upload" method="post" action="/services/uploads" enctype="multipart/form-data">'+
-            '<input type="hidden" name="bucket" value="accountpics"/>'+
-            '<input type="hidden" name="filename" value="'+username+'"/>'+
-            '<input type="file" name="file" />'+
-            '<input type="submit" value="Upload" />'+
-            '</form></div><hr/></div>'
-        );
-        $(banner_html).html(
-            '<h3>Banner</h3>'+
-            '<form id="banner_upload" method="post" action="/services/uploads" enctype="multipart/form-data">'+
-            '<input type="hidden" name="bucket" value="bannerpics"/>'+
-            '<input type="hidden" name="filename" value="'+username+'"/>'+
-            '<input type="file" name="file" />'+
-            '<input type="submit" value="Upload" />'+
-            '</form>'
-        );
-        $(banner_html).attr('class','upload_banner');
-        is_channel ? $(element).find("#upload_content").append(banner_html) : 0 ;
-        */
 
         $(element).attr('id',popID);
         $(element).addClass("popup_block");
@@ -401,6 +375,7 @@ $(this).change(function(){
         var popURL = $(this).attr('href'); 
 
         // parse URL options
+        // TODO: additional options
         var popDestURL = popURL.split('?')[0];
         var popDest = popURL.split('#')[0] + " #" + popURL.split('#')[1]; 
         var query = popURL.split('?');
@@ -421,9 +396,9 @@ $(this).change(function(){
 
                 $('body').append($(element));
                
-                $('#' + popID).height(370);
+                $('#' + popID).height(300);
                 var popMargTop = ($('#' + popID).height() + 80) / 2;
-                var popMargLeft = ($('#' + popID).width() + 80) / 2;
+                var popMargLeft = (popWidth / 2) + 20; //plus padding
                 
                 $('#' + popID).css({ 
                     'margin-top' : -popMargTop,

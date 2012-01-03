@@ -436,57 +436,39 @@
     min-width: 600px;
     .rounded(12px);
     .box_shadow(0, 1px, 3px);
-    div#banner-content {
-        div { padding: 13px; }
+    #banner-content {
+        div { 
+            padding: 13px 0 13px 40px; 
+            border-left: 1px solid rgba(140,140,140,0.25);
+            float: right;
+        }
         #banner-summary {
-            float: none;
+            float: left;
             position: absolute;
+            overflow:hidden;
+            height: 12px;
+            padding: 10px 10px 10px 25px;
             color: #353535;
             font-weight:bold;
             font-size: 22px;
-            overflow:hidden;
             line-height: 1em;
-            height: 12px;
             max-width:370px;
-            padding-top: 10px;
+            border:none;
         }
-        #banner-favorite {
-            background: url(../images/icon-favorite.png) 10px -19px no-repeat;
-            border-left: 1px solid rgba(140,140,140,0.25);
-            padding-right: 0;
-            &.marked {
-                background: url(../images/icon-favorite.png) 10px 11px no-repeat;
-            }
+        
+        // TODO: Make these css sprites
+        #banner-favorite { background: url(../images/icon-favorite.png) 10px -19px no-repeat;
+            &.marked { background: url(../images/icon-favorite.png) 10px 11px no-repeat; }
         }
-        #banner-owner {
-            background: url(../images/icon-owner.png) 10px center no-repeat;
-            border-left: 1px solid rgba(140,140,140,0.25);   
-			border-right: 1px solid rgba(140,140,140,0.25);    
-            padding-left: 45px;
-            overflow:hidden;
-        }
-        #banner-share {
-            background: url(../images/icon-share.png) 10px center no-repeat;
-            border-left: 1px solid rgba(140,140,140,0.25);    
-            padding-right: 0;
-
-        }
-        #banner-lock {
-            border-left:1px solid rgba(140,140,140,0.25);
-			background: url(../images/icon-lock.png) 10px -41px no-repeat;            
-
+        #banner-owner { background: url(../images/icon-owner.png) 10px center no-repeat; border-right: 1px solid #c9c9c9; padding-right: 15px}
+        #banner-share { background: url(../images/icon-share.png) 10px center no-repeat; }
+        #banner-lock { background: url(../images/icon-lock.png) 10px -41px no-repeat;            
             &.locked {
 				background-position: 10px 8px;            
                 :hover{text-decoration:none;}
             }
         }
-		.banner-favorite-link:hover, .banner-share-link:hover {
-			text-decoration:none;
-		}
-        #banner-owner, #banner-favorite, #banner-share, #banner-lock, .banner-map-search {
-            padding-left: 40px;
-            float: right;
-        }
+		.banner-favorite-link:hover, .banner-share-link:hover { text-decoration:none; }
 		.banner-map-search {
             background: #fff url("../images/shadow.png") top repeat-x;
             border: 1px solid #c9c9c9;
@@ -510,7 +492,7 @@
             }
 		}
         .map-status {
-            float:right;
+            border: 0;
             text-align:right;
             font-size:1em;
             color:rgba(0,0,0,0.4);
@@ -525,9 +507,6 @@
                     background: none;
                 }
             }
-        }
-         div {
-            float:left;
         }
     }
     a{

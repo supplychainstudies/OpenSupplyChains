@@ -69,14 +69,14 @@ Sourcemap.Map.prototype.defaults = {
             "label": "${label}",
             "labelAlign": "cm",
             "labelXOffset": 0,
-            "labelYOffset": "${yoffset}", 
+            "labelYOffset": "${yoffset}" 
         },
         "disabled": {
             "fillColor": "#cccccc",
             "strokeColor": "#cccccc",
             "strokeOpacity": 0.5,
 			"fillOpacity": 0.5,
-            "fontColor": "#cccccc",
+            "fontColor": "#cccccc"
         },
         "select": {
             "fillColor": "#ffffff",
@@ -131,7 +131,7 @@ Sourcemap.Map.prototype.defaults = {
             "strokeColor": "#cccccc",
             "fontColor": "#cccccc",
             "fillOpacity": 0.5,
-            "strokeOpacity": 0.5,
+            "strokeOpacity": 0.5
         },
     	"arrow": {
     		"graphicName": "${type}",
@@ -150,7 +150,7 @@ Sourcemap.Map.prototype.defaults = {
             "label": "${label}",
             "labelAlign": "cm",
             "labelXOffset": 0,
-            "labelYOffset": "${yoffset}",
+            "labelYOffset": "${yoffset}"
     	},
         "select": {
             "fillColor": "#ffffff",
@@ -162,7 +162,7 @@ Sourcemap.Map.prototype.defaults = {
             "label": "${label}",
             "labelAlign": "cm",
             "labelXOffset": 0,
-            "labelYOffset": "${yoffset}",
+            "labelYOffset": "${yoffset}"
         }
 	}, "prep_stop": null, "prep_hop": null
 }
@@ -191,7 +191,7 @@ Sourcemap.Map.prototype.initMap = function() {
                 dragPanOptions: {
                     enableKinetic: true
                 }
-            }),
+            })
     ];
     var options = {
         "theme": "assets/scripts/libs/openlayers/theme/sourcemap/style.css",
@@ -215,7 +215,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
         "minZoomLevel": 1, "maxZoomLevel": 17,
-        "wrapDateLine":false,
+        "wrapDateLine":false
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
         "satellite", {
@@ -224,7 +224,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
         "minZoomLevel": 1, "maxZoomLevel": 17,
-        "wrapDateLine":false,
+        "wrapDateLine":false
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
         "cloudmade", {

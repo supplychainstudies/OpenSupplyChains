@@ -30,7 +30,6 @@
             <fail message="Build directory (builddir) property required." />
         </else>
     </if>
-    <phingcall target="build-jsmin" />
 </target>
 
 <!-- ============================================  -->
@@ -54,11 +53,6 @@
     <phingcall target="write-rev" />
     <phingcall target="build-css" />
     <phingcall target="build-js" />
-</target>
-
-<target name="build-jsmin">
-    <echo msg="Build jsmin.c here..." />
-    <exec command="gcc -o jsmin jsmin.c" dir="${srcdir}/../tools/jsmin/" />
 </target>
 
 <target name="build-css">
@@ -104,7 +98,7 @@
     <php function="dirname" returnProperty="dirname">
         <param value="${jsfile_abs}" />
     </php>
-    <exec command="cat ${jsfile_abs} | ${phing.home}jsmin/jsmin > ${dirname}/${basename}.min.js" />
+    <exec command="java -jar ${phing.home}closure-compiler/compiler.jar --warning_level=QUIET --js=${jsfile_abs} > ${dirname}/${basename}.min.js" />
     <!-- copy file="${dirname}/${basename}.min.js" tofile="${dirname}/${basename}.js" overwrite="true" /-->
 </target>
 

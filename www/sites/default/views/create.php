@@ -40,8 +40,8 @@
                     </select>
                 <?php endif; ?>
             </div>
-        <?php } ?>
 		</div>
+        <?php } ?>
     </div>
     <div class="box-section">
     	<?= $create_form ?>

@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="half-width" style="width: 110px">
-                        <label for="card-cvc">CVC Code <a href="/info/payment/#document-content?w=400" target="_blank" class="modal tooltip">?</a></label>
+                        <label for="card-cvc">CVC Code <a href="/legal/payment/#document-content?w=400" target="_blank" class="modal tooltip">?</a></label>
                         <input type="text" name="card-cvc" maxlength="5"  style="height: 28px; padding: 0" class="textbox" />
                     </div>
                     
@@ -81,7 +81,7 @@
                     
                     <div class="clear" style="height: 5px"></div>
                     
-                    <label for="confirm_terms">I have read and agree to the <a href="/info/channel/#document-content?w=150" target="_blank" class="modal">terms of service</a>.</label> <input type="checkbox" name="confirm_terms" class="textbox" />
+                    <label for="confirm_terms">I have read and agree to the <a href="/legal/channel/#document-content?w=150" target="_blank" class="modal">terms of service</a>.</label> <input type="checkbox" name="confirm_terms" class="textbox" />
 
                     <div class="clear"></div>
 

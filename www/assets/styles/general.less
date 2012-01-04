@@ -232,6 +232,7 @@ a {
 #header {
     margin: 0 auto 20px;
     padding-top: 28px;
+    height: 65px;
     #logo{
         float:left;
         h1 { display:none; }
@@ -1484,6 +1485,8 @@ body.admin {
 
 /* Info page & API styles -------------------
  *
+ * TODO: Clean up the following...
+ *
  * These styles are meant for any of our text-heavy pages.
  * They should emphasise proper typesetting.
  *
@@ -1507,16 +1510,36 @@ body.admin {
                 margin: .7em 0;
             }
         }
+        pre{
+            padding: 1em 2em;
+            margin: 1em 4em;
+            .gradient(#e1e1e1, #eeeeee);
+            white-space: pre-wrap; /* css-3 */
+            white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+            line-height: 1.5em;
+            border: 1px dashed #ccc;
+        }
     }
     #toc {
         float: right;
         font-size: 10pt;
         width: 200px;
         padding: 10px 10px 10px 20px;
-        background: #efffb1;
         border: solid 1px #ccd136;
         margin: 0 0 10px 15px;
-    } 
+        .rounded(8px);
+        .gradient(#f9f0a9,#faf6da);
+        li{
+            margin: .5em 0;
+        }
+    }
+    .toc-top-link{
+        padding: .25em 1em;
+        font-size: .6em;
+    }
 }
 
 .about-sourcemap{

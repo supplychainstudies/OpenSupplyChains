@@ -64132,7 +64132,8 @@ OpenLayers.Layer.Google.v3 = {
             var container = this.mapObject.getDiv();
             if (visible === true) {
                 this.mapObject.setMapTypeId(type);                
-                container.style.left = "";
+                //container.style.left = "";
+                container.style.display = "";
                 if (cache.termsOfUse && cache.termsOfUse.style) {
                     cache.termsOfUse.style.left = "";
                     cache.termsOfUse.style.display = "";
@@ -64140,7 +64141,13 @@ OpenLayers.Layer.Google.v3 = {
                 }
                 cache.displayed = this.id;
             } else {
-                delete cache.displayed;
+                if (cache.displayed === this.id) {
+                    container.style.display = "none";
+                } else {
+                    delete cache.displayed;
+                }
+                //delete cache.displayed;
+                
                 //container.style.left = "-9999px";
                 // This cause white screen problem
                 if (cache.termsOfUse && cache.termsOfUse.style) {

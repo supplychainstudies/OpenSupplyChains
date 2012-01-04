@@ -16,9 +16,6 @@ class Controller_Legal extends Sourcemap_Controller_Layout {
     public $template = 'legal/info';
     
     public function action_index() {}    
-    public function action_terms() { $this->template = View::factory('legal/terms'); }
-    public function action_privacy() { $this->template = View::factory('legal/privacy'); }
-    public function action_channel() { $this->template = View::factory('legal/channel'); }
     public function action_payment() { $this->template = View::factory('legal/payment'); }
     
 }

@@ -8,6 +8,9 @@
     </div>
 </div>
 
-<div class="container">
-    <?= $content ?>
+<div class="container info">
+    <div id="toc"></div>
+    <div id="document-content">
+        <?= $content ?>
+    </div>
 </div>

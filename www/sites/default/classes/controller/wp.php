@@ -16,6 +16,9 @@ class Controller_WP extends Sourcemap_Controller_Layout {
     }
  
     public function action_index($page="blog") {
+        $this->layout->scripts = array(
+            'sourcemap-document'
+        );
 
         // Return cached results if possible
         if($cached = Cache::instance()->get(self::cache_key($page))){

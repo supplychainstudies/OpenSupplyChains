@@ -43,8 +43,8 @@ class Sourcemap_Map_Static {
     public static $image_sizes = array(
         'f' => array(1032,560),
         'l' => array(710, 320),
-        'm' => array(220, 128),
-        's' => array(168, 106),
+        'm' => array(240, 138),
+        's' => array(168, 98),
         't' => array(160, 105)
     );
 

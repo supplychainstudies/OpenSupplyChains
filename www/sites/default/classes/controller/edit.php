@@ -278,6 +278,14 @@ class Controller_Edit extends Sourcemap_Controller_Map {
     }
 
     public function action_general($supplychain_id=false) {
+        $private_permission = false;
+        $user = ORM::factory('user', Auth::instance()->get_user());
+        $admin = ORM::factory('role')
+            ->where('name', '=', 'admin')->find();
+        $channel = ORM::factory('role')
+            ->where('name', '=', 'channel')->find();
+        if($user->has('roles', $channel)||$user->has('roles', $admin)) $private_permission = true;
+
         $set_to = false;
         $set_publish = null;
         $set_featured = null;
@@ -352,13 +360,25 @@ class Controller_Edit extends Sourcemap_Controller_Map {
         } else {
             Message::instance()->set('Bad request.');
             $this->request->redirect('/home');
-        }
+        } // End POST/GET request
         // set_to : If parameter is set
         if($set_to) {
-            if($set_publish === true)
-                $sc->other_perms |= $set_publish;
-            else
-                $sc->other_perms &= ~Sourcemap::READ;
+            if($private_permission==true){
+                if($set_publish === true)
+                    $sc->other_perms |= $set_publish;
+                else
+                    $sc->other_perms &= ~Sourcemap::READ;
+            } else {
+                if($set_publish === true){
+                    // private to public
+                } else {
+                    // not allowed free account set to private
+                    Message::instance()->set('You are not allowed to private this map. Please contact support.');
+                    //echo 'You are not allowed to private this map.';
+                    //$this->_rest_error(404, "aaa");
+                    return $this->request->redirect('home',400);
+                }
+            }
 
             if($set_featured === true)
                 $sc->user_featured = "TRUE";
@@ -401,4 +421,12 @@ class Controller_Edit extends Sourcemap_Controller_Map {
         }
     }
 
+
+    protected function  _rest_error($code=400, $msg='Not found.') {
+        $this->request->status = $code;
+        $this->headers['Content-Type'] = 'application/json';
+        $this->response = array(
+            'error' => $msg
+        );
+    }
 }

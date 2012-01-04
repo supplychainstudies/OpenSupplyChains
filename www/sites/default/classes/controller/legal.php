@@ -11,17 +11,14 @@
  * You should have received a copy of the GNU Affero General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
-class Controller_Info extends Sourcemap_Controller_Layout {
+class Controller_Legal extends Sourcemap_Controller_Layout {
     public $layout = 'base';
-    public $template = 'info/info';
+    public $template = 'legal/info';
     
     public function action_index() {}    
-    public function action_api() { $this->template = View::factory('info/api'); }
-    public function action_terms() { $this->template = View::factory('info/terms'); }
-    public function action_dmca() { $this->template = View::factory('info/terms'); }
-    public function action_privacy() { $this->template = View::factory('info/privacy'); }
-    public function action_channel() { $this->template = View::factory('info/channel'); }
-    public function action_payment() { $this->template = View::factory('info/payment'); }
+    public function action_privacy() { $this->template = View::factory('legal/privacy'); }
+    public function action_channel() { $this->template = View::factory('legal/channel'); }
+    public function action_payment() { $this->template = View::factory('legal/payment'); }
     
 }
 

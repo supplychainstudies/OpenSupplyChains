@@ -96,7 +96,7 @@ abstract class Sourcemap_Catalog {
         } else {
             $cat->setup();
 			if (isset($cat->parameters['curated']) == true) {
-				if ($cat->parameters['curated'] == true) {
+				if ($cat->parameters['curated'] === "true") {
 					$got = $cat->cfetch();
 				} else {
 					$got = $cat->fetch();

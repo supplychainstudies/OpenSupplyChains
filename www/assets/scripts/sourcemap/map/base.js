@@ -318,6 +318,7 @@ Sourcemap.Map.Base.prototype.showEditor = function() {
 	this.options.locked = false;
 	$('#banner-lock').removeClass('locked');
 	$('.editable-options').css('display','block');
+	$('.toggle').css("display","none");
 	$('.addstop').css("display","block");	
 	if(this.dialog) {
 		this.hideDialog();
@@ -327,7 +328,8 @@ Sourcemap.Map.Base.prototype.hideEditor = function() {
 	this.options.locked = true;
 	$('#banner-lock').addClass('locked');
 	$('.editable-options').css('display','none');
-	$('.addstop').css("display","none");	
+	$('.toggle').css("display","block");
+	$('.addstop').css("display","none");
 	if(this.dialog) {
 		this.hideDialog();
 	}
@@ -943,7 +945,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
             this.map.dockAdd('weight', {
                 "title": 'Weight',
                 "toggle": true,
-                "panel": 'filter',
+                "panel": 'weight-filter',
                 "callbacks": {
                     "click": $.proxy(function() {
                         this.toggleVisualization("weight");
@@ -961,7 +963,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
                 "title": 'Carbon',
                 "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
                 "toggle": true,
-                "panel": 'filter',
+                "panel": 'co2e-filter',
                 "callbacks": {
                     "click": $.proxy(function() {
                         this.toggleVisualization("co2e");
@@ -979,7 +981,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
                 "title": 'Water',
                 "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
                 "toggle": true,
-                "panel": 'filter',
+                "panel": 'water-filter',
                 "callbacks": {
                     "click": $.proxy(function() {
                         this.toggleVisualization("water");

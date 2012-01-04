@@ -45,6 +45,11 @@
                     <label for="impact-use-co2e">Show Carbon Footprint (CO2e)</label>   
                     <div class="clear"></div>
                 </div>
+                <div class="impact-box">
+                    <input type="checkbox" <?= $supplychain_water; ?> id="impact-use-water" />
+                    <label for="impact-use-water">Show Water Footprint (H2O)</label>   
+                    <div class="clear"></div>
+                </div>
                 <div class="sourcemap-form">
                     <select id="tileset-select" name="tileset-select">	
                         <option <? if($supplychain_tileset == "cloudmade") { ?>selected<? } ?> value="cloudmade">

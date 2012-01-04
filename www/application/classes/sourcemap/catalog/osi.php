@@ -60,11 +60,11 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
         return $this->url.$this->action.'/';
     }
 
-	public function cfetch() {
-		$this->parameters['limit'] = 1000;
-		//$offset = $this->offset;
+	public function cfetch() {		
 		$count = 0;
 		$count_start_offset = $this->parameters['offset'];
+		$this->parameters['offset'] = 0;
+		$this->parameters['limit'] = 10000;
 		$response = parent::fetch();
 		$whole_response = $response;
 		unset($whole_response['results']);
@@ -72,18 +72,19 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
 			$response = (object)$response;
 			foreach ($response->results as $result) {
 				foreach ($this->osi_curated_catalog as $fromlist) {
-					if ($fromlist[0] == $result->name) {
+					if (strtolower($fromlist[0]) == strtolower($result->uri)) {
 						if ($count >= $count_start_offset) {
 							if (count($fromlist) > 1) {
 								foreach ($fromlist as $order=>$part) {
 									if ($order != 0) {
-										$this->parameters['name'] = $part;
+										$this->parameters['uri'] = $part;
+										
 										$part_response = parent::fetch();
-										if ($part_response) {
-											foreach($envft_types as $type) {
-												if ($result->$$type == null) {
-													if ($part_response->results[0][$type] != null) {
-														$result->$$type = $part_response->results[0][$type];
+										if (count($part_response['results']) != 0) {
+											foreach($this->envft_types as $type) {
+												if ($result->$type == null) {
+													if ($part_response['results'][0]->$type != null) {
+														$result->$type = $part_response['results'][0]->$type;
 													}													
 												}
 											}
@@ -97,6 +98,7 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
 							break 2;
 						}
 						$count++;
+						break 1;
 					}
 				}
 			}
@@ -108,29 +110,7 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
         	return $whole_response;
         }
 	}
-/*
-	public function ccfetch() {
-		$limit = $this->limit;
-		$offset = $this->offset;
-		for ($i = $offset; $i < $limit + $offset; $i++) { 
-			foreach ($this->osi_curated_catalog[$i] as $rec) {
-				$this->parameters['q'] = "";
-				$this->parameters['name'] = $rec;
-				$response = parent::fetch();
-				if($response) {
-		            $response = (object)$response;
-					$whole_response->results[] = $response->results[0];
-		        }
-			}
-		}
-		if($whole_response) {
-            $whole_response = (object)$whole_response;
-            $whole_response->parameters['l'] = $this->limit;
-            $whole_response->parameters['o'] = $this->offset;
-        }
-        return $whole_response;
-	}
-*/
+
     public function fetch() {
         $response = parent::fetch();
         if($response) {

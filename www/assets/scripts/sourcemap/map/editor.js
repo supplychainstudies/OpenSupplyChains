@@ -272,11 +272,23 @@ Sourcemap.Map.Editor.prototype.init = function() {
         }
     });
     
-  
-    this.map.map.events.register("zoomend",this.map.map,function(e){
-       Sourcemap.broadcast('map:zoomend'); 
+
+/*
+	this.map.dockAdd('addCarbon', {
+        "title": 'Add Carbon',
+        "content": "<input type='checkbox' id='impact-use-co2e' />",
+        "ordinal": 5,
+        "panel": "carbon-filter"
     });
-    
+
+	this.map.dockAdd('addWater', {
+        "title": 'Add Water',
+        "content": "<input type='checkbox' id='impact-use-water' />",
+        "ordinal": 6,
+        "panel": "water-filters"
+    });
+    */
+
     // Click-add function
     //this.map.map.addControl(new OpenLayers.Control.MousePosition());
     this.map.map.events.register("click",this.map.map,function(e){
@@ -499,7 +511,8 @@ Sourcemap.Map.Editor.prototype.init = function() {
     	Sourcemap.broadcast('supplychain-updated', sc);
     	
     }, {"editor":this}));
-    
+
+ 
     $("#impact-use-co2e").change($.proxy(function(evt) {
     	var co2e = $(evt.target).is(':checked') ? true : false;
     	
@@ -1024,6 +1037,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 				cat_html.html("");
 			}
 			$(this.editor.map_view.dialog).find('.falseclose').click($.proxy(function() {
+				//change this by passing this and adding a class
                 $(this).parent().parent().parent().parent().width(411);
 				$(this).parent().parent().parent().parent().find('#newcatalog').hide();
 				$(this).parent().parent().parent().parent().find('#stop-editor').show();
@@ -1067,6 +1081,33 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
             } else {
 				var next_link = $('<span class="catalog-pager-next"></span>');
                 $(this.editor.map_view.dialog).find('.catalog-pager').append(next_link);
+			}
+			
+			
+			// more (toggle between tiny catalog and full catalog)
+			console.log(o.params.curated);
+            if(o.params.curated == "true") {
+                var more = $('<span>(more values)</span>').click($.proxy(function() {
+                    var o = {};
+                    o.editor = this.editor;
+                    o.ref = this.o.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.curated = false;
+                    o.catalog = this.o.catalog;
+                    this.editor.updateCatalogListing(o);
+                }, {"o": o, "editor": this.editor}));
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(more);
+            } else {
+                var more = $('<span>(curate)</span>').click($.proxy(function() {
+                    var o = {};
+                    o.editor = this.editor;
+                    o.ref = this.o.ref;
+                    o.params = Sourcemap.deep_clone(this.o.params);
+                    o.params.curated = true;
+                    o.catalog = this.o.catalog;
+                    this.editor.updateCatalogListing(o);
+                }, {"o": o, "editor": this.editor}));
+                $(this.editor.map_view.dialog).find('.catalog-pager').append(more);
 			}
 
             // search bar
@@ -1139,6 +1180,11 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
 		$("#dialog").css("padding",0);
 		$("#newcatalog").show();
         $("#newcatalog").html(th);  
+		$("#newcatalog").find("#catalog-search-field").click($.proxy(function(evt) {
+			if ($(this).val() == "Search Materials Catalog") {
+				$(this).val("");
+			}
+	    }, this));
         this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }

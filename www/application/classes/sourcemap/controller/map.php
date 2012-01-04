@@ -302,6 +302,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     'assets/styles/general.less',
                     'sites/default/assets/styles/modal.less'
                 );
+                //TODO: fix this default embed variable
                 $params = array(
                     'tour' => 'yes', 'tour_start_delay' => 7,
                     'tour_interval' => 5, 'banner' => 'yes',

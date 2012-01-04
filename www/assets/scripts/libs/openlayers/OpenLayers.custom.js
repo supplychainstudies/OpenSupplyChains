@@ -15716,15 +15716,18 @@ OpenLayers.Layer.Google.v2 = {
                     delete cache.displayed;
                 }
                 if (!cache.displayed) {
-                    container.style.display = "none";
-                    this.termsOfUse.style.display = "none";
+                    // comment for keep showing termsofuse and  powerby
+                    //container.style.display = "none";
+                    //this.termsOfUse.style.display = "none";
+
                     // move ToU far to the left in addition to setting display
                     // to "none", because at the end of the GMap2 load
                     // sequence, display: none will be unset and ToU would be
                     // visible after loading a map with a google layer that is
                     // initially hidden. 
-                    this.termsOfUse.style.left = "-9999px";
-                    this.poweredBy.style.display = "none";
+
+                    //this.termsOfUse.style.left = "-9999px";
+                    //this.poweredBy.style.display = "none";
                 }
             }
         }
@@ -64129,7 +64132,8 @@ OpenLayers.Layer.Google.v3 = {
             var container = this.mapObject.getDiv();
             if (visible === true) {
                 this.mapObject.setMapTypeId(type);                
-                container.style.left = "";
+                //container.style.left = "";
+                container.style.display = "";
                 if (cache.termsOfUse && cache.termsOfUse.style) {
                     cache.termsOfUse.style.left = "";
                     cache.termsOfUse.style.display = "";
@@ -64137,17 +64141,24 @@ OpenLayers.Layer.Google.v3 = {
                 }
                 cache.displayed = this.id;
             } else {
-                delete cache.displayed;
-                container.style.left = "-9999px";
+                if (cache.displayed === this.id) {
+                    container.style.display = "none";
+                } else {
+                    delete cache.displayed;
+                }
+                //delete cache.displayed;
+                
+                //container.style.left = "-9999px";
+                // This cause white screen problem
                 if (cache.termsOfUse && cache.termsOfUse.style) {
-                    cache.termsOfUse.style.display = "none";
+                    //cache.termsOfUse.style.display = "none";
                     // move ToU far to the left in addition to setting
                     // display to "none", because at the end of the GMap
                     // load sequence, display: none will be unset and ToU
                     // would be visible after loading a map with a google
                     // layer that is initially hidden. 
-                    cache.termsOfUse.style.left = "-9999px";
-                    cache.poweredBy.style.display = "none";
+                    //cache.termsOfUse.style.left = "-9999px";
+                    //cache.poweredBy.style.display = "none";
                 }
             }
         }

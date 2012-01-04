@@ -9,7 +9,7 @@
 </div>
 
 <div class="container info">
-    <div id="toc"></div>
+    <ul id="toc"></ul>
     <div id="document-content">
         <?= $content ?>
     </div>

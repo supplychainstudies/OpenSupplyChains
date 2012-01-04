@@ -6,9 +6,35 @@ $(document).ready(function(){
       {
         startLevel: 2,    // H2 and up
         depth:      3,    // H2 through H4,
-        topLinks:   true, // Add "Top" Links to Each Header
+        topLinks:   false, // Add "Top" Links to Each Header
       }
-    );  
+    );
+
+    $("#toc a").each(function(){
+        $(this).click(function(e){
+            target = $(this).attr('href');    
+            e.preventDefault();
+            $.scrollTo(target, 600);
+        });
+    });
+});
+
+
+// Floating box fxn via http://www.webanddesigners.com/floating-share-box/
+$(function() {
+    var offset = $("#toc").offset();
+    var topPadding = 35;
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > offset.top) {
+            $("#toc").stop().animate({
+                marginTop: $(window).scrollTop() - offset.top + topPadding
+            });
+        } else {
+            $("#toc").stop().animate({
+                marginTop: 0
+            });
+        };
+    });
 });
 
 
@@ -324,3 +350,5 @@ $(document).ready(function(){
 
     
 })(jQuery);
+
+

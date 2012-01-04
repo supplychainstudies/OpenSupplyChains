@@ -1485,6 +1485,8 @@ body.admin {
 
 /* Info page & API styles -------------------
  *
+ * TODO: Clean up the following...
+ *
  * These styles are meant for any of our text-heavy pages.
  * They should emphasise proper typesetting.
  *
@@ -1514,10 +1516,21 @@ body.admin {
         font-size: 10pt;
         width: 200px;
         padding: 10px 10px 10px 20px;
-        background: #efffb1;
         border: solid 1px #ccd136;
         margin: 0 0 10px 15px;
-    } 
+        .rounded(8px);
+        .gradient(#f9f0a9,#faf6da);
+        li{
+            margin: .5em 0;
+        }
+    }
+    code {
+        white-space: pre-wrap;
+    }
+    .toc-top-link{
+        padding: .25em 1em;
+        font-size: .6em;
+    }
 }
 
 .about-sourcemap{

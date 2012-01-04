@@ -304,7 +304,10 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             this.searchFilterMap();
         }, this));
         $(this.banner_div).find("#map-search").blur(function(){
-            setTimeout(function(){window.scrollTo(0,0);},100);
+            setTimeout(function(){
+                if(window.pageYOffset !== 0) return;
+                window.scrollTo(0,window.pageYOffset + 1);
+            },100);
         });
     }, this);
 

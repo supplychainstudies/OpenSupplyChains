@@ -108,6 +108,13 @@ body.mobilezoom {
                 }
             }
         }
+        #banner-owner{
+            padding-top:4px;
+            a{
+                position:relative;
+                top:4px;
+            }
+        }
     }
 	#extras { 
         zoom: @z; -moz-transform: scale(@z); 
@@ -130,15 +137,47 @@ body.mobilezoom {
             bottom:25px;left:0px;
         }
     }
+	#dialog {
+	    #dialog-content {
+            min-height:37px;
+	        h2.title { 
+                &.hop {
+                    background:url("../images/chevron.png") 0 6px no-repeat;
+                    background-size:1em;
+                }
+            }
+            .cluster {
+                .cluster-item {
+                    .dot {
+                        top:7px !important;
+                    }
+                    a{
+                        h2{top: 6px;}
+                    }
+                }
+            }
+        }
+        div.close{
+            top:4px !important;
+            background-size:1.2em;
+        }
+        .dot {
+            top:6px !important;
+            //zoom: @z; -moz-transform: scale(@z);    
+        }
+    }
 }
 
 body.vertical{
     @z : .4;
+    .cluster {max-height:325px;}
 	#dialog {
 	    top:45px;
 	    width:250px;
 	    #dialog-content {
-	        h2.title { font-size: 14px; }
+	        h2.title { 
+                font-size: 16px; 
+            }
 	        h3.placename { font-size:12px; }
 	        div.description { font-size:12px; }
 	        .url { font-size:12px; }
@@ -152,8 +191,6 @@ body.vertical{
 	            zoom: @z; -moz-transform: scale(@z);    
 	            overflow:hidden !important;
 	        }
-			.dot { zoom: @z; -moz-transform: scale(@z);}
-            .close {zoom: @z; -moz-transform: scale(@z);} 
 	    }    
 	}
     // end dialog  
@@ -161,11 +198,12 @@ body.vertical{
 
 body.horizontal{
     @z : .5;
+    .cluster {max-height:170px;}
 	#dialog {
 	    top:45px;
 	    width:360px;
 	    #dialog-content {
-	        h2.title { font-size: 14px; }
+	        h2.title { font-size: 16px; }
 	        h3.placename { font-size:12px; }
 	        div.description { font-size:12px; }
 	        .url { font-size:12px; }
@@ -179,8 +217,6 @@ body.horizontal{
 	            zoom: @z; -moz-transform: scale(@z);    
 	            overflow:hidden !important;
 	        }
-			.dot { zoom: @z; -moz-transform: scale(@z);}
-            .close {zoom: @z; -moz-transform: scale(@z);} 
 	    }    
 	}
     // end dialog  

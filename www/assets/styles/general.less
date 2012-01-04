@@ -915,26 +915,6 @@ ul li.news-item{
     p { line-height: 1.4em; }
 }
 
-/* Document pages ------------------------------------------- */
-#document-content {
-    font-size:0.8em;
-    #document-title {
-        border-bottom: 1px solid #ccc;
-    }
-    h2,h3,h4,h5 {
-        border-bottom:0;
-        margin-top:1em;
-    }
-}
-.about-sourcemap{
-    h1 { margin: 30px 0; }
-    ol {
-        margin: 0 40px;
-        li{ margin: 20px 0; line-height: 28px; }
-    }
-    p { margin-bottom: 20px; }
-}
-
 /* Dashboard ----------------------------------------------------- */
 .account-alert{ 
     .rounded(14px); 
@@ -1355,78 +1335,6 @@ div.form-page {
 }
 
 
-/* API Docs ---------------- */
-.classic-list {
-    li {
-        list-style-position: inside;
-        list-style-type: upper-alpha;
-        ol {
-            margin: .3em;
-            margin-left: .8em;
-            li {
-                list-style-type: decimal;
-                ol {
-                    li {
-                        list-style-type: lower-alpha;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.codeface {
-    font-family: monospace;
-    background-color: #efefef;
-}
-
-.code-sample {
-    white-space: pre;
-    font-family: monospace;
-    background-color: #efefef;
-    margin-top: .25em;
-    margin-bottom: .25em;
-    .rounded(.5em);
-    font-weight: bold;
-}
-
-.documentation {
-    .toc {
-        border: 1px solid #D4C272;
-        padding-left: .2em;
-        .rounded(.2em);
-    }
-    a {
-        color: orange;
-    }
-    .section {
-        h2 {
-            text-align: right;
-            background-color: #efefef;
-            border-bottom: .1em solid #888;
-            color: #bbb;
-            padding-right: .5em;
-            font-size: 2em;
-        }
-        h3 {
-            font-size: 2em;
-            font-weight: bold;
-            border-bottom: 1px solid #ddd;
-        }
-        h4 {
-            font-size: 1.6em;
-            font-weight: bold;
-            color: #D4C272;
-        }
-        p {
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-        margin-bottom: 1em;
-    }
-    margin-bottom: 2em;
-}
-
 /* List (blog) styles ------------------- */
 #list-overview {
     width: 1008px; 
@@ -1572,4 +1480,123 @@ body.admin {
     .export{
         float: right;
     }
+}
+
+/* Info page & API styles -------------------
+ *
+ * These styles are meant for any of our text-heavy pages.
+ * They should emphasise proper typesetting.
+ *
+ */
+
+.container.info{
+    #document-content {
+        width: 700px;
+        h1,h2,h3,h4,h5,h6{
+            margin: .4em 0;
+        }
+        p{
+            text-size: 1em;
+            line-height: 1.5em;
+            margin-bottom: .5em;
+        }
+        ul{
+            margin-left: 2em;
+            list-style: square;
+            li{
+                margin: .7em 0;
+            }
+        }
+    }
+    #toc {
+        float: right;
+        font-size: 10pt;
+        width: 200px;
+        padding: 10px 10px 10px 20px;
+        background: #efffb1;
+        border: solid 1px #ccd136;
+        margin: 0 0 10px 15px;
+    } 
+}
+
+.about-sourcemap{
+    h1 { margin: 30px 0; }
+    ol {
+        margin: 0 40px;
+        li{ margin: 20px 0; line-height: 28px; }
+    }
+    p { margin-bottom: 20px; }
+}
+
+
+/* API Docs ---------------- */
+.classic-list {
+    li {
+        list-style-position: inside;
+        list-style-type: upper-alpha;
+        ol {
+            margin: .3em;
+            margin-left: .8em;
+            li {
+                list-style-type: decimal;
+                ol {
+                    li {
+                        list-style-type: lower-alpha;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.codeface {
+    font-family: monospace;
+    background-color: #efefef;
+}
+
+.code-sample {
+    white-space: pre;
+    font-family: monospace;
+    background-color: #efefef;
+    margin-top: .25em;
+    margin-bottom: .25em;
+    .rounded(.5em);
+    font-weight: bold;
+}
+
+.documentation {
+    .toc {
+        border: 1px solid #D4C272;
+        padding-left: .2em;
+        .rounded(.2em);
+    }
+    a {
+        color: orange;
+    }
+    .section {
+        h2 {
+            text-align: right;
+            background-color: #efefef;
+            border-bottom: .1em solid #888;
+            color: #bbb;
+            padding-right: .5em;
+            font-size: 2em;
+        }
+        h3 {
+            font-size: 2em;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+        h4 {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #D4C272;
+        }
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        margin-bottom: 1em;
+    }
+    margin-bottom: 2em;
 }

@@ -80,6 +80,14 @@ return array(
             'requires' => array(
                 'sourcemap-map'
             )
+        ),
+        'sourcemap-document' => array(
+            'scripts' => array(
+                'sites/default/assets/scripts/tableofcontents.js'
+            ),
+            'requires' => array(
+                'sourcemap-core'
+            )
         )
     )
 );

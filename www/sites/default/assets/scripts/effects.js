@@ -433,7 +433,7 @@ $(this).change(function(){
     /* carousel launch */
     $('.carousel').each(function(){
         $(this).jcarousel({
-            scroll: 4,
+            scroll: 4
         });
     });
 

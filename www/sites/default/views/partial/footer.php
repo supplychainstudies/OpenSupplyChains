@@ -22,8 +22,6 @@
             print '<li><a href="info/' . $page->slug . '">' . $page->title . '</a></li>';
         } 
         ?>
-    	<li><a href="legal/privacy">Privacy Policy</a></li>
-    	<li><a href="legal/terms">Terms of Service</a></li>
     	<li><a href="/contact">Contact us</a></li>
     </ul>
     <div class="clear"></div>

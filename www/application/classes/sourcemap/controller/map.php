@@ -54,7 +54,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_id = $supplychain_id;
                 $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
                 $this->template->can_comment = (bool)$current_user_id;
-                $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
+                $this->template->supplychain_avatar = Sourcemap_Image::avatar($sc->owner, 64, true);
                 $this->template->supplychain_date = date('F j, Y', $sc->created );
                 $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
                 isset($sc->owner->display_name) ? $this->template->supplychain_display_name = $sc->owner->display_name : "";
@@ -98,7 +98,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     foreach($c as $i => $comment) {
                         $arr = $comment->as_array();
                         $arr['username'] = $comment->user->username;
-                        $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
+                        $arr['avatar'] = Sourcemap_Image::avatar($comment->user, 64, true);
                         $comment_data[] = (object)$arr;
                     }
                     $comment_data = array_reverse($comment_data);
@@ -167,7 +167,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 foreach($c as $i => $comment) {
                     $arr = $comment->as_array();
                     $arr['username'] = $comment->user->username;
-                    $arr['avatar'] = "services/uploads?bucket=accountpics&filename=".$comment->user->username;
+                    $arr['avatar'] = Sourcemap_Image::avatar($comment->user, 64, true);
                     $comment_data[] = (object)$arr;
                 }
                 $this->template->comments = $comment_data;
@@ -428,8 +428,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_id = $supplychain_id;
                 $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
                 $this->template->can_comment = (bool)$current_user_id;
-                $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
                 $this->template->supplychain_date = date('F j, Y', $sc->created );
+                $this->template->supplychain_avatar = Sourcemap_Image::avatar($sc->owner, 64, true);
                 $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
                 isset($sc->owner->display_name) ? $this->template->supplychain_display_name = $sc->owner->display_name : "";
                 $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";

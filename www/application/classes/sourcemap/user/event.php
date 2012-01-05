@@ -153,6 +153,7 @@ class Sourcemap_User_Event {
             or_where_close();
         }
         $q = $q->or_where('scope', '=', self::EVERYBODY);
+        $q = $q->and_where('event', '!=', self::ANNOUNCE); // Remove announcements from user stream
         $q->order_by('timestamp', 'desc');
         $q->limit($limit);
         $evts = array();
@@ -164,4 +165,19 @@ class Sourcemap_User_Event {
         }
         return $evts;
     }
+
+    public static function get_announcements(){
+        $q = ORM::factory('user_event')->
+            where_open()->where('scope', '=', 4)
+            ->where('event', '=', 64)
+            ->where_close();
+        $q->order_by('timestamp', 'desc');
+        $evts = array();
+        foreach($q->find_all() as $i => $evt) {
+            $evt = $evt->as_array();
+            $evts[] = $evt;
+        }
+        return $evts;
+    }
+
 }

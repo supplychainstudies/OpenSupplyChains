@@ -12,8 +12,8 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 <script>
-    var username = '<?= $user->username ?>';
-    var is_channel = '<?= $isChannel ?>';
+    Sourcemap.username = '<?= $user->username ?>';
+    Sourcemap.is_channel = '<?= $isChannel ?>';
 </script>
 <div class="container">
     <div class="dashboard-top">

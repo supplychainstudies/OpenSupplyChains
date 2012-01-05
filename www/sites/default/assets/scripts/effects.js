@@ -62,7 +62,7 @@ $(document).ready(function(){
         $(element).prepend('<a href="#" class="close"></a>');
         $('body').append($(element));
 
-        //is_channel ? $('#' + popID).height(200) : $('#' + popID).height(100);
+        //Sourcemap.is_channel ? $('#' + popID).height(200) : $('#' + popID).height(100);
         $('#' + popID).height(100);
         $('#' + popID).width(500);
         var popMargTop = ($('#' + popID).height() + 80) / 2;
@@ -105,14 +105,14 @@ $(document).ready(function(){
                 console.log("file size "+Uploadfilesize+" exceed limit "+sizelimit);
             }
         });
-});
+    });
 
-/* Channel edit */
-$("input:checkbox").each(function(index){
-var ischecked = $(this).is(":checked");
-$(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
+    /* Channel edit */
+    $("input:checkbox").each(function(index){
+        var ischecked = $(this).is(":checked");
+        $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
 
-$(this).change(function(){
+        $(this).change(function(){
             var ischecked = $(this).is(":checked");
             $(this).parent().children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
         });
@@ -123,6 +123,8 @@ $(this).change(function(){
         var publish_precheck = false;
         var featured_precheck = false;
         var passcode_precheck = false;
+
+        var private_permission = false;
         
         // default view
         var map_passcode = $(this).children('.map-controls-passcode');
@@ -130,6 +132,8 @@ $(this).change(function(){
         $(map_passcode).stop().animate({width:ischecked?249:120},500);     
         //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
         ischecked ? $(map_passcode).children("#map-passcode-input").show():$(map_passcode).children("#map-passcode-input").hide();
+
+        //$(this).children('.map-controls-publish"').children("a").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
 
         $(this).children('.map-controls-publish').children('#map-publish-checkbox').change(function(){
             publish_precheck = true;
@@ -141,32 +145,17 @@ $(this).change(function(){
 
         $(this).children('.map-controls-passcode').children("#map-passcode-checkbox").change(function(){
             passcode_precheck = true;
-            //passcode_precheck = $(this).is(":checked");
-            // passcode_check : featured_check ? cancel featured : don't send data            
-            // !passcode_check :
-            /*
-            if(!passcode_precheck){
-                // Delete #map-passcode-input value
-                if($(this).parent().children("#map-passcode-input").val()=="")
-                    passcode_precheck = true;
-                else
-                    $(this).parent().children("#map-passcode-input").val("");
-            }
-            */
             // animation
             var ischecked = $(this).is(":checked");
             var parent_control = $(this).parent(".map-controls-passcode");
             $(parent_control).stop().animate({width:ischecked?249:120},500);            
-            //$(parent_control).children("#map-passcode-link").attr("style","color:"+{color:ischecked?"#777A7E":"#A7AAAE"}.color);
             ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
         });
-
-
         
         $(this).change(function(){
             // loading icon
-            $(this).find('.map-controls-status').show().removeClass('failed');
-            $(this).find('.map-controls-status').show().removeClass('succeeded');
+            //$(this).find('.map-controls-status').show().removeClass('failed');
+            $(this).find('.map-controls-status').show().removeClass('succeeded failed');
 
             // publish
             var publish_selector = $(this).children('.map-controls-publish"');
@@ -180,13 +169,37 @@ $(this).change(function(){
             var passcode_selector = $(this).children('.map-controls-passcode');
             var passcode_check = passcode_selector.children("input:checkbox").is(":checked");
             var passcode_val = passcode_selector.children("#map-passcode-input").val();
-            //console.log($(passcode_selector).children("input:checkbox").is(":checked"));
-            //console.log(passcode_selector.children("#map-passcode-input").val());
 
-            // precheck
+            // Precheck :: which option is change in this action
+            
             // publish_check : featured_check ? cancel featured : (click featured before publish); 
             if(publish_precheck){            
                 publish_precheck = false; // set to default
+
+               if(!Sourcemap.is_channel){
+                    $(this).find('.map-controls-status').hide();
+                    if(publish_check){
+                        // turn private to public : Show confirm window
+                        if(!Sourcemap.is_channel){
+                            // confirm window
+                            var txt_msg = "Private map is for PRO user only.\nAre you sure you want to unprivate this map?";
+                            private_permission = window.confirm(txt_msg);
+                        }
+                        if(!private_permission){
+                            publish_selector.children("input:checkbox").removeAttr("checked");
+                            publish_selector.children("a").attr("style","color:#A7AAAE");
+                            return false;
+                        }
+                        $(this).find('.map-controls-status').show();
+                        
+                    } else {
+                        // Public to private is not allow for free user, change back to default
+                        publish_selector.children("input:checkbox").attr("checked",true);
+                        publish_selector.children("a").attr("style","color:#777A7E");
+                        // pop up the warning window that private map is for pro user only
+                        return false;
+                    }
+               }
 
                 if(!publish_check){                    
                     featured_selector.children("input:checkbox").removeAttr("checked");
@@ -202,8 +215,6 @@ $(this).change(function(){
                     featured_selector.children("input:checkbox").removeAttr("checked");
                     featured_check = false;                        
                     featured_selector.children("a").attr("style","color:#A7AAAE");
-                    // cause recursive
-                    // featured_selector.children("input:checkbox").trigger("change");
                     $(this).find('.map-controls-status').hide();
                     return false;
                 }
@@ -247,7 +258,6 @@ $(this).change(function(){
             // supplychain id
             var supplychain_id = $(this).attr('value');
             var this_class = $(this).attr('class');
-            //http://192.168.1.18/edit/general/5?publish=yes&featured=yes&passcode=aaa 
             $.ajax({
                 url:'edit/general/'+supplychain_id,
                 data:{  
@@ -256,7 +266,6 @@ $(this).change(function(){
                     passcode: passcode_val               
                 },
                 success : function(data) {
-                    //console.log("Success : "+data);
                     $("."+this_class).find('.map-controls-status').addClass('succeeded');
                 },
                 error : function(data){
@@ -297,7 +306,7 @@ $(this).change(function(){
         if ( field === 'description' ){
             input = 'textarea';  // description field gets a textarea
             oldData_textarea = $('#'+field).text();
-        }else{
+        } else {
             oldData_html = $('#'+field).text();
         }
 
@@ -436,7 +445,6 @@ $(this).change(function(){
             scroll: 4
         });
     });
-
 
 }); // end of document ready
 

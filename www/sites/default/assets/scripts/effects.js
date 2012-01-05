@@ -151,6 +151,7 @@ $(document).ready(function(){
             $(parent_control).stop().animate({width:ischecked?249:120},500);            
             ischecked ? $(parent_control).children("#map-passcode-input").show():$(parent_control).children("#map-passcode-input").hide();
         });
+
         
         $(this).change(function(){
             // loading icon
@@ -177,19 +178,63 @@ $(document).ready(function(){
                 publish_precheck = false; // set to default
 
                if(!Sourcemap.is_channel){
+                    
                     $(this).find('.map-controls-status').hide();
                     if(publish_check){
                         // turn private to public : Show confirm window
-                        if(!Sourcemap.is_channel){
-                            // confirm window
-                            var txt_msg = "Private map is for PRO user only.\nAre you sure you want to unprivate this map?";
-                            private_permission = window.confirm(txt_msg);
-                        }
+                        
+                        // confirm window
+                        //var txt_msg = "Private map is for PRO user only.\nAre you sure you want to unprivate this map?";
+                        //private_permission = window.confirm(txt_msg);
+
                         if(!private_permission){
-                            publish_selector.children("input:checkbox").removeAttr("checked");
-                            publish_selector.children("a").attr("style","color:#A7AAAE");
+
+                            // modal
+                            var popID = "publish_confirm";
+                            var element = document.createElement('div');
+                            $(element).html(
+                                'Private map is for PRO user only.<br/>'+
+                                'Are you sure you want to unprivate this map?<br/>'+
+                                '<a class="false">Cancel</a>'+
+                                '<a class="true">Confirm</a>'
+                            );
+                            $(element).find(".true").click(function(){
+                                private_permission = true;
+                                $('#fade , .popup_block').remove();
+                                publish_selector.children("input:checkbox").trigger("change");
+                            });
+                            $(element).find(".false").click(function(){
+                                publish_selector.children("input:checkbox").removeAttr("checked");
+                                publish_selector.children("a").attr("style","color:#A7AAAE");
+                                $('#fade , .popup_block').remove();
+                            });
+                            $(element).attr('id',popID);
+                            $(element).addClass("popup_block");
+                            $(element).prepend('<a href="#" class="close"></a>');
+                            $('body').append($(element));
+                            $('#' + popID).height(110);
+                            $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
+                            var popMargTop = ($('#' + popID).height() + 80) / 2;
+                            var popMargLeft = ($('#' + popID).width() + 80) / 2;
+                             $('#' + popID).css({
+                                 'margin-top' : -popMargTop,
+                                 'margin-left' : -popMargLeft,
+                                 'overflow' : 'hidden'
+                             });
+                             $('body').append('<div id="fade"></div>');
+                             $('#fade').css({'filter' : 'alpha(opacity=80)'});
+                             $('a.close, #fade').live('click', function() {
+                                 $('#fade , .popup_block').fadeOut(function() {
+                                     $('#fade , .popup_block').remove();
+                                 });
+                                 return false;
+                             });
+                             $('#' + popID).fadeIn();
+                             $('#fade').fadeIn();
+
                             return false;
-                        }
+                        } // User not confirm 
+    
                         $(this).find('.map-controls-status').show();
                         
                     } else {

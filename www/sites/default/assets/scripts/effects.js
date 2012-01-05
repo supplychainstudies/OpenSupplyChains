@@ -363,7 +363,7 @@ $(this).change(function(){
 
     /* status message fade */
     if ($('.status-message').length > 0) {
-        $('.status-messages').click(function(){
+        $('.status-messages:not(.announcements)').click(function(){
             $(this).fadeOut(0);
         });
         $('.status-messages').fadeIn(400);

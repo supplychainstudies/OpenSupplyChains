@@ -49,6 +49,9 @@
             </div>
         </div>
         <?php } ?>
+        
+         <?= View::factory('partial/announcements'); ?>
+
         <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
         <div class="push"></div>
     </div><!-- #wrapper -->

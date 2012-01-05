@@ -12,19 +12,22 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?php if(isset($messages) && is_array($messages) && $messages): ?>
-<div class="status-wrap">
-<ul class="status-messages">
 
-<?php foreach($messages as $i => $msg): ?>
-<li class="status-message <?= isset($msg->level) ? HTML::chars($msg->level).' ' : '' ?><?= $i % 2 ? 'odd' : 'even' ?>">
-<div class="status-wrap">
-<?= isset($msg->message) ? HTML::chars($msg->message) : '' ?>
-</div>
-</li>
+<?php $announcements = Sourcemap_User_Event::get_announcements(); ?>
+<?php if(isset($announcements)): ?>
 
-<?php endforeach; ?>
-
-</ul>
+<div class="container">
+    <div class="messages">
+        <div class="status-wrap">
+            <ul class="status-messages announcements">
+                <?php foreach($announcements as $announcement): ?>
+                <li class="status-message announcement">
+                    <?php $message = json_decode($announcement['data']) ?>
+                    <div class="status-wrap"><?= $message->message ?></div>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
 </div>
 <?php endif; ?>

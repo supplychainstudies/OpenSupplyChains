@@ -149,7 +149,7 @@ class Model_Supplychain extends ORM {
             $sc->owner = (object)array(
                 'id' => $owner->id, 'name' => $owner->username,
                 //'avatar' => Gravatar::avatar($owner->email),
-                'avatar' => "services/uploads?bucket=accountpics&filename=".$owner->username,
+                'avatar' => Sourcemap_Image::avatar($sc->owner, 64, true),
                 'banner_url' => $owner->banner_url,
                 'display_name' => $owner->display_name
             );

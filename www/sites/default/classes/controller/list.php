@@ -43,7 +43,7 @@ class Controller_List extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_name = isset($sc->attributes->title) ? $sc->attributes->title : "";
                 $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
-                $this->template->supplychain_avatar = isset($sc->owner->avatar) ? $sc->owner->avatar : "";
+                $this->template->supplychain_avatar = Sourcemap_Image::avatar($sc->owner, 64, true); 
                 $this->template->supplychain_desc = isset($sc->attributes->description) ? $sc->attributes->description : "" ;
 
                 $this->layout->scripts = array('list-view');

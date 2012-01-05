@@ -722,6 +722,22 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
          }
     });
 
+	$("#footprint-methodology").change($.proxy(function(evt) {
+        // grab the first supplychain
+        var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+		for (x in sc.stops) {
+			if (sc.stops[x] == this.editing) {
+				sc.stops[x].attributes.footprintmethodology = evt.currentTarget.value;
+				break;
+			}
+		}
+    	Sourcemap.broadcast('supplychain-updated', sc);
+    }, this));
+
     $(this.map_view.dialog).find('#catalog').click($.proxy(function() {
         this.q = '';
         this.params = {"name": ''};
@@ -770,7 +786,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 			var energy_factor   = editor.find('input[name="energy"]').val();
 			var water_factor   = editor.find('input[name="water"]').val();
 			if (weight != 0) {
-				editor.find('.timesby').text(weight);
+				editor.find('.timesby').text(weight + " kg");
 			}
 			//took quantity out
             if (!isNaN(co2e_factor * weight)){ 
@@ -1034,32 +1050,68 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 		    			cat_content += '<div class="clear"></div>';                    
                 
 		                var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
-		                $(new_li).find('#co2e-factor').click($.proxy(function(evt) {
-							var notes = $(this.editor.map_view.dialog).find("textarea#footprint-methodology");
-							var notes_text = notes.val();
-							if (this.item.ref && notes_text.search(this.item.ref) == -1) {
-								notes_text = notes_text + this.item.ref;
-								console.log(notes_text);
-								$(notes).text(notes_text);
-								console.log(notes);
-								
-								
-								//$("textarea#footprint-methodology").text("notes");
-								//notes.html("sdfsdf");
-								//$(this.editor.map_view.dialog).find("textarea#footprint-methodology").val(notes);
-								//$(this.editor.map_view.dialog).find("textarea#footprint-methodology").val("notes");
-								//$("textarea#footprint-methodology").("notes");
-
+		                $(new_li).find('#co2e-factor').click($.proxy(function(evt) {							
+							var sc = false;
+					        for(var k in this.editor.map.supplychains) {
+					            sc = this.editor.map.supplychains[k];
+					            break;
+					        }
+							for (x in sc.stops) {
+								if (sc.stops[x] == this.editor.editing) {
+									if (sc.stops[x].attributes.footprintmethodology) { if (sc.stops[x].attributes.footprintmethodology.search("\nCO2e factor referenced from: \n" +this.item.ref) != -1) { break; } }
+									sc.stops[x].attributes.footprintmethodology = sc.stops[x].attributes.footprintmethodology + "\nCO2e factor referenced from: \n" +this.item.ref;
+									break;
+								}
 							}
+					    	Sourcemap.broadcast('supplychain-updated', sc);
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
 		                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true, "unit": true, "co2e_reference": true}}}));
 		                $(new_li).find('#energy-factor').click($.proxy(function(evt) {
+							var sc = false;
+					        for(var k in this.editor.map.supplychains) {
+					            sc = this.editor.map.supplychains[k];
+					            break;
+					        }
+							for (x in sc.stops) {
+								if (sc.stops[x] == this.editor.editing) {
+									if (sc.stops[x].attributes.footprintmethodology) { if (sc.stops[x].attributes.footprintmethodology.search("\nEnergy factor referenced from: \n" +this.item.ref) != -1) { break; } }
+									sc.stops[x].attributes.footprintmethodology = sc.stops[x].attributes.footprintmethodology + "\nEnergy factor referenced from: \n" +this.item.ref;
+									break;
+								}
+							}
+					    	Sourcemap.broadcast('supplychain-updated', sc);
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
 		                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"energy": true, "unit": true, "energy_reference": true}}}));
 		                $(new_li).find('#water-factor').click($.proxy(function(evt) {
+							var sc = false;
+					        for(var k in this.editor.map.supplychains) {
+					            sc = this.editor.map.supplychains[k];
+					            break;
+					        }
+							for (x in sc.stops) {
+								if (sc.stops[x] == this.editor.editing) {
+									if (sc.stops[x].attributes.footprintmethodology) { if (sc.stops[x].attributes.footprintmethodology.search("\nWater factor referenced from: \n" +this.item.ref) != -1) { break; } }
+									sc.stops[x].attributes.footprintmethodology = sc.stops[x].attributes.footprintmethodology + "\nWater factor referenced from: \n" +this.item.ref;
+									break;
+								}
+							}
+					    	Sourcemap.broadcast('supplychain-updated', sc);
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
 		                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"water": true, "unit": true, "water_reference": true}}}));                
 						$(new_li).find('.add-map-button').click($.proxy(function(evt) {
+							var sc = false;
+					        for(var k in this.editor.map.supplychains) {
+					            sc = this.editor.map.supplychains[k];
+					            break;
+					        }
+							for (x in sc.stops) {
+								if (sc.stops[x] == this.editor.editing) {
+									if (sc.stops[x].attributes.footprintmethodology) { if (sc.stops[x].attributes.footprintmethodology.search("\nFactors referenced from: \n" +this.item.ref) != -1) { break; } }
+									sc.stops[x].attributes.footprintmethodology = sc.stops[x].attributes.footprintmethodology + "\nFactors referenced from: \n" +this.item.ref;
+									break;
+								}
+							}
+					    	Sourcemap.broadcast('supplychain-updated', sc);
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
 		                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true,"energy": true,"water": true, "unit": true, "co2e_reference": true, "energy_reference": true, "water_reference": true}}}));                
 
@@ -1216,11 +1268,6 @@ Sourcemap.Map.Editor.prototype.showCatalog = function(o) {
 		$("#dialog").css("padding",0);
 		$("#newcatalog").show();
         $("#newcatalog").html(th);  
-		$("#newcatalog").find("#catalog-search-field").click($.proxy(function(evt) {
-			if ($(this).val() == "Search Materials Catalog") {
-				$(this).val("");
-			}
-	    }, this));
         this.editor.updateCatalogListing(this.o);
     }, tscope, tscope);
 }

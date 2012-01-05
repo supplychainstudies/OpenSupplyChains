@@ -13,11 +13,11 @@
 
 <div id="catalog">
 	<div class="falseclose"><a></a></div>
-	<div class="catalog-title">Materials Catalog</div>
+	<div class="catalog-title">Impact Library</div>
 	<div class="catalog-search-bar">
 	    <form id="catalog-search">
 	        <fieldset>       
-	                <input id="catalog-search-field" value="Search Materials Catalog" autocomplete="off" />
+	                <input id="catalog-search-field" placeholder="Search Materials Catalog" autocomplete="off" />
 	        </fieldset>
 
 	    </form>

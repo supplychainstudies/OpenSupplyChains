@@ -58,6 +58,7 @@
     <% if(this.stop.getAttr("water", false) && this.stop.getAttr("water", false) != 0) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L</li> <% } %>
     <% if(this.stop.getAttr("energy", false) && this.stop.getAttr("energy", false) != 0) { %><li class="energy"><%= this.stop.getAttr("energy", 0) * this.stop.getAttr("qty", 0) %> kwh</li> <% } %>
 </ul>
+<div><%= this.stop.getAttr("footprintmethodology", "") %></div> 
 </div>
 
 <% } %>

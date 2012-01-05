@@ -42,7 +42,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "viz_attr_map": {
         "weight": function(st) {
             var val = 0;
-            var qty = parseFloat(st.getAttr("qty", 0));
+            var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
             var wgt = parseFloat(unt || st.getAttr("weight"));
             if(!isNaN(qty) && !isNaN(wgt)) val = qty * wgt;
@@ -50,7 +50,7 @@ Sourcemap.Map.Base.prototype.defaults = {
         },
         "water": function(st) {
             var val = 0;
-            var qty = parseFloat(st.getAttr("qty", 0));
+            var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","L") == "L" ? 1 : 0;
             var wgt = parseFloat(unt || st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
@@ -62,7 +62,7 @@ Sourcemap.Map.Base.prototype.defaults = {
         }, 
         "energy": function(st) {
             var val = 0;
-            var qty = parseFloat(st.getAttr("qty", 0));
+            var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","kWh") == "kWh" ? 1 : 0;
             var wgt = parseFloat(unt || st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
@@ -74,7 +74,7 @@ Sourcemap.Map.Base.prototype.defaults = {
         },
         "co2e": function(st) {
             var val = 0;
-            var qty = parseFloat(st.getAttr("qty", 0));
+            var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
             var wgt = parseFloat(unt || st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
@@ -145,6 +145,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         }
         var unit = "kg";
         if(metric === "water") unit = "L";
+		if(metric === "energy") unit = "kWh";
         var scaled = Sourcemap.Units.scale_unit_value(value, unit, 2);
 
         this.map.dockControlEl(metric).find('.value').text(scaled.value);
@@ -739,7 +740,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 						var scaled = {};
 						scaled.unit = unit;
 						scaled.value = val;            
-		                //var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
+		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
 		                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
 		                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
 		            } 
@@ -768,7 +769,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 						var scaled = {};
 						scaled.unit = unit;
 						scaled.value = val;
-		                //var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
+		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
 		                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
 		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
 		    				f.attributes.label = "";

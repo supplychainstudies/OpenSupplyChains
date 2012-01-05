@@ -36,8 +36,8 @@ Sourcemap.Map.Base.prototype.defaults = {
     "tour_order_strategy": "upstream", "position": "0|0|0", "error_color": '#ff0000',
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
-    "visualization_mode": null, "visualizations": ["co2e","weight","water"],
-    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080"},
+    "visualization_mode": null, "visualizations": ["co2e","weight","water","energy"],
+    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080","energy":"#FAE500"},
     "legend": true, "locked":true,
     "viz_attr_map": {
         "weight": function(st) {
@@ -51,13 +51,27 @@ Sourcemap.Map.Base.prototype.defaults = {
         "water": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 0));
+    		var unt = st.getAttr("unit","L") == "L" ? 1 : 0;
+            var wgt = parseFloat(unt || st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
-                qty = parseFloat(st.attributes.distance);
+                wgt = parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("water", 0));
-            if(!isNaN(qty) && !isNaN(fac)) val = qty * fac;
+            if(!isNaN(qty) && !isNaN(fac)) val = wgt* qty * fac;
             return val;
         }, 
+        "energy": function(st) {
+            var val = 0;
+            var qty = parseFloat(st.getAttr("qty", 0));
+    		var unt = st.getAttr("unit","kWh") == "kWh" ? 1 : 0;
+            var wgt = parseFloat(unt || st.getAttr("weight"));
+            if(st instanceof Sourcemap.Hop) {
+                wgt = parseFloat(st.gc_distance());
+            }
+            var fac = parseFloat(st.getAttr("energy", 0));
+            if(!isNaN(qty) && !isNaN(fac)) val = wgt* qty * fac;
+            return val;
+        },
         "co2e": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 0));
@@ -318,7 +332,6 @@ Sourcemap.Map.Base.prototype.showEditor = function() {
 	this.options.locked = false;
 	$('#banner-lock').removeClass('locked');
 	$('.editable-options').css('display','block');
-	$('.toggle').css("display","none");
 	$('.addstop').css("display","block");	
 	if(this.dialog) {
 		this.hideDialog();
@@ -328,7 +341,6 @@ Sourcemap.Map.Base.prototype.hideEditor = function() {
 	this.options.locked = true;
 	$('#banner-lock').addClass('locked');
 	$('.editable-options').css('display','none');
-	$('.toggle').css("display","block");
 	$('.addstop').css("display","none");
 	if(this.dialog) {
 		this.hideDialog();
@@ -697,9 +709,10 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 
     if(!smax) smax = this.map.options.max_stop_size;
     var dec_fn = $.proxy(
-		function(f, mb) {            
+		function(f, mb) {        
 				//The val variable should be the polution value for this stop
 		        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
+				console.log(f);
 		        if(f.cluster) {    //Why we divide this into two segments is unclear
 		            var val = 0;
 		            for(var c in f.cluster) {
@@ -721,8 +734,12 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                f.attributes.fcolor = this.color
 		                f.attributes.yoffset = -1*(f.attributes.size+fsize);
 		                var unit = "kg";
-		                if(attr_nm === "water") { unit = "L"; }                
-		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
+		                if(this.attr_nm === "water") { unit = "L"; } 
+						if(this.attr_nm === "energy") { unit = "kWh"; }    
+						var scaled = {};
+						scaled.unit = unit;
+						scaled.value = val;            
+		                //var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
 		                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
 		                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
 		            } 
@@ -745,14 +762,18 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                f.attributes.fsize = fsize+"px";     
 		                f.attributes.fcolor = this.color
 		                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
-                
 		                var unit = "kg";
-		                if(attr_nm === "water") { unit = "L"; }
-		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
+		                if(this.attr_nm === "water") { unit = "L"; }
+						if(this.attr_nm === "energy") { unit = "kWh"; }
+						var scaled = {};
+						scaled.unit = unit;
+						scaled.value = val;
+		                //var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
 		                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
 		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
 		    				f.attributes.label = "";
 		    			} else {
+							
 		    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
 		    			}	              
 		            } 
@@ -848,6 +869,7 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
     switch(viz_nm) {
         //case "energy":
         //    break;
+		case "energy":
         case "water":
         case "co2e":
         case "weight":
@@ -945,7 +967,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
             this.map.dockAdd('weight', {
                 "title": 'Weight',
                 "toggle": true,
-                "panel": 'weight-filter',
+                "panel": 'filter',
                 "callbacks": {
                     "click": $.proxy(function() {
                         this.toggleVisualization("weight");
@@ -963,7 +985,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
                 "title": 'Carbon',
                 "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kg</span> CO2e",
                 "toggle": true,
-                "panel": 'co2e-filter',
+                "panel": 'filter',
                 "callbacks": {
                     "click": $.proxy(function() {
                         this.toggleVisualization("co2e");
@@ -981,7 +1003,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
                 "title": 'Water',
                 "content": "<span class=\"value\">-.-</span> <span class=\"unit\">L</span> H2O",
                 "toggle": true,
-                "panel": 'water-filter',
+                "panel": 'filter',
                 "callbacks": {
                     "click": $.proxy(function() {
                         this.toggleVisualization("water");
@@ -992,6 +1014,25 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
     } else {
     	this.map.dockRemove('water');
     }
+
+	if(sc.attributes["sm:ui:energy"]) {   
+    	if(this.map.dockControlEl('energy').length == 0) {	
+            this.map.dockAdd('energy', {
+                "title": 'Energy',
+                "content": "<span class=\"value\">-.-</span> <span class=\"unit\">kWh</span>",
+                "toggle": true,
+                "panel": 'filter',
+                "callbacks": {
+                    "click": $.proxy(function() {
+                        this.toggleVisualization("energy");
+                    }, this)
+                }
+            });
+    	}
+    } else {
+    	this.map.dockRemove('energy');
+    }
+
 }
 Sourcemap.Map.Base.prototype.favorite = function() {
     for(var k in this.map.supplychains) {

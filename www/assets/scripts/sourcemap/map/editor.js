@@ -562,6 +562,22 @@ Sourcemap.Map.Editor.prototype.init = function() {
     	this.map_view.updateFilterDisplay(sc);
     	Sourcemap.broadcast('supplychain-updated', sc);
     }, this));
+
+    $("#impact-use-energy").change($.proxy(function(evt) {
+    	var water = $(evt.target).is(':checked') ? true : false;
+        // grab the first supplychain
+        var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+
+    	if(water) { sc.attributes["sm:ui:energy"] = true; } 
+    	else { delete sc.attributes["sm:ui:energy"]; }
+
+    	this.map_view.updateFilterDisplay(sc);
+    	Sourcemap.broadcast('supplychain-updated', sc);
+    }, this));
 }
 
 Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
@@ -668,7 +684,6 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	$("#dialog").width(410);
 	//$("#dialog").height("auto");
 	$("#dialog").css("right",37);
-	$("#dialog").css("padding",5);
 	$("#newcatalog").hide();
     this.editing = ref;
     //$("#editor-tabs").tabs();
@@ -707,7 +722,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
          }
     });
 
-    $(this.map_view.dialog).find('.catalog').click($.proxy(function() {
+    $(this.map_view.dialog).find('#catalog').click($.proxy(function() {
         this.q = '';
         this.params = {"name": ''};
         this.showCatalog(this);
@@ -738,31 +753,43 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     // impact calculator for stops
     if(ref instanceof Sourcemap.Stop) {
+	
+	
+		$("#edit-stop-footprint").find('input[name="co2e"]').keyup($.proxy(function(e){ 
+            
+        }, this));
+		
         $("#edit-stop-footprint input").keyup($.proxy(function(e){ 
             editor = $('#edit-stop-footprint');
-            var quantity = editor.find('input[name="qty"]').val(); 
-            var unit     = editor.find('.footprint-unit').val(); 
-            var weight   = (unit == "kg") ? 1 : Math.max(editor.find('input[name="weight"]').val(), 0); 
+            //var quantity = editor.find('input[name="qty"]').val(); 
+            //var unit     = editor.find('.footprint-unit').val(); 
+            //var weight   = (unit == "kg") ? 1 : Math.max(editor.find('input[name="weight"]').val(), 0); 
+			
+			var weight   = Math.max(editor.find('input[name="weight"]').val(), 0); 
             var co2e_factor   = editor.find('input[name="co2e"]').val(); 
 			var energy_factor   = editor.find('input[name="energy"]').val();
 			var water_factor   = editor.find('input[name="water"]').val();
-            if (!isNaN(quantity * co2e_factor * weight)){ 
-                var output = quantity * weight * co2e_factor;
+			if (weight != 0) {
+				editor.find('.timesby').text(weight);
+			}
+			//took quantity out
+            if (!isNaN(co2e_factor * weight)){ 
+                var output = weight * co2e_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
                 editor.find('#c02e-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#c02e-impact-result').text("-"); }
-			if (!isNaN(quantity * energy_factor * weight)){ 
-                var output = quantity * weight * energy_factor;
+			if (!isNaN(energy_factor * weight)){ 
+                var output = weight * energy_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'kwh', 2);
                 editor.find('#energy-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#energy-impact-result').text("-"); }
-			if (!isNaN(quantity * water_factor * weight)){ 
-                var output = quantity * weight * water_factor;
+			if (!isNaN(water_factor * weight)){ 
+                var output = weight * water_factor;
                 var scaled = Sourcemap.Units.scale_unit_value(output, 'L', 2);
                 editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#water-impact-result').text("-"); }
         }, this)); 
-            	
+        /*    	
     	$(".footprint-unit").change($.proxy(function(e){
     		if($(e.target).val() != "kg") {
     			$(".weight-context").removeClass("hidden");
@@ -792,6 +819,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
                 editor.find('#water-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#water-impact-result').text("-"); }            
     	}, this));
+		*/
         // trigger event on load
         $("#edit-stop-footprint input").trigger('keyup');
 
@@ -874,8 +902,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         Sourcemap.broadcast('supplychain-updated', supplychain);
     }, s));
 	if (s.ref.getAttr("co2e_reference",0) != 0) {
-		$(this.editor.map_view.dialog).find('#lock-co2e').addClass("lock");
-		$(this.editor.map_view.dialog).find('#lock-co2e').removeClass("unlock");
+		$(this.map_view.dialog).find('#reference-co2e').addClass("lock");
 		$(this.map_view.dialog).find('#reference-co2e').click(
 	        $.proxy(function(e) { 
 	            window.open(this.ref.getAttr("co2e_reference",0),"_blank"); 
@@ -885,8 +912,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		
 	}
 	if (s.ref.getAttr("energy_reference",0) != 0) {
-		$(this.editor.map_view.dialog).find('#lock-energy').addClass("lock");
-		$(this.editor.map_view.dialog).find('#lock-energy').removeClass("unlock");
+		$(this.map_view.dialog).find('#reference-energy').addClass("lock");
 		$(this.map_view.dialog).find('#reference-energy').click(
 	        $.proxy(function(e) { 
 	            window.open(this.ref.getAttr("energy_reference",0),"_blank"); 
@@ -896,8 +922,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		
 	}
 	if (s.ref.getAttr("water_reference",0) != 0) {
-		$(this.editor.map_view.dialog).find('#lock-water').addClass("lock");
-		$(this.editor.map_view.dialog).find('#lock-water').removeClass("unlock");
+		$(this.map_view.dialog).find('#reference-water').addClass("lock");
 		$(this.map_view.dialog).find('#reference-water').click(
 	        $.proxy(function(e) { 
 	            window.open(this.ref.getAttr("water_reference",0),"_blank"); 
@@ -908,21 +933,17 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	}
 	$(this.map_view.dialog).find('[name^=co2e]').keyup(
         $.proxy(function(e) { 
-			$(this.editor.map_view.dialog).find('#lock-co2e').removeClass("lock");
-			$(this.editor.map_view.dialog).find('#lock-co2e').addClass("unlock");
-			//this.editor.applyCatalogItem("", {"co2e-reference" : ""}, this.ref, {"osi": {"name": ["title"],"co2e_reference": true});
+			$(this.editor.map_view.dialog).find('#reference-co2e').removeClass("lock");
         }, s)
     );
 	$(this.map_view.dialog).find('[name^=energy]').keyup(
         $.proxy(function(e) { 
-			$(this.editor.map_view.dialog).find('#lock-energy').removeClass("lock");
-			$(this.editor.map_view.dialog).find('#lock-energy').addClass("unlock");		
+			$(this.editor.map_view.dialog).find('#reference-energy').removeClass("lock");	
         }, s)
     );
 	$(this.map_view.dialog).find('[name^=water]').keyup(
         $.proxy(function(e) { 
-			$(this.editor.map_view.dialog).find('#lock-water').removeClass("lock");
-			$(this.editor.map_view.dialog).find('#lock-water').addClass("unlock");
+			$(this.editor.map_view.dialog).find('#reference-water').removeClass("lock");
         }, s)
     );
     var cb = function(e) {
@@ -1014,6 +1035,22 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                 
 		                var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
 		                $(new_li).find('#co2e-factor').click($.proxy(function(evt) {
+							var notes = $(this.editor.map_view.dialog).find("textarea#footprint-methodology");
+							var notes_text = notes.val();
+							if (this.item.ref && notes_text.search(this.item.ref) == -1) {
+								notes_text = notes_text + this.item.ref;
+								console.log(notes_text);
+								$(notes).text(notes_text);
+								console.log(notes);
+								
+								
+								//$("textarea#footprint-methodology").text("notes");
+								//notes.html("sdfsdf");
+								//$(this.editor.map_view.dialog).find("textarea#footprint-methodology").val(notes);
+								//$(this.editor.map_view.dialog).find("textarea#footprint-methodology").val("notes");
+								//$("textarea#footprint-methodology").("notes");
+
+							}
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
 		                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true, "unit": true, "co2e_reference": true}}}));
 		                $(new_li).find('#energy-factor').click($.proxy(function(evt) {
@@ -1085,7 +1122,6 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 			
 			
 			// more (toggle between tiny catalog and full catalog)
-			console.log(o.params.curated);
             if(o.params.curated == "true") {
                 var more = $('<span>(more values)</span>').click($.proxy(function() {
                     var o = {};

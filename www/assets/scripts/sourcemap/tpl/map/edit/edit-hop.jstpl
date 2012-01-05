@@ -38,11 +38,11 @@
         <div id="edit-hop-footprint" class="accordion-body sourcemap-form">
                 <fieldset>
 					<div class="footprint-section">        					
-	                    <label for="distance">Qty.</label>
+	                    <label for="distance">Qty</label>
                         <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 0)); %>
                         <%= $("<div></div>").append(el).html() %>
 					</div>
-                    <div class="footprint-section disabled-unit">
+                    <div class="footprint-section disabled-unit" style="margin-left: 4px; padding-left: 0px; margin-top: 8px">
                         	<input class="disabled-unit" type="text" name="unit" value="<%= this.ref.getAttr("unit", "kg") %>" disabled />
                         </label>
                     </div>
@@ -52,13 +52,14 @@
                             el[0].setAttribute("value", Math.round(this.ref.gc_distance()) || 0); %>
                         <%= $("<div></div>").append(el).html() %>
 					</div>
-					<div class="footprint-math">km x</div>					
+					<div class="footprint-math" style="margin-left: 4px; padding-left: 0px; margin-top: 35px">km x</div>					
 					<div class="footprint-section">        					
 	                    <label for="co2e">Factor</label>
                         <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>
                         <%= $("<div></div>").append(el).html() %>
     				</div>
 					<div class="clear"></div>
+					<label for="transportation-type" style="margin-top: 10px">Method of Transportation</label>
                     <select id="transportation-type" name="transportcat" class="sourcemap-form-select">	
 						<% for(var i in this.editor.transport_catalog) { %>
 							<option <% if(this.ref.getAttr("transport", false) == this.editor.transport_catalog[i].name) { %> selected <% } %> value="<%= this.editor.transport_catalog[i].co2e %>">

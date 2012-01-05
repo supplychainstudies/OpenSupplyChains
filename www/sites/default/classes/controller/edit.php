@@ -371,6 +371,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
             } else {
                 if($set_publish === true){
                     // private to public
+                    $sc->other_perms |= $set_publish;
                 } else {
                     // not allowed free account set to private
                     Message::instance()->set('You are not allowed to private this map. Please contact support.');

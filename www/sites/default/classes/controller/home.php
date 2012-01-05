@@ -42,11 +42,18 @@ class Controller_Home extends Sourcemap_Controller_Layout {
 
         $isChannel = false;
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
+        $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find(); 
         if($user->has('roles', $channel_role))
             $isChannel = true;
 
+        /*
+        $private_permission = false;
+        if($user->has('roles', $channel_role)||$user->has('roles', $admin_role)) 
+            $private_permission = true;
+        */
         $this->template->isChannel = $isChannel;
         $this->template->user = (object)$user_arr;
+        //$this->template->private_permission = $private_permission;
         $this->layout->page_title = "Dashboard for ".$this->template->user->username." on Sourcemap";
         $this->template->user_event_stream = Sourcemap_User_Event::get_user_stream($user->id, 6);
         $this->template->supplychains = $scs;

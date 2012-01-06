@@ -67,24 +67,8 @@
 <% if(this.stop.magic) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Media</h3>
 <div id="dialog-media" class="accordion-body">
-        <% if(this.stop.magic["youtube:link"]) { %>
-            <%= Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]) %>
-        <% } %>
-        <% if(this.stop.magic["vimeo:link"]) { %>
-            <%= Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]) %>
-        <% } %>
-        <% if(this.stop.magic["soundcloud:id"]) { %>
-            <%= Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]) %>
-        <% } %>
-        <% if(this.stop.magic["twitter:search"]) { %>	
-            <%= Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]) %>
-        <% } %>
-        <% if(this.stop.magic["flickr:setid"]) {  %>
-            <div id="flickr-photoset-<%= this.stop.magic["flickr:setid"] %>">
-                <%= Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) %>
-            </div>
-        <% } %>
-
+	<div id="dialog-media-content">
+	</div>
     <div id="dialog-media-navigation">
         <% for(var i in this.stop.magic) { %>
                 <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  

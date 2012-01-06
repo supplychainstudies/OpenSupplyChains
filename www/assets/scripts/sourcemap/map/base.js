@@ -569,10 +569,35 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     			$("#dialog-media").find(".navigation-item").removeClass("selected");
     			$(evt.target).addClass("selected");
                 // for multiple media item
-    			$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
-    			$("#dialog-media").children("."+target).css("left","0");
+    			//$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
+    			//$("#dialog-media").children("."+target).css("left","0");
+				
+				if(target == "youtube-link") { 
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+		        } else if(target == "vimeo-link") {
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+		        } else if(target == "soundcloud-id") {
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+		        } else if(target == "twitter-search") {	
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+		        } else if(target == "flickr-setid") {
+		            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+		        }
             }, this));
-                
+              
+	        if(this.stop.magic["youtube:link"]) { 
+	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+	        } else if(this.stop.magic["vimeo:link"]) { 
+	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+	        } else if(this.stop.magic["soundcloud:id"]) { 
+	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+	        } else if(this.stop.magic["twitter:search"]) {	
+	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+	        } else if(this.stop.magic["flickr:setid"]) { 
+	            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+			} 
+
+  
         }, 
         {"stop": stop, "supplychain": sc, 'base': this, "feature":f},
         {"base": this, "stop": stop, "supplychain": sc, "feature": f},

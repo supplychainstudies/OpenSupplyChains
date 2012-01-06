@@ -36,6 +36,7 @@
 		<div class="container">
             <div class="editable-options">
                 <h3>Map Options</h3>
+				
                 <div class="impact-box">
                     <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
                     <label for="impact-use-weight">Show Weight</label>
@@ -70,6 +71,19 @@
                     </select>
                 </div>
                 <br/>
+				<div class="map-replace">
+					<h3>Upload Spreadsheet <a href="http://blog.sourcemap.com/instructions/#usingspreadsheets" class="upload-question"/></a></h3>
+				    <form class="sourcemap-form" name="xls-import" method="post" enctype="multipart/form-data">
+				    <input class="hidden" name="supplychain_name" type="text" value="A Sourcemap" />
+				    <input type="file" name="xls_file" />
+				    <select class="hidden"  name="replace_into">
+				    <option value="<?= $supplychain_id ?>">"></option>
+				    <input class="hidden" type="checkbox" name="publish" value="<?= $supplychain_id ?>" checked="<?= $supplychain_id ?>" />
+				    <input class="button replace" type="submit" value="Replace" />
+				    </form>
+					<div class="clear"></div>					
+				</div>
+				
             </div>
 
             <h2 class="section-title">Share this Sourcemap</h2>

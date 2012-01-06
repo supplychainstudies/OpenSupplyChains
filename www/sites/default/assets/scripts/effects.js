@@ -193,10 +193,15 @@ $(document).ready(function(){
                             var popID = "publish_confirm";
                             var element = document.createElement('div');
                             $(element).html(
-                                'Once you make this map public, you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro</a> Account, '+
-                                'you will only be able to make it private again by upgrading to a Pro Account.'+
+                                '<div class="submit-status failed" style="margin-right:25px"></div>'+
+                                '<div class="confirm_text">'+
+                                'Once you make this map public, you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro Account</a>, '+
+                                'you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro Account</a>.'+
+                                '</div>'+
+                                '<div class="confirm_button">'+
                                 '<input class="button publish_cancel" value="Cancel"/>'+
-                                '<input class="button publish_confirm" value="OK"/>'
+                                '<input class="button publish_confirm" value="OK"/>'+
+                                '</div>'
                             );
                             $(element).find(".publish_confirm").click(function(){
                                 private_permission = true;
@@ -212,7 +217,7 @@ $(document).ready(function(){
                             $(element).addClass("popup_block");
                             $(element).prepend('<a href="#" class="close"></a>');
                             $('body').append($(element));
-                            $('#' + popID).height(110);
+                            $('#' + popID).height(100);
                             $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
                             var popMargTop = ($('#' + popID).height() + 80) / 2;
                             var popMargLeft = ($('#' + popID).width() + 80) / 2;

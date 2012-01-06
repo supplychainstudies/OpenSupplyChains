@@ -32,11 +32,18 @@ class Controller_Create extends Sourcemap_Controller_Layout {
 
         $import_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
+        $private_permission = false;
+
     	if(Auth::instance()->get_user()->has('roles', $import_role) || Auth::instance()->get_user()->has('roles', $admin_role)) {
     		$this->template->can_import = true;                         	
+            $private_permission = true;
     	} else { 
             $this->template->can_import = false; 
         }
+        if(!$private_permission){
+            $f->get_field('publish')->add_class("Go_Pro ");
+        }
+
         $this->template->create_form = $f;
         
         $scs = array();
@@ -56,6 +63,9 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
                 $category = $p['category'];
                 $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
+                if(!$private_permission){
+                    $public = Sourcemap::READ;
+                }
                 $raw_sc = new stdClass();
                 if($category) $raw_sc->category = $category;
                 $raw_sc->attributes = new stdClass();

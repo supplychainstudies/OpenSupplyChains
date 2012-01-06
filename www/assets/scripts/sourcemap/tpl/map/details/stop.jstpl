@@ -48,17 +48,17 @@
 		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %></li>
 	<% } %>
 	<% if(this.stop.getAttr("weight", false) && this.stop.getAttr("weight", false) != 0 && this.stop.getAttr("qty", false) && this.stop.getAttr("qty", false) != 0) { %>
-		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("qty", 0) * this.stop.getAttr("weight", 0)), "kg", 2); %>
+		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0)), "kg", 2); %>
 		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %></li>
 	<% } %>
     <% if(this.stop.getAttr("co2e", false) && this.stop.getAttr("co2e", false) != 0) { %>
-		<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 0)), "kg", 2); %>		
+		<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0)), "kg", 2); %>		
 		<li class="co2e"><%= co2e_scaled.value %> <%= co2e_scaled.unit %></li> 
 	<% } %>
-    <% if(this.stop.getAttr("water", false) && this.stop.getAttr("water", false) != 0) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 0) %> L</li> <% } %>
-    <% if(this.stop.getAttr("energy", false) && this.stop.getAttr("energy", false) != 0) { %><li class="energy"><%= this.stop.getAttr("energy", 0) * this.stop.getAttr("qty", 0) %> kwh</li> <% } %>
+    <% if(this.stop.getAttr("water", false) && this.stop.getAttr("water", false) != 0) { %><li class="water"><%= this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0) %> L</li> <% } %>
+    <% if(this.stop.getAttr("energy", false) && this.stop.getAttr("energy", false) != 0) { %><li class="energy"><%= this.stop.getAttr("energy", 0) * this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0) %> kwh</li> <% } %>
 </ul>
-<div><%= this.stop.getAttr("footprintmethodology", "") %></div> 
+<div style="margin: 10px"><%= this.stop.getAttr("footprintmethodology", "") %></div> 
 </div>
 
 <% } %>

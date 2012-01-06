@@ -128,6 +128,16 @@ a {
     margin-left: auto;
     margin-right: auto;
     &.wide{ width: 1020px; }  // for extra-wide containers including the browse and map views
+    &.full{ // for announcements
+        width: 100%;
+        .status-messages{
+            cursor: auto;
+        }
+        .messages{  
+            text-align: center;
+            margin: 0;
+        }
+    }
 }
 
 #page-title {
@@ -221,6 +231,8 @@ a {
                 .gradient(#eee, #fff);
             }
             &.announcement{
+                padding: 4px 0 6px;
+                .rounded(0);
                 .status-wrap{ background: none; } // disable close button graphic
             }
         }
@@ -641,6 +653,25 @@ input[type=checkbox]{
 			float: left;
 		}
 
+	}
+	.map-replace {
+		border:1px solid #dfdfdf;
+		.rounded(4px);
+		padding:0; margin:10px;
+		input {
+			padding:5px 10px;
+		}
+		input.button {
+			padding:10px;
+			margin:5px 10px 10px 10px;
+		}
+		.upload-question {
+        	background: url("../images/account-question.png"); 
+			display:block;
+			float:right;
+			width:27px;
+			height:27px;
+		}
 	}
 	#tileset-select {
 		margin:0 10px;

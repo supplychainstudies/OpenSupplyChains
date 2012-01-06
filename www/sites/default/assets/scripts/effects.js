@@ -25,7 +25,7 @@ $(document).ready(function(){
         //console.log("go bro");
         //$target.after("<div class='clear'></div><div class='bro_status'>bbb <3</div>");
 
-        var goprohtml = 'Go <a href="/upgrade">Pro</a> to make maps private!';
+        var goprohtml = '<a href="/upgrade">Go Pro</a> to make maps private!';
         // For dashboard
         var $dashboard_selector = $target.parent().parent().children(".map-controls-status");
         $dashboard_selector.show().removeClass('succeeded failed').addClass('text');

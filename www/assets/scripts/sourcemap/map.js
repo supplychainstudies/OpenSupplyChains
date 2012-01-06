@@ -672,7 +672,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
 		}  
         new_ftr.attributes.tier = tiers[st.instance_id];
         if (new_ftr.attributes.color){
-            console.log(new_ftr.attributes.color);
+            console.log(new_ftr.attributes.color, scolor);
         }
         new_ftr.attributes.color = scolor;
         new_ftr.attributes.scolor = scolor;

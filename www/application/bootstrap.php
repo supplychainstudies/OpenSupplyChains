@@ -94,11 +94,9 @@ if(isset(Kohana::config('sourcemap')->cache_dir)) {
  * Enable modules. Modules are referenced by a relative or absolute path.
  */  
 
-Kohana::modules(array(  
-  'firephp'    => MODPATH.'firephp',    //FIREphp debug extension 
+$modules = array(  
   'auth'       => MODPATH.'auth',       // Basic authentication
   'cache'      => MODPATH.'cache',      // Caching with multiple backends
-//'codebench'  => MODPATH.'codebench',  // Benchmarking tool
   'database'   => MODPATH.'database',   // Database access
 //'image'      => MODPATH.'image',      // Image manipulation
   'orm'        => MODPATH.'orm',        // Object Relationship Mapping
@@ -111,7 +109,13 @@ Kohana::modules(array(
   'stripe' => MODPATH.'stripe',
   'swiftmailer' => MODPATH.'swiftmailer',
   'recaptcha' => MODPATH.'recaptcha' //RECAPTCHA for Kohona,
-  ));  
+);  
+
+if (Kohana::config('sourcemap.debug')) {
+    $modules['codebench'] = MODPATH.'codebench';  // Benchmarking tool
+    $modules['firephp']   = MODPATH.'firephp';    // firephp debug extension
+}
+Kohana::modules($modules);
 
 Kohana::add_include_path(SOURCEMAP_SITES_PATH.SOURCEMAP_SITE.'/');
 

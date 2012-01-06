@@ -13,7 +13,7 @@
 
  class Controller_Services_Supplychains extends Sourcemap_Controller_Service {
     public function action_get() {
-        $id = $this->request->param('id', false);
+        $id = $this->request->param('id', false);		
         if($id && !preg_match('/^\d+$/', $id)) {
             $alias = ORM::factory('supplychain_alias')
             ->where('site', '=', SOURCEMAP_SITE)

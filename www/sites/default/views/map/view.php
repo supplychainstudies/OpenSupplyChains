@@ -35,7 +35,7 @@
     <div id="sidebar" class="map-view">
 		<div class="container">
             <div class="editable-options">
-                <h3>Map Options</h3>
+            	<h2 class="section-title">Map Options</h2>
 				
                 <div class="impact-box">
                     <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
@@ -70,9 +70,8 @@
                         </option>
                     </select>
                 </div>
-                <br/>
+	            <h2 class="section-title">Upload Spreadsheet <a href="http://blog.sourcemap.com/instructions/#usingspreadsheets" class="upload-question"/></a></h2>									
 				<div class="map-replace">
-					<h3>Upload Spreadsheet <a href="http://blog.sourcemap.com/instructions/#usingspreadsheets" class="upload-question"/></a></h3>
 				    <form class="sourcemap-form" name="xls-import" method="post" enctype="multipart/form-data">
 				    <input class="hidden" name="supplychain_name" type="text" value="A Sourcemap" />
 				    <input type="file" name="xls_file" />
@@ -96,6 +95,10 @@
             <div class="pseudo-form">
                 <input class="embed" value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
             </div>
+            <div class="share-pseudo">
+                <div class="linkbox earth"><a href="<?= URL::site(NULL, TRUE) ?>services/supplychains/<?= $supplychain_id ?>?f=kml">Download for Google Earth</a></div>
+            </div>
+			
             <div class="clear"></div>
             <?= View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>
         </div>

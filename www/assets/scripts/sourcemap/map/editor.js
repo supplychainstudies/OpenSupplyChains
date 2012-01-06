@@ -917,6 +917,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
         this.editor.map_view.hideDialog(true);
         Sourcemap.broadcast('supplychain-updated', supplychain);
     }, s));
+
+	
 	if (s.ref.getAttr("co2e_reference",0) != 0) {
 		$(this.map_view.dialog).find('#reference-co2e').addClass("lock");
 		$(this.map_view.dialog).find('#reference-co2e').click(
@@ -950,16 +952,61 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	$(this.map_view.dialog).find('[name^=co2e]').keyup(
         $.proxy(function(e) { 
 			$(this.editor.map_view.dialog).find('#reference-co2e').removeClass("lock");
+			var sc = false;
+	        for(var k in this.editor.map.supplychains) {
+	            sc = this.editor.map.supplychains[k];
+	            break;
+	        }
+			console.log(this);
+			for (x in sc.stops) {
+				if (sc.stops[x] == this.editor.editing) {
+					if (sc.stops[x].attributes.co2e_reference) {
+						delete sc.stops[x].attributes.co2e_reference;
+						break;
+					}
+				}
+			}
+	    	Sourcemap.broadcast('supplychain-updated', sc);
         }, s)
     );
 	$(this.map_view.dialog).find('[name^=energy]').keyup(
         $.proxy(function(e) { 
-			$(this.editor.map_view.dialog).find('#reference-energy').removeClass("lock");	
+			$(this.editor.map_view.dialog).find('#reference-energy').removeClass("lock");
+			var sc = false;
+	        for(var k in this.editor.map.supplychains) {
+	            sc = this.editor.map.supplychains[k];
+	            break;
+	        }
+			console.log(this);
+			for (x in sc.stops) {
+				if (sc.stops[x] == this.editor.editing) {
+					if (sc.stops[x].attributes.energy_reference) {
+						delete sc.stops[x].attributes.energy_reference;
+						break;
+					}
+				}
+			}
+	    	Sourcemap.broadcast('supplychain-updated', sc);	
         }, s)
     );
 	$(this.map_view.dialog).find('[name^=water]').keyup(
         $.proxy(function(e) { 
 			$(this.editor.map_view.dialog).find('#reference-water').removeClass("lock");
+			var sc = false;
+	        for(var k in this.editor.map.supplychains) {
+	            sc = this.editor.map.supplychains[k];
+	            break;
+	        }
+			console.log(this);
+			for (x in sc.stops) {
+				if (sc.stops[x] == this.editor.editing) {
+					if (sc.stops[x].attributes.water_reference) {
+						delete sc.stops[x].attributes.water_reference;
+						break;
+					}
+				}
+			}
+	    	Sourcemap.broadcast('supplychain-updated', sc);
         }, s)
     );
     var cb = function(e) {

@@ -188,7 +188,14 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 						}
 					}
 					// Should be unique name + address
-					$name = $title . "-" . trim($rows->getCell($sh['Address'] . $rowIndex)->getCalculatedValue());
+					//$name = $title . "-" . trim($rows->getCell($sh['Address'] . $rowIndex)->getCalculatedValue());
+					
+					// This is Tier 0, should see if it has a duplicate
+					if ($rows->getCell($tiers[0] . $rowIndex)->getCalculatedValue() != "") {
+						$name = $title . "-" . trim($rows->getCell($sh['Address'] . $rowIndex)->getCalculatedValue()); 
+					} else {
+						$name = $count;
+					}
 					// Check if that stop has been already added 
 					if (isset($stops[$name]) == false) {
 						// create a stop 						

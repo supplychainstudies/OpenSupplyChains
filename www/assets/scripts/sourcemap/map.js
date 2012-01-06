@@ -671,8 +671,8 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
 			var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
 		}  
         new_ftr.attributes.tier = tiers[st.instance_id];
-        if (new_ftr.attributes.color){
-            console.log(new_ftr.attributes.color, scolor);
+        if (st.getAttr("color") != undefined){
+            console.log('custom color', st.getAttr("color"));
         }
         new_ftr.attributes.color = scolor;
         new_ftr.attributes.scolor = scolor;

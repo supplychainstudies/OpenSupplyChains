@@ -115,6 +115,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_weight = isset($sc->attributes->{'sm:ui:weight'}) ? "checked" : "";
                 $this->template->supplychain_co2e = isset($sc->attributes->{"sm:ui:co2e"}) ? "checked" : "";
                 $this->template->supplychain_water = isset($sc->attributes->{"sm:ui:water"}) ? "checked" : "";
+				$this->template->supplychain_energy = isset($sc->attributes->{"sm:ui:energy"}) ? "checked" : "";
                 $this->template->supplychain_tileset = isset($sc->attributes->{"sm:ui:tileset"}) ? $sc->attributes->{"sm:ui:tileset"} : "";
 
                 // qrcode url

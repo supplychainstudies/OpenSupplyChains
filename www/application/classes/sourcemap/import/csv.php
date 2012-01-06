@@ -148,11 +148,15 @@ class Sourcemap_Import_Csv {
                         $new_stop['attributes']['placename'] = $result->placename;
                 }
             }
+<<<<<<< HEAD
+            if(is_null($lon) || is_null($lat)) throw new Exception('No lat/lon.');
+=======
             if(is_null($lon) || is_null($lat)) {
 				$lon = 0.0;
 				$lat = 0.0;
 				//throw new Exception('No lat/lon in record #'.$i);
 			}
+>>>>>>> master
             $from_pt = new Sourcemap_Proj_Point($lon, $lat);
             $new_stop['geometry'] = Sourcemap_Proj::transform('WGS84', 'EPSG:900913', $from_pt)->toGeometry();
             $stops[] = (object)$new_stop;

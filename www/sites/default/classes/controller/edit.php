@@ -52,7 +52,20 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                 if(isset($supplychain->attributes->passcode))
                     $form->field('passcode')->value($supplychain->attributes->passcode);
 
-                $form->field('publish')->value($supplychain->other_perms & Sourcemap::READ);
+                $private_permission = false;
+                $user = ORM::factory('user', Auth::instance()->get_user());
+                $admin = ORM::factory('role')
+                    ->where('name', '=', 'admin')->find();
+                $channel = ORM::factory('role')
+                    ->where('name', '=', 'channel')->find();
+                if($user->has('roles', $channel)||$user->has('roles', $admin)) $private_permission = true;
+
+                // if you are pro user or this map is private
+                if($private_permission||!$supplychain->other_perms){
+                    $form->field('publish')->value($supplychain->other_perms & Sourcemap::READ);
+                } else {
+                    $form->field('publish')->add_class("Go_Pro ");
+                }
 
                 if(strtolower(Request::$method) === 'post') {
                     if($form->validate($_POST)) {
@@ -62,6 +75,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         $category = $form->get_field('category')->value();
                         if($category) $supplychain->category = $category;
                         else $category = null;
+                        // Some free user might change title/description but don't want to set it to public
                         $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
                         $supplychain->attributes->title = $title;
                         $supplychain->attributes->description = $description;

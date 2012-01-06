@@ -38,5 +38,5 @@
     </div>
     <div class="map-status">
     </div>
-    <div class="clear"></div>
+    <span class="clear"></span>
 </div>    

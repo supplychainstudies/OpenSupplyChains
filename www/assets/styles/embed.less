@@ -46,21 +46,36 @@ body#embedded-supplychain {
 }
 
 body.zoom {
-    @z : .5;
+    @z : .7;
 	#banner { 
         zoom: @z; -moz-transform: scale(@z); 
+        min-width:96% !important;
         .banner-date{
             display:none;
         }
         #banner-content{
+            line-height:0.8em;
             .banner-map-search{
                 input{
-                    margin-top:5px;
+                    //margin-top:5px;
                 }
+            }
+            #banner-owner{
+                border-right:none;
+                margin-top:5px;
             }
         }
     }
-	#extras { zoom: @z; -moz-transform: scale(@z); bottom: 20px; }
+	#extras { 
+        zoom: @z; -moz-transform: scale(@z); 
+        bottom: 11px; 
+        #watermark {
+            &.satellite,&.terrain{
+                left:6px;
+                bottom:24px;
+            }
+        }
+    }
 	#dialog {
 	    top:45px;
 	    width:360px;
@@ -90,14 +105,15 @@ body.zoom {
 	    }    
 	}
     // end dialog  
-    .olControlAttribution,.olLayerGooglePoweredBy, .olLayerGoogleCopyright {
-            zoom:@z; -moz-transform: scale(@z);
-    }
+    //.olControlAttribution,.olLayerGooglePoweredBy, .olLayerGoogleCopyright {
+    //.olControlAttribution {
+    //        zoom:@z; -moz-transform: scale(@z);}
 }
 body.mobilezoom {
     @z : .5;
 	#banner { 
         zoom: @z; -moz-transform: scale(@z); 
+        //width:100%;
         .banner-date{
             display:none;
         }

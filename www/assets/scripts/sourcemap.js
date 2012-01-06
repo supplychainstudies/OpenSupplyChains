@@ -993,7 +993,6 @@ Sourcemap.buildTree = function(tree_id,sc) {
     //.append("svg:path")
     //    .attr("d", "M0,-5 L10,0 L0,5");
 
-  
     // Arc
     /*
     svg.append("svg:g")

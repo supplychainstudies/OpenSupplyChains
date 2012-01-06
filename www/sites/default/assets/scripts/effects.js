@@ -193,17 +193,17 @@ $(document).ready(function(){
                             var popID = "publish_confirm";
                             var element = document.createElement('div');
                             $(element).html(
-                                'Private map is for PRO user only.<br/>'+
-                                'Are you sure you want to unprivate this map?<br/>'+
-                                '<a class="false">Cancel</a>'+
-                                '<a class="true">Confirm</a>'
+                                'Once you make this map public, you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro</a> Account, '+
+                                'you will only be able to make it private again by upgrading to a Pro Account.'+
+                                '<input class="button publish_cancel" value="Cancel"/>'+
+                                '<input class="button publish_confirm" value="OK"/>'
                             );
-                            $(element).find(".true").click(function(){
+                            $(element).find(".publish_confirm").click(function(){
                                 private_permission = true;
                                 $('#fade , .popup_block').remove();
                                 publish_selector.children("input:checkbox").trigger("change");
                             });
-                            $(element).find(".false").click(function(){
+                            $(element).find(".publish_cancel").click(function(){
                                 publish_selector.children("input:checkbox").removeAttr("checked");
                                 publish_selector.children("a").attr("style","color:#A7AAAE");
                                 $('#fade , .popup_block').remove();
@@ -225,6 +225,8 @@ $(document).ready(function(){
                              $('#fade').css({'filter' : 'alpha(opacity=80)'});
                              $('a.close, #fade').live('click', function() {
                                  $('#fade , .popup_block').fadeOut(function() {
+                                    publish_selector.children("input:checkbox").removeAttr("checked");
+                                    publish_selector.children("a").attr("style","color:#A7AAAE");
                                      $('#fade , .popup_block').remove();
                                  });
                                  return false;

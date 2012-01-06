@@ -12,12 +12,22 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
 
 <div id="catalog">
-    <form id="catalog-search">
-        <fieldset>       
-                <input id="catalog-search-field" autocomplete="off" />
-        </fieldset>
+	<div class="falseclose"><a></a></div>
+	<div class="catalog-title">Impact Library</div>
+	<div class="catalog-search-bar">
+	    <form id="catalog-search">
+	        <fieldset>       
+	                <input id="catalog-search-field" placeholder="Search Materials Catalog" autocomplete="off" />
+	        </fieldset>
 
-    </form>
-    <div class="catalog-pager"></div>
+	    </form>
+	    <div class="catalog-pager"></div>
+		<div class="catalog-footprint-types">
+			<span class="symbol-co2e">&nbsp;</span>
+			<span class="symbol-energy">&nbsp;</span>
+			<span class="symbol-water">&nbsp;</span>
+		</div>	
+	</div>
+	<div class="clear"></div>
     <div class="catalog-content"></div>
 </div>

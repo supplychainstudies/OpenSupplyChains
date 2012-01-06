@@ -54,6 +54,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_id = $supplychain_id;
                 $this->template->can_edit = (bool)$supplychain->user_can($current_user_id, Sourcemap::WRITE);
                 $this->template->can_comment = (bool)$current_user_id;
+				$this->template->perms = $supplychain->other_perms;
                 $this->template->supplychain_avatar = Sourcemap_Image::avatar($sc->owner, 64, true);
                 $this->template->supplychain_date = date('F j, Y', $sc->created );
                 $this->template->supplychain_owner = isset($sc->owner->name) ? $sc->owner->name : "";

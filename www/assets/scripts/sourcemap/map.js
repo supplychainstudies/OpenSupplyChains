@@ -655,6 +655,7 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
     if(this.getStopLayer(scid)) this.getStopLayer(scid).removeAllFeatures();
     if(this.getHopLayer(scid)) this.getHopLayer(scid).removeAllFeatures();
     var featureList = [];
+    var hasCustomColors = false;
     for(var i=0; i<supplychain.stops.length; i++) {
         var st = supplychain.stops[i];
         var new_ftr = this.mapStop(st, scid);
@@ -671,8 +672,10 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
 			var scolor = st.getAttr("color", palette[tiers[st.instance_id]].toString());
 		}  
         new_ftr.attributes.tier = tiers[st.instance_id];
+        
         if (st.getAttr("color") != undefined){
-            console.log('custom color', st.getAttr("color"));
+            // console.log('custom color', st.getAttr("color"));
+            var hasCustomColors = true;
         }
         new_ftr.attributes.color = scolor;
         new_ftr.attributes.scolor = scolor;
@@ -706,27 +709,28 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
         }
     }
 
-    //Add or remove gradient to map 
-    var gradient = $(this.map.div.extras).find('#sourcemap-gradient');
-    if ($(gradient).length == 0) { // if gradient legend not exist
-        if(!max_plen){
-        }else{                      // add gradient to map
-            var gradient = $('<div id="sourcemap-gradient"></div>');
-            if(this.map.baseLayer.name)
-                gradient.addClass(this.map.baseLayer.name);
-            $(this.map.div.extras).append(gradient);
-        }
-    } else {
-        if(max_plen){ // if exist
-            if(!gradient.hasClass(this.map.baseLayer.name)) {// if map tileset is different
-                gradient.removeClass(gradient.attr("class"));
-                gradient.addClass(this.map.baseLayer.name);
+    // Add or remove gradient to map, unless the map has custom colors 
+    if (!hasCustomColors){
+        var gradient = $(this.map.div.extras).find('#sourcemap-gradient');
+        if ($(gradient).length == 0) { // if gradient legend not exist
+            if(!max_plen){
+            }else{                      // add gradient to map
+                var gradient = $('<div id="sourcemap-gradient"></div>');
+                if(this.map.baseLayer.name)
+                    gradient.addClass(this.map.baseLayer.name);
+                $(this.map.div.extras).append(gradient);
             }
         } else {
-            gradient.remove();      // remove gradient from map
+            if(max_plen){ // if exist
+                if(!gradient.hasClass(this.map.baseLayer.name)) {// if map tileset is different
+                    gradient.removeClass(gradient.attr("class"));
+                    gradient.addClass(this.map.baseLayer.name);
+                }
+            } else {
+                gradient.remove();      // remove gradient from map
+            }
         }
     }
-
     this.broadcast('map:supplychain_mapped', this, supplychain);
 }
 

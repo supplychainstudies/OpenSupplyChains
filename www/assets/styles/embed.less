@@ -48,6 +48,11 @@ body#embedded-supplychain {
 body.zoom {
     @z : .7;
 	#banner { 
+        &.small{
+            .banner-map-search{
+                display:none;
+            }
+        }
         zoom: @z; -moz-transform: scale(@z); 
         min-width:96% !important;
         .banner-date{
@@ -56,6 +61,8 @@ body.zoom {
         #banner-content{
             line-height:0.8em;
             .banner-map-search{
+                &.small{
+                }
                 input{
                     //margin-top:5px;
                 }

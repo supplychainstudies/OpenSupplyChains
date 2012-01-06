@@ -11,6 +11,17 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 $(document).ready(function() {
+    var cb = function(sc){
+        Sourcemap.embed_instance.map.addSupplychain(sc);
+        $(window).resize();
+        $("#banner").click(function(event) {
+            event.preventDefault();
+            if(event.target.nodeName!="INPUT") {
+                if($("body").hasClass("mobile")){return;}
+                window.open("view/" + window.location.pathname.split("/")[2]);
+            } 
+        });
+    };
 	switch(Sourcemap.embed_params.served_as) {
 		default:
 		    Sourcemap.embed_params.map_element_id = 'sourcemap-map-embed';
@@ -43,8 +54,8 @@ $(document).ready(function() {
                         if(parseInt($(window).width()) < 740){
                            $("#sourcemap-gradient").css("display","none"); 
                         }
-                        if(window_width < 420){
-                           $(".banner-map-search").css("display","none");
+                        if(parseInt($(window).width()) < 420){
+                           $("#banner").addClass("small");
                         }
                     } else {
 		    		    $("body").addClass("mobilezoom");			
@@ -72,21 +83,11 @@ $(document).ready(function() {
                 
 		    });
 
-
             // TODO : make password input window
             var passcode = "";
             if(!Sourcemap.passcode_exist){
                 // no passcode
-                Sourcemap.loadSupplychain(scid, passcode, function(sc) {
-                    Sourcemap.embed_instance.map.addSupplychain(sc);
-                    $(window).resize();
-                    $("#banner").click(function(event) {
-                        event.preventDefault();
-                        if(event.target.nodeName!="INPUT") {
-                            window.open("view/" + window.location.pathname.split("/")[2]);
-                        } 
-                    });
-                });
+                Sourcemap.loadSupplychain(scid, passcode, cb);
             } else {
                 var popID = "popup";
                 Sourcemap.initPasscodeInput(popID);
@@ -99,16 +100,6 @@ $(document).ready(function() {
                         //$('#fade, a.close').remove();
                     });
 
-                    var cb = function(sc){
-                        Sourcemap.embed_instance.map.addSupplychain(sc);
-                        $(window).resize();
-                        $("#banner").click(function(event) {
-                            event.preventDefault();
-                            if(event.target.nodeName!="INPUT") {
-                                window.open("view/" + window.location.pathname.split("/")[2]);
-                            } 
-                        });
-                    };
                     Sourcemap.loadSupplychain(scid, passcode,cb);
                 }); // submit end
                 if(Sourcemap.passcode==''||Sourcemap.passcode==undefined){
@@ -117,13 +108,6 @@ $(document).ready(function() {
                     $('#fade , .popup_block').fadeOut(function() {
                     });
                     passcode = Sourcemap.passcode;
-                    var cb = function(sc){
-                        Sourcemap.embed_instance.map.addSupplychain(sc);
-                        $(window).resize();
-                        $("#banner").click(function() {
-                            window.open("view/" + window.location.pathname.split("/")[2]);
-                        });
-                    };
                     Sourcemap.loadSupplychain(scid, passcode,cb);
                 }
             }

@@ -23,7 +23,29 @@
         <div class="description"><%= _S.htesc(this.item.getAttr("description")) %></div>
     <% } %>
 	
-	<ul>
+	<% if(this.base.options.attributes["sm:ui:co2e"] && this.base.options.attributes["sm:ui:weight"]) { %>
+	<% if((this.item.getAttr("qty", false) && this.item.getAttr("qty", false) != 0) || (this.item.getAttr("weight", false)  && this.item.getAttr("weight", false) != 0) || (this.item.getAttr("co2e", false)  && this.item.getAttr("co2e", false) != 0) || (this.item.getAttr("energy", false) && this.item.getAttr("energy", false) != 0) || (this.item.getAttr("water", false) && this.item.getAttr("water", false) != 0)) { %>
+	<div>
+	<ul class="list-footprint">	
+		<% var unit = (this.item.getAttr("unit","kg") == "kg") ? 1 : 0; %>
+		<% var weight = unit || this.item.getAttr("weight"); %>
+		<% if((!this.item.getAttr("weight", false) || this.item.getAttr("weight", false) == 0) && (this.item.getAttr("qty", false) && this.item.getAttr("qty", false) != 0)) { %>
+			<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.item.getAttr("qty", 0)), "kg", 2); %>
+			<li class="weight">Weight: <%= weight_scaled.value %> <%= weight_scaled.unit %></li>
+		<% } %>
+
+	    <% if(this.item.getAttr("co2e", false) && this.item.getAttr("co2e", false) != 0) { %>
+			<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.item.getAttr("co2e", 0) * this.item.getAttr("qty", 0)), "kg", 2); %>		
+			<li class="co2e">Footprint: <%= co2e_scaled.value %> <%= co2e_scaled.unit %>  co2e</li> 
+		<% } %>
+	    <% if(this.item.getAttr("water", false) && this.item.getAttr("water", false) != 0) { %><li class="water"><%= this.item.getAttr("water", 0) * this.item.getAttr("qty", 0) %> L</li> <% } %>
+	    <% if(this.item.getAttr("energy", false) && this.item.getAttr("energy", false) != 0) { %><li class="energy"><%= this.item.getAttr("energy", 0) * this.item.getAttr("qty", 0) %> kwh</li> <% } %>
+	</ul>
+	</div>
+	<% } %>
+	<% } %>
+	
+	<ul class="list-media-items">
     <% if(this.item.getAttr("url:moreinfo", false)) { %>
         <li class="url moreinfo"> 
             <%= $("<a></a>").attr("href", this.item.getAttr("url:moreinfo"))
@@ -57,5 +79,6 @@
 		</li>
     <% } %>
 	</ul>
+	<div class="clear"></div>
 </div>
 <% } %>

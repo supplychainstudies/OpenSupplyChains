@@ -11,6 +11,17 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/
 
 $(document).ready(function() {
+    var cb = function(sc){
+        Sourcemap.embed_instance.map.addSupplychain(sc);
+        $(window).resize();
+        $("#banner").click(function(event) {
+            event.preventDefault();
+            if(event.target.nodeName!="INPUT") {
+                if($("body").hasClass("mobile")){return;}
+                window.open("view/" + window.location.pathname.split("/")[2]);
+            } 
+        });
+    };
 	switch(Sourcemap.embed_params.served_as) {
 		default:
 		    Sourcemap.embed_params.map_element_id = 'sourcemap-map-embed';
@@ -24,28 +35,40 @@ $(document).ready(function() {
 
 		    // fetch supplychain
 		    $(window).resize(function() {
-                var classlist = "vertical horizontal";
+                var window_height = parseInt($(window).height());
+                var window_width = parseInt($(window).width());
+                var classlist = "zoom mobilezoom vertical horizontal";
                 $("body").removeClass(classlist);
-		    	if(parseInt($(window).height()) > 480 && parseInt($(window).width()) > 640) {
-		    		$("body").removeClass("mobilezoom");
-                    $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
+		    	if(window_height > 480 && window_width > 640) {
+		    		//$("body").removeClass("mobilezoom");
+                    $('#sourcemap-map-embed').css("height", window_height).css("width", window_width);
 		    	}
 		    	else {
-		    		$("body").addClass("mobilezoom");			
+		    		//$("body").addClass("mobilezoom");			
                     // Mobile view
                     var isiOS = (/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()));
                     
-                    if(parseInt($(window).height()) > parseInt($(window).width())){
-                        // vertical
-                        $("body").addClass("vertical");			
-                        $('#sourcemap-map-embed').css("height", 416).css("width", 320);
-                    } else {
-                        // horizontal
-                        $("body").addClass("horizontal");			
-                        $('#sourcemap-map-embed').css("height", 268).css("width", 480);
-                    }
                     if(!isiOS){
+		    		    $("body").addClass("zoom");			
                         $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
+                        if(parseInt($(window).width()) < 740){
+                           $("#sourcemap-gradient").css("display","none"); 
+                        }
+                        if(parseInt($(window).width()) < 420){
+                           $("#banner").addClass("small");
+                        }
+                    } else {
+		    		    $("body").addClass("mobilezoom");			
+
+                        if(parseInt($(window).height()) > parseInt($(window).width())){
+                            // vertical
+                            $("body").addClass("vertical");			
+                            $('#sourcemap-map-embed').css("height", 416).css("width", 320);
+                        } else {
+                            // horizontal
+                            $("body").addClass("horizontal");			
+                            $('#sourcemap-map-embed').css("height", 268).css("width", 480);
+                        }
                     }
 		    	}
 		      	//$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
@@ -56,21 +79,15 @@ $(document).ready(function() {
                     if(window.pageYOffset !== 0) return;
                     window.scrollTo(0,window.pageYOffset + 1);
                 },100);
-		    });
 
+                
+		    });
 
             // TODO : make password input window
             var passcode = "";
             if(!Sourcemap.passcode_exist){
                 // no passcode
-                Sourcemap.loadSupplychain(scid, passcode, function(sc) {
-                    Sourcemap.embed_instance.map.addSupplychain(sc);
-                    $(window).resize();
-                    $("#banner-summary").click(function() {
-                        //window.location.href = "view/" + window.location.pathname.split("/")[2];
-                        window.open("view/" + window.location.pathname.split("/")[2]);
-                    });
-                });
+                Sourcemap.loadSupplychain(scid, passcode, cb);
             } else {
                 var popID = "popup";
                 Sourcemap.initPasscodeInput(popID);
@@ -83,14 +100,6 @@ $(document).ready(function() {
                         //$('#fade, a.close').remove();
                     });
 
-                    var cb = function(sc){
-                        Sourcemap.embed_instance.map.addSupplychain(sc);
-                        $(window).resize();
-                        $("#banner").click(function() {
-                            //window.location.href = "view/" + window.location.pathname.split("/")[2];
-                            window.open("view/" + window.location.pathname.split("/")[2]);
-                        });
-                    };
                     Sourcemap.loadSupplychain(scid, passcode,cb);
                 }); // submit end
                 if(Sourcemap.passcode==''||Sourcemap.passcode==undefined){
@@ -99,13 +108,6 @@ $(document).ready(function() {
                     $('#fade , .popup_block').fadeOut(function() {
                     });
                     passcode = Sourcemap.passcode;
-                    var cb = function(sc){
-                        Sourcemap.embed_instance.map.addSupplychain(sc);
-                        $(window).resize();
-                        $("#banner").click(function() {
-                            window.open("view/" + window.location.pathname.split("/")[2]);
-                        });
-                    };
                     Sourcemap.loadSupplychain(scid, passcode,cb);
                 }
             }

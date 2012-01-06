@@ -65,5 +65,14 @@
         <script> DD_belatedPNG.fix('img, .png_bg'); 
     <![endif]-->
 
+    <?php
+        // Output profiler stats
+        if (Kohana::config('sourcemap.debug')) {
+            echo "<div id='profiler'>";
+            echo View::factory('profiler/stats');
+            echo "</div>";
+        }
+    ?>
+
 </body>
 </html>

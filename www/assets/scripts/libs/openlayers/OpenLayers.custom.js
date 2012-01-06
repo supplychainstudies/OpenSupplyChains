@@ -64159,6 +64159,8 @@ OpenLayers.Layer.Google.v3 = {
                     // layer that is initially hidden. 
                     //cache.termsOfUse.style.left = "-9999px";
                     //cache.poweredBy.style.display = "none";
+                    cache.termsOfUse.style.display = "none";
+                    cache.poweredBy.style.display = "none";
                 }
             }
         }

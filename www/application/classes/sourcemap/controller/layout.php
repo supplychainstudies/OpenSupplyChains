@@ -26,13 +26,12 @@ class Sourcemap_Controller_Layout extends Controller_Template {
     public $ssl_actions  = false; // action specific ssl required
 
     public function before() {
+        if (Kohana::config('sourcemap.debug')) { $this->profiler = new Profiler; } // enable profiler for debug mode
+        
         $pret = parent::before();
-       
         $config = Kohana::config('sourcemap');
        
-        if(Kohana::config('sourcemap.use_ssl')){
-            $this->sslRedirect();
-        }
+        if(Kohana::config('sourcemap.use_ssl')){ $this->sslRedirect(); }
         if($this->auto_render === true) {
             $this->layout = View::factory('layout/'.$this->layout);
         }
@@ -64,6 +63,7 @@ class Sourcemap_Controller_Layout extends Controller_Template {
             $this->layout->content = $this->request->response;
             $this->request->response = $this->layout;
         }
+
         return $pret;
     }
 

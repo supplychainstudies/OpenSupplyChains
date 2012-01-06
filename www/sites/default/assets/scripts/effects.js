@@ -491,6 +491,17 @@ $(document).ready(function(){
         });
     });
 
+    /* profiler stats */
+    if ($('#profiler').length > 0){
+        $('#profiler .final.time').clone().find('td').each(function(){
+            $('#footer p').append($(this).attr('class'), " ", $(this).html(), "&nbsp;&nbsp;");
+        });
+        $('#footer p').click(function(e){
+            $('#profiler').slideToggle();
+        });
+
+    }
+
 }); // end of document ready
 
 

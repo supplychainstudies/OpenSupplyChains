@@ -294,11 +294,11 @@
                     text-decoration:none;
                     width:12px;
                     height:12px;
-                    background:rgba(255,255,255,0.4);
+                    background:rgba(150,150,150,0.4);
                     .rounded(6px);
                     display: inline-block;
 					&.selected {
-						background:rgba(255,255,255,1);
+						background:rgba(115,115,115,1);
 					}
                 }
             }
@@ -499,7 +499,7 @@
         #banner-favorite { background: url(../images/icon-favorite.png) 10px -19px no-repeat;
             &.marked { background: url(../images/icon-favorite.png) 10px 11px no-repeat; }
         }
-        #banner-owner { background: url(../images/icon-owner.png) 10px center no-repeat; background-size: 25px 25px; border-right: 1px solid #c9c9c9; padding-right: 15px}
+        #banner-owner { background: url(../images/icon-owner.png) 10px center no-repeat; background-size: 32px 32px; border-right: 1px solid #c9c9c9; padding-left: 47px; padding-right: 20px}
         #banner-share { background: url(../images/icon-share.png) 10px center no-repeat; }
         #banner-lock { 
             background: url(../images/icon-lock.png) 10px -41px no-repeat;
@@ -627,10 +627,8 @@
         }
     }
     #edit-description, #edit-stop-footprint, #edit-hop-footprint, #edit-media {
-        height:200px;
-        //background: rgb(200,200,200);
-        //padding: 10px 20px; 
-        //.box_shadow_inset(0px,0px,8px,rgba(0,0,0,.2));
+        height:170px;
+		max-height: 170px;
         overflow:auto;
     }
     #edit-description {

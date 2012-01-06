@@ -15712,7 +15712,14 @@ OpenLayers.Layer.Google.v2 = {
                 this.poweredBy.style.display = "";            
                 cache.displayed = this.id;
             } else {
+                /*
                 if (cache.displayed === this.id) {
+                    delete cache.displayed;
+                }
+                */
+                if (cache.displayed === this.id) {
+                    container.style.display = "none";
+                } else {
                     delete cache.displayed;
                 }
                 if (!cache.displayed) {
@@ -64141,6 +64148,7 @@ OpenLayers.Layer.Google.v3 = {
                 }
                 cache.displayed = this.id;
             } else {
+                //container.style.display = "none";
                 if (cache.displayed === this.id) {
                     container.style.display = "none";
                 } else {

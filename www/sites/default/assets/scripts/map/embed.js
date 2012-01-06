@@ -39,7 +39,7 @@ $(document).ready(function() {
                 var window_width = parseInt($(window).width());
                 var classlist = "zoom mobilezoom vertical horizontal";
                 $("body").removeClass(classlist);
-		    	if(window_height > 480 && window_width > 640) {
+		    	if(window_height >= 480 && window_width >= 640) {
 		    		//$("body").removeClass("mobilezoom");
                     $('#sourcemap-map-embed').css("height", window_height).css("width", window_width);
 		    	}

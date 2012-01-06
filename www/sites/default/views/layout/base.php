@@ -40,6 +40,9 @@
 <body class="main">
     <?= isset($scripts) ? Sourcemap_JS::script_tags($scripts) : Sourcemap_JS::script_tags('less', 'sourcemap-core') ?>
     <div id="wrapper">
+        <?php if(isset($isfrontpage)){ ?>
+            <?= View::factory('partial/announcements'); ?>
+        <?php } ?>
         <?= View::factory('partial/header', array('page_title' => isset($page_title) ? $page_title : APPLONGNM)) ?>
         <?php if(Message::instance()->get() || Breadcrumbs::instance()->get()){ ?>
         <div class="container">
@@ -50,7 +53,6 @@
         </div>
         <?php } ?>
         
-         <?= View::factory('partial/announcements'); ?>
 
         <?= isset($content) ? $content : '<h2>There\'s nothing here.</h2>' ?>
         <div class="push"></div>

@@ -16,7 +16,7 @@
 <?php $announcements = Sourcemap_User_Event::get_announcements(); ?>
 <?php if(isset($announcements)): ?>
 
-<div class="container">
+<div class="container full">
     <div class="messages">
         <div class="status-wrap">
             <ul class="status-messages announcements">

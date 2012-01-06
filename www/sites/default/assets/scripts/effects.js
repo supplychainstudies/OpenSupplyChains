@@ -497,6 +497,12 @@ $(document).ready(function(){
     if ($('#profiler').length > 0){
         $('#profiler .final.time').clone().find('td').each(function(){
             $('#footer p').append($(this).attr('class'), " ", $(this).html(), "&nbsp;&nbsp;");
+            if ($(this).hasClass('average')){
+                time = $(this).text().slice(0, -2);
+                if (time > .02){
+                    //$('#header').prepend('<div class="account-alert" style="position:absolute; top: 0">Oh noes!</div>');
+                }
+            }
         });
         $('#footer p').click(function(e){
             $('#profiler').slideToggle();

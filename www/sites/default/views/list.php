@@ -20,10 +20,6 @@
     <h1><?= HTML::chars($supplychain_name) ?></h1>
     <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
 	</div>
-
-    <div class="author">
-         <a href="user/<?= HTML::chars($supplychain_ownerid) ?>"><img src="<?= $supplychain_avatar ?>" alt="Avatar"></img></a>
-    </div>
 	<div class="clear"></div>
 </div>
 <div id="list-container">    

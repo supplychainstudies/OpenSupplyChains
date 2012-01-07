@@ -69,8 +69,7 @@ class Sourcemap_Kml {
 				
 					preg_match($pattern, $subject, $matches);
 					//if(isset($matches[3])) { $k .= '<iframe width="500" height="360" class="vimeo-link" type="text/html" src="http://player.vimeo.com/video/'.$matches[3].'?title=0&amp;byline=0&amp;portrait=0&amp;frameborder=00&amp;allowfullscreen=0"></iframe>'; }	  
-				}
-           
+				}           
 				
 			    $k .= '</div>]]>';
 			    $k .= '</description>';

@@ -15,6 +15,15 @@
 $(document).ready(function(){
 
     // Go_Pro !
+    if ($(".Go_Pro").length ) {
+        var goprohtml = '<a href="/upgrade">Go Pro</a> to make maps private';
+        // For create / edit 
+        var $edit_selector = $(".Go_Pro").parent().children(".submit-status");
+        $edit_selector.show().removeClass('succeeded failed').addClass('text');
+        $edit_selector.css("position","relative").css("top","-25px").css("left","80px");
+        $edit_selector.css("padding-left",0);
+        $edit_selector.html(goprohtml);
+    };
     $(".Go_Pro").click(function(e){
         e.preventDefault();
         Go_Bro(e);
@@ -25,14 +34,17 @@ $(document).ready(function(){
         //console.log("go bro");
         //$target.after("<div class='clear'></div><div class='bro_status'>bbb <3</div>");
 
-        var goprohtml = '<a href="/upgrade">Go Pro</a> to make maps private!';
+        var goprohtml = '<a href="/upgrade">Go Pro</a> to make maps private';
         // For dashboard
         var $dashboard_selector = $target.parent().parent().children(".map-controls-status");
-        $dashboard_selector.show().removeClass('succeeded failed').addClass('text');
         $dashboard_selector.html(goprohtml);
+        $dashboard_selector.removeClass('succeeded failed').addClass('text').show();
 
+
+        // For create / edit 
         var $edit_selector = $target.parent().children(".submit-status");
         $edit_selector.show().removeClass('succeeded failed').addClass('text');
+        $edit_selector.css("position","relative").css("top","-25px").css("left","80px");
         $edit_selector.css("padding-left",0);
         $edit_selector.html(goprohtml);
     };

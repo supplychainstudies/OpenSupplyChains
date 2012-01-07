@@ -146,13 +146,16 @@ class Model_Supplychain extends ORM {
             }
             $sc->stops = array_values($stops);
             $sc->hops = array_values($hops);
+            $user = ORM::factory('user', $owner->id);
+			
             $sc->owner = (object)array(
                 'id' => $owner->id, 'name' => $owner->username,
                 //'avatar' => Gravatar::avatar($owner->email),
-                'avatar' => Sourcemap_Image::avatar($sc->owner, 64, true),
+                'avatar' => Sourcemap_Image::avatar($user, 64, true),
                 'banner_url' => $owner->banner_url,
                 'display_name' => $owner->display_name
             );
+
             $sc->user_id = $owner->id;
             $sc->taxonomy = 
                 ($cat && $cat->loaded()) ? Sourcemap_Taxonomy::load_ancestors($cat->id) : null;

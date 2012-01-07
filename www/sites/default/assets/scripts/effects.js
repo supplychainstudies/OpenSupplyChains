@@ -14,6 +14,29 @@
 
 $(document).ready(function(){
 
+    // Go_Pro !
+    $(".Go_Pro").click(function(e){
+        e.preventDefault();
+        Go_Bro(e);
+    });
+
+    function Go_Bro (e){
+        var $target = $(e.target);
+        //console.log("go bro");
+        //$target.after("<div class='clear'></div><div class='bro_status'>bbb <3</div>");
+
+        var goprohtml = '<a href="/upgrade">Go Pro</a> to make maps private!';
+        // For dashboard
+        var $dashboard_selector = $target.parent().parent().children(".map-controls-status");
+        $dashboard_selector.show().removeClass('succeeded failed').addClass('text');
+        $dashboard_selector.html(goprohtml);
+
+        var $edit_selector = $target.parent().children(".submit-status");
+        $edit_selector.show().removeClass('succeeded failed').addClass('text');
+        $edit_selector.css("padding-left",0);
+        $edit_selector.html(goprohtml);
+    };
+
     /* truncation */
     Sourcemap.truncate_string(".truncate");
 
@@ -153,7 +176,7 @@ $(document).ready(function(){
         });
 
         
-        $(this).change(function(){
+        $(this).change(function(event){
             // loading icon
             //$(this).find('.map-controls-status').show().removeClass('failed');
             $(this).find('.map-controls-status').show().removeClass('succeeded failed');
@@ -195,8 +218,8 @@ $(document).ready(function(){
                             $(element).html(
                                 '<div class="submit-status failed" style="margin-right:25px"></div>'+
                                 '<div class="confirm_text">'+
-                                'Once you make this map public, you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro Account</a>, '+
-                                'you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro Account</a>.'+
+                                'Once you make this map public, you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro Account</a>. '+
+                                //'you will only be able to make it private again by upgrading to a <a href="/upgrade" target="_blank">Pro Account</a>.'+
                                 '</div>'+
                                 '<div class="confirm_button">'+
                                 '<input class="button publish_cancel" value="Cancel"/>'+
@@ -249,6 +272,7 @@ $(document).ready(function(){
                         publish_selector.children("input:checkbox").attr("checked",true);
                         publish_selector.children("a").attr("style","color:#777A7E");
                         // pop up the warning window that private map is for pro user only
+                        Go_Bro(event);   
                         return false;
                     }
                }

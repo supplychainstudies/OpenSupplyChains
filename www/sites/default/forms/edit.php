@@ -41,9 +41,11 @@ $admin = ORM::factory('role')
 $is_channel=false;
 $channel = ORM::factory('role')
         ->where('name', '=', 'channel')->find();
-        if($user->has('roles', $channel)) $is_channel = true;
+        if($user->has('roles', $channel)) $is_channel = true;        
 
 if($is_admin){
+    $is_channel = true;
+
     $title_max_length = array('max_length', array(10000));
     $desc_max_length = array('max_length', array(10000));
     $title_attributes = array(
@@ -162,7 +164,7 @@ return array(
         'publish' => array(
             'type' => 'checkbox',
             'label' => 'Public',
-    		'default' => 0
+    		'default' => 1
         ),
         'save' => array(
             'type' => 'submit',

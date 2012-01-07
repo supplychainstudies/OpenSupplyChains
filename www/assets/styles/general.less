@@ -494,18 +494,20 @@ div.submit-status{
     &.text{
         padding-left: 40px;
         width: 225px;
-        color: #777;
+        color: #999;
         font-size: 1em;
         line-height: 1.5em;
         ul{ 
             margin: .75em 0 0 .2em;    
         }
+        background:none;
+        a{color:#4D98CF;}
     }
 }
 
 select {
 	border: 1px solid #c9c9c9;
-	padding: 2%;
+	padding: 0 2%;
 	color:#666;
 	font-size: 0.8em;
 	width: 100% ;
@@ -562,6 +564,20 @@ input[type=checkbox]{
         &.link{  background: url("../images/icon-link.png") 6px center no-repeat; }
         &.embed{ background: url("../images/icon-embed.png") 6px center no-repeat; }
     }
+}
+.share-pseudo {
+    float:left;
+    height: 42px;
+    margin-bottom: 15px;
+    .linkbox {
+        margin-top: 10px;
+        width: 290px;
+        padding: 4px 10px 4px 36px;
+        border: 0;
+        font-size:12px;
+        background: url("../images/little-earth.png") 12px center no-repeat;
+        color: #999;
+    }	
 }
 
 .collapsed{ display: none; }
@@ -1258,14 +1274,18 @@ ul li.news-item{
                 background: url("../images/account-alert.png") 12px 13px no-repeat;
             }
             &.text{
-                padding-left: 40px;
                 width: 240px;
-                color: #777;
+                color: #999;
                 font-size: 1em;
                 line-height: 1.5em;
+                background:none;
+                text-align:left;
+                position:relative;
+                left:4px;
                 ul{ 
                     margin: .75em 0 0 .2em;    
                 }
+                a{color:#4D98CF;}
             }
         }
     }

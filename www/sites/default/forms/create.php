@@ -98,7 +98,7 @@ return array(
         'publish' => array(
             'type' => 'checkbox',
             'label' => 'Public',
-            'default' => 0
+            'default' => 1
         ),
         'create' => array(
             'type' => 'submit',

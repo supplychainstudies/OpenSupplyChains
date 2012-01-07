@@ -74,12 +74,8 @@ class Controller_User extends Sourcemap_Controller_Layout {
             // Normal user functions
             
             // Return all user's supplychain IDs
-            // TODO: turn this into a search (for better caching)
-            $scs = array();
-            foreach($user->supplychains->order_by('modified', 'desc')->find_all() as $i => $sc) {            
-                $scs[] = $sc->kitchen_sink($sc->id);
-            }
-            
+            $scs = Sourcemap_Search::find(array('user' => $user->id, 'l' => 999));
+
             $this->template->user = (object)$user_arr;
             $this->template->avatar_url = Sourcemap_Image::avatar($user, 64, true);
             $this->template->supplychains = $scs;

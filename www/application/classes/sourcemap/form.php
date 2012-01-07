@@ -263,8 +263,8 @@ class Sourcemap_Form {
             $this->_fields[$nm] = $f;
             $f->name($nm);
             $f->label($l);
-            if($w !== null) $f->width($w);
-            if($wt !== null) $f->weight($wt);
+            //if($w !== null) $f->width($w);
+            //if($wt !== null) $f->weight($wt);
         } else {
             $f = $this->get_field($f);
             return $f;
@@ -308,11 +308,11 @@ class Sourcemap_Form {
        return $this->field($f, Sourcemap_Form_Field::PASSWORD, $w, $l, $wt);
     }
 
-    public function select($f, $l=null, $wt=null) {
+    public function select($f, $w=300, $l=null, $wt=null) {
         return $this->field($f, Sourcemap_Form_Field::SELECT, $w, $l, $wt);
     }
 
-    public function submit($f, $v=null, $wt=null) {
+    public function submit($f, $w=100, $v=null, $wt=null) {
        return $this->field($f, Sourcemap_Form_Field::SUBMIT, $w, $v, $wt);
     }
 

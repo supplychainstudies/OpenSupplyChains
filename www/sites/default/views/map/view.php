@@ -35,7 +35,7 @@
     <div id="sidebar" class="map-view">
 		<div class="container">
             <div class="editable-options">
-                <h3>Map Options</h3>
+            	<h2 class="section-title">Map Options</h2>
 				
                 <div class="impact-box">
                     <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
@@ -71,17 +71,20 @@
                     </select>
                 </div>
                 <br/>
-				<div class="map-replace">
-					<h3>Upload Spreadsheet <a href="http://blog.sourcemap.com/instructions/#usingspreadsheets" class="upload-question"/></a></h3>
-				    <form class="sourcemap-form" name="xls-import" method="post" enctype="multipart/form-data">
-				    <input class="hidden" name="supplychain_name" type="text" value="A Sourcemap" />
-				    <input type="file" name="xls_file" />
-				    <select class="hidden"  name="replace_into">
-				    <option value="<?= $supplychain_id ?>">"></option>
-				    <input class="hidden" type="checkbox" name="publish" value="<?= $supplychain_id ?>" checked="<?= $supplychain_id ?>" />
-				    <input class="button replace" type="submit" value="Replace" />
-				    </form>
-					<div class="clear"></div>					
+				
+                <div class="map-replace">
+                    <div style="clear: both; float:left;">
+                        <form class="sourcemap-form" name="xls-import" action="tools/import/xls" method="post" enctype="multipart/form-data">
+                            <a class="tooltip pro" style="float: left; margin-top: 8px; margin-right: 10px; padding-bottom: 3px">New!</a>
+                            <h3 class="blue" style="clear: right; float: left;">Upload a Spreadsheet</h3>
+                            <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" />
+                            <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px; padding: 8px" />
+                            <input class="button" id="comment-submit" type="submit" value="Replace" style="width: 90px; height: 30px; padding: 8px"/>
+                            <select class="hidden"  name="replace_into">
+                                <option value="<?= $supplychain_id ?>"></option> 
+                            </select>
+                        </form>
+                    </div>
 				</div>
 				
             </div>
@@ -96,6 +99,10 @@
             <div class="pseudo-form">
                 <input class="embed" value='<iframe width="640px" height="480px" frameborder="0" src="<?= URL::site(NULL, TRUE) ?>embed/<?= $supplychain_id ?>"></iframe>' onclick="select()" readonly="readonly"></input>
             </div>
+            <div class="share-pseudo">
+                <div class="linkbox earth"><a href="<?= URL::site(NULL, TRUE) ?>services/supplychains/<?= $supplychain_id ?>?f=kml">Download for Google Earth</a></div>
+            </div>
+			
             <div class="clear"></div>
             <?= View::factory('partial/social', array('supplychain_id' => $supplychain_id)); ?>
         </div>

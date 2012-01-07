@@ -560,18 +560,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 						);
 						if (isset($forecast_values) == true) {		
 							$bomval = $forecast_values[$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue()];					
-<<<<<<< HEAD
-							$v = (7/365)* $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue() * $bomval;
-							if ($v >= 1) {
-								$hops[$hops_from."-".$hops_to]['color'] = "#ff0000";
-							} elseif ($v < 1 && $v >= 0.5) {
-								$hops[$hops_from."-".$hops_to]['color'] = "#ffff00";
-							} else {
-								$hops[$hops_from."-".$hops_to]['color'] = "#92d050";
-							}
-=======
 							$hops[$hops_from."-".$hops_to]['varort'] = (7/365)* $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue() * $bomval;							
->>>>>>> master
 						}
 						foreach ($stops as $u=>$stop) {
 							if ($stop["num"] == $hops_from) { 
@@ -750,13 +739,8 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		
         $sc->stops = self::csv2stops($stop_csv, $options);
         $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
-<<<<<<< HEAD
-        $sc->attributes = array();
-        return $sc;
-=======
         $sc->attributes = array("description"=>$description);
         return $sc;	
->>>>>>> master
     }
 
 }

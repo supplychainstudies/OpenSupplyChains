@@ -24,12 +24,14 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
         $current_user = Auth::instance()->get_user();
         $import_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
+        /*
         if($current_user->has('roles', $import_role) || $current_user->has('roles', $admin_role)) {
             // pass
         } else {
             Message::instance()->set('You don\'t have access to the Google Docs importer.');
             $this->request->redirect('/home');
         }
+        */
         $this->layout->scripts = array(
             'sourcemap-core'
         );
@@ -48,6 +50,7 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
                     $this->request->redirect('tools/import/xls');
                 }
                 $sc->user_id = Auth::instance()->get_user()->id;
+				$sc->attributes->title = $posted->title;
                 $update = false;
                 if(isset($posted->replace_into) && $posted->replace_into > 0) {
                     if(!(ORM::factory('supplychain', $posted->replace_into)->owner->id == $sc->user_id)) {

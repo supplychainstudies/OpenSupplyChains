@@ -13,7 +13,7 @@
 ?>
 
 <div id="edit-map" class="container">
-    <h1><?= $supplychain->attributes->title ?></h1>
+    <h1><?= isset($supplychain->attributes->itle) ? HTML::chars($supplychain->attributes->title) : "Untitled Sourcemap" ?></h1>
     <div class="edit-map-form">
         <?= $form ?>
     </div>
@@ -26,7 +26,7 @@
                 </div>
                 <h3 class="preview-title">
                     <a href="view/<?= $supplychain->id; ?>">
-                        <?= HTML::chars($supplychain->attributes->title) ?>                    
+                        <?= isset($supplychain->attributes->title) ? HTML::chars($supplychain->attributes->title) : "Untitled Sourcemap" ?>                    
                     </a></h3>
                 <h4 class="preview-author"><a href="user/<?= $supplychain->owner->id; ?>"><?= HTML::chars($supplychain->owner->name) ?></a>,
                 <?= date("F j, Y", $supplychain->created) ?></h4>

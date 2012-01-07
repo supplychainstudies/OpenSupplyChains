@@ -21,9 +21,10 @@
 <div class="container form-page">
     <div class="copy-section">
     	<p>Tell the story behind a product or a service: map the locations of suppliers, add descriptions, photos and videos, calculate the carbon footprint, and embed or link to the map to share it with the world!</p>
-    	<?php if($can_import) { ?>
+    	<?php // if($can_import) { ?>
 		<div style="margin-top: 15px; margin-bottom: 15px">
-            <a class="tooltip pro" style="float: left; margin-top: 8px; margin-right: 10px; padding-bottom: 3px">Pro</a><h3 class="blue" style="clear: right; float: left;">Build your Sourcemap from a File</h3>
+            <a class="tooltip pro" style="float: left; margin-top: 8px; margin-right: 10px; padding-bottom: 3px">New!</a><h3 class="blue" style="clear: right; float: left;">Upload a Spreadsheet</h3>
+            <div class="clear"></div>
             <div style="clear: both; float:left;">
                 <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" /> <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px;" /> 	
                 <?php if(isset($user_supplychains) && $user_supplychains): ?>
@@ -41,7 +42,7 @@
                 <?php endif; ?>
             </div>
 		</div>
-        <?php } ?>
+        <?php // } ?>
     </div>
     <div class="box-section">
     	<?= $create_form ?>

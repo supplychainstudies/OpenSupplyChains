@@ -235,6 +235,10 @@ a {
                 .rounded(0);
                 .status-wrap{ background: none; } // disable close button graphic
             }
+            a{ 
+                color: #fff;
+                text-decoration: underline;
+            }
         }
         .status-wrap {
             background: url('../images/close.png') right 4px transparent no-repeat;
@@ -507,7 +511,7 @@ div.submit-status{
 
 select {
 	border: 1px solid #c9c9c9;
-	padding: 0 2%;
+	padding: 2%;
 	color:#666;
 	font-size: 0.8em;
 	width: 100% ;
@@ -564,6 +568,20 @@ input[type=checkbox]{
         &.link{  background: url("../images/icon-link.png") 6px center no-repeat; }
         &.embed{ background: url("../images/icon-embed.png") 6px center no-repeat; }
     }
+}
+.share-pseudo {
+    float:left;
+    height: 42px;
+    margin-bottom: 15px;
+    .linkbox {
+        margin-top: 10px;
+        width: 290px;
+        padding: 4px 10px 4px 36px;
+        border: 0;
+        font-size:12px;
+        background: url("../images/little-earth.png") 12px center no-repeat;
+        color: #999;
+    }	
 }
 
 .collapsed{ display: none; }
@@ -1692,5 +1710,9 @@ body.admin {
 
 /* Debug/Profiler information ---------------- */
 #profiler{
+	margin-top:10px;
     display: none;
+}
+.profiler-link {
+	cursor:pointer;
 }

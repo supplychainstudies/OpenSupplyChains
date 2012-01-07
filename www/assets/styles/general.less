@@ -235,6 +235,9 @@ a {
                 .rounded(0);
                 .status-wrap{ background: none; } // disable close button graphic
             }
+            a{ 
+                color: #fff;
+            }
         }
         .status-wrap {
             background: url('../images/close.png') right 4px transparent no-repeat;
@@ -507,7 +510,7 @@ div.submit-status{
 
 select {
 	border: 1px solid #c9c9c9;
-	padding: 0 2%;
+	padding: 2%;
 	color:#666;
 	font-size: 0.8em;
 	width: 100% ;
@@ -1706,5 +1709,9 @@ body.admin {
 
 /* Debug/Profiler information ---------------- */
 #profiler{
+	margin-top:10px;
     display: none;
+}
+.profiler-link {
+	cursor:pointer;
 }

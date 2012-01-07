@@ -49,10 +49,12 @@ class Sourcemap_Kml {
 			    $k .= '<![CDATA[<div class="gebubble">';
 				$k .= isset($ftr->properties->description) ? Sourcemap_Kml::xmlentities($ftr->properties->description) : "";
 				$k .= isset($ftr->properties->{"url:moreinfo"}) ? '<br/>'.$ftr->properties->{"url:moreinfo"} : "";
+				if(isset($data->properties->{"sm:ui:co2e"}) && isset($data->properties->{"sm:ui:weight"})) {				
 				if($data->properties->{"sm:ui:co2e"} == 1 && $data->properties->{"sm:ui:weight"}) {
 					// Should be smart units.
 					$k .= isset($ftr->properties->co2e) ? '<br/><strong>Footprint: '.$ftr->properties->co2e." kg co2e " : "";					
 					$k .= isset($ftr->properties->weight) ? 'Weight: '.$ftr->properties->weight." kg.</strong>" : "";				
+				}
 				}
 				if(isset($ftr->properties->{"youtube:link"})) {
 					$subject = $ftr->properties->{"youtube:link"};
@@ -95,12 +97,13 @@ class Sourcemap_Kml {
 			    $k .= '<![CDATA[<div class="gebubble">';
 				$k .= isset($ftr->properties->description) ? Sourcemap_Kml::xmlentities($ftr->properties->description) : "";
 				$k .= isset($ftr->properties->{"url:moreinfo"}) ? '<br/>'.$ftr->properties->{"url:moreinfo"} : "";
+				if(isset($data->properties->{"sm:ui:co2e"}) && isset($data->properties->{"sm:ui:weight"})) {
 				if($data->properties->{"sm:ui:co2e"} == 1 && $data->properties->{"sm:ui:weight"}) {
 					// Should be smart units.
 					$k .= isset($ftr->properties->co2e) ? '<br/><strong>Footprint: '.$ftr->properties->co2e." kg co2e " : "";					
 					$k .= isset($ftr->properties->weight) ? 'Weight: '.$ftr->properties->weight." kg.</strong>" : "";				
 				}
-				
+				}
 			    $k .= '</div>]]>';
 			    $k .= '</description>';
 			    $k .= '<LineString>';
@@ -118,7 +121,7 @@ class Sourcemap_Kml {
 	}
 	
 	private static function getKMLDotColor($color) {
-		$color = substr($color,1);
+		$color = strlen($color == 7) ? substr($color,1) : $color;
 		$r = substr($color, 0, 2);
 		$g = substr($color, 2, 2);
 		$b = substr($color, 4, 2);

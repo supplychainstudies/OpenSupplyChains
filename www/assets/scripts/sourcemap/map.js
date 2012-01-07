@@ -214,7 +214,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.TERRAIN,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 1, "maxZoomLevel": 17,
+        "restrictedMinZoom": 1, "minZoomLevel": 1, "maxZoomLevel":17, "maxZoomLevel": 17,
         "wrapDateLine":false
     }));
     this.map.addLayer(new OpenLayers.Layer.Google(
@@ -223,7 +223,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "type": google.maps.MapTypeId.SATELLITE,
         "animationEnabled": false,
         "resolutions": this.defaults.resolutions,
-        "minZoomLevel": 1, "maxZoomLevel": 17,
+        "restrictedMinZoom": 1, "minZoomLevel": 1, "maxZoomLevel":17, "maxZoomLevel": 17,
         "wrapDateLine":false
     }));
     this.map.addLayer(new OpenLayers.Layer.CloudMade(
@@ -231,7 +231,7 @@ Sourcemap.Map.prototype.initBaseLayer = function() {
         "key": "BC9A493B41014CAABB98F0471D759707",
         "styleId": 44909,
         //"resolutions": this.defaults.resolutions,
-        "minZoomLevel": 1, "maxZoomLevel": 12
+        "restrictedMinZoom": 2, "minZoomLevel": 2, "restrictedMinZoom":12, "maxZoomLevel": 12
     }));
     
     this.broadcast('map:base_layer_initialized', this);
@@ -1263,7 +1263,7 @@ Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
         }
 
 
-        var zoomFromReso = Math.max(this.map.minZoomLevel, zoom);
+        var zoomFromReso = Math.max(this.map.restrictedMinZoom, zoom);
         return zoomFromReso;
         //return Math.max(this.map.minZoomLevel, zoom);
 }

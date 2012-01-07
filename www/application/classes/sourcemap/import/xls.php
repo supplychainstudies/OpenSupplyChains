@@ -152,7 +152,9 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					$pattern = '/\d/';
 					$instances = array();
 					preg_match($pattern, $value, $instances);
-					$tiers[$instances[0]] = $column;
+					if (count($instances) != 0) {
+						$tiers[$instances[0]] = $column;
+					}
 				}
 				else {
 					// If you can't find one of our typical column names, add it in as a new type of attr 
@@ -179,14 +181,15 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 			// Loop through all the rows
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rowIndex != 1) {
-					$name = "";
-					// Find the name
-					foreach ($tiers as $num=>$column) {
-						if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
-							$title = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());							
-						}
+				$title = "";
+				// Find the name
+				foreach ($tiers as $num=>$column) {
+					if ($rows->getCell($column . $rowIndex)->getCalculatedValue() != "") {
+						$title = trim($rows->getCell($column . $rowIndex)->getCalculatedValue());							
 					}
+				}
+				if ($title != "" && $rowIndex > $starting_row) {
+					$name = "";
 					// Should be unique name + address
 					//$name = $title . "-" . trim($rows->getCell($sh['Address'] . $rowIndex)->getCalculatedValue());
 					
@@ -197,6 +200,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 						$name = $count;
 					}
 					// Check if that stop has been already added 
+					
 					if (isset($stops[$name]) == false) {
 						// create a stop 						
 						$stops[$name] = array (

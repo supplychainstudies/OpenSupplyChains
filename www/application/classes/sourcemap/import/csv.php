@@ -98,11 +98,11 @@ class Sourcemap_Import_Csv {
         foreach($data as $i => $record) {
             if(is_null($addresscol)) {
                 if(!isset($record[$latcol], $record[$loncol])) {				
-                    throw new Exception('Missing lat/lon field (record #'.($i+1).').');
+                    //throw new Exception('Missing lat/lon field (record #'.($i+1).').');
 				}
             } else {
                 if(!isset($record[$addresscol])) {
-                    throw new Exception('Missing address field (record #'.($i+1).').');
+                    //throw new Exception('Missing address field (record #'.($i+1).').');
 				}
             }
             if($idcol && !isset($record[$idcol])) {

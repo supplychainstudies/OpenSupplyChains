@@ -22,7 +22,6 @@
 
     <script>
         Sourcemap.passcode_exist = "<?= isset($exist_passcode) ? $exist_passcode : '0' ?>";
- 		Sourcemap.avatar_url = "<?= isset($supplychain_avatar) ? $supplychain_avatar : '' ?>";
     </script>
 
 <div id="map-container">    

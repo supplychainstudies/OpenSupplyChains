@@ -37,10 +37,15 @@ $(document).ready(function() {
 		    $(window).resize(function() {
                 var window_height = parseInt($(window).height());
                 var window_width = parseInt($(window).width());
-                var classlist = "zoom mobilezoom vertical horizontal";
+                console.log("width:"+window_width+" /height:"+window_height);
+
+                // clearing tags : for test
+                var classlist = "zoom mobilezoom vertical horizontal small medium embed";
                 $("body").removeClass(classlist);
+
 		    	if(window_height >= 480 && window_width >= 640) {
 		    		//$("body").removeClass("mobilezoom");
+                    $("body").addClass("embed");
                     $('#sourcemap-map-embed').css("height", window_height).css("width", window_width);
 		    	}
 		    	else {
@@ -51,11 +56,11 @@ $(document).ready(function() {
                     if(!isiOS){
 		    		    $("body").addClass("zoom");			
                         $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
-                        if(parseInt($(window).width()) < 740){
-                           $("#sourcemap-gradient").css("display","none"); 
-                        }
-                        if(parseInt($(window).width()) < 420){
-                           $("#banner").addClass("small");
+
+                        if(parseInt($(window).width()) <= 320){
+                           $("body").addClass("small");
+                        } else {
+                           $("body").addClass("medium");
                         }
                     } else {
 		    		    $("body").addClass("mobilezoom");			

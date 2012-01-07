@@ -124,7 +124,7 @@ class Sourcemap_Import_Csv {
                     	else $lon = $v;
 					}
                     continue;
-                } elseif($k == $addresscol) {
+                } elseif($k == $addresscol && $v != "") {
                     if($results = Sourcemap_Geocoder::geocode($v)) {
                         $result = $results[0];
                         $lat = (float)$result->lat;

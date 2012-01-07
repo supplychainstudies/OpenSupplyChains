@@ -12,8 +12,6 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?php // TEMPORARY MOBILE VIEW TO MAKE OFFICE DEPOT HAPPY ?>
-
 <?php if (isset($supplychain_banner_url) && $supplychain_banner_url): ?>
 <div class="container mobile">
     <div class="channel-banner">

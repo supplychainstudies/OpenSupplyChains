@@ -12,21 +12,11 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<?php if(isset($user->banner_url)): ?>
-<div class="container">
-    <div class="channel-banner">        
-        <a class="channel-banner-url" <?= isset($user->url)?'href="'.$user->url.'"':null ?> >
-        <img src="<?= $user->banner_url ?>"/>
-        </a>
-    </div>
-</div>
-<?php else: ?>
 <div id="page-title">
     <div class="container">
         <h1><?= isset($user->display_name) ? $user->display_name : $user->username; ?></h1>
     </div>
 </div>
-<?php endif; ?>
 
 <div class="container">
 

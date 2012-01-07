@@ -24,14 +24,6 @@
 </form>
 </div>
 <?php else: ?>
-<?php if (isset($supplychain_banner_url) && $supplychain_banner_url): ?>
-<div class="container preview">
-    <div class="channel-banner">
-       <img src="<?= $supplychain_banner_url?>"/>
-    </div>
-    <div class="clear"></div>
-</div><!-- .container.preview -->
-<?php endif; ?>
 
 <div class="container preview">
     <h1><?= HTML::chars($supplychain_name) ?></h1>

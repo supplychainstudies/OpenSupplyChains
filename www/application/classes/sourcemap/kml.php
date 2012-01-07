@@ -121,7 +121,7 @@ class Sourcemap_Kml {
 	}
 	
 	private static function getKMLDotColor($color) {
-		$color = substr($color,1);
+		$color = strlen($color == 7) ? substr($color,1) : $color;
 		$r = substr($color, 0, 2);
 		$g = substr($color, 2, 2);
 		$b = substr($color, 4, 2);

@@ -1174,10 +1174,10 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 			}
 			$(this.editor.map_view.dialog).find('.falseclose').click($.proxy(function() {
 				//change this by passing this and adding a class
-                $(this).parent().parent().parent().parent().width(411);
-				$(this).parent().parent().parent().parent().find('#newcatalog').hide();
-				$(this).parent().parent().parent().parent().find('#stop-editor').show();
-				}));
+                this.map_view.dialog.width(411);
+				this.map_view.dialog.find('#newcatalog').hide();
+				this.map_view.dialog.find('#stop-editor').show();
+			},{ "map_view": this.editor.map_view }));
             o.results = json.results;
             o.params = json.parameters;
             $(this.editor.map_view.dialog).find('.catalog-content').html(cat_html);

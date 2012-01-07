@@ -361,7 +361,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 
         $sc->stops = self::csv2stops($stop_csv, $options);
 		$sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
-        $sc->attributes = array();
+        $sc->attributes = new stdClass();
         return $sc;
     }
 

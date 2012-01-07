@@ -50,6 +50,7 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
                     $this->request->redirect('tools/import/xls');
                 }
                 $sc->user_id = Auth::instance()->get_user()->id;
+				$sc->attributes->title = $posted->title;
                 $update = false;
                 if(isset($posted->replace_into) && $posted->replace_into > 0) {
                     if(!(ORM::factory('supplychain', $posted->replace_into)->owner->id == $sc->user_id)) {

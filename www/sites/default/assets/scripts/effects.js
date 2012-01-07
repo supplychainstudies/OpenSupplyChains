@@ -58,7 +58,7 @@ $(document).ready(function(){
             case "change_profile_pic":
                 element_class = "upload_profile_pic";
                 element_caption = "Profile picture";
-                upload_rules= "Upload size limit: 500kb / Width,Height: 200px";
+                upload_rules= "Upload size limit: 500kb / Maximum width and height: 200px";
                 form_id = "profile_pic_upload";
             break;
             case "change_banner":

@@ -26,11 +26,10 @@ $(document).ready(function() {
 			$('.sourcemap-form form').attr('action','/tools/import/xls');
 			$('.sourcemap-form form').append($('[name="file"]'));
 		} else {
-			$('[name="file_front"]').val("Not supported...");
+			$('[name="file_front"]').val("File not supported...");
 			$('.sourcemap-form form').attr('action','/create');
 			$('[name="file"]').val("");
 		}
-        
     });
    $('#form-description').before('<div id="desc-counter"></div>');
    $('.sourcemap-form textarea').keyup(function() {

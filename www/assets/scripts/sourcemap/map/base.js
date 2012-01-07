@@ -34,7 +34,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water","energy"],
-    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#000080","energy":"#FAE500"},
+    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#1c9acd","energy":"#f6df43"},
     "legend": true, "locked":true,
     "viz_attr_map": {
         "weight": function(st) {

@@ -1263,7 +1263,7 @@ Sourcemap.Map.prototype.getZoomForResolution = function (resolution, closest){
         }
 
 
-        var zoomFromReso = Math.max(this.map.restrictedMinZoom, zoom);
+        var zoomFromReso = Math.max(this.map.baseLayer.restrictedMinZoom, zoom);
         return zoomFromReso;
         //return Math.max(this.map.minZoomLevel, zoom);
 }

@@ -40,6 +40,7 @@
 
             // if we have a www/version.php file, use it
             if (file_exists('version.php')){
+				echo "<span class='profiler-link'>";
                 include_once('version.php');
                 $date = str_replace( "Date: ", "", $date );
                 $age = Kohana_date::span(strtotime($date), time(), 'days,hours,minutes,seconds');
@@ -54,6 +55,8 @@
                 echo " and " . $age['seconds'] . " seconds ago. ";
                 echo "| ";
                 echo "<a href=\"". $changelog_url . "\">Changelog</a>";
+				echo "</span>";
+				
             }
             
             // otherwise, do nothing 

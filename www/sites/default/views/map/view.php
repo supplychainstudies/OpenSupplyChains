@@ -72,8 +72,8 @@
                 </div>
 	            <h2 class="section-title">Upload Spreadsheet <a href="http://blog.sourcemap.com/instructions/#usingspreadsheets" class="upload-question"/></a></h2>									
 				<div class="map-replace">
-				    <form class="sourcemap-form" name="xls-import" method="post" enctype="multipart/form-data">
-				    <input class="hidden" name="supplychain_name" type="text" value="A Sourcemap" />
+				    <form class="sourcemap-form" name="xls-import" action="tools/import/xls" method="post" enctype="multipart/form-data">
+				    <input class="hidden" name="supplychain_name" type="text" value="<?= $supplychain_name ?>" />
 				    <input type="file" name="xls_file" />
 				    <select class="hidden"  name="replace_into">
 				    <option value="<?= $supplychain_id ?>">"></option>

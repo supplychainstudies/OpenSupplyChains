@@ -24,6 +24,7 @@
     	<?php // if($can_import) { ?>
 		<div style="margin-top: 15px; margin-bottom: 15px">
             <a class="tooltip pro" style="float: left; margin-top: 8px; margin-right: 10px; padding-bottom: 3px">New!</a><h3 class="blue" style="clear: right; float: left;">Upload a Spreadsheet</h3>
+            &nbsp;<a href="/info/instructions/#spreadsheet?w=600" target="_blank" class="modal tooltip">?</a>
             <div class="clear"></div>
             <div style="clear: both; float:left;">
                 <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" /> <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px;" /> 	

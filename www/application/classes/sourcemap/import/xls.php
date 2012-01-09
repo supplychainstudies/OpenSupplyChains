@@ -41,10 +41,9 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		//get upstream sheet
 		$contentReader = new PHPExcel_Reader_Excel5Contents();
 		$contentReader->setReadDataOnly(true);
-		//$contentPHPExcel = $contentReader->loadContents($xls);
 		$sheets = array();
-		// If you have an upstream template
 		
+        // If you have an upstream template
 		$contentReader->setLoadSheetsOnly("Upstream");
 		$contentPHPExcel = $contentReader->loadContents($xls);
 		$sheets['Upstream'] = $contentPHPExcel->getActiveSheet();
@@ -53,7 +52,6 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 		if (count($contentPHPExcel->getSheetNames()) != 0) {
 			$sheets['Downstream'] = $contentPHPExcel->getActiveSheet();
 		}
-		
 		
 		$stops = array();
 		$hops = array();
@@ -107,7 +105,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 					}
 				}
 			}
-			// Figure out what each of the columns represents. if its not recognizable, it gets its own column (becomes and attribute)
+			// Figure out what each of the columns represents. if its not recognizable, it gets its own column (becomes a new attribute)
 			for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
 				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
 				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
@@ -272,21 +270,10 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 				if ($maxrowcount>$maxrows) {
 					break 2;
 				}
-			} // Foreach
-		} // foreach($sheets as $sheet=>$rows)
-
+			} 
+		} 
 		
-
-		
-		/*
-		
-		
-		
-		Now we convert the array to a phpexcel object and then to a csv output
-		
-		
-
-		*/
+		// Now we convert the array to a phpexcel object and then to a csv output
 		
 		//var_dump($stops);
 		//var_dump($hops);

@@ -426,6 +426,10 @@ input[type=text],input[type=password], textarea {
 	.box_shadow_inset(0, 3px, 12px, #eee);
 	.rounded(4px);
 	&:focus, &:hover { background-color:#FBF7D5; }
+    &:disabled{
+        background: #ddd;
+        &:focus, &:hover { background-color: auto; }
+    }
 }
 input::-webkit-input-placeholder, input:-moz-placeholder { color:#999 }
 textarea { height: 55px; }
@@ -521,6 +525,7 @@ select {
 	-webkit-appearance: none;
 	outline:none;
 	.rounded(4px);
+    &:disabled{ background: #ddd; }
 }
 input[type=file] { width:100%; }
 input[type=checkbox]{
@@ -673,7 +678,6 @@ input[type=checkbox]{
 
 	}
 	.map-replace {
-		border:1px solid #dfdfdf;
 		.rounded(4px);
 		padding:0; margin:10px;
 		input {

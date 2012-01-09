@@ -24,14 +24,6 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
         $current_user = Auth::instance()->get_user();
         $import_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
-        /*
-        if($current_user->has('roles', $import_role) || $current_user->has('roles', $admin_role)) {
-            // pass
-        } else {
-            Message::instance()->set('You don\'t have access to the Google Docs importer.');
-            $this->request->redirect('/home');
-        }
-        */
         $this->layout->scripts = array(
             'sourcemap-core'
         );
@@ -41,6 +33,12 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
 				$posted->xls_file = $posted->file;
 			}
             if(isset($posted->xls_file) && $posted->xls_file instanceof Sourcemap_Upload && $posted->xls_file->ok()) {
+				// Prevent blank titles
+                if ((!isset($posted->title) || $posted->title == "") && !isset($posted->replace_into)){
+                    Message::instance()->set('Please provide a title.');
+                    $this->request->redirect('create');
+                }
+
                 $xls = $posted->xls_file->get_contents();
                 try {
                     $sc = Sourcemap_Import_Xls::xls2sc($xls, $posted);
@@ -50,20 +48,24 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
                     $this->request->redirect('tools/import/xls');
                 }
                 $sc->user_id = Auth::instance()->get_user()->id;
-				$sc->attributes->title = $posted->title;
                 $update = false;
                 if(isset($posted->replace_into) && $posted->replace_into > 0) {
                     if(!(ORM::factory('supplychain', $posted->replace_into)->owner->id == $sc->user_id)) {
                         Message::instance()->set('That supplychain doesn\'t exist or doesn\'t belong to you.');
-                        $this->request->redirect('tools/import/xls');
+                        $this->request->redirect('create');
                     } else {
                         $update = (int)$posted->replace_into;
+                        
+                        // Grab attributes from old supplychain (this is kind of ugly, but necessary)
+                        $supplychain = ORM::factory('supplychain', $update);
+                        $old_sc = $supplychain->kitchen_sink($supplychain->id);
+                        $sc->attributes = $old_sc->attributes;
                     }
                 }
-                if($update) {
-                    $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc, $update);
-                } else {
+                if($update == false) {
                     $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc);
+                } else {
+                    $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc, $update);
                 }
                 $new_sc = ORM::factory('supplychain', $new_sc_id);
                 if(isset($posted->publish) && $posted->publish) {

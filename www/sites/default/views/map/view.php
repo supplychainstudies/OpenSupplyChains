@@ -68,6 +68,7 @@
                         <form class="sourcemap-form" name="xls-import" action="/create" method="post" enctype="multipart/form-data">
                             <a class="tooltip pro" style="float: left; margin-top: 8px; margin-right: 10px; padding-bottom: 3px">New!</a>
                             <h3 class="blue" style="clear: right; float: left;">Upload a Spreadsheet</h3>
+                            &nbsp;<a href="/info/instructions/#spreadsheet?w=600" target="_blank" class="modal tooltip">?</a>
                             <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" />
 							<input class="hidden" name="title" type="text" value="<?= $supplychain_name ?>" />
                             <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px; padding: 8px" />

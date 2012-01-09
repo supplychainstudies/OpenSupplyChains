@@ -352,7 +352,6 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 							$hops[$hops_from."-".$hops_to]['varort'] = (7/365)* $rows->getCell($h['Source-Split'] . $rowIndex)->getCalculatedValue() * $bom0partvalue;
 						}					
 						foreach ($stops as $u=>$stop) {
->>>>>>> master
 							if ($stop["num"] == $hops_from) { 
 								$hops[$hops_from."-".$hops_to]['Description'] .= "From: " . $stop['Location'];
 								$hops[$hops_from."-".$hops_to]['fuuid'] = $u;

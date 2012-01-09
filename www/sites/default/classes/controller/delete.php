@@ -30,7 +30,6 @@ class Controller_Delete extends Sourcemap_Controller_Map {
                 // create the form object and add fields
                 $form = Sourcemap_Form::factory('delete')
                     ->method('post')->action('delete/'.$supplychain_id)
-                    ->add_class('vertical')
                     ->select('confirm_once', 'Are you sure?')
                     ->select('confirm_twice', 'We can\'t undo this. Are you still sure you want to delete this map?')
                     ->select('confirm_thrice', 'Seriously. This is a permanent thing. Are you *sure*?')

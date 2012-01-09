@@ -13,11 +13,30 @@
  */
 
 $(document).ready(function() {
-	
+   
+   // Disable create form attrs on "replace a map" selection
+   var replace_into = $('[name="replace_into"]');
+   var elements = $('.sourcemap-form input:not([type="submit"]), .sourcemap-form textarea');
+   replace_into.change(function() {
+       // Not sure why .selectedIndex doesn't work here...
+       if (replace_into.find('option:selected').text() == replace_into.find('option:eq(0)').text()){
+           elements.each(function(){ $(this).removeAttr('disabled'); });
+           $('.sourcemap-form input[type="submit"]').val("Create");
+           $('.sourcemap-form form input[name="replace_into"]').remove();
+       } else {
+           elements.each(function(){ $(this).attr('disabled', 'disabled'); });
+           $('.sourcemap-form input[type="submit"]').val("Update");
+           hidden_element = '<input name="replace_into" value="' + replace_into.find('option:selected').val() + '">';
+           $(hidden_element).hide().appendTo($('.sourcemap-form form'));
+       }
+   });
+    
+   $('select[name="replace_into"]').hide();
    $('[name="file_front"]').click(function() {
         $('[name="file"]').click();
     });	
    $('[name="file"]').change(function() {
+       $('select[name="replace_into"]').show();
 		var filename = $('[name="file"]').val();
 		var parts = filename.split("\\");
 		var filetype = parts[parts.length-1].split(".");
@@ -30,7 +49,9 @@ $(document).ready(function() {
 			$('.sourcemap-form form').attr('action','/create');
 			$('[name="file"]').val("");
 		}
+        replace_into.trigger("change");
     });
+   
    $('#form-description').before('<div id="desc-counter"></div>');
    $('.sourcemap-form textarea').keyup(function() {
         var maxlength = $(this).attr('maxlength');

@@ -55,16 +55,20 @@ body.small{
 	#extras { 
         bottom: 5px; 
         margin-left:8px;
-        #sourcemap-dock{bottom:12px;}
+        #sourcemap-dock{
+            bottom:12px;
+            zoom: .9; -moz-transform: scale(.9); 
+        }
         #watermark {
             &.satellite,&.terrain{
-                left:0px;
-                bottom:35px;
+                left:-4px;
+                bottom:27px;
             }
         }
         #sourcemap-gradient{
+            display:none;
             &.satellite,&.terrain{
-                left:-23px;
+                left:-5px;
                 bottom:63px;
             }
         }
@@ -77,31 +81,45 @@ body.medium{
         #sourcemap-dock{bottom:12px;}
         #watermark {
             &.satellite,&.terrain{
-                left:0px;
-                bottom:35px;
+                left:-4px;
+                bottom:27px;
             }
         }
         #sourcemap-gradient{
+            zoom: .9; -moz-transform: scale(.9); 
+            left:-22px;
             &.satellite,&.terrain{
-                left:-23px;
-                bottom:63px;
+                left:-27px;
+                bottom:65px;
             }
         }
     }
 }// end medium
 body.embed{
+    // big
     #extras{
         #sourcemap-dock{bottom:9px;}
+        #sourcemap-dock{
+            .sourcemap-dock-outerwrap{
+                .sourcemap-dock-content{
+                    .filter{
+                        display:none;
+                        .content{
+                            span{
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     #sourcemap-gradient{
-        left:68px;
-        &.satellite,&.terrain{
-            left:-11px;
-            bottom:36px;
-        }
+        bottom:60px;
+        left:-14px;
     }
 }
 body.zoom {
+    // smaller than 640 480
     @z : .7;
 	#banner { 
         zoom: @z; -moz-transform: scale(@z); 
@@ -123,8 +141,25 @@ body.zoom {
         }
     }
 	#extras { 
-        zoom: @z; -moz-transform: scale(@z); 
+        // for cloudmade
+        #watermark {
+            left:2px;
+            bottom:11px;
+        }
+        #sourcemap-dock{
+            zoom: @z; -moz-transform: scale(@z); 
+        }
+        #sourcemap-dock{
+            .sourcemap-dock-outerwrap{
+                .sourcemap-dock-content{
+                    .filter{
+                        display:none;
+                    }
+                }
+            }
+        }
         /*
+        zoom: @z; -moz-transform: scale(@z); 
         bottom: 5px; 
         margin-left:8px;
         #sourcemap-dock{
@@ -140,7 +175,7 @@ body.zoom {
     }
     #sourcemap-gradient{
         // for cloudmade
-        left:-12px;
+        left:-11px;
         bottom:44px;
     }
 	#dialog {

@@ -19,7 +19,7 @@ div.olLayerDiv {
 }
 .olLayerGooglePoweredBy {
     left: 2px;
-    bottom: 15px;   
+    bottom: 0.4em !important;   
 }
 .olControlAttribution {
     font-size: smaller; 

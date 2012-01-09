@@ -37,7 +37,7 @@ $(document).ready(function() {
 		    $(window).resize(function() {
                 var window_height = parseInt($(window).height());
                 var window_width = parseInt($(window).width());
-                console.log("width:"+window_width+" /height:"+window_height);
+                //console.log("width:"+window_width+" /height:"+window_height);
 
                 // clearing tags : for test
                 var classlist = "zoom mobilezoom vertical horizontal small medium embed";
@@ -76,7 +76,7 @@ $(document).ready(function() {
                         }
                     }
 		    	}
-		      	//$('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
+                // end styling
 		    	// TODO: throw supplychain:loaded equivalant event on resize and retrigger center
                 
                 // iOS hide address bar 
@@ -85,7 +85,13 @@ $(document).ready(function() {
                     window.scrollTo(0,window.pageYOffset + 1);
                 },100);
 
-                
+                // fix banner size
+                /*
+                console.log($("#banner-summary"));
+                $("#banner-summary").css("max-width","600px");
+                $("#banner-summary").css("width","600px");
+                Sourcemap.truncate_string("#banner-summary");
+                */
 		    });
 
             // TODO : make password input window

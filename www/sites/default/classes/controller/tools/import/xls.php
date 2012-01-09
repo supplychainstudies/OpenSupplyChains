@@ -61,6 +61,9 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
                         $old_sc = $supplychain->kitchen_sink($supplychain->id);
                         $sc->attributes = $old_sc->attributes;
                     }
+                } else {
+                    $sc->attributes->title = $posted->title;
+                    $sc->attributes->description = $posted->description;
                 }
                 if($update == false) {
                     $new_sc_id = ORM::factory('supplychain')->save_raw_supplychain($sc);

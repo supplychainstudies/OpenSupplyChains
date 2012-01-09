@@ -49,7 +49,7 @@
 					</div>						
 				<hr />
 				<div class="footprint-row indent">							           
-	                    <div class="timesby"></div><div class="footprint-math">x</div><span class="symbol-co2e"></span>
+	                    <div class="times byweight"></div><div class="footprint-math">x</div><span class="symbol-co2e"></span>
                         <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>                       
 						<%= $("<div></div>").append(el).html() %>
 					<% $("#reference-co2e").click(function () { window.open(this.ref.getAttr("co2e_reference",0),"_blank"); }); %>
@@ -57,7 +57,7 @@
 				</div>	
                		
 				<div class="footprint-row indent">								           
-	                    <div class="timesby"></div><div class="footprint-math">x</div><span class="symbol-energy"></span>
+	                    <div class="times byweight"></div><div class="footprint-math">x</div><span class="symbol-energy"></span>
                         <% el = $("<input></input>").attr("class", "footprint-energy").attr("type", "text").attr("name", "energy").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("energy",0)); %>
 						<%= $("<div></div>").append(el).html() %>		
 					<% $("#reference-energy").click(function () { window.open(this.ref.getAttr("energy_reference",0),"_blank"); }); %>
@@ -65,7 +65,7 @@
 				</div>
                		
 				<div class="footprint-row indent">				           
-	                    <div class="timesby"></div><div class="footprint-math">x</div><span class="symbol-water"></span>
+	                    <div class="times byweight"></div><div class="footprint-math">x</div><span class="symbol-water"></span>
                         <% el = $("<input></input>").attr("class", "footprint-water").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("water",0)); %>
                         <%= $("<div></div>").append(el).html() %>
 					<% $("#reference-water").click(function () { window.open(this.ref.getAttr("water_reference",0),"_blank"); }); %>

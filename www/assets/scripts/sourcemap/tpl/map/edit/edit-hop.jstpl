@@ -20,13 +20,6 @@
 </h2>
 
 <div id="editor-tabs" class="accordion">
-	<!--<ul>
-		<li><a href="#edit-description">Description</a></li>
-		<li><a href="#edit-media">Media</a></li>
-		<li><a href="#edit-hop-footprint">Footprint</a></li>
-		<div class="clear"></div>
-	</ul>
-    <div class="clear"></div>-->
     	<h3 class="accordion-title first"><div class="arrow"></div>Description</h3>
         <div id="edit-description" class="sourcemap-form accordion-body">        
             <%= $("<div></div>").append(
@@ -36,39 +29,63 @@
         </div>
 		<h3 class="accordion-title"><div class="arrow"></div>Footprint</h3>
         <div id="edit-hop-footprint" class="accordion-body sourcemap-form">
-                <fieldset>
-					<div class="footprint-section">        					
-	                    <label for="distance">Qty</label>
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "qty").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("qty", 0)); %>
+                <fieldset> 
+					<div style="clear: both; height: 40px;">
+						<div style="float: right; clear: right; margin-top: 0px;margin-right: 20px;">
+						<label for="transportcat">via</label>
+	                    <select id="transportation-type" name="transportcat" class="sourcemap-form-select" style="width: 159px; font-size: 10px; margin-top: 0px;">	
+							<option selected>Method of Transportation</option>
+							<% for(var i in this.editor.transport_catalog) { %>
+								<% if (this.editor.transport_catalog[i].name != "") { %>
+									<option <% if(this.ref.getAttr("transport", false) == this.editor.transport_catalog[i].name) { %> selected <% } %> value="<%= this.editor.transport_catalog[i].co2e %>">
+										<%= this.editor.transport_catalog[i].name %>
+									</option>
+					        		<% } %>																				
+					        <% } %>
+	                    </select>
+						</div>
+          
+						<div style="margin: 10px">
+						<label for="weight">Weight</label>
+						<% el = $("<input></input>").attr("class", "footprint-weight").attr("type", "text").attr("name", "weight").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("weight",0)); %>
+	                        <%= $("<div></div>").append(el).html() %>
+						<label for="weight">kg</label>
+						</div>	
+					</div>						
+				<hr />
+				<div class="footprint-row indent">	
+					<div class="times byweight"></div><div class="footprint-math">x</div>	
+					<div class="times bydistance">
+                    <%= Math.round(this.ref.gc_distance()) %>   
+					 km</div><div class="footprint-math">x</div><span class="symbol-co2e"></span>
+                        <% el = $("<input></input>").attr("class", "footprint-co2e").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>                       
+						<%= $("<div></div>").append(el).html() %>
+					<% $("#reference-co2e").click(function () { window.open(this.ref.getAttr("co2e_reference",0),"_blank"); }); %>
+					<div class="units" style="width: 35px; line-height: 7px">kg CO<sub>2</sub>e/ kg*km</div><div class="footprint-math">=</div><div id="co2e-impact-result" class="result" style="width: 50px">0 kg</div><span class="reference <% if(this.ref.getAttr("co2e_reference","") != "") { %>lock<% } %>" id="reference-co2e">&nbsp;</span>
+				</div>	
+               	<!--	
+				<div class="footprint-row indent">								           
+	                    <div class="timesby"></div><div class="footprint-math">x</div><span class="symbol-energy"></span>
+                        <% el = $("<input></input>").attr("class", "footprint-energy").attr("type", "text").attr("name", "energy").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("energy",0)); %>
+						<%= $("<div></div>").append(el).html() %>		
+					<% $("#reference-energy").click(function () { window.open(this.ref.getAttr("energy_reference",0),"_blank"); }); %>
+					<div class="units">kwh/kg</div><div class="footprint-math">=</div><div id="energy-impact-result" class="result">0 kwh</div><span class="reference" id="reference-energy">&nbsp;</span>
+				</div>
+               		
+				<div class="footprint-row indent">				           
+	                    <div class="timesby"></div><div class="footprint-math">x</div><span class="symbol-water"></span>
+                        <% el = $("<input></input>").attr("class", "footprint-water").attr("type", "text").attr("name", "water").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("water",0)); %>
                         <%= $("<div></div>").append(el).html() %>
-					</div>
-                    <div class="footprint-section disabled-unit" style="margin-left: 4px; padding-left: 0px; margin-top: 8px">
-                        	<input class="disabled-unit" type="text" name="unit" value="<%= this.ref.getAttr("unit", "kg") %>" disabled />
-                        </label>
-                    </div>
-					<div class="footprint-section">        					
-	                    <label for="distance">Distance</label>
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "distance").addClass("textbox"); 
-                            el[0].setAttribute("value", Math.round(this.ref.gc_distance()) || 0); %>
-                        <%= $("<div></div>").append(el).html() %>
-					</div>
-					<div class="footprint-math" style="margin-left: 4px; padding-left: 0px; margin-top: 35px">km x</div>					
-					<div class="footprint-section">        					
-	                    <label for="co2e">Factor</label>
-                        <% el = $("<input></input>").attr("type", "text").attr("name", "co2e").addClass("textbox"); el[0].setAttribute("value",this.ref.getAttr("co2e",0)); %>
-                        <%= $("<div></div>").append(el).html() %>
-    				</div>
-					<div class="clear"></div>
-					<label for="transportation-type" style="margin-top: 10px">Method of Transportation</label>
-                    <select id="transportation-type" name="transportcat" class="sourcemap-form-select">	
-						<% for(var i in this.editor.transport_catalog) { %>
-							<option <% if(this.ref.getAttr("transport", false) == this.editor.transport_catalog[i].name) { %> selected <% } %> value="<%= this.editor.transport_catalog[i].co2e %>">
-								<%= this.editor.transport_catalog[i].name %>
-							</option>											
-				        <% } %>
-                    </select>
-
-                    <div id="impact-result" class="result">0 kg C02e</div>
+					<% $("#reference-water").click(function () { window.open(this.ref.getAttr("water_reference",0),"_blank"); }); %>
+					<div class="units">L H<sub>2</sub>O/kg</div><div class="footprint-math">=</div><div id="water-impact-result" class="result">0 L</div><span class="reference" id="reference-water">&nbsp;</span>
+               	</div>	
+					-->
+				<div class="footprint-row indent">				           
+	                 <label for="footprint-methodology"  style="width: 200px">References:</label> 
+					 <% el = $("<textarea></textarea>").attr("id","footprint-methodology").attr("maxlength","1000").addClass("textbox").attr("placeholder","Maximum 1000 characters.").text(this.ref.getAttr("footprintmethodology","")); 
+					 %>
+                     <%= $("<div></div>").append(el).html() %>
+               	</div>
 
                 </fieldset>
         </div>

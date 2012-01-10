@@ -326,20 +326,19 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         });
 
         // truncate here
-        
-        //console.log($(this.banner_div).width());
         var bannerwidth = $(this.banner_div).width();
+        console.log(bannerwidth);
         var sumwidth=0;
-        //console.log($(this.banner_div).children("#banner-content").filter("#banner-summary"));
-        //console.log($(this.banner_div).find("#banner-content").find("div:not(#banner-summary)"));
         $(this.banner_div).find("#banner-content").find("div:not(#banner-summary):visible").each(function(){
             sumwidth += $(this).width() + 44;
             console.log($(this));
             console.log($(this).width());
         });
-        //console.log(sumwidth);
+
         var summarywidth = bannerwidth - sumwidth; 
+        console.log(summarywidth);
         $(this.banner_div).find("#banner-summary").css("max-width",summarywidth);
+        $(this.banner_div).find("#banner-summary").css("width",summarywidth);
         Sourcemap.truncate_one_string("#banner-summary");
     }, this);
 

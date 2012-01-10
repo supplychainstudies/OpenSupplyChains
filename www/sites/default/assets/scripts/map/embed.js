@@ -86,6 +86,7 @@ $(document).ready(function() {
                 },100);
 
                 // fix banner size
+               // Sourcemap.truncate_one_string("#banner-summary");
 		    });
 
             // TODO : make password input window

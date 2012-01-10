@@ -214,6 +214,15 @@ body.zoom {
 }
 body.mobilezoom {
     @z : .5;
+    #sourcemap-dock{
+        .sourcemap-dock-outerwrap{
+            .sourcemap-dock-content{
+                .filter{
+                    display:none;
+                }
+            }
+        }
+    }
 	#banner { 
         zoom: @z; -moz-transform: scale(@z); 
         //width:100%;
@@ -245,6 +254,7 @@ body.mobilezoom {
     }
     .olControlAttribution {bottom: -5px !important;}
 
+    /*
     #watermark {
         &.satellite,&.terrain{
             left:70px;
@@ -254,6 +264,21 @@ body.mobilezoom {
     #sourcemap-gradient{
         &.satellite,&.terrain{
             bottom:25px;left:0px;
+        }
+    }
+    */
+    #watermark {
+        &.satellite,&.terrain{
+            left:10px;
+            bottom:42px;
+        }
+    }
+    #sourcemap-gradient{
+        //zoom: .9; -moz-transform: scale(.9); 
+        left:-12px;
+        &.satellite,&.terrain{
+            //left:-23px;
+            bottom:89px;
         }
     }
 	#dialog {

@@ -19,7 +19,7 @@
     <div id="sidebar" class="profile">
         <div class="container">
             <p>
-                <?= isset($user->display_name) ? $user->display_name : $user->username; ?> has <?= count($supplychains); ?> maps 
+                <?= isset($user->display_name) ? $user->display_name : $user->username; ?> has <?= count($supplychains->results); ?> maps 
             </p> 
         </div>
     </div>

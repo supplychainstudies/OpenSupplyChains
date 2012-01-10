@@ -19,11 +19,11 @@
         <div class="button alternate">
             <a id="change_profile_pic" name="<?= Kohana::config('aws')->avatar_bucket ?>">Change picture</a>
         </div>
-            <?php if($isChannel): ?>
+        <?php if(false)://if($isChannel): ?>
         <div class="button alternate">
             <a id="change_banner" name="<?= Kohana::config('aws')->banner_bucket ?>">Upload banner</a>
         </div>
-            <? endif; ?>
+        <? endif; ?>
         <div class="button alternate">
             <a href="auth/reset">Change password</a>
         </div>

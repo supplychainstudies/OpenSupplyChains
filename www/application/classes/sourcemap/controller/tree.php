@@ -43,6 +43,7 @@ class Sourcemap_Controller_Tree extends Sourcemap_Controller_Layout {
 	 			$isadmin = $current_user->has('roles', $admin_role);
 				$ishviz = $current_user->has('roles', $hviz_role);
 			}
+            // Only user who create map / admin / hviz can read tree
             if($supplychain->user_can($current_user_id, Sourcemap::READ) && ($isadmin == true || $ishviz == true)) {
                 //redirect mobile users to mobile template
                 if (Request::user_agent('mobile')){

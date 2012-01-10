@@ -61,16 +61,12 @@ body.small{
         }
         #watermark {
             &.satellite,&.terrain{
-                left:-4px;
-                bottom:27px;
+                left:0px;
+                bottom:43px;
             }
         }
         #sourcemap-gradient{
             display:none;
-            &.satellite,&.terrain{
-                left:-5px;
-                bottom:63px;
-            }
         }
     }
 }// end small
@@ -81,22 +77,27 @@ body.medium{
         #sourcemap-dock{bottom:12px;}
         #watermark {
             &.satellite,&.terrain{
-                left:-4px;
-                bottom:27px;
+                left:0px;
+                bottom:42px;
             }
         }
         #sourcemap-gradient{
             zoom: .9; -moz-transform: scale(.9); 
             left:-22px;
             &.satellite,&.terrain{
-                left:-27px;
-                bottom:65px;
+                left:-23px;
+                bottom:89px;
             }
         }
     }
 }// end medium
 body.embed{
     // big
+	#banner { 
+        .banner-date{
+            display:none;
+        }
+    }
     #extras{
         #sourcemap-dock{bottom:9px;}
         #sourcemap-dock{
@@ -114,8 +115,8 @@ body.embed{
         }
     }
     #sourcemap-gradient{
-        bottom:60px;
-        left:-14px;
+        //bottom:60px;
+        //left:-14px;
     }
 }
 body.zoom {

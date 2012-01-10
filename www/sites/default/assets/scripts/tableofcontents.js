@@ -6,7 +6,7 @@ $(document).ready(function(){
       {
         startLevel: 2,    // H2 and up
         depth:      3,    // H2 through H4,
-        topLinks:   false, // Add "Top" Links to Each Header
+        topLinks:   false // Add "Top" Links to Each Header
       }
     );
 

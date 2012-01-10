@@ -86,12 +86,6 @@ $(document).ready(function() {
                 },100);
 
                 // fix banner size
-                /*
-                console.log($("#banner-summary"));
-                $("#banner-summary").css("max-width","600px");
-                $("#banner-summary").css("width","600px");
-                Sourcemap.truncate_string("#banner-summary");
-                */
 		    });
 
             // TODO : make password input window

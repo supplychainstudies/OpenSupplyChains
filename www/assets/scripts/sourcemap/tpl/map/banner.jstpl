@@ -13,7 +13,7 @@
 
 <div id="banner-content">
     <div id="banner-summary">
-       <%= _S.ttrunc(_S.htesc(this.sc.getAttr("title", this.sc.getAttr("name", "Untitled Sourcemap"))), 75) %>
+       <nobr><%= _S.ttrunc(_S.htesc(this.sc.getAttr("title", this.sc.getAttr("name", "Untitled Sourcemap"))), 75) %></nobr>
     </div>
     <% if(this.sc.editable){ %> 
         <a class="banner-lock-link" href="javascript:void(0);">

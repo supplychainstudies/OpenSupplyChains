@@ -1005,22 +1005,120 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 }
 
 Sourcemap.Map.Base.prototype.searchFilterMap = function() {
+	
+	var operators = new Array(
+		">=",
+		"<=",
+		"<",
+		">",
+		"=",
+		"is"
+		);
 	var query = new RegExp($(this.banner_div).find('#map-search').val(), "i");
-    
+	query = "varort>0";
+	query = "varort>0 and varort<1";
+	var queries = new Array();
+	var boolean_operators = new Array();
+	var ands = query.split(" and ");
+	for (var i in ands) {
+		var ors = ands[i].toString().split(" or ");
+		boolean_operators.push("and");
+		for (var j in ors) {
+			queries.push(ors[j]);
+			boolean_operators.push("or");
+		}
+	}
+	
+	//query = query.replace(" and "," && ").replace(" or ", " || ");	
     for(var scid in this.map.stop_features) {
         for(var k in this.map.stop_features[scid]) {
             var s = this.map.stop_features[scid][k];
             s = s.stop ? s.stop : s;
-
 			var match = false;
-			for(var a in s.attributes) {
-				if(typeof(s.attributes[a]) == 'string') {
-					if(s.attributes[a].search(query) != -1) { match = true; }
+			var resolved = new Array();
+			
+			for(var a in s.attributes) { 
+				if (typeof s.attributes[a] == "string" || typeof s.attributes[a] == "number") {
+					//eval('var '+ a + ' = "'+s.attributes[a]+'";'); 
+				}
+			} 
+			// figure out each condition
+			for (var k in queries) {
+				// which attribute
+				if (typeof(queries[k]) == "string") {
+					var statement = new Array();
+					for (var l in operators) {
+						if (queries[k].toString().search(operators[l]) != -1) {						
+							statement = queries[k].toString().split(operators[l]);
+							if (s.attributes[statement[0]] != undefined) {
+								console.log("rbefore");
+								console.log(resolved);
+								switch (operators[l]) {
+									case ">=":
+									if (s.attributes[statement[0]] >= statement[1]) {
+										resolved.push(true);
+									} else { resolved.push(false); }
+									break;
+									case "<=":
+									if (s.attributes[statement[0]] <= statement[1]) {
+										resolved.push(true);
+									} else { resolved.push(false); }
+									break;
+									case "<":
+									if (s.attributes[statement[0]] > statement[1]) {
+										resolved.push(true);
+									} else { resolved.push(false); }
+									break;
+									case ">":
+									if (s.attributes[statement[0]] < statement[1]) {
+										resolved.push(true);
+									} else { resolved.push(false); }
+									break;
+									case "=":
+									if (s.attributes[statement[0]] == statement[1]) {
+										resolved.push(true);
+									} else { resolved.push(false); }
+									break;
+									default:
+										if (s.attributes[statement[0]] == statement[1]) {
+											resolved.push(true);
+										} else { resolved.push(false); }
+									break;
+								}					
+							} else {
+								resolved.push(false);
+							}
+							console.log("resolved");
+							console.log(resolved);
+							console.log("st");
+							console.log(statement);
+							break;
+						}				
+					} 
+				}
+			}
+			console.log("resolved");
+			console.log(resolved);
+			var statement_solution = resolved[0];
+			for (var m in resolved) {
+				if (boolean_operators[m] == "and") {
+					statement_solution = statement_solution && resolved;
+				} else if (boolean_operators[m] == "or") {
+					statement_solution = statement_solution || resolved;
+				}
+			}
+			match = statement_solution;
+			if (match == false) {
+				for(var a in s.attributes) {
+					if(typeof(s.attributes[a]) == 'string') {
+						if(s.attributes[a].search(query) != -1) { match = true; }
+					}
 				}
 			}
 			if(match == true) { s.renderIntent = 'default'; }
 			else { s.renderIntent = 'disabled'; }
         }
+
     }
 
     for(var scid in this.map.hop_features) {

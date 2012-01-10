@@ -90,9 +90,9 @@ $(document).ready(function() {
                 // fix dialog size
                 // top 45px
                 // dock height + 12px
-                var dialogheight = window_height - 45 - $("#sourcemap-dock").height() - 12; 
-                console.log($("#sourcemap-dock"));
-                $("#dialog").css("max-height",dialogheight);
+                //var dialogheight = window_height - 45 - $("#sourcemap-dock").height() - 12; 
+                //onsole.log($("#sourcemap-dock"));
+                //$("#dialog").css("max-height",dialogheight);
 		    });
 
             // TODO : make password input window

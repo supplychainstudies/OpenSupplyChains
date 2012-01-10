@@ -324,10 +324,29 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
                 window.scrollTo(0,window.pageYOffset + 1);
             },100);
         });
+
+        // truncate here
+        
+        //console.log($(this.banner_div).width());
+        var bannerwidth = $(this.banner_div).width();
+        var sumwidth=0;
+        //console.log($(this.banner_div).children("#banner-content").filter("#banner-summary"));
+        //console.log($(this.banner_div).find("#banner-content").find("div:not(#banner-summary)"));
+        $(this.banner_div).find("#banner-content").find("div:not(#banner-summary):visible").each(function(){
+            sumwidth += $(this).width() + 44;
+            console.log($(this));
+            console.log($(this).width());
+        });
+        //console.log(sumwidth);
+        var summarywidth = bannerwidth - sumwidth; 
+        $(this.banner_div).find("#banner-summary").css("max-width",summarywidth);
+        Sourcemap.truncate_one_string("#banner-summary");
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
     Sourcemap.template('map/banner', cb, s);
+
+   
 
     if(this.options.watermark) {
         this.watermark = $('<a href="/"><div id="watermark"></div></a>');

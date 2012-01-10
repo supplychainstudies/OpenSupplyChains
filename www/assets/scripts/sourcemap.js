@@ -1326,6 +1326,32 @@ Sourcemap.truncate_string = function(target){
 }
 
 
+Sourcemap.truncate_one_string = function(target){
+    $(target).each(function(){
+        //console.log($(this).width());
+        // grab parent element dimensions
+        var width  = $(this).width();
+        var height = $(this).height();
+
+        // clone div to a new element for measurement
+        var testdiv = $(this).clone().css({'width': width, 'height': 'auto', 'overflow': 'auto', 'display': 'hidden'});
+        $('<br />').appendTo($(this).parent());
+        $(testdiv).appendTo($(this).parent());
+        var text = $.trim($(this).text());
+        replacementText = null;
+       
+        // remove one character at a time until the height equals the original 
+        for(i=text.length; height < $(testdiv).height() && i > 0; i--){
+            replacementText = text.substr(0, i);
+            $(testdiv).text(replacementText + "...");
+        }
+        
+        if(replacementText)
+            $(this).text($.trim(replacementText.slice(0,-1)) + "...");
+        $(testdiv).prev().remove();
+        $(testdiv).remove();
+    });
+}
 Sourcemap.tlinkify = function(str) {
     var txt = _S.htesc(str);
     var regex = /((((http|https):\/\/([\w\d]+\.){1,2})|www\.[\w\d-]+\.)([\w\d]{2,3})((\/[\d\w%\.]+)+)?(\?([\d\w%]+=[\d\w%]+&?)+)?)/g;

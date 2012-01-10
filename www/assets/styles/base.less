@@ -363,7 +363,7 @@
 #sourcemap-dock {
     @dock-height: 3.25em;
     width: 100%;
-    bottom: 0; left: 0;
+    bottom: 0.6em; left: 0;
     position: absolute;
     height: @dock-height;
     overflow: hidden;
@@ -401,6 +401,7 @@
                     .content {
                         height: @dock-height - 2em;     
                         line-height: @dock-height - 2em;
+                        //margin-top:-4px;
                     }
                     &.zoomin{width: 29px; padding: 14px;  background: url(../images/icon-zoomin.png) 15px 9px no-repeat;}
                     &.zoomout{width: 29px; padding: 14px;  background: url(../images/icon-zoomout.png) 15px 9px no-repeat;}
@@ -418,7 +419,18 @@
                     &.toggle {  &.active { color: #333; background-color:rgba(200,200,200,0.85); } }
                     &:last-child { border-radius: 0 12px 12px 0; border: none; }
                     &:first-child { border-radius: 12px 0 0 12px; }
+                    &.weight,&.co2e,&.water,&.energy{
+                        //border-right:none;
+                    }
                 }
+                /*
+                &.filter{
+                    position:absolute;
+                    width:100px;
+                    //left:-150%;
+                    bottom:0px;
+                }
+                */
             }
         }
     }
@@ -442,19 +454,24 @@
 #sourcemap-gradient{
     position: absolute;
     width:161px;height:20px;
-    bottom:20px;left:85px;
+    //bottom:20px;left:85px;
+    left:-11px; bottom:61px;
     display: block;
     z-index: 1010;
 
     &.cloudmade{ background: url(../images/legend-gradient.png) center center no-repeat;}
     &.satellite{ 
         background: url(../images/legend-gradient-light.png) center center no-repeat;
-        bottom:12px;left:135px;
+        //bottom:12px;left:135px;
     }
     &.terrain{   
         background: url(../images/legend-gradient.png) center center no-repeat;
-        bottom:12px;left:135px;     
+        //bottom:12px;left:135px;     
         //bottom:30px;left:70px;     
+    }
+    &.terrain , &.satellite {
+        //bottom:61px;left:-5px;
+        left:-5px;
     }
 }
 
@@ -480,12 +497,13 @@
             float: left;
             position: absolute;
             overflow:hidden;
+            display:inline; // no line break
             height: 22px;
             padding: 10px 10px 10px 25px;
             color: #353535;
             font-weight:bold;
             font-size: 22px;
-            line-height: 1em;
+            line-height: 22px;
             max-width:370px;
             border:none;
         }
@@ -556,7 +574,8 @@
     height: 25px;
     text-align:center;
     position:absolute;
-    bottom:1em; left:10px;
+    bottom:1.4em; 
+    left:10px;
     z-index:1010;
     &.cloudmade{
         background: url("../images/watermark.png") center center no-repeat;
@@ -565,15 +584,13 @@
     // Postioning with Google watermark
     &.satellite{
         background: url("../images/watermark-white.png") center center no-repeat;
-        left:68px;
-        bottom:0.45em;
+        left:82px;
+        //bottom:1.4em;
     }    
     &.terrain{
         background: url("../images/watermark.png") center center no-repeat;
-        left:68px;        
-        bottom:0.45em;
-        //left:4px;        
-        //bottom:25px;
+        left:82px;        
+        //bottom:1.4em;
     }
         
 

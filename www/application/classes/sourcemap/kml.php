@@ -41,7 +41,7 @@ class Sourcemap_Kml {
 				$k .= '<scale>1.0</scale>';
 				$k .= '<Icon><href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href></Icon>';
 		        $k .= '<color>';
-				$k .= isset($ftr->properties->color) ? Sourcemap_Kml::getKMLDotColor($ftr->properties->color) : 'aaffffff';
+				$k .= isset($ftr->properties->color) ? Sourcemap_Kml::getKMLDotColor($ftr->properties->color) : 'aa97A235';
 				$k .= '</color>';
 				$k .= '</IconStyle>';
 				$k .= '</Style>';												
@@ -120,14 +120,14 @@ class Sourcemap_Kml {
 	}
 	
 	private static function getKMLDotColor($color) {
-		$color = strlen($color == 7) ? substr($color,1) : $color;
+		$color = strlen($color) == 7 ? substr($color,1) : $color;
 		$r = substr($color, 0, 2);
 		$g = substr($color, 2, 2);
 		$b = substr($color, 4, 2);
 		return "ff".$b.$g.$r;			
 	}
 	private static function getKMLLineColor($color) {
-		$color = substr($color,1);
+		$color = strlen($color) == 7 ? substr($color,1) : $color;
 		$r = substr($color, 0, 2);
 		$g = substr($color, 2, 2);
 		$b = substr($color, 4, 2);

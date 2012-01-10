@@ -113,6 +113,7 @@ class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
 					}
 				}
 			}
+			$rh = array("days"=>"","origin"=>"","material"=>"");
 			for ($i = 1; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
 				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getValue());
 				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
@@ -464,7 +465,7 @@ class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
 			$boms = array();
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rowIndex>$starting_row) {
+				if ($rowIndex>$starting_row && $rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue() != null && $rows->getCell($h['O-Name'] . $rowIndex)->getCalculatedValue() != "") {
 					$uuid = $rows->getCell($h['O-Name'] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h['O-City'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['O-Country'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['O-Postal-Code'] . $rowIndex)->getCalculatedValue() . ")";
 
 					if (isset($stops[$uuid]) == false) {
@@ -479,6 +480,7 @@ class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
 								'tier' => ""
 								
 							);
+							$stops[$uuid]['parts'][] = array('name'=>$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue(), 'split'=> $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue());								
 							if ($h['Risk Recovery Days'] != "") {
 								if ($rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue() != "") {
 									$stops[$uuid]['days'] = $rows->getCell($h['Risk Recovery Days'] . $rowIndex)->getCalculatedValue();
@@ -498,7 +500,6 @@ class Sourcemap_Import_Hviz2 extends Sourcemap_Import_Xls{
 									$stops[$uuid]['days'] = $recovery_values[$stops[$uuid]['Name'] . "-" . $stops[$uuid]['parts'][0]["name"]];
 								}
 							}
-							$stops[$uuid]['parts'][] = array('name'=>$rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue(), 'split'=> $rows->getCell($h['flow'] . $rowIndex)->getCalculatedValue());	
 							$count++;
 					} 
 					$prev = $uuid;

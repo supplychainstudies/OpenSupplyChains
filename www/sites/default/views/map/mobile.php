@@ -12,4 +12,4 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ 
 ?>
 
-<div id="sourcemap-map-embed"></div>
+<div id="sourcemap-map-mobile"></div>

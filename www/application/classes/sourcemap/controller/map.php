@@ -487,12 +487,12 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
 
                 $this->layout->supplychain_id = $supplychain_id;
                 $this->layout->scripts = array(
-                    'sourcemap-embed'
+                    'sourcemap-mobile'
                 );
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css',
                     'assets/styles/base.less',
-                    'assets/styles/embed.less',
+                    'assets/styles/mobile.less',
                     'assets/styles/general.less',
                     'sites/default/assets/styles/modal.less'
                 );

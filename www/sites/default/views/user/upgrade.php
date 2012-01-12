@@ -81,7 +81,7 @@
                     
                     <div class="clear" style="height: 5px"></div>
                     
-                    <label for="confirm_terms">I have read and agree to the <a href="/info/upgrade/#document-content?w=150" target="_blank" class="modal">terms of service</a>.</label> <input type="checkbox" name="confirm_terms" class="textbox" />
+                    <label for="confirm_terms">I have read and agree to the <a href="/legal/upgrade/#document-content?w=500" target="_blank" class="modal">terms of service</a>.</label> <input type="checkbox" name="confirm_terms" class="textbox" />
 
                     <div class="clear"></div>
 

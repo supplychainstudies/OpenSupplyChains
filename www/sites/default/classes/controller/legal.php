@@ -17,6 +17,7 @@ class Controller_Legal extends Sourcemap_Controller_Layout {
     
     public function action_index() {}    
     public function action_payment() { $this->template = View::factory('legal/payment'); }
+    public function action_upgrade() { $this->template = View::factory('legal/upgrade'); }
     
 }
 

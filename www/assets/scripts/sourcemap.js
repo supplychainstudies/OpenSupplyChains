@@ -414,6 +414,7 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
         url:'services/supplychains/'+remote_id,
         data:{ passcode : passcode },
         success : function(data) {
+            //put supplychain into object
             var sc = Sourcemap.factory('supplychain', data.supplychain);
             sc.editable = data.editable;
             callback.apply(this, [sc]);
@@ -498,6 +499,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
 				letitle = sc.stops[i].attributes.location;		
 			//	letitle = sc.stops[i].attributes.name;
 
+            var label = Sourcemap.ttrunc(letitle, 24);
+            
 	        if(sc.stops[i].attributes.size == undefined)
 	            size = 2;
 	        else
@@ -505,6 +508,7 @@ Sourcemap.buildTree = function(tree_id,sc) {
 
 	        tier_list[i] = { 
 	            title:letitle,
+                label:label,
 	            index:i,
 	            tiers:sc.tiers[sc.stops[i].instance_id],
 	            instance:sc.stops[i].instance_id,
@@ -1055,7 +1059,8 @@ Sourcemap.buildTree = function(tree_id,sc) {
 	.style("fill",function(d){return d.color})
 	.style("font-size","12px")
 	.style("font-weight", "bold")
-    .text(function(d){return d.title});
+    .text(function(d){return d.label});
+    //.text(function(d){return d.title});
  
     svg.append("svg:g").attr("class","circle").selectAll("circle")
         .data(tier_list)

@@ -24,7 +24,7 @@ $(document).ready(function() {
     };
 	switch(Sourcemap.embed_params.served_as) {
 		default:
-		    Sourcemap.embed_params.map_element_id = 'sourcemap-map-embed';
+		    Sourcemap.embed_params.map_element_id = 'sourcemap-map-mobile';
 		    Sourcemap.embed_instance = new Sourcemap.Map.Base(Sourcemap.embed_params);
 		    Sourcemap.listen("map:supplychain_mapped", function(evt, map, sc) {
 		        var embed = Sourcemap.embed_instance;
@@ -46,7 +46,7 @@ $(document).ready(function() {
 		    	if(window_height >= 480 && window_width >= 640) {
 		    		//$("body").removeClass("mobilezoom");
                     $("body").addClass("embed");
-                    $('#sourcemap-map-embed').css("height", window_height).css("width", window_width);
+                    $('#sourcemap-map-mobile').css("height", window_height).css("width", window_width);
 		    	}
 		    	else {
 		    		//$("body").addClass("mobilezoom");			
@@ -55,7 +55,7 @@ $(document).ready(function() {
                     
                     if(!isiOS){
 		    		    $("body").addClass("zoom");			
-                        $('#sourcemap-map-embed').css("height", $(window).height()).css("width", $(window).width());
+                        $('#sourcemap-map-mobile').css("height", $(window).height()).css("width", $(window).width());
 
                         if(parseInt($(window).width()) <= 320){
                            $("body").addClass("small");
@@ -68,11 +68,11 @@ $(document).ready(function() {
                         if(parseInt($(window).height()) > parseInt($(window).width())){
                             // vertical
                             $("body").addClass("vertical");			
-                            $('#sourcemap-map-embed').css("height", 416).css("width", 320);
+                            $('#sourcemap-map-mobile').css("height", 416).css("width", 320);
                         } else {
                             // horizontal
                             $("body").addClass("horizontal");			
-                            $('#sourcemap-map-embed').css("height", 268).css("width", 480);
+                            $('#sourcemap-map-mobile').css("height", 268).css("width", 480);
                         }
                     }
 		    	}
@@ -128,21 +128,21 @@ $(document).ready(function() {
 		case "static":
 			var l = "view/" + window.location.pathname.split("/")[2];
 			var s = 'static/'+ window.location.pathname.split("/")[2]+'.f.png';
-			$('#sourcemap-map-embed').replaceWith(
+			$('#sourcemap-map-mobile').replaceWith(
 				"<a class='static-embed' href="+l+"><img src='"+s+"'/></a>"
 			);
 			break;
 		case "earth":
 			var id = window.location.pathname.split("/")[2];
-			$('#sourcemap-map-embed').addClass("google-earth");
+			$('#sourcemap-map-mobile').addClass("google-earth");
 			$('body').prepend(
 				"<div class='earth-banner'><a href='view/"+id+"'>View on Sourcemap</a> | <a href='services/supplychains/"+id+"?f=kml'>Download for Google Earth</a></div>"
 			);
 			$(window).resize(function() {
-		      	$('#sourcemap-map-embed').css("height", $(window).height()-40).css("width", $(window).width());
+		      	$('#sourcemap-map-mobile').css("height", $(window).height()-40).css("width", $(window).width());
 		    });
 			$(window).resize();
-			google.earth.createInstance('sourcemap-map-embed', earthComplete);
+			google.earth.createInstance('sourcemap-map-mobile', earthComplete);
 			
 			function earthComplete(instance) {
 				ge = instance;

@@ -71,10 +71,18 @@
 					<% $("#reference-water").click(function () { window.open(this.ref.getAttr("water_reference",0),"_blank"); }); %>
 					<div class="units">L H<sub>2</sub>O/kg</div><div class="footprint-math">=</div><div id="water-impact-result" class="result">0 L</div><span class="reference" id="reference-water">&nbsp;</span>
                	</div>	
-
+				<div class="footprint-row indent" class="citation co2e">
+				</div>
+				<div class="footprint-row indent" class="citation water">
+				</div>
+				<div class="footprint-row indent" class="citation energy">
+				</div>
 				<div class="footprint-row indent">				           
-	                 <label for="footprint-methodology"  style="width: 200px">Methodology and References:</label> 
-					 <% el = $("<textarea></textarea>").attr("id","footprint-methodology").attr("maxlength","1000").addClass("textbox").attr("placeholder","Maximum 1000 characters.").text(this.ref.getAttr("footprintmethodology","")); 
+	                 <label for="notes" style="width: 200px">Methodology and References:</label> 
+					 <% el = $("<textarea></textarea>").attr("id","notes").attr("maxlength","1000").addClass("textbox").attr("placeholder","Maximum 1000 characters.").text(this.ref.getAttr("footprintmethodology","")); 
+					 %>
+                     <%= $("<div></div>").append(el).html() %>
+					 <% el = $("<textarea></textarea>").attr("id","footprint-methodology").attr("maxlength","1000").addClass("textbox").attr("placeholder","Maximum 1000 characters.").css("display","none").text(this.ref.getAttr("footprintmethodology","")); 
 					 %>
                      <%= $("<div></div>").append(el).html() %>
                	</div>

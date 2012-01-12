@@ -334,8 +334,6 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         //console.log($(this.banner_div).find("#banner-content").find("div:not(#banner-summary)"));
         $(this.banner_div).find("#banner-content").find("div:not(#banner-summary):visible").each(function(){
             sumwidth += $(this).width() + 44;
-            console.log($(this));
-            console.log($(this).width());
         });
         //console.log(sumwidth);
         var summarywidth = bannerwidth - sumwidth; 
@@ -1014,101 +1012,75 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
 		"=",
 		"is"
 		);
-	var query = new RegExp($(this.banner_div).find('#map-search').val(), "i");
-	query = "varort>0";
-	query = "varort>0 and varort<1";
+	var query = $(this.banner_div).find('#map-search').val();
 	var queries = new Array();
-	var boolean_operators = new Array();
-	var ands = query.split(" and ");
-	for (var i in ands) {
-		var ors = ands[i].toString().split(" or ");
-		boolean_operators.push("and");
-		for (var j in ors) {
-			queries.push(ors[j]);
-			boolean_operators.push("or");
-		}
-	}
-	
+	var splitthis = query.toString().split(" and ");
+	var querystring  = splitthis.join("+&&+");
+	var splitthis = querystring.toString().split(" or ");
+	var querystring  = splitthis.join("+||+");	
+	var linkedqueries = querystring.toString().split("+");
 	//query = query.replace(" and "," && ").replace(" or ", " || ");	
     for(var scid in this.map.stop_features) {
         for(var k in this.map.stop_features[scid]) {
+			var queries = linkedqueries.slice(0);
             var s = this.map.stop_features[scid][k];
             s = s.stop ? s.stop : s;
 			var match = false;
-			var resolved = new Array();
-			
-			for(var a in s.attributes) { 
-				if (typeof s.attributes[a] == "string" || typeof s.attributes[a] == "number") {
-					//eval('var '+ a + ' = "'+s.attributes[a]+'";'); 
-				}
-			} 
 			// figure out each condition
-			for (var k in queries) {
+			for (var n in queries) {
 				// which attribute
-				if (typeof(queries[k]) == "string") {
+				if (typeof(queries[n]) == "string" && queries[n] !="&&" && queries[n] != "||") {
 					var statement = new Array();
 					for (var l in operators) {
-						if (queries[k].toString().search(operators[l]) != -1) {						
-							statement = queries[k].toString().split(operators[l]);
-							if (s.attributes[statement[0]] != undefined) {
-								console.log("rbefore");
-								console.log(resolved);
-								switch (operators[l]) {
-									case ">=":
-									if (s.attributes[statement[0]] >= statement[1]) {
-										resolved.push(true);
-									} else { resolved.push(false); }
-									break;
-									case "<=":
-									if (s.attributes[statement[0]] <= statement[1]) {
-										resolved.push(true);
-									} else { resolved.push(false); }
-									break;
-									case "<":
-									if (s.attributes[statement[0]] > statement[1]) {
-										resolved.push(true);
-									} else { resolved.push(false); }
-									break;
-									case ">":
-									if (s.attributes[statement[0]] < statement[1]) {
-										resolved.push(true);
-									} else { resolved.push(false); }
-									break;
-									case "=":
-									if (s.attributes[statement[0]] == statement[1]) {
-										resolved.push(true);
-									} else { resolved.push(false); }
-									break;
-									default:
-										if (s.attributes[statement[0]] == statement[1]) {
-											resolved.push(true);
-										} else { resolved.push(false); }
-									break;
-								}					
-							} else {
-								resolved.push(false);
+						if (typeof(operators[l]) == "string") {
+							if (queries[n].toString().search(operators[l].toString()) != -1) {						
+								statement = queries[n].toString().split(operators[l]);							 
+								if (typeof(s.attributes[statement[0]]) != "undefined") {
+									switch (operators[l]) {
+										case ">=":
+										if (parseFloat(s.attributes[statement[0]]) >= parseFloat(statement[1])) {
+											queries[n] = true;
+										} else { queries[n] = false; }
+										break;
+										case "<=":
+										if (parseFloat(s.attributes[statement[0]]) <= parseFloat(statement[1])) {
+											queries[n] = true;
+										} else { queries[n] = false; }
+										break;
+										case ">":
+										if (parseFloat(s.attributes[statement[0]]) > parseFloat(statement[1])) {
+											queries[n] = true;
+										} else { queries[n] = false; }
+										break;
+										case "<":
+										if (parseFloat(s.attributes[statement[0]]) < parseFloat(statement[1])) {
+											queries[n] = true;
+										} else { queries[n] = false; }
+										break;
+										case "=":
+										if (parseFloat(s.attributes[statement[0]]) == parseFloat(statement[1])) {
+											queries[n] = true;
+										} else { queries[n] = false; }
+										break;
+										default:
+											queries[n] = false;
+										break;
+									}					
+								} else {
+									queries[n] = false;
+								}
+								break;
 							}
-							console.log("resolved");
-							console.log(resolved);
-							console.log("st");
-							console.log(statement);
-							break;
 						}				
-					} 
+					}
+					if (queries[n] != true && queries[n] != "&&" && queries[n] != "||") {
+						queries[n] = false;
+					}
 				}
 			}
-			console.log("resolved");
-			console.log(resolved);
-			var statement_solution = resolved[0];
-			for (var m in resolved) {
-				if (boolean_operators[m] == "and") {
-					statement_solution = statement_solution && resolved;
-				} else if (boolean_operators[m] == "or") {
-					statement_solution = statement_solution || resolved;
-				}
-			}
-			match = statement_solution;
+			match = eval(queries.join(" "));
 			if (match == false) {
+				var query = new RegExp($(this.banner_div).find('#map-search').val(), "i");
 				for(var a in s.attributes) {
 					if(typeof(s.attributes[a]) == 'string') {
 						if(s.attributes[a].search(query) != -1) { match = true; }
@@ -1127,12 +1099,66 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
                 var h = this.map.hop_features[scid][fromStop][toStop];
 				var arr = h.arrow ? h.arrow : {};	
 				var arr2 = h.arrow2 ? h.arrow2 : h.arrow;			
-						
+				var queries = linkedqueries.slice(0);		
                 h = h.hop ? h.hop : h;	
 				var match = false;
-				for(var a in h.attributes) {
-					if(typeof(h.attributes[a]) == 'string') {
-						if(h.attributes[a].search(query) != -1) { match = true; }
+				for (var n in queries) {
+					// which attribute
+					if (typeof(queries[n]) == "string" && queries[n] !="&&" && queries[n] != "||") {
+						var statement = new Array();
+						for (var l in operators) {
+							if (typeof(operators[l]) == "string") {
+								if (queries[n].toString().search(operators[l].toString()) != -1) {						
+									statement = queries[n].toString().split(operators[l]);							 
+									if (typeof(h.attributes[statement[0]]) != "undefined") {
+										switch (operators[l]) {
+											case ">=":
+											if (parseFloat(h.attributes[statement[0]]) >= parseFloat(statement[1])) {
+												queries[n] = true;
+											} else { queries[n] = false; }
+											break;
+											case "<=":
+											if (parseFloat(h.attributes[statement[0]]) <= parseFloat(statement[1])) {
+												queries[n] = true;
+											} else { queries[n] = false; }
+											break;
+											case ">":
+											if (parseFloat(h.attributes[statement[0]]) > parseFloat(statement[1])) {
+												queries[n] = true;
+											} else { queries[n] = false; }
+											break;
+											case "<":
+											if (parseFloat(h.attributes[statement[0]]) < parseFloat(statement[1])) {
+												queries[n] = true;
+											} else { queries[n] = false; }
+											break;
+											case "=":
+											if (parseFloat(h.attributes[statement[0]]) == parseFloat(statement[1])) {
+												queries[n] = true;
+											} else { queries[n] = false; }
+											break;
+											default:
+												queries[n] = false;
+											break;
+										}					
+									} else {
+										queries[n] = false;
+									}
+									break;
+								}
+							}				
+						}
+						if (queries[n] != true && queries[n] != "&&" && queries[n] != "||") {
+							queries[n] = false;
+						}
+					}
+				}
+				match = eval(queries.join(" "));
+				if (match == false) {
+					for(var a in h.attributes) {
+						if(typeof(h.attributes[a]) == 'string') {
+							if(h.attributes[a].search(query) != -1) { match = true; }
+						}
 					}
 				}
 				if(match == true) { h.renderIntent = 'default'; arr.renderIntent = 'arrow'; arr2.renderIntent = 'arrow';}
@@ -1149,11 +1175,70 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
 			for(var k in c.cluster) {
 				var s = c.cluster[k];
 				s = s.stop ? s.stop : s;
-
-				for(var a in s.attributes) {
-					if(typeof(s.attributes[a]) == 'string') {
-						if(s.attributes[a].search(query) != -1) { match = true;  break lookup;}
+				if (typeof(s) == "object") {
+					var queries = linkedqueries.slice(0);
+					for (var n in queries) {
+						// which attribute
+						if (typeof(queries[n]) == "string" && queries[n] !="&&" && queries[n] != "||") {
+							var statement = new Array();
+							for (var l in operators) {
+								if (typeof(operators[l]) == "string") {
+									if (queries[n].toString().search(operators[l].toString()) != -1) {						
+										statement = queries[n].toString().split(operators[l]);							 
+										if (typeof(s.attributes[statement[0]]) != "undefined") {
+											switch (operators[l]) {
+												case ">=":
+												if (parseFloat(s.attributes[statement[0]]) >= parseFloat(statement[1])) {
+													queries[n] = true;
+												} else { queries[n] = false; }
+												break;
+												case "<=":
+												if (parseFloat(s.attributes[statement[0]]) <= parseFloat(statement[1])) {
+													queries[n] = true;
+												} else { queries[n] = false; }
+												break;
+												case ">":
+												if (parseFloat(s.attributes[statement[0]]) > parseFloat(statement[1])) {
+													queries[n] = true;
+												} else { queries[n] = false; }
+												break;
+												case "<":
+												if (parseFloat(s.attributes[statement[0]]) < parseFloat(statement[1])) {
+													queries[n] = true;
+												} else { queries[n] = false; }
+												break;
+												case "=":
+												if (parseFloat(s.attributes[statement[0]]) == parseFloat(statement[1])) {
+													queries[n] = true;
+												} else { queries[n] = false; }
+												break;
+												default:
+													queries[n] = false;
+												break;
+											}					
+										} else {
+											queries[n] = false;
+										}
+										break;
+									}
+								}				
+							}
+							if (queries[n] != true && queries[n] != "&&" && queries[n] != "||") {
+								queries[n] = false;
+							}
+						}
 					}
+				}
+				match = eval(queries.join(" "));
+				if (match == false) {
+					for(var a in s.attributes) {
+						if(typeof(s.attributes[a]) == 'string') {
+							if(s.attributes[a].search(query) != -1) { match = true;  break lookup;}
+						}
+					}
+				}
+				if (match == true) {
+					break;
 				}
 			}
 			if(match == true) { c.renderIntent = 'cluster'; }

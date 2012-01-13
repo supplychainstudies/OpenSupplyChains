@@ -73,8 +73,11 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                         $description = $form->get_field('description')->value();
                         $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($form->get_field('tags')->value()));
                         $category = $form->get_field('category')->value();
-                        if($category) $supplychain->category = $category;
-                        else $category = null;
+                        if ($category) 
+                            $supplychain->category = $category;
+                        else 
+                            $category = null;
+
                         // Some free user might change title/description but don't want to set it to public
                         $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
                         $supplychain->attributes->title = $title;
@@ -88,25 +91,25 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                             $supplychain->other_perms &= ~Sourcemap::READ;
                         try {
                             ORM::factory('supplychain')->save_raw_supplychain($supplychain, $supplychain->id);
-                            Message::instance()->set('Map updated.', Message::SUCCESS);
+                            Message::instance()->set('edit-complete', Message::SUCCESS);
                             return $this->request->redirect('view/'.$supplychain->id);
                         } catch(Exception $e) {
                             $this->request->status = 500;
-                            Message::instance()->set('Couldn\t update your supplychain. Please contact support.');
+                            Message::instance()->set('edit-failed');
                         }
                     } else {
-                        Message::instance()->set('Please correct the errors below.');
+                        Message::instance()->set('form-validation-errors');
                     }
                 }
 
                 $this->template->supplychain = $supplychain;
                 $this->template->form = $form;
             } else {
-                Message::instance()->set('You\'re not allowed to edit that map.');
+                Message::instance()->set('edit-not-permitted');
                 $this->request->redirect('home');
             }
         } else {
-            Message::instance()->set('That map does not exist.');
+            Message::instance()->set('map-doesnt-exist');
             $this->request->redirect('home');
         }
     }
@@ -125,15 +128,15 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     if($p->check()) {
                         $set_to = strtolower($p['publish']) == 'yes';
                     } else {
-                        Message::instance()->set('Missing required "publish" parameter.');
+                        Message::instance()->set('edit-missing-publish');
                         $this->request->redirect('/home');
                     }
                 } else {
-                    Message::instance()->set('You don\'t have permission to do that.');
+                    Message::instance()->set('map-not-permitted');
                     $this->request->redirect('/home');
                 }
             } else {
-                Message::instance()->set('That map doesn\'t exist.');
+                Message::instance()->set('map-doesnt-exist');
                 $this->request->redirect('/home');
             }
         } elseif(Request::$method === 'GET') {
@@ -148,19 +151,19 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     if($g->check()) {
                         $set_to = strtolower($g['publish']) == 'yes';
                     } else {
-                        Message::instance()->set('Missing required "publish" parameter.');
+                        Message::instance()->set('edit-missing-publish');
                         $this->request->redirect('/home');
                     }
                 } else {
-                    Message::instance()->set('You don\'t have permission to do that.');
+                    Message::instance()->set('edit-not-permitted');
                     $this->request->redirect('/home');
                 }
             } else {
-                Message::instance()->set('That map does not exist.');
+                Message::instance()->set('map-doest-exist');
                 $this->request->redirect('/home');
             }
         } else {
-            Message::instance()->set('Bad request.');
+            Message::instance()->set('bad-request');
             $this->request->redirect('/home');
         }
         if($set_to !== null) {
@@ -189,11 +192,11 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     Cache::instance()->delete($ckey);
                 }
                 
-                Message::instance()->set('Map updated.', Message::SUCCESS);
+                Message::instance()->set('edit-complete', Message::SUCCESS);
                 return $this->request->redirect('/home');
             } catch(Exception $e) {
                 $this->request->status = 500;
-                Message::instance()->set('Couldn\t update your supplychain. Please contact support.');
+                Message::instance()->set('edit-failed');
             }
         }
     }
@@ -213,15 +216,15 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     if($p->check()) {
                         $set_to = strtolower($p['featured']) == 'yes';
                     } else {
-                        Message::instance()->set('Missing required "featured" parameter.');
+                        Message::instance()->set('edit-missing-publish');
                         $this->request->redirect('/home');
                     }
                 } else {
-                    Message::instance()->set('You don\'t have permission to do that.');
+                    Message::instance()->set('no-permission');
                     $this->request->redirect('/home');
                 }
             } else {
-                Message::instance()->set('That map doesn\'t exist.');
+                Message::instance()->set('map-doesnt-exist');
                 $this->request->redirect('/home');
             }
         } elseif(Request::$method === 'GET') {
@@ -236,19 +239,19 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     if($g->check()) {
                         $set_to = strtolower($g['featured']) == 'yes';
                     } else {
-                        Message::instance()->set('Missing required "featured" parameter.');
+                        Message::instance()->set('edit-missing-publish');
                         $this->request->redirect('/home');
                     }
                 } else {
-                    Message::instance()->set('You don\'t have permission to do that.');
+                    Message::instance()->set('no-permission');
                     $this->request->redirect('/home');
                 }
             } else {
-                Message::instance()->set('That map does not exist.');
+                Message::instance()->set('map-doesnt-exist');
                 $this->request->redirect('/home');
             }
         } else {
-            Message::instance()->set('Bad request.');
+            Message::instance()->set('bad-request');
             $this->request->redirect('/home');
         }
         if($set_to !== null) {
@@ -281,11 +284,11 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     Cache::instance()->delete($ckey);
                 }
                 
-                Message::instance()->set('Map updated.', Message::SUCCESS);
+                Message::instance()->set('edit-complete', Message::SUCCESS);
                 return $this->request->redirect('/home');
             } catch(Exception $e) {
                 $this->request->status = 500;
-                Message::instance()->set('Couldn\t update your supplychain. Please contact support.' . $e);
+                Message::instance()->set('edit-failed' . $e);
                 return $this->request->redirect('/home');
             }
         }
@@ -327,15 +330,15 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                             $set_passcode = $_POST['passcode'];
 
                     } else {
-                        Message::instance()->set('Missing required parameter.');
+                        Message::instance()->set('edit-missing-parameter');
                         $this->request->redirect('/home');
                     }
                 } else {
-                    Message::instance()->set('You don\'t have permission to do that.');
+                    Message::instance()->set('no-permission');
                     $this->request->redirect('/home');
                 }
             } else {
-                Message::instance()->set('That map doesn\'t exist.');
+                Message::instance()->set('map-doesnt-exist');
                 $this->request->redirect('/home');
             }
         } elseif(Request::$method === 'GET') {
@@ -360,19 +363,19 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                             $set_passcode = $_GET['passcode'];
                         
                     } else {
-                        Message::instance()->set('Missing required parameter.');
+                        Message::instance()->set('edit-missing-parameter');
                         $this->request->redirect('/home');
                     }
                 } else {
-                    Message::instance()->set('You don\'t have permission to do that.');
+                    Message::instance()->set('no-permission');
                     $this->request->redirect('/home');
                 }
             } else {
-                Message::instance()->set('That map does not exist.');
+                Message::instance()->set('map-doesnt-exist');
                 $this->request->redirect('/home');
             }
         } else {
-            Message::instance()->set('Bad request.');
+            Message::instance()->set('bad-request');
             $this->request->redirect('/home');
         } // End POST/GET request
         // set_to : If parameter is set
@@ -388,8 +391,7 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     $sc->other_perms |= $set_publish;
                 } else {
                     // not allowed free account set to private
-                    Message::instance()->set('You are not allowed to private this map. Please contact support.');
-                    //echo 'You are not allowed to private this map.';
+                    Message::instance()->set('edit-cant-private');
                     //$this->_rest_error(404, "aaa");
                     return $this->request->redirect('home',400);
                 }
@@ -427,15 +429,14 @@ class Controller_Edit extends Sourcemap_Controller_Map {
                     Cache::instance()->delete($ckey);
                 }
             
-                Message::instance()->set('Map updated.', Message::SUCCESS);
+                Message::instance()->set('edit-complete', Message::SUCCESS);
                 return $this->request->redirect('/home');
             } catch(Exception $e) {
                 $this->request->status = 500;
-                Message::instance()->set('Couldn\'t update your supplychain. Please contact support.');
+                Message::instance()->set('edit-failed');
             }
         }
     }
-
 
     protected function  _rest_error($code=400, $msg='Not found.') {
         $this->request->status = $code;

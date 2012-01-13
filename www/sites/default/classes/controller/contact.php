@@ -22,7 +22,9 @@ class Controller_Contact extends Sourcemap_Controller_Layout {
 
         if(strtolower(Request::$method) === 'post') { 
             $ajax = isset($_POST["_form_ajax"]) ? 'true' : 'false';
-            
+            // Create message object
+            $message = new Message($ajax);
+
             if ($ajax)
                 $this->auto_render=false; // will disable template rendering
 
@@ -32,16 +34,14 @@ class Controller_Contact extends Sourcemap_Controller_Layout {
                  $revalid = (BOOL)($recap->is_valid($_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"])); 
             }
             if( !$revalid ) {
-                Message::instance()->set('Incorrect captcha.');
+                $message->set('invalid-captcha');
             } else{
                 // basic validation
                 if (!$f->validate($_POST)){
                     $errors = $f->errors();
                     foreach($errors as $error){
-                        Message::instance()->set($error[0]);
+                        $message->set($error[0]);
                     }
-
-                    echo $ajax ? Message::instance()->render() : "";
                     return; 
                 }
 
@@ -65,25 +65,16 @@ class Controller_Contact extends Sourcemap_Controller_Layout {
                 try {
                     $sent = $mailer->send($swift_msg);
                 } catch (Exception $e) {
-                    Message::instance()->set('Sorry, could not send message. Please contact support.');
-                    echo Message::instance()->get() ? Message::instance()->render() : false;
+                    $message->set('contact-failed');
                     return;
                 }
 
                 Message::instance()->set('Message sent.', Message::SUCCESS);
-                if ($ajax){
-                    echo "redirect contact/thankyou";
-                    return;
-                }
-                else{
+                if (!$ajax)
                     return $this->request->redirect('contact/thankyou');
-                }
-
+                echo "redirect contact/thankyou";
+                return;
             }
-            if ($ajax){
-                echo Message::instance()->get() ? Message::instance()->render() : false;
-            }
-
         } else { 
         /* pass */ 
         }

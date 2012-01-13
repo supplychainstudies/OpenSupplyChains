@@ -37,7 +37,7 @@
         </div>
     <?php else: ?>
         <div class="sourcemap-form">
-            <?= $form ?>
+            <?= $form_2 ?>
         </div>
     <?php endif; ?>
     </div>

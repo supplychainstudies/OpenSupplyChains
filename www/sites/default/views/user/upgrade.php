@@ -25,11 +25,12 @@
 <div class="container form-page">
     <div class="copy-section">
 
-    <p>Upgrade to a Sourcemap Channel for $99/year. You'll get:</p>
-        <ul>
-            <li>Password-protected maps for private sharing</li>
-            <li>The ability to create and save maps with Excel spreadsheets</li>
-            <li>Enhanced API access</li>
+    <p>Upgrade to a Pro Account for $99/year and you'll get:</p>
+        <ul id="upgrade-list">
+            <li class="lock">Private and Password-protected maps</li>
+            <li class="tag">A branded channel (sourcemap.com/yourname)</li>
+            <li class="key">Enhanced API Access</li>
+            <li class="support">Priority Support</li>
             <li>...and more features coming soon!</li>
         </ul>
 

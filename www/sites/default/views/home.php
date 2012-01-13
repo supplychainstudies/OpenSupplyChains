@@ -21,7 +21,7 @@
             <div class="container">
                 <h2 class="user-name section-title">
                     <?= isset($user->display_name) ? HTML::chars($user->display_name) : HTML::chars($user->username) ?>
-                    <?= $isChannel ? '<span class="secondary">Channel Account</span>' : '' ?>
+                    <?= $isChannel ? '<span class="secondary">Pro Account</span>' : '' ?>
                     <a class="preview-link" href="user/<?= $user->username ?>?preview">See how this looks to other users</a>
                 </h2>       
                 <?= View::factory('partial/user/badge', array('user' => $user, 'avatar_url' => $avatar_url, 'isChannel' => $isChannel, 'canEdit' => true)) ?>
@@ -47,8 +47,8 @@
 <?php if ($isChannel){ ?>
 <div class="account-alert notice"> 
     <p> 
-        Congratulations!  You're one of our first Channel Accounts.  You now have access to new modes, options, and features.
-        <br />We're working to improve our premium services.   Please email <a href="mailto:channels@sourcemap.com">channels@sourcemap.com</a> if you have any questions or feedback.
+        Congratulations!  You're one of our first Pro Accounts.  You now have access to new modes, options, and features.
+        <br />We're working to improve our premium services.   Please email <a href="mailto:proaccounts@sourcemap.com">proaccounts@sourcemap.com</a> if you have any questions or feedback.
     </p> 
 </div> 
 <?php } ?>

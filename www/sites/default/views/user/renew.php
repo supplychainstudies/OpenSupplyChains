@@ -20,7 +20,7 @@
 
 <div class="container form-page">
     <div class="copy-section">
-        <p>Renew your Channel today and avoid a lapse in your account status.</p>
+        <p>Renew your Pro Account today and avoid a lapse in your account status.</p>
         <ul>
             <?= isset($thru) ? "<li>You've paid through " . date("F j, Y", $thru) . ".</li>" : ""?>
         </ul>

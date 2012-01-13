@@ -24,18 +24,19 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             $this->request->redirect('auth');
         }
 
-
         if(strtolower(Request::$method) === 'post') {
-             $ajax = isset($_POST["_form_ajax"]) ? 'true' : 'false';
-             if (!$f->validate($_POST)){
-                 $errors = $f->errors();
-                 foreach($errors as $error){
-                     Message::instance()->set($error[0]);
-                 }
+            $ajax = isset($_POST["_form_ajax"]) ? 'true' : 'false';
+            
+            // Create message object
+            $message = new Message($ajax);
 
-                 echo $ajax ? Message::instance()->render() : "";
-                 return;
-             } else {
+            if (!$f->validate($_POST)){
+                $errors = $f->errors();
+                foreach($errors as $error){
+                    $message->set($error[0]);
+                }
+                return;
+            } else {
                 $p = $f->values();
                 try{
                     try{
@@ -71,51 +72,41 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                     }
 
                 } catch (Exception $e) {
-                    Message::instance()->set('Please check your credit card information and try again.' . $e);
+                    $message->set('upgrade-cc-failed' . $e);
                     $this->request->redirect('home/');
                 } 
 
-                //send a notification 
-				$mailer = Email::connect(); 
-				$swift_msg = Swift_Message::newInstance();
-
-				$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your Newly Upgraded Sourcemap Account');
-				
-                $h = md5(sprintf('%s-%s', $user->username, $user->email));
-                $lid = strrev(base64_encode($user->username));
-                $url = URL::site("register/confirm?t=$lid-$h", true);
-                $msgbody = "\n";
-                $msgbody .= "Dear {$user->username},\n\n";
-                $msgbody .= "Thank you for upgrading to a channel account.\n\n";
-                $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.\n\n";
-                $msgbody .= "If you have any questions, please contact us at channels@sourcemap.com.\n\n";
-                $msgbody .= "-The Sourcemap Team\n";
-                $swift_msg->setSubject('Re: Your Newly Upgraded Sourcemap Account')
-						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
-						  ->setTo(array($user->email => ''))
-						  ->setBody($msgbody);
-					
-
+                // Build outgoing message
+                $mailer   = Email::connect();
+                $subject  = Kohana::message('general', 'upgrade-email-subject');
+                $from     = Kohana::message('general', 'email-from');
+                $msgbody  = __(Kohana::message('general', 'upgrade-email-body'), array(
+                    ':user' => $new_user->username
+                ));
+                $swift_msg = Swift_Message::newInstance();
+                $swift_msg->setSubject($subject)
+                          ->setFrom($from)
+                          ->setTo(array($new_user->email => ''))
+                          ->setBody($msgbody);
+                
+                // Send notifcation
                 try { 
 					$sent = $mailer->send($swift_msg);
-
-                    Message::instance()->set('Email confirmation sent.');
+                    $message->set('upgrade-email-sent');
                     
-                    //set channel status
+                    // Set channel status
                     $channel_role = ORM::factory('role', array('name' => 'channel'));
                     $user->add('roles', $channel_role)->save();
-
-                    if ($ajax){
-                        echo "redirect upgrade/thankyou ";
-                        return;
-                    }
-                    else{
-                        return $this->request->redirect('upgrade/thankyou');
-                    }
                     
-                } catch (Exception $e) {
-                    Message::instance()->set('Sorry, could not complete account upgrade. Please contact support.');
-                } 
+                    // Redirect
+                    if ($ajax)
+                        echo "redirect upgrade/thankyou ";
+                    else
+                        return $this->request->redirect('upgrade/thankyou');
+                    return;
+                 } catch (Exception $e) {
+                     $message->set('upgrade-generic');
+                 } 
 
                 return $this->request->redirect('register');
             } 
@@ -125,7 +116,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if($user->has('roles', $channel_role)) {
-            Message::instance()->set("You've already upgraded your account.");
+            Message::instance()->set('upgrade-already-done');
             $this->request->redirect('home');
         } 
     
@@ -139,6 +130,9 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-payments'
         );
+        
+        // Create message object
+        $message = new Message();
 
         if(!($user = Auth::instance()->get_user())) {
             $this->request->redirect('auth');
@@ -146,7 +140,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if(!($user->has('roles', $channel_role))) {
-            Message::instance()->set("You haven't upgraded your account yet.");
+            $message->set('upgrade-havent-upgraded');
             $this->request->redirect('user/upgrade');
         } 
         
@@ -194,7 +188,8 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if(!($user->has('roles', $channel_role))) {
-            Message::instance()->set("You haven't upgraded your account yet.");
+            $message = new Message($ajax);
+            $message->set('upgrade-havent-upgraded');
             $this->request->redirect('user/upgrade');
         } 
 
@@ -219,6 +214,9 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
     }
 
     public function action_renew() {
+        // Create message object
+        $message = new Message;
+        
         $this->template = new View('user/renew');
         $this->layout->page_title = 'Renew your account';
         if(!($user = Auth::instance()->get_user())) {
@@ -227,9 +225,13 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if(!($user->has('roles', $channel_role))) {
-            Message::instance()->set("You haven't upgraded your account yet.");
+            $message->set('upgrade-havent-upgraded');
             $this->request->redirect('user/upgrade');
         } 
+        
+        $f = Sourcemap_Form::load('/renew');
+        $f->action('upgrade/renew')->method('post');
+        $this->template->form = $f;
         
         $f = Sourcemap_Form::load('/renew');
         $f->action('upgrade/renew')->method('post');
@@ -248,7 +250,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             $this->template->exp_year= $customer->active_card->exp_year;
             $this->template->thru = strtotime($customer->next_recurring_charge->date);
         } catch (Exception $e){
-            Message::instance()->set("No credit card on file.  Please contact support.");
+            $message->set('upgrade-no-cc');
             $this->request->redirect('/upgrade/renew');
         }
         
@@ -260,7 +262,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                     try{
                         Stripe_Plan::retrieve("channel");
                     } catch (Exception $e) {
-                        Message::instance()->set("There was a problem.  Please contact support.");
+                        $message->set('upgrade-lookup-failed');
                         $this->request->redirect('/upgrade/renew');
                     }
  
@@ -278,34 +280,27 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                     }
 
                 } catch (Exception $e) {
-                    Message::instance()->set('Please check the credit card information below.' . $e);
+                    $message->set('upgrade-cc-failed');
                     $this->request->redirect('home/');
                 } 
 
-                //send a notification 
-				$mailer = Email::connect(); 
-				$swift_msg = Swift_Message::newInstance();
+                // Build outgoing message
+                $mailer   = Email::connect();
+                $subject  = Kohana::message('general', 'renew-email-subject');
+                $from     = Kohana::message('general', 'email-from');
+                $msgbody  = __(Kohana::message('general', 'renew-email-body'), array(
+                    ':user' => $new_user->username
+                ));
+                $swift_msg = Swift_Message::newInstance();
+                $swift_msg->setSubject($subject)
+                          ->setFrom($from)
+                          ->setTo(array($new_user->email => ''))
+                          ->setBody($msgbody);
 
-				$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your Sourcemap Channel Renewal');
-				
-                $h = md5(sprintf('%s-%s', $user->username, $user->email));
-                $lid = strrev(base64_encode($user->username));
-                $url = URL::site("register/confirm?t=$lid-$h", true);
-                $msgbody = "\n";
-                $msgbody .= "Dear {$user->username},\n\n";
-                $msgbody .= "Thank you for renewing your channel!";
-                $msgbody .= "As a channel user, you will have access to exclusive feature that aren't available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly-availble fields in your dashboard.\n\n";
-                $msgbody .= "If you have any questions, please contact us at channels@sourcemap.com.\n\n";
-                $msgbody .= "-The Sourcemap Team\n";
-                $swift_msg->setSubject('Re: Your Newly Upgraded Sourcemap Account')
-						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
-						  ->setTo(array($user->email => ''))
-						  ->setBody($msgbody);
-					
-
+                // Send message
                 try { 
 					$sent = $mailer->send($swift_msg);
-                    Message::instance()->set('Email confirmation sent.');
+                    $message->set('upgrade-email-sent');
                     
                     //set channel status
                     $channel_role = ORM::factory('role', array('name' => 'channel'));
@@ -313,12 +308,12 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                     
                     return $this->request->redirect('upgrade/renew/thankyou');
                 } catch (Exception $e) {
-                    Message::instance()->set('Sorry, could not complete account upgrade. Please contact support.');
+                    $message->set('upgrade-generic');
                 } 
 
                 return $this->request->redirect('register');
             } else {
-                Message::instance()->set('Check the information below and try again.');
+                $message->set('form-validation-fail');
                 $this->request->redirect('upgrade/renew');
             }
         }

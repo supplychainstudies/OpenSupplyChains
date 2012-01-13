@@ -1,0 +1,392 @@
+/* Copyright (C) Sourcemap 2011
+ * This program is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.*/
+
+/* EMBED STYLES  -------------------------------------------------------------- */ 
+@import "sourcemap";
+
+html { 
+    //overflow:hidden;
+} /* Ideal embed width/height right now is no less than 640 by 480 */
+
+body#embedded-supplychain {
+    width: 100%; height:100%;
+    margin: 0; padding: 0;
+    background:#fff;
+
+    #sourcemap-map-mobile {        
+        position:absolute;
+        bottom:0; left:0; right:0;
+	    width:1px; height:1px;
+        background: #fff;
+        margin: 0 auto; padding: 0;
+		&.google-earth {
+			top:40px;
+			width:100%;
+			height:100%;
+			background:#000;
+		}
+    }
+}
+
+#banner {
+	cursor:pointer;
+    #banner-content {
+		width:100%;
+        #banner-favorite, #banner-share ,#banner-edit , #banner-preview, #banner-lock{ display:none; }
+        .banner-map-search{
+            width:120px;
+        }
+    }
+}
+
+body.small{
+    #banner{
+        .banner-map-search{display:none;}
+    }
+	#extras { 
+        bottom: 5px; 
+        margin-left:8px;
+        #sourcemap-dock{
+            bottom:12px;
+            zoom: .9; -moz-transform: scale(.9); 
+        }
+        #watermark {
+            &.satellite,&.terrain{
+                left:0px;
+                bottom:43px;
+            }
+        }
+        #sourcemap-gradient{
+            display:none;
+        }
+    }
+}// end small
+body.medium{
+	#extras { 
+        bottom: 5px; 
+        margin-left:8px;
+        #sourcemap-dock{bottom:12px;}
+        #watermark {
+            &.satellite,&.terrain{
+                left:0px;
+                bottom:42px;
+            }
+        }
+        #sourcemap-gradient{
+            zoom: .9; -moz-transform: scale(.9); 
+            left:-22px;
+            &.satellite,&.terrain{
+                left:-23px;
+                bottom:89px;
+            }
+        }
+    }
+}// end medium
+body.embed{
+    // big
+	#banner { 
+        .banner-date{
+            display:none;
+        }
+    }
+    #extras{
+        #sourcemap-dock{bottom:9px;}
+        #sourcemap-dock{
+            .sourcemap-dock-outerwrap{
+                .sourcemap-dock-content{
+                    .filter{
+                        display:none;
+                        .content{
+                            span{
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    #sourcemap-gradient{
+        //bottom:60px;
+        //left:-14px;
+    }
+}
+body.zoom {
+    // smaller than 640 480
+    @z : .7;
+	#banner { 
+        zoom: @z; -moz-transform: scale(@z); 
+        min-width:96% !important;
+        .banner-date{
+            display:none;
+        }
+        #banner-content{
+            line-height:0.8em;
+            .banner-map-search{
+                input{
+                    //margin-top:5px;
+                }
+            }
+            #banner-owner{
+                border-right:none;
+                margin-top:5px;
+            }
+        }
+    }
+	#extras { 
+        // for cloudmade
+        #watermark {
+            left:2px;
+            bottom:11px;
+        }
+        #sourcemap-dock{
+            zoom: @z; -moz-transform: scale(@z); 
+        }
+        #sourcemap-dock{
+            .sourcemap-dock-outerwrap{
+                .sourcemap-dock-content{
+                    .filter{
+                        display:none;
+                    }
+                }
+            }
+        }
+        /*
+        zoom: @z; -moz-transform: scale(@z); 
+        bottom: 5px; 
+        margin-left:8px;
+        #sourcemap-dock{
+            bottom:12px;
+        }
+        #watermark {
+            &.satellite,&.terrain{
+                left:6px;
+                bottom:24px;
+            }
+        }
+        */
+    }
+    #sourcemap-gradient{
+        // for cloudmade
+        left:-11px;
+        bottom:44px;
+    }
+	#dialog {
+	    top:45px;
+        left:10px;
+	    width:360px;
+        max-width:90%;
+	    #dialog-content {
+	        h2.title { font-size: 14px; }
+	        h3.placename { font-size:12px; }
+	        div.description { font-size:12px; }
+	        .url { font-size:12px; }
+	        #dialog-media {
+				background:#000;
+	            padding:40px 0 0 0;
+				margin-bottom:-18px;
+	        }
+			#dialog-media-navigation {
+				zoom: @z; -moz-transform: scale(@z);    	
+			}
+	        #dialog-footprint {
+	            zoom: @z; -moz-transform: scale(@z);    
+	            overflow:hidden !important;
+	        }
+			.dot {
+				zoom: @z; -moz-transform: scale(@z);    
+			}
+            .close {
+				zoom: @z; -moz-transform: scale(@z);    
+			}
+	    }    
+	}
+    // end dialog  
+    //.olControlAttribution,.olLayerGooglePoweredBy, .olLayerGoogleCopyright {
+    //.olControlAttribution {
+    //        zoom:@z; -moz-transform: scale(@z);}
+}
+body.mobilezoom {
+    @z : .5;
+    #sourcemap-dock{
+        .sourcemap-dock-outerwrap{
+            .sourcemap-dock-content{
+                .filter{
+                    display:none;
+                }
+            }
+        }
+    }
+	#banner { 
+        zoom: @z; -moz-transform: scale(@z); 
+        //width:100%;
+        .banner-date{
+            display:none;
+        }
+        #banner-content{
+            .banner-map-search{
+                input{
+                    margin-top:5px;
+                }
+            }
+        }
+        #banner-owner{
+            padding-top:4px;
+            a{
+                position:relative;
+                top:4px;
+            }
+        }
+    }
+	#extras { 
+        zoom: @z; -moz-transform: scale(@z); 
+        bottom:15px;
+    }
+
+    .olControlAttribution ,.olLayerGooglePoweredBy, .olLayerGoogleCopyright{
+        zoom:@z; -moz-transform: scale(@z);
+    }
+    .olControlAttribution {bottom: -5px !important;}
+
+    /*
+    #watermark {
+        &.satellite,&.terrain{
+            left:70px;
+            bottom:-10px;
+        }
+    }
+    #sourcemap-gradient{
+        &.satellite,&.terrain{
+            bottom:25px;left:0px;
+        }
+    }
+    */
+    #watermark {
+        &.satellite,&.terrain{
+            left:10px;
+            bottom:42px;
+        }
+    }
+    #sourcemap-gradient{
+        //zoom: .9; -moz-transform: scale(.9); 
+        left:-12px;
+        &.satellite,&.terrain{
+            //left:-23px;
+            bottom:89px;
+        }
+    }
+	#dialog {
+        max-width:90%;
+	    #dialog-content {
+            min-height:37px;
+	        h2.title { 
+                &.hop {
+                    background:url("../images/chevron.png") 0 6px no-repeat;
+                    background-size:1em;
+                }
+            }
+            .cluster {
+                .cluster-item {
+                    .dot {
+                        top:7px !important;
+                    }
+                    a{
+                        h2{top: 6px;}
+                    }
+                }
+            }
+        }
+        div.close{
+            top:4px !important;
+            background-size:1.2em;
+        }
+        .dot {
+            top:6px !important;
+            //zoom: @z; -moz-transform: scale(@z);    
+        }
+    }
+}
+
+body.vertical{
+    @z : .4;
+    .cluster {max-height:325px;}
+	#dialog {
+	    top:45px;
+	    width:250px;
+	    #dialog-content {
+	        h2.title { 
+                font-size: 16px; 
+            }
+	        h3.placename { font-size:12px; }
+	        div.description { font-size:12px; }
+	        .url { font-size:12px; }
+	        #dialog-media {
+				background:#000;
+	            padding:40px 0 0 0;
+				margin-bottom:-18px;
+	        }
+			#dialog-media-navigation {zoom: @z; -moz-transform: scale(@z);}
+	        #dialog-footprint {
+	            zoom: @z; -moz-transform: scale(@z);    
+	            overflow:hidden !important;
+	        }
+	    }    
+	}
+    // end dialog  
+} // end vertical
+
+body.horizontal{
+    @z : .5;
+    .cluster {max-height:170px;}
+	#dialog {
+	    top:45px;
+	    width:360px;
+	    #dialog-content {
+	        h2.title { font-size: 16px; }
+	        h3.placename { font-size:12px; }
+	        div.description { font-size:12px; }
+	        .url { font-size:12px; }
+	        #dialog-media {
+				background:#000;
+	            padding:40px 0 0 0;
+				margin-bottom:-18px;
+	        }
+			#dialog-media-navigation {zoom: @z; -moz-transform: scale(@z);}
+	        #dialog-footprint {
+	            zoom: @z; -moz-transform: scale(@z);    
+	            overflow:hidden !important;
+	        }
+	    }    
+	}
+    // end dialog  
+} // end horizontal
+
+.static-embed {
+	margin:auto;
+	display:block;
+	text-align:center;
+}
+.earth-banner {
+	padding:10px;
+	height:20px;
+	text-align:center;
+	.gradient(#111111,#333333);
+    a { color:#999; }
+}	
+.gebubble {
+	max-width:500px;
+}
+
+/* MOBILE STYLES  -------------------------------------------------------------- */ 
+
+body#embedded-supplychain.mobile {
+    overflow:hidden;
+}

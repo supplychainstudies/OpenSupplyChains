@@ -137,6 +137,15 @@ return array(
             'requires' => array(
                 'sourcemap-map', 'showdown'
             )
+        ),
+        'sourcemap-mobile' => array(
+            'scripts' => array(
+                'assets/scripts/sourcemap/supplychain/graph.js',
+                'sites/default/assets/scripts/map/mobile.js'
+            ),
+            'requires' => array(
+                'sourcemap-map', 'showdown'
+            )
         )
     )
 );

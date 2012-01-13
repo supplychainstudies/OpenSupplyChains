@@ -28,6 +28,7 @@ $(document).ready(function() {
 		    Sourcemap.embed_instance = new Sourcemap.Map.Base(Sourcemap.embed_params);
 		    Sourcemap.listen("map:supplychain_mapped", function(evt, map, sc) {
 		        var embed = Sourcemap.embed_instance;
+                Sourcemap.init_mobile_dialog(sc);
 		    });
 
 		    // get scid from inline script
@@ -53,7 +54,8 @@ $(document).ready(function() {
                     // Mobile view
                     var isiOS = (/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()));
                     
-                    if(!isiOS){
+                    //if(!isiOS){
+                    if(false){
 		    		    $("body").addClass("zoom");			
                         $('#sourcemap-map-mobile').css("height", $(window).height()).css("width", $(window).width());
 
@@ -68,11 +70,17 @@ $(document).ready(function() {
                         if(parseInt($(window).height()) > parseInt($(window).width())){
                             // vertical
                             $("body").addClass("vertical");			
-                            $('#sourcemap-map-mobile').css("height", 416).css("width", 320);
+                            //$('#sourcemap-map-mobile').css("height", 416).css("width", 320);
+                            $('#sourcemap-map-mobile').css("height", 208).css("width", window_width);
+                            $('#sourcemap-dialog-mobile').css("height", 208).css("width", window_width);
                         } else {
                             // horizontal
                             $("body").addClass("horizontal");			
-                            $('#sourcemap-map-mobile').css("height", 268).css("width", 480);
+                            //$('#sourcemap-map-mobile').css("height", 268).css("width", 480);
+                            $('#sourcemap-map-mobile').css("height", 268).css("width", 240);
+                            $('#sourcemap-map-mobile').css("float","left");
+                            $('#sourcemap-dialog-mobile').css("height", 268).css("width", 240);
+                            $('#sourcemap-dialog-mobile').css("float","left");
                         }
                     }
 		    	}
@@ -175,3 +183,13 @@ $(document).ready(function() {
 
 });
 
+
+Sourcemap.init_mobile_dialog = function(supplychain){
+    console.log(supplychain);
+    $("#sourcemap-dialog-mobile").html('<div class="mobile-accordion"></div>');
+    var item = '<h3 class="accordion-title"><div class="arrow"></div> My name is first item </h3>'+
+    '<div class="accordion-body"></div>'+
+    '</div>';
+    $(".mobile-accordion").append(item);
+
+}

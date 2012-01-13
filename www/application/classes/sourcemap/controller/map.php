@@ -492,8 +492,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css',
                     'assets/styles/base.less',
-                    'assets/styles/mobile.less',
                     'assets/styles/general.less',
+                    'assets/styles/mobile.less',
                     'sites/default/assets/styles/modal.less'
                 );
                 $params = array(

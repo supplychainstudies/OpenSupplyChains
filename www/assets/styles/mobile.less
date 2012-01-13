@@ -14,7 +14,7 @@
 @import "sourcemap";
 
 html { 
-    //overflow:hidden;
+    overflow:hidden;
 } /* Ideal embed width/height right now is no less than 640 by 480 */
 
 body#embedded-supplychain {
@@ -34,6 +34,32 @@ body#embedded-supplychain {
 			height:100%;
 			background:#000;
 		}
+    }
+    #sourcemap-dialog-mobile {
+        background : #bbb;
+        .mobile-accordion {
+            background:#fff;
+            h3.accordion-title {
+                cursor: pointer;
+                border-bottom: solid #bbbbbb 1px;
+                padding: 5px;
+                margin: 0px;
+                color: #338db7;
+                font-size: 14px;
+                .arrow {
+                    background:url("../images/arrow.png") no-repeat;
+                    width: 10px;
+                    height: 10px;
+                    padding: 0px;
+                    margin: 4px 10px;
+                    clear: none;
+                    float: left;
+                    &.arrowopen {
+                        background-position: 0px -10px;
+                    }
+                }
+            }
+        } // end mobile accordion
     }
 }
 
@@ -390,3 +416,5 @@ body.horizontal{
 body#embedded-supplychain.mobile {
     overflow:hidden;
 }
+
+

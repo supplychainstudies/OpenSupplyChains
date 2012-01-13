@@ -13,3 +13,4 @@
 ?>
 
 <div id="sourcemap-map-mobile"></div>
+<div id="sourcemap-dialog-mobile"></div>

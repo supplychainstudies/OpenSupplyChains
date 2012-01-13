@@ -572,6 +572,11 @@ Sourcemap.Map.Editor.prototype.loadTransportCatalog = function() {
                 "name": 'None', "co2e": 0.0, "unit": "kg*km"
             }
             this.transport_catalog = data.results;
+			for (var x in this.transport_catalog) {
+				if (this.transport_catalog[x].unit != "kg km") {
+					delete this.transport_catalog[x];
+				}
+			}
             //this.transport_catalog.unshift(nil);
         }, this)
     };
@@ -683,7 +688,11 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		if (open == false) {
 			$(this).next().slideToggle('fast');
 			$(this).find('.arrow').addClass('arrowopen');
-		}				
+		}
+		/*
+		if ($(this).next().attr("id") == "edit-stop-footprint") {
+			$(this).next().find('.footprint-weight').focus();
+		} */				
 		return false;
 	});
 
@@ -704,7 +713,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
             }
          }
     });
-
+	
 	$("#footprint-methodology").change($.proxy(function(evt) {
         // grab the first supplychain
         var sc = false;
@@ -837,8 +846,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 			editor.find('.byweight').html(weight + " kg");
 			
             if(!isNaN(weight * distance * factor)){ 
-                var output = weight * distance * factor;
-                var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);
+                var output = weight * distance * factor;		
+                var scaled = Sourcemap.Units.scale_unit_value(output, 'kg', 2);		
                 editor.find('#co2e-impact-result').text(scaled.value + " " + scaled.unit); 
             } else { editor.find('#co2e-impact-result').text("-"); }            
         }, this)); 
@@ -879,7 +888,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 				if (sc.hops[x] == ref) {
 					sc.hops[x].attributes.co2e = editor.find('.footprint-co2e').val();
 					var fm = sc.hops[x].attributes.footprintmethodology;
-					sc.hops[x].attributes.footprintmethodology = fm.replace("CO2e factor referenced from: \n" +item.ref, "");
+					sc.hops[x].attributes.footprintmethodology = fm.toString().replace("CO2e factor referenced from: \n" +item.ref, "");
 					delete sc.hops[x].attributes.co2e_reference;
 				}
 			}
@@ -1135,20 +1144,21 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 						cat_content += '</div>';
 						cat_content += '<span class="cat-item-footprints">';
 						cat_content +=  '<span class="cat-item-co2e">';
-						cat_content +=  json.results[i].co2e ? '<input type="checkbox" id="co2e-factor" />'+ Math.round(100*json.results[i].co2e)/100+' kg' : '&nbsp;';
+						cat_content +=  json.results[i].co2e ? '<input type="checkbox" id="co2e-factor" checked="checked" />'+ Math.round(100*json.results[i].co2e)/100+' kg' : '&nbsp;';
 						cat_content +=  '</span>';
 						cat_content +=  '<span class="cat-item-energy">';
-						cat_content +=  json.results[i].energy ? '<input type="checkbox" id="energy-factor" />'+ Math.round(100*json.results[i].energy)/100+' kwh' : '&nbsp;';
+						cat_content +=  json.results[i].energy ? '<input type="checkbox" id="energy-factor" checked="checked" />'+ Math.round(100*json.results[i].energy)/100+' kwh' : '&nbsp;';
 						cat_content +=  '</span>';
 						cat_content +=  '<span class="cat-item-water">';
-						cat_content +=  json.results[i].water ? '<input type="checkbox" id="water-factor" />'+Math.round(100*json.results[i].water)/100+' L ' : '&nbsp;';
+						cat_content +=  json.results[i].water ? '<input type="checkbox" id="water-factor" checked="checked" />'+Math.round(100*json.results[i].water)/100+' L ' : '&nbsp;';
 						cat_content +=  '</span>';
 						cat_content +=  '<a class="add-map-button">&nbsp;</a>';
 						cat_content +=  '<a class="reference-button" target="_blank" href="' + json.results[i].uri + '">&nbsp;</a>';
 						cat_content += '</span>';
 		    			cat_content += '<div class="clear"></div>';                    
                 
-		                var new_li = $('<li class="catalog-item"></li>').html(cat_content);                   
+		                var new_li = $('<li class="catalog-item"></li>').html(cat_content);       
+		            	/*
 		                $(new_li).find('#co2e-factor').click($.proxy(function(evt) {							
 							var sc = false;
 					        for(var k in this.editor.map.supplychains) {
@@ -1266,28 +1276,13 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 					    	Sourcemap.broadcast('supplychain-updated', sc);
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
 		                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"water": true, "unit": true, "water_reference": true}}}));                
+						*/
 						$(new_li).find('.add-map-button').click($.proxy(function(evt) {
 							var sc = false;
 					        for(var k in this.editor.map.supplychains) {
 					            sc = this.editor.map.supplychains[k];
 					            break;
 					        }
-					/*
-							for (x in sc.stops) {
-								if (sc.stops[x] == this.editor.editing) {
-									if (sc.stops[x].attributes.footprintmethodology) { 
-										if (sc.stops[x].attributes.footprintmethodology.search("Factors referenced from: \n" +this.item.ref) != -1) { 
-											break;
-										} else {
-											sc.stops[x].attributes.footprintmethodology = sc.stops[x].attributes.footprintmethodology + "\nFactors referenced from: \n" +this.item.ref;
-										}
-									} else {
-										sc.stops[x].attributes.footprintmethodology = "\nFactors referenced from: \n" +this.item.ref;
-									}
-									break;
-								}
-							}
-					*/
 							var the_stop = "";
 							for (x in sc.stops) {
 								if (sc.stops[x] == this.editor.editing) {
@@ -1298,10 +1293,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 									break;
 								}
 							}
-							if (this.item.co2e == null) {
-								delete this.catalog_map.osi.co2e;
-								delete this.catalog_map.osi.co2e_reference;
-							} else {
+							if (this.item.co2e != null && this.new_li.find('#co2e-factor').attr("checked") == "checked") {
 								if (sc.stops[the_stop].attributes.footprintmethodology.search("CO2e factor referenced from") != -1) {
 									var pieces = sc.stops[the_stop].attributes.footprintmethodology.split("\n");
 									var cswitch = false;
@@ -1324,11 +1316,11 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 								} else {
 									sc.stops[the_stop].attributes.footprintmethodology = sc.stops[the_stop].attributes.footprintmethodology+ "\nCO2e factor referenced from \n" + this.item.ref + "\n";
 								}
-							}
-							if (this.item.water == null) {
-								delete this.catalog_map.osi.water;
-								delete this.catalog_map.osi.water_reference;								
 							} else {
+								delete this.catalog_map.osi.co2e;
+								delete this.catalog_map.osi.co2e_reference;
+							}
+							if (this.item.water != null && this.new_li.find('#water-factor').attr("checked") == "checked") {
 								if (sc.stops[the_stop].attributes.footprintmethodology.search("Water factor referenced from") != -1) {
 									var pieces = sc.stops[the_stop].attributes.footprintmethodology.split("\n");
 									var cswitch = false;
@@ -1351,11 +1343,11 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 								} else {
 									sc.stops[the_stop].attributes.footprintmethodology = sc.stops[the_stop].attributes.footprintmethodology+ "\nWater factor referenced from \n" + this.item.ref + "\n";
 								}
+							}  else {								
+								delete this.catalog_map.osi.water;
+								delete this.catalog_map.osi.water_reference;								
 							}
-							if (this.item.energy == null) {
-								delete this.catalog_map.osi.energy;
-								delete this.catalog_map.osi.energy_reference;
-							} else {
+							if (this.item.energy != null && this.new_li.find('#energy-factor').attr("checked") == "checked") {
 								if (sc.stops[the_stop].attributes.footprintmethodology.search("Energy factor referenced from") != -1) {
 									var pieces = sc.stops[the_stop].attributes.footprintmethodology.split("\n");
 									var cswitch = false;
@@ -1378,10 +1370,13 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 								} else {
 									sc.stops[the_stop].attributes.footprintmethodology = sc.stops[the_stop].attributes.footprintmethodology+ "\nEnergy factor referenced from \n" + this.item.ref + "\n";
 								}
+							}  else {
+								delete this.catalog_map.osi.energy;
+								delete this.catalog_map.osi.energy_reference;
 							}
 					    	Sourcemap.broadcast('supplychain-updated', sc);
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
-		                }, {"item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true,"energy": true,"water": true, "unit": true, "co2e_reference": true, "energy_reference": true, "water_reference": true}}}));                
+		                }, {"new_li": $(new_li), "checks": {"co2e": $(new_li).find('#co2e-factor'), "water": $(new_li).find('#water-factor'), "energy": $(new_li).find('#energy-factor') }, "item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true,"energy": true,"water": true, "unit": true, "co2e_reference": true, "energy_reference": true, "water_reference": true}}}));                
 						cat_html.append(new_li);
 	            }
 			} else {
@@ -1438,6 +1433,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 			
 			
 			// more (toggle between tiny catalog and full catalog)
+			/*
             if(o.params.curated == "true") {
                 var more = $('<span>(more values)</span>').click($.proxy(function() {
                     var o = {};
@@ -1461,7 +1457,7 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                 }, {"o": o, "editor": this.editor}));
                 $(this.editor.map_view.dialog).find('.catalog-pager').append(more);
 			}
-
+			*/
             // search bar
             $(this.editor.map_view.dialog).find('#catalog-search-field').keyup($.proxy(function(evt) {
                 if($(evt.target).val().length < 3) return;

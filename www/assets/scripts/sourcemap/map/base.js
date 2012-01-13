@@ -741,7 +741,7 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 				if (open == false) {
 					$(this).next().slideToggle('fast');
 					$(this).find('.arrow').addClass('arrowopen');
-				}				
+				}			
 				return false;
 			});	
             // Sets up content-nav behavior

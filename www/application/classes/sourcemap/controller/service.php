@@ -104,6 +104,7 @@ class Sourcemap_Controller_Service extends Controller_REST {
         $this->request->response = $this->_serialize($this->response);
         $this->request->headers['Content-Type'] = 
             $this->_format_content_type($this->_format);
+		$this->request->headers['Access-Control-Allow-Origin'] = '*';
         if($this->_cache_hit)
             $this->request->headers[self::HDR_CACHE_HIT] = 'true';
         return parent::after();

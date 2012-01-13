@@ -479,7 +479,7 @@ Sourcemap.Map.Base.prototype.hideDialog = function(notrigger) {
         $(this.dialog).hide();
         if(!notrigger) {
             this.map.controls["select"].unselectAll();
-			this.searchFilterMap();
+			//this.searchFilterMap();
             Sourcemap.broadcast('sourcemap-base-dialog-close', 
                 this, this.map.editor ? $(this.dialog).find("form").serializeArray() : false
             );
@@ -1002,7 +1002,6 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 }
 
 Sourcemap.Map.Base.prototype.searchFilterMap = function() {
-	
 	var operators = new Array(
 		">=",
 		"<=",
@@ -1012,6 +1011,9 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
 		"is"
 		);
 	var query = $(this.banner_div).find('#map-search').val();
+	if (query == "") {
+		return;
+	}
 	var queries = new Array();
 	var splitthis = query.toString().split(" and ");
 	var querystring  = splitthis.join("+&&+");

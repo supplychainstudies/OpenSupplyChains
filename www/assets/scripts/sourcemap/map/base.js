@@ -994,12 +994,14 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 						scaled.value = val;
 		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
 		                if(attr_nm === "co2e") { scaled.unit += " co2e"}   
-						f.attributes.label = parseInt(scaled.value) + " " + scaled.unit;	      
+						var x = parseFloat(scaled.value);
+						scaled.value = x.toFixed(1);
+						f.attributes.label = scaled.value + " " + scaled.unit;	      
 		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
 		    				f.attributes.label = "";
 		    			} else {
 							
-		    			    f.attributes.label = parseInt(scaled.value) + " " + scaled.unit;	 
+		    			    f.attributes.label = scaled.value + " " + scaled.unit;	 
 		    			}	              
 		            } 
 		        } 

@@ -925,7 +925,6 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		function(f, mb) {        
 				//The val variable should be the polution value for this stop
 		        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
-				console.log(f);
 		        if(f.cluster) {    //Why we divide this into two segments is unclear
 		            var val = 0;
 		            for(var c in f.cluster) {
@@ -958,7 +957,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		            } 
 		        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
 		            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
-		            else val = f.attributes[attr_nm];
+		            else val = f.attributes[this.attr_nm];
 		            val = parseFloat(val);
 		            if(!isNaN(val)) { 
 		                // scale
@@ -969,6 +968,14 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                // var sval = this.smin;
 		                //if(vrange)
 		                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+						
+						if (this.attr_nm == "co2e" || this.attr_nm == "water" || this.attr_nm == "energy") {
+							if (typeof(f.attributes.ref.attributes.weight) != "undefined") {
+								val = val * f.attributes.ref.attributes.weight;
+							} else {
+								val = 0;
+							}
+						} 
 						fraction = val/this.vtot;
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
 		                var fsize = 18;
@@ -978,16 +985,21 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                var unit = "kg";
 		                if(this.attr_nm === "water") { unit = "L"; }
 						if(this.attr_nm === "energy") { unit = "kWh"; }
+						/*
+						if (typeof(f.attributes.hop_instance_id) != "undefined" && typeof(f.attributes.ref.gc_distance()) != "undefined") {
+							val = parseFloat(val) * parseFloat(f.attributes.ref.gc_distance());
+						} */
 						var scaled = {};
 						scaled.unit = unit;
 						scaled.value = val;
 		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
-		                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
+		                if(attr_nm === "co2e") { scaled.unit += " co2e"}   
+						f.attributes.label = parseInt(scaled.value) + " " + scaled.unit;	      
 		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
 		    				f.attributes.label = "";
 		    			} else {
 							
-		    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
+		    			    f.attributes.label = parseInt(scaled.value) + " " + scaled.unit;	 
 		    			}	              
 		            } 
 		        } 

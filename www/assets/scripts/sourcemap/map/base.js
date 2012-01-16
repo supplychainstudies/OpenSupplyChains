@@ -40,8 +40,8 @@ Sourcemap.Map.Base.prototype.defaults = {
         "weight": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 1));
-    		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
-            var wgt = parseFloat(unt || st.getAttr("weight"));
+    		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;			
+            var wgt = parseFloat(st.getAttr("weight"));
             if(!isNaN(qty) && !isNaN(wgt)) val = qty * wgt;
             return val;
         },
@@ -49,9 +49,9 @@ Sourcemap.Map.Base.prototype.defaults = {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","L") == "L" ? 1 : 0;
-            var wgt = parseFloat(unt || st.getAttr("weight"));
+            var wgt = parseFloat(st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
-                wgt = parseFloat(st.gc_distance());
+                wgt =  wgt * parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("water", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = wgt* qty * fac;
@@ -61,9 +61,9 @@ Sourcemap.Map.Base.prototype.defaults = {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","kWh") == "kWh" ? 1 : 0;
-            var wgt = parseFloat(unt || st.getAttr("weight"));
+            var wgt = parseFloat(st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
-                wgt = parseFloat(st.gc_distance());
+                wgt = wgt * parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("energy", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = wgt* qty * fac;
@@ -75,7 +75,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
             var wgt = parseFloat(unt || st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
-                wgt = parseFloat(st.gc_distance());
+                wgt = wgt * parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("co2e", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * wgt* fac;

@@ -547,6 +547,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			});
 			$(this.base.dialog_content).find('#dialog-footprint').each(function() {	
 				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				console.log(reduced_height);console.log(val);
 				if (reduced_height > val) {
 					reduced_height = reduced_height - val;
 					$(this).prev().find('.arrow').addClass("arrowopen");
@@ -957,7 +958,11 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		            } 
 		        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
 		            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
-		            else val = f.attributes[this.attr_nm];
+		            else {
+						//val = f.attributes[this.attr_nm];
+						val =  attr_nm(f);
+					}
+					//val = f.attributes[this.attr_nm];
 		            val = parseFloat(val);
 		            if(!isNaN(val)) { 
 		                // scale
@@ -968,14 +973,14 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                // var sval = this.smin;
 		                //if(vrange)
 		                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
-						
+						/*
 						if (this.attr_nm == "co2e" || this.attr_nm == "water" || this.attr_nm == "energy") {
 							if (typeof(f.attributes.ref.attributes.weight) != "undefined") {
 								val = val * f.attributes.ref.attributes.weight;
 							} else {
 								val = 0;
 							}
-						} 
+						} */
 						fraction = val/this.vtot;
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
 		                var fsize = 18;
@@ -992,7 +997,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 						var scaled = {};
 						scaled.unit = unit;
 						scaled.value = val;
-		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
+		                //var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
 		                if(attr_nm === "co2e") { scaled.unit += " co2e"}   
 						var x = parseFloat(scaled.value);
 						scaled.value = x.toFixed(1);

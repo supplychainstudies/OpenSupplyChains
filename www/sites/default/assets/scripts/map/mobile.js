@@ -203,7 +203,12 @@ Sourcemap.init_mobile_dialog = function(sc){
     var stops_total = sc.stops.length;
     for( var i =0 ; i<stops_total ; i++){
         var stop = sc.stops[i];
-        var item = '<h3 class="accordion-title"><div class="arrow"></div>'+stop.attributes.title+'</h3>';
+        var item; 
+        if(i==0)
+            item = '<h3 class="accordion-title first">';
+        else    
+            item = '<h3 class="accordion-title">';
+        item += '<div class="arrow"></div>'+stop.attributes.title+'</h3>';
         //if(stop.attributes.description!="")
         item += '<div class="accordion-body">'+
         '<div id="dialog-description">'+

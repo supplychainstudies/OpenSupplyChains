@@ -71,8 +71,8 @@ $(document).ready(function() {
                             // vertical
                             $("body").addClass("vertical");			
                             //$('#sourcemap-map-mobile').css("height", 416).css("width", 320);
-                            $('#sourcemap-map-mobile').css("height", 208).css("width", window_width);
-                            $('#sourcemap-dialog-mobile').css("height", 208).css("width", window_width);
+                            $('#sourcemap-map-mobile').css("height", 208).css("width", 320);
+                            $('#sourcemap-dialog-mobile').css("height", 208).css("width", 320);
                         } else {
                             // horizontal
                             $("body").addClass("horizontal");			
@@ -187,9 +187,11 @@ $(document).ready(function() {
 Sourcemap.init_mobile_dialog = function(supplychain){
     console.log(supplychain);
     $("#sourcemap-dialog-mobile").html('<div class="mobile-accordion"></div>');
-    var item = '<h3 class="accordion-title"><div class="arrow"></div> My name is first item </h3>'+
-    '<div class="accordion-body"></div>'+
-    '</div>';
-    $(".mobile-accordion").append(item);
+    var map_item = '<h3 class="accordion-title"><div class="arrow"></div> Title </h3>'+
+    '<div class="accordion-body"></div></div>'+
+    '<h3 class="accordion-title"><div class="arrow"></div>Description</h3>'+
+    '<div class="accordion-body">aaa</div></div>';
+    $(".mobile-accordion").append(map_item);
+    
 
 }

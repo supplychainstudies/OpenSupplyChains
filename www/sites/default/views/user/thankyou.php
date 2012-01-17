@@ -20,7 +20,7 @@
 
 <div class="container form-page">
     <div class="copy-section">
-        <p>Your account has been upgraded to a Channel.  You should see a confirmation in your inbox within the next few minutes.</p> 
+        <p>You have successfully upgraded to a Pro Account.  You should see a confirmation in your inbox within the next few minutes.</p> 
         <ul>
             <li><a href="/home">Go back to your Dashboard</a></li>
         </ul>

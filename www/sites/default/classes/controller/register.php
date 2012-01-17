@@ -31,28 +31,29 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
         $this->template->form = $f;
 
-        if(strtolower(Request::$method) === 'post') { 
+        if(strtolower(Request::$method) === 'post') {
+            // Have we requested AJAX?
             $ajax = isset($_POST["_form_ajax"]) ? 'true' : 'false';
-            
             if ($ajax)
-                $this->auto_render=false; // will disable template rendering
+                $this->auto_render=false; 
+
+            // Create message object
+            $message = new Message($ajax);
 
             // Pass recaptcha first
             if (array_key_exists('recaptcha', Kohana::modules())) { 
                  $recap = Recaptcha::instance();  
                  $revalid = (BOOL)($recap->is_valid($_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"])); 
             }
-            if( !$revalid ) {
-                Message::instance()->set('Incorrect captcha.');
+            if( $revalid ) {
+                $message->set('invalid-captcha');
             } else{
                 // basic validation
                 if (!$f->validate($_POST)){
                     $errors = $f->errors();
                     foreach($errors as $error){
-                        Message::instance()->set($error[0]);
+                        $message->set($error[0]);
                     }
-
-                    echo $ajax ? Message::instance()->render() : "";
                     return; 
                 }
 
@@ -61,8 +62,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
                 if(!preg_match("/^[a-zA-Z]/",$p['username']))
                 {
-                    Message::instance()->set('Please use alphabetical character as first letter of your Username.');
-                    echo $ajax ? Message::instance()->render() : "";
+                    $message->set('register-alpha-character');
                     return;
                 }
 
@@ -81,8 +81,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 );
                 foreach ($restricted_names as $restricted_name){
                     if ($p['username'] == $restricted_name){
-                        Message::instance()->set('That username is restricted.  Please try a different username.');
-                        echo $ajax ? Message::instance()->render() : "";
+                        $message->set('register-restricted');
                         $restricted = TRUE;
                         break;
                     }
@@ -94,66 +93,54 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                 // check for username in use
                 $exists = ORM::factory('user')->where('username', 'ILIKE', $p['username'])->find()->loaded();
                 if($exists) {
-                    Message::instance()->set('That username is taken.');
-                    echo $ajax ? Message::instance()->render() : "";
+                    $message->set('register-taken');
                     return;
                 }
                 // check for email in use
                 $exists = ORM::factory('user')->where('email', '=', $p['email'])->find()->loaded();
                 if($exists) {
-                    Message::instance()->set('An account exists for that email address.');
-                    echo $ajax ? Message::instance()->render() : "";
+                    $message->set('register-email-exists');
                     return;
                 }
 
+                // Save user
                 $new_user = ORM::factory('user');
                 $new_user->username = $p['username'];
                 $new_user->email = $p['email'];
                 $new_user->password = $p['password'];
 				$new_user->save();
 
-                /*
-				if (isset($p['email_subscribe']) == true) {
-					$emailsubscriber_role = ORM::factory('role', array('name' => 'emailsubscriber'));
-					$new_user->add('roles', $emailsubscriber_role)->save();					
-				}
-                */
-
                 if(!$new_user->id) {
-                    Message::instance()->set('Could not complete registration. Please contact support.');
-                    echo $ajax ? Message::instance()->render() : "";
+                    $message->set('register-generic');
                     return $this->request->redirect('register');
                 }
-
-                //send a notification 
-				$mailer = Email::connect(); 
-				$swift_msg = Swift_Message::newInstance();
-
-				$headers = array('from' => 'The Sourcemap Team <noreply@sourcemap.com>', 'subject' => 'Re: Your New Sourcemap Account');
 				
+                // Build outgoing message
                 $h = md5(sprintf('%s-%s', $new_user->username, $new_user->email));
                 $lid = strrev(base64_encode($new_user->username));
                 $url = URL::site("register/confirm?t=$lid-$h", true);
-                $msgbody = "\n";
-                $msgbody .= "Dear {$new_user->username},\n\n";
-                $msgbody .= "Welcome to Sourcemap! ";
-                $msgbody .= "Click the link below to activate your account:\n\n";
-                $msgbody .= $url."\n\n";
-                $msgbody .= "If you have any questions, please email support@sourcemap.com.\n\n";
-                $msgbody .= "-The Sourcemap Team\n";
-                $swift_msg->setSubject('Re: Your New Sourcemap Account')
-						  ->setFrom(array('noreply@sourcemap.com' => 'The Sourcemap Team'))
-						  ->setTo(array($new_user->email => ''))
-						  ->setBody($msgbody);
+
+                $mailer   = Email::connect();
+                $from     = Kohana::message('general', 'email-from');
+                $subject  = Kohana::message('general', 'register-email-subject'); 
+                $msgbody  = __(Kohana::message('general', 'register-email-body'), array(
+                    ':user' => $new_user->username, 
+                    ':url' => $url)
+                ); 
+                $swift_msg = Swift_Message::newInstance();
+                $swift_msg->setSubject($subject)
+                          ->setFrom($from)
+                          ->setTo(array($new_user->email => ''))
+                          ->setBody($msgbody);
+
+                // Send a notification 
                 try { 
-					$sent = $mailer->send($swift_msg);
+					// $sent = $mailer->send($swift_msg);
                 } catch (Exception $e) {
-                    Message::instance()->set('Sorry, could not complete registration. Please contact support.');
-                    echo Message::instance()->get() ? Message::instance()->render() : false;
+                    $message->set('register-generic');
                     return;
                 } 
-                
-                Message::instance()->set('Activation email sent.', Message::SUCCESS);
+                Message::instance()->set('register-email-sent', Message::SUCCESS);
                 if ($ajax){
                     echo "redirect register/thankyou"; 
                     return;
@@ -162,9 +149,6 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                     return $this->request->redirect('register/thankyou');
                 }
 
-            }
-            if ($ajax){
-                echo Message::instance()->get() ? Message::instance()->render() : false;
             }
 
         } else { 
@@ -177,11 +161,11 @@ class Controller_Register extends Sourcemap_Controller_Layout {
     }
 
     public function action_confirm(){
+        // Create message object
+        $message = new Message;
+        
         if(Auth::instance()->get_user()) {
-            Message::instance()->set(
-                'You\'re already signed in. Sign out and click the '.
-                'confirmation url again.', Message::INFO
-            );
+            $message->set('register-already-in');
             return $this->request->redirect('home');
         }
         $get = Validate::factory($_GET);
@@ -197,20 +181,20 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             if($user->loaded()) {
                 // see if acct is already confirmed
                 if($user->has('roles', $login)) {
-                    Message::instance()->set('That token has expired.');
+                    $message->set('register-token-expired');
                     return $this->request->redirect('auth');
                 }
             } else {
-                Message::instance()->set('Invalid confirmation token.');
+                $message->set('register-invalid-token');
                 return $this->request->redirect('auth');
             }
             // add login role
             $user->add('roles', $login);
-            Message::instance()->set('Your account has been confirmed. Please Sign in (and start mapping).', Message::SUCCESS);
+            $message->set('register-confirmed', Message::SUCCESS);
             Sourcemap_User_Event::factory(Sourcemap_User_Event::REGISTERED, $user->id)->trigger();
             return $this->request->redirect('auth');
         } else {
-            Message::instance()->set('Invalid confirmation token.');
+            $message->set('register-invalid-token');
             return $this->request->redirect('auth');
         }
     }

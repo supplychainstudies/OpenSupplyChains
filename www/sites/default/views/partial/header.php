@@ -41,9 +41,9 @@
             </li>
             <?php endif; ?>
         </ul>
-        <form method="post" action="/search">
+        <form action="/search">
             <div id="search-div" class="pseudo-form">
-                <input id="search" name="q" placeholder="Search" results="0" />
+                <input id="search" name="sq" placeholder="Search" value="<?= isset($_GET['sq']) ? $_GET['sq'] : "";?>" results="0" />
             </div>
         </form>
         <div id="search-results">

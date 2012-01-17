@@ -34,6 +34,7 @@
     <link rel="apple-touch-icon" href="assets/images/favicon-large.png">
     <link rel="image_src" href="assets/images/favicon-large.png">
     <link rel="alternate" type="application/rss+xml" title="Sourcemap Blog Feed" href="http://blog.sourcemap.com/feed/" />
+	<link rel="search" href="services/opensearch/" type="application/opensearchdescription+xml" title="Sourcemap.com" />
     
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>    
 </head>

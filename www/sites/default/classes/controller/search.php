@@ -29,30 +29,36 @@ class Controller_Search extends Sourcemap_Controller_Layout {
         $params = $_GET;
         if(strtolower(Request::$method) === 'post') {
             $params = $_POST;
-        }
+        } else {
+			if(isset($params['sq'])) {
+				$params['q'] = $params['sq'];
+			}
+		}
+		if(!isset($params['q'])) {
+	    	$this->layout->page_title = 'No results available for your search on Sourcemap';
+		} else {
+	        $search_params = $defaults;
+	        foreach($search_params as $k => $v) 
+	            if(isset($params[$k])) 
+	                $search_params[$k] = $params[$k];
 
-        //$params = array_merge($defaults, $params);
-        $search_params = $defaults;
-        foreach($search_params as $k => $v) 
-            if(isset($params[$k])) 
-                $search_params[$k] = $params[$k];
+	        $r = Sourcemap_Search::find($search_params);
 
-        $r = Sourcemap_Search::find($search_params);
+	        $this->template->search_result = $r;
+	    	$this->layout->page_title = 'Search results for ['.$search_params['q'].'] on Sourcemap';
 
-        $this->template->search_result = $r;
-    	$this->layout->page_title = 'Search results for ['.$search_params['q'].'] on Sourcemap';
+	        $p = Pagination::factory(array(
+	            'current_page' => array(
+	                'source' => 'query_string',
+	                'key' => 'p'
+	            ),
+	            'total_items' => $r->hits_tot,
+	            'items_per_page' => $r->limit,
+	            'view' => 'pagination/basic',
+	            'url_params' => $search_params
+	        ));
 
-        $p = Pagination::factory(array(
-            'current_page' => array(
-                'source' => 'query_string',
-                'key' => 'p'
-            ),
-            'total_items' => $r->hits_tot,
-            'items_per_page' => $r->limit,
-            'view' => 'pagination/basic',
-            'url_params' => $search_params
-        ));
-
-        $this->template->pager = $p;
+	        $this->template->pager = $p;
+		}
     }
 }

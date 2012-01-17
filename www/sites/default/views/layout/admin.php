@@ -33,6 +33,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
     <link rel="apple-touch-icon" href="assets/images/favicon-large.png">
     <link rel="image_src" href="assets/images/favicon-large.png">
+	<link rel="search" href="services/opensearch/" type="application/opensearchdescription+xml" title="Sourcemap.com" />
 
     <?= isset($styles) ? Sourcemap_CSS::link_tags($styles) : '' ?>
 </head>

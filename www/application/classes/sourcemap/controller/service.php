@@ -104,6 +104,7 @@ class Sourcemap_Controller_Service extends Controller_REST {
         $this->request->response = $this->_serialize($this->response);
         $this->request->headers['Content-Type'] = 
             $this->_format_content_type($this->_format);
+		$this->request->headers['Access-Control-Allow-Origin'] = '*';
         if($this->_cache_hit)
             $this->request->headers[self::HDR_CACHE_HIT] = 'true';
         return parent::after();
@@ -382,7 +383,7 @@ class Sourcemap_Controller_Service extends Controller_REST {
     protected function _serialize_jpeg($jpeg) {
         return $jpeg;
     }
-
+	
     protected function  _rest_error($code=400, $msg='Not found.') {
         $this->request->status = $code;
         $this->headers['Content-Type'] = $this->_format_content_type();

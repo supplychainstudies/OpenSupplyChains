@@ -143,7 +143,6 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 				unset($recovery_values); 
 			}
 		}
-		var_dump($recovery_values);
 		if ($upstream_sheet != "") {
 			$contentReader->setLoadSheetsOnly($upstream_sheet);
 			$contentPHPExcel = $contentReader->loadContents($xls);
@@ -423,7 +422,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 					}
 				}
 			}
-		}
+		} var_dump($starting_row);
 			for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
 				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getCalculatedValue());
 				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();
@@ -465,7 +464,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			$boms = array();
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
-				if ($rowIndex>$starting_row && $rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue() != null && $rows->getCell($h['O-Name'] . $rowIndex)->getCalculatedValue() != "") {
+				if ($rowIndex>$starting_row && $rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue() != null && $rows->getCell($h['Part-Name'] . $rowIndex)->getCalculatedValue() != "") {
 					$uuid = $rows->getCell($h['O-Name'] . $rowIndex)->getCalculatedValue() . " (" . $rows->getCell($h['O-City'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['O-Country'] . $rowIndex)->getCalculatedValue() . " " . $rows->getCell($h['O-Postal-Code'] . $rowIndex)->getCalculatedValue() . ")";
 
 					if (isset($stops[$uuid]) == false) {
@@ -495,6 +494,8 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 									}
 								}
 							} elseif (isset($recovery_values) == true) {
+								var_dump($recovery_values);
+								var_dump($stops[$uuid]['Name']);
 								if (isset($recovery_values[$stops[$uuid]['Name']]) == true) {
 									$stops[$uuid]['days'] = $recovery_values[$stops[$uuid]['Name']];
 								} elseif (isset($recovery_values[$stops[$uuid]['Name'] . "-" . $stops[$uuid]['Part-Name']]) == true) {

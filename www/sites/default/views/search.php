@@ -14,7 +14,7 @@
 
 <div id="page-title">
     <div class="container">
-        <h1>Results for "<?= isset($search_result->parameters['q']) ? HTML::chars($search_result->parameters['q']) : ''; ?>"</h1>
+        <h1><?= isset($search_result->parameters['q']) ? HTML::chars("Results for &ldquo;".$search_result->parameters['q']."&rdquo;.", false) : "No Results Available"; ?></h1>
     </div>
 </div>
 
@@ -33,7 +33,7 @@
             <?= $pager->render() ?>
         </div>
     <?php else: ?>
-        <h3 class="bad-news">No results.  Please try broadening your search terms.</h3>
+        <h3 class="bad-news">Please try broadening your search terms.</h3>
     <?php endif; ?>
     </div>
 </div>

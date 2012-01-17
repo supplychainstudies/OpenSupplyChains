@@ -27,7 +27,8 @@
 		<div class="container">
             <div class="editable-options">
             	<h2 class="section-title">Map Options</h2>
-				
+		        <a id="map-edit-button" class="button alternate" href="edit/<?= $supplychain_id; ?>">Edit Map Description</a>
+				<div class="clear"></div>
                 <div class="impact-box">
                     <input type="checkbox" <?= $supplychain_weight; ?> id="impact-use-weight" /> 
                     <label for="impact-use-weight">Show Weight</label>
@@ -92,9 +93,6 @@
             <?php endif; ?>
             </span>
         </h1>
-        <?php if($can_edit): ?>
-            <a id="map-edit-button" class="button alternate" href="edit/<?= $supplychain_id; ?>">Edit Description</a>
-        <?php endif; ?>
         <div class="clear"></div>
         <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
         <?php if (isset($supplychain_youtube_id)): ?>

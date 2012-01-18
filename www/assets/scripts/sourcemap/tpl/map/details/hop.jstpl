@@ -36,7 +36,7 @@
 	<% if((!this.hop.getAttr("weight", false) || this.hop.getAttr("weight", false) == 0) && (this.hop.getAttr("qty", false) && this.hop.getAttr("qty", false) != 0)) { %><li class="weight"><%= this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
 	<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0) && (this.hop.getAttr("qty", false) && this.hop.getAttr("qty", false) != 0)) { %><li class="weight"><%= this.hop.getAttr("weight", 0)*this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
     <% if((this.hop.getAttr("co2e", false) && this.hop.getAttr("co2e", false) != 0)) { %>
-	<% var scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("co2e", 0) * this.hop.gc_distance() * this.hop.getAttr("qty", 0)), "kg", 2); %>
+	<% var scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("co2e", 0) * this.hop.gc_distance() * this.hop.getAttr("weight", 0)* this.hop.getAttr("qty", 1)), "kg", 2); %>
 		<li class="co2e"> <%= scaled.value %> <%= scaled.unit %> CO2e</li> <% } %>
 </ul>
 </div>

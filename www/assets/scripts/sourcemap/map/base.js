@@ -327,14 +327,14 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 
         // truncate here
         var bannerwidth = $(this.banner_div).width();
-        console.log(bannerwidth);
+        //console.log(bannerwidth);
         var sumwidth=0;
         $(this.banner_div).find("#banner-content").find("div:not(#banner-summary):visible").each(function(){
             sumwidth += $(this).width() + 44;
         });
 
         var summarywidth = bannerwidth - sumwidth; 
-        console.log(summarywidth);
+        //console.log(summarywidth);
         $(this.banner_div).find("#banner-summary").css("max-width",summarywidth);
         $(this.banner_div).find("#banner-summary").css("width",summarywidth);
         Sourcemap.truncate_one_string("#banner-summary");

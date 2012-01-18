@@ -75,7 +75,7 @@ $(document).ready(function() {
                             $('#sourcemap-dialog-mobile').css("height", 208).css("width", 320);
                         } else {
                             // horizontal
-                            $("body").addClass("horizontal");			
+                            $("body").addClass("horizontal");	
                             //$('#sourcemap-map-mobile').css("height", 268).css("width", 480);
                             $('#sourcemap-map-mobile').css("height", 268).css("width", 240);
                             $('#sourcemap-map-mobile').css("float","left");
@@ -184,14 +184,59 @@ $(document).ready(function() {
 });
 
 
-Sourcemap.init_mobile_dialog = function(supplychain){
-    console.log(supplychain);
+Sourcemap.init_mobile_dialog = function(sc){
+    console.log(sc);
     $("#sourcemap-dialog-mobile").html('<div class="mobile-accordion"></div>');
-    var map_item = '<h3 class="accordion-title"><div class="arrow"></div> Title </h3>'+
-    '<div class="accordion-body"></div></div>'+
-    '<h3 class="accordion-title"><div class="arrow"></div>Description</h3>'+
-    '<div class="accordion-body">aaa</div></div>';
+    var d = new Date(sc.modified*1000);
+    var owner_name = sc.owner.display_name!=undefined ? sc.owner.display_name : sc.owner.name;
+    var map_item = '<h3 class="accordion-title map-title first"><div class="noarrow"></div><div id="title">'+sc.attributes.title+'</div>'+
+    '<div id="owner" style="background: url('+sc.owner.avatar+') 10px center no-repeat">'+owner_name+'</a></h3>'+
+    '<div class="accordion-body"><div id="dialog-description">'+
+    '<div class="dialog-item"><b>Title:</b><br/>'+sc.attributes.title+'</div>'+
+    '<div class="dialog-item"><b>Owner:</b><br/><a href="user/'+sc.owner.name+'">'+owner_name+'</a></div>'+
+    '<div class="dialog-item"><b>Modified:</b><br/>'+_S.fmt_date(d)+'</div>'+
+    '</div></div>'+
+    '<h3 class="accordion-title"><div class="arrow"></div>Map Description</h3>'+
+    '<div class="accordion-body"><div id="dialog-description">'+sc.attributes.description+'</div></div>';
     $(".mobile-accordion").append(map_item);
-    
+    $(".mobile-accordion").append('<div class=""></div>')
+    var stops_total = sc.stops.length;
+    for( var i =0 ; i<stops_total ; i++){
+        var stop = sc.stops[i];
+        var item; 
+        if(i==0)
+            item = '<h3 class="accordion-title first">';
+        else    
+            item = '<h3 class="accordion-title">';
+        item += '<div class="arrow"></div>'+stop.attributes.title+'</h3>';
+        //if(stop.attributes.description!="")
+        item += '<div class="accordion-body">'+
+        '<div id="dialog-description">'+
+        '<h3 class="placename">'+stop.attributes.address+'</h3>'+
+        stop.attributes.description+'</div></div>';
+        $(".mobile-accordion").append(item);
+    }
+    $(".mobile-accordion").find('.accordion-body').each(function() {
+        $(this).hide();
+    });
+    $(".mobile-accordion").find('.accordion-title').click(function() {
+        var open = $(this).next().is(":visible");
+
+        $('.accordion-body:visible').each(function() {
+            $(this).slideToggle('fast');
+        });
+
+        $('.accordion-title').find('.arrow').removeClass('arrowopen');
+        if (open == false) {
+            $(this).next().slideToggle('fast');
+            $(this).find('.arrow').addClass('arrowopen');
+        }
+
+        setTimeout(function(){
+            if(window.pageYOffset !== 0) return;
+            window.scrollTo(0,window.pageYOffset + 1);
+        },100);
+        return false;
+    });
 
 }

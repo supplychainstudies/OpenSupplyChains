@@ -38,15 +38,41 @@ body#embedded-supplychain {
     }
     #sourcemap-dialog-mobile {
         background : #bbb;
+        padding:0px; margin:0px;
+        overflow:auto;
         .mobile-accordion {
             background:#fff;
             h3.accordion-title {
+                overflow:hidden;
                 cursor: pointer;
                 border-bottom: solid #bbbbbb 1px;
                 padding: 5px;
                 margin: 0px;
                 color: #338db7;
                 font-size: 14px;
+                &.map-title{
+                    color:#353535;
+                    white-space: nowrap;
+                    #title{
+                        float:left;
+                    }
+                    #owner{
+                        float:right;
+                        background-size:20px 20px;
+                        padding-left: 33px; 
+                        font-size:10px;
+                        position:relative;
+                        top:2px;
+                        color:#2D78AF;
+                    }
+                }
+                .noarrow{
+                    width:10px;
+                    height:10px;
+                    //margin:4px 10px;
+                    clear:none;
+                    float:left;
+                }
                 .arrow {
                     background:url("../images/arrow.png") no-repeat;
                     width: 10px;
@@ -60,6 +86,34 @@ body#embedded-supplychain {
                     }
                 }
             }
+            h3.first {
+                border-top: solid #bbbbbb 1px;
+            }
+            div.accordion-body {
+                border-bottom: solid #bbbbbb 1px;
+                .box_shadow_inset(0, 2px, 3px, #dddddd);
+                margin-bottom: 0px;
+                height: auto;
+                h3.placename {
+                    font-style: italic;
+                    font-size:14px;
+                    font-weight: normal;
+                    color: #888888;
+                    margin-left: 5px;
+                    margin-bottom: 10px;
+                }
+
+                #dialog-description {
+                    padding: 15px;
+                    font-size:12px;
+                    line-height:1.2em;
+                    overflow:auto;
+                    .dialog-item{
+                        font-size:12px;
+                    }
+                }
+            }
+
         } // end mobile accordion
     }
 }
@@ -253,6 +307,7 @@ body.mobilezoom {
         }
     }
 	#banner { 
+        display:none;
         zoom: @z; -moz-transform: scale(@z); 
         //width:100%;
         .banner-date{
@@ -374,8 +429,9 @@ body.horizontal{
     @z : .5;
     .cluster {max-height:170px;}
 	#dialog {
-	    top:45px;
-	    width:360px;
+	    top:18px;
+        right:15px;
+	    width:208px;
 	    #dialog-content {
 	        h2.title { font-size: 16px; }
 	        h3.placename { font-size:12px; }

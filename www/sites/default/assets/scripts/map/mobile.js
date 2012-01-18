@@ -199,15 +199,15 @@ Sourcemap.init_mobile_dialog = function(sc){
     '<h3 class="accordion-title"><div class="arrow"></div>Map Description</h3>'+
     '<div class="accordion-body"><div id="dialog-description">'+sc.attributes.description+'</div></div>';
     $(".mobile-accordion").append(map_item);
-    $(".mobile-accordion").append('<div class=""></div>')
+    //$(".mobile-accordion").append('<div class=""></div>')
     var stops_total = sc.stops.length;
     for( var i =0 ; i<stops_total ; i++){
         var stop = sc.stops[i];
         var item; 
         if(i==0)
-            item = '<h3 class="accordion-title first">';
+            item = '<h3 class="accordion-title first" id="dialog-'+stop.instance_id+'">';
         else    
-            item = '<h3 class="accordion-title">';
+            item = '<h3 class="accordion-title" id="dialog-'+stop.instance_id+'">';
         item += '<div class="arrow"></div>'+stop.attributes.title+'</h3>';
         //if(stop.attributes.description!="")
         item += '<div class="accordion-body">'+
@@ -220,23 +220,71 @@ Sourcemap.init_mobile_dialog = function(sc){
         $(this).hide();
     });
     $(".mobile-accordion").find('.accordion-title').click(function() {
-        var open = $(this).next().is(":visible");
+        Sourcemap.Map.Base.prototype.hideDialog();
 
+        var open = $(this).next().is(":visible");
         $('.accordion-body:visible').each(function() {
             $(this).slideToggle('fast');
         });
-
         $('.accordion-title').find('.arrow').removeClass('arrowopen');
         if (open == false) {
             $(this).next().slideToggle('fast');
             $(this).find('.arrow').addClass('arrowopen');
         }
 
+        // set iphone screen
         setTimeout(function(){
             if(window.pageYOffset !== 0) return;
             window.scrollTo(0,window.pageYOffset + 1);
         },100);
+
         return false;
     });
+    Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
+        this.hideDialog(true);
+        var target = "#dialog-"+stid;
+        $(target).click();
+        var targetOffset = $(target).offset().top;
+        var currentOffset = $("#sourcemap-dialog-mobile").scrollTop();
+        var accordian_height = $(target).next().height();
+        console.log(currentOffset);
+        console.log(targetOffset);
+        console.log(accordian_height);
+        var sumOffset;
+        if($("body").hasClass("vertical")){
+            if(targetOffset>0){
+                sumOffset = currentOffset+targetOffset-208-64;
+            } else {
+                sumOffset = currentOffset+targetOffset-208;
+            }
+        } else {
+            sumOffset = currentOffset+targetOffset;
+        }
+        $("#sourcemap-dialog-mobile").animate({scrollTop:sumOffset},200);
+        
+    }
+    /*
+    Sourcemap.Map.Base.prototype.showHopDetails = function(stid, scid) {
+        console.log("showhop");
+        this.hideDialog();
+    }
+    $(document).unbind("map:feature_selected");
+    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        var _Base = _S.Map.Base.prototype;
+        console.log(_Base);
+        if(ftr.cluster) {
+            _Base.showClusterDetails(ftr);
+        } else if(ftr.attributes.stop_instance_id && (!(map.editor) || this.options.locked)) {
+            _Base.showStopDetails(
+            ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
+            );
+        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {
+            _Base.showHopDetails(
+                ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
+            );
+        }
+    }, this));
+    */
+} // end init dialog
 
-}
+

@@ -242,24 +242,25 @@ Sourcemap.init_mobile_dialog = function(sc){
     });
     Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
         this.hideDialog(true);
+        var previous_height = $('.accordion-title').find('.arrowopen').parent().next().height();
         var target = "#dialog-"+stid;
         $(target).click();
         var targetOffset = $(target).offset().top;
         var currentOffset = $("#sourcemap-dialog-mobile").scrollTop();
-        var accordian_height = $(target).next().height();
+        //var accordian_height = $(target).height();
         console.log(currentOffset);
         console.log(targetOffset);
-        console.log(accordian_height);
+        console.log(previous_height);
         var sumOffset;
-        if($("body").hasClass("vertical")){
-            if(targetOffset>0){
-                sumOffset = currentOffset+targetOffset-208-64;
-            } else {
-                sumOffset = currentOffset+targetOffset-208;
-            }
+        if(targetOffset>0){
+            sumOffset = currentOffset+targetOffset-previous_height; // -64 = normal height
         } else {
             sumOffset = currentOffset+targetOffset;
         }
+        if($("body").hasClass("vertical")){
+            sumOffset -= 208;
+        } 
+        //else {    sumOffset = currentOffset+targetOffset; }
         $("#sourcemap-dialog-mobile").animate({scrollTop:sumOffset},200);
         
     }

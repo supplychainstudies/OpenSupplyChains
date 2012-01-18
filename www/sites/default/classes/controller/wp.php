@@ -28,11 +28,16 @@ class Controller_WP extends Sourcemap_Controller_Layout {
         // Otherwise grab JSON from Wordpress API plugin and write a new cache
         else{
             try {
-                $contents = file_get_contents(self::BLOGURL . $page);
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_URL, self::BLOGURL . $page);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 3); // times out after 4s
+                $contents = curl_exec($ch);
+                curl_close($ch);
                 $contents = json_decode($contents);
                 Cache::instance()->set(self::cache_key($page), $contents);
             } catch(Exception $e) {
-                $contents = $e;
+                $contents = false;
             }
         }
 

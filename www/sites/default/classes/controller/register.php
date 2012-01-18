@@ -198,4 +198,4 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             return $this->request->redirect('auth');
         }
     }
-}
+

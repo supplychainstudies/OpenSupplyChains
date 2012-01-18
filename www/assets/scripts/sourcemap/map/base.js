@@ -40,8 +40,8 @@ Sourcemap.Map.Base.prototype.defaults = {
         "weight": function(st) {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 1));
-    		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
-            var wgt = parseFloat(unt || st.getAttr("weight"));
+    		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;			
+            var wgt = parseFloat(st.getAttr("weight"));
             if(!isNaN(qty) && !isNaN(wgt)) val = qty * wgt;
             return val;
         },
@@ -49,9 +49,9 @@ Sourcemap.Map.Base.prototype.defaults = {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","L") == "L" ? 1 : 0;
-            var wgt = parseFloat(unt || st.getAttr("weight"));
+            var wgt = parseFloat(st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
-                wgt = parseFloat(st.gc_distance());
+                wgt =  wgt * parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("water", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = wgt* qty * fac;
@@ -61,9 +61,9 @@ Sourcemap.Map.Base.prototype.defaults = {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","kWh") == "kWh" ? 1 : 0;
-            var wgt = parseFloat(unt || st.getAttr("weight"));
+            var wgt = parseFloat(st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
-                wgt = parseFloat(st.gc_distance());
+                wgt = wgt * parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("energy", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = wgt* qty * fac;
@@ -73,9 +73,9 @@ Sourcemap.Map.Base.prototype.defaults = {
             var val = 0;
             var qty = parseFloat(st.getAttr("qty", 1));
     		var unt = st.getAttr("unit","kg") == "kg" ? 1 : 0;
-            var wgt = parseFloat(unt || st.getAttr("weight"));
+            var wgt = parseFloat(st.getAttr("weight"));
             if(st instanceof Sourcemap.Hop) {
-                wgt = parseFloat(st.gc_distance());
+                wgt = wgt * parseFloat(st.gc_distance());
             }
             var fac = parseFloat(st.getAttr("co2e", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * wgt* fac;
@@ -547,6 +547,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			});
 			$(this.base.dialog_content).find('#dialog-footprint').each(function() {	
 				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+				console.log(reduced_height);console.log(val);
 				if (reduced_height > val) {
 					reduced_height = reduced_height - val;
 					$(this).prev().find('.arrow').addClass("arrowopen");
@@ -925,7 +926,6 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		function(f, mb) {        
 				//The val variable should be the polution value for this stop
 		        var attr_nm = this.basemap.viz_attr_map[this.attr_nm];
-				console.log(f);
 		        if(f.cluster) {    //Why we divide this into two segments is unclear
 		            var val = 0;
 		            for(var c in f.cluster) {
@@ -958,7 +958,11 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		            } 
 		        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
 		            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
-		            else val = f.attributes[attr_nm];
+		            else {
+						//val = f.attributes[this.attr_nm];
+						val =  attr_nm(f);
+					}
+					//val = f.attributes[this.attr_nm];
 		            val = parseFloat(val);
 		            if(!isNaN(val)) { 
 		                // scale
@@ -969,6 +973,14 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                // var sval = this.smin;
 		                //if(vrange)
 		                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
+						/*
+						if (this.attr_nm == "co2e" || this.attr_nm == "water" || this.attr_nm == "energy") {
+							if (typeof(f.attributes.ref.attributes.weight) != "undefined") {
+								val = val * f.attributes.ref.attributes.weight;
+							} else {
+								val = 0;
+							}
+						} */
 						fraction = val/this.vtot;
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
 		                var fsize = 18;
@@ -978,16 +990,23 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                var unit = "kg";
 		                if(this.attr_nm === "water") { unit = "L"; }
 						if(this.attr_nm === "energy") { unit = "kWh"; }
+						/*
+						if (typeof(f.attributes.hop_instance_id) != "undefined" && typeof(f.attributes.ref.gc_distance()) != "undefined") {
+							val = parseFloat(val) * parseFloat(f.attributes.ref.gc_distance());
+						} */
 						var scaled = {};
 						scaled.unit = unit;
 						scaled.value = val;
 		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
-		                if(attr_nm === "co2e") { scaled.unit += " co2e"}        
+		                if(attr_nm === "co2e") { scaled.unit += " co2e"}   
+						var x = parseFloat(scaled.value);
+						scaled.value = x.toFixed(1);
+						f.attributes.label = scaled.value + " " + scaled.unit;	      
 		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
 		    				f.attributes.label = "";
 		    			} else {
 							
-		    			    f.attributes.label = parseFloat(scaled.value) + " " + scaled.unit;	 
+		    			    f.attributes.label = scaled.value + " " + scaled.unit;	 
 		    			}	              
 		            } 
 		        } 

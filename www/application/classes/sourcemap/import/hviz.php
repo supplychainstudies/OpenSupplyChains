@@ -53,6 +53,8 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		$upstream_sheet = "";
 		$downstream_sheet = "";
 		$recovery_sheet = "";
+		// Forecast Unit of Measure
+		$forecast_uom = "";
 		foreach($sheets as $key => $val) {
 			if(strpos(strtolower($val), "forecast") !== false) 
 				$forecast_sheet = $val;
@@ -86,11 +88,16 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 					$fh["part"] = $column;
 				elseif (strpos($value,"forecast") !== false)
 					$fh["forecast"] = $column;
+				elseif (strpos($value,"unit") !== false) 
+					$fh["uom"] = $column;
 			}
 			foreach ($rows->getRowIterator() as $row) {
 				$rowIndex = $row->getRowIndex();
 				if ($rowIndex > $starting_row && $rows->getCell($fh["forecast"] . $rowIndex)->getCalculatedValue() != NULL) {
 					$forecast_values[$rows->getCell($fh["part"] . $rowIndex)->getCalculatedValue()] = $rows->getCell($fh["forecast"] . $rowIndex)->getCalculatedValue(); 
+				}
+				if ($rows->getCell($fh["uom"] . $rowIndex)->getCalculatedValue() != NULL && $forecast_uom != "") {
+					$forecast_uom = $rows->getCell($fh["uom"] . $rowIndex)->getCalculatedValue();
 				}
 			}
 			if (count($forecast_values) == 0) { 
@@ -422,7 +429,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 					}
 				}
 			}
-		} var_dump($starting_row);
+		}
 			for ($i = 0; $rows->cellExistsByColumnAndRow($i,$starting_row) == true; $i++) {
 				$value = strtolower($rows->getCellByColumnAndRow($i,$starting_row)->getCalculatedValue());
 				$column = $rows->getCellByColumnAndRow($i,$starting_row)->getColumn();

@@ -1701,4 +1701,3 @@ Sourcemap.Date.format = function(dt) {
 Sourcemap.fmt_date = function(dt) {
     return Sourcemap.Date.format(dt);
 }
-

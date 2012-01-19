@@ -13,6 +13,9 @@
 
 class Sourcemap_Search_Simple extends Sourcemap_Search {
     public function fetch() {
+
+
+
         parent::fetch();
         if(!isset($this->parameters['q']))
             $this->parameters['q'] = '';
@@ -63,8 +66,10 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         }
 
         $search->reset(false);
-        $ct = $search->count_all();
         
+        // The count_all method requires a separate call to the DB.  It's slow.
+        // $ct = $search->count_all();
+        // Let's just count the total number of results after they come in.
 
         // featured filter
         if(isset($this->parameters['featured']) && strtolower($this->parameters['featured']) == 'yes') {
@@ -96,15 +101,23 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $search->limit($this->limit);
         $search->offset($this->offset);
 
+        //$tok = Profiler::start('bench','find-supplychains');
         $raw = $search->find_all();
-        $results = self::prep_rows($raw);
+        //Profiler::stop($tok);
 
+        //$tok = Profiler::start('bench','prep-rows');
+        $results = self::prep_rows($raw);
+        //Profiler::stop($tok);
+
+        $ct = count($results);
+        
         $this->results->hits_tot = $ct;
         $this->results->results = $results;
         $this->results->limit = $this->limit;
         $this->results->offset = $this->offset;
         $this->results->hits_ret = count($results);
         $this->results->parameters = $this->parameters;
+
         return $this->results;
     }
 

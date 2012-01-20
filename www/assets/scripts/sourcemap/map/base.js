@@ -713,7 +713,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 					$(this).show();
 				}					
 			});
-			$(this.base.dialog_content).find('#dialog-footprint').each(function() {	
+			$(this.base.dialog_content).find('#dialog-footprint-body').each(function() {	
 				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
 				console.log(reduced_height);console.log(val);
 				if (reduced_height > val) {

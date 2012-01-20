@@ -35,7 +35,7 @@
 <% } %>
 <% if((this.stop.getAttr("weight", false)  && this.stop.getAttr("weight", false) != 0) && ((this.stop.getAttr("co2e", false)  && this.stop.getAttr("co2e", false) != 0) || (this.stop.getAttr("energy", false) && this.stop.getAttr("energy", false) != 0) || (this.stop.getAttr("water", false) && this.stop.getAttr("water", false) != 0))) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
-<div class="accordion-body">
+<div class="accordion-body" id="dialog-footprint-body">
 <ul id="dialog-footprint-header">	
 	<% var unit = (this.stop.getAttr("unit","kg") == "kg") ? 1 : 0; %>
 	<% var weight = unit || this.stop.getAttr("weight"); %>

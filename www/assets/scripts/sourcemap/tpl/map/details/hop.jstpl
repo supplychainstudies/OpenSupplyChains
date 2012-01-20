@@ -30,7 +30,7 @@
 <% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0)) { %>
 	<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("qty", 1) * this.hop.getAttr("weight", 0)), "kg", 2); %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
-<div class="accordion-body">
+<div class="accordion-body" id="dialog-footprint-body">
 <ul id="dialog-footprint-header">
     <% if(this.hop.gc_distance()) { %><li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li><% } %>
 	<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0) && (!this.hop.getAttr("qty", false) || this.hop.getAttr("qty", false) == 0)) { %><li class="weight"><%= this.hop.getAttr("weight", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>

@@ -1335,6 +1335,21 @@ Sourcemap.Map.prototype.findFeaturesForHop = function(scid, from_stid, to_stid) 
     }
     return ftrs;
 }
+Sourcemap.Map.prototype.findFeaturesForHopfromHopID = function (scid , hopid) {
+    var ftrs = false;
+    if(this.hop_features[scid]){
+        var sc_hop_ftrs = this.hop_features[scid];
+        for(var fid in sc_hop_ftrs){
+            for( var tid in sc_hop_ftrs[fid]) {
+                var hop_feature = sc_hop_ftrs[fid][tid];
+                if(hop_feature.hop.attributes.hop_instance_id==hopid){
+                    ftrs = hop_feature;
+                }
+            }
+        }
+    }
+    return ftrs;
+}
 
 Sourcemap.Map.prototype.getStopFeatures = function(scid) {
     var features = [];

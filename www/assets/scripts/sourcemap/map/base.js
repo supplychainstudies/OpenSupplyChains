@@ -121,10 +121,14 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 				var sid = window.location.hash.substring(1);				
 				var targetftr = this.map.findFeaturesForStop(sc.instance_id, sid).stop;
 			} else if(type == 'hop') {
-				var fid = 'stop-'+window.location.hash.substring(1).split('-')[1];
-				var tid = 'stop-'+window.location.hash.substring(1).split('-')[2];
-				var targetftr = this.map.findFeaturesForHop(sc.instance_id, fid, tid).hop; 	
-			}
+				//var fid = 'stop-'+window.location.hash.substring(1).split('-')[1];
+				//var tid = 'stop-'+window.location.hash.substring(1).split('-')[2];
+                var hid = window.location.hash.substring(1);
+				var targetftr = this.map.findFeaturesForHopfromHopID(sc.instance_id, hid).hop; 	
+			} else if(type == 'cluster') {
+                console.log("cluster");
+                //console.log(this.map.findFeaturesForCluster(sc.instance_id,))
+            }
 			if(typeof(targetftr) != 'undefined' && targetftr != false) {
 				this.map.broadcast('map:feature_selected', this.map, targetftr); 
 			}

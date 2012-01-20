@@ -233,10 +233,9 @@
             line-height:1.2em;
             overflow:auto;
         }
-        ul#dialog-footprint { 
-	        
+
+		ul#dialog-footprint-header { 
             height:45px;
-            //padding:10px; 
 			padding: 0px;
 			margin:0px;
             font-size: 14px;
@@ -244,8 +243,8 @@
             text-align:center;
             color: @link-color;
             list-style:none;
-            border-top: 1px solid rgb(206,206,206);
-            border-bottom: 1px solid rgb(206,206,206);
+            //border-top: 1px solid rgb(206,206,206);
+            //border-bottom: 1px solid rgb(206,206,206);
             li {
                 float:left;
                 display:block;
@@ -255,6 +254,60 @@
                 &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
 				&.energy{padding-left: 40px; background: url(../images/dock-icon-power.png) 10px 12px no-repeat;}
 				&.distance{padding-left: 40px; background: url(../images/dock-icon-distance.png) 10px 12px no-repeat;}
+            }
+        }
+        ul#dialog-footprint { 
+	        
+            //height:45px;
+			padding: 10px;
+			height: auto;
+			margin:0px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align:center;
+			clear: both;
+            color: @link-color;
+            list-style:none;
+            //border-top: 1px solid rgb(206,206,206);
+            //border-bottom: 1px solid rgb(206,206,206);
+            li {
+                float:left;
+                display:block;
+				clear: both;
+                padding: 12px 10px;
+				.units {
+					font-size: 8px;
+					//color: #aaaaaa;
+					width: 50px;
+					clear: none;
+					margin: 3px;
+					float: left;
+				}
+				.footprint-math {
+					clear: none;
+					float:left;
+					text-align:center;
+					//vertical-align: bottom;
+					//width:auto;
+					font-size:1em;
+					padding-left: 5px;
+					padding-right: 5px;
+					//padding-top: 7px;
+				}
+				.reference {  
+					width: 25px;
+					height: 25px;
+					margin-left: 10px;
+					float:left;
+					&.lock {
+						background: url(../images/icon-book.png) 0px 0px no-repeat;  
+					}
+				}
+                &.weight{padding-left: 45px; background: url(../images/dock-icon-mass.png) 10px 12px no-repeat;}
+                &.co2e{padding-left: 45px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
+                &.water{padding-left: 45px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
+				&.energy{padding-left: 45px; background: url(../images/dock-icon-power.png) 10px 12px no-repeat;}
+				&.distance{padding-left: 45px; background: url(../images/dock-icon-distance.png) 10px 12px no-repeat;}
             }
         }   
         #dialog-media {

@@ -1351,6 +1351,22 @@ Sourcemap.Map.prototype.findFeaturesForHopfromHopID = function (scid , hopid) {
     return ftrs;
 }
 
+Sourcemap.Map.prototype.findFeaturesForCluster = function (scid, clusterid) {
+    var ftrs =false;
+    if(this.cluster_features[scid]){
+        var sc_cluster_ftrs = this.cluster_features[scid];
+        for(var cluster in sc_cluster_ftrs){
+            var cluster = sc_cluster_ftrs[cluster];
+            if(cluster.attributes){
+                if(cluster.attributes.cluster_instance_id == clusterid){
+                    ftrs = cluster;
+                }
+            }
+        }
+    }
+    return ftrs;
+}
+
 Sourcemap.Map.prototype.getStopFeatures = function(scid) {
     var features = [];
     if(scid) {

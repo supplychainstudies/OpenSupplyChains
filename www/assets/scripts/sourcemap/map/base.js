@@ -126,8 +126,8 @@ Sourcemap.Map.Base.prototype.initMap = function() {
                 var hid = window.location.hash.substring(1);
 				var targetftr = this.map.findFeaturesForHopfromHopID(sc.instance_id, hid).hop; 	
 			} else if(type == 'cluster') {
-                console.log("cluster");
-                //console.log(this.map.findFeaturesForCluster(sc.instance_id,))
+                var cid = window.location.hash.substring(1);
+                var targetftr = this.map.findFeaturesForCluster(sc.instance_id, cid);
             }
 			if(typeof(targetftr) != 'undefined' && targetftr != false) {
 				this.map.broadcast('map:feature_selected', this.map, targetftr); 

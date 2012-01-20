@@ -104,8 +104,16 @@ Route::set('static maps', 'map/static/<id>.<sz>.png', array(
 
 Route::set('info', 'info/<id>')
     ->defaults(array(
-        'controller' => 'wp',
+        'controller' => 'info',
         'action' => 'index'
+    )
+);
+
+Route::set('info/child', 'info/<id>/<child>')
+    ->defaults(array(
+        'controller' => 'info',
+        'action' => 'index',
+        'child' => null
     )
 );
 

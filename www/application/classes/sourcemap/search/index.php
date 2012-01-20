@@ -19,6 +19,7 @@ class Sourcemap_Search_Index {
     }
 
     public static function update($scid) {
+
         $sc = ORM::factory('supplychain', $scid);
         if($sc->loaded() && $sc->other_perms != 0) {
             $scidx = ORM::factory('supplychain_search')

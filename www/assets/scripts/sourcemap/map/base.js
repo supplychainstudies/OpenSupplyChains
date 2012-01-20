@@ -121,10 +121,14 @@ Sourcemap.Map.Base.prototype.initMap = function() {
 				var sid = window.location.hash.substring(1);				
 				var targetftr = this.map.findFeaturesForStop(sc.instance_id, sid).stop;
 			} else if(type == 'hop') {
-				var fid = 'stop-'+window.location.hash.substring(1).split('-')[1];
-				var tid = 'stop-'+window.location.hash.substring(1).split('-')[2];
-				var targetftr = this.map.findFeaturesForHop(sc.instance_id, fid, tid).hop; 	
-			}
+				//var fid = 'stop-'+window.location.hash.substring(1).split('-')[1];
+				//var tid = 'stop-'+window.location.hash.substring(1).split('-')[2];
+                var hid = window.location.hash.substring(1);
+				var targetftr = this.map.findFeaturesForHopfromHopID(sc.instance_id, hid).hop; 	
+			} else if(type == 'cluster') {
+                var cid = window.location.hash.substring(1);
+                var targetftr = this.map.findFeaturesForCluster(sc.instance_id, cid);
+            }
 			if(typeof(targetftr) != 'undefined' && targetftr != false) {
 				this.map.broadcast('map:feature_selected', this.map, targetftr); 
 			}
@@ -223,15 +227,20 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(ftr.cluster) {
+            window.location.hash = ftr.attributes.cluster_instance_id; // + ftr.attributes.supplychain_instance_id;
             this.showClusterDetails(ftr);
         } else if(ftr.attributes.stop_instance_id && (!(map.editor) || this.options.locked)) {
             this.showStopDetails(
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
+            window.location.hash = ftr.attributes.stop_instance_id; // + ftr.attributes.supplychain_instance_id;
+            console.log(ftr);
         } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
+            window.location.hash = ftr.attributes.hop_instance_id; // + ftr.attributes.supplychain_instance_id;
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );
+            console.log(ftr);
         }
     }, this));
 
@@ -411,7 +420,7 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
         return true;         
     }
 	
-	
+
 }
 
 Sourcemap.Map.Base.prototype.setActiveArea = function(){
@@ -495,14 +504,12 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 
         // truncate here
         var bannerwidth = $(this.banner_div).width();
-        //console.log(bannerwidth);
         var sumwidth=0;
         $(this.banner_div).find("#banner-content").find("div:not(#banner-summary):visible").each(function(){
             sumwidth += $(this).width() + 44;
         });
 
         var summarywidth = bannerwidth - sumwidth; 
-        //console.log(summarywidth);
         $(this.banner_div).find("#banner-summary").css("max-width",summarywidth);
         $(this.banner_div).find("#banner-summary").css("width",summarywidth);
         Sourcemap.truncate_one_string("#banner-summary");
@@ -715,7 +722,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			});
 			$(this.base.dialog_content).find('#dialog-footprint-body').each(function() {	
 				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				console.log(reduced_height);console.log(val);
 				if (reduced_height > val) {
 					reduced_height = reduced_height - val;
 					$(this).prev().find('.arrow').addClass("arrowopen");
@@ -769,7 +775,8 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 		            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
 		        }
             }, this));
-              
+             
+            /* Commented out until the errors are in check... 
 	        if(this.stop.magic["youtube:link"]) { 
 	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
 	        } else if(this.stop.magic["vimeo:link"]) { 
@@ -781,6 +788,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 	        } else if(this.stop.magic["flickr:setid"]) { 
 	            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
 			} 
+            */
 
   
         }, 
@@ -1668,4 +1676,3 @@ jQuery.fn.detail_center = function () {
 
 // Jquery shake $.shake
 jQuery.fn.shake = function ( ) { this.each(function(init) { var jqNode = $(this); for (var x = 1; x <= 2; x++) { jqNode.animate({ 'right' : '-=15px' },15) .animate({ 'right' : '+=15px' },15) .animate({ 'right' : '+=15px' },15) .animate({ 'right' : '-=15px' },15,"linear",function() { $(this).attr("style","display:"+$(this).css("display")+";"); }); } }); return this; }
-

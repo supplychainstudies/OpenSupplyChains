@@ -95,6 +95,11 @@
         </h1>
         <div class="clear"></div>
         <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
+		<ul class="tags">
+			<?php foreach($supplychain_tags as $tag) {?>
+				<li><?= $tag; ?></li>
+			<?php } ?>			
+		</ul>
         <?php if (isset($supplychain_youtube_id)): ?>
         <div class="description-video">
             <iframe class="youtube-player" type="text/html" width="480" height="280" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>" frameborder="0"></iframe> 

@@ -577,10 +577,11 @@ input[type=checkbox]{
     float:left;
     height: 42px;
     margin-bottom: 15px;
+	a { color: #999; }
     .linkbox {
         margin-top: 10px;
         width: 290px;
-        padding: 4px 10px 4px 36px;
+        padding: 4px 10px 4px 40px;
         border: 0;
         font-size:12px;
         background: url("../images/little-earth.png") 12px center no-repeat;
@@ -612,10 +613,10 @@ input[type=checkbox]{
 #map-secondary {
 	margin:20px auto;
     .author {
-		margin-top:10px;
+		margin-top:15px;
         padding-bottom:20px;
         img {
-			width:64px; height:64px;
+			width:48px; height:48px;
             vertical-align:middle;
 			margin-right:5px;
         }
@@ -623,8 +624,8 @@ input[type=checkbox]{
 	p.description {
         font-size:16px;
         line-height:1.2em;
-		margin-bottom:10px;
-        color: #999;
+		margin:5px 0 10px 0;
+        color: #666;
 	}
     .description-video{
         width: 480px;
@@ -632,7 +633,23 @@ input[type=checkbox]{
         margin-bottom: 20px;
         .box.small();
     }
+	ul.tags {
+		margin:0 0 0 0; padding:0;
+		display:inline;
+		li {
+			font-size:10px;
+			border-radius:4px;
+			color:#999;
+			margin:5px 5px 5px 0;
+			background:#eee;
+			border:1px solid #ccc;
+			padding:2px 5px;
+			display:inline;
+		}
+	}
     .map-title{
+		font-size:24px;
+		line-height:1.2em;
         float: left;
     }
 }
@@ -735,6 +752,9 @@ input[type=checkbox]{
     min-height: 110px;
     padding: 20px 20px 0 0;
     background: url("../images/secondary_background.jpg") top left no-repeat;
+	h2.section-title {
+		margin-bottom:0; padding-bottom:0;
+	}
     #comments {
         list-style:none;
         padding:10px 0 0 0;

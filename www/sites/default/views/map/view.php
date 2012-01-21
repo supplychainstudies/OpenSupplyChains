@@ -97,7 +97,9 @@
         <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
 		<ul class="tags">
 			<?php foreach($supplychain_tags as $tag) {?>
+				<? if($tag != "") { ?>
 				<li><?= $tag; ?></li>
+				<? } ?>
 			<?php } ?>			
 		</ul>
         <?php if (isset($supplychain_youtube_id)): ?>

@@ -155,6 +155,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         this.map.dockControlEl(metric).find('.unit').text(scaled.unit);
     	
     }, this));
+        
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -194,35 +195,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             }
             Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
-		$("circle").hover($.proxy(function(event) {
-			var thefeature = event.currentTarget._featureId; 
-			var tieredsc = new Sourcemap.Supplychain.makeTiers(sc);
-			// first iterate through the openlayers map object to find the right circle
-			for (var x in this.map.map.layers) {
-				for (var y in this.map.map.layers[x].features) {
-					if (this.map.map.layers[x].features[y].id == thefeature) {
-						// Found the right openlayers feature. get data.
-						for (var z in tieredsc.stops) {
-							if (tieredsc.stops[z].instance_id == this.map.map.layers[x].features[y].attributes.stop_instance_id) {
-								Sourcemap.Map.Base.isolateNetworkEffect(this, tieredsc, 0.1, tieredsc.stops[z].local_stop_id);
-								break;
-							}
-						}
-						break;
-					}
-				}
-			}
-			//var id = $(this).attr("id");
-			//for () {
-				
-			//}
-		}, this));
-		/*
-	    Sourcemap.listen('map:feature_hover', $.proxy(function(evt, map, ftr) {
-			console.log("meow");
-	        var x = new Sourcemap.Supplychain.makeTiers(sc);		
-	    }, this));
-		*/
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
@@ -244,20 +216,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         }
     }, this));
 
-    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        if(ftr.cluster) {
-            this.showClusterDetails(ftr);
-        } else if(ftr.attributes.stop_instance_id && (!(map.editor) || this.options.locked)) {
-            this.showStopDetails(
-                ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
-            );
-        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
-            this.showHopDetails(
-                ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
-            );
-        }
-    }, this));
-	
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.hideDialog();
     }, this));
@@ -294,133 +252,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         }
     }, this));
     */
-}
-
-Sourcemap.Map.Base.svgToSc = function (thismap, sc, svgid) {
-	// first iterate through the openlayers map object to find the right circle
-	for (var x in thismap.map.map.layers) {
-		for (var y in thismap.map.map.layers[x].features) {
-			if (typeof(thismap.map.map.layers[x].features[y].geometry) != "undefined") {
-				if (thismap.map.map.layers[x].features[y].geometry.id == svgid) {
-					// Found the right openlayers feature. get data.
-					console.log(thismap.map.map.layers[x].features[y].attributes.stop_instance_id);
-					return thismap.map.map.layers[x].features[y].attributes.stop_instance_id;
-					break;
-				} 
-			}
-		}
-	}
-	return "not found";
-}
-
-
-Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
-            $("circle")
-            .filter(function(d){
-                    update_updown(i);
-					var x = new Sourcemap.Map.Base.svgToSc(thismap, sc, $(this).attr("id"));
-					for (var y in sc.stops) {
-						console.log(sc.stops[y].instance_id + " == " + x);
-						if (sc.stops[y].instance_id == x) {
-							return check_stops(sc.stops[y].local_stop_id, i);
-						}
-					}
-					//return check_stops(x,i);					                  
-                })
-            .transition()
-                .style("opacity",opacity);
-/*
-            svg.selectAll("g.stop_title text")
-            .filter(function(d){
-                    return check_stops(d.index,i);                        
-                })
-            .transition()
-                .style("opacity",opacity);
-           // Hide Arrow
-           svg.selectAll("g.arrow polygon")
-           .filter(function(d){return check_hops(d,i);})
-           .transition()
-                .style("opacity",opacity);
-
-           // Hide line
-           svg.selectAll("g.line line")
-           .filter(function(d){return check_hops(d,i);})
-           .transition()
-                .style("opacity",opacity);
-*/
-
-
-    var upstream = [];
-    var downstream = [];
-    function update_updown(select)
-    {        
-        var upstream = [];
-        var downstream = [];
-		if (typeof(sc.tier_list[select].instance) != "undefined") {
-        	upstream.push(sc.tier_list[select].instance);
-	        downstream.push(sc.tier_list[select].instance);
-	        //downstream ~max
-	        (function(){
-	        for(var j=0,down_max=downstream.length;j<down_max;j++){
-	            for(var h=0,max=sc.hop_list.length;h<max;h++){                        
-	                if(sc.hop_list[h].from==downstream[j]){
-	                    //prevent circular supplychain
-	                    if(jQuery.inArray(sc.hop_list[h].to,downstream)>0)
-	                        continue;
-	                    downstream.push(sc.hop_list[h].to);
-	                    down_max = downstream.length; 
-	                }
-	            }
-	        }
-	        })(); // end of funciton
-	        //upstream
-	        (function(){
-	        for(var j=0,up_max=upstream.length;j<up_max;j++){
-	            for(var h=0,max=sc.hop_list.length;h<max;h++){                        
-	                if(sc.hop_list[h].to==upstream[j]){
-	                    //prevent circular supplychain
-	                    if(jQuery.inArray(sc.hop_list[h].from,upstream)>0)
-	                        continue;
-	                    upstream.push(sc.hop_list[h].from);
-	                    up_max = upstream.length; 
-	                }
-	            }
-	        }
-	      })(); // end of function
-		}
-    }
-
-    function check_hops(hop,select)
-    {
-        // hops that connect to select stop
-        if(hop.from==sc.tier_list[select].instance||hop.to==sc.tier_list[select].instance)
-            return false;
-        if(jQuery.inArray(hop.from,upstream)>0){    
-            if(jQuery.inArray(hop.to,upstream)>0)
-                return false;
-        }
-        if(jQuery.inArray(hop.from,downstream)>0){    
-            if(jQuery.inArray(hop.to,downstream)>0)
-                return false;
-        }
-        return true;    
-    }
-
-    function check_stops(i,select)
-    {
-		console.log(i); console.log(select);
-        // false : not change opacity 
-        if(i==select)
-            return false;
-        if(jQuery.inArray(sc.tier_list[i].instance,downstream)>0)
-            return false;
-        if(jQuery.inArray(sc.tier_list[i].instance,upstream)>0) 
-            return false;
-        //else return true
-        return true;         
-    }
-	
-
 }
 
 Sourcemap.Map.Base.prototype.setActiveArea = function(){
@@ -834,8 +665,10 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
                 this.map.broadcast('map:feature_selected', this.map, sftr); 
 
             },{"map":this.map, "cluster":cluster}));
-}
 
+
+    
+}
 Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     var sc = this.map.supplychains[scid];
     var hop = sc.findHop(hid);

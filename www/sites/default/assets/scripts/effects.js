@@ -438,7 +438,7 @@ $(document).ready(function(){
     if ($.browser.msie  && parseInt($.browser.version) <= 8 && $('.browser').length == 0){
         
         //document.getElementById("status-message").className = "status-message browser";
-        if (!$('.messsages').length){
+        if (!$('.messages').length){
             $('.container:eq(0)').append($('<div class="messages"></div>'));
         }
 
@@ -446,7 +446,7 @@ $(document).ready(function(){
             "<div class=\"status-wrap\">"
             +"<div class=\"status-message\" style=\"line-height: 1.8em\">"
             +"<div class=\"browser\" "
-            +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; \"></div></div></div>"        
+            +" style=\"font-size:20px;color:#999;padding:20px;border: 1px solid #ddd; width: 903px; margin: 0 auto; \"></div></div></div>"        
         );
         $(".browser").append(
             " You're using Internet Explorer " +  parseInt($.browser.version) + ", which is not supported by Sourcemap."

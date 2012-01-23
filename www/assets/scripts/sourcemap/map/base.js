@@ -234,13 +234,11 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
             window.location.hash = ftr.attributes.stop_instance_id; // + ftr.attributes.supplychain_instance_id;
-            console.log(ftr);
         } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
             window.location.hash = ftr.attributes.hop_instance_id; // + ftr.attributes.supplychain_instance_id;
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );
-            console.log(ftr);
         }
     }, this));
 
@@ -303,7 +301,6 @@ Sourcemap.Map.Base.svgToSc = function (thismap, sc, svgid) {
 			if (typeof(thismap.map.map.layers[x].features[y].geometry) != "undefined") {
 				if (thismap.map.map.layers[x].features[y].geometry.id == svgid) {
 					// Found the right openlayers feature. get data.
-					console.log(thismap.map.map.layers[x].features[y].attributes.stop_instance_id);
 					return thismap.map.map.layers[x].features[y].attributes.stop_instance_id;
 					break;
 				} 
@@ -313,14 +310,12 @@ Sourcemap.Map.Base.svgToSc = function (thismap, sc, svgid) {
 	return "not found";
 }
 
-
 Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
             $("circle")
             .filter(function(d){
                     update_updown(i);
 					var x = new Sourcemap.Map.Base.svgToSc(thismap, sc, $(this).attr("id"));
 					for (var y in sc.stops) {
-						console.log(sc.stops[y].instance_id + " == " + x);
 						if (sc.stops[y].instance_id == x) {
 							return check_stops(sc.stops[y].local_stop_id, i);
 						}
@@ -408,7 +403,6 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
 
     function check_stops(i,select)
     {
-		console.log(i); console.log(select);
         // false : not change opacity 
         if(i==select)
             return false;
@@ -692,14 +686,18 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
 			});
 			// Each accordion body can be the size of the leftover space
-			$(this.base.dialog_content).find('.accordion-body').each(function() {
+            var accordion_body = $(this.base.dialog_content).find('.accordion-body')
+            var len = accordion_body.length;
+			accordion_body.each(function(index) {
 				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
 				if (thissize > h) {	
 					var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
 					$(this).css('height',newsize+"px");
 					$(this).css('overflow',"auto");
-				}
+				}  
 				$(this).hide();
+                if (index == len-1)
+                    $(this).addClass('last');
 			});
 			// h is all the room we have to open stuff in
 			var reduced_height = h;

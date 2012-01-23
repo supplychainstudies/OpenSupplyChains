@@ -62,7 +62,7 @@ $(document).ready(function() {
             if (lettersleft == maxlength)
                 $('#desc-counter').html('&nbsp;')
             else if(lettersleft>1)
-                ('#desc-counter').text(lettersleft+' characters remaining');
+                $('#desc-counter').text(lettersleft+' characters remaining');
             else if(lettersleft == 1)
                 $('#desc-counter').text(lettersleft+' character remaining');
             else

@@ -1,15 +1,21 @@
 body {
-    background:url("../images/background.png") top center repeat #757351;
+    background:url("../images/background.jpg") top center repeat #757351;
     font-family:Helvetica, arial, sans-serif;	  
     margin:0; padding:0;     
 }
 #wrapper {
-    margin:0 auto;
-    width:1020px;
+
 }
 #content {
     padding-top:20px;
     position:relative;
+}
+#content .center {
+    margin:0 auto;
+    width:1020px;
+}
+#content .relative {
+	position:relative;
 }
 #content h1 {
     display:none;
@@ -23,7 +29,6 @@ body {
     float:right;
     color:rgba(255,255,255,0.7);
     font-size:16px;
-    font-family: 'Puritan', sans-serif;
     text-align: right;
 }
 #content #info #socialmedia {
@@ -58,6 +63,25 @@ body {
 #twitter {
     background:url("../images/Twitter.png") center center no-repeat;	        
 }
+
+#sourcemap-link {
+	width:191px;
+	height:48px;
+    background:url("../images/sourcemap.png") center center no-repeat;	
+    display:block;
+    margin:0 0 0 10px;
+    float:right;
+    cursor:pointer;
+	opacity:0.8;        
+}
+#sourcemap-link:hover {
+	opacity:1;
+}
+#sourcemap-link a {
+	width:191px;
+	height:48px;
+}
+
 #content #orbits {
 	display:none;
     position:absolute;
@@ -66,7 +90,6 @@ body {
     height:890px;
     z-index:1000;
     pointer-events:none;
-    background:url("../images/orbits.png") center 65px no-repeat;
 }
 #contentoptions {
     position:absolute;
@@ -75,7 +98,6 @@ body {
     padding:0; margin:0;
 }
 #contentoptions li {
-    font-family: 'Puritan', sans-serif;
     -webkit-border-radius: 4px 4px 0 0;
     -moz-border-radius: 4px 4px 0 0;
     border-radius:4px 4px 0 0;
@@ -93,41 +115,68 @@ body {
 	opacity:1;
 }
 #map {
-    width:1020px;
     z-index:100;
-    margin-top:40px;
-    background:#000;
+    margin-top:0px;
 }
-#map #cotton {
+#cotton {
     position:absolute;
-    top:392px;
-    left:825px;
+    bottom:0px;
+    left:-100px;
     z-index:1000;
     width:300px;
     height:375px;
     background:top center no-repeat;
-	background-image:url("../images/cotton-right.png");
+	background-image:url("../images/cotton-left.png");
     pointer-events:none;
 }
+#trailer-link {
+	padding:10px 0;
+	width:100%;
+	font-size:20px;
+    background-color:#ACA893;
+	color:#fff;
+	height:20px;
+	text-align:center;
+	cursor:pointer;
+	border-radius: 0 0 4px 4px;
+	box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
+}
+#trailer-link:hover {
+	color:#000;
+	background:#fff;
+}
+
 iframe {
+	margin:0 auto;
     overflow:hidden;
     z-index:10;
     position:relative;
+	background:#000;
 }
 #trailer {
-    
+	visibility:hidden;
 }
-#sourcemap {
-
+.trailer-placeholder{
+	width:900px;
+	height:484px;
+    background:url("../images/trailer-preview.jpg");
+}
+iframe#sourcemap {
+	background:#fff;
+	visibility:hidden;
+}
+.placeholder {
+	height:574px;
+	width:100%;
+	background:url("../images/preload-map.jpg") left center no-repeat #fff;
 }
 #overlay {
-	display:none;
+	display:block;
 	position:absolute;
-	top:280px;
+	top:170px;
 	left:0; right:0;
-	width:500px;
-	height:140px;
-    background: rgba(255,255,255,0.95);
+	width:900px;
+    background: rgba(0,0,0,0.95);
 	padding:20px;
 	margin:0 auto;
 	z-index:1200;
@@ -138,7 +187,6 @@ iframe {
 	-webkit-box-shadow: 3px 1px 10px rgba(0,0,0,0.2);
     -moz-box-shadow: 3px 1px 10px rgba(0,0,0,0.2);
     box-shadow: 3px 1px 10px rgba(0,0,0,0.2);    
-    font-family: 'Puritan', sans-serif;
     color:#6b6759;
     font-size:20px;
 }
@@ -148,12 +196,13 @@ iframe {
     position: absolute;
     top: 4px;
     right: 9px;
+	z-index:1400;
     cursor: pointer;
 }
 
 #cotton-diagram {
     position:absolute;
-    top:110px; right:200px;
+    top:70px; right:350px;
     margin:10px auto;
     width:450px;
     z-index:1000;
@@ -165,16 +214,24 @@ iframe {
     left:-5000px;
 }
 #additionalcontent {
-    margin-top:10px;
+    margin:20px 0 0px 0;
    	color:rgba(255,255,255,0.7);
     font-size:16px;
-    font-family: 'Puritan', sans-serif;
 }
+#additionalcontent a {
+	color:#fff;
+}
+
 #footer {
-    font-family: 'Puritan', sans-serif;
     color:#9e9b8c;
-    margin:10px 0;
+    margin:0px 0 30px 0;
     font-size:14px;
+}
+#footer a, .credits {
+	color:#9e9b8c;
+}
+#additionalcontent .credits a {
+	color:#cfcebf;
 }
 .clear {
     clear:both;

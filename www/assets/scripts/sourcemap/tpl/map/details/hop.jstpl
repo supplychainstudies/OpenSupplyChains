@@ -12,7 +12,7 @@
  * program. If not, see <http://www.gnu.org/licenses/>.*/ %>
 
 <% var first = ""; %>
-<h2 class="title hop"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("title", "Hop")), 20, true) %></h2>
+<h2 class="title hop" title="<%= _S.htesc(this.hop.getAttr("title", "Hop")) %>"><%= _S.ttrunc(_S.htesc(this.hop.getAttr("title", "Hop")), 28, true) %></h2>
 <div class="accordion">
 <% if(this.hop.getAttr("description", false) && this.hop.getAttr("description").length > 1) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Description</h3>

@@ -13,7 +13,7 @@
 
 
 <% var first = "first"; %>
-<h2 class="title"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 30, true) %><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
+<h2 class="title" title="<%= _S.htesc(this.stop.getAttr("title", "Stop")) %>"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("title", "Stop")), 30, true) %><div class="dot" style="background:<%= this.feature.attributes.color %>"></div></h2>
 <% if(this.stop.attributes.address != undefined) { %>
         <h3 class="placename"><%= _S.ttrunc(_S.htesc(this.stop.getAttr("placename", this.stop.attributes.address)), 50, true) %></h3>
 <% } %>

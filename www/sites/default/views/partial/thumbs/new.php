@@ -24,7 +24,7 @@ if ($data):
             </div>
             <h3 class="preview-title">
                 <a href="view/<?php print $item->id; ?>">
-                <?= Text::limit_chars(HTML::chars($item->attributes->title), 16) ?>
+                <?= isset($item->attributes->title) ? Text::limit_chars(HTML::chars($item->attributes->title), 16) : "Unnamed Map" ?>
                 </a>
             </h3>
             <div class="preview-author">

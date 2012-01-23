@@ -22,7 +22,7 @@
             </div>
             <h4 class="preview-title vertical">
                 <a class="truncate" href="view/<?php print $item->id; ?>">
-                <?= HTML::chars($item->attributes->title) ?>
+                    <?= HTML::chars(isset($item->attributes->title) ? $item->attributes->title : "Untitled Map") ?>
                 </a>
             </h4>
             <div>

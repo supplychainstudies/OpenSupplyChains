@@ -37,7 +37,7 @@ class Sourcemap_Catalog_Osi extends Sourcemap_Catalog {
 
     public function __construct($params=null) {
 		$this->_api_key = Kohana::config('apis')->footprinted_key;
-		$this->osi_curated_catalog = Kohana::config('apis')->footprinted_list;
+		$this->osi_curated_catalog = Kohana::config('footprinted')->footprinted_list;
 	
         $action = self::DEFAULT_ACTION;
         if(is_array($params)) {

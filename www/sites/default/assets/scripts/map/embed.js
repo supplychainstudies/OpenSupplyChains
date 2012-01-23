@@ -126,6 +126,7 @@ $(document).ready(function() {
             // end passcode part
 			break;
 		case "static":
+			console.log(window.location.pathname.split("/"));
 			var l = "view/" + window.location.pathname.split("/")[2];
 			var s = 'static/'+ window.location.pathname.split("/")[2]+'.f.png';
 			$('#sourcemap-map-embed').replaceWith(

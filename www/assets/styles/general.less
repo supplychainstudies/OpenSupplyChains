@@ -251,7 +251,7 @@ a {
 #header {
     margin: 0 auto 20px;
     padding-top: 28px;
-    height: 65px;
+    height: 55px;
     #logo{
         float:left;
         h1 { display:none; }
@@ -492,7 +492,9 @@ div.submit-status{
     height: 40px;
     width: 40px;
     overflow: hidden;
-    background: url("../images/throbber.gif") 8px 8px no-repeat;
+    &.running{
+        background: url("../images/throbber.gif") 8px 8px no-repeat;
+    }
     &.succeeded{
         background: url("../images/account-notice.png") 12px 13px no-repeat;
     }

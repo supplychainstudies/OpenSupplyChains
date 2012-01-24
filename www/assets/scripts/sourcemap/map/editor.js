@@ -1471,8 +1471,8 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
                 o.catalog = this.o.catalog;
                 this.editor.updateCatalogListing(o);
             }, {"o": o, "editor": this.editor}));
-            $(this.editor.map_view.dialog).find('#catalog-search').bind("submit",function(event){
-                event.preventDefault();
+            $('#catalog-search').keypress(function(e){
+                if ( e.which == 13 ){ return false; }
             });
         }, {"editor": this, "o": o}), "failure": $.proxy(function() {
             $(this.editor.map_view).find("#edit-catalog").html('<h3 class="bad-news">The catalog is currently unavailable.</h3>');

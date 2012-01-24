@@ -45,7 +45,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
                  $recap = Recaptcha::instance();  
                  $revalid = (BOOL)($recap->is_valid($_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"])); 
             }
-            if( $revalid ) {
+            if( !$revalid ) {
                 $message->set('invalid-captcha');
             } else{
                 // basic validation
@@ -135,7 +135,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
                 // Send a notification 
                 try { 
-					// $sent = $mailer->send($swift_msg);
+					$sent = $mailer->send($swift_msg);
                 } catch (Exception $e) {
                     $message->set('register-generic');
                     return;
@@ -198,4 +198,4 @@ class Controller_Register extends Sourcemap_Controller_Layout {
             return $this->request->redirect('auth');
         }
     }
-
+}

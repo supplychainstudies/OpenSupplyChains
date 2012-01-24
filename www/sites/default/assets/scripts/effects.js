@@ -111,7 +111,7 @@ $(document).ready(function(){
         $('#' + popID).fadeIn();
 
         $('body').append('<div id="fade"></div>'); //Add the fade layer to botto
-        $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the
+        $('#fade').css({'filter' : 'alpha(opacity=80)'}).show(); //Fade in the
         $('a.close, #fade').live('click', function() { //When clicking on the cl
             $('#fade , .popup_block').fadeOut(function() {
                 $('#fade, a.close').remove();
@@ -481,6 +481,9 @@ $(document).ready(function(){
         
         var popID = 'popup';
 
+        // if there's already a popup, get rid of it
+        $('#popup').remove();
+
         // if an actual URL is specified, get it via a jQuery load()
         if (popDest){
             var element = document.createElement('div'); 
@@ -503,7 +506,7 @@ $(document).ready(function(){
                 });
 
                 $('#' + popID).width(popWidth); 
-                $('#' + popID).fadeIn();
+                $('#' + popID).show();
             });
         }
 
@@ -513,15 +516,14 @@ $(document).ready(function(){
             $('#' + popID).fadeIn().css({ 'width': Number( popWidth ) }).prepend('<a href="#" class="close"><img src="close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
         }
             
-
         $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
-        $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+        $('#fade').css({'filter' : 'alpha(opacity=80)'}).show(); 
         
         return false;
     });
     
     $('a.close, #fade').live('click', function() { //When clicking on the close or fade layer...
-        $('#fade , .popup_block').fadeOut(function() {
+        $('#fade , .popup_block').hide(function() {
             $('#fade, a.close').remove();  
     }); //fade them both out
         return false;

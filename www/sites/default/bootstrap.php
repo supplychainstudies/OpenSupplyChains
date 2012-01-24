@@ -117,4 +117,19 @@ Route::set('info/child', 'info/<id>/<child>')
     )
 );
 
+Route::set('secure', 'secure/<id>')
+    ->defaults(array(
+        'controller' => 'info',
+        'action' => 'secure'
+    )
+);
+
+Route::set('secure/child', 'secure/<id>/<child>')
+    ->defaults(array(
+        'controller' => 'info',
+        'action' => 'secure',
+        'child' => null
+    )
+);
+
 //Sourcemap::register_plugin('hello');

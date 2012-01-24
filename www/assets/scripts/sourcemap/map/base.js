@@ -206,13 +206,11 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
                 ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
             );
             window.location.hash = ftr.attributes.stop_instance_id; // + ftr.attributes.supplychain_instance_id;
-            console.log(ftr);
         } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
             window.location.hash = ftr.attributes.hop_instance_id; // + ftr.attributes.supplychain_instance_id;
             this.showHopDetails(
                 ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
             );
-            console.log(ftr);
         }
     }, this));
 
@@ -523,14 +521,18 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
 			});
 			// Each accordion body can be the size of the leftover space
-			$(this.base.dialog_content).find('.accordion-body').each(function() {
+            var accordion_body = $(this.base.dialog_content).find('.accordion-body')
+            var len = accordion_body.length;
+			accordion_body.each(function(index) {
 				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
 				if (thissize > h) {	
 					var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
 					$(this).css('height',newsize+"px");
 					$(this).css('overflow',"auto");
-				}
+				}  
 				$(this).hide();
+                if (index == len-1)
+                    $(this).addClass('last');
 			});
 			// h is all the room we have to open stuff in
 			var reduced_height = h;

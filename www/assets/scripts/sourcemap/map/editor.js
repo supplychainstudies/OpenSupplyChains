@@ -1378,6 +1378,13 @@ Sourcemap.Map.Editor.prototype.updateCatalogListing = function(o) {
 							}
 					    	Sourcemap.broadcast('supplychain-updated', sc);
 		                    this.editor.applyCatalogItem(this.catalog, this.item, this.ref, this.catalog_map);
+							// Close catalog and open footprint dialog
+							//change this by passing this and adding a class
+			                this.editor.map_view.dialog.width(411);
+							this.editor.map_view.dialog.find('#newcatalog').hide();
+							//this.editor.map_view.dialog.find('#stop-editor').show();
+							this.editor.showEdit(this.editor.map.findFeaturesForStop(this.editor.editing.supplychain_id,this.editor.editing.instance_id).stop); 
+							this.editor.map_view.dialog.find('#edit-stop-footprint').show();
 		                }, {"new_li": $(new_li), "checks": {"co2e": $(new_li).find('#co2e-factor'), "water": $(new_li).find('#water-factor'), "energy": $(new_li).find('#energy-factor') }, "item": json.results[i], "editor": this.editor, "ref": o.ref, "catalog": o.catalog, "catalog_map": {"osi": {"name": ["title"],"co2e": true,"energy": true,"water": true, "unit": true, "co2e_reference": true, "energy_reference": true, "water_reference": true}}}));                
 						cat_html.append(new_li);
 	            }
@@ -1565,6 +1572,6 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref, catal
         }
     }
     this.updateFeature(this.editing, vals);
-    this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);   
+    //this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);   
 }
 

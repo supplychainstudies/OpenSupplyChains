@@ -10,7 +10,8 @@ class Controller_info extends Sourcemap_Controller_Layout {
     
     public $layout = 'base';
     public $template = 'wp';
-   
+    public $ssl_actions = array('secure');
+
     public static function cache_key($id) {
         return sprintf('blog-page-%s', $id);
     }
@@ -20,7 +21,31 @@ class Controller_info extends Sourcemap_Controller_Layout {
         $this->layout->scripts = array(
             'sourcemap-document'
         );
+
+        $contents = self::getContents($slug, $childSlug);
+
+        if($contents){
+            $this->template->title = $contents->page->title;
+            $this->template->content = $contents->page->content;
+        }
+    }
+    
+    public function action_secure($slug="blog", $childSlug=null) {
+
+        $this->layout->scripts = array(
+            'sourcemap-document'
+        );
         
+        $contents = self::getContents($slug, $childSlug);
+
+        if($contents){
+            $this->template->title = $contents->page->title;
+            $this->template->content = $contents->page->content;
+        }
+    }
+
+    public function getContents($slug, $childSlug=null){
+
         // Convert slug to ID.  This is necessary because WP JSON API doesn't support heirarchical slugs 
         $id = self::slug2id($slug, $childSlug);
 
@@ -45,11 +70,7 @@ class Controller_info extends Sourcemap_Controller_Layout {
                 $contents = false;
             }
         }
-
-        if($contents){
-            $this->template->title = $contents->page->title;
-            $this->template->content = $contents->page->content;
-        }
+        return $contents;
     }
 
     public function slug2id($slug, $childSlug=null){

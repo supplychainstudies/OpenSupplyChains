@@ -884,6 +884,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	            sc = this.map.supplychains[k];
 	            break;
 	        }
+            /* This seems to be broken.  TODO: Implement this functionality for hops.
 			for (x in sc.hops) {
 				if (sc.hops[x] == ref) {
 					sc.hops[x].attributes.co2e = editor.find('.footprint-co2e').val();
@@ -892,6 +893,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 					delete sc.hops[x].attributes.co2e_reference;
 				}
 			}
+            */
 	    	Sourcemap.broadcast('supplychain-updated', sc);          
         }, this));
 		

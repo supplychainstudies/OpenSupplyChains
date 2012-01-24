@@ -34,7 +34,7 @@ Sourcemap.Map.Base.prototype.defaults = {
     "locate_user": false, "user_loc": false, "user_loc_color": "#ff0000", "tour": false, 
     "attr_missing_color": Sourcemap.Map.prototype.defaults.default_feature_color,
     "visualization_mode": null, "visualizations": ["co2e","weight","water","energy"],
-    "visualization_colors": {"co2e": "#ffa500", "weight": "#804000", "water": "#1c9acd","energy":"#f6df43"},
+    "visualization_colors": {"co2e": "#c95f3d", "weight": "#804000", "water": "#1c9acd","energy":"#e2a919"},
     "legend": true, "locked":true,
     "viz_attr_map": {
         "weight": function(st) {
@@ -535,14 +535,40 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			// h is all the room we have to open stuff in
 			var reduced_height = h;
 			// If there's a media accordion (and there's enough room to show it), show it
-			$(this.base.dialog_content).find('#dialog-media').each(function() {	
-				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+			$(this.base.dialog_content).find('#dialog-media').each($.proxy(function(num,evt) {	
+				var e = evt;
+				//console.log(evt);
+				var val = parseInt($(e).css('height').replace('px',"")) + parseInt($(e).css('padding-top').replace('px',"")) + parseInt($(e).css('padding-bottom').replace('px',""));		
 				if (reduced_height > val) {
 					reduced_height = reduced_height - val;
-					$(this).prev().find('.arrow').addClass("arrowopen");
-					$(this).show();
+					$(e).prev().find('.arrow').addClass("arrowopen");
+					$(e).show();
+					
+					// Count number of media. if there is only one, don't show navigation
+					var count = 0;
+					$(this.base.dialog_content).find('.navigation-item').each($.proxy(function(evt) {
+						count++;
+		            }, this));			
+					if (count == 1) {
+						$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
+					}
+					// the first media object should play
+					$(this.base.dialog_content).find('.navigation-item').first().each($.proxy(function(num,evt) {
+		                var target = evt.id.split('-').pop().replace(":","-");
+						if(target == "youtube-link") { 
+				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+				        } else if(target == "vimeo-link") {
+				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+				        } else if(target == "soundcloud-id") {
+				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+				        } else if(target == "twitter-search") {	
+				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+				        } else if(target == "flickr-setid") {
+				            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+				        }
+		            }, this));
 				}					
-			});
+			}, this));
 			$(this.base.dialog_content).find('#dialog-description').each(function() {	
 				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
 				if (reduced_height > val) {
@@ -559,23 +585,51 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 					$(this).show();
 				}					
 			});
-				$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
-					var open = $(this).next().is(":visible");
-					
-					$('.accordion-body:visible').each(function() {
-						if ($(this).attr("id") == "dialog-media")
-							$(this).hide();
-						else 
-							$(this).slideToggle('fast');
-					});
-					
-					$('.accordion-title').find('.arrow').removeClass('arrowopen');
-					if (open == false) {
-						$(this).next().slideToggle('fast');
-						$(this).find('.arrow').addClass('arrowopen');
-					}				
-					return false;
+			$(this.base.dialog_content).find('.accordion .accordion-title').click($.proxy(function(evt) {
+				var e = evt.target;
+				// figure out if the accordion is already open
+				var open = $(e).next().is(":visible");
+				// Close everything visible
+				$('.accordion-body:visible').each(function() {
+					if ($(this).attr("id") == "dialog-media")
+						$(this).hide();
+					else 
+						$(this).slideToggle('fast');
 				});
+				
+				$(this.base.dialog_content).find('.accordion-title').find('.arrow').removeClass('arrowopen');
+				// if it wasnt open. open it
+				if (open == false) {
+					$(e).next().slideToggle('fast');
+					$(e).find('.arrow').addClass('arrowopen');
+					if ($(e).next().attr("id") == "dialog-media") {
+						// Count number of media. if there is only one, don't show navigation
+						var count = 0;
+						$(e).next().find('.navigation-item').each($.proxy(function(evt) {
+							count++;
+			            }, this));			
+						if (count == 1) {
+							$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
+						}
+						// the first media object should play
+						$(e).next().find('.navigation-item').first().each($.proxy(function(num,evt) {
+			                var target = evt.id.split('-').pop().replace(":","-");
+							if(target == "youtube-link") { 
+					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+					        } else if(target == "vimeo-link") {
+					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+					        } else if(target == "soundcloud-id") {
+					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+					        } else if(target == "twitter-search") {	
+					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+					        } else if(target == "flickr-setid") {
+					            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+					        }
+			            }, this));
+					}
+				}				
+				return false;
+			}, this));
 
             // Sets up zoom on click
             $(this.base.dialog_content).find('.dot')

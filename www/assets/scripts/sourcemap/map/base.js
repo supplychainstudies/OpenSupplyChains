@@ -541,7 +541,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 				var e = evt;
 				//console.log(evt);
 				var val = parseInt($(e).css('height').replace('px',"")) + parseInt($(e).css('padding-top').replace('px',"")) + parseInt($(e).css('padding-bottom').replace('px',""));		
-				if (reduced_height > val) {
+				if (reduced_height >= val) {
 					reduced_height = reduced_height - val;
 					$(e).prev().find('.arrow').addClass("arrowopen");
 					$(e).show();
@@ -573,7 +573,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			}, this));
 			$(this.base.dialog_content).find('#dialog-description').each(function() {	
 				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				if (reduced_height > val) {
+				if (reduced_height >= val) {
 					reduced_height = reduced_height - val;
 					$(this).prev().find('.arrow').addClass("arrowopen");
 					$(this).show();
@@ -581,7 +581,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
 			});
 			$(this.base.dialog_content).find('#dialog-footprint-body').each(function() {	
 				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				if (reduced_height > val) {
+				if (reduced_height >= val) {
 					reduced_height = reduced_height - val;
 					$(this).prev().find('.arrow').addClass("arrowopen");
 					$(this).show();

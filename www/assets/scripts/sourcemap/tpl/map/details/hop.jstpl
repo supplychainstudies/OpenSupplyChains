@@ -59,7 +59,7 @@
 <% } %>
 
 <% if(this.hop.magic) { %>
-<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Media</h3>
+<h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Video</h3>
 <div id="dialog-media" class="accordion-body">
         <% if(this.hop.magic["youtube:link"]) { %>
             <%= Sourcemap.MagicWords.content.youtube.link(this.hop.magic["youtube:link"]) %>

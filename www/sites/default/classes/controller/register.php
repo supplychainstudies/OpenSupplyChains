@@ -135,7 +135,7 @@ class Controller_Register extends Sourcemap_Controller_Layout {
 
                 // Send a notification 
                 try { 
-					// $sent = $mailer->send($swift_msg);
+					$sent = $mailer->send($swift_msg);
                 } catch (Exception $e) {
                     $message->set('register-generic');
                     return;

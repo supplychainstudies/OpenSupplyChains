@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="half-width" style="width: 110px">
-                        <label for="card-cvc">CVC Code <a href="/secure/instructions/payment/#document-content?w=400" target="_blank" class="modal tooltip">?</a></label>
+                        <label for="card-cvc" style="height: 31px; padding: 0;">CVC Code <a href="/secure/instructions/payment/#document-content?w=400" target="_blank" class="modal tooltip"></a></label>
                         <input type="text" name="card-cvc" maxlength="5"  style="height: 28px; padding: 0" class="textbox" />
                     </div>
                     

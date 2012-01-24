@@ -32,9 +32,12 @@
         <input type="search" id="map-search"></input>
     </div>
 
-    <div id="banner-owner" style="background: url(<%= this.sc.owner.avatar %>) 10px center no-repeat">
+    <div id="banner-owner">
         <% var d = new Date(this.sc.modified*1000); %>
         <a href="user/<%= this.sc.owner.name %>"><% if(this.sc.owner.display_name!=undefined){%><%= this.sc.owner.display_name %><%}else{%><%= this.sc.owner.name %><%}%></a><span class="banner-date">&nbsp;&nbsp;<%= _S.ttrunc(_S.fmt_date(d),14) %></span>
+    </div>
+    <div id="banner-avatar">
+        <img src="<%= this.sc.owner.avatar %>" alt="Avatar" />
     </div>
     <div class="map-status">
     </div>

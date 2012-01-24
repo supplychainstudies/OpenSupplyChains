@@ -17,6 +17,30 @@ class Sourcemap_Geocoder {
     const GOOGLE_GEOCODE_FMT = 'json';
 
     public static function geocode($placename) {
+        // Detect whether the placename is a valid coordinate pair
+        if (preg_match('/^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/', $placename, $matches)){
+            $lat = (float)$matches[1];
+            $lon = (float)$matches[3];
+            if (($lat >= -90 && $lat <= 90) && ($lat >= -90 && $lat <= 90)){
+                $results = array();
+                $results[] = array(
+                    // Using multiple keywords to match google's results
+                    'lat' => $lat,
+                    'lng' => $lon, 
+                    'latitude' => $lat, 
+                    'longitude' => $lon, 
+                    'lon' => $lon, 
+                    'placename' => $lat . "," . $lon
+                );
+                return $results;
+            } else{
+                //pass
+            }
+        } else{ 
+            // pass 
+        }
+
+        // Not coordinates.  Let's let google handle this.
         $ckey = sprintf("geocode-%s", md5($placename));
         if($cached = Cache::instance()->get($ckey)) {
             $results = $cached;

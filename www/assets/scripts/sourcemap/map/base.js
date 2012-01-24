@@ -936,16 +936,18 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		        if(f.cluster) {    //Why we divide this into two segments is unclear
 		            var val = 0;
 		            for(var c in f.cluster) {
-                        if (c != "filter" && c != "indexOf"){
+                        if (c != "filter" && c != "indexOf" && typeof(f.cluster[c].attributes.ref) != "undefined"){
                             if(attr_nm instanceof Function){
                                 var ref = f.cluster[c].attributes.ref;
-                                val += attr_nm(ref);
+								var newval = attr_nm(ref);
+								if (!isNaN(newval)) 
+                                	val += newval;
                             }
                             else 
-                                val += parseFloat(f.cluster[c].attributes[attr_nm]);
+                                val += parseFloat(f.cluster[c].attributes.ref.attributes[this.attr_nm]);
                         }
 		            }
-		            if(!isNaN(val)) {
+		            if(!isNaN(val) && val != 0) {
 		                // scale  
 						fraction = val/this.vtot;
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
@@ -956,13 +958,9 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                var unit = "kg";
 		                if(this.attr_nm === "water") { unit = "L"; } 
 						if(this.attr_nm === "energy") { unit = "kWh"; }    
-						var scaled = {};
-						scaled.unit = unit;
-						scaled.value = val;            
-		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
-		                if(attr_nm === "co2e") { scaled.unit += " co2e"}              
+						var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);            
 		                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
-		            } 
+		            } else { f.attributes.label = ""; }
 		        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
 		            if(attr_nm instanceof Function) val = attr_nm(f.attributes.ref);
 		            else {
@@ -971,23 +969,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 					}
 					//val = f.attributes[this.attr_nm];
 		            val = parseFloat(val);
-		            if(!isNaN(val)) { 
-		                // scale
-		                // val = Math.max(val, this.vmin);
-		                // val = Math.min(val, this.vmax); 
-		                // var voff = val - this.vmin;
-		                // var vrange = this.vmax - this.vmin;
-		                // var sval = this.smin;
-		                //if(vrange)
-		                //    sval = parseInt(smin + ((voff/vrange) * (this.smax - this.smin)));
-						/*
-						if (this.attr_nm == "co2e" || this.attr_nm == "water" || this.attr_nm == "energy") {
-							if (typeof(f.attributes.ref.attributes.weight) != "undefined") {
-								val = val * f.attributes.ref.attributes.weight;
-							} else {
-								val = 0;
-							}
-						} */
+		            if(!isNaN(val) && val != 0) { 
 						fraction = val/this.vtot;
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
 		                var fsize = 18;
@@ -997,25 +979,12 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                var unit = "kg";
 		                if(this.attr_nm === "water") { unit = "L"; }
 						if(this.attr_nm === "energy") { unit = "kWh"; }
-						/*
-						if (typeof(f.attributes.hop_instance_id) != "undefined" && typeof(f.attributes.ref.gc_distance()) != "undefined") {
-							val = parseFloat(val) * parseFloat(f.attributes.ref.gc_distance());
-						} */
-						var scaled = {};
-						scaled.unit = unit;
-						scaled.value = val;
-		                var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
-		                if(attr_nm === "co2e") { scaled.unit += " co2e"}   
-						var x = parseFloat(scaled.value);
-						scaled.value = x.toFixed(1);
-						f.attributes.label = scaled.value + " " + scaled.unit;	      
+						var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
+						f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	      
 		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
 		    				f.attributes.label = "";
-		    			} else {
-							
-		    			    f.attributes.label = scaled.value + " " + scaled.unit;	 
 		    			}	              
-		            } 
+		            } else { f.attributes.label = ""; }
 		        } 
 		        f.attributes.size = f.attributes.size || smin;
 		        f.attributes.yoffset = f.attributes.yoffset || 0;

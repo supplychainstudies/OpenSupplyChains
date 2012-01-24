@@ -1563,6 +1563,6 @@ Sourcemap.Map.Editor.prototype.applyCatalogItem = function(cat, item, ref, catal
         }
     }
     this.updateFeature(this.editing, vals);
-    //this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);   
+    this.showEdit(this.map.findFeaturesForStop(this.editing.supplychain_id,this.editing.instance_id).stop);   
 }
 

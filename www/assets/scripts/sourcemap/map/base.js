@@ -80,7 +80,11 @@ Sourcemap.Map.Base.prototype.defaults = {
             var fac = parseFloat(st.getAttr("co2e", 0));
             if(!isNaN(qty) && !isNaN(fac)) val = qty * wgt* fac;
             return val;
+        },
+        "valueatrisk": function(st) {
+            return st.getAttr("varort", 1);
         }
+
     }
 }
 
@@ -410,7 +414,6 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
                     var updown = update_updown(i);
 					var theid = $(this).attr("id");
 					var x = Sourcemap.Map.Base.svgToSc(thismap, sc, theid);
-					console.log(typeof(x));
 					if (x != "not found" && typeof(x) == "string") {
 						for (var y in sc.stops) {
 							if (sc.stops[y].instance_id == x) {
@@ -426,11 +429,8 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
 						for (var cs in x) {
 							if (typeof(x[cs]) == "string") {
 								for (var y in sc.stops) {
-									console.log(sc.stops[y].instance_id + " - " + x[cs]);
 									if (sc.stops[y].instance_id == x[cs]) {
-										console.log(check_stops(sc.stops[y].instance_id,i, updown) + " , " + bool_stops);
 										bool_stops = bool_stops && check_stops(sc.stops[y].instance_id,i, updown);
-										console.log(bool_stops);
 									}
 								}
 							}
@@ -1385,16 +1385,28 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		            }
 		            if(!isNaN(val) && val != 0) {
 		                // scale  
-						fraction = val/this.vtot;
+						if (this.attr_nm == "valueatrisk") {
+							fraction = val/this.vmax;
+						} else {
+							fraction = val/this.vtot;
+						}
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
 		                var fsize = 18;
 		                f.attributes.fsize = fsize+"px";     
 		                f.attributes.fcolor = this.color
 		                f.attributes.yoffset = -1*(f.attributes.size+fsize);
 		                var unit = "kg";
+						if(this.attr_nm === "valueatrisk") { unit = ""; }
 		                if(this.attr_nm === "water") { unit = "L"; } 
 						if(this.attr_nm === "energy") { unit = "kWh"; }    
-						var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);            
+						if (unit != "") {
+							var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
+						}
+						else {
+							scaled = {};
+							scaled.value = val;
+							scaled.unit = "";
+						}            
 		                f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
 		            } else { f.attributes.label = ""; }
 		        } else if(attr_nm && ((attr_nm instanceof Function) || (f.attributes[attr_nm] !== undefined))) {
@@ -1406,16 +1418,28 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 					//val = f.attributes[this.attr_nm];
 		            val = parseFloat(val);
 		            if(!isNaN(val) && val != 0) { 
-						fraction = val/this.vtot;
+						if (this.attr_nm == "valueatrisk") {
+							fraction = val/this.vmax;
+						} else {
+							fraction = val/this.vtot;
+						}
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
 		                var fsize = 18;
 		                f.attributes.fsize = fsize+"px";     
 		                f.attributes.fcolor = this.color
 		                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
 		                var unit = "kg";
+						if(this.attr_nm === "valueatrisk") { unit = ""; }
 		                if(this.attr_nm === "water") { unit = "L"; }
 						if(this.attr_nm === "energy") { unit = "kWh"; }
-						var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2); 
+						if (unit != "") {
+							var scaled = Sourcemap.Units.scale_unit_value(val, unit, 2);
+						}
+						else {
+							scaled = {};
+							scaled.value = val;
+							scaled.unit = "";
+						} 
 						f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	      
 		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
 		    				f.attributes.label = "";
@@ -1701,6 +1725,7 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
     switch(viz_nm) {
         //case "energy":
         //    break;
+		case "valueatrisk":
 		case "energy":
         case "water":
         case "co2e":
@@ -1861,6 +1886,24 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
     	}
     } else {
     	this.map.dockRemove('energy');
+    }
+
+	if(sc.attributes["sm:ui:valueatrisk"]) {   
+    	if(this.map.dockControlEl('valueatrisk').length == 0) {	
+            this.map.dockAdd('hviz', {
+                "title": 'Value at Risk',
+                "content": "&nbsp; $ &nbsp;",
+                "toggle": true,
+                "panel": 'filter',
+                "callbacks": {
+                    "click": $.proxy(function() {
+                        this.toggleVisualization("valueatrisk");
+                    }, this)
+                }
+            });
+    	}
+    } else {
+    	this.map.dockRemove('valueatrisk');
     }
 
 }

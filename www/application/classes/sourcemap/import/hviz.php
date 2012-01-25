@@ -649,6 +649,7 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		}
 		
 		$description = "";
+		
 		/*
 		if (isset($maxvarort) == true) {
 			$description = '\<div style="width:10px;height:10px;background-color:#ff0000;"\>&nbsp;\</div\>' . 'Over ' . $maxvarort . '\<br /\>';
@@ -657,15 +658,17 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			$description .= '\<div style="width:10px;height:10px;background-color:#92d050;"\>&nbsp;\</div\>' . 'Under ' . ($maxvarort/4) . '\<br /\>';
 		}
 		*/
-		/*
+/*
 		if (isset($maxvarort) == true) {
+			$description = "Red sites have a value at-risk-over-recovery-time of over"  . floor($maxvarort).  " " . $forecast_uom . ". Orange sites have a value-at-risk-over-recovery-time between"  . floor($maxvarort).  " and  " . $forecast_uom . ". Yellow sites have a value-at-risk-over-recovery-time between 20,837,260 lbs and 10,418,630 lbs. Green sites have a value-at-risk-over-recovery-time of under 10,418,630 lbs. Blue sites do not have value-at-risk-over-recovery-time values.
+			"
 			$description = 'Red is over ' . floor($maxvarort). ". ";
 			$description .= 'Orange is between ' . floor($maxvarort) . " and ". floor($maxvarort/2) . '. ';
 			$description .= 'Yellow is between ' . floor($maxvarort/2) . " and ". floor($maxvarort/4) . '. ';
 			$description .= 'Green is under ' . floor($maxvarort/4) . '. ';
 			$description .= 'Blue do not have VARORT values. ';
 		}
-		*/
+
 		/*
 		
 		
@@ -698,7 +701,6 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 
 		$stopswriter->getActiveSheet()->setCellValue("E1", 'varort');
 		$stopswriter->getActiveSheet()->setCellValue("F1", 'tier');
-		$stopswriter->getActiveSheet()->setCellValue("G1", 'size');
 		$stopswriter->getActiveSheet()->setCellValue("H1", 'lat');
 		$stopswriter->getActiveSheet()->setCellValue("I1", 'long');
 		
@@ -716,7 +718,6 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 			*/
 			$stopswriter->getActiveSheet()->setCellValue("E".($count+1), $stop['varort']);
 			$stopswriter->getActiveSheet()->setCellValue("F".($count+1), $stop['tier']);
-			$stopswriter->getActiveSheet()->setCellValue("G".($count+1), "0.5");
 			
 			//$stopswriter->getActiveSheet()->setCellValue("J".($count+1), $stop['lat']);
 			//$stopswriter->getActiveSheet()->setCellValue("K".($count+1), $stop['long']);
@@ -730,13 +731,13 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		$hopswriter->getActiveSheet()->setCellValue("A1", 'From');
 		$hopswriter->getActiveSheet()->setCellValue("B1", 'To');
 		$hopswriter->getActiveSheet()->setCellValue("C1", 'Description');
-		//$hopswriter->getActiveSheet()->setCellValue("D1", 'Color');
+		$hopswriter->getActiveSheet()->setCellValue("D1", 'varort');
 		$count = 2;
 		foreach ($hops as $num=>$hop) {
 			$hopswriter->getActiveSheet()->setCellValue("A".($count), trim($hop['From']));
 			$hopswriter->getActiveSheet()->setCellValue("B".($count), trim($hop['To']));
 			$hopswriter->getActiveSheet()->setCellValue("C".($count), trim($hop['Description']));
-			//$hopswriter->getActiveSheet()->setCellValue("D".($count), trim($hop['color']));
+			$hopswriter->getActiveSheet()->setCellValue("D".($count), trim($hop['varort']));
 			$count++;
 		} 
 		$sWriter = new PHPExcel_Writer_CSVContents($stopswriter);
@@ -748,7 +749,10 @@ class Sourcemap_Import_Hviz extends Sourcemap_Import_Xls{
 		
         $sc->stops = self::csv2stops($stop_csv, $options);
         $sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();
-        $sc->attributes = array("description"=>$description);
+        $sc->attributes = array("description"=>$description, "sm:ui:valueatrisk"=>"1");
+		if (isset($forecast_uom)) {
+			$sc->attributes->{"sm:ui:valueatrisk"} = $forecast_uom;
+		}
         return $sc;	
     }
 

@@ -155,7 +155,6 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         this.map.dockControlEl(metric).find('.unit').text(scaled.unit);
     	
     }, this));
-        
 }
 
 Sourcemap.Map.Base.prototype.initEvents = function() {
@@ -195,6 +194,76 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             }
             Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
+		$("circle").hover($.proxy(function(event) {
+			var thefeature = event.currentTarget._featureId; 
+			var tieredsc = new Sourcemap.Supplychain.makeTiers(sc);
+			// first iterate through the openlayers map object to find the right circle
+			for (var x in this.map.map.layers) {
+				for (var y in this.map.map.layers[x].features) {
+					if (this.map.map.layers[x].features[y].id == thefeature) {
+						// Found the right openlayers feature. get data.
+						for (var z in tieredsc.stops) {
+							if (tieredsc.stops[z].instance_id == this.map.map.layers[x].features[y].attributes.stop_instance_id) {
+								Sourcemap.Map.Base.isolateNetworkEffect(this, tieredsc, 0.1, tieredsc.stops[z].instance_id);
+								break;
+							}
+						}
+						break;
+					}
+				}
+			}
+			//var id = $(this).attr("id");
+			//for () {
+				
+			//}
+		}, this));
+		$("circle").mouseover($.proxy(function(event) {
+			Sourcemap.Map.Base.defaultEffect();
+			var thefeature = event.currentTarget._featureId; 
+			var tieredsc = new Sourcemap.Supplychain.makeTiers(sc);
+			// first iterate through the openlayers map object to find the right circle
+			for (var x in this.map.map.layers) {
+				for (var y in this.map.map.layers[x].features) {
+					if (this.map.map.layers[x].features[y].id == thefeature) {
+						// what if its a cluster? Make sure to iterate through all the cluster stops
+						if (typeof(this.map.map.layers[x].features[y].cluster) != "undefined") {
+							for (var a in this.map.map.layers[x].features[y].cluster) {
+								for (var z in tieredsc.stops) {
+									if (typeof(this.map.map.layers[x].features[y].cluster[a].attributes) != "undefined") {
+										if (tieredsc.stops[z].instance_id == this.map.map.layers[x].features[y].cluster[a].attributes.stop_instance_id) {
+											Sourcemap.Map.Base.isolateNetworkEffect(this, tieredsc, 0.1, tieredsc.stops[z].instance_id);
+											break;
+										}
+									}
+								}								
+							}
+						} else {
+							// Found the right openlayers feature. get data.
+							for (var z in tieredsc.stops) {
+								if (tieredsc.stops[z].instance_id == this.map.map.layers[x].features[y].attributes.stop_instance_id) {
+									Sourcemap.Map.Base.isolateNetworkEffect(this, tieredsc, 0.1, tieredsc.stops[z].instance_id);
+									break;
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+			//var id = $(this).attr("id");
+			//for () {
+				
+			//}
+		}, this));
+		$("circle").mouseout($.proxy(function() {
+			Sourcemap.Map.Base.defaultEffect();
+		}, this));
+		/*
+	    Sourcemap.listen('map:feature_hover', $.proxy(function(evt, map, ftr) {
+			console.log("meow");
+	        var x = new Sourcemap.Supplychain.makeTiers(sc);		
+	    }, this));
+		*/
     }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
@@ -214,6 +283,20 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         }
     }, this));
 
+    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
+        if(ftr.cluster) {
+            this.showClusterDetails(ftr);
+        } else if(ftr.attributes.stop_instance_id && (!(map.editor) || this.options.locked)) {
+            this.showStopDetails(
+                ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
+            );
+        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
+            this.showHopDetails(
+                ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
+            );
+        }
+    }, this));
+	
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.hideDialog();
     }, this));
@@ -250,6 +333,305 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         }
     }, this));
     */
+}
+
+Sourcemap.Map.Base.svgToSc = function (thismap, sc, svgid) {
+	// first iterate through the openlayers map object to find the right circle
+	for (var x in thismap.map.map.layers) {
+		for (var y in thismap.map.map.layers[x].features) {
+			if (typeof(thismap.map.map.layers[x].features[y].geometry) != "undefined") {
+				// Case: Arrows and Circles
+				if (thismap.map.map.layers[x].features[y].geometry.id == svgid) {
+					// Found the right openlayers feature. get data.
+					// Case: Circles
+					if (typeof(thismap.map.map.layers[x].features[y].attributes.stop_instance_id) != "undefined") {
+						return (thismap.map.map.layers[x].features[y].attributes.stop_instance_id).toString();	
+					} 
+					// Case: Arrows
+					else if (typeof(thismap.map.map.layers[x].features[y].attributes.hop_instance_id) != "undefined") {
+						return (thismap.map.map.layers[x].features[y].attributes.hop_instance_id).toString();	
+					}
+					// Case: Cluster 
+					else if (typeof(thismap.map.map.layers[x].features[y].cluster) != "undefined") {
+						var cluster_list = new Array();
+						var cluster_count = 0;
+						for (var c in thismap.map.map.layers[x].features[y].cluster) {
+							if (typeof(thismap.map.map.layers[x].features[y].cluster[c].attributes) != "undefined") {
+								cluster_list[cluster_count] = thismap.map.map.layers[x].features[y].cluster[c].attributes.stop_instance_id;		
+								cluster_count++;
+							}
+						}
+						return cluster_list;
+					}
+					return "not found";
+					break;
+				} 
+				// Case: Text 
+				else if (svgid.search("_label") && thismap.map.map.layers[x].features[y].id == svgid.replace("_label","")) {
+					// Found the right openlayers feature. get data.
+					if (typeof(thismap.map.map.layers[x].features[y].attributes.stop_instance_id) != "undefined") {
+						return (thismap.map.map.layers[x].features[y].attributes.stop_instance_id).toString();	
+					} 
+					return "not found";
+					break;
+				}				
+				// Case: Lines
+				else if (typeof(thismap.map.map.layers[x].features[y].geometry.components) != "undefined") {
+					if (thismap.map.map.layers[x].features[y].geometry.components[0].id == svgid && typeof(thismap.map.map.layers[x].features[y].attributes.hop_instance_id) != "undefined") {
+						return (thismap.map.map.layers[x].features[y].attributes.hop_instance_id).toString();	
+					}
+				} else if (typeof(thismap.map.map.layers[x].features[y].geometry.components) != "undefined") {
+					if (thismap.map.map.layers[x].features[y].geometry.components[0].id == svgid && typeof(thismap.map.map.layers[x].features[y].attributes.hop_instance_id) != "undefined") {
+						return (thismap.map.map.layers[x].features[y].attributes.hop_instance_id).toString();	
+					}
+				}
+			}
+		}
+	}
+	return "not found";
+}
+Sourcemap.Map.Base.filterMap = function () {
+	
+}
+Sourcemap.Map.Base.defaultEffect = function () {
+    $("circle")
+    .css("opacity",1);
+    $("text")
+    .css("opacity",1);
+	$("polyline")
+    .css("opacity",1);
+	$("polygon")
+    .css("opacity",1);
+}
+Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
+    //Sourcemap.Map.Base.defaultEffect();
+            $("circle")
+            .filter(function(d){
+                    var updown = update_updown(i);
+					var theid = $(this).attr("id");
+					var x = Sourcemap.Map.Base.svgToSc(thismap, sc, theid);
+					console.log(typeof(x));
+					if (x != "not found" && typeof(x) == "string") {
+						for (var y in sc.stops) {
+							if (sc.stops[y].instance_id == x) {
+								if (parseFloat($(this).css("opacity")).toFixed(2) != 0.99) {
+									return check_stops(sc.stops[y].instance_id,i, updown);
+								}
+							}
+						}
+					} 
+					// Case clusters
+					else if (x != "not found" && typeof(x) == "object") {
+						var bool_stops = true; 
+						for (var cs in x) {
+							if (typeof(x[cs]) == "string") {
+								for (var y in sc.stops) {
+									console.log(sc.stops[y].instance_id + " - " + x[cs]);
+									if (sc.stops[y].instance_id == x[cs]) {
+										console.log(check_stops(sc.stops[y].instance_id,i, updown) + " , " + bool_stops);
+										bool_stops = bool_stops && check_stops(sc.stops[y].instance_id,i, updown);
+										console.log(bool_stops);
+									}
+								}
+							}
+						}
+						if (parseFloat($(this).css("opacity")).toFixed(2) != 0.99) {
+							return bool_stops;
+						}
+					}
+					return false;				                  
+	        })
+            .css("opacity",0.2);
+
+			// 			
+            $("circle")
+            .filter(function(d){
+               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+					return true;
+				else 
+					return false;			                
+	        })
+            .css("opacity",0.99);
+
+            $("text")
+            .filter(function(d){
+                    var updown = update_updown(i);
+					var theid = $(this).attr("id");
+					var x = Sourcemap.Map.Base.svgToSc(thismap, sc, theid);
+					if (x != "not found") {
+						for (var y in sc.stops) {
+							if (sc.stops[y].instance_id == x) {
+								if (parseFloat($(this).css("opacity")).toFixed(2) != 0.99) {
+									return check_stops(sc.stops[y].instance_id,i, updown);
+								}
+							}
+						}
+					}
+					return false;				                  
+	        })
+            .css("opacity",0.2);
+
+            $("text")
+            .filter(function(d){
+               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+					return true;
+				else 
+					return false;			                
+	        })
+            .css("opacity",0.99);
+
+			$("polyline")
+			.filter(function(d){
+                    var updown = update_updown(i);
+					var theid = $(this).attr("id");
+					var x = Sourcemap.Map.Base.svgToSc(thismap, sc, theid);
+					if (x != "not found") {
+						for (var y in sc.hops) {
+							if (sc.hops[y].instance_id == x) {
+								if (parseFloat($(this).css("opacity")).toFixed(2) != 0.99) {
+									return check_hops(sc.hops[y],i, updown);
+								}
+							}
+						}
+					}
+					return false;				                  
+	        })
+            .css("opacity",0.2);
+
+            $("polyline")
+            .filter(function(d){
+               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+					return true;
+				else 
+					return false;			                
+	        })
+            .css("opacity",0.99);
+
+			$("polygon")
+			.filter(function(d){
+                    var updown = update_updown(i);
+					var theid = $(this).parent().attr("id");
+					if (theid.search('Point')) {
+						var x = Sourcemap.Map.Base.svgToSc(thismap, sc, theid);
+						if (x != "not found") {
+							for (var y in sc.hops) {
+								if (sc.hops[y].instance_id == x) {
+									if (parseFloat($(this).css("opacity")).toFixed(2) != 0.99) {
+										return check_hops(sc.hops[y],i, updown);
+									}
+								}
+							}
+						}
+						return false;	
+					}			             
+	        })
+			//.transition()
+            .css("opacity",0.2);
+
+            $("polygon")
+            .filter(function(d){
+               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+					return true;
+				else 
+					return false;			                
+	        })
+            .css("opacity",0.99);
+
+	function update_updown(select)
+    {        
+        var upstream = [];
+        var downstream = [];
+		var x = 0;
+		for (x in sc.tier_list) {
+			if (sc.tier_list[x].instance == select) {				
+				break;
+			}
+		}
+		if (typeof(sc.tier_list[x].instance) != "undefined") {
+        	upstream.push(sc.tier_list[x].instance);
+	        downstream.push(sc.tier_list[x].instance);
+	        //downstream ~max
+	        (function(){
+	        for(var j=0,down_max=downstream.length;j<down_max;j++){
+	            for(var h=0,max=sc.hop_list.length;h<max;h++){                        
+	                if(sc.hop_list[h].from==downstream[j]){
+	                    //prevent circular supplychain
+	                    if(jQuery.inArray(sc.hop_list[h].to,downstream)>0)
+	                        continue;
+	                    downstream.push(sc.hop_list[h].to);
+	                    down_max = downstream.length; 
+	                }
+	            }
+	        }
+	        })(); // end of funciton
+	        //upstream
+	        (function(){
+	        for(var j=0,up_max=upstream.length;j<up_max;j++){
+	            for(var h=0,max=sc.hop_list.length;h<max;h++){                        
+	                if(sc.hop_list[h].to==upstream[j]){
+	                    //prevent circular supplychain
+	                    if(jQuery.inArray(sc.hop_list[h].from,upstream)>0)
+	                        continue;
+	                    upstream.push(sc.hop_list[h].from);
+	                    up_max = upstream.length; 
+	                }
+	            }
+	        }
+	      })(); // end of function
+		}
+		var updown = {};
+		return {'upstream':upstream, 'downstream':downstream};
+    }
+
+    function check_hops(hop,select, updown)
+    {
+	// hop should be a whole hop object. It should be the hop that is being tested for whether it included in the same branch that stop "select"
+	// select is the stop id of the stop that has been moused over. it should look like "stop-1"
+		var upstream = updown.upstream;
+		var downstream = updown.downstream;
+		var x = 0;
+		for (x in sc.tier_list) {
+			if (sc.tier_list[x].instance == select) {				
+				break;
+			}
+		}
+        // hops that connect to select stop
+        if(hop.from_stop_id==sc.tier_list[x].instance||hop.to_stop_id==sc.tier_list[x].instance)
+            return false;
+        if(jQuery.inArray(hop.from_stop_id,upstream)>0){    
+            if(jQuery.inArray(hop.to_stop_id,upstream)>0)
+                return false;
+        }
+        if(jQuery.inArray(hop.from_stop_id,downstream)>0){    
+            if(jQuery.inArray(hop.to_stop_id,downstream)>0)
+                return false;
+        }
+        return true;    
+    }
+	
+    function check_stops(i,select, updown)
+    {
+	// i is the stop id of the stop that is being tested for whether it included in the same branch that stop "select"
+	// select is the stop id of the stop that has been moused over. it should look like "stop-1"	
+	var upstream = updown.upstream;
+	var downstream = updown.downstream;
+        // false : not change opacity 
+		var x = 0;
+		for (x in sc.tier_list) {
+			if (sc.tier_list[x].instance == i) {				
+				break;
+			}
+		}
+        if(i==select)
+            return false;
+        if(jQuery.inArray(sc.tier_list[x].instance,downstream)>0)
+            return false;
+        if(jQuery.inArray(sc.tier_list[x].instance,upstream)>0) 
+            return false;
+        //else return true
+        return true;         
+    }
+
 }
 
 Sourcemap.Map.Base.prototype.setActiveArea = function(){
@@ -721,10 +1103,8 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
                 this.map.broadcast('map:feature_selected', this.map, sftr); 
 
             },{"map":this.map, "cluster":cluster}));
-
-
-    
 }
+
 Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     var sc = this.map.supplychains[scid];
     var hop = sc.findHop(hid);

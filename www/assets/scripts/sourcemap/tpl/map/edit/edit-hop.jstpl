@@ -89,7 +89,7 @@
 
                 </fieldset>
         </div>
-		<h3 class="accordion-title"><div class="arrow"></div>Media</h3>
+		<h3 class="accordion-title"><div class="arrow"></div>Video</h3>
         <div id="edit-media" class="sourcemap-form accordion-body">
             <fieldset>
 				<% mediatype = this.ref.getAttr("youtube:link", false) ? "youtube:link" : this.ref.getAttr("flickr:setid", false) ? "flickr:setid" : "youtube:link"; %>

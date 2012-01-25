@@ -24,13 +24,6 @@ Route::set('view', '<controller>/<id>', array(
     )
 );
 
-Route::set('tree', '<controller>/<id>', array(
-    'controller' => '(tree)'
-))->defaults(array(
-        'action' => 'index'
-    )
-);
-
 Route::set('toplevel static maps', 'static/<id>.<sz>.png', array(
     'id' => '[a-z0-9]+', 'sz' => '(t|s|m|l|f|th-m)'
 ))->defaults(array(
@@ -132,4 +125,8 @@ Route::set('secure/child', 'secure/<id>/<child>')
     )
 );
 
-//Sourcemap::register_plugin('hello');
+
+/* SITE-SPECIFIC PLUGINS --------------------------------------- */
+
+// HiViz tree
+Sourcemap::register_plugin('tree');

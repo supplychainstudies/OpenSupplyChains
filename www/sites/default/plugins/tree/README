@@ -1,0 +1,3 @@
+The TREE plugin takes a supplychain object and renders a tree using the d3 library.
+
+It is meant to be included on the main Sourcemap.com site, and be visible only to users with the "HiViz" role.

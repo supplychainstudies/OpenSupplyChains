@@ -1,6 +1,6 @@
 <?php
 
-Route::set('tree', 'tree/<id>')
+Route::set('tree', '<controller>/<id>')
     ->defaults(array(
         'controller' => 'tree',
         'action' => 'index'

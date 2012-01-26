@@ -36,6 +36,6 @@ The following interesting directories can be found in the repository:
 If you want custom routing or a non-standard routing, you'll want to put your own site-specific `bootstrap.php` file in your `sites/<siteshortname>` directory.
 
 [1]: http://www.sourcemap.com "Sourcemap.com"
-[2]: http://github.com/SourcemapFoundation/SrcClient "SrcClient on Github"
-[3]: http://github.com/SourcemapFoundation/OpenSupplyChains/raw/master/docs/img/preview.png "Open Supply Chains"
+[2]: http://github.com/supplychainstudies/SrcClient "SrcClient on Github"
+[3]: http://github.com/supplychainstudies/OpenSupplyChains/raw/master/docs/img/preview.png "Open Supply Chains"
 [4]: http://wiki.openstreetmap.org/wiki/Mapnik/PostGIS "Mapnik PostGIS Guide"

@@ -15,7 +15,7 @@
 <div class="clear"></div>
 <div class="container">
 	<ul>
-		<li><a href="http://sourcemapfoundation.org/about/sourcemap/">Open Supply Chains is distributed by Sourcemap Foundation</a></li>		
+		<li><a href="http://supplychainstudies.org">Open Supply Chains is distributed by Organization for Supply Chain Studies.</a></li>		
 	</ul>   
 </div>
 <div class="clear"></div>

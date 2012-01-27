@@ -125,8 +125,16 @@ Route::set('secure/child', 'secure/<id>/<child>')
     )
 );
 
+Route::set('hooks', 'hooks/<action>')
+    ->defaults(array(
+        'controller' => 'hooks',
+        'action' => 'index'
+    )
+);
+
 
 /* SITE-SPECIFIC PLUGINS --------------------------------------- */
 
 // HiViz tree
 Sourcemap::register_plugin('tree');
+//Sourcemap::register_plugin('hello');

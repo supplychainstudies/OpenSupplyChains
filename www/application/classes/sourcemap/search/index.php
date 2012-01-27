@@ -51,6 +51,8 @@ class Sourcemap_Search_Index {
                 ->where('supplychain_id', '=', $sc->id)->count_all();
             $scidx->comments = ORM::factory('supplychain_comment')
                 ->where('supplychain_id', '=', $sc->id)->count_all();
+			$scidx->stops = ORM::factory('stop')
+                ->where('supplychain_id', '=', $sc->id)->count_all();
             $scidx->save();
         }
         return true;

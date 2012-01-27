@@ -916,6 +916,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 							sc.hops[x].attributes.co2e_reference = "http://footprinted.org/"+item.uri;
 							sc.hops[x].attributes.transport = item.name;
 							sc.hops[x].attributes.co2e = item.co2e;
+							sc.hops[x].attributes.unit = "kg";
 							if (sc.hops[x].attributes.footprintmethodology) { 
 								if (sc.hops[x].attributes.footprintmethodology.search("CO2e factor referenced from: \n" +item.ref) == -1) { 
 									sc.hops[x].attributes.footprintmethodology = sc.hops[x].attributes.footprintmethodology + "\nCO2e factor referenced from: \n" +item.ref;

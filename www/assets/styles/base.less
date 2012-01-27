@@ -239,17 +239,18 @@
             height:45px;
 			padding: 0px;
 			margin:0px;
+			padding-left: 10px;
             font-size: 14px;
             font-weight: bold;
             text-align:center;
             color: @link-color;
             list-style:none;
-            //border-top: 1px solid rgb(206,206,206);
-            //border-bottom: 1px solid rgb(206,206,206);
+			border: 0px;
             li {
                 float:left;
                 display:block;
                 padding: 15px 10px;
+				border: 0px;
                 &.weight{padding-left: 40px; background: url(../images/dock-icon-mass.png) 10px 12px no-repeat;}
                 &.co2e{padding-left: 40px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
                 &.water{padding-left: 40px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
@@ -258,57 +259,70 @@
             }
         }
         ul#dialog-footprint { 
-	        
-            //height:45px;
-			padding: 10px;
+			padding-left: 10px;
 			height: auto;
 			margin:0px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             text-align:center;
 			clear: both;
             color: @link-color;
             list-style:none;
-            //border-top: 1px solid rgb(206,206,206);
-            //border-bottom: 1px solid rgb(206,206,206);
             li {
+				height: 30px;
                 float:left;
                 display:block;
 				clear: both;
-                padding: 12px 10px;
-				.units {
-					font-size: 8px;
-					//color: #aaaaaa;
-					width: 50px;
-					clear: none;
-					margin: 3px;
+				padding: 0px;
+				padding-left: 15px;
+				margin-top: 4px; margin-bottom: 4px;
+				.vals {
+					height: 14px; margin:0px; padding: 0px;
+					min-width: 30px;
+					clear: none; 
 					float: left;
+					margin-top: 9px;
+					margin-bottom: 7px;
+				}
+				.bigger {
+					min-width: 50px;
+				}
+				.units {
+					height: 14px; margin:0px; padding: 0px;
+					font-size: 8px;
+					width: 60px;
+					clear: none;
+					float: left;
+					margin-top: 10px;
+					margin-bottom: 7px;
 				}
 				.footprint-math {
+					height: 14px; margin:0px; padding: 0px;
 					clear: none;
 					float:left;
 					text-align:center;
-					//vertical-align: bottom;
-					//width:auto;
 					font-size:1em;
-					padding-left: 5px;
-					padding-right: 5px;
-					//padding-top: 7px;
+					padding-left: 15px;
+					padding-right: 15px;
+					color: #6d848e;
+					margin-top: 9px;
+					margin-bottom: 7px;
 				}
 				.reference {  
+					height: 20px; margin:0px; padding: 0px;
 					width: 25px;
-					height: 25px;
-					margin-left: 10px;
+					margin-left: 20px;
+					margin-top: 5px;
 					float:left;
 					&.lock {
 						background: url(../images/icon-book.png) 0px 0px no-repeat;  
 					}
 				}
-                &.weight{padding-left: 45px; background: url(../images/dock-icon-mass.png) 10px 12px no-repeat;}
-                &.co2e{padding-left: 45px; background: url(../images/dock-icon-co2.png) 10px 12px no-repeat;}
-                &.water{padding-left: 45px; background: url(../images/dock-icon-h2o.png) 10px 12px no-repeat;}
-				&.energy{padding-left: 45px; background: url(../images/dock-icon-power.png) 10px 12px no-repeat;}
-				&.distance{padding-left: 45px; background: url(../images/dock-icon-distance.png) 10px 12px no-repeat;}
+                &.weight{padding-left: 45px; background: url(../images/dock-icon-mass.png) 5px 5px no-repeat;}
+                &.co2e{padding-left: 45px; background: url(../images/dock-icon-co2.png) 5px 5px no-repeat;}
+                &.water{padding-left: 45px; background: url(../images/dock-icon-h2o.png) 5px 5px no-repeat;}
+				&.energy{padding-left: 45px; background: url(../images/dock-icon-power.png) 5px 5px no-repeat;}
+				&.distance{padding-left: 45px; background: url(../images/dock-icon-distance.png) 5px 5px no-repeat;}
             }
         }   
         #dialog-media {

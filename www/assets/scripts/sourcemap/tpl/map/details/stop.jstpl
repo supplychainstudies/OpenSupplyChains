@@ -62,19 +62,19 @@
 			<% var energy_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("energy", 0) * this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0)), "kwh", 2); %>
 	<li class="energy"><%= energy_scaled.value %> <%= energy_scaled.unit %></li> <% } %>
 </ul>
-<div style="clear: both"><hr /></div>
+<div style="clear: both; height: 5px"><hr /></div>
 <ul id="dialog-footprint">	
 	<% var unit = (this.stop.getAttr("unit","kg") == "kg") ? 1 : 0; %>
 	<% var weight = unit || this.stop.getAttr("weight"); %>
     <% if(this.stop.getAttr("co2e", false) && this.stop.getAttr("co2e", false) != 0) { %>
 		<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("co2e", 0) * this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0)), "kg", 2); %>		
 		<li class="co2e">
-			<div style="clear: none; float: left"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
+			<div class="vals"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
 			<div class="footprint-math">x</div> 
-			<div style="clear: none; float: left; width: 60px"><%= this.stop.getAttr("co2e", 0) %></div>
+			<div class="vals"><%= this.stop.getAttr("co2e", 0) %></div>
 			<div class="units">kg CO<sub>2</sub>e/kg</div> 
 			<div class="footprint-math">=</div>
-			<div style="clear: none; float: left; width: 60px"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> </div>
+			<div class="vals bigger"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> </div>
 			<% if(this.stop.getAttr("co2e_reference", false) && this.stop.getAttr("co2e_reference", false) != 0) { %>
 			<a target="_blank" href="<%= this.stop.getAttr("co2e_reference", false) %>"><span class="reference lock" id="co2e-energy">&nbsp;</span></a>
 			<% } %>
@@ -83,12 +83,12 @@
     <% if(this.stop.getAttr("water", false) && this.stop.getAttr("water", false) != 0) { %>
 	<% var water_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("water", 0) * this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0)), "L", 2); %>
 	<li class="water">
-		<div style="clear: none; float: left"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
+		<div class="vals"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
 		<div class="footprint-math">x</div> 
-		<div style="clear: none; float: left; width: 60px"><%= this.stop.getAttr("water", 0) %></div>
+		<div class="vals"><%= this.stop.getAttr("water", 0) %></div>
 		<div class="units">L H<sub>2</sub>O/kg</div> 
 		<div class="footprint-math">=</div>
-		<div style="clear: none; float: left; width: 60px"><%= water_scaled.value %> <%= water_scaled.unit %></div>
+		<div class="vals bigger"><%= water_scaled.value %> <%= water_scaled.unit %></div>
 		<% if(this.stop.getAttr("water_reference", false) && this.stop.getAttr("water_reference", false) != 0) { %>
 		<a target="_blank" href="<%= this.stop.getAttr("water_reference", false) %>"><span class="reference lock" id="water-energy">&nbsp;</span></a>
 		<% } %>
@@ -97,12 +97,12 @@
     <% if(this.stop.getAttr("energy", false) && this.stop.getAttr("energy", false) != 0) { %>
 	<% var energy_scaled = Sourcemap.Units.scale_unit_value((this.stop.getAttr("energy", 0) * this.stop.getAttr("qty", 1) * this.stop.getAttr("weight", 0)), "kwh", 2); %>
 	<li class="energy">
-		<div style="clear: none; float: left"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
+		<div class="vals"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
 		<div class="footprint-math">x</div> 
-		<div style="clear: none; float: left; width: 60px"><%= this.stop.getAttr("energy", 0) %></div>
+		<div class="vals"><%= this.stop.getAttr("energy", 0) %></div>
 		<div class="units">kwh/kg</div>
 		<div class="footprint-math">=</div>
-		<div style="clear: none; float: left; width: 60px"><%= energy_scaled.value %> <%= energy_scaled.unit %></div>
+		<div class="vals bigger"><%= energy_scaled.value %> <%= energy_scaled.unit %></div>
 		<% if(this.stop.getAttr("energy_reference", false) && this.stop.getAttr("energy_reference", false) != 0) { %>
 		<a target="_blank" href="<%= this.stop.getAttr("energy_reference", false) %>"><span class="reference lock" id="reference-energy">&nbsp;</span></a>
 		<% } %>		

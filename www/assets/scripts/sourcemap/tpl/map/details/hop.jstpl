@@ -28,65 +28,61 @@
     </div>
 <% } %>
 <% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0)) { %>
-	<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("qty", 1) * this.hop.getAttr("weight", 0)), "kg", 2); %>
+
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Footprint</h3>
 <div class="accordion-body" id="dialog-footprint-body">
 <ul id="dialog-footprint-header">
-    <% if(this.hop.gc_distance()) { %><li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li><% } %>
-	<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0) && (!this.hop.getAttr("qty", false) || this.hop.getAttr("qty", false) == 0)) { %><li class="weight"><%= this.hop.getAttr("weight", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
-	<% if((!this.hop.getAttr("weight", false) || this.hop.getAttr("weight", false) == 0) && (this.hop.getAttr("qty", false) && this.hop.getAttr("qty", false) != 0)) { %><li class="weight"><%= this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
-	<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0) && (this.hop.getAttr("qty", false) && this.hop.getAttr("qty", false) != 0)) { %><li class="weight"><%= this.hop.getAttr("weight", 0)*this.hop.getAttr("qty", 0) %> <%= this.hop.getAttr("unit", "kg") %></li><% } %>
+    <% if(this.hop.gc_distance()) { %>
+		<li class="distance"><%= Math.round(this.hop.gc_distance() || 0) %> km</li>
+	<% } %>
+	<% if((this.hop.getAttr("weight", false) && this.hop.getAttr("weight", false) != 0)) { %>
+		<% var weight_scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("qty", 1) * this.hop.getAttr("weight", 0)), "kg", 2); %>
+		<li class="weight"><%= weight_scaled.value %> <%= weight_scaled.unit %> </li>
+		
+	<% } %>
     <% if(this.hop.getAttr("co2e", false) && this.hop.getAttr("co2e", false) != 0) { %>
 		<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("co2e", 0)* this.hop.gc_distance() * this.hop.getAttr("qty", 1) * this.hop.getAttr("weight", 0)), "kg", 2); %>		
 		<li class="co2e"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> </li> 
 	<% } %>
 </ul>
-<div style="clear: both"><hr /></div>
-<ul id="dialog-footprint" style="clear: both; min-height: 45px">
-    <% if(this.hop.getAttr("co2e", false) && this.hop.getAttr("co2e", false) != 0) { %>
-		<% var co2e_scaled = Sourcemap.Units.scale_unit_value((this.hop.getAttr("co2e", 0)* this.hop.gc_distance() * this.hop.getAttr("qty", 1) * this.hop.getAttr("weight", 0)), "kg", 2); %>		
-		<li class="co2e">
-			<div style="clear: none; float: left"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
-			<div class="footprint-math">x</div> 
-			<div style="clear: none; float: left; width: 60px"><%= this.hop.getAttr("co2e", 0) %></div>
-			<div class="units">kg CO<sub>2</sub>e/kg</div> 
-			<div class="footprint-math">=</div>
-			<div style="clear: none; float: left"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> </div>
+<div style="clear: both; height: 2px"><hr /></div>
+<ul id="dialog-footprint" style="margin-bottom: 15px; min-height: 38px">
+    <% if(this.hop.getAttr("co2e", false) && this.hop.getAttr("co2e", false) != 0) { %>	
+		<li class="co2e" style="margin-top: 15px; margin-left: 2px">
+			<div class="vals"><%= Math.round(this.hop.gc_distance() || 0) %> km</div>
+			<div class="footprint-math" style="padding-left: 7px; padding-right: 7px">x</div> 
+			<div class="vals"><%= weight_scaled.value %> <%= weight_scaled.unit %></div>
+			<div class="footprint-math" style="padding-left: 7px; padding-right: 7px">x</div>
+			<div style="clear: none; float: left; width: 130px; margin-top: -18px">
+			<div class="vals" style="font-size: 10px; clear: both; float: left; padding-bottom: 0px; margin-bottom: 0px; width: 140px; text-align: center"><%= this.hop.getAttr("transport", "") %></div>
+				<div class="vals" style="margin-top: 4px; margin-left: 25px"><%= parseFloat(this.hop.getAttr("co2e", 0)).toExponential(1) %></div>
+				<div class="units" style="margin-right: 2px; margin-top: 4px;">kg CO<sub>2</sub>e/kg</div> 
+			</div>
+			<div class="footprint-math" style="padding-left: 7px; padding-right: 7px">=</div>
+			<div class="vals"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> </div>
+			<% if(this.hop.getAttr("co2e_reference", false) && this.hop.getAttr("co2e_reference", false) != 0) { %>
+			<a target="_blank" href="<%= this.hop.getAttr("co2e_reference", false) %>"><span class="reference lock" id="co2e-energy" style="margin-left: 10px">&nbsp;</span></a>
+			<% } %>
 		</li> 
 	<% } %>
 </ul>
+
 </div>
 <% } %>
 
 <% if(this.hop.magic) { %>
 <h3 class="accordion-title <%= first; %><% first=""; %>"><div class="arrow"></div>Video</h3>
 <div id="dialog-media" class="accordion-body">
-        <% if(this.hop.magic["youtube:link"]) { %>
-            <%= Sourcemap.MagicWords.content.youtube.link(this.hop.magic["youtube:link"]) %>
-        <% } %>
-        <% if(this.hop.magic["vimeo:link"]) { %>
-            <%= Sourcemap.MagicWords.content.vimeo.link(this.hop.magic["vimeo:link"]) %>
-        <% } %>
-        <% if(this.hop.magic["soundcloud:id"]) { %>
-            <%= Sourcemap.MagicWords.content.soundcloud.id(this.hop.magic["soundcloud:id"]) %>
-        <% } %>
-        <% if(this.hop.magic["twitter:search"]) { %>
-            <%= Sourcemap.MagicWords.content.twitter.search(this.hop.magic["twitter:search"]) %>
-        <% } %>
-        <% if(this.hop.magic["flickr:setid"]) {  %>
-            <div id="flickr-photoset-<%= this.hop.magic["flickr:setid"] %>">
-                <%= Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.hop.magic["flickr:setid"]) %>
-            </div>
-        <% } %>
-
-
+	<div id="dialog-media-content">
+	</div>
     <div id="dialog-media-navigation">
         <% for(var i in this.hop.magic) { %>
                 <a id="media-item-<%= i %>" class="navigation-item" href="javascript: void(0);">&nbsp;</a>  
         <% } %>
-</div>
-        <div class="clear"></div>
+	</div>
+    <div class="clear"></div>
     </div>
+</div>
 </div>
 <% } %>
 

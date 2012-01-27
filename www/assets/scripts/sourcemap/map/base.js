@@ -891,130 +891,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			var h = this.base.map.activeArea.h -55;
-			// First, find out how much height is already occupied 
-			$(this.base.dialog_content).find('.placename').each(function() {
-				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-			});
-			$(this.base.dialog_content).find('.title').each(function() {
-				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-			});
-			$(this.base.dialog_content).find('.accordion-title').each(function() {
-				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-			});
-			// Each accordion body can be the size of the leftover space
-            var accordion_body = $(this.base.dialog_content).find('.accordion-body')
-            var len = accordion_body.length;
-			accordion_body.each(function(index) {
-				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
-				if (thissize > h) {	
-					var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
-					$(this).css('height',newsize+"px");
-					$(this).css('overflow',"auto");
-				}  
-				$(this).hide();
-                if (index == len-1)
-                    $(this).addClass('last');
-			});
-			// h is all the room we have to open stuff in
-			var reduced_height = h;
-			// If there's a media accordion (and there's enough room to show it), show it
-			$(this.base.dialog_content).find('#dialog-media').each($.proxy(function(num,evt) {	
-				var e = evt;
-				//console.log(evt);
-				var val = parseInt($(e).css('height').replace('px',"")) + parseInt($(e).css('padding-top').replace('px',"")) + parseInt($(e).css('padding-bottom').replace('px',""));		
-				if (reduced_height >= val) {
-					reduced_height = reduced_height - val;
-					$(e).prev().find('.arrow').addClass("arrowopen");
-					$(e).show();
-					
-					// Count number of media. if there is only one, don't show navigation
-					var count = 0;
-					$(this.base.dialog_content).find('.navigation-item').each($.proxy(function(evt) {
-						count++;
-		            }, this));			
-					if (count == 1) {
-						$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
-					}
-					// the first media object should play
-					$(this.base.dialog_content).find('.navigation-item').first().each($.proxy(function(num,evt) {
-		                var target = evt.id.split('-').pop().replace(":","-");
-						if(target == "youtube-link") { 
-				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
-				        } else if(target == "vimeo-link") {
-				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
-				        } else if(target == "soundcloud-id") {
-				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
-				        } else if(target == "twitter-search") {	
-				            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
-				        } else if(target == "flickr-setid") {
-				            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
-				        }
-		            }, this));
-				}					
-			}, this));
-			$(this.base.dialog_content).find('#dialog-description').each(function() {	
-				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				if (reduced_height >= val) {
-					reduced_height = reduced_height - val;
-					$(this).prev().find('.arrow').addClass("arrowopen");
-					$(this).show();
-				}					
-			});
-			$(this.base.dialog_content).find('#dialog-footprint-body').each(function() {	
-				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				if (reduced_height >= val) {
-					reduced_height = reduced_height - val;
-					$(this).prev().find('.arrow').addClass("arrowopen");
-					$(this).show();
-				}					
-			});
-			$(this.base.dialog_content).find('.accordion .accordion-title').click($.proxy(function(evt) {
-				var e = evt.target;
-				// figure out if the accordion is already open
-				var open = $(e).next().is(":visible");
-				// Close everything visible
-				$('.accordion-body:visible').each(function() {
-					if ($(this).attr("id") == "dialog-media")
-						$(this).hide();
-					else 
-						$(this).slideToggle('fast');
-				});
-				
-				$(this.base.dialog_content).find('.accordion-title').find('.arrow').removeClass('arrowopen');
-				// if it wasnt open. open it
-				if (open == false) {
-					$(e).next().slideToggle('fast');
-					$(e).find('.arrow').addClass('arrowopen');
-					if ($(e).next().attr("id") == "dialog-media") {
-						// Count number of media. if there is only one, don't show navigation
-						var count = 0;
-						$(e).next().find('.navigation-item').each($.proxy(function(evt) {
-							count++;
-			            }, this));			
-						if (count == 1) {
-							$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
-						}
-						// the first media object should play
-						$(e).next().find('.navigation-item').first().each($.proxy(function(num,evt) {
-			                var target = evt.id.split('-').pop().replace(":","-");
-							if(target == "youtube-link") { 
-					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
-					        } else if(target == "vimeo-link") {
-					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
-					        } else if(target == "soundcloud-id") {
-					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
-					        } else if(target == "twitter-search") {	
-					            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
-					        } else if(target == "flickr-setid") {
-					            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
-					        }
-			            }, this));
-					}
-				}				
-				return false;
-			}, this));
-
+			Sourcemap.Map.Base.setDetails();   
             // Sets up zoom on click
             $(this.base.dialog_content).find('.dot')
                 .css({'cursor': 'pointer'})
@@ -1022,43 +899,6 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
                     this.base.map.map.moveTo(this.base.getFeatureLonLat(this.feature));
                     this.base.map.map.zoomTo(this.base.map.map.maxZoomLevel);
                 }, this));
-
-            // Sets up content-nav behavior
-            $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
-                var target = evt.target.id.split('-').pop().replace(":","-");
-    			$("#dialog-media").find(".navigation-item").removeClass("selected");
-    			$(evt.target).addClass("selected");
-                // for multiple media item
-    			//$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
-    			//$("#dialog-media").children("."+target).css("left","0");
-				
-				if(target == "youtube-link") { 
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
-		        } else if(target == "vimeo-link") {
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
-		        } else if(target == "soundcloud-id") {
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
-		        } else if(target == "twitter-search") {	
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
-		        } else if(target == "flickr-setid") {
-		            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
-		        }
-            }, this));
-             
-            /* Commented out until the errors are in check... 
-	        if(this.stop.magic["youtube:link"]) { 
-	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
-	        } else if(this.stop.magic["vimeo:link"]) { 
-	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
-	        } else if(this.stop.magic["soundcloud:id"]) { 
-	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
-	        } else if(this.stop.magic["twitter:search"]) {	
-	            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
-	        } else if(this.stop.magic["flickr:setid"]) { 
-	            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
-			} 
-            */
-
   
         }, 
         {"stop": stop, "supplychain": sc, 'base': this, "feature":f},
@@ -1121,84 +961,7 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			var h = this.base.map.activeArea.h -55;
-			// First, find out how much height is already occupied 
-			$(this.base.dialog_content).find('.placename').each(function() {
-				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-			});
-			$(this.base.dialog_content).find('.title').each(function() {
-				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-			});
-			$(this.base.dialog_content).find('.accordion-title').each(function() {
-				h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-			});
-			// Each accordion body can be the size of the leftover space
-			$(this.base.dialog_content).find('.accordion-body').each(function() {
-				var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
-				if (thissize > h) {	
-					var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
-					$(this).css('height',newsize+"px");
-					$(this).css('overflow',"auto");
-				}
-				$(this).hide();
-			});
-			// h is all the room we have to open stuff in
-			var reduced_height = h;
-			// If there's a media accordion (and there's enough room to show it), show it
-			$(this.base.dialog_content).find('#dialog-media').each(function() {	
-				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				if (reduced_height > val) {
-					reduced_height = reduced_height - val;
-					$(this).prev().find('.arrow').addClass("arrowopen");
-					$(this).show();
-				}					
-			});
-			// If there's a description accordion (and there's enough room to show it), show it
-			$(this.base.dialog_content).find('#dialog-description').each(function() {	
-				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				if (reduced_height > val) {
-					reduced_height = reduced_height - val;
-					$(this).prev().find('.arrow').addClass("arrowopen");
-					$(this).show();
-				}					
-			});
-			// If there's a footprint accordion (and there's enough room to show it), show it
-			$(this.base.dialog_content).find('#dialog-footprint').each(function() {	
-				var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
-				if (reduced_height > val) {
-					reduced_height = reduced_height - val;
-					$(this).prev().find('.arrow').addClass("arrowopen");
-					$(this).show();
-				}					
-			});
-			$(this.base.dialog_content).find('.accordion .accordion-title').click(function() {
-				var open = $(this).next().is(":visible");
-				
-				$('.accordion-body:visible').each(function() {
-					if ($(this).attr("id") == "dialog-media")
-						$(this).hide();
-					else 
-						$(this).slideToggle('fast');
-				});
-				
-				$('.accordion-title').find('.arrow').removeClass('arrowopen');
-				if (open == false) {
-					$(this).next().slideToggle('fast');
-					$(this).find('.arrow').addClass('arrowopen');
-				}			
-				return false;
-			});	
-            // Sets up content-nav behavior
-            $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
-                var target = evt.target.id.split('-').pop().replace(":","-");
-    			$("#dialog-media").find(".navigation-item").removeClass("selected");
-    			$(evt.target).addClass("selected");
-                // for multiple media item
-    			$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
-    			$("#dialog-media").children("."+target).css("left","0");
-    			
-            }, this));
-                
+			Sourcemap.Map.Base.setDetails();                
         }, 
         {"hop": hop, "supplychain": sc, 'base': this},
         {"base": this, "hop": hop, "supplychain": sc},
@@ -1206,6 +969,153 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     );
 
     // this.map.map.panTo(this.getFeatureLonLat(f));
+}
+
+Sourcemap.Map.Base.prototype.setDetails = function() {
+	var h = this.base.map.activeArea.h -55;
+	// First, find out how much height is already occupied 
+	$(this.base.dialog_content).find('.placename').each(function() {
+		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+	});
+	$(this.base.dialog_content).find('.title').each(function() {
+		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+	});
+	$(this.base.dialog_content).find('.accordion-title').each(function() {
+		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+	});
+	// Each accordion body can be the size of the leftover space
+    var accordion_body = $(this.base.dialog_content).find('.accordion-body')
+    var len = accordion_body.length;
+	accordion_body.each(function(index) {
+		var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
+		if (thissize > h) {	
+			var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
+			$(this).css('height',newsize+"px");
+			$(this).css('overflow',"auto");
+		}  
+		$(this).hide();
+        if (index == len-1)
+            $(this).addClass('last');
+	});
+	// h is all the room we have to open stuff in
+	var reduced_height = h;
+	// If there's a media accordion (and there's enough room to show it), show it
+	$(this.base.dialog_content).find('#dialog-media').each($.proxy(function(num,evt) {	
+		var e = evt;
+		//console.log(evt);
+		var val = parseInt($(e).css('height').replace('px',"")) + parseInt($(e).css('padding-top').replace('px',"")) + parseInt($(e).css('padding-bottom').replace('px',""));		
+		if (reduced_height >= val) {
+			reduced_height = reduced_height - val;
+			$(e).prev().find('.arrow').addClass("arrowopen");
+			$(e).show();
+			
+			// Count number of media. if there is only one, don't show navigation
+			var count = 0;
+			$(this.base.dialog_content).find('.navigation-item').each($.proxy(function(evt) {
+				count++;
+            }, this));			
+			if (count == 1) {
+				$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
+			}
+			// the first media object should play
+			$(this.base.dialog_content).find('.navigation-item').first().each($.proxy(function(num,evt) {
+                var target = evt.id.split('-').pop().replace(":","-");
+				if(target == "youtube-link") { 
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+		        } else if(target == "vimeo-link") {
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+		        } else if(target == "soundcloud-id") {
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+		        } else if(target == "twitter-search") {	
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+		        } else if(target == "flickr-setid") {
+		            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+		        }
+            }, this));
+		}					
+	}, this));
+	$(this.base.dialog_content).find('#dialog-description').each(function() {	
+		var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+		if (reduced_height >= val) {
+			reduced_height = reduced_height - val;
+			$(this).prev().find('.arrow').addClass("arrowopen");
+			$(this).show();
+		}					
+	});
+	$(this.base.dialog_content).find('#dialog-footprint-body').each(function() {	
+		var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+		if (reduced_height >= val) {
+			reduced_height = reduced_height - val;
+			$(this).prev().find('.arrow').addClass("arrowopen");
+			$(this).show();
+		}					
+	});
+	$(this.base.dialog_content).find('.accordion .accordion-title').click($.proxy(function(evt) {
+		var e = evt.target;
+		// figure out if the accordion is already open
+		var open = $(e).next().is(":visible");
+		// Close everything visible
+		$('.accordion-body:visible').each(function() {
+			if ($(this).attr("id") == "dialog-media")
+				$(this).hide();
+			else 
+				$(this).slideToggle('fast');
+		});
+		
+		$(this.base.dialog_content).find('.accordion-title').find('.arrow').removeClass('arrowopen');
+		// if it wasnt open. open it
+		if (open == false) {
+			$(e).next().slideToggle('fast');
+			$(e).find('.arrow').addClass('arrowopen');
+			if ($(e).next().attr("id") == "dialog-media") {
+				// Count number of media. if there is only one, don't show navigation
+				var count = 0;
+				$(e).next().find('.navigation-item').each($.proxy(function(evt) {
+					count++;
+	            }, this));			
+				if (count == 1) {
+					$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
+				}
+				// the first media object should play
+				$(e).next().find('.navigation-item').first().each($.proxy(function(num,evt) {
+	                var target = evt.id.split('-').pop().replace(":","-");
+					if(target == "youtube-link") { 
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+			        } else if(target == "vimeo-link") {
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+			        } else if(target == "soundcloud-id") {
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+			        } else if(target == "twitter-search") {	
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+			        } else if(target == "flickr-setid") {
+			            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+			        }
+	            }, this));
+			}
+		}				
+		return false;
+	}, this));
+	// Sets up content-nav behavior
+    $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
+        var target = evt.target.id.split('-').pop().replace(":","-");
+		$("#dialog-media").find(".navigation-item").removeClass("selected");
+		$(evt.target).addClass("selected");
+        // for multiple media item
+		//$("#dialog-media").children("iframe, object, embed, div.media-object").css("left","-1000px");
+		//$("#dialog-media").children("."+target).css("left","0");
+		
+		if(target == "youtube-link") { 
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+        } else if(target == "vimeo-link") {
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+        } else if(target == "soundcloud-id") {
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+        } else if(target == "twitter-search") {	
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+        } else if(target == "flickr-setid") {
+            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+        }
+    }, this));
 }
 
 Sourcemap.Map.Base.prototype.showLocationDialog = function(msg) {
@@ -1892,7 +1802,7 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
     	if(this.map.dockControlEl('valueatrisk').length == 0) {	
             this.map.dockAdd('hviz', {
                 "title": 'Value at Risk',
-                "content": "&nbsp; $ &nbsp;",
+                "content": "VARORT",
                 "toggle": true,
                 "panel": 'filter',
                 "callbacks": {

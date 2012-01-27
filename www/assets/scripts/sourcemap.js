@@ -361,13 +361,12 @@ Sourcemap.initPasscodeInput = function(popID){
     $(element).addClass("popup_block");
     $(element).prepend('<a href="#" class="close"></a>');
     $('body').append($(element));
-
+    
     var scid = Sourcemap.view_supplychain_id || location.pathname.split('/').pop();
 
     // Error behavior
     var onError = function(){ window.location = "/view/" + scid + "?private"; }
 
-    
     // CSS setting of pop up window
     $('#' + popID).height(110);
     $('#' + popID).width(($('body').width()>750)?600:$('body').width()*.8);
@@ -395,7 +394,7 @@ Sourcemap.initPasscodeInput = function(popID){
         return false;
     });
 
-    if(Sourcemap.passcode==''||Sourcemap.passcode==undefined){
+    if(!Sourcemap.passcode==''||!Sourcemap.passcode==undefined){
         $('#' + popID).fadeIn();
         $('#fade').fadeIn(); //Fade in the fade layer 
         //Autofocus on password  

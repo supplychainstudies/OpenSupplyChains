@@ -59,21 +59,6 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
                 );
             }
         }
-
-		// check to make sure stops has been counted for each map
-		$stops_search = ORM::factory('supplychain_search');
-		$stops_search->where('stops','is',null);
-		$raw = $stops_search->find_all();
-        $results = self::prep_rows($raw);
-        if (count($results) > 0) {
-			foreach($results as $row) {
-				$stopcount_search = ORM::factory('supplychain_search',$row->id);
-				$stopcount_search->stops = ORM::factory('stop')->where('supplychain_id', '=', $row->id)->count_all();
-				//$stopcount_search->where('supplychain_id', '=', $row->id);
-				$stopcount_search->save();
-			}			
-		}
-		
         
         // by userid
         if(isset($this->parameters['user']) && (int)$this->parameters['user']) {
@@ -91,16 +76,10 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $search->and_where(DB::expr('featured'), 'and', DB::expr('TRUE'));
         }
 
-        // user featured filter
+        // user geatured filter
         if(isset($this->parameters['user_featured']) && strtolower($this->parameters['user_featured']) == 'yes') {
             //$search->and_where(DB::expr('user_featured'), 'and', DB::expr('TRUE'));
             $search->and_where('user_featured','=','true');
-        }
-
-		$this->parameters['display_empty'] = "no";
-		// Don't display empty
-        if(isset($this->parameters['display_empty']) && strtolower($this->parameters['display_empty']) == 'no') {
-            $search->and_where('stops','>','0');
         }
         
 

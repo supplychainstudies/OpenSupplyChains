@@ -39,15 +39,18 @@ class Sourcemap_Bitly {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
             $result = json_decode($result);
-
-            if($result->status_code == "200") {
+			if ($result != null) {
+	            if($result->status_code == "200") {
             
-                Cache::instance()->set($cache_key, $result->data->url, $ttl);
-                return $result->data->url;
+	                Cache::instance()->set($cache_key, $result->data->url, $ttl);
+	                return $result->data->url;
 
-            } else { 
-                return false;
-            }
+	            } else { 
+	                return false;
+	            }
+			} else {
+				return $url;
+			}
         }
     }
 }

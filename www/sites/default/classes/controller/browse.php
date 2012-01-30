@@ -47,6 +47,15 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
 
         $params = array_merge($defaults, $params);
 
+		$params['display_empty'] = "no";
+		if (Auth::instance()->get_user()) {
+			$user = Auth::instance()->get_user();
+			$adminrole = ORM::factory('role')->where('name', '=', 'admin')->find();
+            if($user->has('roles', $adminrole)) {
+				$params['display_empty'] = "yes";
+			}
+		}
+		
         // if a specific category is set, use the category view 
         if($category && isset($nms[$category])) {
             $slug = $category;

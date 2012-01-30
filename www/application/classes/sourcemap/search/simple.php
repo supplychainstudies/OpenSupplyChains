@@ -67,14 +67,12 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $results = self::prep_rows($raw);
         if (count($results) > 0) {
 			foreach($results as $row) {
-				$stopcount_search = ORM::factory('supplychain_search',$row->id);
-				$stopcount_search->stops = ORM::factory('stop')->where('supplychain_id', '=', $row->id)->count_all();
-				//$stopcount_search->where('supplychain_id', '=', $row->id);
+				$stopcount_search = ORM::factory('supplychain_search',$row->search_id);
+				$stopcount_search->stops = $row->stops_tot;
 				$stopcount_search->save();
 			}			
 		}
-		
-        
+
         // by userid
         if(isset($this->parameters['user']) && (int)$this->parameters['user']) {
             $search->and_where('user_id', '=', $this->parameters['user']);
@@ -97,7 +95,6 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $search->and_where('user_featured','=','true');
         }
 
-		$this->parameters['display_empty'] = "no";
 		// Don't display empty
         if(isset($this->parameters['display_empty']) && strtolower($this->parameters['display_empty']) == 'no') {
             $search->and_where('stops','>','0');
@@ -156,6 +153,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $row = (object)$row;
         $sc = ORM::factory('supplychain', $row->supplychain_id);
         $sca = (object)$sc->as_array();
+		$sca->search_id = $row->id;
         $sca->attributes = (object)$sc->attributes->find_all()->as_array("key", "value");
         if(isset($sca->attributes->passcode)){
             // If passcode exist, then return null
@@ -165,7 +163,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $sca->owner->name = $sca->owner->username;
         $sca->comments_tot = ORM::factory('supplychain_comment')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
         $sca->favorites_tot = ORM::factory('user_favorite')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
- 
+		$sca->stops_tot = ORM::factory('stop')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
         unset($sca->owner->password);
         unset($sca->owner->flags);
         unset($sca->owner->email); # !!!

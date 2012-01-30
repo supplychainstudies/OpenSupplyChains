@@ -136,5 +136,5 @@ Route::set('hooks', 'hooks/<action>')
 /* SITE-SPECIFIC PLUGINS --------------------------------------- */
 
 // HiViz tree
-Sourcemap::register_plugin('tree');
+//Sourcemap::register_plugin('tree'); // This plugin breaks our geocoding service.  Don't enable!
 //Sourcemap::register_plugin('hello');

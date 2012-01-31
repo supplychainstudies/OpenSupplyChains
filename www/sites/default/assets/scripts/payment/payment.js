@@ -9,8 +9,8 @@ function loadAjaxStripe(){
         name: $('input[name="card-name"]').val(),
         number: $('input[name="card-number"]').val(),
         cvc: $('input[name="card-cvc"]').val(),
-        exp_month: $('input[name="card-expiry-month"]').val(),
-        exp_year: $('input[name="card-expiry-year"]').val()
+        exp_month: $('select[name="card-expiry-month"]').val(),
+        exp_year: $('select[name="card-expiry-year"]').val()
     }, amount, stripeResponseHandler);
    
     // prevent the form from submitting with the default action

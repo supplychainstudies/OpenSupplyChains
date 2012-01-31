@@ -144,7 +144,7 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
         $this->template->thru = strtotime($customer->next_recurring_charge->date);
         $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
         if($user->has('roles', $channel_role)) {
-            $this->template->status = "Channel";
+            $this->template->status = "Sourcemap Pro";
         } 
         else{
             $this->template->status = "Free";

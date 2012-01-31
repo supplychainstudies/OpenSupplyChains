@@ -80,9 +80,9 @@ return array(
     
     'upgrade-payment-email-subject' => 'Re: Your Newly Upgraded Sourcemap Account',
     'upgrade-payment-email-body' => '
-        Dear :user,
+        Dear :card-name,
 
-        Your payment for has been processed.  Please refer to the details below:
+        Your payment has been processed.  Please refer to the details below:
 
         ------------------------------------------------------------------------
         Payment information
@@ -93,9 +93,9 @@ return array(
         Name on card: :card-name
         Card type: :card-type
         Card number: :card-number
-        Expires: :card-exp
                 
         Account details
+        Username: :user
         Account level: :acct-level
         Paid through: :acct-paidthru
         ------------------------------------------------------------------------

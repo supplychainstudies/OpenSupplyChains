@@ -33,7 +33,7 @@ class Controller_hooks extends Sourcemap_Controller_Layout {
                 $channel_role = ORM::factory('role')->where('name', '=', 'channel')->find();
 
                 if($user->has('roles', $channel_role))
-                    $acct_level = "Channel";
+                    $acct_level = "Sourcemap Pro";
                 else
                     $acct_level = "Free";
 
@@ -44,13 +44,13 @@ class Controller_hooks extends Sourcemap_Controller_Layout {
                 $msgbody  = __(Kohana::message('general', 'upgrade-payment-email-body'), array(
                     ':user' => $user->username,
                     ':payment-amount' => isset($event->object->subtotal) ? $event->object->subtotal : "$0.00",
-                    ':payment-date' => isset($event->object->date) ? strtotime($event->object->date) : "",
+                    ':payment-date' => isset($event->object->date) ? date("F j, Y", strtotime($event->object->date)) : "",
                     ':card-name' => $customer->active_card->name,
                     ':card-type' => $customer->active_card->type,
                     ':card-number' => "xxxx xxxx xxxx " . $customer->active_card->last4,
                     ':card-exp' => $customer->active_card->exp_month . "/" . $customer->active_card->exp_year,
                     ':acct-level' => $acct_level,
-                    ':acct-paidthru' => strtotime($customer->next_recurring_charge->date),
+                    ':acct-paidthru' => date("F j, Y", strtotime($customer->next_recurring_charge->date)),
                 ));
                 $swift_msg = Swift_Message::newInstance();
                 $swift_msg->setSubject($subject)

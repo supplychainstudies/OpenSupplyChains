@@ -84,11 +84,12 @@ function loadAjaxForms(){
     $('.sourcemap-form.ajax input[type=submit]').click(function(e){
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
         submitButton = $(this);
-        $(submitButton).attr('disabled', '');
+        $(submitButton).attr('disabled', '').addClass('disabled');
 
         form = $(this).parent();
         submitStatus = $(form).find('.submit-status');
 
+        submitStatus.addClass("active");
         $(form).append('<input type="hidden" name="_form_ajax" value="true"></input>');
         $(submitStatus).empty().removeClass('failed').show().animate({height: 40});
 
@@ -100,6 +101,7 @@ function loadAjaxForms(){
 
         // ajax validate
         $.post(action, $(form).serialize(), function(data){
+            submitStatus.removeClass('active');
             if (data.substring(0,8) === 'redirect'){
                 var data = data.split(" ");
                 window.location = data[1];
@@ -112,12 +114,11 @@ function loadAjaxForms(){
                     }
                     $(submitStatus).find('ul').append('<li>' + $(this).text().trim() + '</li>');
                 });
-                
                 if(success)
                     $(submitStatus).addClass('succeeded');
                 else{
                     $(submitStatus).addClass('failed');
-                    $(submitButton).removeAttr('disabled', '');
+                    $(submitButton).removeAttr('disabled', '').removeClass('disabled');
                 }
 
                 // expand height to fit parent

@@ -463,8 +463,7 @@ div.half-width{
 	.gradient(#246587,#50a3ce);
 	.rounded(4px);
 	.box_shadow();
-	&:hover { color: #f7f7f7; background:#024365; }
-	&.disabled { background:#ccc; 	}
+	&:hover, &.disabled { color: #f7f7f7; .gradient(#024365,#024365); }
     &.alternate{
         font-size: 11px;
         font-weight: normal;
@@ -487,7 +486,7 @@ div.submit-status{
     height: 40px;
     width: 40px;
     overflow: hidden;
-    &.running{
+    &.active{
         background: url("../images/throbber.gif") 8px 8px no-repeat;
     }
     &.succeeded{

@@ -3,16 +3,10 @@
 
 class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
-    public $force_ssl = TRUE;
-
     public $layout = 'base';
     public $template = 'user/upgrade';
-        
-    public $ssl_required = true;
 
-    const MIGRATE_EMAIL = 'account-migration@sourcemap.com';
-
-    public function action_index() {        
+    public function action_index() {       
 
         $this->layout->page_title = 'Upgrade your account';
 
@@ -30,86 +24,80 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             // Create message object
             $message = new Message($ajax);
 
-            if (!$f->validate($_POST)){
-                $errors = $f->errors();
-                foreach($errors as $error){
-                    $message->set($error[0]);
-                }
-                return;
-            } else {
-                $p = $f->values();
+            // This assumes that we've already passed CC validation.  
+            // So, full steam ahead...
+            $p = $_POST;
+            try{
                 try{
-                    try{
-                        Stripe_Plan::retrieve("channel");
-                    } catch (Exception $e) {
-                        // create plan if it doesn't exist
-                        Stripe_Plan::create(array(
-                          "amount" => 9900,
-                          "interval" => "year",
-                          "name" => "Channel",
-                          "currency" => "usd",
-                          "id" => "channel")
-                        );
-                    }
-                    
-                    // get the credit card details submitted by the form
-                    $token = $_POST['stripeToken'] ? $_POST['stripeToken'] : false;
-
-                    try{
-                        // do we already have a customer ID?  then we're renewing 
-                        $cu = Stripe_Customer::retrieve($user->customer_id);
-                        $cu->updateSubscription(array("plan" => "channel"));
-                    } catch (Exception $e) {
-                        // otherwise create new stripe customer based on existing username
-                        $customer = Stripe_Customer::create(array(
-                            "description" => $user->username,
-                            "plan" => "channel",
-                            "card" => $token
-                        ));
-
-                        $user->customer_id = $customer->id;
-                        $user->save();
-                    }
-
+                    Stripe_Plan::retrieve("channel");
                 } catch (Exception $e) {
-                    $message->set('upgrade-cc-failed' . $e);
-                    $this->request->redirect('home/');
-                } 
-
-                // Build outgoing message
-                $mailer   = Email::connect();
-                $subject  = Kohana::message('general', 'upgrade-email-subject');
-                $from     = Kohana::message('general', 'email-from');
-                $msgbody  = __(Kohana::message('general', 'upgrade-email-body'), array(
-                    ':user' => $new_user->username
-                ));
-                $swift_msg = Swift_Message::newInstance();
-                $swift_msg->setSubject($subject)
-                          ->setFrom($from)
-                          ->setTo(array($new_user->email => ''))
-                          ->setBody($msgbody);
+                    // create plan if it doesn't exist
+                    Stripe_Plan::create(array(
+                      "amount" => 9900,
+                      "interval" => "year",
+                      "name" => "Channel",
+                      "currency" => "usd",
+                      "id" => "channel")
+                    );
+                }
                 
-                // Send notifcation
-                try { 
-					$sent = $mailer->send($swift_msg);
-                    $message->set('upgrade-email-sent');
-                    
-                    // Set channel status
-                    $channel_role = ORM::factory('role', array('name' => 'channel'));
-                    $user->add('roles', $channel_role)->save();
-                    
-                    // Redirect
-                    if ($ajax)
-                        echo "redirect upgrade/thankyou ";
-                    else
-                        return $this->request->redirect('upgrade/thankyou');
-                    return;
-                 } catch (Exception $e) {
-                     $message->set('upgrade-generic');
-                 } 
+                // get the credit card details submitted by the form
+                $token = $_POST['stripeToken'] ? $_POST['stripeToken'] : false;
 
-                return $this->request->redirect('register');
+                try{
+                    // do we already have a customer ID?  then we're renewing 
+                    $cu = Stripe_Customer::retrieve($user->customer_id);
+                    $cu->updateSubscription(array("plan" => "channel"));
+                } catch (Exception $e) {
+                    // otherwise create new stripe customer based on existing username
+                    $customer = Stripe_Customer::create(array(
+                        "description" => $user->username,
+                        "plan" => "channel",
+                        "card" => $token
+                    ));
+
+                    $user->customer_id = $customer->id;
+                    $user->save();
+                }
+
+            } catch (Exception $e) {
+                $message->set('upgrade-cc-failed' . $e);
+                $this->request->redirect('home/');
             } 
+
+            // Build outgoing message
+            $mailer   = Email::connect();
+            $subject  = Kohana::message('general', 'upgrade-email-subject');
+            $from     = Kohana::message('general', 'email-from');
+            $msgbody  = __(Kohana::message('general', 'upgrade-email-body'), array(
+                ':user' => $user->username
+            ));
+            $swift_msg = Swift_Message::newInstance();
+            $swift_msg->setSubject($subject)
+                      ->setFrom($from)
+                      ->setTo(array($user->email => ''))
+                      ->setBody($msgbody);
+            
+            // Send notifcation
+            try { 
+                $sent = $mailer->send($swift_msg);
+                $message->set('upgrade-email-sent');
+                
+                // Set channel status
+                $channel_role = ORM::factory('role', array('name' => 'channel'));
+                $user->add('roles', $channel_role)->save();
+                
+                // Redirect
+                if ($ajax)
+                    echo "redirect upgrade/thankyou ";
+                else
+                    return $this->request->redirect('upgrade/thankyou');
+                return;
+             } catch (Exception $e) {
+                 $message->set('upgrade-generic');
+             } 
+
+            return $this->request->redirect('register');
         } else { 
         /* pass */ 
         }
@@ -289,12 +277,12 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
                 $subject  = Kohana::message('general', 'renew-email-subject');
                 $from     = Kohana::message('general', 'email-from');
                 $msgbody  = __(Kohana::message('general', 'renew-email-body'), array(
-                    ':user' => $new_user->username
+                    ':user' => $user->username
                 ));
                 $swift_msg = Swift_Message::newInstance();
                 $swift_msg->setSubject($subject)
                           ->setFrom($from)
-                          ->setTo(array($new_user->email => ''))
+                          ->setTo(array($user->email => ''))
                           ->setBody($msgbody);
 
                 // Send message

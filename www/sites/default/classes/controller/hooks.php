@@ -21,7 +21,8 @@ class Controller_hooks extends Sourcemap_Controller_Layout {
         $type = isset($event->type) ? $event->type : "none";
 
         if ($type == "invoice.payment_succeeded"){
-            if ($user = ORM::factory('user')->where('customer_id', 'ILIKE', $event->data->object->customer)->find() || $event->data->object->customer == "cus_00000000000000"){
+            $user = ORM::factory('user')->where('customer_id', '=', $event->data->object->customer)->find();
+            if ($user || $event->data->object->customer == "cus_00000000000000"){
 
                 if ($event->data->object->customer == "cus_00000000000000"){
                         $user = ORM::factory('user')->where('username', 'ILIKE', "alex1")->find();

@@ -105,7 +105,7 @@ return array(
         -The Sourcemap Team',
     
     // Pro Account Renewals
-    'upgrade-email-subject' => 'Re: Your Pro Account Renewal',
+    'renew-email-subject' => 'Re: Your Pro Account Renewal',
     'renew-email-body' => '
         Dear :user,
 

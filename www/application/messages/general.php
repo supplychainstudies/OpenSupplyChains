@@ -68,9 +68,9 @@ return array(
     'upgrade-email-body' => '
         Dear :user,
         
-        Thank you for upgrading to a channel account.
+        Thank you for upgrading to a Pro Account.
  
-        As a channel user, you will have access to exclusive feature that aren\'t available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.
+        As a Pro user, you will have access to exclusive feature that aren\'t available to the general public-- Most importantly, the ability to brand your account with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.
 
         Once your payment is processed, you will receive an e-mail invoice for your records.
         
@@ -109,11 +109,11 @@ return array(
     'renew-email-body' => '
         Dear :user,
 
-        Thank you for renewing your channel!
+        Thank you for renewing your Pro Account!
         
-        As a channel user, you will have access to exclusive feature that aren\'t available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.
+        As a Pro user, you will have access to exclusive feature that aren\'t available to the general public-- Most importantly, the ability to brand your account with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.
         
-        If you have any questions, please contact us at channels@sourcemap.com.
+        If you have any questions, please contact us at proaccounts@sourcemap.com.
 
         -The Sourcemap Team',
 

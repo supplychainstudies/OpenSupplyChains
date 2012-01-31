@@ -18,18 +18,33 @@ class Controller_hooks extends Sourcemap_Controller_Layout {
         // Grab event from Stripe's webhook req
         $body = @file_get_contents('php://input');
         $event = json_decode($body);
+        $type = isset($event->type) ? $event->type : "none";
 
-        if ($event->type == "invoice.created"){
+        if ($type == "invoice.created"){
             if ($user = ORM::factory('user')->where('customer_id', 'ILIKE', $event->data->object->customer || $event->data->object->customer == "cus_00000000000000")){
+    
+                // Get vars
+                $customer = Stripe_Customer::retrieve($user->customer_id);
+                
                 // Build outgoing message
                 $mailer   = Email::connect();
-                $subject  = Kohana::message('general', 'upgrade-email-subject');
+                $subject  = Kohana::message('general', 'upgrade-payment-email-subject');
                 $from     = Kohana::message('general', 'email-from');
-                $msgbody  = "Test";
+                $msgbody  = __(Kohana::message('general', 'upgrade-email-body'), array(
+                    ':user' => $user->username,
+                    ':payment-amount' => "$" . ($event->object->subtotal / 100),
+                    ':payment-date' => strtotime($event->object->date),
+                    ':card-name' => $customer->active_card->name,
+                    ':card-type' => $customer->active_card->type,
+                    ':card-number' => "xxxx xxxx xxxx " . $customer->active_card->last4,
+                    ':card-exp' => $customer->active_card->exp_month . "/" . $customer->active_card->exp_year,
+                    ':account-level' => $acct_level,
+                    ':acct-paidthru' => strtotime($customer->next_recurring_charge->date),
+                ));
                 $swift_msg = Swift_Message::newInstance();
                 $swift_msg->setSubject($subject)
                           ->setFrom($from)
-                          ->setTo(array("alexander.ose@gmail.com" => ''))
+                          ->setTo(array($user->email => ''))
                           ->setBody($msgbody);
 
                 // Send notifcation

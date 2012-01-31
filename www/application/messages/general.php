@@ -71,8 +71,36 @@ return array(
         Thank you for upgrading to a channel account.
  
         As a channel user, you will have access to exclusive feature that aren\'t available to the general public-- Most importantly, the ability to brand your channel with custom colors, logos, and banners.  Before you start mapping with your upgraded account, we recommend you fill in the newly available fields in your dashboard.
+
+        Once your payment is processed, you will receive an e-mail invoice for your records.
         
-        If you have any questions, please contact us at channels@sourcemap.com.
+        If you have any questions, please contact us at proaccounts@sourcemap.com.
+
+        -The Sourcemap Team',
+    
+    'upgrade-payment-email-subject' => 'Re: Your Newly Upgraded Sourcemap Account',
+    'upgrade-payment-email-body' => '
+        Dear :user,
+
+        Your payment for has been processed.  Please refer to the details below:
+
+        ------------------------------------------------------------------------
+        Payment information
+        Total: :payment-amount
+        Date: :payment-date
+
+        Card information
+        Name on card: :card-name
+        Card type: :card-type
+        Card number: :card-number
+        Expires: :card-exp
+                
+        Account details
+        Account level: :acct-level
+        Paid through: :acct-paidthru
+        ------------------------------------------------------------------------
+
+        We appreciate your business. If you have any questions, please contact us at proaccounts@sourcemap.com.
 
         -The Sourcemap Team',
     

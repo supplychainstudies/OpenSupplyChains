@@ -375,19 +375,27 @@ Sourcemap.Map.Base.svgToSc = function (thismap, sc, svgid) {
 					// Found the right openlayers feature. get data.
 					if (typeof(thismap.map.map.layers[x].features[y].attributes.stop_instance_id) != "undefined") {
 						return (thismap.map.map.layers[x].features[y].attributes.stop_instance_id).toString();	
-					} 
+					} else if (typeof(thismap.map.map.layers[x].features[y].cluster) != "undefined") {
+						var cluster_list = new Array();
+						var cluster_count = 0;
+						for (var c in thismap.map.map.layers[x].features[y].cluster) {
+							if (typeof(thismap.map.map.layers[x].features[y].cluster[c].attributes) != "undefined") {
+								cluster_list[cluster_count] = thismap.map.map.layers[x].features[y].cluster[c].attributes.stop_instance_id;		
+								cluster_count++;
+							}
+						}
+						return cluster_list;	
+					}
 					return "not found";
 					break;
 				}				
 				// Case: Lines
 				else if (typeof(thismap.map.map.layers[x].features[y].geometry.components) != "undefined") {
-					if (thismap.map.map.layers[x].features[y].geometry.components[0].id == svgid && typeof(thismap.map.map.layers[x].features[y].attributes.hop_instance_id) != "undefined") {
-						return (thismap.map.map.layers[x].features[y].attributes.hop_instance_id).toString();	
-					}
-				} else if (typeof(thismap.map.map.layers[x].features[y].geometry.components) != "undefined") {
-					if (thismap.map.map.layers[x].features[y].geometry.components[0].id == svgid && typeof(thismap.map.map.layers[x].features[y].attributes.hop_instance_id) != "undefined") {
-						return (thismap.map.map.layers[x].features[y].attributes.hop_instance_id).toString();	
-					}
+					for (var comp in thismap.map.map.layers[x].features[y].geometry.components)	{
+						if (thismap.map.map.layers[x].features[y].geometry.components[comp].id == svgid && typeof(thismap.map.map.layers[x].features[y].attributes.hop_instance_id) != "undefined") {
+							return (thismap.map.map.layers[x].features[y].attributes.hop_instance_id).toString();	
+						}
+					}			
 				}
 			}
 		}
@@ -408,7 +416,7 @@ Sourcemap.Map.Base.defaultEffect = function () {
     .css("opacity",1);
 }
 Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
-    //Sourcemap.Map.Base.defaultEffect();
+	opacity = 0.15;
             $("circle")
             .filter(function(d){
                     var updown = update_updown(i);
@@ -441,12 +449,12 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
 					}
 					return false;				                  
 	        })
-            .css("opacity",0.2);
+            .css("opacity",opacity);
 
 			// 			
             $("circle")
             .filter(function(d){
-               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+               if (parseFloat($(this).css("opacity")).toFixed(2) != opacity) 
 					return true;
 				else 
 					return false;			                
@@ -458,7 +466,7 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
                     var updown = update_updown(i);
 					var theid = $(this).attr("id");
 					var x = Sourcemap.Map.Base.svgToSc(thismap, sc, theid);
-					if (x != "not found") {
+					if (x != "not found" && typeof(x) == "string") {
 						for (var y in sc.stops) {
 							if (sc.stops[y].instance_id == x) {
 								if (parseFloat($(this).css("opacity")).toFixed(2) != 0.99) {
@@ -467,13 +475,30 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
 							}
 						}
 					}
+					
+					// Case clusters
+					else if (x != "not found" && typeof(x) == "object") {
+						var bool_stops = true; 
+						for (var cs in x) {
+							if (typeof(x[cs]) == "string") {
+								for (var y in sc.stops) {
+									if (sc.stops[y].instance_id == x[cs]) {
+										bool_stops = bool_stops && check_stops(sc.stops[y].instance_id,i, updown);
+									}
+								}
+							}
+						}
+						if (parseFloat($(this).css("opacity")).toFixed(2) != 0.99) {
+							return bool_stops;
+						}
+					}
 					return false;				                  
 	        })
-            .css("opacity",0.2);
+            .css("opacity",opacity);
 
             $("text")
             .filter(function(d){
-               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+               if (parseFloat($(this).css("opacity")).toFixed(2) != opacity) 
 					return true;
 				else 
 					return false;			                
@@ -496,11 +521,11 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
 					}
 					return false;				                  
 	        })
-            .css("opacity",0.2);
+            .css("opacity",opacity);
 
             $("polyline")
             .filter(function(d){
-               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+               if (parseFloat($(this).css("opacity")).toFixed(2) != opacity) 
 					return true;
 				else 
 					return false;			                
@@ -526,11 +551,11 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
 					}			             
 	        })
 			//.transition()
-            .css("opacity",0.2);
+            .css("opacity",opacity);
 
             $("polygon")
             .filter(function(d){
-               if (parseFloat($(this).css("opacity")).toFixed(2) != 0.2) 
+               if (parseFloat($(this).css("opacity")).toFixed(2) != opacity) 
 					return true;
 				else 
 					return false;			                

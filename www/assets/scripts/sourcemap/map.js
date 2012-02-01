@@ -1296,7 +1296,7 @@ Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     this.stop_features[scid] = {};
     this.hop_features[scid] = {};
     this.cluster_features[scid] = [];
-    this.mapSupplychain(scid);
+    //this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);
     
     return this;
@@ -1414,7 +1414,6 @@ Sourcemap.Map.prototype.getSelected = function() {
         var l = this.map.layers[i];
         if(l instanceof OpenLayers.Layer.Vector) {
             if(l.selectedFeatures instanceof Array) {}
-				console.log(l.selectedFeatures);
                 s = s.concat(l.selectedFeatures.slice(0));
 			}
         }

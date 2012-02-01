@@ -63,7 +63,11 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                 $this->template->supplychain_banner_url = isset($sc->owner->banner_url) ? $sc->owner->banner_url : "";
                 $this->template->supplychain_ownerid = isset($sc->owner->id) ? $sc->owner->id : "";
 
-                $this->layout->scripts = array('map-view');
+				if ($this->template->can_edit == true) {
+					$this->layout->scripts = array('map-view-edit');
+				} else {
+					$this->layout->scripts = array('map-view');
+				}
                 $this->layout->styles = array(
                     'sites/default/assets/styles/reset.css', 
                     'assets/styles/base.less',

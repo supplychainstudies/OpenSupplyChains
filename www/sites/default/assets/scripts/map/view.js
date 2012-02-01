@@ -132,7 +132,9 @@ $(document).ready(function() {
         Sourcemap.loadSupplychain(scid, passcode, function(sc) {
             var m = Sourcemap.view_instance.map;
             m.addSupplychain(sc);
-            new Sourcemap.Map.Editor(Sourcemap.view_instance);
+			if (typeof(Sourcemap.Map.Editor) != "undefined") {
+				new Sourcemap.Map.Editor(Sourcemap.view_instance);
+			}
         });
     }
 

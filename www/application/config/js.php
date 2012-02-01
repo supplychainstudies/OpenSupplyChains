@@ -87,7 +87,6 @@ return array(
         ),
         'sourcemap-working' => array(
             'scripts' => array(
-                'assets/scripts/script.js'
             ),
             'requires' => array(
                 'sourcemap-core', 'sourcemap-template'

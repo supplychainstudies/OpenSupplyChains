@@ -761,6 +761,28 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     // impact calculator for stops
     if(ref instanceof Sourcemap.Stop) {
+		
+		// Clean up qty	
+		var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+		for (x in sc.stops) {
+			if (sc.stops[x] == ref) {
+				if (sc.stops[x].attributes.qty) {
+					if (sc.stops[x].attributes.weight && sc.stops[x].attributes.qty != 0) {
+						sc.stops[x].attributes.weight = sc.stops[x].attributes.qty*sc.stops[x].attributes.weight;
+					} else {
+						sc.stops[x].attributes.weight = sc.stops[x].attributes.qty;
+					}
+					Sourcemap.broadcast('supplychain-updated', sc);
+					break;
+				}
+			}
+		}
+		
+		
 	
 		$("#edit-stop-footprint input").find(".citation, #notes").change($.proxy(function(e) {
 			$("#footprint-methodology").val("");

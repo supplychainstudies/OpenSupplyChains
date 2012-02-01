@@ -309,11 +309,11 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         // I would prefer to use "resize" here, but it doesn't work.
         this.setActiveArea();
     }, this));
-
+/*
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
     }, this));
-  
+*/  
     /* disabled until we decide on show/hide behavior
     this.map.map.events.register("mousemove", this.map.map.events, $.proxy(function(e) {
         var activeStatus = false;
@@ -1615,6 +1615,7 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
+	alert("bloo");
     if(this.visualization_mode){
         if(this.visualization_mode != viz_nm) {
             this.disableVisualization();

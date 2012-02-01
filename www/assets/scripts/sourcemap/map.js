@@ -1296,7 +1296,7 @@ Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     this.stop_features[scid] = {};
     this.hop_features[scid] = {};
     this.cluster_features[scid] = [];
-    this.mapSupplychain(scid);
+    //this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);
     
     return this;

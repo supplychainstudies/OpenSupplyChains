@@ -139,7 +139,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
     	}
         // TODO : Load twice for legend-gradient @map.js , make it for effeciency
         for(var k in this.map.supplychains)
-            this.map.mapSupplychain(k);
+           	this.map.mapSupplychain(k);
             
     }, this));
     $(this.map.map.div).css("position", "relative");

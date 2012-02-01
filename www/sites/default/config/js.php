@@ -21,7 +21,6 @@ return array(
         ),
         'sourcemap-create' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap/supplychain/create.js',
             ),
         ),
         'sourcemap-welcome' => array(

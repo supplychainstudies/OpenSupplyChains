@@ -25,7 +25,7 @@ class Controller_hooks extends Sourcemap_Controller_Layout {
             if ($user || $event->data->object->customer == "cus_00000000000000"){
 
                 if ($event->data->object->customer == "cus_00000000000000"){
-                        $user = ORM::factory('user')->where('username', 'ILIKE', "alex1")->find();
+                     $user = ORM::factory('user')->where('username', 'ILIKE', "alex1")->find();
                 }
 
                 // Get vars

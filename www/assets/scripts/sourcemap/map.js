@@ -1414,7 +1414,6 @@ Sourcemap.Map.prototype.getSelected = function() {
         var l = this.map.layers[i];
         if(l instanceof OpenLayers.Layer.Vector) {
             if(l.selectedFeatures instanceof Array) {}
-				console.log(l.selectedFeatures);
                 s = s.concat(l.selectedFeatures.slice(0));
 			}
         }

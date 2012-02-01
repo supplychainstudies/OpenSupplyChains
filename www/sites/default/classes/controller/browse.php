@@ -24,7 +24,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
         $this->layout->styles = $this->default_styles;
         $this->layout->styles[] = 'sites/default/assets/styles/carousel.less';
 
-        $this->layout->page_title = 'Browse maps by Category';
+        $this->layout->page_title = 'Browsing all maps on Sourcemap';
 
         $cats = Sourcemap_Taxonomy::arr();
         

@@ -530,7 +530,7 @@ Sourcemap.Supplychain.makeTiers = function (sc) {
         hop_list[i] = {            
             id:h.instance_id,
             from:h.from_stop_id,
-            to:h.to_stop_id,
+            to:h.to_stop_id
         }
     }
 

@@ -30,7 +30,7 @@ class Controller_User extends Sourcemap_Controller_Layout {
         }
 
         if($user->loaded()) {
-            $this->layout->page_title = "Dashboard for " . $user->username . " on Sourcemap";
+            $this->layout->page_title = $user->username . " on Sourcemap";
             $user_arr = $user->as_array();
             unset($user_arr['password']);
             

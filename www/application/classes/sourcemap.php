@@ -57,7 +57,7 @@ class Sourcemap {
                 Kohana::config('js')->packages : array()
         );
         //Sourcemap_JS::$bundle = self::$env == self::DEV ? false : true;
-        Sourcemap_JS::$bundle = false;
+        Sourcemap_JS::$bundle = Kohana::config('sourcemap.bundle');
         Sourcemap_JS::$minified = self::$env == self::DEV ? false : true;
         Sourcemap_JS::$bundle_path = 'assets/scripts/bundles/'.self::site().'/';
         Sourcemap_CSS::$convert_less = self::$env == self::DEV ? false : true;

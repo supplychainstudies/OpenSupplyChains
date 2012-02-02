@@ -1,5 +1,5 @@
 <?php
-$less = Kohana::config('sourcemap.convert_less') ? "null" : "less";
+$less = Kohana::config('sourcemap.convert_less') ? null : "less";
 
 return array(
     'packages' => array(

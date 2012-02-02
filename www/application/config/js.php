@@ -1,4 +1,6 @@
 <?php
+$less = Kohana::config('sourcemap.convert_less') ? "null" : "less";
+
 return array(
     'packages' => array(
         'jquery' => array(
@@ -46,7 +48,7 @@ return array(
                 'assets/scripts/sourcemap/supplychain/graph.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-search', 'sourcemap-jquery', 'google-analytics'
+                $less, 'sourcemap-search', 'sourcemap-jquery', 'google-analytics'
             )
         ),
         'sourcemap-search' => array(

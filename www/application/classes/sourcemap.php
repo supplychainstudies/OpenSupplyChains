@@ -56,11 +56,12 @@ class Sourcemap {
             isset(Kohana::config('js')->packages) ? 
                 Kohana::config('js')->packages : array()
         );
-        //Sourcemap_JS::$bundle = self::$env == self::DEV ? false : true;
         Sourcemap_JS::$bundle = Kohana::config('sourcemap.bundle');
-        Sourcemap_JS::$minified = self::$env == self::DEV ? false : true;
+        Sourcemap_JS::$minified = Kohana::config('sourcemap.minified');
         Sourcemap_JS::$bundle_path = 'assets/scripts/bundles/'.self::site().'/';
-        Sourcemap_CSS::$convert_less = self::$env == self::DEV ? false : true;
+        Sourcemap_CSS::$convert_less = Kohana::config('sourcemap.convert_less');
+        // If we've compiled our less files, we should remove less.js as a requirement
+
         // Use db for session storage
         Session::$default = 'database';
         self::$plugins = array();

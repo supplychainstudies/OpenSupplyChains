@@ -124,7 +124,11 @@ Sourcemap.Map.prototype.defaults = {
             "fontColor": "${fcolor}",
             "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
-            "rotation": "${angle}"
+            "rotation": "${angle}",
+            "label": "${label}",
+            "labelAlign": "cm",
+            "labelXOffset": 0,
+            "labelYOffset": "${yoffset}"
         },
         "disabled": {
             "fillColor": "#cccccc",
@@ -385,7 +389,6 @@ Sourcemap.Map.prototype.initEvents = function() {
 	this.map.events.register("movestart", this, function() {
         var s = this.getSelected();
 		this.selected = s;
-		this.filter = "energy";
         s = s.length ? s[0] : false;
         if(s) {
             if(s.cluster_instance_id) {
@@ -400,6 +403,7 @@ Sourcemap.Map.prototype.initEvents = function() {
     });
     // zoom evts
     this.map.events.register("zoomend", this, function() {
+		this.broadcast('map:zoomend', this);
     });
     return this;
 }
@@ -1519,7 +1523,6 @@ Sourcemap.Cluster.prototype.createCluster = function(feature) {
 
     cluster.cluster = [feature];    
     this.map.cluster_features[scid].push(cluster);
-    
     return cluster;
 }
 Sourcemap.Cluster.prototype.addToCluster = function(cluster, feature) {

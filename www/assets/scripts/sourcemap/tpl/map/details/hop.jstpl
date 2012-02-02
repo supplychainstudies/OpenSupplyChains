@@ -56,7 +56,7 @@
 			<div style="clear: none; float: left; width: 130px; margin-top: -18px">
 			<div class="vals" style="font-size: 10px; clear: both; float: left; padding-bottom: 0px; margin-bottom: 0px; width: 140px; text-align: center"><%= this.hop.getAttr("transport", "") %></div>
 				<div class="vals" style="margin-top: 4px; margin-left: 25px"><%= parseFloat(this.hop.getAttr("co2e", 0)).toExponential(1) %></div>
-				<div class="units" style="margin-right: 2px; margin-top: 4px;">kg CO<sub>2</sub>e/kg</div> 
+				<div class="units" style="margin-right: 2px; margin-top: 4px;">kg CO<sub>2</sub>e/<br />kg*km</div> 
 			</div>
 			<div class="footprint-math" style="padding-left: 7px; padding-right: 7px">=</div>
 			<div class="vals"><%= co2e_scaled.value %> <%= co2e_scaled.unit %> </div>

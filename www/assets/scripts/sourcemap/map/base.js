@@ -264,7 +264,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 		}, this));
 		/*
 	    Sourcemap.listen('map:feature_hover', $.proxy(function(evt, map, ftr) {
-			console.log("meow");
 	        var x = new Sourcemap.Supplychain.makeTiers(sc);		
 	    }, this));
 		*/
@@ -304,11 +303,18 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.hideDialog();
     }, this));
+
+    Sourcemap.listen('map:zoomend', $.proxy(function(evt, stuff) {
+		if (stuff.filter) {
+			this.enableVisualization(stuff.filter);
+		}
+    }, this));
     
     this.map.map.events.register("moveend", this.map.map, $.proxy(function(e) {
         // I would prefer to use "resize" here, but it doesn't work.
         this.setActiveArea();
     }, this));
+
 /*
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
@@ -916,6 +922,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
+			console.log(this);
 			Sourcemap.Map.Base.setDetails();   
             // Sets up zoom on click
             $(this.base.dialog_content).find('.dot')
@@ -1375,10 +1382,15 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 							scaled.value = val;
 							scaled.unit = "";
 						} 
-						f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	      
-		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
-		    				f.attributes.label = "";
-		    			}	              
+						f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
+						//f.data.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
+						/*
+		    			if(f.attributes.hop_component && f.attributes.hop_component == "arrow") {
+		    				console.log(f);
+							f.attributes.label = f.attributes.label;
+		    			} else {
+							f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	      
+						} */            
 		            } else { f.attributes.label = ""; }
 		        } 
 		        f.attributes.size = f.attributes.size || smin;
@@ -1640,19 +1652,23 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
-	alert("bloo");
+	console.log(this);
     if(this.visualization_mode){
         if(this.visualization_mode != viz_nm) {
             this.disableVisualization();
             this.enableVisualization(viz_nm);
+			this.map.filter = viz_nm;
         }
         else{
             this.disableVisualization();
+			delete this.map.filter;
         }
     }
     else{
         this.enableVisualization(viz_nm);
+		this.map.filter = viz_nm;
     }
+console.log(this);
 }
 
 Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {

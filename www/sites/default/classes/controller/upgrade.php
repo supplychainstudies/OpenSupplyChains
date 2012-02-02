@@ -5,6 +5,8 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
     public $layout = 'base';
     public $template = 'user/upgrade';
+    public $ssl_required = true;
+
 
     public function action_index() {       
 

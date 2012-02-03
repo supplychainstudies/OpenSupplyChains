@@ -25,7 +25,7 @@
     	<li><a href="/contact">Contact us</a></li>
     </ul>
     <div class="clear"></div>
-    <p>&copy; 2011 Sourcemap Inc. 
+    <p>&copy; 2012 Sourcemap Inc. 
     <?php
         // version information
         

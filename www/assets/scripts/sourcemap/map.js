@@ -683,7 +683,6 @@ Sourcemap.Map.prototype.mapSupplychain = function(scid) {
         new_ftr.attributes.tier = tiers[st.instance_id];
         
         if (st.getAttr("color") != undefined){
-            // console.log('custom color', st.getAttr("color"));
             var hasCustomColors = true;
         }
         new_ftr.attributes.color = scolor;
@@ -1443,39 +1442,7 @@ Sourcemap.Map.prototype.setSelected = function() {
 			}
         }
     }
-    //return s;
 }
-
-/*
-
-
-Sourcemap.Map.prototype.setSelected = function() {
-	console.log(this.selected);
-	var s = this.selected;
-    for(var i=0; i<this.map.layers.length; i++) {
-        var l = this.map.layers[i];
-		if(l instanceof OpenLayers.Layer.Vector) {
-            if(l.selectedFeatures instanceof Array) {
-				for (var z in s) {
-					if(s[z] instanceof OpenLayers.Feature.Vector) {
-						if (l.id == s[z].layer.id) {
-							console.log(typeof(s));
-							console.log(typeof(this.map.layers[i].selectedFeatures));
-							console.log(this.map.layers[i].selectedFeatures);
-							console.log(s);
-							this.map.layers[i].selectedFeatures = this.map.layers[i].selectedFeatures = s;
-							console.log(this.map.layers[i].selectedFeatures);
-						}
-					}
-				}
-
-			}
-        }
-    }
-    return s;
-}
-
-*/
 
 Sourcemap.Cluster = function(distance, threshold, map) {
     this.map = map;

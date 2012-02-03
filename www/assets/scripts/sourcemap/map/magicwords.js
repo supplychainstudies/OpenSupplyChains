@@ -22,7 +22,7 @@ Sourcemap.MagicWords.content = {
                 return '<p class="error">Invalid YouTube link.</p>';
             var m = lnk.match(/((\?v=)|(v\/))([^\/\&]+)/);
             if(m) {
-                var mkup = '<iframe width="500" height="360" class="youtube-link" type="text/html"'+
+                var mkup = '<iframe width="346" height="228" class="youtube-link" type="text/html"'+
                     'src="http://www.youtube.com/embed/'+m[4]+'?autoplay=1"'+ 
                     'frameborder="0" allowfullscreen></iframe>';
             } else mkup = '';

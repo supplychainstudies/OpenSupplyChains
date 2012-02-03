@@ -5,6 +5,8 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
 
     public $layout = 'base';
     public $template = 'user/upgrade';
+    public $ssl_required = true;
+
 
     public function action_index() {       
 
@@ -81,17 +83,19 @@ class Controller_Upgrade extends Sourcemap_Controller_Layout {
             // Send notifcation
             try { 
                 $sent = $mailer->send($swift_msg);
-                $message->set('upgrade-email-sent');
                 
                 // Set channel status
                 $channel_role = ORM::factory('role', array('name' => 'channel'));
                 $user->add('roles', $channel_role)->save();
                 
                 // Redirect
-                if ($ajax)
+                if ($ajax){
                     echo "redirect upgrade/thankyou ";
-                else
+                }
+                else{
+                    $message->set('upgrade-email-sent');
                     return $this->request->redirect('upgrade/thankyou');
+                }
                 return;
              } catch (Exception $e) {
                  $message->set('upgrade-generic');

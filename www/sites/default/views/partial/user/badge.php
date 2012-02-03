@@ -19,10 +19,6 @@
         <div class="button alternate">
             <a id="change_profile_pic" name="<?= Kohana::config('aws')->avatar_bucket ?>">Change picture</a>
         </div>
-        <?php if(false)://if($isChannel): ?>
-        <div class="button alternate">
-            <a id="change_banner" name="<?= Kohana::config('aws')->banner_bucket ?>">Upload banner</a>
-        </div>
         <? endif; ?>
         <div class="button alternate">
             <a href="auth/reset">Change password</a>
@@ -31,8 +27,7 @@
         <div class="button alternate"> 
             <a href="/upgrade">Upgrade account</a> 
         </div> 
-        <?php endif; ?> 
-        <?php if ($isChannel): ?> 
+        <?php else: ?> 
         <div class="button alternate"> 
             <a href="/upgrade/payments">Payments</a> 
         </div> 

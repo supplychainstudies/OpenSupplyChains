@@ -19,20 +19,19 @@
         <div class="button alternate">
             <a id="change_profile_pic" name="<?= Kohana::config('aws')->avatar_bucket ?>">Change picture</a>
         </div>
-        <?php if(false)://if($isChannel): ?>
-        <div class="button alternate">
-            <a id="change_banner" name="<?= Kohana::config('aws')->banner_bucket ?>">Upload banner</a>
-        </div>
         <? endif; ?>
         <div class="button alternate">
             <a href="auth/reset">Change password</a>
         </div>
-            <?php if($isChannel): ?>
-        <div class="button alternate">
-            <a href="/upgrade/payments">Payments</a>
-        </div>
-            <?php endif; ?>
-        <?php endif; ?>
+        <?php if (!$isChannel): ?> 
+        <div class="button alternate"> 
+            <a href="/upgrade">Upgrade account</a> 
+        </div> 
+        <?php else: ?> 
+        <div class="button alternate"> 
+            <a href="/upgrade/payments">Payments</a> 
+        </div> 
+        <?php endif; ?>  
     </div>
     <ul class="user-details">
         <li><span><div class="detail_cap">Account name</div><?= HTML::chars($user->username); ?></span></li>

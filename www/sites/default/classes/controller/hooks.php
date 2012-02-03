@@ -43,8 +43,8 @@ class Controller_hooks extends Sourcemap_Controller_Layout {
                 $from     = Kohana::message('general', 'email-from');
                 $msgbody  = __(Kohana::message('general', 'upgrade-payment-email-body'), array(
                     ':user' => $user->username,
-                    ':payment-amount' => isset($event->object->subtotal) ? $event->object->subtotal : "$0.00",
-                    ':payment-date' => isset($event->object->date) ? date("F j, Y", strtotime($event->object->date)) : "",
+                    ':payment-amount' => isset($event->object->total) ? $event->object->total : "$99.00",
+                    ':payment-date' => isset($event->object->date) ? date("F j, Y", strtotime($event->object->date)) : date("F j, Y"),
                     ':card-name' => $customer->active_card->name,
                     ':card-type' => $customer->active_card->type,
                     ':card-number' => "xxxx xxxx xxxx " . $customer->active_card->last4,

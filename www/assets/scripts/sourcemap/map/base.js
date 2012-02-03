@@ -264,7 +264,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 		}, this));
 		/*
 	    Sourcemap.listen('map:feature_hover', $.proxy(function(evt, map, ftr) {
-			console.log("meow");
 	        var x = new Sourcemap.Supplychain.makeTiers(sc);		
 	    }, this));
 		*/
@@ -304,11 +303,18 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     Sourcemap.listen('map:feature_unselected', $.proxy(function(evt, map, ftr) {
         this.hideDialog();
     }, this));
+
+    Sourcemap.listen('map:zoomend', $.proxy(function(evt, stuff) {
+		if (stuff.filter) {
+			this.enableVisualization(stuff.filter);
+		}
+    }, this));
     
     this.map.map.events.register("moveend", this.map.map, $.proxy(function(e) {
         // I would prefer to use "resize" here, but it doesn't work.
         this.setActiveArea();
     }, this));
+
 /*
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
         this.toggleVisualization();
@@ -916,7 +922,7 @@ Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
     Sourcemap.template('map/details/stop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			Sourcemap.Map.Base.setDetails();   
+			this.base.setDetails(this.stop);   
             // Sets up zoom on click
             $(this.base.dialog_content).find('.dot')
                 .css({'cursor': 'pointer'})
@@ -986,7 +992,8 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     Sourcemap.template('map/details/hop', function(p, tx, th) {
             $(this.base.dialog_content).empty();
             this.base.showDialog(th);
-			Sourcemap.Map.Base.setDetails();                
+			this.base.setDetails(this.hop);     
+			           
         }, 
         {"hop": hop, "supplychain": sc, 'base': this},
         {"base": this, "hop": hop, "supplychain": sc},
@@ -996,20 +1003,20 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
     // this.map.map.panTo(this.getFeatureLonLat(f));
 }
 
-Sourcemap.Map.Base.prototype.setDetails = function() {
-	var h = this.base.map.activeArea.h -55;
+Sourcemap.Map.Base.prototype.setDetails = function(feature) {
+	var h = this.map.activeArea.h -55;
 	// First, find out how much height is already occupied 
-	$(this.base.dialog_content).find('.placename').each(function() {
+	$(this.dialog_content).find('.placename').each(function() {
 		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
 	});
-	$(this.base.dialog_content).find('.title').each(function() {
+	$(this.dialog_content).find('.title').each(function() {
 		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
 	});
-	$(this.base.dialog_content).find('.accordion-title').each(function() {
+	$(this.dialog_content).find('.accordion-title').each(function() {
 		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
 	});
 	// Each accordion body can be the size of the leftover space
-    var accordion_body = $(this.base.dialog_content).find('.accordion-body')
+    var accordion_body = $(this.dialog_content).find('.accordion-body')
     var len = accordion_body.length;
 	accordion_body.each(function(index) {
 		var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
@@ -1025,7 +1032,7 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 	// h is all the room we have to open stuff in
 	var reduced_height = h;
 	// If there's a media accordion (and there's enough room to show it), show it
-	$(this.base.dialog_content).find('#dialog-media').each($.proxy(function(num,evt) {	
+	$(this.dialog_content).find('#dialog-media').each($.proxy(function(num,evt) {	
 		var e = evt;
 		//console.log(evt);
 		var val = parseInt($(e).css('height').replace('px',"")) + parseInt($(e).css('padding-top').replace('px',"")) + parseInt($(e).css('padding-bottom').replace('px',""));		
@@ -1036,30 +1043,30 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 			
 			// Count number of media. if there is only one, don't show navigation
 			var count = 0;
-			$(this.base.dialog_content).find('.navigation-item').each($.proxy(function(evt) {
+			$(this.dialog_content).find('.navigation-item').each($.proxy(function(evt) {
 				count++;
             }, this));			
 			if (count == 1) {
-				$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
+				$(this.dialog_content).find("#dialog-media-navigation").css("display","none");
 			}
 			// the first media object should play
-			$(this.base.dialog_content).find('.navigation-item').first().each($.proxy(function(num,evt) {
+			$(this.dialog_content).find('.navigation-item').first().each($.proxy(function(num,evt) {
                 var target = evt.id.split('-').pop().replace(":","-");
 				if(target == "youtube-link") { 
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(feature.magic["youtube:link"]));
 		        } else if(target == "vimeo-link") {
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(feature.magic["vimeo:link"]));
 		        } else if(target == "soundcloud-id") {
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(feature.magic["soundcloud:id"]));
 		        } else if(target == "twitter-search") {	
-		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+		            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(feature.magic["twitter:search"]));
 		        } else if(target == "flickr-setid") {
-		            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+		            $("#dialog-media-content").html('<div id="flickr-photoset-' + feature.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, feature.magic["flickr:setid"]) + '</div> ');
 		        }
             }, this));
 		}					
 	}, this));
-	$(this.base.dialog_content).find('#dialog-description').each(function() {	
+	$(this.dialog_content).find('#dialog-description').each(function() {	
 		var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
@@ -1067,7 +1074,7 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 			$(this).show();
 		}					
 	});
-	$(this.base.dialog_content).find('#dialog-footprint-body').each(function() {	
+	$(this.dialog_content).find('#dialog-footprint-body').each(function() {	
 		var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
@@ -1075,7 +1082,7 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 			$(this).show();
 		}					
 	});
-	$(this.base.dialog_content).find('.accordion .accordion-title').click($.proxy(function(evt) {
+	$(this.dialog_content).find('.accordion .accordion-title').click($.proxy(function(evt) {
 		var e = evt.target;
 		// figure out if the accordion is already open
 		var open = $(e).next().is(":visible");
@@ -1087,7 +1094,7 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 				$(this).slideToggle('fast');
 		});
 		
-		$(this.base.dialog_content).find('.accordion-title').find('.arrow').removeClass('arrowopen');
+		$(this.dialog_content).find('.accordion-title').find('.arrow').removeClass('arrowopen');
 		// if it wasnt open. open it
 		if (open == false) {
 			$(e).next().slideToggle('fast');
@@ -1099,21 +1106,21 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 					count++;
 	            }, this));			
 				if (count == 1) {
-					$(this.base.dialog_content).find("#dialog-media-navigation").css("display","none");
+					$(this.dialog_content).find("#dialog-media-navigation").css("display","none");
 				}
 				// the first media object should play
 				$(e).next().find('.navigation-item').first().each($.proxy(function(num,evt) {
 	                var target = evt.id.split('-').pop().replace(":","-");
 					if(target == "youtube-link") { 
-			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(feature.magic["youtube:link"]));
 			        } else if(target == "vimeo-link") {
-			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(feature.magic["vimeo:link"]));
 			        } else if(target == "soundcloud-id") {
-			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(feature.magic["soundcloud:id"]));
 			        } else if(target == "twitter-search") {	
-			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+			            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(feature.magic["twitter:search"]));
 			        } else if(target == "flickr-setid") {
-			            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+			            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, feature.magic["flickr:setid"]) + '</div> ');
 			        }
 	            }, this));
 			}
@@ -1121,7 +1128,7 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 		return false;
 	}, this));
 	// Sets up content-nav behavior
-    $(this.base.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
+    $(this.dialog_content).find('.navigation-item').click($.proxy(function(evt) {
         var target = evt.target.id.split('-').pop().replace(":","-");
 		$("#dialog-media").find(".navigation-item").removeClass("selected");
 		$(evt.target).addClass("selected");
@@ -1130,15 +1137,15 @@ Sourcemap.Map.Base.prototype.setDetails = function() {
 		//$("#dialog-media").children("."+target).css("left","0");
 		
 		if(target == "youtube-link") { 
-            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(this.stop.magic["youtube:link"]));
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.youtube.link(feature.magic["youtube:link"]));
         } else if(target == "vimeo-link") {
-            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(this.stop.magic["vimeo:link"]));
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.vimeo.link(feature.magic["vimeo:link"]));
         } else if(target == "soundcloud-id") {
-            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(this.stop.magic["soundcloud:id"]));
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.soundcloud.id(feature.magic["soundcloud:id"]));
         } else if(target == "twitter-search") {	
-            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(this.stop.magic["twitter:search"]));
+            $("#dialog-media-content").html(Sourcemap.MagicWords.content.twitter.search(feature.magic["twitter:search"]));
         } else if(target == "flickr-setid") {
-            $("#dialog-media-content").html('<div id="flickr-photoset-' + this.stop.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, this.stop.magic["flickr:setid"]) + '</div> ');
+            $("#dialog-media-content").html('<div id="flickr-photoset-' + feature.magic["flickr:setid"] + '">' + Sourcemap.MagicWords.content.flickr.setid.call(this.embed, feature.magic["flickr:setid"]) + '</div> ');
         }
     }, this));
 }
@@ -1375,10 +1382,15 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 							scaled.value = val;
 							scaled.unit = "";
 						} 
-						f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	      
-		    			if(f.attributes.hop_component && f.attributes.hop_component == "hop") {
-		    				f.attributes.label = "";
-		    			}	              
+						f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
+						//f.data.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
+						/*
+		    			if(f.attributes.hop_component && f.attributes.hop_component == "arrow") {
+		    				console.log(f);
+							f.attributes.label = f.attributes.label;
+		    			} else {
+							f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	      
+						} */            
 		            } else { f.attributes.label = ""; }
 		        } 
 		        f.attributes.size = f.attributes.size || smin;
@@ -1640,18 +1652,20 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
 }
 
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
-	alert("bloo");
     if(this.visualization_mode){
         if(this.visualization_mode != viz_nm) {
             this.disableVisualization();
             this.enableVisualization(viz_nm);
+			this.map.filter = viz_nm;
         }
         else{
             this.disableVisualization();
+			delete this.map.filter;
         }
     }
     else{
         this.enableVisualization(viz_nm);
+		this.map.filter = viz_nm;
     }
 }
 

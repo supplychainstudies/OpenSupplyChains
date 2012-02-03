@@ -110,7 +110,7 @@ $(document).ready(function() {
                         .append($('<iframe></iframe>')
                             .addClass("youtube-player")
                             .attr({
-                                type:"text/html", width:480, height:280, 
+                                type:"text/html", width:346, height:226, 
                                 src:"http://www.youtube.com/embed/"+supplychain_youtube_id,
                                 frameborder:0
                             })

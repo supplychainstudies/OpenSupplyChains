@@ -761,6 +761,28 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     // impact calculator for stops
     if(ref instanceof Sourcemap.Stop) {
+		
+		// Clean up qty	
+		var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+		for (x in sc.stops) {
+			if (sc.stops[x] == ref) {
+				if (sc.stops[x].attributes.qty) {
+					if (sc.stops[x].attributes.weight && sc.stops[x].attributes.qty != 0) {
+						sc.stops[x].attributes.weight = sc.stops[x].attributes.qty*sc.stops[x].attributes.weight;
+					} else {
+						sc.stops[x].attributes.weight = sc.stops[x].attributes.qty;
+					}
+					Sourcemap.broadcast('supplychain-updated', sc);
+					break;
+				}
+			}
+		}
+		
+		
 	
 		$("#edit-stop-footprint input").find(".citation, #notes").change($.proxy(function(e) {
 			$("#footprint-methodology").val("");
@@ -872,7 +894,7 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 			var editor = $('#edit-hop-footprint');
 			editor.find("#reference-co2e").removeClass("lock");
 			var transnm = $('#edit-hop-footprint select[name="transportcat"] option:selected').text();
-			$("#reference-co2e").addClass("lock");
+			$("#reference-co2e").removeClass("lock");
             for(var k in this.transport_catalog) {
                 var item = this.transport_catalog[k];
                 if(item.name == transnm) {
@@ -884,16 +906,14 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 	            sc = this.map.supplychains[k];
 	            break;
 	        }
-            /* This seems to be broken.  TODO: Implement this functionality for hops.
 			for (x in sc.hops) {
 				if (sc.hops[x] == ref) {
 					sc.hops[x].attributes.co2e = editor.find('.footprint-co2e').val();
-					var fm = sc.hops[x].attributes.footprintmethodology;
-					sc.hops[x].attributes.footprintmethodology = fm.toString().replace("CO2e factor referenced from: \n" +item.ref, "");
+					delete sc.hops[x].attributes.footprintmethodology;
 					delete sc.hops[x].attributes.co2e_reference;
+					$("#footprint-methodology").text("");
 				}
 			}
-            */
 	    	Sourcemap.broadcast('supplychain-updated', sc);          
         }, this));
 		
@@ -917,13 +937,8 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 							sc.hops[x].attributes.transport = item.name;
 							sc.hops[x].attributes.co2e = item.co2e;
 							sc.hops[x].attributes.unit = "kg";
-							if (sc.hops[x].attributes.footprintmethodology) { 
-								if (sc.hops[x].attributes.footprintmethodology.search("CO2e factor referenced from: \n" +item.ref) == -1) { 
-									sc.hops[x].attributes.footprintmethodology = sc.hops[x].attributes.footprintmethodology + "\nCO2e factor referenced from: \n" +item.ref;
-								} 
-							} else {
-								sc.hops[x].attributes.footprintmethodology = "\nCO2e factor referenced from: \n" +item.ref;
-							}
+							sc.hops[x].attributes.footprintmethodology = "\nCO2e factor referenced from: \n" +item.ref;
+							$("#footprint-methodology").text((sc.hops[x].attributes.footprintmethodology).toString());
 						}
 					}
 			    	Sourcemap.broadcast('supplychain-updated', sc);

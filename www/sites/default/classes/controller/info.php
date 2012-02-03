@@ -18,6 +18,7 @@ class Controller_info extends Sourcemap_Controller_Layout {
  
     public function action_index($slug="blog", $childSlug=null) {
 
+
         $this->layout->scripts = array(
             'sourcemap-document'
         );
@@ -28,6 +29,7 @@ class Controller_info extends Sourcemap_Controller_Layout {
             $this->template->title = $contents->page->title;
             $this->template->content = $contents->page->content;
         }
+        $this->layout->page_title = 'Sourcemap: ' . $contents->page->title;
     }
     
     public function action_secure($slug="blog", $childSlug=null) {
@@ -42,6 +44,7 @@ class Controller_info extends Sourcemap_Controller_Layout {
             $this->template->title = $contents->page->title;
             $this->template->content = $contents->page->content;
         }
+        $this->layout->page_title = 'Sourcemap: ' . $contents->page->title;
     }
 
     public function getContents($slug, $childSlug=null){

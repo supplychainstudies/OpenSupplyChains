@@ -9,8 +9,8 @@ function loadAjaxStripe(){
         name: $('input[name="card-name"]').val(),
         number: $('input[name="card-number"]').val(),
         cvc: $('input[name="card-cvc"]').val(),
-        exp_month: $('input[name="card-expiry-month"]').val(),
-        exp_year: $('input[name="card-expiry-year"]').val()
+        exp_month: $('select[name="card-expiry-month"]').val().split(" ")[0],
+        exp_year: $('select[name="card-expiry-year"]').val().split(" ")[0]
     }, amount, stripeResponseHandler);
    
     // prevent the form from submitting with the default action
@@ -40,6 +40,7 @@ function stripeResponseHandler(status, response) {
         $(submitStatus).animate({
             height : $(submitStatus).find('ul').height() + 14
         });
+        $('.sourcemap-form.ajax input[type=submit]').removeAttr("disabled");
     
     } else {
         // we've passed the CC validation.  time for normal validation.
@@ -75,6 +76,7 @@ function stripeResponseHandler(status, response) {
                     $(submitStatus).addClass('succeeded');
                 else{
                     // failed.  back to square one...
+                    $('.sourcemap-form.ajax input[type=submit]').removeAttr("disabled");
                     $(submitStatus).addClass('failed');
                     failure = true;
                 }

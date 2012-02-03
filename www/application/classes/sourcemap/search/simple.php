@@ -59,7 +59,20 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
                 );
             }
         }
-        
+
+		// check to make sure stops has been counted for each map
+		$stops_search = ORM::factory('supplychain_search');
+		$stops_search->where('stops','is',null);
+		$raw = $stops_search->find_all();
+        $results = self::prep_rows($raw);
+        if (count($results) > 0) {
+			foreach($results as $row) {
+				$stopcount_search = ORM::factory('supplychain_search',$row->search_id);
+				$stopcount_search->stops = $row->stops_tot;
+				$stopcount_search->save();
+			}			
+		}
+
         // by userid
         if(isset($this->parameters['user']) && (int)$this->parameters['user']) {
             $search->and_where('user_id', '=', $this->parameters['user']);
@@ -76,10 +89,15 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
             $search->and_where(DB::expr('featured'), 'and', DB::expr('TRUE'));
         }
 
-        // user geatured filter
+        // user featured filter
         if(isset($this->parameters['user_featured']) && strtolower($this->parameters['user_featured']) == 'yes') {
             //$search->and_where(DB::expr('user_featured'), 'and', DB::expr('TRUE'));
             $search->and_where('user_featured','=','true');
+        }
+
+		// Don't display empty
+        if(isset($this->parameters['display_empty']) && strtolower($this->parameters['display_empty']) == 'no') {
+            $search->and_where('stops','>','0');
         }
         
 
@@ -135,6 +153,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $row = (object)$row;
         $sc = ORM::factory('supplychain', $row->supplychain_id);
         $sca = (object)$sc->as_array();
+		$sca->search_id = $row->id;
         $sca->attributes = (object)$sc->attributes->find_all()->as_array("key", "value");
         if(isset($sca->attributes->passcode)){
             // If passcode exist, then return null
@@ -144,7 +163,7 @@ class Sourcemap_Search_Simple extends Sourcemap_Search {
         $sca->owner->name = $sca->owner->username;
         $sca->comments_tot = ORM::factory('supplychain_comment')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
         $sca->favorites_tot = ORM::factory('user_favorite')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
- 
+		$sca->stops_tot = ORM::factory('stop')->where('supplychain_id', '=', $row->supplychain_id)->count_all();
         unset($sca->owner->password);
         unset($sca->owner->flags);
         unset($sca->owner->email); # !!!

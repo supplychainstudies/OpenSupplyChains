@@ -382,8 +382,10 @@ Sourcemap.Map.prototype.dockRemove = function(nm) {
 }
 
 Sourcemap.Map.prototype.initEvents = function() {
-    this.map.events.register("movestart", this, function() {
+	this.map.events.register("movestart", this, function() {
         var s = this.getSelected();
+		this.selected = s;
+		this.filter = "energy";
         s = s.length ? s[0] : false;
         if(s) {
             if(s.cluster_instance_id) {
@@ -392,6 +394,9 @@ Sourcemap.Map.prototype.initEvents = function() {
                 this._sel_before_zoom = s;
             }
         }
+    });
+    this.map.events.register("moveend", this, function() {
+        this.setSelected();
     });
     // zoom evts
     this.map.events.register("zoomend", this, function() {
@@ -1291,7 +1296,7 @@ Sourcemap.Map.prototype.addSupplychain = function(supplychain) {
     this.stop_features[scid] = {};
     this.hop_features[scid] = {};
     this.cluster_features[scid] = [];
-    this.mapSupplychain(scid);
+    //this.mapSupplychain(scid);
     this.broadcast('map:supplychain_added', this, supplychain);
     
     return this;
@@ -1408,12 +1413,65 @@ Sourcemap.Map.prototype.getSelected = function() {
     for(var i=0; i<this.map.layers.length; i++) {
         var l = this.map.layers[i];
         if(l instanceof OpenLayers.Layer.Vector) {
-            if(l.selectedFeatures instanceof Array)
+            if(l.selectedFeatures instanceof Array) {}
                 s = s.concat(l.selectedFeatures.slice(0));
+			}
+        }
+    return s;
+}
+
+Sourcemap.Map.prototype.setSelected = function() {
+	var s = this.selected;
+	var ss = this.selected;
+    for(var i=0; i<this.map.layers.length; i++) {
+        var l = this.map.layers[i];
+		if(l instanceof OpenLayers.Layer.Vector) {
+            if(l.selectedFeatures instanceof Array) {
+				for (var z in s) {
+					if(s[z] instanceof OpenLayers.Feature.Vector) {
+						if (l.id == s[z].layer.id) {
+							this.map.layers[i].selectedFeatures = ss;
+							break;
+						}
+					}
+				}
+
+			}
+        }
+    }
+    //return s;
+}
+
+/*
+
+
+Sourcemap.Map.prototype.setSelected = function() {
+	console.log(this.selected);
+	var s = this.selected;
+    for(var i=0; i<this.map.layers.length; i++) {
+        var l = this.map.layers[i];
+		if(l instanceof OpenLayers.Layer.Vector) {
+            if(l.selectedFeatures instanceof Array) {
+				for (var z in s) {
+					if(s[z] instanceof OpenLayers.Feature.Vector) {
+						if (l.id == s[z].layer.id) {
+							console.log(typeof(s));
+							console.log(typeof(this.map.layers[i].selectedFeatures));
+							console.log(this.map.layers[i].selectedFeatures);
+							console.log(s);
+							this.map.layers[i].selectedFeatures = this.map.layers[i].selectedFeatures = s;
+							console.log(this.map.layers[i].selectedFeatures);
+						}
+					}
+				}
+
+			}
         }
     }
     return s;
 }
+
+*/
 
 Sourcemap.Cluster = function(distance, threshold, map) {
     this.map = map;

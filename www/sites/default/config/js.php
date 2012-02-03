@@ -21,7 +21,6 @@ return array(
         ),
         'sourcemap-create' => array(
             'scripts' => array(
-                'assets/scripts/sourcemap/supplychain/create.js',
             ),
         ),
         'sourcemap-welcome' => array(
@@ -61,6 +60,14 @@ return array(
                 'less', 'sourcemap-map'
             )
         ),
+	    'map-view-edit' => array(
+	        'scripts' => array(
+	            'sites/default/assets/scripts/map/view.js'
+	        ),
+	        'requires' => array(
+	            'less', 'sourcemap-map-edit'
+	        )
+	    ),
         'list-view' => array(
             'scripts' => array(
                 'sites/default/assets/scripts/map/list.js',

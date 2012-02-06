@@ -18,7 +18,7 @@ class Sourcemap_Controller_Service extends Controller_REST {
     const HDR_API_KEY = 'X-Sourcemap-API-Key';
     const HDR_API_TOKEN = 'X-Sourcemap-API-Token';
     const HDR_API_DATE = 'Date';
-    const API_DATE_MARGIN = 30; // seconds
+    const API_DATE_MARGIN = 60; // seconds
     
     public $_action_map = array(
         'GET' => 'get',
@@ -154,9 +154,28 @@ class Sourcemap_Controller_Service extends Controller_REST {
                     if(($api_user->has('roles', $loginrole) && $api_user->has('roles', $apirole)) ||
                         $api_user->has('roles', $adminrole)
                     ) {
-                        // pass
-                        $apikeym->requests = $apikeym->requests + 1;
+                        $apikeym->requests = $apikeym->requests + 1;						
                         $apikeym->save();
+						if($apikeym->requests > 100000) {
+	                        $mailer = Email::connect();
+	                        $swift_msg = Swift_Message::newInstance();
+
+	                        $headers = array('from' => 'Sourcemap Api Monitor <noreply@sourcemap.com>', 'subject' => 'User '.$apikeym->user_id.' has exceed the API Limit (100,000).');
+	                        $swift_msg->setSubject('User '.$apikeym->user_id.' has exceed the API Limit (100,000).')
+	                                  ->setFrom(array('noreply@sourcemap.com' => 'Sourcemap Api Monitor'))
+	                                  ->setTo(array('admin@sourcemap.com' => 'Sourcemap Administrator'))
+	                                  ->setBody("");
+	                        try {
+	                            $sent = $mailer->send($swift_msg);
+							}
+							catch (Exception $e) {
+	                        	throw new Exception('Something went wrong with the API. '.
+	                            	'Contact an administrator.'
+	                        	);
+                        	}	
+	                        $apikeym->requests = 1;						
+	                        $apikeym->save();												
+						}
                     } else {
                         throw new Exception('You\'re not allowed to access the API. '.
                             'Contact an administrator if you have questions.'

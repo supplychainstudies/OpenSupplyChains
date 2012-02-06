@@ -89,7 +89,7 @@ class Sourcemap_Kml {
 		        $k .= '<color>';
 				$k .= isset($ftr->properties->color) ? Sourcemap_Kml::getKMLLineColor($ftr->properties->color) : 'aaffffff';
 				$k .= '</color>';
-				$k .= '<width>6</width>';
+				$k .= '<width>4</width>';
 				$k .= '</LineStyle>';
 				$k .= '</Style>';
 			    $k .= '<description>';

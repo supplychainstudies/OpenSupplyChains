@@ -25,7 +25,7 @@ class Controller_Welcome extends Sourcemap_Controller_Layout {
         $this->layout->styles[] = 'sites/default/assets/styles/slider.less';
 
         $this->layout->page_title = 'Sourcemap: where things come from';
-        $recent = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 4));
+        $recent = Sourcemap_Search::find(array('recent' => 'yes', 'l' => 8));
         $popular = Sourcemap_Search::find(array('comments' => 'yes', 'favorited' => 'yes', 'l' => 4));
         $featured = Sourcemap_Search::find(array('featured' => 'yes', 'l' => 4));
         $morefeatured = Sourcemap_Search::find(array('featured' => 'yes', 'l' => 2, 'o' => 0));

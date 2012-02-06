@@ -1,11 +1,12 @@
 <?php
-$less = Kohana::config('sourcemap.convert_less') ? null : "less";
+$less   = Kohana::config('sourcemap.convert_less') ? null : "less";
+$jquery = Kohana::config('sourcemap.local_jquery') ? "assets/scripts/libs/jquery/jquery.js" : "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ;
 
 return array(
     'packages' => array(
         'jquery' => array(
             'scripts' => array(
-                'assets/scripts/libs/jquery/jquery.js'
+                $jquery 
             )
         ),
         'jquery-ui' => array(
@@ -36,7 +37,7 @@ return array(
         ),
         'sourcemap-jquery' => array(
             'scripts' => array(
-                'assets/scripts/libs/jquery/jquery.js',
+                $jquery,
                 'assets/scripts/libs/jquery/jquery-ui.js',
                 'assets/scripts/libs/jquery/jquery.jqote.js'
             )

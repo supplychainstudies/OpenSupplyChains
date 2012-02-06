@@ -98,7 +98,7 @@
     <php function="dirname" returnProperty="dirname">
         <param value="${jsfile_abs}" />
     </php>
-    <exec command="java -jar ${phing.home}closure-compiler/compiler.jar --warning_level=QUIET --compilation_level=ADVANCED_OPTIMIZATIONS --js=${jsfile_abs} > ${dirname}/${basename}.min.js" />
+    <exec command="java -jar ${phing.home}closure-compiler/compiler.jar --warning_level=QUIET --compilation_level=SIMPLE_OPTIMIZATIONS --js=${jsfile_abs} > ${dirname}/${basename}.min.js" />
     <!-- copy file="${dirname}/${basename}.min.js" tofile="${dirname}/${basename}.js" overwrite="true" /-->
 </target>
 

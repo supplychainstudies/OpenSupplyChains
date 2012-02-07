@@ -49,7 +49,7 @@ return array(
                 'sites/default/assets/scripts/payment/payment.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-core'
+                'sourcemap-core'
             )
         ),
         'map-view' => array(
@@ -57,7 +57,7 @@ return array(
                 'sites/default/assets/scripts/map/view.js'
             ),
             'requires' => array(
-                'less', 'sourcemap-map'
+                'sourcemap-map'
             )
         ),
 	    'map-view-edit' => array(
@@ -65,7 +65,7 @@ return array(
 	            'sites/default/assets/scripts/map/view.js'
 	        ),
 	        'requires' => array(
-	            'less', 'sourcemap-map-edit'
+	            'sourcemap-map-edit'
 	        )
 	    ),
         'list-view' => array(

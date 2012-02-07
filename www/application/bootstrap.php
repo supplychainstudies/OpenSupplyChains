@@ -158,7 +158,10 @@ $styles = array(
 $header_style = isset($styles) ? Sourcemap_CSS::link_tags($styles) : '';
 $header = View::factory('partial/header', array('page_title' => isset($page_title) ? $page_title : APPLONGNM));
 $footer = View::factory('partial/footer', array('page_title' => isset($page_title) ? $page_title : APPLONGNM));
-$scripts = Sourcemap_JS::script_tags('less', 'sourcemap-core');
+if (Kohana::config('sourcemap.convert_less'))
+    $scripts = Sourcemap_JS::script_tags('sourcemap-core');
+else
+    $scripts = Sourcemap_JS::script_tags('less', 'sourcemap-core');
 
 if (!defined('SUPPRESS_REQUEST')) {
     /**

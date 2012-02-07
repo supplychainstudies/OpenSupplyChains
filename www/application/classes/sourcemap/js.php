@@ -88,12 +88,6 @@ class Sourcemap_JS {
             }
         }
 
-        // jQuery should always load first
-        foreach ($scripts as $script){
-            if (strpos($script,"jquery.min.js") || strpos($script,"jquery.js")){
-                
-            }
-        }
 
         return $scripts;
     }
@@ -138,7 +132,23 @@ class Sourcemap_JS {
             //if(!$scripts) $scripts[] = array();
             //$scripts = array_values(array_unique($scripts));
         }
+        
+        // jQuery has priority over other scripts, then Openlayers
+        $scripts = self::move_to_top($scripts, "OpenLayers");
+        $scripts = self::move_to_top($scripts, "jquery.js");
+       
         return $scripts;
+    }
+
+    public static function move_to_top($array, $string){
+        foreach ($array as $i => $value){
+            if (strpos($value,$string)){
+                // Pop value off array and put it on top
+                array_splice($array, $i, 1);
+                array_unshift($array, $value);
+            }
+        }
+        return $array;
     }
 
     public static function script_tags() {

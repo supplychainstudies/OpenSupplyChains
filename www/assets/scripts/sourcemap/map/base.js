@@ -269,22 +269,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 		*/
     }, this));
 
-    Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
-        if(ftr.cluster) {
-            window.location.hash = ftr.attributes.cluster_instance_id; // + ftr.attributes.supplychain_instance_id;
-            this.showClusterDetails(ftr);
-        } else if(ftr.attributes.stop_instance_id && (!(map.editor) || this.options.locked)) {
-            this.showStopDetails(
-                ftr.attributes.stop_instance_id, ftr.attributes.supplychain_instance_id
-            );
-            window.location.hash = ftr.attributes.stop_instance_id; // + ftr.attributes.supplychain_instance_id;
-        } else if (ftr.attributes.hop_instance_id && (!(map.editor) || this.options.locked)) {			
-            window.location.hash = ftr.attributes.hop_instance_id; // + ftr.attributes.supplychain_instance_id;
-            this.showHopDetails(
-                ftr.attributes.hop_instance_id, ftr.attributes.supplychain_instance_id
-            );
-        }
-    }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(ftr.cluster) {

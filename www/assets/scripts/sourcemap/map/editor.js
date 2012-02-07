@@ -359,7 +359,7 @@ Sourcemap.Map.Editor.prototype.init = function() {
         "onComplete": $.proxy(function(ftr, px) {
             if(ftr.attributes.stop_instance_id) {
                 this.editor.moveStopToFeatureLoc(ftr, true, true);
-                //this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
+                this.editor.syncStopHops(ftr.attributes.supplychain_instance_id, ftr.attributes.stop_instance_id);
             }
             ftr.attributes.size -= 2;
             //this.editor.map.controls.select.select(ftr);
@@ -591,7 +591,7 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
     var ll = new OpenLayers.LonLat(ftr.geometry.x, ftr.geometry.y)
     ll = ll.clone();
     ll.transform(new OpenLayers.Projection('EPSG:900913'), new OpenLayers.Projection('EPSG:4326'));
-    this.syncStopHops(scid, st);
+    //this.syncStopHops(scid, st);
     if(geocode) {
         this.map_view.updateStatus("Moved stop '"+st.getLabel()+'"..."');
         Sourcemap.Stop.geocode(ll, $.proxy(function(data) {
@@ -620,6 +620,7 @@ Sourcemap.Map.Editor.prototype.moveStopToFeatureLoc = function(ftr, geocode, tri
                 this.stop.setAttr('address', ll.lat+','+ll.lon);
             }
         }, {"stop": st, "editor": this, "trigger_events": trigger_events}));
+		this.syncStopHops(this.map.findSupplychain(scid), st);
     }
     if(trigger_events) {
         Sourcemap.broadcast('supplychain-updated', 
@@ -1115,6 +1116,7 @@ Sourcemap.Map.Editor.prototype.updateFeature = function(ref, updated_vals, norem
                     this.stop.geometry = (new OpenLayers.Format.WKT()).write(new OpenLayers.Feature.Vector(new_geom));
                     var scid = this.stop.supplychain_id;
                     this.editor.map_view.updateStatus("Moved stop to '"+pl.placename+"'...", "good-news");
+					this.editor.syncStopHops(this.editor.map.supplychains[ref.supplychain_id],ref);
                 } else {
                     $(this.edit_form).find('input,textarea,select').removeAttr("disabled");
                     this.editor.map_view.updateStatus("Could not geocode...", "bad-news");

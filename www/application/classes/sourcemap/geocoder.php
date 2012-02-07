@@ -23,7 +23,7 @@ class Sourcemap_Geocoder {
             $lon = (float)$matches[3];
             if (($lat >= -90 && $lat <= 90) && ($lat >= -90 && $lat <= 90)){
                 $results = array();
-                $results[] = array(
+                $results[] = (object) array(
                     // Using multiple keywords to match google's results
                     'lat' => $lat,
                     'lng' => $lon, 

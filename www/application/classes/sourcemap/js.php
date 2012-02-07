@@ -87,6 +87,14 @@ class Sourcemap_JS {
                 $scripts[] = $script;
             }
         }
+
+        // jQuery should always load first
+        foreach ($scripts as $script){
+            if (strpos($script,"jquery.min.js") || strpos($script,"jquery.js")){
+                
+            }
+        }
+
         return $scripts;
     }
 
@@ -128,7 +136,7 @@ class Sourcemap_JS {
                 }
             }
             //if(!$scripts) $scripts[] = array();
-            //$scripts = array_values(array_unique(call_user_func_array('array_merge', $scripts)));
+            //$scripts = array_values(array_unique($scripts));
         }
         return $scripts;
     }

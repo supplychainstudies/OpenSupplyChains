@@ -213,7 +213,9 @@ Sourcemap.init_mobile_dialog = function(sc){
         item += '<div class="accordion-body">'+
         '<div id="dialog-description">'+
         '<h3 class="placename">'+stop.attributes.address+'</h3>'+
-        stop.attributes.description+'</div></div>';
+        stop.attributes.description+'</div>';
+        item+= Sourcemap.MagicWords.content.youtube.mobilelink(stop.attributes["youtube:link"]);
+        item += '</div>'; // end accordion-body
         $(".mobile-accordion").append(item);
     }
     $(".mobile-accordion").find('.accordion-body').each(function() {
@@ -230,6 +232,17 @@ Sourcemap.init_mobile_dialog = function(sc){
         if (open == false) {
             $(this).next().slideToggle('fast');
             $(this).find('.arrow').addClass('arrowopen');
+
+            var this_id = $(this).attr("id");
+            if(this_id!=undefined){
+                // panTo stop id while open the dialog
+                var stid = this_id.split("dialog-")[1];
+                var map_id = Sourcemap.embed_instance.instance_id;
+                var sm_b = Sourcemap.embed_instance;
+                var stop = sc.findStop(stid);
+                var f = sm_b.map.stopFeature(stop);
+                sm_b.map.map.panTo(sm_b.getFeatureLonLat(f));
+            }
         }
 
         // set iphone screen

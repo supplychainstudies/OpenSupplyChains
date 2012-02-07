@@ -27,6 +27,17 @@ Sourcemap.MagicWords.content = {
                     'frameborder="0" allowfullscreen></iframe>';
             } else mkup = '';
             return mkup;
+        },
+        "mobilelink": function(lnk) {
+            if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
+                return '';
+            var m = lnk.match(/((\?v=)|(v\/))([^\/\&]+)/);
+            if(m) {
+                var mkup = '<iframe width="100%" class="youtube-link" type="text/html"'+
+                    'src="http://www.youtube.com/embed/'+m[4]+'"'+ 
+                    'frameborder="0" allowfullscreen></iframe>';
+            } else mkup = '';
+            return mkup;
         }
     },
     "vimeo": {

@@ -1004,7 +1004,8 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 }
 
 Sourcemap.Map.Base.prototype.setDetails = function(feature) {
-	var h = this.map.activeArea.h -55;
+	var h = this.map.activeArea.h -95;
+	console.log(h);
 	// First, find out how much height is already occupied 
 	$(this.dialog_content).find('.placename').each(function() {
 		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));

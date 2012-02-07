@@ -156,12 +156,13 @@ class Sourcemap_Controller_Service extends Controller_REST {
                     ) {
                         $apikeym->requests = $apikeym->requests + 1;						
                         $apikeym->save();
-						if($apikeym->requests > 100000) {
+						$apilimit = 10;
+						if($apikeym->requests > $apilimit) {
 	                        $mailer = Email::connect();
 	                        $swift_msg = Swift_Message::newInstance();
 
-	                        $headers = array('from' => 'Sourcemap Api Monitor <noreply@sourcemap.com>', 'subject' => 'User '.$apikeym->user_id.' has exceed the API Limit (100,000).');
-	                        $swift_msg->setSubject('User '.$apikeym->user_id.' has exceed the API Limit (100,000).')
+	                        $headers = array('from' => 'Sourcemap Api Monitor <noreply@sourcemap.com>', 'subject' => 'User '.$apikeym->user_id.' has exceed the API Limit ('.$apilimit.').');
+	                        $swift_msg->setSubject('User '.$apikeym->user_id.' has exceed the API Limit ('.$apilimit.').')
 	                                  ->setFrom(array('noreply@sourcemap.com' => 'Sourcemap Api Monitor'))
 	                                  ->setTo(array('admin@sourcemap.com' => 'Sourcemap Administrator'))
 	                                  ->setBody("");

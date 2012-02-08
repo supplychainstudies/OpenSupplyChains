@@ -199,6 +199,8 @@ Sourcemap.init_mobile_dialog = function(sc){
             supplychain_youtube_id = regex_result[1];
         sc_desc = sc_desc.replace(regex,"");
         sc_desc += "<br>"+Sourcemap.MagicWords.content.youtube.makelink(supplychain_youtube_id);
+    } else {
+        sc_desc = "";
     }
     var map_item = '<h3 class="accordion-title map-title first"><div class="noarrow"></div><div id="title">'+sc.attributes.title+'</div>'+
     '<div id="owner" style="background: url('+sc.owner.avatar+') 10px center no-repeat">'+owner_name+'</a></h3>'+

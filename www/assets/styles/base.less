@@ -628,14 +628,16 @@
 }
 
 #watermark {
-    display:block;
-    width: 75px;
-    height: 25px;
-    text-align:center;
     position:absolute;
     bottom:1.4em; 
     left:10px;
     z-index:1010;
+    a {
+        display:block;
+        width: 75px;
+        height: 25px;
+        text-align:center;
+    }
     &.cloudmade{
         background: url("../images/watermark.png") center center no-repeat;
     }

@@ -27,7 +27,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
     <meta http-equiv="content-language" content="en-us">
     
-    <meta name="viewport" content="initial-scale=1.2, maximum-scale=1.2, user-scalable=no" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, maximum-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
@@ -37,6 +37,18 @@
 	<link rel="search" href="services/opensearch/" type="application/opensearchdescription+xml" title="Sourcemap.com" />
    
     <link rel="stylesheet" href="assets/styles/preview.css" type="text/css"/>
+
+    <script type="text/javascript">
+        // Get rid of address bar on iphone/ipod
+        window.addEventListener("load",function() {
+            // Set a timeout...
+            setTimeout(function(){
+                // Hide the address bar!
+                window.scrollTo(0, 1);
+            }, 0);
+        });    
+    </script>
+
 </head>
 
 <body id="preview">

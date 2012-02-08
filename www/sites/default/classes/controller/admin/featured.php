@@ -42,7 +42,7 @@ class Controller_Admin_Featured extends Controller_Admin {
             $scid = $supplychain->id;
             $supplychains_array[$scid] = (array)$supplychains_array[$scid];
             $supplychains_array[$scid]['owner'] = $supplychain->owner->username;
-            $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychains_array[$scid]['created']);
+            $supplychains_array[$scid]['created'] = date("F j, Y, g:i a", $supplychain->created);
             $supplychains_array[$scid]['attributes'] = $supplychain->attributes->find_all()->as_array('key', 'value');
         }
 

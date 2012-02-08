@@ -31,7 +31,7 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
     
     public function action_view($supplychain_id) {
         // Redirect mobile users to preview template
-        if (Request::user_agent('mobile')){
+        if (!Request::user_agent('mobile')){
             $this->request->redirect('preview/' . $supplychain_id);
         }
 

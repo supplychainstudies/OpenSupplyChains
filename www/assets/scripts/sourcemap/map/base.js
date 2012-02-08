@@ -198,6 +198,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             }
             Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
+		/*
 		$("circle").hover($.proxy(function(event) {
 			var thefeature = event.currentTarget._featureId; 
 			var tieredsc = new Sourcemap.Supplychain.makeTiers(sc);
@@ -216,10 +217,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 					}
 				}
 			}
-			//var id = $(this).attr("id");
-			//for () {
-				
-			//}
 		}, this));
 		$("circle").mouseover($.proxy(function(event) {
 			Sourcemap.Map.Base.defaultEffect();
@@ -254,14 +251,11 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 					}
 				}
 			}
-			//var id = $(this).attr("id");
-			//for () {
-				
-			//}
 		}, this));
 		$("circle").mouseout($.proxy(function() {
 			Sourcemap.Map.Base.defaultEffect();
 		}, this));
+		*/
 		/*
 	    Sourcemap.listen('map:feature_hover', $.proxy(function(evt, map, ftr) {
 	        var x = new Sourcemap.Supplychain.makeTiers(sc);		

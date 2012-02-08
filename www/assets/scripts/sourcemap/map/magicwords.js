@@ -28,7 +28,17 @@ Sourcemap.MagicWords.content = {
             } else mkup = '';
             return mkup;
         },
-        "mobilelink": function(lnk) {
+        "mobilelink": function(link) {
+            if(!link || !link.match(/((\?v=)|(v\/))(.+)$/))
+                return '';
+            var html = '<div id="dialog-youtube"><a href="'+link+'">Youtube</a></div>';
+            return html;
+        },
+        "makelink": function(vid) {
+            var html = '<a href="http://www.youtube.com/watch?v='+vid+'">Youtube</a>';
+            return html;
+        },
+        "mobile_link": function(lnk) {
             if(!lnk || !lnk.match(/((\?v=)|(v\/))(.+)$/))
                 return '';
             var m = lnk.match(/((\?v=)|(v\/))([^\/\&]+)/);

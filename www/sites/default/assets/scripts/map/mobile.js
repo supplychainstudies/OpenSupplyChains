@@ -189,6 +189,15 @@ Sourcemap.init_mobile_dialog = function(sc){
     $("#sourcemap-dialog-mobile").html('<div class="mobile-accordion"></div>');
     var d = new Date(sc.modified*1000);
     var owner_name = sc.owner.display_name!=undefined ? sc.owner.display_name : sc.owner.name;
+
+    var sc_desc = sc.attributes.description;
+    var regex = new RegExp(/\[youtube:(.+)\]/);
+    var regex_result = sc_desc.match(regex);
+    var supplychain_youtube_id = null;
+    if(regex_result)
+        supplychain_youtube_id = regex_result[1];
+    sc_desc = sc_desc.replace(regex,"");
+    sc_desc += "<br>"+Sourcemap.MagicWords.content.youtube.makelink(supplychain_youtube_id);
     var map_item = '<h3 class="accordion-title map-title first"><div class="noarrow"></div><div id="title">'+sc.attributes.title+'</div>'+
     '<div id="owner" style="background: url('+sc.owner.avatar+') 10px center no-repeat">'+owner_name+'</a></h3>'+
     '<div class="accordion-body"><div id="dialog-description">'+
@@ -197,7 +206,7 @@ Sourcemap.init_mobile_dialog = function(sc){
     '<div class="dialog-item"><b>Modified:</b><br/>'+_S.fmt_date(d)+'</div>'+
     '</div></div>'+
     '<h3 class="accordion-title"><div class="arrow"></div>Map Description</h3>'+
-    '<div class="accordion-body"><div id="dialog-description">'+sc.attributes.description+'</div></div>';
+    '<div class="accordion-body"><div id="dialog-description">'+sc_desc+'</div></div>';
     $(".mobile-accordion").append(map_item);
     //$(".mobile-accordion").append('<div class=""></div>')
     var stops_total = sc.stops.length;

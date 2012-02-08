@@ -772,11 +772,13 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 		for (x in sc.stops) {
 			if (sc.stops[x] == ref) {
 				if (sc.stops[x].attributes.qty) {
+					
 					if (sc.stops[x].attributes.weight && sc.stops[x].attributes.qty != 0) {
 						sc.stops[x].attributes.weight = sc.stops[x].attributes.qty*sc.stops[x].attributes.weight;
 					} else {
 						sc.stops[x].attributes.weight = sc.stops[x].attributes.qty;
 					}
+					delete sc.stops[x].attributes.qty;
 					Sourcemap.broadcast('supplychain-updated', sc);
 					break;
 				}
@@ -859,6 +861,30 @@ Sourcemap.Map.Editor.prototype.prepEdit = function(ref, attr, ftr) {
 
     // impact calculator for hops
     } else {	
+	
+		// Clean up qty	
+		var sc = false;
+        for(var k in this.map.supplychains) {
+            sc = this.map.supplychains[k];
+            break;
+        }
+		for (x in sc.hops) {
+			if (sc.hops[x] == ref) {
+				if (sc.hops[x].attributes.qty) {
+					
+					if (sc.hops[x].attributes.weight && sc.hops[x].attributes.qty != 0) {
+						sc.hops[x].attributes.weight = sc.hops[x].attributes.qty*sc.hops[x].attributes.weight;
+					} else {
+						sc.hops[x].attributes.weight = sc.hops[x].attributes.qty;
+					}
+					delete sc.hops[x].attributes.qty;
+					Sourcemap.broadcast('supplychain-updated', sc);
+					break;
+				}
+			}
+		}
+	
+	
         $("#edit-hop-footprint input").keyup($.proxy(function(e){ 
             editor = $('#edit-hop-footprint');
             //var qty   = editor.find('input[name="qty"]').val();

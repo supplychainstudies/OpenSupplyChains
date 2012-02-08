@@ -684,10 +684,10 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 	var s = {"sc":sc, "lock":this.options.locked};
     Sourcemap.template('map/banner', cb, s);
 
-   
-
     if(this.options.watermark) {
-        this.watermark = $('<a href="/"><div id="watermark"></div></a>');
+        this.watermark = $('<div id="watermark"><a href="/"></a></div>');
+        var tileset = sc.attributes["sm:ui:tileset"] || this.options.tileset;
+        this.watermark.addClass(tileset);
         $(this.map.map.div.extras).append(this.watermark);
     }
     return this;
@@ -1193,8 +1193,10 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
 
     // handle overlays upon color scheme changes
     if(this.options.watermark){
-        $("#watermark").css("display","block");
-        $("#watermark").removeClass("cloudmade satellite terrain").addClass(tileset);
+        $("#watermark")
+            .css("display","block")
+            .removeClass("cloudmade satellite terrain")
+            .addClass(tileset);
     }
 
     this.map.setBaseLayer(tileset);

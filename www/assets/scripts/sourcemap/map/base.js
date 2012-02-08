@@ -198,6 +198,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             }
             Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
+		/*
 		$("circle").hover($.proxy(function(event) {
 			var thefeature = event.currentTarget._featureId; 
 			var tieredsc = new Sourcemap.Supplychain.makeTiers(sc);
@@ -216,10 +217,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 					}
 				}
 			}
-			//var id = $(this).attr("id");
-			//for () {
-				
-			//}
 		}, this));
 		$("circle").mouseover($.proxy(function(event) {
 			Sourcemap.Map.Base.defaultEffect();
@@ -254,14 +251,11 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
 					}
 				}
 			}
-			//var id = $(this).attr("id");
-			//for () {
-				
-			//}
 		}, this));
 		$("circle").mouseout($.proxy(function() {
 			Sourcemap.Map.Base.defaultEffect();
 		}, this));
+		*/
 		/*
 	    Sourcemap.listen('map:feature_hover', $.proxy(function(evt, map, ftr) {
 	        var x = new Sourcemap.Supplychain.makeTiers(sc);		
@@ -744,10 +738,10 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 	var s = {"sc":sc, "lock":this.options.locked};
     Sourcemap.template('map/banner', cb, s);
 
-   
-
     if(this.options.watermark) {
-        this.watermark = $('<a href="/"><div id="watermark"></div></a>');
+        this.watermark = $('<div id="watermark"><a href="/"></a></div>');
+        var tileset = sc.attributes["sm:ui:tileset"] || this.options.tileset;
+        this.watermark.addClass(tileset);
         $(this.map.map.div.extras).append(this.watermark);
     }
     return this;
@@ -988,7 +982,8 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 }
 
 Sourcemap.Map.Base.prototype.setDetails = function(feature) {
-	var h = this.map.activeArea.h -55;
+	var h = this.map.activeArea.h -95;
+	console.log(h);
 	// First, find out how much height is already occupied 
 	$(this.dialog_content).find('.placename').each(function() {
 		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
@@ -1240,8 +1235,10 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
 
     // handle overlays upon color scheme changes
     if(this.options.watermark){
-        $("#watermark").css("display","block");
-        $("#watermark").removeClass("cloudmade satellite terrain").addClass(tileset);
+        $("#watermark")
+            .css("display","block")
+            .removeClass("cloudmade satellite terrain")
+            .addClass(tileset);
     }
 
     this.map.setBaseLayer(tileset);

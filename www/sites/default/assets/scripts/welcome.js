@@ -18,14 +18,7 @@ $(function () {
         hashTags: false,
         width: '1040px',
         height: '322px',
-        onInitialized : function(){      // Random styling of buttons 
-            var minSize = 18;
-            var maxSize = 27;
-
-            function randOrd() {
-                return (Math.round(Math.random())-0.5); 
-            }
-
+        onInitialized : function(){      
             // Code that adds a floating description box
             $('.anythingWindow').append('<div id="featured-slider-description"><h1>...</h1></div>');
             $('#featured-slider-description').empty();

@@ -1167,14 +1167,12 @@ Sourcemap.Map.prototype.getFeaturesExtent = function() {
 }
 
 Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
-    
     var center = bounds.getCenterLonLat();
-
-    //if there's only one stop on the map, let's zoom to the minimum level
-    //if (oneStop() == true){
-    //    this.map.setCenter(center, this.map.minZoomLevel+1);
-    //}
-    //else{
+    // ignore if the bounds object is missing valid extent information
+    if (bounds.top === null){
+        this.map.setCenter(center, this.map.minZoomLevel);
+    }
+    else{
         if (this.map.baseLayer.wrapDateLine) {
             var maxExtent = this.map.getMaxExtent();
             
@@ -1184,17 +1182,15 @@ Sourcemap.Map.prototype.zoomToExtent = function(bounds, closest){
             }
             
             center = bounds_c.getCenterLonLat();
-            //center = bounds_c.getCenterLonLat().wrapDateLine(maxExtent);
         }
-        
-        this.map.setCenter(center, this.getZoomForExtent(bounds, closest));
-        //this.map.setCenter(center, 2);
-    //}
+       
+        this.map.setCenter(center, this.getZoomForExtent(bounds, false));
+    }
 }
 
 Sourcemap.Map.prototype.getZoomForExtent = function(extent, closest) {
     var viewSize = this.getPaddedSize();
-   
+
     var idealResolution = Math.max( extent.getWidth()  / viewSize.w,
                                     extent.getHeight() / viewSize.h );
 

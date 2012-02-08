@@ -124,11 +124,7 @@ Sourcemap.Map.prototype.defaults = {
             "fontColor": "${fcolor}",
             "fillOpacity": 1,
             "strokeOpacity": "${opacity}",
-            "rotation": "${angle}",
-            "label": "${label}",
-            "labelAlign": "cm",
-            "labelXOffset": 0,
-            "labelYOffset": "${yoffset}"
+            "rotation": "${angle}"
         },
         "disabled": {
             "fillColor": "#cccccc",

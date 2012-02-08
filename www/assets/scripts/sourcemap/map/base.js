@@ -176,6 +176,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         if(!this.map || this.map !== map) return;
         if(this.options.banner && !($("#banner").length)) this.initBanner();
         // TODO: do calculations here
+
     	this.updateFilterDisplay(sc);
 
         for(var vi=0; vi<this.options.visualizations.length; vi++) {
@@ -198,71 +199,8 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             }
             Sourcemap.broadcast('map-base-calc-update', v, range.total);
         }
-		/*
-		$("circle").hover($.proxy(function(event) {
-			var thefeature = event.currentTarget._featureId; 
-			var tieredsc = new Sourcemap.Supplychain.makeTiers(sc);
-			// first iterate through the openlayers map object to find the right circle
-			for (var x in this.map.map.layers) {
-				for (var y in this.map.map.layers[x].features) {
-					if (this.map.map.layers[x].features[y].id == thefeature) {
-						// Found the right openlayers feature. get data.
-						for (var z in tieredsc.stops) {
-							if (tieredsc.stops[z].instance_id == this.map.map.layers[x].features[y].attributes.stop_instance_id) {
-								Sourcemap.Map.Base.isolateNetworkEffect(this, tieredsc, 0.1, tieredsc.stops[z].instance_id);
-								break;
-							}
-						}
-						break;
-					}
-				}
-			}
-		}, this));
-		$("circle").mouseover($.proxy(function(event) {
-			Sourcemap.Map.Base.defaultEffect();
-			var thefeature = event.currentTarget._featureId; 
-			var tieredsc = new Sourcemap.Supplychain.makeTiers(sc);
-			// first iterate through the openlayers map object to find the right circle
-			for (var x in this.map.map.layers) {
-				for (var y in this.map.map.layers[x].features) {
-					if (this.map.map.layers[x].features[y].id == thefeature) {
-						// what if its a cluster? Make sure to iterate through all the cluster stops
-						if (typeof(this.map.map.layers[x].features[y].cluster) != "undefined") {
-							for (var a in this.map.map.layers[x].features[y].cluster) {
-								for (var z in tieredsc.stops) {
-									if (typeof(this.map.map.layers[x].features[y].cluster[a].attributes) != "undefined") {
-										if (tieredsc.stops[z].instance_id == this.map.map.layers[x].features[y].cluster[a].attributes.stop_instance_id) {
-											Sourcemap.Map.Base.isolateNetworkEffect(this, tieredsc, 0.1, tieredsc.stops[z].instance_id);
-											break;
-										}
-									}
-								}								
-							}
-						} else {
-							// Found the right openlayers feature. get data.
-							for (var z in tieredsc.stops) {
-								if (tieredsc.stops[z].instance_id == this.map.map.layers[x].features[y].attributes.stop_instance_id) {
-									Sourcemap.Map.Base.isolateNetworkEffect(this, tieredsc, 0.1, tieredsc.stops[z].instance_id);
-									break;
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-		}, this));
-		$("circle").mouseout($.proxy(function() {
-			Sourcemap.Map.Base.defaultEffect();
-		}, this));
-		*/
-		/*
-	    Sourcemap.listen('map:feature_hover', $.proxy(function(evt, map, ftr) {
-	        var x = new Sourcemap.Supplychain.makeTiers(sc);		
-	    }, this));
-		*/
-    }, this));
 
+    }, this));
 
     Sourcemap.listen('map:feature_selected', $.proxy(function(evt, map, ftr) {
         if(ftr.cluster) {
@@ -322,7 +260,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
     }, this));
     */
 }
-
+/*
 Sourcemap.Map.Base.svgToSc = function (thismap, sc, svgid) {
 	// first iterate through the openlayers map object to find the right circle
 	for (var x in thismap.map.map.layers) {
@@ -386,6 +324,7 @@ Sourcemap.Map.Base.svgToSc = function (thismap, sc, svgid) {
 	}
 	return "not found";
 }
+
 Sourcemap.Map.Base.filterMap = function () {
 	
 }
@@ -641,7 +580,8 @@ Sourcemap.Map.Base.isolateNetworkEffect = function (thismap, sc, opacity, i) {
         return true;         
     }
 
-}
+} 
+*/
 
 Sourcemap.Map.Base.prototype.setActiveArea = function(){
     // The active area is the part of the viewport that isn't covered by menus. 
@@ -1362,14 +1302,9 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 							scaled.unit = "";
 						} 
 						f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
-						//f.data.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;
-						/*
-		    			if(f.attributes.hop_component && f.attributes.hop_component == "arrow") {
-		    				console.log(f);
-							f.attributes.label = f.attributes.label;
-		    			} else {
-							f.attributes.label = parseFloat(scaled.value).toFixed(1) + " " + scaled.unit;	      
-						} */            
+						if(f.attributes.hop_component && f.attributes.hop_component != "arrow") {
+								f.attributes.label = "";
+		    			}        
 		            } else { f.attributes.label = ""; }
 		        } 
 		        f.attributes.size = f.attributes.size || smin;
@@ -1816,25 +1751,6 @@ Sourcemap.Map.Base.prototype.updateFilterDisplay = function(sc) {
     } else {
     	this.map.dockRemove('energy');
     }
-
-	if(sc.attributes["sm:ui:valueatrisk"]) {   
-    	if(this.map.dockControlEl('valueatrisk').length == 0) {	
-            this.map.dockAdd('hviz', {
-                "title": 'Value at Risk',
-                "content": "VARORT",
-                "toggle": true,
-                "panel": 'filter',
-                "callbacks": {
-                    "click": $.proxy(function() {
-                        this.toggleVisualization("valueatrisk");
-                    }, this)
-                }
-            });
-    	}
-    } else {
-    	this.map.dockRemove('valueatrisk');
-    }
-
 }
 Sourcemap.Map.Base.prototype.favorite = function() {
     for(var k in this.map.supplychains) {

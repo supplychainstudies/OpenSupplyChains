@@ -300,7 +300,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 			$column_iterator = 0;
 			foreach ($sh as $name=>$value) {
 					if (isset($stop[$name]) == true) {
-						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace("\n"," ",$stop[$name]));		
+						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace('"', "'",str_replace(array("\r\n", "\n", "\r")," ",$stop[$name])));		
 					}
 					$column_iterator++;
 			}
@@ -331,7 +331,7 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 				$column_iterator = 0;
 				foreach ($hh as $name=>$value) {
 					if (isset($hop[$name]) == true) {
-						$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace("\n"," ",$hop[$name]));
+						$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace('"', "'",str_replace(array("\r\n", "\n", "\r")," ",$hop[$name])));
 					}
 					$column_iterator++;
 				}
@@ -343,8 +343,8 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 			$hop_csv = "To,From";
 		}
 		
-		//var_dump($stop_csv);
-		//var_dump($hop_csv);
+		var_dump($stop_csv);
+		var_dump($hop_csv);
 
         $sc->stops = self::csv2stops($stop_csv, $options);
 		$sc->hops = $hop_csv ? self::csv2hops($hop_csv, $sc->stops, $options) : array();

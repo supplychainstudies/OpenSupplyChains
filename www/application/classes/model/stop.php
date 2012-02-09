@@ -71,15 +71,6 @@ class Model_Stop extends ORM {
                 throw new Exception('Bad stop: missing or duplicate id.');
             }
         }
-        if(isset($stop->attributes->color)){
-            $color = $stop->attributes->color;
-
-            // make sure color has a # in front of it
-            if(substr($color, 1) !== "#")
-                $v = "#" . $v;
-
-            $stop->attributes->color = $color;
-        }
         return true;
     }
 

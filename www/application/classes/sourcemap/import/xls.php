@@ -300,7 +300,8 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 			$column_iterator = 0;
 			foreach ($sh as $name=>$value) {
 					if (isset($stop[$name]) == true) {
-						$stopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace('"', "'",str_replace(array("\r\n", "\n", "\r")," ",$stop[$name])));		
+						$stopswriter->getActiveSheet()->getCellByColumnAndRow($column_iterator,$row_iterator)->setDataType(PHPExcel_Cell_DataType::TYPE_STRING);
+						$stopswriter->getActiveSheet()->setCellValueExplicitByColumnAndRow($column_iterator,$row_iterator,(string)str_replace('"', "'",str_replace(array("\r\n", "\n", "\r")," ",$stop[$name])),PHPExcel_Cell_DataType::TYPE_STRING);
 					}
 					$column_iterator++;
 			}
@@ -331,7 +332,8 @@ class Sourcemap_Import_Xls extends Sourcemap_Import_Csv{
 				$column_iterator = 0;
 				foreach ($hh as $name=>$value) {
 					if (isset($hop[$name]) == true) {
-						$hopswriter->getActiveSheet()->setCellValueByColumnAndRow($column_iterator,$row_iterator,str_replace('"', "'",str_replace(array("\r\n", "\n", "\r")," ",$hop[$name])));
+						$hopswriter->getActiveSheet()->getCellByColumnAndRow($column_iterator,$row_iterator)->setDataType(PHPExcel_Cell_DataType::TYPE_STRING);
+						$hopswriter->getActiveSheet()->setCellValueExplicitByColumnAndRow($column_iterator,$row_iterator,(string)str_replace('"', "'",str_replace(array("\r\n", "\n", "\r")," ",$hop[$name])),PHPExcel_Cell_DataType::TYPE_STRING);
 					}
 					$column_iterator++;
 				}

@@ -220,6 +220,10 @@ class Model_Supplychain extends ORM {
                 if($k==="passcode")
                     if($v==="")
                         continue;
+                // make sure color is hex and has a # in front of it
+                if($k==="color")
+                    if(substr($v, 1) !== "#")
+                        $v = "#" . $v;
                 list($nothing, $affected) = $scattr_insert_query->param(':supplychain_id', $scid)
                     ->param(':key', $k)->param(':value', (string)$v)->execute();
                 if(!$affected) throw new Exception('Could not insert supplychain attribute: "'.$k.'".');
@@ -238,6 +242,13 @@ class Model_Supplychain extends ORM {
                 if(!$affected)
                     throw new Exception('Could not insert stop.');
                 foreach($raw_stop->attributes as $k => $v) {
+                    if($k === "color"){
+                        // make sure color has a # in front of it
+                        if(substr($v, 1) !== "#"){
+                            $v = "#" . $v;
+                        }
+                    }
+ 
                     list($nothing, $affected) = $stattr_insert_query->param(':supplychain_id', $scid)->param(':local_stop_id', $raw_stop->local_stop_id)
                         ->param(':key', $k)->param(':value', $v)->execute();
                     if(!$affected) throw new Exception('Could not insert stop attribute: "'.$k.'".');

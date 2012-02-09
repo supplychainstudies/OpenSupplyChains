@@ -250,11 +250,27 @@ Sourcemap.init_mobile_dialog = function(sc){
             if(this_id!=undefined){
                 // panTo stop id while open the dialog
                 var stid = this_id.split("dialog-")[1];
-                var map_id = Sourcemap.embed_instance.instance_id;
+                var sc_id = sc.instance_id;
                 var sm_b = Sourcemap.embed_instance;
                 var stop = sc.findStop(stid);
                 var f = sm_b.map.stopFeature(stop);
                 sm_b.map.map.panTo(sm_b.getFeatureLonLat(f));
+
+                // Clean select effect
+                console.log(sm_b.map.stop_features["supplychain-1"]);
+                for(var stop in sm_b.map.stop_features["supplychain-1"]){
+                    var features = sm_b.map.stop_features["supplychain-1"];
+                    var stopftr = features[stop].stop;
+                    if(stop!=undefined){
+                        stopftr.renderIntent = "default";
+                    }
+                }
+                var targetftr = sm_b.map.findFeaturesForStop(sc_id, stid).stop;
+                if(typeof(targetftr) != 'undefined' && targetftr != false) {
+                    sm_b.map.controls.select.unselectAll();
+                    targetftr.renderIntent = "select";
+                    sm_b.map.redraw();
+                }
             }
         }
 
@@ -267,6 +283,7 @@ Sourcemap.init_mobile_dialog = function(sc){
         return false;
     });
     Sourcemap.Map.Base.prototype.showStopDetails = function(stid, scid) {
+        //console.log("showStopDetail:"+stid+"/"+scid);
         this.hideDialog(true);
         var previous_height = $('.accordion-title').find('.arrowopen').parent().next().height();
         var target = "#dialog-"+stid;
@@ -274,9 +291,9 @@ Sourcemap.init_mobile_dialog = function(sc){
         var targetOffset = $(target).offset().top;
         var currentOffset = $("#sourcemap-dialog-mobile").scrollTop();
         //var accordian_height = $(target).height();
-        console.log(currentOffset);
-        console.log(targetOffset);
-        console.log(previous_height);
+        //console.log(currentOffset);
+        //console.log(targetOffset);
+        //console.log(previous_height);
         var sumOffset;
         if(targetOffset>0){
             sumOffset = currentOffset+targetOffset-previous_height; // -64 = normal height

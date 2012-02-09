@@ -1329,6 +1329,33 @@ Sourcemap.truncate_string = function(target){
     });
 }
 
+Sourcemap.measureHeight = function(target){
+    return $(target).each(function(){
+
+        // grab parent element dimensions
+        var width  = $(this).parent().width();
+        var height = $(this).parent().height();
+
+        // clone div to a new element for measurement
+        var testdiv = $(this).clone().css({'width': width, 'height': 'auto', 'overflow': 'auto', 'display': 'hidden'});
+        $('<br />').appendTo($(this).parent());
+        $(testdiv).appendTo($(this).parent());
+		var h = parseFloat($(testdiv).height());
+		$(testdiv).prev().remove();
+        $(testdiv).remove();
+		//console.log(h);
+		return h;
+    });
+}
+
+Sourcemap.measurefddsight = function(target){
+	var thediv = this.measure(target);
+	var h = $(thediv).height();
+	console.log(thediv);
+    $(thediv).prev().remove();
+    $(thediv).remove();	
+	return h;
+}
 
 Sourcemap.truncate_one_string = function(target){
     $(target).each(function(){

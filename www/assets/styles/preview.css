@@ -1,13 +1,11 @@
 /* Preview styles ---------------------------------- */
 
-html { width:100%; }
+html, body { height: 230px; width: 100%; }
 body {
-    background: #eee;
     color: #555;
 	margin:0; padding:0;
     text-align: center;
 	font-size:1em;
-	width:100%;
     font-family: "Helvetica Neue", Helvetica;
 }
 
@@ -110,11 +108,23 @@ li:last-child {
     border: 1px solid #3e444c;
 }
 
+div#bottom{
+    position: absolute;
+    bottom: 1em;
+    left: 0; right: 0;
+}
+
+img#watermark{
+    width: 45px; height: 15px;
+    position: absolute;
+    bottom: 1em;
+    left; 0; 
+}
+
 /* Channel ---------------------------------- */
 
-.container-preview{
-    padding: 20px;
-    width: 100%;
+.container.preview{
+    height: 100%; width: 100%;
     text-align:center;
 }
 

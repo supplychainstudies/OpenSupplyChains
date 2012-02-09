@@ -25,24 +25,24 @@
 </div>
 <?php else: ?>
 
-<div class="container preview">
+<div class="container preview" style="background: url('/static/<?= $supplychain_id ?>.l.png') top center no-repeat; background-size: auto 100%; position:absolute; top:0; bottom: 0;">
     <h1><?= HTML::chars($supplychain_name) ?></h1>
-    
-    <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
-    
-    <?php if (isset($supplychain_youtube_id)): ?>
-    <div class="description-video">
-        <iframe class="youtube-player" type="text/html" width="240px" height="180px" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>?showinfo=0" frameborder="0"></iframe> 
-    </div>
-    <?php endif; ?>
-    
-    <div class="map-preview">
-        <img src="/static/<?= $supplychain_id ?>.l.png"/>
-	    <div class="preview-footer"><a href="/"><img src="assets/images/mobile/logo.png" /></a></div>
-    </div>
-	
-    <a href="/mobile/<?= $supplychain_id ?><?php if($passcode_match==True){ ?>?passcode=<?=$passcode ?><?php } ?>" class="full-site-button">View Interactive Map</a>
+   
+    <div id="bottom">
+        <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
+        
+        <?php if (isset($supplychain_youtube_id)): ?>
+        <div class="description-video">
+            <iframe class="youtube-player" type="text/html" width="240px" height="180px" src="http://www.youtube.com/embed/<?= $supplychain_youtube_id ?>?showinfo=0" frameborder="0"></iframe> 
+        </div>
+        <?php endif; ?>
+        
+        <a href="/mobile/<?= $supplychain_id ?><?php if($passcode_match==True){ ?>?passcode=<?=$passcode ?><?php } ?>" class="full-site-button">View Interactive Map</a>
 
+    </div>
+    
     <div class="clear"></div>
+    
+    <img id="watermark" src="assets/images/watermark.png" />
 </div><!-- .container.preview -->
 <?php endif; ?>

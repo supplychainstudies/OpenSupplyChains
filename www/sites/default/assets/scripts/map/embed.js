@@ -13,6 +13,10 @@
 $(document).ready(function() {
     var cb = function(sc){
         Sourcemap.embed_instance.map.addSupplychain(sc);
+        // mapSupplychain first(twice) to finish banner early.
+        var scid = sc.instance_id;
+        Sourcemap.embed_instance.map.mapSupplychain(scid);
+
         $(window).resize();
         $("#banner").click(function(event) {
             event.preventDefault();

@@ -98,7 +98,6 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
-    this.setActiveArea();
     this.map.activeStatus = false;
     
     Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
@@ -230,6 +229,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         // I would prefer to use "resize" here, but it doesn't work.
         this.setActiveArea();
     }, this));
+
 
 /*
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
@@ -678,6 +678,8 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find("#banner-summary").css("max-width",summarywidth);
         $(this.banner_div).find("#banner-summary").css("width",summarywidth);
         Sourcemap.truncate_one_string("#banner-summary");
+
+        this.setActiveArea();
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};

@@ -98,7 +98,6 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
-    this.setActiveArea();
     this.map.activeStatus = false;
     
     Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
@@ -108,7 +107,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
       	if(this.options.position == '0|0|0') {
     		if(sc.stops.length) {	
-                this.map.zoomToExtent(this.map.getFeaturesExtent(), false);
+                // this.map.zoomToExtent(this.map.getFeaturesExtent(), false);
     		} else {	
     			this.map.map.setCenter(p, this.map.map.minZoomLevel);		
     		}
@@ -229,6 +228,7 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         // I would prefer to use "resize" here, but it doesn't work.
         this.setActiveArea();
     }, this));
+
 
 /*
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
@@ -658,9 +658,14 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
             setTimeout(function(){
                 if(window.pageYOffset !== 0) return;
                 window.scrollTo(0,window.pageYOffset + 1);
-            },100);
+            },100);			
         });
-
+        $(this.banner_div).find("#map-search").blur($.proxy(function(evt){
+			if (evt.currentTarget.value == "") {
+				this.clearFilterMap();
+			}
+        },this));			
+					
         // truncate here
         var bannerwidth = $(this.banner_div).width();
         var sumwidth=0;
@@ -672,6 +677,8 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find("#banner-summary").css("max-width",summarywidth);
         $(this.banner_div).find("#banner-summary").css("width",summarywidth);
         Sourcemap.truncate_one_string("#banner-summary");
+
+        this.setActiveArea();
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
@@ -921,26 +928,30 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 }
 
 Sourcemap.Map.Base.prototype.setDetails = function(feature) {
-	var h = this.map.activeArea.h -95;
-	console.log(h);
+	var h = this.map.activeArea.h - 90;
 	// First, find out how much height is already occupied 
-	$(this.dialog_content).find('.placename').each(function() {
-		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
+	var header = Sourcemap.measureHeight($(this.dialog_content)).height() - Sourcemap.measureHeight($(this.dialog_content).find('.accordion')).height();
+	h = h - header;
+	/*
+	var accbodies = Sourcemap.measureHeight($(this.dialog_content).find('.accordion')).height();
+	$(this.dialog_content).find('.accordion-body').each(function() {
+		var acc = Sourcemap.measureHeight($(this)).height();
+		console.log("acc " +acc);
+		accbodies = accbodies - acc;
 	});
-	$(this.dialog_content).find('.title').each(function() {
-		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-	});
-	$(this.dialog_content).find('.accordion-title').each(function() {
-		h = h - parseInt($(this).css('height').replace("px","")) - parseInt($(this).css('padding-top').replace("px","")) - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('margin-top').replace("px","")) - parseInt($(this).css('margin-bottom').replace("px",""));
-	});
+	console.log(accbodies);
+	h = h - accbodies;
+	console.log(h);
+	*/
+	
 	// Each accordion body can be the size of the leftover space
     var accordion_body = $(this.dialog_content).find('.accordion-body')
     var len = accordion_body.length;
 	accordion_body.each(function(index) {
-		var thissize = parseInt($(this).css('height').replace("px","")) + parseInt($(this).css('padding-bottom').replace("px","")) + parseInt($(this).css('padding-top').replace("px",""));
-		if (thissize > h) {	
-			var newsize = h - parseInt($(this).css('padding-bottom').replace("px","")) - parseInt($(this).css('padding-top').replace("px",""));
-			$(this).css('height',newsize+"px");
+		// what is the accordion body height
+		var abh = Sourcemap.measureHeight($(this));
+		if (abh.height() > h) {	
+			$(this).height(h);
 			$(this).css('overflow',"auto");
 		}  
 		$(this).hide();
@@ -950,10 +961,12 @@ Sourcemap.Map.Base.prototype.setDetails = function(feature) {
 	// h is all the room we have to open stuff in
 	var reduced_height = h;
 	// If there's a media accordion (and there's enough room to show it), show it
+	console.log("height " + reduced_height);
 	$(this.dialog_content).find('#dialog-media').each($.proxy(function(num,evt) {	
 		var e = evt;
-		//console.log(evt);
-		var val = parseInt($(e).css('height').replace('px',"")) + parseInt($(e).css('padding-top').replace('px',"")) + parseInt($(e).css('padding-bottom').replace('px',""));		
+		var val = Sourcemap.measureHeight($(e));	
+		val = val.height();	
+ 		console.log("media " + val);
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
 			$(e).prev().find('.arrow').addClass("arrowopen");
@@ -984,16 +997,22 @@ Sourcemap.Map.Base.prototype.setDetails = function(feature) {
             }, this));
 		}					
 	}, this));
+	console.log("height " + reduced_height);
 	$(this.dialog_content).find('#dialog-description').each(function() {	
-		var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+		var val = Sourcemap.measureHeight($(this));	
+		val = val.height();
+		console.log("desc " +val);	
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
 			$(this).prev().find('.arrow').addClass("arrowopen");
 			$(this).show();
 		}					
 	});
+	console.log("height " + reduced_height);
 	$(this.dialog_content).find('#dialog-footprint-body').each(function() {	
-		var val = parseInt($(this).css('height').replace('px',"")) + parseInt($(this).css('padding-top').replace('px',"")) + parseInt($(this).css('padding-bottom').replace('px',""));		
+		var val = Sourcemap.measureHeight($(this));	
+		val = val.height();
+		console.log("ft " + val);
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
 			$(this).prev().find('.arrow').addClass("arrowopen");
@@ -1247,11 +1266,7 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		            }
 		            if(!isNaN(val) && val != 0) {
 		                // scale  
-						if (this.attr_nm == "valueatrisk") {
-							fraction = val/this.vmax;
-						} else {
-							fraction = val/this.vtot;
-						}
+						fraction = val/this.vtot;
 		                f.attributes.size = Math.max(Math.sqrt(fraction)*smax, smin); 
 		                var fsize = 18;
 		                f.attributes.fsize = fsize+"px";     
@@ -1291,7 +1306,6 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		                f.attributes.fcolor = this.color
 		                f.attributes.yoffset = -1*(f.attributes.size+fsize);                
 		                var unit = "kg";
-						if(this.attr_nm === "valueatrisk") { unit = ""; }
 		                if(this.attr_nm === "water") { unit = "L"; }
 						if(this.attr_nm === "energy") { unit = "kWh"; }
 						if (unit != "") {
@@ -1316,6 +1330,38 @@ Sourcemap.Map.Base.prototype.sizeFeaturesOnAttr = function(attr_nm, vmin, vmax, 
 		    }, 
 	{"vmin": vmin, "vmax": vmax, "vtot": vtot, "smin": smin, "smax": smax, "attr_nm": attr_nm, "basemap": this, "color": active_color});
     return this.decorateStopFeatures(dec_fn) && this.decorateHopFeatures(dec_fn);
+}
+
+Sourcemap.Map.Base.prototype.clearFilterMap = function() {
+    for(var scid in this.map.stop_features) {
+        for(var k in this.map.stop_features[scid]) {
+            var s = this.map.stop_features[scid][k];
+			s = s.stop ? s.stop : s;
+			s.renderIntent = 'default';
+        }
+
+    }
+    for(var scid in this.map.hop_features) {
+        for(var fromStop in this.map.hop_features[scid]){
+            for (var toStop in this.map.hop_features[scid][fromStop]){
+				var h = this.map.hop_features[scid][fromStop][toStop];
+				h = h.hop ? h.hop : h;
+				h.renderIntent = 'default'; 
+				if (h.arrow) {
+					h.arrow.renderIntent = 'default'; 
+				}
+				if (h.arrow2) {
+					h.arrow2.renderIntent = 'default';					
+				}
+            }
+        }
+    }
+    for(var scid in this.map.cluster_features) {
+        for(var l in this.map.cluster_features[scid]) {
+			this.map.cluster_features[scid][l].renderIntent = 'default'; 
+        }
+    }
+	this.map.redraw();
 }
 
 Sourcemap.Map.Base.prototype.searchFilterMap = function() {
@@ -1566,6 +1612,8 @@ Sourcemap.Map.Base.prototype.searchFilterMap = function() {
 	this.map.redraw();
 }
 
+
+
 Sourcemap.Map.Base.prototype.toggleVisualization = function(viz_nm) {
     if(this.visualization_mode){
         if(this.visualization_mode != viz_nm) {
@@ -1588,9 +1636,6 @@ Sourcemap.Map.Base.prototype.enableVisualization = function(viz_nm) {
     this.map.controls.select.unselectAll();
     
     switch(viz_nm) {
-        //case "energy":
-        //    break;
-		case "valueatrisk":
 		case "energy":
         case "water":
         case "co2e":

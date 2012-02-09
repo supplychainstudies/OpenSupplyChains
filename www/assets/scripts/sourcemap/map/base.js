@@ -108,7 +108,7 @@ Sourcemap.Map.Base.prototype.initMap = function() {
         p.transform(new OpenLayers.Projection("EPSG:4326"), this.map.map.getProjectionObject());
       	if(this.options.position == '0|0|0') {
     		if(sc.stops.length) {	
-                this.map.zoomToExtent(this.map.getFeaturesExtent(), false);
+                // this.map.zoomToExtent(this.map.getFeaturesExtent(), false);
     		} else {	
     			this.map.map.setCenter(p, this.map.map.minZoomLevel);		
     		}
@@ -169,7 +169,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
             // zoomToExtent upon first load.  this needs to happen here, since 
             // we don't know the geometry of the hops until they are mapped.
             this.map.zoomToExtent(this.map.getFeaturesExtent(), true);
-
             firstLoad = false;
         }
 		if(!(sc.stops.length) && sc.editable) {	this.showEditor(); }
@@ -683,10 +682,10 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
 	var s = {"sc":sc, "lock":this.options.locked};
     Sourcemap.template('map/banner', cb, s);
 
-   
-
     if(this.options.watermark) {
-        this.watermark = $('<a href="/"><div id="watermark"></div></a>');
+        this.watermark = $('<div id="watermark"><a href="/"></a></div>');
+        var tileset = sc.attributes["sm:ui:tileset"] || this.options.tileset;
+        this.watermark.addClass(tileset);
         $(this.map.map.div.extras).append(this.watermark);
     }
     return this;
@@ -1180,8 +1179,10 @@ Sourcemap.Map.Base.prototype.toggleTileset = function(sc) {
 
     // handle overlays upon color scheme changes
     if(this.options.watermark){
-        $("#watermark").css("display","block");
-        $("#watermark").removeClass("cloudmade satellite terrain").addClass(tileset);
+        $("#watermark")
+            .css("display","block")
+            .removeClass("cloudmade satellite terrain")
+            .addClass(tileset);
     }
 
     this.map.setBaseLayer(tileset);

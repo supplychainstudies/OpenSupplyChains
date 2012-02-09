@@ -98,6 +98,7 @@ Sourcemap.Map.Base.prototype.init = function() {
 
 Sourcemap.Map.Base.prototype.initMap = function() {
     this.map = new Sourcemap.Map(this.options.map_element_id);
+    this.setActiveArea();
     this.map.activeStatus = false;
     
     Sourcemap.listen('supplychain:loaded', $.proxy(function(evt, smap, sc) {
@@ -229,7 +230,6 @@ Sourcemap.Map.Base.prototype.initEvents = function() {
         // I would prefer to use "resize" here, but it doesn't work.
         this.setActiveArea();
     }, this));
-
 
 /*
     this.map.map.events.register('zoomend', this.map.map.events, $.proxy(function(e) {
@@ -678,8 +678,6 @@ Sourcemap.Map.Base.prototype.initBanner = function(sc) {
         $(this.banner_div).find("#banner-summary").css("max-width",summarywidth);
         $(this.banner_div).find("#banner-summary").css("width",summarywidth);
         Sourcemap.truncate_one_string("#banner-summary");
-
-        this.setActiveArea();
     }, this);
 
 	var s = {"sc":sc, "lock":this.options.locked};
@@ -931,19 +929,13 @@ Sourcemap.Map.Base.prototype.showHopDetails = function(hid, scid) {
 Sourcemap.Map.Base.prototype.setDetails = function(feature) {
 	var h = this.map.activeArea.h - 90;
 	// First, find out how much height is already occupied 
-	var header = Sourcemap.measureHeight($(this.dialog_content)).height() - Sourcemap.measureHeight($(this.dialog_content).find('.accordion')).height();
+	var header = Sourcemap.measureHeight($(this.dialog_content)).innerHeight() - Sourcemap.measureHeight($(this.dialog_content).find('.accordion')).innerHeight();
 	h = h - header;
-	/*
-	var accbodies = Sourcemap.measureHeight($(this.dialog_content).find('.accordion')).height();
-	$(this.dialog_content).find('.accordion-body').each(function() {
-		var acc = Sourcemap.measureHeight($(this)).height();
-		console.log("acc " +acc);
-		accbodies = accbodies - acc;
+	
+	$(this.dialog_content).find('.accordion-title').each(function() {
+		var acc = Sourcemap.measureHeight($(this)).innerHeight();
+		h = h - acc;
 	});
-	console.log(accbodies);
-	h = h - accbodies;
-	console.log(h);
-	*/
 	
 	// Each accordion body can be the size of the leftover space
     var accordion_body = $(this.dialog_content).find('.accordion-body')
@@ -962,12 +954,10 @@ Sourcemap.Map.Base.prototype.setDetails = function(feature) {
 	// h is all the room we have to open stuff in
 	var reduced_height = h;
 	// If there's a media accordion (and there's enough room to show it), show it
-	console.log("height " + reduced_height);
 	$(this.dialog_content).find('#dialog-media').each($.proxy(function(num,evt) {	
 		var e = evt;
 		var val = Sourcemap.measureHeight($(e));	
-		val = val.height();	
- 		console.log("media " + val);
+		val = val.innerHeight();	
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
 			$(e).prev().find('.arrow').addClass("arrowopen");
@@ -998,22 +988,18 @@ Sourcemap.Map.Base.prototype.setDetails = function(feature) {
             }, this));
 		}					
 	}, this));
-	console.log("height " + reduced_height);
 	$(this.dialog_content).find('#dialog-description').each(function() {	
 		var val = Sourcemap.measureHeight($(this));	
-		val = val.height();
-		console.log("desc " +val);	
+		val = val.innerHeight();	
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
 			$(this).prev().find('.arrow').addClass("arrowopen");
 			$(this).show();
 		}					
 	});
-	console.log("height " + reduced_height);
 	$(this.dialog_content).find('#dialog-footprint-body').each(function() {	
 		var val = Sourcemap.measureHeight($(this));	
-		val = val.height();
-		console.log("ft " + val);
+		val = val.innerHeight();
 		if (reduced_height >= val) {
 			reduced_height = reduced_height - val;
 			$(this).prev().find('.arrow').addClass("arrowopen");

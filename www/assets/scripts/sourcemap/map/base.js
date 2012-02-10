@@ -867,6 +867,15 @@ Sourcemap.Map.Base.prototype.showClusterDetails = function(cluster) {
             $(this.dialog_content).empty();
             var cluster_id = cluster.attributes.cluster_instance_id;
             var chtml = $("<div id='"+cluster_id+"' class='cluster'></div>");
+            // Over-size dialog
+            var dialog_maxheight = parseInt($(this.dialog).css("max-height")); // should be 400px (Careful if %)
+            var dialog_height = $(window).height()-55;
+            var final_height;
+            if(dialog_maxheight>dialog_height)
+                final_height = dialog_height;
+            else
+                final_height = dialog_maxheight;
+            chtml.css("max-height",(final_height)+"px");
 
             for(var i in cluster.cluster) {
                 if(cluster.cluster[i].attributes==undefined)

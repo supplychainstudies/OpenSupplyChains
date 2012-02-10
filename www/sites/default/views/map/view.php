@@ -96,11 +96,13 @@
         <div class="clear"></div>
         <p class="description"><?= HTML::chars($supplychain_desc) ?></p>
 		<ul class="tags">
+        <?php if(isset($supplychain_tags)): ?>
 			<?php foreach($supplychain_tags as $tag) {?>
 				<? if($tag != "") { ?>
 				<li><?= $tag; ?></li>
 				<? } ?>
 			<?php } ?>			
+        <?php endif; ?>
 		</ul>
         <?php if (isset($supplychain_youtube_id)): ?>
         <div class="description-video">

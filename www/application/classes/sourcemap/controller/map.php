@@ -94,7 +94,8 @@ class Sourcemap_Controller_Map extends Sourcemap_Controller_Layout {
                     //$this->template->supplychain_youtube_id = isset($supplychain_youtube_id) ? $supplychain_youtube_id : "" ;
                     isset($supplychain_youtube_id) ? $this->template->supplychain_youtube_id = $supplychain_youtube_id : "" ;
 
-                    $this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();                                   $this->template->supplychain_tags = isset($sc->attributes->tags) ? explode(" ", $sc->attributes->tags) : array();                    
+                    $this->template->supplychain_taxonomy = isset($sc->taxonomy) ? $sc->taxonomy : array();
+                    $this->template->supplychain_tags = isset($sc->attributes->tags) ? explode(" ", $sc->attributes->tags) : array();
 
                     $this->layout->page_title = $this->template->supplychain_name.' on Sourcemap';
                                                                 

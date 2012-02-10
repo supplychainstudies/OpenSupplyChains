@@ -425,8 +425,13 @@ Sourcemap.loadSupplychain = function(remote_id, passcode, callback) {
         error : function(data){
             //console.log("Passcode incorrect");
             var error_response = eval('('+data.response+')');
+            var error_response_text;
+            if(error_response==undefined)
+                error_response_text = "Wrong passcode. ";
+            else
+                error_response_text = error_response;
             $('#popup').fadeIn();
-            $('#passcode-msg').html(error_response.error+" Please enter passcode again:");
+            $('#passcode-msg').html(error_response_text+" Please enter passcode again:");
             $('.passcode-input').find("input[name='passcode']").focus();
             $("#fade").fadeIn();
             $('.submit-status').fadeOut();

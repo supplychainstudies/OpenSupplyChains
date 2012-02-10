@@ -72,7 +72,8 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             // Validate!
             if ($validator->check()){
                 $title = $p['title'];
-                $description = substr($p['description'], 0, 80);
+                //$description = substr($p['description'], 0, 80); // It should be 8000
+                $description = $p['description'];
                 $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
                 $category = $p['category'];
                 $public = isset($_POST['publish']) ? Sourcemap::READ : 0;

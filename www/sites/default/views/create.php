@@ -40,7 +40,7 @@
                     <?php //Build category list ?>
                         <?php for($i=0; $i<count($taxonomy->children); $i++): ?>
                             <?php $t = $taxonomy->children[$i]; ?>
-                            <option value="<?= $t->data->name ?>"><?= HTML::chars($t->data->title) ?></option>
+                            <option value="<?= $t->data->id ?>"><?= HTML::chars($t->data->title) ?></option>
                         <?php endfor; ?>
                     </div>
                 </select>

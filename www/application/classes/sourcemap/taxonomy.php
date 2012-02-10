@@ -61,12 +61,13 @@ class Sourcemap_Taxonomy {
 
     public static function flatten($tree=null, $d=0) {
         if($tree === null) $tree = self::load_tree();
-        if (!isset($tree->data->id)) return;
-        $flat = array();
-        $flat[] = array($tree->data->id, $tree->data->name, $tree->data->title, $d);
-        foreach($tree->children as $ci => $ch) {
-            $flat = array_merge($flat, self::flatten($ch, $d+1));
-        }
+            $flat = array();
+            if (isset($tree->data->id)){
+                $flat[] = array($tree->data->id, $tree->data->name, $tree->data->title, $d);
+                foreach($tree->children as $ci => $ch) {
+                    $flat = array_merge($flat, self::flatten($ch, $d+1));
+                }
+            }
         return $flat;
     }
 

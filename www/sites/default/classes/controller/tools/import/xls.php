@@ -33,8 +33,9 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
 				$posted->xls_file = $posted->file;
 			}
             if(isset($posted->xls_file) && $posted->xls_file instanceof Sourcemap_Upload && $posted->xls_file->ok()) {
+
 				// Prevent blank titles
-                if ((!isset($posted->title) || $posted->title == "") && !isset($posted->replace_into)){
+                if ((!isset($posted->title) || $posted->title == "") && ($posted->replace_into == 0)){
                     Message::instance()->set('Please provide a title.');
                     $this->request->redirect('create');
                 }

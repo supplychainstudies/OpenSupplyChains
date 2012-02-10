@@ -27,10 +27,10 @@
         <fieldset>
             <form action="/create" method="post" accept-charset="utf-8" enctype="multipart/form-data">        
                 <label for="title">Title</label>
-                <input type="text" name="title" maxlength="10000" class="textbox" placeholder="Admin mode: Maximum 10000 characters." />            
+                <input type="text" name="title" maxlength="180" class="textbox"/>            
 
                 <label for="description">Description</label>
-                <textarea id="form-description" name="description" cols="50" rows="10" maxlength="10000" class="preview" placeholder="Admin mode: Maximum 10000 characters."></textarea>
+                <textarea id="form-description" name="description" cols="50" rows="10" maxlength="8000" class="preview"></textarea>
 
                 <label for="tags">Tags</label>
                 <input type="text" name="tags" class="textbox" placeholder="Separated by spaces." />            

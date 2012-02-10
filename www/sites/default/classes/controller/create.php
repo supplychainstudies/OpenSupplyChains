@@ -19,28 +19,21 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     public function action_index() {
     	$this->layout->page_title = 'Create a Sourcemap';
     	
-        if(!Auth::instance()->get_user()) {
+        if(!$user = Auth::instance()->get_user()) {
             $this->request->redirect('auth');
         }
         
         $this->layout->scripts = array(
             'sourcemap-template'
         );
-
-        $import_role = ORM::factory('role')->where('name', '=', 'channel')->find();
-        $admin_role = ORM::factory('role')->where('name', '=', 'admin')->find();
-        $private_permission = false;
-
-    	if(Auth::instance()->get_user()->has('roles', $import_role) || Auth::instance()->get_user()->has('roles', $admin_role)) {
-    		$this->template->can_import = true;                         	
-            $private_permission = true;
-    	} else { 
-            $this->template->can_import = false; 
-        }
-        if(!$private_permission){
-            $f->get_field('publish')->add_class("Go_Pro ");
-        }
         
+        $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
+        $private = ORM::factory('role')->where('name', '=', 'channel')->find();
+
+        $can_private = false;
+        if($user->has('roles', $private) || $user->has('roles', $admin)) 
+            $can_private = true;
+
         // Get categories
         $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
         
@@ -53,18 +46,37 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     	$this->template->user_supplychains = $scs; 
 
         if(strtolower(Request::$method) === 'post') {
-            // Validate!
-            $post = Validate::factory($_POST)
-                ->rule('title', 'not_empty');
+            // Sanitize input
+            $p = Kohana::sanitize($_POST);
 
-            if ($post->check()){
-                $p = $_POST;
+            // Build valid categories
+            $valid_cats = array(0);
+            $flat_cats = Sourcemap_Taxonomy::flatten();
+            $_p = array();
+            foreach($flat_cats as $i => $cat) {
+                list($id,$nm,$title,$depth) = $cat;
+                if($depth < count($_p)) {
+                    while(count($_p) > $depth) array_pop($_p);
+                }
+                $_p[] = $title;
+                $valid_cats[] = $id;
+                if($id)
+                    $cat_opts[] = array($id, join(' / ', array_slice($_p, 1)));
+            }
+            
+            // Create rules for validation
+            $validator = Validate::factory($p)
+                ->rule('title', 'not_empty')
+                ->rule('categories', 'in_array', array($valid_cats));
+                
+            // Validate!
+            if ($validator->check()){
                 $title = $p['title'];
                 $description = substr($p['description'], 0, 80);
                 $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
                 $category = $p['category'];
                 $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
-                if(!$private_permission){
+                if(!$can_private){
                     $public = Sourcemap::READ;
                 }
                 $raw_sc = new stdClass();
@@ -90,7 +102,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                     Message::instance()->set('Couldn\t create your supplychain. Please contact support.');
                 }
             } else {
-                Message::instance()->set('Correct the errors below.');
+                Message::instance()->set('Please check the form below.');
             }
         }
     }

@@ -143,7 +143,7 @@ class Controller_Browse extends Sourcemap_Controller_Layout {
                 foreach ($toplevels as $i => $cat){
                     $params['c'] = $cat;
                     $search = Sourcemap_Search::find($params+array('recent' => 'yes', 'limit' => '999'));
-                    $search->cat_title = $nms[$cat]->title; 
+                    $search->cat_title = isset($nms[$cat]->title) ? $nms[$cat]->title : ""; 
                     array_push($searches, $search);
                 }
                 // Sort array by number of result

@@ -46,14 +46,16 @@ $(document).ready(function() {
         $('[name="file"]').click();
     });	
    $('[name="file"]').change(function() {
-       $('select[name="replace_into"]').show();
+       //$('select[name="replace_into"]').show();
 		var filename = $('[name="file"]').val();
 		var parts = filename.split("\\");
 		var filetype = parts[parts.length-1].split(".");
 		if (filetype[filetype.length-1] == "xls") {
+            $("#replace_into").show();
 			$('[name="file_front"]').val(parts[parts.length-1]);
 			//$('.sourcemap-form form').append($('[name="file"]'));
 		} else {
+            $("#replace_into").hide();
 			$('[name="file_front"]').val("File not supported...");
 			$('.sourcemap-form form').attr('action','/create');
 			$('[name="file"]').val("");

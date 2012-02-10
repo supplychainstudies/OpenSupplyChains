@@ -44,6 +44,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         }
 
     	$this->template->user_supplychains = $scs; 
+        $this->template->can_private = $can_private;
 
         if(strtolower(Request::$method) === 'post') {
             // Sanitize input

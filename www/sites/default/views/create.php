@@ -72,11 +72,11 @@
 
                 <div class="clear"></div>
 
-                <div style="float:left;padding:10px 0 5px 0;height:25px;">
                     <label for="publish">Public</label>
-                    <input type="checkbox" name="publish" class="Go_Pro textbox" checked="checked" />
+                    <input type="checkbox" name="publish" class="<?php if(!$can_private): ?>Go_Pro <?php endif ?>textbox" checked="checked" />
+                    <br/>
                     <div class="submit-status hidden"></div>
-                </div>
+
                 <div class="clear"></div>
 
                 <input type="submit" name="create" value="Create" class="button form-button" style="margin: 10px 10px 0 0" />

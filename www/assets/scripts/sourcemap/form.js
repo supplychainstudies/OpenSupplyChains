@@ -16,7 +16,7 @@ $(document).ready(function() {
    
    // Disable create form attrs on "replace a map" selection
    var replace_into = $('[name="replace_into"]');
-   var elements = $('.sourcemap-form input:not([type="submit"]), .sourcemap-form textarea');
+   var elements = $('.sourcemap-form input:not([type="submit"], [type="file"]), .sourcemap-form textarea');
    replace_into.change(function() {
        // Not sure why .selectedIndex doesn't work here...
        if (replace_into.find('option:selected').text() == replace_into.find('option:eq(0)').text()){

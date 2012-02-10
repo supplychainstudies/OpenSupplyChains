@@ -47,11 +47,11 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         $this->template->can_private = $can_private;
 
         if(strtolower(Request::$method) === 'post') {
-            // Sanitize input
-            $p = Kohana::sanitize($_POST);
-            
+            // Sanitize input and unset empty values
+            $p = (object)array_filter(Kohana::sanitize($_POST));
+         
             // Validate!
-            if (!(isset($p['title'])) && !(isset($p['replace_into']))){
+            if (!isset($p->title) && !isset($p->replace_into)){
                 Message::instance()->set('Please provide a title.');
                 return;
             }
@@ -63,7 +63,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
                 if ($file->error == 0){
                     $xls = $file->get_contents();
                     try {
-                        $sc = Sourcemap_Import_Xls::xls2sc($xls, $p);
+                        $sc = Sourcemap_Import_Xls::xls2sc($xls, (array)$p);
                     } catch(Exception $e) {
                         die($e);
                         Message::instance()->set('Problem with import: '.$e->getMessage());
@@ -73,40 +73,44 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             }
             
             // Are we replacing a supplychain?
-            if (isset($p['replace_into']) && ($sc !== null)){
-                $update = (int)$p['replace_into'];
+            $replace_id = isset($p->replace_into) ? (int)$p->replace_into : 0;
+            if ($replace_id != 0){
+                if ($sc == null){
+                    Message::instance()->set('There was a problem with importing your spreadsheet.');
+                    $this->request->redirect('create/');
+                }
+                $update = $replace_id;
                 $supplychain = ORM::factory('supplychain', $update);
                 $raw_supplychain = $supplychain->kitchen_sink($supplychain->id);
                 $sc->attributes = $raw_supplychain->attributes;
                 $raw_sc = $sc;
-
             } else {
-                // No? Let's grab attributes from the post
-                $title = $p['title'];
-                //$description = substr($p['description'], 0, 80); // It should be 8000
-                $description = $p['description'];
-                $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
-                $category = $p['category'];
-                $raw_sc = new stdClass();
-                $raw_sc->stops = array();
-                $raw_sc->hops = array();
+                if ($sc != null){
+                    $raw_sc = $sc;
+                } else {
+                    $raw_sc = new stdClass();
+                    $raw_sc->stops = array();
+                    $raw_sc->hops  = array();
+                }
+                
+                $title       = $p->title;
+                $description = isset($p->description) ? substr($p->description, 0, 8000) : "";
+                $category    = isset($p->category) ? $p->category : null;
+                $tags        = isset($p->tags) ? $p->tags : null;
+
+                $raw_sc->attributes              = new stdClass();
+                $raw_sc->attributes->title       = $title;
+                $raw_sc->attributes->description = $description;
+                $raw_sc->attributes->tags        = Sourcemap_Tags::join(Sourcemap_Tags::parse($tags));
+                $raw_sc->category                = $category;
             }
-
-            $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
-            if(!$can_private) $public = Sourcemap::READ;
-
-            if($category) $raw_sc->category = $category;
-            $raw_sc->attributes = new stdClass();
-            $raw_sc->attributes->title = $title;
-            $raw_sc->attributes->description = $description;
-            $raw_sc->attributes->tags = $tags;
+            
             $raw_sc->user_id = Auth::instance()->get_user()->id;
             $raw_sc->other_perms = 0;
             $raw_sc->user_featured = false;
-            if($public)
-                $raw_sc->other_perms |= $public;
-            else
-                $raw_sc->other_perms &= ~Sourcemap::READ;
+            $public = isset($p->publish) ? Sourcemap::READ : 0;
+            if (!$public && $can_private) $raw_sc->other_perms &= ~Sourcemap::READ;
+           
             try {
                 $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
                 return $this->request->redirect('view/'.$new_scid);

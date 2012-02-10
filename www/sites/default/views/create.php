@@ -21,27 +21,6 @@
 <div class="container form-page">
     <div class="copy-section">
     	<p>Tell the story behind a product or a service: map the locations of suppliers, add descriptions, photos and videos, calculate the carbon footprint, and embed or link to the map to share it with the world!</p>
-		<div style="margin-top: 15px; margin-bottom: 15px">
-            <h3 class="blue" style="clear: right; float: left;">Upload a Spreadsheet</h3>
-            &nbsp;<a href="/info/instructions/#spreadsheet?w=600" target="_blank" class="modal tooltip"></a>
-            <div class="clear"></div>
-            <div style="clear: both; float:left;">
-                <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" /> <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px;" /> 	
-                <?php if(isset($user_supplychains) && $user_supplychains): ?>
-                    <select name="replace_into" style="margin-top: 10px; width: 330px; height: 30px; padding: 0 30px 0 10px; clear: none; float: left">
-                        <option value="0">Create a new map</option>
-                        <?php foreach($user_supplychains as $sc): ?>
-                        <option value="<?= $sc->id ?>"><?php
-                            echo "Replace \"";
-                            echo isset($sc->attributes->title) ? HTML::chars($sc->attributes->title) : $sc->id;
-                            echo "\" created ";
-                            echo date("F j, Y", $sc->created);
-                        ?></option>
-                    <?php endforeach; ?>
-                    </select>
-                <?php endif; ?>
-            </div>
-		</div>
     </div>
     <div class="box-section">
     <div class="sourcemap-form vertical"> 
@@ -58,20 +37,49 @@
 
                 <label for="category">Category</label>
                 <select name="category">
-
-                <?php foreach ($categories as $cat){
-                    print "<option value=\"" . $cat->id . "\">" . $cat->name . "</option>";
-                } ?>
-                </select>        
-
-                <label for="publish">Public</label>
-                <input type="checkbox" name="publish" class="textbox" checked="checked" />        
+                    <?php //Build category list ?>
+                        <?php for($i=0; $i<count($taxonomy->children); $i++): ?>
+                            <?php $t = $taxonomy->children[$i]; ?>
+                            <option value="<?= $t->data->name ?>"><?= HTML::chars($t->data->title) ?></option>
+                        <?php endfor; ?>
+                    </div>
+                </select>
+               
+                <?php //"Upload a spreadsheet" ?>
+                <div style="margin-top: 8px; margin-bottom: 8px">
+                    <label for="upload">Upload a Spreadsheet</label>
+                    &nbsp;<a href="/info/instructions/#spreadsheet?w=600" target="_blank" class="modal tooltip"></a>
+                    <div class="clear"></div>
+                    <div style="clear: both; float:left;">
+                        <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" /> <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px;" /> 	
+                    </div>
+                </div>
+                
+                <?php //Build replacement list ?>
+                <?php if(isset($user_supplychains) && $user_supplychains): ?>
+                    <select name="replace_into" style="margin-top: 2px; width: 223px; height: 30px; padding: 0 30px 0 10px; clear: none; float: left">
+                        <option value="0">Create a new map</option>
+                        <?php foreach($user_supplychains as $sc): ?>
+                        <option value="<?= $sc->id ?>"><?php
+                            echo "Replace \"";
+                            echo isset($sc->attributes->title) ? HTML::chars($sc->attributes->title) : $sc->id;
+                            echo "\" created ";
+                            echo date("F j, Y", $sc->created);
+                        ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
 
                 <div class="clear"></div>
-                <div class="submit-status hidden"></div>
-                <input type="submit" name="create" value="Create" class="button form-button" />
 
-                <label for="_form_id"></label>
+                <div style="float:left; margin: 10px;">
+                    <label for="publish">Public</label>
+                    <input type="checkbox" name="publish" class="textbox" checked="checked" />
+                </div>
+
+                <div class="submit-status hidden"></div>
+                <input type="submit" name="create" value="Create" class="button form-button" style="margin: 10px 10px 0 0" />
+
                 <input type="hidden" name="_form_id" value="create" class=" textbox" />
             </form>
         </fieldset>

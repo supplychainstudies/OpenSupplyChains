@@ -45,8 +45,7 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         }
         
         // Get categories
-        //$this->template->categories = Sourcemap_Taxonomy::flatten();
-        print_r(Sourcemap_Taxonomy::flatten());
+        $this->template->taxonomy = Sourcemap_Taxonomy::load_tree();
         
         $scs = array();
         $user = Auth::instance()->get_user();

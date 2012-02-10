@@ -220,10 +220,6 @@ class Model_Supplychain extends ORM {
                 if($k==="passcode")
                     if($v==="")
                         continue;
-                // make sure color is hex and has a # in front of it
-                if($k==="color")
-                    if(substr($v, 1) !== "#")
-                        $v = "#" . $v;
                 list($nothing, $affected) = $scattr_insert_query->param(':supplychain_id', $scid)
                     ->param(':key', $k)->param(':value', (string)$v)->execute();
                 if(!$affected) throw new Exception('Could not insert supplychain attribute: "'.$k.'".');
@@ -244,7 +240,7 @@ class Model_Supplychain extends ORM {
                 foreach($raw_stop->attributes as $k => $v) {
                     if($k === "color"){
                         // make sure color has a # in front of it
-                        if(substr($v, 1) !== "#"){
+                        if(substr($v, 0) !== "#"){
                             $v = "#" . $v;
                         }
                     }

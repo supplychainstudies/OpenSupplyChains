@@ -50,26 +50,10 @@ class Controller_Create extends Sourcemap_Controller_Layout {
             // Sanitize input
             $p = Kohana::sanitize($_POST);
 
-            // Build valid categories
-            $valid_cats = array(0);
-            $flat_cats = Sourcemap_Taxonomy::flatten();
-            $_p = array();
-            foreach($flat_cats as $i => $cat) {
-                list($id,$nm,$title,$depth) = $cat;
-                if($depth < count($_p)) {
-                    while(count($_p) > $depth) array_pop($_p);
-                }
-                $_p[] = $title;
-                $valid_cats[] = $id;
-                if($id)
-                    $cat_opts[] = array($id, join(' / ', array_slice($_p, 1)));
-            }
-            
             // Create rules for validation
             $validator = Validate::factory($p)
-                ->rule('title', 'not_empty')
-                ->rule('categories', 'in_array', array($valid_cats));
-                
+                ->rule('title', 'not_empty');
+
             // Validate!
             if ($validator->check()){
                 $title = $p['title'];

@@ -50,14 +50,15 @@
                     <label for="upload">Upload a Spreadsheet</label>
                     &nbsp;<a href="/info/instructions/#spreadsheet?w=600" target="_blank" class="modal tooltip"></a>
                     <div class="clear"></div>
-                    <div style="clear: both; float:left;">
-                        <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" /> <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px;" /> 	
+                    <div id="file_import" style="clear: both; float:left;">
+                        <input type="file" name="file" style="visibility: hidden; width: 0px; height: 0px;" /> 
+                        <input type="button" name="file_front" value="Choose a File..." class="button alternate" style="clear: none; float: left; margin-right: 10px; width: 150px; height: 30px;" /> 	
                     </div>
                 </div>
                 
                 <?php //Build replacement list ?>
                 <?php if(isset($user_supplychains) && $user_supplychains): ?>
-                    <select name="replace_into" style="margin-top: 2px; width: 223px; height: 30px; padding: 0 30px 0 10px; clear: none; float: left">
+                    <select id="replace_into" name="replace_into" style="margin-top: 2px; width: 223px; height: 30px; padding: 0 30px 0 10px; clear: none; float: left">
                         <option value="0">Create a new map</option>
                         <?php foreach($user_supplychains as $sc): ?>
                         <option value="<?= $sc->id ?>"><?php

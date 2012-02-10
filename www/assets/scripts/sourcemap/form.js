@@ -13,9 +13,18 @@
  */
 
 $(document).ready(function() {
-   
+
    // Disable create form attrs on "replace a map" selection
    var replace_into = $('[name="replace_into"]');
+
+   // If IE
+   if ($.browser.msie  && $('.browser').length == 0){
+       var file_input = '<input type="file" name="file" style="" />';
+       file_input += '<div class="clear"></div>';
+       $("#file_import").html(file_input);
+       //$("#replace_into").hide();
+   }
+
    var elements = $('.sourcemap-form input:not([type="submit"], [type="file"]), .sourcemap-form textarea');
    replace_into.change(function() {
        // Not sure why .selectedIndex doesn't work here...
@@ -31,7 +40,8 @@ $(document).ready(function() {
        }
    });
     
-   $('select[name="replace_into"]').hide();
+   //$('select[name="replace_into"]').hide();
+   $("#replace_into").hide();
    $('[name="file_front"]').click(function() {
         $('[name="file"]').click();
     });	
@@ -42,7 +52,7 @@ $(document).ready(function() {
 		var filetype = parts[parts.length-1].split(".");
 		if (filetype[filetype.length-1] == "xls") {
 			$('[name="file_front"]').val(parts[parts.length-1]);
-			$('.sourcemap-form form').append($('[name="file"]'));
+			//$('.sourcemap-form form').append($('[name="file"]'));
 		} else {
 			$('[name="file_front"]').val("File not supported...");
 			$('.sourcemap-form form').attr('action','/create');

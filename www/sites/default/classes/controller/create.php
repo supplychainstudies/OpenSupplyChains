@@ -43,8 +43,10 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         if(!$private_permission){
             $f->get_field('publish')->add_class("Go_Pro ");
         }
-
-        $this->template->create_form = $f;
+        
+        // Get categories
+        //$this->template->categories = Sourcemap_Taxonomy::flatten();
+        print_r(Sourcemap_Taxonomy::flatten());
         
         $scs = array();
         $user = Auth::instance()->get_user();

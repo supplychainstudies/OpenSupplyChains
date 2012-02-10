@@ -44,7 +44,38 @@
 		</div>
     </div>
     <div class="box-section">
-    	<?= $create_form ?>
+    <div class="sourcemap-form vertical"> 
+        <fieldset>
+            <form action="/create" method="post" accept-charset="utf-8" enctype="multipart/form-data">        
+                <label for="title">Title</label>
+                <input type="text" name="title" maxlength="10000" class="textbox" placeholder="Admin mode: Maximum 10000 characters." />            
+
+                <label for="description">Description</label>
+                <textarea id="form-description" name="description" cols="50" rows="10" maxlength="10000" class="preview" placeholder="Admin mode: Maximum 10000 characters."></textarea>
+
+                <label for="tags">Tags</label>
+                <input type="text" name="tags" class="textbox" placeholder="Separated by spaces." />            
+
+                <label for="category">Category</label>
+                <select name="category">
+
+                <?php foreach ($categories as $cat){
+                    print "<option value=\"" . $cat->id . "\">" . $cat->name . "</option>";
+                } ?>
+                </select>        
+
+                <label for="publish">Public</label>
+                <input type="checkbox" name="publish" class="textbox" checked="checked" />        
+
+                <div class="clear"></div>
+                <div class="submit-status hidden"></div>
+                <input type="submit" name="create" value="Create" class="button form-button" />
+
+                <label for="_form_id"></label>
+                <input type="hidden" name="_form_id" value="create" class=" textbox" />
+            </form>
+        </fieldset>
+    </div>
     </div>
     <div class="clear"></div>
 </div>

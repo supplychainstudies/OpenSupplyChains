@@ -37,7 +37,6 @@ class Sourcemap_Import_Csv {
         foreach(self::$default_options as $k => $v)
             $options[$k] = isset($o[$k]) ? $o[$k] : $v;
         extract($options);
-		var_dump($csv);
         $csv = Sourcemap_Csv::parse($csv);
         $data = array();
         $raw_headers = array();
@@ -51,7 +50,6 @@ class Sourcemap_Import_Csv {
 			}
 		}
         foreach($csv as $ri => $row) {
-			//var_dump($row);
             if($headers && is_array($headers)) {
                 $record = array();
                 foreach($headers as $hi => $k) {

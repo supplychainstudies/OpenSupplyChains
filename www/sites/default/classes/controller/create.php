@@ -49,46 +49,70 @@ class Controller_Create extends Sourcemap_Controller_Layout {
         if(strtolower(Request::$method) === 'post') {
             // Sanitize input
             $p = Kohana::sanitize($_POST);
-
-            // Create rules for validation
-            $validator = Validate::factory($p)
-                ->rule('title', 'not_empty');
-
+            
             // Validate!
-            if ($validator->check()){
+            if (!(isset($p['title'])) && !(isset($p['replace_into']))){
+                Message::instance()->set('Please provide a title.');
+                return;
+            }
+
+            // Did we successfully post a file?
+            $sc = null;
+            $uploads = Sourcemap_Upload::get_uploads();
+            foreach ($uploads as $file){
+                if ($file->error == 0){
+                    $xls = $file->get_contents();
+                    try {
+                        $sc = Sourcemap_Import_Xls::xls2sc($xls, $p);
+                    } catch(Exception $e) {
+                        die($e);
+                        Message::instance()->set('Problem with import: '.$e->getMessage());
+                        $this->request->redirect('create/');
+                    }
+                }
+            }
+            
+            // Are we replacing a supplychain?
+            if (isset($p['replace_into']) && ($sc !== null)){
+                $update = (int)$p['replace_into'];
+                $supplychain = ORM::factory('supplychain', $update);
+                $raw_supplychain = $supplychain->kitchen_sink($supplychain->id);
+                $sc->attributes = $raw_supplychain->attributes;
+                $raw_sc = $sc;
+
+            } else {
+                // No? Let's grab attributes from the post
                 $title = $p['title'];
                 //$description = substr($p['description'], 0, 80); // It should be 8000
                 $description = $p['description'];
                 $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));
                 $category = $p['category'];
-                $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
-                if(!$can_private){
-                    $public = Sourcemap::READ;
-                }
                 $raw_sc = new stdClass();
-                if($category) $raw_sc->category = $category;
-                $raw_sc->attributes = new stdClass();
-                $raw_sc->attributes->title = $title;
-                $raw_sc->attributes->description = $description;
-                $raw_sc->attributes->tags = $tags;
                 $raw_sc->stops = array();
                 $raw_sc->hops = array();
-                $raw_sc->user_id = Auth::instance()->get_user()->id;
-                $raw_sc->other_perms = 0;
-                $raw_sc->user_featured = false;
-                if($public)
-                    $raw_sc->other_perms |= $public;
-                else
-                    $raw_sc->other_perms &= ~Sourcemap::READ;
-                try {
-                    $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
-                    return $this->request->redirect('view/'.$new_scid);
-                } catch(Exception $e) {
-                    $this->request->status = 500;
-                    Message::instance()->set('Couldn\t create your supplychain. Please contact support.');
-                }
-            } else {
-                Message::instance()->set('Please check the form below.');
+            }
+
+            $public = isset($_POST['publish']) ? Sourcemap::READ : 0;
+            if(!$can_private) $public = Sourcemap::READ;
+
+            if($category) $raw_sc->category = $category;
+            $raw_sc->attributes = new stdClass();
+            $raw_sc->attributes->title = $title;
+            $raw_sc->attributes->description = $description;
+            $raw_sc->attributes->tags = $tags;
+            $raw_sc->user_id = Auth::instance()->get_user()->id;
+            $raw_sc->other_perms = 0;
+            $raw_sc->user_featured = false;
+            if($public)
+                $raw_sc->other_perms |= $public;
+            else
+                $raw_sc->other_perms &= ~Sourcemap::READ;
+            try {
+                $new_scid = ORM::factory('supplychain')->save_raw_supplychain($raw_sc);
+                return $this->request->redirect('view/'.$new_scid);
+            } catch(Exception $e) {
+                $this->request->status = 500;
+                Message::instance()->set('Couldn\t create your supplychain. Please contact support.');
             }
         }
     }

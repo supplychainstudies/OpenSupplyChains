@@ -42,7 +42,6 @@ $(document).ready(function() {
 		var filetype = parts[parts.length-1].split(".");
 		if (filetype[filetype.length-1] == "xls") {
 			$('[name="file_front"]').val(parts[parts.length-1]);
-			$('.sourcemap-form form').attr('action','/tools/import/xls');
 			$('.sourcemap-form form').append($('[name="file"]'));
 		} else {
 			$('[name="file_front"]').val("File not supported...");

@@ -34,6 +34,8 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
 			}
             if(isset($posted->xls_file) && $posted->xls_file instanceof Sourcemap_Upload && $posted->xls_file->ok()) {
 
+                // TODO:  This functionality duplicates the create form.  Big time.
+
 				// Prevent blank titles
                 if ((!isset($posted->title) || $posted->title == "") && ($posted->replace_into == 0)){
                     Message::instance()->set('Please provide a title.');
@@ -73,10 +75,28 @@ class Controller_Tools_Import_Xls extends Sourcemap_Controller_Layout {
                 }
                 $new_sc = ORM::factory('supplychain', $new_sc_id);
                 if(isset($posted->publish) && $posted->publish) {
-                    $new_sc->other_perms |= Sourcemap::READ;
+                    // TODO:  More code duplication here.  Get rid of it
+                    $admin = ORM::factory('role')->where('name', '=', 'admin')->find();
+                    $private = ORM::factory('role')->where('name', '=', 'channel')->find();
+                    
+                    $can_private = false;
+                    if($current_user->has('roles', $private) || $current_user->has('roles', $admin))
+                        $can_private = true;
+
+                    $public = isset($posted->publish) ? Sourcemap::READ : 0;
+                    if(!$can_private){
+                        $public = Sourcemap::READ;
+                    }
+                    
+                    if($public)
+                        $raw_sc->other_perms |= $public;
+                    else
+                        $raw_sc->other_perms &= ~Sourcemap::READ;
+                    
                     $new_sc->save();
                 }
                 if(isset($posted->supplychain_name) && is_string($posted->supplychain_name)) {
+
                     $attr = ORM::factory('supplychain_attribute');
                     $attr->supplychain_id = $new_sc_id;
                     $attr->key = 'title';

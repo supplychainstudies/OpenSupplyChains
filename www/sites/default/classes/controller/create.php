@@ -19,9 +19,6 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     public function action_index() {
     	$this->layout->page_title = 'Create a Sourcemap';
     	
-        $f = Sourcemap_Form::load('/create');
-        $f->action('create')->method('post')->enctype("multipart/form-data");
-
         if(!Auth::instance()->get_user()) {
             $this->request->redirect('auth');
         }
@@ -56,9 +53,12 @@ class Controller_Create extends Sourcemap_Controller_Layout {
     	$this->template->user_supplychains = $scs; 
 
         if(strtolower(Request::$method) === 'post') {
-            if($f->validate($_POST)) {
-                // create!
-                $p = $f->values();
+            // Validate!
+            $post = Validate::factory($_POST)
+                ->rule('title', 'not_empty');
+
+            if ($post->check()){
+                $p = $_POST;
                 $title = $p['title'];
                 $description = substr($p['description'], 0, 80);
                 $tags = Sourcemap_Tags::join(Sourcemap_Tags::parse($p['tags']));

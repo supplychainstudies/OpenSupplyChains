@@ -1,4 +1,4 @@
-#Open Supply Chains
+# Open Supply Chains
 
 Open Supply Chains is the opensource codebase behind [Sourcemap][1] that allows anyone to visualize and analyze supply chains. It does this providing a structure for modeling supplychains, tools for richly describing and annotating them with video, images and text, a detailed geographic visualization core, and modules for calculations and display of useful metrics of evaluation (like carbon footprints).
 
@@ -15,7 +15,7 @@ In most cases, this repository will not be directly useful in and of itself. Thi
 
 		./db-migrate dev up
 
-##Structure and Organization
+## Structure and Organization
 
 The following interesting directories can be found in the repository:
 
@@ -30,7 +30,8 @@ The following interesting directories can be found in the repository:
 * **tools** - scripts and accessories for deployment and so on
 * **db** - database schema, data, fixtures, and other related things
 
-###Routing/Bootstrapping
+### Routing/Bootstrapping
+
 If you want custom routing or a non-standard routing, you'll want to put your own site-specific `bootstrap.php` file in your `sites/<siteshortname>` directory.
 
 [1]: http://www.sourcemap.com "Sourcemap.com"
